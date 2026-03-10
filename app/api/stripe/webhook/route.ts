@@ -1,0 +1,235 @@
+// app/api/stripe/webhook/route.ts
+// Handles Stripe webhook events to sync subscription state
+
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
+import { stripe } from '@/lib/stripe';
+import Stripe from 'stripe';
+import { createShopifyPromoCode } from '@/lib/shopify/createPromoCode';
+import { logInfo, logError } from '@/lib/logging';
+
+// Service-role client bypasses RLS — only used server-side in this webhook
+function getServiceClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
+
+export async function POST(request: NextRequest) {
+  const body = await request.text();
+  const sig = request.headers.get('stripe-signature');
+
+  if (!sig) {
+    return NextResponse.json({ error: 'Missing stripe-signature' }, { status: 400 });
+  }
+
+  let event: Stripe.Event;
+  try {
+    event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Webhook signature verification failed';
+    logError({ source: 'webhook', module: 'stripe', message: 'Signature verification failed', metadata: { error: message } });
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
+
+  const supabase = getServiceClient();
+
+  switch (event.type) {
+    case 'checkout.session.completed': {
+      const session = event.data.object as Stripe.Checkout.Session;
+      const userId = session.metadata?.supabase_user_id;
+      const plan = session.metadata?.plan;
+
+      if (!userId) break;
+
+      logInfo({ source: 'webhook', module: 'stripe', message: 'Checkout completed', metadata: { sessionId: session.id, plan, mode: session.mode }, userId });
+
+      if (session.mode === 'subscription' && plan === 'teacher') {
+        // Activate teacher role and upsert teacher_profiles
+        const { error: roleErr } = await supabase
+          .from('profiles')
+          .update({ role: 'teacher' })
+          .eq('id', userId);
+        if (roleErr) {
+          logError({ source: 'webhook', module: 'stripe', message: 'Failed to set teacher role', metadata: { error: roleErr.message }, userId });
+        }
+
+        const { error: tpErr } = await supabase
+          .from('teacher_profiles')
+          .upsert({
+            user_id: userId,
+            stripe_subscription_id: session.subscription as string,
+          }, { onConflict: 'user_id' });
+        if (tpErr) logError({ source: 'webhook', module: 'stripe', message: 'Failed to upsert teacher_profile', metadata: { error: tpErr.message }, userId });
+      } else if (session.mode === 'subscription' && (plan === 'contractor' || plan === 'lister')) {
+        // Add product to user's products array
+        const { data: pData } = await supabase
+          .from('profiles')
+          .select('products')
+          .eq('id', userId)
+          .maybeSingle();
+        const currentProducts: string[] = pData?.products ?? [];
+        if (!currentProducts.includes(plan)) {
+          const { error } = await supabase
+            .from('profiles')
+            .update({ products: [...currentProducts, plan] })
+            .eq('id', userId);
+          if (error) {
+            logError({ source: 'webhook', module: 'stripe', message: `Failed to add ${plan} product`, metadata: { error: error.message }, userId });
+          }
+        }
+        logInfo({ source: 'webhook', module: 'stripe', message: `${plan} subscription activated`, metadata: { subscriptionId: session.subscription }, userId });
+      } else if (session.mode === 'subscription' && plan === 'monthly') {
+        // Expand subscription to get current_period_end for renewal date.
+        // In Stripe API 2024-09-30+ (acacia/clover), this field moved to SubscriptionItem.
+        let subscriptionExpiresAt: string | null = null;
+        try {
+          const sub = await stripe.subscriptions.retrieve(session.subscription as string);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const s = sub as any;
+          const rawEnd: number | undefined = s.items?.data?.[0]?.current_period_end ?? s.current_period_end;
+          if (rawEnd && typeof rawEnd === 'number') {
+            subscriptionExpiresAt = new Date(rawEnd * 1000).toISOString();
+          }
+        } catch (err) {
+          logError({ source: 'webhook', module: 'stripe', message: 'Failed to retrieve subscription for period_end', metadata: { error: err instanceof Error ? err.message : String(err) }, userId });
+        }
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            subscription_status: 'monthly',
+            stripe_subscription_id: session.subscription as string,
+            subscription_expires_at: subscriptionExpiresAt,
+            cancel_at_period_end: false,
+            cancel_at: null,
+          })
+          .eq('id', userId);
+        if (error) {
+          logError({ source: 'webhook', module: 'stripe', message: 'Failed to update monthly status', metadata: { error: error.message }, userId });
+        }
+      } else if (session.mode === 'payment' && plan === 'lifetime') {
+        let promoCode: string | null = null;
+        try {
+          promoCode = await createShopifyPromoCode();
+        } catch (err) {
+          logError({ source: 'webhook', module: 'stripe', message: 'Failed to create Shopify promo code', metadata: { error: err instanceof Error ? err.message : String(err) }, userId });
+          // Do not throw — purchase is complete; code will show as pending on billing page
+        }
+
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            subscription_status: 'lifetime',
+            shirt_promo_code: promoCode,
+            stripe_subscription_id: null,
+            subscription_expires_at: null,
+          })
+          .eq('id', userId);
+        if (error) {
+          logError({ source: 'webhook', module: 'stripe', message: 'Failed to update lifetime status', metadata: { error: error.message }, userId });
+        }
+      }
+      break;
+    }
+
+    case 'customer.subscription.deleted': {
+      const subscription = event.data.object as Stripe.Subscription;
+      const customerId = subscription.customer as string;
+
+      logInfo({ source: 'webhook', module: 'stripe', message: 'Subscription deleted', metadata: { subscriptionId: subscription.id, customerId } });
+
+      // Check if this is a contractor or lister subscription cancellation
+      const cancelledPlan = subscription.metadata?.plan;
+      if (cancelledPlan === 'contractor' || cancelledPlan === 'lister') {
+        const cancelUserId = subscription.metadata?.supabase_user_id;
+        if (cancelUserId) {
+          const { data: pData } = await supabase
+            .from('profiles')
+            .select('products')
+            .eq('id', cancelUserId)
+            .maybeSingle();
+          const updated = (pData?.products ?? []).filter((p: string) => p !== cancelledPlan);
+          await supabase.from('profiles').update({ products: updated }).eq('id', cancelUserId);
+          logInfo({ source: 'webhook', module: 'stripe', message: `${cancelledPlan} subscription cancelled`, metadata: { subscriptionId: subscription.id }, userId: cancelUserId });
+        }
+        break;
+      }
+
+      // Check if this is a teacher subscription cancellation
+      const isTeacherSub = await supabase
+        .from('teacher_profiles')
+        .select('user_id')
+        .eq('stripe_subscription_id', subscription.id)
+        .maybeSingle();
+
+      if (isTeacherSub.data) {
+        // Revoke teacher role
+        await supabase
+          .from('profiles')
+          .update({ role: 'member' })
+          .eq('id', isTeacherSub.data.user_id);
+        break;
+      }
+
+      // Downgrade to free unless they have a lifetime membership
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('subscription_status')
+        .eq('stripe_customer_id', customerId)
+        .maybeSingle();
+
+      if (profile && profile.subscription_status !== 'lifetime') {
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            subscription_status: 'free',
+            stripe_subscription_id: null,
+            subscription_expires_at: null,
+          })
+          .eq('stripe_customer_id', customerId);
+        if (error) {
+          logError({ source: 'webhook', module: 'stripe', message: 'Failed to downgrade subscription', metadata: { error: error.message } });
+        }
+      }
+      break;
+    }
+
+    case 'customer.subscription.updated': {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const sub = event.data.object as any;
+      const userId = sub.metadata?.supabase_user_id;
+      if (!userId) break;
+
+      logInfo({ source: 'webhook', module: 'stripe', message: 'Subscription updated', metadata: { subscriptionId: sub.id, cancelAtPeriodEnd: sub.cancel_at_period_end }, userId });
+
+      // current_period_end moved to SubscriptionItem in Stripe API 2024-09-30+
+      const rawEnd: number | undefined = sub.items?.data?.[0]?.current_period_end ?? sub.current_period_end;
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          cancel_at_period_end: sub.cancel_at_period_end ?? false,
+          cancel_at: sub.cancel_at ? new Date(sub.cancel_at * 1000).toISOString() : null,
+          cancellation_feedback: sub.cancellation_details?.feedback ?? null,
+          cancellation_comment: sub.cancellation_details?.comment ?? null,
+          subscription_expires_at: (rawEnd && typeof rawEnd === 'number') ? new Date(rawEnd * 1000).toISOString() : null,
+        })
+        .eq('id', userId);
+      if (error) {
+        logError({ source: 'webhook', module: 'stripe', message: 'Subscription update DB write failed', metadata: { error: error.message }, userId });
+      }
+      break;
+    }
+
+    case 'invoice.payment_failed': {
+      // Stripe handles dunning automatically; downgrade happens via subscription.deleted
+      break;
+    }
+
+    default:
+      break;
+  }
+
+  return NextResponse.json({ received: true });
+}

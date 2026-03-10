@@ -1,0 +1,135 @@
+// app/api/admin/help/ingest/route.ts
+// POST: embed all help articles and upsert into help_articles table.
+// Admin-only. Uses Gemini text-embedding-004 (768-dim).
+
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase/server';
+import { HELP_ARTICLES } from '@/lib/help/articles';
+
+function getDb() {
+  return createServiceClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
+
+// gemini-embedding-001 outputs 3072 dims by default; pin to 768 to match schema
+const EMBEDDING_MODEL = 'gemini-embedding-001';
+
+async function getEmbedding(text: string): Promise<number[]> {
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY not set');
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+    body: JSON.stringify({
+      content: { parts: [{ text }] },
+      outputDimensionality: 768,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.text();
+    throw new Error(`Gemini embedding error: ${err}`);
+  }
+
+  const data = await response.json();
+  return data.embedding?.values ?? [];
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function POST(_req: NextRequest) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== process.env.ADMIN_EMAIL) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  // Preflight: validate API key exists and the Gemini API is reachable
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json(
+      { error: 'GOOGLE_GEMINI_API_KEY is not set in environment variables.' },
+      { status: 500 },
+    );
+  }
+
+  // Quick ping to verify the key works before processing all articles
+  try {
+    await getEmbedding('test');
+  } catch (e) {
+    return NextResponse.json(
+      { error: `Gemini API key check failed: ${e instanceof Error ? e.message : String(e)}` },
+      { status: 500 },
+    );
+  }
+
+  const db = getDb();
+
+  // Clear existing articles before re-ingesting
+  await db.from('help_articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+
+  const results: { title: string; ok: boolean; error?: string }[] = [];
+
+  for (const article of HELP_ARTICLES) {
+    const text = `${article.title}\n\n${article.content}`;
+    try {
+      const embedding = await getEmbedding(text);
+      if (!embedding.length) throw new Error('Gemini returned an empty embedding vector.');
+
+      // pgvector expects the array formatted as a bracketed string e.g. "[0.1,0.2,...]"
+      const { error } = await db.from('help_articles').insert({
+        title: article.title,
+        content: article.content,
+        role: article.role,
+        embedding: `[${embedding.join(',')}]`,
+      });
+      if (error) throw new Error(error.message);
+      results.push({ title: article.title, ok: true });
+    } catch (e) {
+      results.push({ title: article.title, ok: false, error: e instanceof Error ? e.message : 'Unknown' });
+    }
+  }
+
+  const succeeded = results.filter((r) => r.ok).length;
+  const failed = results.filter((r) => !r.ok);
+
+  return NextResponse.json({ succeeded, failed: failed.length > 0 ? failed : undefined });
+}
+
+export async function GET(req: NextRequest) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || user.email !== process.env.ADMIN_EMAIL) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  // ?diagnose=1 → list models available to this API key
+  const diagnose = new URL(req.url).searchParams.get('diagnose');
+  if (diagnose) {
+    const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+    if (!apiKey) return NextResponse.json({ error: 'GOOGLE_GEMINI_API_KEY not set' }, { status: 500 });
+    const r = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models',
+      { headers: { 'x-goog-api-key': apiKey } },
+    );
+    const data = await r.json();
+    // Extract just the names and supported methods for embedding
+    const models = (data.models ?? []).map((m: { name: string; supportedGenerationMethods?: string[] }) => ({
+      name: m.name,
+      supportsEmbed: (m.supportedGenerationMethods ?? []).includes('embedContent'),
+      supportsGenerate: (m.supportedGenerationMethods ?? []).includes('generateContent'),
+    }));
+    return NextResponse.json({ models, raw: r.ok ? undefined : data });
+  }
+
+  const db = getDb();
+  const { count } = await db
+    .from('help_articles')
+    .select('id', { count: 'exact', head: true });
+
+  return NextResponse.json({ count: count ?? 0, total: HELP_ARTICLES.length });
+}
