@@ -1,0 +1,181 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+supabase/.temp/cli-latest
+
+supabase/.temp/gotrue-version
+
+supabase/.temp/pooler-url
+
+supabase/.temp/postgres-version
+
+supabase/.temp/project-ref
+
+supabase/.temp/rest-version
+
+supabase/.temp/storage-version
+
+supabase/.branches/
+
+docs/PodcastSetupGuide-CentenarianOSPodcastSetupGuide-centos_podcast_guide.md
+
+docs/PodcastSetupGuide-CentenarianOSPodcastSetupGuide-centos_podcast_guide.pdf
+
+docs/Cent OS Week 20251013.pdf
+
+app/dashboard/fuel/app-dashboard-fuel-page.tsx
+
+app/dashboard/fuel/meal-prep/app-dashboard-fuel-meal--prep-page.tsx
+
+app/dashboard/fuel/meal-prep/ORIGINAL-app-dashboard-fuel-page.tsx
+
+content/
+
+docs/
+
+docs/mobile-ui-refactor/
+
+docs/garmin-data
+docs/hume-health
+docs/BAM apple_health_export
+
+app/dashboard/engine/analytics/app-dashboard-engine-analytics-page.tsx
+
+app/dashboard/layout-old.tsx
+
+app/dashboard/roadmap/layout-new.tsx
+
+docs/2 Week Refactor/
+
+docs/workingFiles/CentOS Courses.zip
+
+docs/workingFiles/Tutorial Prompts.rtf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Baseline Assessment Kit - Foundations of Fitness and Health Metrics.gdoc
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Baseline Assessment Kit - Foundations of Fitness and Health Metrics.gsheet
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Baseline Assessment Kit - Foundations of Fitness and Health Metrics.pdf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Baseline Assessment Kit.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Claude Responses Fitness Data Analytics Course.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Complete Email Drip Campaign- Fitness Data Analytics Course/Complete Email Drip Campaign- Fitness Data Analytics Course.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Copy of Baseline Assessment Kit - Foundations of Fitness and Health Metrics (1).gsheet
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Copy of Baseline Assessment Kit - Foundations of Fitness and Health Metrics.gsheet
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Copy of TEMPLATE of Baseline Assessment Kit - Foundations of Fitness and Health Metrics.gsheet
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Class Social Media Posts/Additional Social Media Posts- Worlds Fastest Centenarian Record Holders.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Class Social Media Posts/Campaign Strategy- The Centenarian Journey.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Class Social Media Posts/Social Media Campaign- Foundations of Fitness and Health Metrics Course.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course Content Templates.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/Fitness Ebook Email Campaign Sequence.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/Fitness Ebook Email Campaign Sequence.pdf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/fitness_ebook_cover.html
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/Foundations of Fitness and Health Metrics - Waitlist Preview Ebook 3pg.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/Foundations of Fitness and Health Metrics - Waitlist Preview Ebook 3pg.pdf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/Foundations of Fitness and Health Metrics - Waitlist Preview Ebook.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/Foundations of Fitness and Health Metrics - Waitlist Preview Ebook.pdf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course ebook/shortened_ebook_cover.html
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/Fitness Data Analytics Course Market Research.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/fitness-analytics-landing-page.tsx
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course supporting docs/TEMPLATE of Baseline Assessment Kit - Foundations of Fitness and Health Metrics.gsheet
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course Week 1 Lecture Script Revised.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course Week 2 Lecture Script.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course Week 3 Lecture Script.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course Week 4 N-of-1 Experiments with Intensity Minutes - Complete Lecture Script.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Fitness Data Analytics Course Week 5 Lecture Script.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 1/Week 1-5 Research Citations and Knowledge Checks.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 5/My Health Blueprint - Capstone Project Template.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 5/My Health Blueprint - Capstone Project Template.pdf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 5/Phase 3_ Community & Transition Elements.md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 5/Phase 3_ Community & Transition Elements.pdf
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 5/Week 5_ Simplified Content (6th Grade Reading Level).md
+
+docs/CentOS Courses/FDA and Metrics CentOS version/Week 5/Week 5_ Simplified Content (6th Grade Reading Level).pdf
+
+docs/garmin-data
+
+files/
+
+files/a-google-calendar.ical/a\@awews.com.ics
+
+files/a-google-calendar.ical/appointment-scheduler_awews.com_1e51q21npge6u840poq4de8ok8\@group.calendar.google.com.ics
+
+files/a-google-calendar.ical/Birthdays_a\@awews.com.ics
+
+files/a-google-calendar.ical/future money_awews.com_8ci9d20kn26rmctua3591vsb3c\@group.calendar.google.com.ics
+
+files/a-google-calendar.ical/Other_awews.com_ferbj1m4c5smb6redjr1dp8edo\@group.calendar.google.com.ics
+
+files/bugs/security-risks.md
+
+plans/
