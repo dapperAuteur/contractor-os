@@ -1,0 +1,328 @@
+@import "tailwindcss";
+/* @tailwind base;
+@tailwind components; */
+@tailwind utilities;
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+/* 
+ * MOBILE-FIRST FIX: Add these rules to app/globals.css
+ * These prevent horizontal scroll and ensure responsive behavior
+ */
+
+/* Prevent horizontal scroll at root level */
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Ensure all containers respect viewport width */
+* {
+  box-sizing: border-box;
+}
+
+/* Make images and media responsive by default */
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure iframes are responsive */
+iframe {
+  max-width: 100%;
+}
+
+/* Prevent text from overflowing containers */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Ensure pre and code blocks don't cause horizontal scroll */
+pre,
+code {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Make tables responsive */
+table {
+  max-width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+/* Smooth transitions for responsive elements */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Touch-friendly scrollbars on mobile */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure focus states are visible for accessibility */
+*:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users but keep for keyboard */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ─── Blog content prose styles ──────────────────────────────────────────── */
+/* Applied by TiptapRenderer and the editor's editorProps.attributes.class    */
+
+.blog-content {
+  color: #1f2937; /* gray-800 — force light regardless of dark mode */
+  background-color: #ffffff;
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.blog-content h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.blog-content h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.blog-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-content p {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.blog-content a {
+  color: #0284c7; /* sky-600 */
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.blog-content a:hover {
+  color: #0369a1; /* sky-700 */
+}
+
+.blog-content ul,
+.blog-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.blog-content ul {
+  list-style-type: disc;
+}
+
+.blog-content ol {
+  list-style-type: decimal;
+}
+
+.blog-content li {
+  margin-bottom: 0.25rem;
+}
+
+.blog-content blockquote {
+  border-left: 4px solid #0ea5e9; /* sky-500 */
+  padding-left: 1rem;
+  margin-left: 0;
+  margin-bottom: 1.25rem;
+  color: #4b5563; /* gray-600 */
+  font-style: italic;
+}
+
+.blog-content code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.875em;
+  background: #f3f4f6; /* gray-100 */
+  color: #374151; /* gray-700 */
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+}
+
+.blog-content pre {
+  background: #1f2937; /* gray-800 */
+  color: #f9fafb; /* gray-50 */
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+
+.blog-content pre code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.blog-content img {
+  border-radius: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.blog-content hr {
+  border: none;
+  border-top: 2px solid #e5e7eb; /* gray-200 */
+  margin: 2rem 0;
+}
+
+/* YouTube / video embeds */
+.blog-content iframe,
+.blog-content .social-embed-block iframe {
+  border-radius: 0.75rem;
+  margin-bottom: 1.25rem;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  height: auto;
+}
+
+/* Tiptap editor placeholder */
+.blog-content .is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #9ca3af; /* gray-400 */
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+/* ─── End blog content styles ─────────────────────────────────────────────── */
+
+/* Custom global class for form inputs */
+.form-input {
+  @apply w-full px-4 py-2 rounded-lg border transition-colors;
+  @apply bg-white border-gray-300 text-gray-900;
+  @apply focus:ring-2 focus:ring-sky-500 focus:border-transparent focus:outline-none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-input {
+    /* Keep background white and text dark for high contrast in dark mode */
+    @apply bg-white border-gray-600 text-gray-900;
+    @apply focus:ring-sky-500;
+  }
+}
+
+/* Remove browser-default autofill background color */
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px theme('colors.white') inset;
+  -webkit-text-fill-color: theme('colors.gray.900');
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-input:-webkit-autofill,
+  .form-input:-webkit-autofill:hover,
+  .form-input:-webkit-autofill:focus {
+    /* Match the explicit input styles for autofill in dark mode */
+    -webkit-box-shadow: 0 0 0px 1000px theme('colors.white') inset;
+    -webkit-text-fill-color: theme('colors.gray.900');
+  }
+}
+
+/* ─── Global input accessibility ──────────────────────────────────────────── */
+/* Enforce high-contrast text on all native form controls app-wide,
+   regardless of whether they use the .form-input utility class.            */
+input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+textarea,
+select {
+  color: #111827; /* gray-900 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af; /* gray-400 — visible but clearly secondary */
+  opacity: 1;     /* override Firefox default partial opacity */
+}
+/* ─── End global input accessibility ──────────────────────────────────────── */
+
+/* ─── Dark-background form controls (admin dark UI) ──────────────────────── */
+/* Overrides the light-mode textarea/input color rule above for dark contexts  */
+.dark-input textarea,
+.dark-input select,
+.dark-input input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
+  color: #e5e7eb; /* gray-200 — readable on gray-800 backgrounds */
+}
+.dark-input textarea::placeholder,
+.dark-input input::placeholder {
+  color: #6b7280; /* gray-500 */
+}
