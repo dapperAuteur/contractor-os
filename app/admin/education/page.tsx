@@ -492,7 +492,7 @@ export default function AdminEducationPage() {
                 </div>
               ) : (
                 <div
-                  className="max-w-[85%] px-4 py-3 rounded-xl rounded-tl-none text-sm leading-relaxed bg-gray-800 text-gray-200 prose prose-sm prose-invert max-w-none [&_pre]:bg-gray-900 [&_pre]:rounded-lg [&_pre]:p-3 [&_code]:text-amber-300 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_p]:my-1.5"
+                  className="max-w-[85%] px-4 py-3 rounded-xl rounded-tl-none text-sm leading-relaxed bg-gray-800 text-gray-200 prose prose-sm prose-invert [&_pre]:bg-gray-900 [&_pre]:rounded-lg [&_pre]:p-3 [&_code]:text-amber-300 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_p]:my-1.5"
                   dangerouslySetInnerHTML={renderMarkdown(msg.text)}
                 />
               )}
