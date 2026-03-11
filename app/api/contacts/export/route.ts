@@ -62,6 +62,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Name', 'Contact Type', 'Notes', 'Location Label', 'Address', 'Lat', 'Lng'],
     rows,
-    'centenarianos-contacts-export.csv',
+    'jobhub-contacts-export.csv',
   );
 }

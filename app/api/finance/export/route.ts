@@ -43,6 +43,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Date', 'Type', 'Amount', 'Description', 'Vendor', 'Category', 'Notes'],
     rows,
-    'centenarianos-finance-export.csv',
+    'jobhub-finance-export.csv',
   );
 }

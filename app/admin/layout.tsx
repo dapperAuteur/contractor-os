@@ -22,7 +22,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         >
           <Menu className="w-5 h-5" />
         </button>
-        <p className="text-xs font-bold uppercase tracking-widest text-fuchsia-400">Admin</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-amber-400">Admin</p>
       </div>
 
       {/* Mobile overlay */}
@@ -44,8 +44,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       >
         <div className="p-5 border-b border-gray-800 flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-fuchsia-400 mb-1">Admin</p>
-            <p className="text-lg font-bold text-white">CentenarianOS</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1">Admin</p>
+            <p className="text-lg font-bold text-white">JobHub</p>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -58,7 +58,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <AdminSidebar onNavigate={() => setSidebarOpen(false)} />
         <div className="p-3 border-t border-gray-800">
           <Link
-            href="/dashboard/planner"
+            href="/dashboard/contractor"
             className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white transition"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />

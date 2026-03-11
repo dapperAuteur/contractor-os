@@ -10,8 +10,8 @@ import { useAuth } from '@/lib/hooks/useAuth';
 
 const BENEFITS = [
   { icon: BookOpen,   title: 'Flexible Course Formats',   desc: 'Video, audio, text, slides — or mix them all. Linear or CYOA adventure paths.' },
-  { icon: Users,      title: 'Built-In Audience',          desc: 'Reach the CentenarianOS community of health-focused learners immediately.' },
-  { icon: DollarSign, title: 'Keep the Majority',          desc: 'Set your own price. CentOS takes a small platform fee; the rest goes to you via Stripe.' },
+  { icon: Users,      title: 'Built-In Audience',          desc: 'Reach the JobHub community of health-focused learners immediately.' },
+  { icon: DollarSign, title: 'Keep the Majority',          desc: 'Set your own price. JobHub takes a small platform fee; the rest goes to you via Stripe.' },
   { icon: Zap,        title: 'Assignments & Live Sessions', desc: 'Grade submissions, give feedback, and host live streams — all in one place.' },
 ];
 
@@ -45,14 +45,14 @@ export default function TeachLandingPage() {
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
         <span className="inline-block px-3 py-1 mb-6 rounded-full bg-fuchsia-900/50 text-fuchsia-300 text-sm font-medium">
-          Centenarian Academy — Teach
+          JobHub Academy — Teach
         </span>
         <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
           Share your knowledge.<br />
           Build a sustainable income.
         </h1>
         <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-          Host free or paid courses on CentenarianOS. Reach an audience obsessed with living
+          Host free or paid courses on JobHub. Reach an audience obsessed with living
           healthier, longer lives — and get paid directly through Stripe.
         </p>
       </section>

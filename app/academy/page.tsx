@@ -78,7 +78,7 @@ export default function AcademyPage() {
     <div className="text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         <div className="mb-8 sm:mb-12 text-center">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-3">Centenarian Academy</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold mb-3">JobHub Academy</h1>
           <p className="text-gray-400 text-base sm:text-lg">Expert-led courses to help you live longer, stronger.</p>
           <div className="flex items-center justify-center gap-2 mt-6">
             <span className="px-4 py-1.5 bg-fuchsia-600 text-white rounded-full text-sm font-medium">Courses</span>

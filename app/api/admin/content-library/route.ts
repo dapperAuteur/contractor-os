@@ -81,7 +81,7 @@ const TUTORIAL_SERIES = [
   },
   {
     slug: 'getting-started',
-    title: 'Getting Started with CentenarianOS',
+    title: 'Getting Started with JobHub',
     description: 'Your first stop — explore the platform, pricing, demo account, and interactive walkthroughs.',
     category: 'Platform Guide',
     tags: ['tutorial', 'getting-started', 'onboarding', 'demo'],
@@ -180,7 +180,7 @@ const TUTORIAL_SERIES = [
   },
   {
     slug: 'academy',
-    title: 'Navigating the Centenarian Academy',
+    title: 'Navigating the JobHub Academy',
     description: 'Browse courses, enroll, navigate lessons, complete assignments, and use CYOA adventure mode.',
     category: 'Platform Guide',
     tags: ['tutorial', 'academy', 'courses', 'learning', 'cyoa'],

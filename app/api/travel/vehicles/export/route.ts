@@ -39,6 +39,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Type', 'Nickname', 'Make', 'Model', 'Year', 'Color', 'Ownership Type', 'Trip Mode', 'Active'],
     rows,
-    'centenarianos-vehicles-export.csv',
+    'jobhub-vehicles-export.csv',
   );
 }
