@@ -17,14 +17,15 @@ export default function TermsPage() {
         <div className="max-w-3xl mx-auto px-6 py-16">
         <h1 className="text-3xl font-bold text-white mb-2">Terms of Use</h1>
         <p className="text-gray-400 text-sm mb-10">
-          Last updated: February 21, 2026 &nbsp;·&nbsp; Operated by B4C LLC / AwesomeWebStore.com
+          Last updated: March 11, 2026 &nbsp;&middot;&nbsp; Operated by B4C LLC / AwesomeWebStore.com
         </p>
 
         <Section title="1. Acceptance of Terms">
           <p>
             By creating an account or using JobHub (&quot;the Platform,&quot; &quot;we,&quot; &quot;us&quot;), you agree to
-            these Terms of Use and our{' '}
-            <Link href="/privacy" className="text-fuchsia-400 hover:underline">Privacy Policy</Link>.
+            these Terms of Use, our{' '}
+            <Link href="/privacy" className="text-fuchsia-400 hover:underline">Privacy Policy</Link>, and our{' '}
+            <Link href="/community" className="text-fuchsia-400 hover:underline">Community Code of Conduct</Link>.
             If you do not agree, do not use the Platform.
           </p>
           <p className="mt-3">
@@ -54,80 +55,90 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="4. Health Data — Your Responsibility">
+        <Section title="4. Platform Description">
+          <p>
+            JobHub is a contractor management platform that helps freelance contractors and crew
+            coordinators track jobs, log time, manage invoices, scan documents, and organize work
+            schedules. The Platform provides tools for:
+          </p>
+          <ul className="list-disc pl-5 mt-2 space-y-1">
+            <li>Job tracking, time entry, and invoice generation</li>
+            <li>Document scanning and data extraction using AI (Google Gemini)</li>
+            <li>Multi-day scheduling with calendar-based date picking</li>
+            <li>Push notifications for clock in/out and pay day reminders</li>
+            <li>Job board for posting and accepting available work</li>
+            <li>Mileage, expense, and trip tracking</li>
+            <li>Blog and Academy for community education</li>
+          </ul>
+        </Section>
+
+        <Section title="5. Financial Data — Your Responsibility">
           <p className="font-semibold text-yellow-400">
-            IMPORTANT: JobHub is a self-tracking and education platform. It is NOT a medical
-            service, clinic, or healthcare provider.
+            IMPORTANT: JobHub is a record-keeping and productivity tool. It is NOT an accounting
+            firm, tax advisor, or financial services provider.
           </p>
           <p className="mt-3">
-            Any health metrics, biometric data, or personal health information you enter into the Platform
-            is entered voluntarily by you. You are solely responsible for:
+            Any financial data you enter — including pay rates, invoices, expenses, and mileage — is
+            entered voluntarily by you. You are solely responsible for:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>The accuracy of the data you enter</li>
-            <li>How you interpret, share, or act on that data</li>
-            <li>Any decisions — including changes to diet, exercise, medication, or lifestyle — that
-                you make based on information from the Platform</li>
+            <li>Tax reporting and compliance with local, state, and federal regulations</li>
+            <li>Verifying invoice totals and pay calculations before submitting to clients</li>
+            <li>Maintaining your own backup records for tax and legal purposes</li>
           </ul>
           <p className="mt-3">
             <strong>JobHub, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless
-            from any claims, damages, or liability arising from your use of health data tools, AI-generated
-            insights, course content, or any other feature of the Platform.</strong>
+            from any claims, damages, or liability arising from your use of financial tracking tools,
+            AI-generated document extractions, or any other feature of the Platform.</strong>
           </p>
         </Section>
 
-        <Section title="5. Medical Disclaimer — Consult Your Doctor">
+        <Section title="6. AI-Generated Content & Document Scanning">
           <p>
-            Nothing on this Platform constitutes medical advice, diagnosis, or treatment. All content —
-            including course lessons, AI-generated insights, blog posts, recipes, and health metric
-            summaries — is for <strong>informational and educational purposes only</strong>.
-          </p>
-          <p className="mt-3">
-            <strong>
-              Always consult a qualified, licensed healthcare provider before making any changes to your
-              health regimen, including changes to exercise, nutrition, supplements, or medications.
-              Do not disregard or delay professional medical advice based on anything you read or learn
-              on this Platform.
-            </strong>
-          </p>
-          <p className="mt-3">
-            Wearable device data (from Apple Watch, Fitbit, Garmin, Oura Ring, or similar devices) logged
-            on the Platform is consumer-grade data. It is not a substitute for clinical measurement or
-            medical testing.
-          </p>
-        </Section>
-
-        <Section title="6. AI-Generated Content">
-          <p>
-            The Platform uses artificial intelligence (Google Gemini) to generate insights, course
-            recommendations, and help responses. AI-generated content:
+            The Platform uses artificial intelligence (Google Gemini) to extract data from scanned
+            documents (pay stubs, invoices, call sheets, receipts) and generate insights. AI-generated
+            content:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>May be inaccurate, incomplete, or outdated</li>
-            <li>Is not a substitute for professional advice</li>
-            <li>Should be verified before acting upon it</li>
+            <li>May be inaccurate, incomplete, or misread from source documents</li>
+            <li>Should always be reviewed and verified before use</li>
+            <li>Is not a substitute for professional accounting or legal advice</li>
           </ul>
           <p className="mt-3">
-            JobHub, B4C LLC, AwesomeWebStore.com, and Anthony McDonald make no warranties
-            regarding the accuracy, reliability, or fitness for any purpose of AI-generated content.
+            You are responsible for verifying all extracted data before creating jobs, invoices, or
+            time entries from scanned documents.
           </p>
         </Section>
 
         <Section title="7. User-Generated Content">
           <p>
-            You retain ownership of content you create on the Platform (blog posts, recipes, course
-            materials, assignment submissions). By publishing content, you grant JobHub a
+            You retain ownership of content you create on the Platform (blog posts, job documents,
+            incident reports, best practices). By publishing content publicly, you grant JobHub a
             non-exclusive, royalty-free license to display and distribute that content through the
             Platform.
           </p>
           <p className="mt-3">
             You agree not to post content that is: unlawful, defamatory, harassing, sexually explicit,
             or that infringes on the intellectual property rights of others. We reserve the right to
-            remove content that violates these standards.
+            remove content that violates these standards or our{' '}
+            <Link href="/community" className="text-fuchsia-400 hover:underline">Community Code of Conduct</Link>.
           </p>
         </Section>
 
-        <Section title="8. JobHub Academy — Courses and Enrollments">
+        <Section title="8. Job Board & Shared Information">
+          <p>
+            When you post a job publicly on the job board, certain job details become visible to other
+            users. When a replacement contractor accepts your posted job, contact information may be
+            shared based on your sharing preferences.
+          </p>
+          <p className="mt-3">
+            JobHub is not a party to any employment or contractor agreement between users. We do not
+            guarantee the quality, reliability, or availability of any contractor or job posting.
+          </p>
+        </Section>
+
+        <Section title="9. Academy — Courses and Enrollments">
           <p>
             JobHub Academy is a marketplace where independent teachers offer courses. JobHub
             is the platform operator, not the employer or agent of any teacher. Course content reflects
@@ -135,12 +146,11 @@ export default function TermsPage() {
           </p>
           <p className="mt-3">
             Paid course enrollments are processed through Stripe. Refund eligibility is determined by
-            the individual teacher&apos;s refund policy. Contact the teacher directly for refund requests.
-            The platform fee (a percentage of each sale) is non-refundable.
+            the individual teacher&apos;s refund policy. The platform fee is non-refundable.
           </p>
         </Section>
 
-        <Section title="9. Prohibited Uses">
+        <Section title="10. Prohibited Uses">
           <p>You agree not to:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Use the Platform for any unlawful purpose</li>
@@ -149,17 +159,19 @@ export default function TermsPage() {
             <li>Reproduce, redistribute, or resell Platform content without written permission</li>
             <li>Impersonate another person or entity</li>
             <li>Use the Platform to send unsolicited communications (spam)</li>
+            <li>Manipulate job board listings, reviews, or contractor profiles</li>
+            <li>Share confidential client or employer information obtained through the Platform</li>
           </ul>
         </Section>
 
-        <Section title="10. Intellectual Property">
+        <Section title="11. Intellectual Property">
           <p>
             The JobHub brand, logo, platform design, and proprietary code are owned by B4C LLC /
             AwesomeWebStore.com. You may not use our trademarks or branding without written permission.
           </p>
         </Section>
 
-        <Section title="11. Disclaimers and Limitation of Liability">
+        <Section title="12. Disclaimers and Limitation of Liability">
           <p>
             THE PLATFORM IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTIES OF ANY KIND, EXPRESS
             OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, JOBHUB, B4C LLC,
@@ -168,12 +180,12 @@ export default function TermsPage() {
           </p>
           <p className="mt-3">
             IN NO EVENT SHALL WE BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL
-            DAMAGES ARISING FROM YOUR USE OF THE PLATFORM OR YOUR RELIANCE ON ANY CONTENT, INSIGHT, OR
-            RECOMMENDATION PROVIDED THROUGH THE PLATFORM.
+            DAMAGES ARISING FROM YOUR USE OF THE PLATFORM OR YOUR RELIANCE ON ANY CONTENT, EXTRACTION,
+            CALCULATION, OR RECOMMENDATION PROVIDED THROUGH THE PLATFORM.
           </p>
         </Section>
 
-        <Section title="12. Changes to These Terms">
+        <Section title="13. Changes to These Terms">
           <p>
             We may update these Terms at any time. We will notify you of material changes by email or
             by displaying a notice on the Platform. Continued use after changes take effect constitutes
@@ -181,14 +193,14 @@ export default function TermsPage() {
           </p>
         </Section>
 
-        <Section title="13. Governing Law">
+        <Section title="14. Governing Law">
           <p>
             These Terms are governed by the laws of the State of Indiana, United States, without regard
             to its conflict of law provisions.
           </p>
         </Section>
 
-        <Section title="14. Contact">
+        <Section title="15. Contact">
           <p>
             Questions about these Terms? Contact us at{' '}
             <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
