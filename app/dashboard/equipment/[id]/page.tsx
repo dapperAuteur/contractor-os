@@ -8,6 +8,7 @@ import { offlineFetch } from '@/lib/offline/offline-fetch';
 import ActivityLinker from '@/components/ui/ActivityLinker';
 import LifeCategoryTagger from '@/components/ui/LifeCategoryTagger';
 import ValuationChart from '@/components/equipment/ValuationChart';
+import EquipmentMediaGallery from '@/components/equipment/EquipmentMediaGallery';
 
 interface EquipmentDetail {
   id: string;
@@ -93,14 +94,14 @@ export default function EquipmentDetailPage() {
   };
 
   if (loading) {
-    return <div className="max-w-4xl mx-auto py-12 text-center text-gray-400 text-sm">Loading...</div>;
+    return <div className="max-w-4xl mx-auto py-12 text-center text-neutral-500 text-sm">Loading...</div>;
   }
 
   if (!item) {
     return (
       <div className="max-w-4xl mx-auto py-12 text-center">
-        <p className="text-gray-500">Equipment not found.</p>
-        <button onClick={() => router.push('/dashboard/equipment')} className="mt-3 text-sm text-fuchsia-600">
+        <p className="text-neutral-500">Equipment not found.</p>
+        <button onClick={() => router.push('/dashboard/equipment')} className="mt-3 text-sm text-amber-400 min-h-11">
           Back to Equipment
         </button>
       </div>
@@ -118,42 +119,42 @@ export default function EquipmentDetailPage() {
       {/* Back button */}
       <button
         onClick={() => router.push('/dashboard/equipment')}
-        className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition"
+        className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-200 transition min-h-11"
       >
         <ArrowLeft className="w-4 h-4" />
         Equipment
       </button>
 
       {/* Main info card */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
         <div className="flex gap-5">
           {/* Image */}
-          <div className="w-28 h-28 rounded-xl bg-gray-100 shrink-0 overflow-hidden flex items-center justify-center">
+          <div className="w-28 h-28 rounded-xl bg-neutral-800 shrink-0 overflow-hidden flex items-center justify-center">
             {item.image_url ? (
               <Image src={item.image_url} alt={item.name} width={112} height={112} className="w-full h-full object-cover" />
             ) : (
-              <Package className="w-10 h-10 text-gray-300" />
+              <Package className="w-10 h-10 text-neutral-600" aria-hidden="true" />
             )}
           </div>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h1 className="text-xl font-bold text-gray-900">{item.name}</h1>
+                <h1 className="text-xl font-bold text-neutral-100">{item.name}</h1>
                 {(item.brand || item.model) && (
-                  <p className="text-sm text-gray-500 mt-0.5">
+                  <p className="text-sm text-neutral-400 mt-0.5">
                     {[item.brand, item.model].filter(Boolean).join(' ')}
                   </p>
                 )}
               </div>
               <div className="flex gap-2 shrink-0">
                 {catName && (
-                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-neutral-800 text-neutral-300 border border-neutral-700">
                     {catName}
                   </span>
                 )}
                 {!item.is_active && (
-                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-500">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-red-900/30 text-red-400">
                     Retired
                   </span>
                 )}
@@ -164,32 +165,32 @@ export default function EquipmentDetailPage() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
               {item.purchase_date && (
                 <div>
-                  <span className="text-[10px] text-gray-400 uppercase tracking-wide">Purchased</span>
-                  <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
-                    <Calendar className="w-3 h-3 text-gray-400" />
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-wide">Purchased</span>
+                  <p className="text-sm font-medium text-neutral-200 flex items-center gap-1">
+                    <Calendar className="w-3 h-3 text-neutral-500" aria-hidden="true" />
                     {new Date(item.purchase_date + 'T00:00:00').toLocaleDateString()}
                   </p>
                 </div>
               )}
               {purchase > 0 && (
                 <div>
-                  <span className="text-[10px] text-gray-400 uppercase tracking-wide">Paid</span>
-                  <p className="text-sm font-medium text-gray-700 flex items-center gap-1">
-                    <DollarSign className="w-3 h-3 text-gray-400" />
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-wide">Paid</span>
+                  <p className="text-sm font-medium text-neutral-200 flex items-center gap-1">
+                    <DollarSign className="w-3 h-3 text-neutral-500" aria-hidden="true" />
                     ${purchase.toLocaleString()}
                   </p>
                 </div>
               )}
               {current > 0 && (
                 <div>
-                  <span className="text-[10px] text-gray-400 uppercase tracking-wide">Current Value</span>
-                  <p className="text-sm font-medium text-gray-700">${current.toLocaleString()}</p>
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-wide">Current Value</span>
+                  <p className="text-sm font-medium text-neutral-200">${current.toLocaleString()}</p>
                 </div>
               )}
               {purchase > 0 && current > 0 && (
                 <div>
-                  <span className="text-[10px] text-gray-400 uppercase tracking-wide">Change</span>
-                  <p className={`text-sm font-medium ${diff >= 0 ? 'text-emerald-600' : 'text-red-500'}`}>
+                  <span className="text-[10px] text-neutral-500 uppercase tracking-wide">Change</span>
+                  <p className={`text-sm font-medium ${diff >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                     {diff >= 0 ? '+' : ''}{diffPct.toFixed(1)}% (${Math.abs(diff).toLocaleString()})
                   </p>
                 </div>
@@ -197,7 +198,7 @@ export default function EquipmentDetailPage() {
             </div>
 
             {/* Extra fields */}
-            <div className="flex flex-wrap gap-4 mt-3 text-xs text-gray-500">
+            <div className="flex flex-wrap gap-4 mt-3 text-xs text-neutral-500">
               {item.serial_number && <span>S/N: {item.serial_number}</span>}
               {item.condition && <span className="capitalize">Condition: {item.condition}</span>}
               {item.warranty_expires && (
@@ -208,19 +209,24 @@ export default function EquipmentDetailPage() {
             </div>
 
             {item.notes && (
-              <p className="mt-3 text-sm text-gray-600 bg-gray-50 rounded-lg p-3">{item.notes}</p>
+              <p className="mt-3 text-sm text-neutral-300 bg-neutral-800 rounded-lg p-3">{item.notes}</p>
             )}
           </div>
         </div>
       </div>
 
+      {/* Media Gallery */}
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5">
+        <EquipmentMediaGallery equipmentId={id} />
+      </div>
+
       {/* Value History */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-gray-900">Value History</h2>
+          <h2 className="text-sm font-semibold text-neutral-100">Value History</h2>
           <button
             onClick={() => setShowValForm(!showValForm)}
-            className="text-xs text-fuchsia-600 hover:text-fuchsia-700 font-medium flex items-center gap-1"
+            className="text-xs text-amber-400 hover:text-amber-300 font-medium flex items-center gap-1 min-h-11 px-2"
           >
             <Plus className="w-3 h-3" />
             Add Valuation
@@ -228,13 +234,13 @@ export default function EquipmentDetailPage() {
         </div>
 
         {showValForm && (
-          <form onSubmit={addValuation} className="border border-gray-200 rounded-lg p-3 mb-4 space-y-2">
-            <div className="flex gap-2">
+          <form onSubmit={addValuation} className="border border-neutral-700 rounded-lg p-3 mb-4 space-y-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="date"
                 value={valDate}
                 onChange={(e) => setValDate(e.target.value)}
-                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+                className="border border-neutral-700 bg-neutral-800 text-neutral-100 rounded-lg px-3 py-1.5 text-sm min-h-11"
               />
               <input
                 type="number"
@@ -244,19 +250,19 @@ export default function EquipmentDetailPage() {
                 onChange={(e) => setValValue(e.target.value)}
                 placeholder="Value"
                 required
-                className="border border-gray-200 rounded-lg px-3 py-1.5 text-sm w-28"
+                className="border border-neutral-700 bg-neutral-800 text-neutral-100 rounded-lg px-3 py-1.5 text-sm w-28 min-h-11"
               />
               <input
                 type="text"
                 value={valNotes}
                 onChange={(e) => setValNotes(e.target.value)}
                 placeholder="Notes (optional)"
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+                className="flex-1 border border-neutral-700 bg-neutral-800 text-neutral-100 rounded-lg px-3 py-1.5 text-sm min-h-11"
               />
               <button
                 type="submit"
                 disabled={valSaving}
-                className="px-3 py-1.5 text-sm font-medium text-white bg-fuchsia-600 hover:bg-fuchsia-700 rounded-lg transition disabled:opacity-50"
+                className="px-4 py-1.5 text-sm font-medium text-white bg-amber-600 hover:bg-amber-500 rounded-lg transition disabled:opacity-50 min-h-11"
               >
                 {valSaving ? '...' : 'Add'}
               </button>
@@ -274,12 +280,12 @@ export default function EquipmentDetailPage() {
         {valuations.length > 0 && (
           <div className="mt-4 space-y-1">
             {valuations.map((v) => (
-              <div key={v.id} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg text-xs">
-                <span className="text-gray-500">
+              <div key={v.id} className="flex items-center justify-between px-3 py-2 bg-neutral-800 rounded-lg text-xs">
+                <span className="text-neutral-400">
                   {new Date(v.valued_at + 'T00:00:00').toLocaleDateString()}
                 </span>
-                <span className="font-medium text-gray-700">${Number(v.value).toLocaleString()}</span>
-                {v.notes && <span className="text-gray-400 truncate max-w-40">{v.notes}</span>}
+                <span className="font-medium text-neutral-200">${Number(v.value).toLocaleString()}</span>
+                {v.notes && <span className="text-neutral-500 truncate max-w-40">{v.notes}</span>}
               </div>
             ))}
           </div>
@@ -287,12 +293,12 @@ export default function EquipmentDetailPage() {
       </div>
 
       {/* Activity Links */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5">
         <ActivityLinker entityType="equipment" entityId={id} />
       </div>
 
       {/* Life Categories */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-5">
         <LifeCategoryTagger entityType="equipment" entityId={id} />
       </div>
     </div>

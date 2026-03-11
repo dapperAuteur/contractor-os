@@ -65,6 +65,16 @@ Never use `border-gray-300` or `bg-white` on dark-themed pages.
 
 ---
 
+## Shared Database
+
+This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details.
+- **Always use `IF NOT EXISTS` / `IF EXISTS`** in migrations
+- **Never drop columns** without checking both repos
+- **Copy new migrations to both repos** to keep schema history in sync
+- When adding columns that only JobHub uses, document them in `SHARED_DB.md`
+
+---
+
 ## General Code Patterns
 
 - Use `.maybeSingle()` not `.single()` for Supabase queries that may return no rows

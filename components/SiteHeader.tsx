@@ -1,69 +1,53 @@
 'use client';
 
 // components/SiteHeader.tsx
-// Shared nav bar used on public pages (Academy, Live, Blog, Recipes).
+// Shared nav bar used on public pages (Academy, Blog, Profiles).
 // Logged-in users see the full grouped nav (same as dashboard).
 // Logged-out users see a minimal public header.
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/hooks/useAuth';
-import { useSubscription } from '@/lib/hooks/useSubscription';
 import { useUnreadCount } from '@/lib/hooks/useUnreadCount';
 import { createClient } from '@/lib/supabase/client';
-import { GraduationCap, Radio, LogIn, BookOpen, ChefHat, Zap } from 'lucide-react';
+import { GraduationCap, LogIn, BookOpen, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
-import DesktopNav from '@/components/nav/DesktopNav';
-import MobileBottomBar from '@/components/nav/MobileBottomBar';
+import ContractorNav from '@/components/nav/ContractorNav';
 
 function PublicHeader() {
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+    <nav className="bg-neutral-950 border-b border-neutral-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold text-gray-900">
+        <Link href="/" className="text-lg font-bold text-neutral-100">
           JobHub
         </Link>
         <div className="flex items-center gap-1">
           <Link
             href="/academy"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 transition"
           >
             <GraduationCap className="w-4 h-4" />
             Academy
           </Link>
           <Link
             href="/blog"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 transition"
           >
             <BookOpen className="w-4 h-4" />
             Blog
           </Link>
-          <Link
-            href="/recipes"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
-          >
-            <ChefHat className="w-4 h-4" />
-            Recipes
-          </Link>
-          <Link
-            href="/live"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
-          >
-            <Radio className="w-4 h-4" />
-            Live
-          </Link>
-          <div className="w-px h-5 bg-gray-200 mx-2" />
+          <div className="w-px h-5 bg-neutral-700 mx-2" />
           <Link
             href="/login"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 transition"
           >
             <LogIn className="w-4 h-4" />
             Login
           </Link>
           <Link
             href="/pricing"
-            className="flex items-center gap-1.5 px-3 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
           >
             <Zap className="w-4 h-4" />
             Get Started
@@ -75,23 +59,15 @@ function PublicHeader() {
 }
 
 function AuthenticatedHeader() {
-  const { status: subStatus, loading: subLoading } = useSubscription();
   const router = useRouter();
   const supabase = createClient();
   const unreadMessages = useUnreadCount();
-
-  const isPaid = subStatus === 'monthly' || subStatus === 'lifetime';
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [isTeacher, setIsTeacher] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
-  const hasAccess = isPaid || isAdmin;
 
   useEffect(() => {
     offlineFetch('/api/auth/me')
       .then((r) => r.json())
       .then((d) => {
-        setIsAdmin(d.isAdmin ?? false);
-        setIsTeacher(d.isTeacher ?? false);
         setUsername(d.username ?? null);
       })
       .catch(() => {});
@@ -103,21 +79,12 @@ function AuthenticatedHeader() {
     router.refresh();
   };
 
-  const navProps = {
-    hasAccess,
-    isAdmin,
-    isTeacher,
-    username,
-    unreadMessages,
-    onLogout: handleLogout,
-    subLoading,
-  };
-
   return (
-    <>
-      <DesktopNav {...navProps} />
-      <MobileBottomBar {...navProps} />
-    </>
+    <ContractorNav
+      username={username}
+      unreadMessages={unreadMessages}
+      onLogout={handleLogout}
+    />
   );
 }
 
