@@ -11,5 +11,8 @@ export {
   type PayStubExtraction,
   type PayStubLineItem,
   type PayStubBenefit,
+  type InvoiceExtraction,
+  type InvoiceLineItem,
+  type CallSheetExtraction,
   type ExtractionResult,
 } from './extractors';

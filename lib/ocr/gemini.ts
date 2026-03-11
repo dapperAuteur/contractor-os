@@ -10,7 +10,7 @@ export interface GeminiImagePart {
 /** Convert File objects to base64 inline data parts for Gemini Vision */
 export async function filesToImageParts(
   files: File[],
-  maxFiles = 4,
+  maxFiles = 10,
 ): Promise<GeminiImagePart[]> {
   const parts: GeminiImagePart[] = [];
   for (const file of files.slice(0, maxFiles)) {

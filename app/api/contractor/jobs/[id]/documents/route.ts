@@ -43,10 +43,12 @@ export async function POST(request: NextRequest, ctx: Ctx) {
 
   const { id } = await ctx.params;
   const body = await request.json();
-  const { name, url, doc_type, is_shared, file_size, notes } = body;
+  const { name, url, doc_type, is_shared, file_size, notes, title, doc_category, description, metadata } = body;
 
-  if (!name?.trim() || !url?.trim()) {
-    return NextResponse.json({ error: 'name and url are required' }, { status: 400 });
+  // At minimum, a title or name is required
+  const docTitle = (title || name || '').trim();
+  if (!docTitle) {
+    return NextResponse.json({ error: 'title or name is required' }, { status: 400 });
   }
 
   // Verify job ownership
@@ -65,9 +67,13 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     .insert({
       job_id: id,
       user_id: user.id,
-      name: name.trim(),
-      url: url.trim(),
+      name: docTitle,
+      url: url?.trim() || null,
       doc_type: doc_type ?? 'other',
+      doc_category: doc_category ?? null,
+      title: docTitle,
+      description: description ?? notes ?? null,
+      metadata: metadata ?? null,
       is_shared: is_shared ?? false,
       file_size: file_size ?? null,
       notes: notes ?? null,

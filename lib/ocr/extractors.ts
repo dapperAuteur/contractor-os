@@ -106,6 +106,49 @@ export interface PayStubExtraction {
   confidence_notes: string;
 }
 
+// ── Invoice ─────────────────────────────────────────────────────
+export interface InvoiceLineItem {
+  description: string;
+  quantity: number;
+  unit_price: number;
+  amount: number;
+}
+
+export interface InvoiceExtraction {
+  vendor: string | null;
+  invoice_number: string | null;
+  date: string | null;          // YYYY-MM-DD
+  due_date: string | null;      // YYYY-MM-DD
+  bill_to: string | null;
+  line_items: InvoiceLineItem[];
+  subtotal: number | null;
+  tax: number | null;
+  total: number | null;
+  payment_terms: string | null;
+  notes: string | null;
+  confidence_notes: string;
+}
+
+// ── Call Sheet ───────────────────────────────────────────────────
+export interface CallSheetExtraction {
+  client_name: string | null;
+  event_name: string | null;
+  job_number: string | null;
+  work_dates: string[];          // YYYY-MM-DD array
+  call_time: string | null;      // HH:MM AM/PM
+  wrap_time: string | null;      // HH:MM AM/PM
+  location_name: string | null;
+  location_address: string | null;
+  poc_name: string | null;
+  poc_phone: string | null;
+  crew_coordinator_name: string | null;
+  crew_coordinator_phone: string | null;
+  department: string | null;
+  union_local: string | null;
+  notes: string | null;
+  confidence_notes: string;
+}
+
 // ── Union type ──────────────────────────────────────────────────
 export type ExtractionResult =
   | { type: 'receipt'; data: ReceiptExtraction }
@@ -113,6 +156,8 @@ export type ExtractionResult =
   | { type: 'maintenance_invoice'; data: MaintenanceExtraction }
   | { type: 'fuel_receipt'; data: FuelReceiptExtraction }
   | { type: 'pay_stub'; data: PayStubExtraction }
+  | { type: 'invoice'; data: InvoiceExtraction }
+  | { type: 'call_sheet'; data: CallSheetExtraction }
   | { type: 'medical'; data: Record<string, unknown> }
   | { type: 'unknown'; data: Record<string, unknown> };
 
@@ -257,12 +302,68 @@ Be precise with numbers and rates. Capture ALL earning line items and ALL benefi
 If "Punch" and "Adjusted" times are shown, prefer the "Adjusted" values.
 Return only the JSON object, no markdown, no explanation.`;
 
+const INVOICE_PROMPT = `You are extracting data from a billing invoice or statement.
+
+Extract all visible information and return ONLY valid JSON matching this schema:
+{
+  "vendor": "<company/vendor name or null>",
+  "invoice_number": "<invoice # or null>",
+  "date": "<YYYY-MM-DD or null>",
+  "due_date": "<YYYY-MM-DD or null>",
+  "bill_to": "<recipient name/company or null>",
+  "line_items": [
+    {
+      "description": "<item/service description>",
+      "quantity": <number, default 1>,
+      "unit_price": <price per unit>,
+      "amount": <line total>
+    }
+  ],
+  "subtotal": <subtotal before tax or null>,
+  "tax": <tax amount or null>,
+  "total": <total amount due or null>,
+  "payment_terms": "<e.g. 'Net 30', 'Due on receipt', or null>",
+  "notes": "<any additional notes or null>",
+  "confidence_notes": "<brief note about extraction quality>"
+}
+
+Be precise with numbers. Capture ALL line items. If a value is unclear, use null.`;
+
+const CALL_SHEET_PROMPT = `You are extracting data from a production call sheet, crew schedule, or work assignment document.
+
+This is commonly used in broadcast/production to communicate job details, call times, locations, and crew contacts.
+
+Extract all visible information and return ONLY valid JSON matching this schema:
+{
+  "client_name": "<production company or client name, or null>",
+  "event_name": "<event or show name, or null>",
+  "job_number": "<job ID or reference number, or null>",
+  "work_dates": ["<YYYY-MM-DD>"],
+  "call_time": "<HH:MM AM/PM — when crew should arrive, or null>",
+  "wrap_time": "<HH:MM AM/PM — expected end time, or null>",
+  "location_name": "<venue name, or null>",
+  "location_address": "<full address, or null>",
+  "poc_name": "<point of contact name, or null>",
+  "poc_phone": "<POC phone number, or null>",
+  "crew_coordinator_name": "<crew coordinator name, or null>",
+  "crew_coordinator_phone": "<coordinator phone, or null>",
+  "department": "<department like 'Camera', 'Audio', 'Lighting', or null>",
+  "union_local": "<union local like 'IATSE 317', 'IBEW 1220', or null>",
+  "notes": "<parking instructions, load-in info, dress code, or null>",
+  "confidence_notes": "<brief note about extraction quality>"
+}
+
+Extract ALL dates mentioned. If multiple work dates are listed, include all of them in the work_dates array.
+Return only the JSON object, no markdown, no explanation.`;
+
 const EXTRACTION_PROMPTS: Record<string, string> = {
   receipt: RECEIPT_PROMPT,
   recipe: RECIPE_PROMPT,
   maintenance_invoice: MAINTENANCE_PROMPT,
   fuel_receipt: FUEL_RECEIPT_PROMPT,
   pay_stub: PAY_STUB_PROMPT,
+  invoice: INVOICE_PROMPT,
+  call_sheet: CALL_SHEET_PROMPT,
 };
 
 export async function extractDocument(

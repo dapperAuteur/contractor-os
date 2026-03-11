@@ -5,7 +5,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { NAV_GROUPS } from '@/components/nav/NavConfig';
-import { Settings, Check, Loader2, Sparkles, RotateCcw, Clock } from 'lucide-react';
+import { Settings, Check, Loader2, Sparkles, RotateCcw, Clock, Bell } from 'lucide-react';
+import { subscribeToPush, unsubscribeFromPush, isPushSubscribed } from '@/lib/push/subscribe';
 import MfaSetupSection from '@/components/settings/MfaSetupSection';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -58,6 +59,16 @@ export default function DashboardSettingsPage() {
   const [socialSaving, setSocialSaving] = useState(false);
   const [tours, setTours] = useState<TourStatus[]>([]);
 
+  // Notification preferences
+  const [pushEnabled, setPushEnabled] = useState(false);
+  const [pushLoading, setPushLoading] = useState(false);
+  const [clockInReminder, setClockInReminder] = useState(true);
+  const [clockInMinutes, setClockInMinutes] = useState(15);
+  const [clockOutReminder, setClockOutReminder] = useState(true);
+  const [payDayReminder, setPayDayReminder] = useState(true);
+  const [jobStartReminder, setJobStartReminder] = useState(true);
+  const [notifSaving, setNotifSaving] = useState(false);
+
   const loadTours = useCallback(async () => {
     try {
       const res = await fetch('/api/onboarding/status');
@@ -82,6 +93,24 @@ export default function DashboardSettingsPage() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+
+    // Load notification preferences
+    offlineFetch('/api/user/notification-preferences')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.prefs) {
+          setClockInReminder(d.prefs.clock_in_reminder ?? true);
+          setClockInMinutes(d.prefs.clock_in_minutes_before ?? 15);
+          setClockOutReminder(d.prefs.clock_out_reminder ?? true);
+          setPayDayReminder(d.prefs.pay_day_reminder ?? true);
+          setJobStartReminder(d.prefs.job_start_reminder ?? true);
+        }
+      })
+      .catch(() => {});
+
+    // Check push subscription status
+    isPushSubscribed().then(setPushEnabled).catch(() => {});
+
     loadTours();
   }, [loadTours]);
 
@@ -267,6 +296,181 @@ export default function DashboardSettingsPage() {
             onToggle={() => togglePref('scan_auto_save_images', scanAutoSave, setScanAutoSave, setScanAutoSaveSaving)}
           />
         </label>
+      </div>
+
+      {/* Notifications */}
+      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6 space-y-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Bell className="w-5 h-5 text-amber-400" aria-hidden="true" />
+          <h2 className="text-base font-semibold text-neutral-100">Notifications</h2>
+        </div>
+        <p className="text-sm text-neutral-400">
+          Get push notifications for job reminders. Requires browser permission.
+        </p>
+
+        {/* Push enable/disable */}
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-neutral-200">Push notifications</p>
+            <p className="text-xs text-neutral-500 mt-0.5">
+              {pushEnabled ? 'Enabled on this device' : 'Enable to receive alerts'}
+            </p>
+          </div>
+          <button
+            onClick={async () => {
+              setPushLoading(true);
+              try {
+                if (pushEnabled) {
+                  await unsubscribeFromPush();
+                  setPushEnabled(false);
+                } else {
+                  const sub = await subscribeToPush();
+                  setPushEnabled(!!sub);
+                }
+              } catch {
+                // Permission denied or unavailable
+              } finally {
+                setPushLoading(false);
+              }
+            }}
+            disabled={pushLoading}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition min-h-11 ${
+              pushEnabled
+                ? 'border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-red-700 hover:text-red-400'
+                : 'bg-amber-600 text-white hover:bg-amber-500'
+            } ${pushLoading ? 'opacity-50' : ''}`}
+          >
+            {pushLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : pushEnabled ? (
+              'Disable'
+            ) : (
+              'Enable'
+            )}
+          </button>
+        </div>
+
+        {pushEnabled && (
+          <div className="space-y-4 pt-2 border-t border-neutral-800">
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-neutral-200">Clock-in reminder</p>
+                <p className="text-xs text-neutral-500">Reminder before your job start time</p>
+              </div>
+              <Toggle
+                on={clockInReminder}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !clockInReminder;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ clock_in_reminder: val }),
+                    });
+                    if (res.ok) setClockInReminder(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
+
+            {clockInReminder && (
+              <div className="flex items-center gap-3 pl-4">
+                <label htmlFor="clock-in-minutes" className="text-xs text-neutral-400">Minutes before:</label>
+                <select
+                  id="clock-in-minutes"
+                  value={clockInMinutes}
+                  onChange={async (e) => {
+                    const val = Number(e.target.value);
+                    setClockInMinutes(val);
+                    await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ clock_in_minutes_before: val }),
+                    });
+                  }}
+                  className="border border-neutral-700 bg-neutral-800 text-neutral-100 rounded-lg px-3 py-1.5 text-sm focus:ring-amber-500 focus:border-amber-500"
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={15}>15</option>
+                  <option value={30}>30</option>
+                  <option value={60}>60</option>
+                </select>
+              </div>
+            )}
+
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-neutral-200">Clock-out reminder</p>
+                <p className="text-xs text-neutral-500">Alert when your expected end time arrives</p>
+              </div>
+              <Toggle
+                on={clockOutReminder}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !clockOutReminder;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ clock_out_reminder: val }),
+                    });
+                    if (res.ok) setClockOutReminder(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
+
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-neutral-200">Pay day reminder</p>
+                <p className="text-xs text-neutral-500">Check if payment received for completed jobs</p>
+              </div>
+              <Toggle
+                on={payDayReminder}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !payDayReminder;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ pay_day_reminder: val }),
+                    });
+                    if (res.ok) setPayDayReminder(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
+
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-neutral-200">Job start reminder</p>
+                <p className="text-xs text-neutral-500">Morning notification on work days</p>
+              </div>
+              <Toggle
+                on={jobStartReminder}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !jobStartReminder;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ job_start_reminder: val }),
+                    });
+                    if (res.ok) setJobStartReminder(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
+          </div>
+        )}
       </div>
 
       {/* Social & Privacy */}

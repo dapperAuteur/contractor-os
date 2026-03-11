@@ -9,8 +9,8 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #f9fafb;
-      color: #111827;
+      background: #0a0a0a;
+      color: #f5f5f5;
       min-height: 100dvh;
       display: flex;
       align-items: center;
@@ -20,10 +20,10 @@
     .card {
       max-width: 28rem;
       text-align: center;
-      background: white;
+      background: #171717;
+      border: 1px solid #404040;
       border-radius: 1rem;
       padding: 2.5rem 2rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,.1);
     }
     .icon {
       width: 3rem;
@@ -34,11 +34,12 @@
     h1 {
       font-size: 1.25rem;
       font-weight: 700;
+      color: #f5f5f5;
       margin-bottom: .5rem;
     }
     p {
       font-size: .875rem;
-      color: #6b7280;
+      color: #a3a3a3;
       line-height: 1.5;
       margin-bottom: 1.5rem;
     }
@@ -51,6 +52,8 @@
       padding: .625rem 1.25rem;
       border-radius: .5rem;
       text-decoration: none;
+      min-height: 2.75rem;
+      line-height: 1.5rem;
     }
     a:hover { background: #b45309; }
   </style>
@@ -58,7 +61,8 @@
 <body>
   <div class="card">
     <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+         aria-hidden="true">
       <line x1="2" y1="2" x2="22" y2="22"/>
       <path d="M8.5 16.5a5 5 0 0 1 7 0"/>
       <path d="M2 8.82a15 15 0 0 1 4.17-2.65"/>

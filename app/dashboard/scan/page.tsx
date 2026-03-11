@@ -34,7 +34,6 @@ export default function ScanPage() {
     async (data: ReceiptExtraction, contactId?: string, scanImageId?: string) => {
       setCreating(true);
       try {
-        // Build description from line items
         const description = data.line_items?.length
           ? data.line_items.map((li) => li.description).join(', ')
           : undefined;
@@ -61,7 +60,6 @@ export default function ScanPage() {
 
         const { transaction } = await res.json();
 
-        // Record line item prices
         if (data.line_items?.length) {
           await Promise.allSettled(
             data.line_items.map((li) =>
@@ -83,7 +81,6 @@ export default function ScanPage() {
             ),
           );
 
-          // Insert receipt line items
           await offlineFetch('/api/finance/transactions', {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -152,7 +149,6 @@ export default function ScanPage() {
     async (data: MaintenanceExtraction) => {
       setCreating(true);
       try {
-        // For maintenance, redirect to the maintenance form with pre-filled data
         const params = new URLSearchParams();
         if (data.shop_name) params.set('vendor', data.shop_name);
         if (data.date) params.set('date', data.date);
@@ -161,7 +157,6 @@ export default function ScanPage() {
         if (data.services?.length) {
           params.set('description', data.services.map((s) => s.description).join(', '));
         }
-
         router.push(`/dashboard/travel/maintenance?${params.toString()}`);
       } finally {
         setCreating(false);
@@ -170,49 +165,73 @@ export default function ScanPage() {
     [router],
   );
 
+  const handleCreateJob = useCallback(
+    (prefill: Record<string, unknown>) => {
+      sessionStorage.setItem('scan_job_prefill', JSON.stringify(prefill));
+      router.push('/dashboard/contractor/jobs/new?from=scan');
+    },
+    [router],
+  );
+
+  const handleAddToJob = useCallback(
+    (prefill: Record<string, unknown>) => {
+      sessionStorage.setItem('scan_job_prefill', JSON.stringify(prefill));
+      router.push('/dashboard/contractor/jobs?action=scan-import');
+    },
+    [router],
+  );
+
+  const handleCreateInvoice = useCallback(
+    (prefill: Record<string, unknown>) => {
+      sessionStorage.setItem('scan_invoice_prefill', JSON.stringify(prefill));
+      router.push('/dashboard/finance/invoices?from=scan');
+    },
+    [router],
+  );
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-3 bg-purple-100 rounded-xl">
-          <ScanLine className="w-6 h-6 text-purple-600" />
+        <div className="p-3 bg-amber-900/30 rounded-xl">
+          <ScanLine className="w-6 h-6 text-amber-400" aria-hidden="true" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Smart Scan</h1>
-          <p className="text-sm text-gray-500">
-            Scan receipts, recipes, and invoices to auto-fill your data
+          <h1 className="text-2xl font-bold text-neutral-100">Smart Scan</h1>
+          <p className="text-sm text-neutral-400">
+            Scan documents to auto-fill jobs, invoices, and expenses
           </p>
         </div>
       </div>
 
       {/* Scan area */}
       {!scanResult && !success && (
-        <div className="border-2 border-dashed border-gray-300 rounded-2xl p-12 text-center space-y-4 hover:border-purple-400 transition">
-          <Camera className="w-12 h-12 text-gray-400 mx-auto" />
+        <div className="border-2 border-dashed border-neutral-700 rounded-2xl p-12 text-center space-y-4 hover:border-amber-600/50 transition">
+          <Camera className="w-12 h-12 text-neutral-500 mx-auto" aria-hidden="true" />
           <div>
-            <p className="text-gray-700 font-medium">
-              Take a photo or select images
+            <p className="text-neutral-200 font-medium">
+              Take a photo or select files
             </p>
-            <p className="text-sm text-gray-500 mt-1">
-              Supports receipts, recipe cards, and maintenance invoices
+            <p className="text-sm text-neutral-400 mt-1">
+              Supports pay stubs, call sheets, invoices, receipts, and more (up to 10 files)
             </p>
           </div>
           <ScanButton
             onResult={handleScanResult}
             onError={handleError}
             label="Scan Document"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition cursor-pointer text-base"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition cursor-pointer text-base min-h-11"
           />
         </div>
       )}
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 text-red-700 px-4 py-3 rounded-xl text-sm">
+        <div className="bg-red-900/30 text-red-400 px-4 py-3 rounded-xl text-sm" role="alert">
           {error}
           <button
             onClick={() => setError('')}
-            className="ml-2 underline hover:no-underline"
+            className="ml-2 underline hover:no-underline min-h-11"
           >
             Dismiss
           </button>
@@ -221,16 +240,19 @@ export default function ScanPage() {
 
       {/* Scan result */}
       {scanResult && (
-        <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
           <ScanResultRouter
             result={scanResult}
             onCreateTransaction={handleCreateTransaction}
             onCreateRecipe={handleCreateRecipe}
             onCreateMaintenance={handleCreateMaintenance}
+            onCreateJob={handleCreateJob}
+            onCreateInvoice={handleCreateInvoice}
+            onAddToJob={handleAddToJob}
             onDismiss={() => setScanResult(null)}
           />
           {creating && (
-            <div className="mt-4 text-center text-sm text-purple-600">
+            <div className="mt-4 text-center text-sm text-amber-400">
               Creating...
             </div>
           )}
@@ -239,36 +261,36 @@ export default function ScanPage() {
 
       {/* Success */}
       {success && (
-        <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center space-y-3">
-          <p className="text-green-800 font-medium">
+        <div className="bg-green-900/30 border border-green-800 rounded-2xl p-6 text-center space-y-3">
+          <p className="text-green-400 font-medium">
             {success.type} created successfully!
           </p>
-          <div className="flex justify-center gap-3">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
             <button
               onClick={() => router.push(success.href)}
-              className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 transition"
+              className="flex items-center justify-center gap-1.5 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-500 transition min-h-11"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4" aria-hidden="true" />
               View {success.type}
             </button>
             <ScanButton
               onResult={handleScanResult}
               onError={handleError}
               label="Scan Another"
-              className="flex items-center gap-1.5 px-4 py-2 bg-purple-600 text-white rounded-xl text-sm font-medium hover:bg-purple-700 transition cursor-pointer"
+              className="flex items-center justify-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-500 transition cursor-pointer min-h-11"
             />
           </div>
         </div>
       )}
 
       {/* Tips */}
-      <div className="bg-gray-50 rounded-2xl p-6 space-y-3">
-        <h3 className="font-semibold text-gray-900">Tips for best results</h3>
-        <ul className="space-y-2 text-sm text-gray-600">
+      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 space-y-3">
+        <h3 className="font-semibold text-neutral-100">Tips for best results</h3>
+        <ul className="space-y-2 text-sm text-neutral-400">
           <li>- Use good lighting and lay documents flat</li>
           <li>- Avoid glare on thermal receipt paper</li>
           <li>- Fill the frame with the document text</li>
-          <li>- Up to 4 images per scan for multi-page documents</li>
+          <li>- Up to 10 images/PDFs per scan for multi-page documents</li>
           <li>- Always review extracted values before saving</li>
         </ul>
       </div>

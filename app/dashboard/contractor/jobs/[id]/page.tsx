@@ -5,13 +5,16 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Loader2, Clock, DollarSign, Car,
-  FolderOpen, Phone, MessageSquare, Camera, Receipt,
+  FolderOpen, Phone, MessageSquare, Receipt,
   Trash2, Edit2, Check, X, Zap, Globe, Lock,
+  FileText, AlertTriangle, BookOpen, ImageIcon, Plus,
 } from 'lucide-react';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import JobSummaryCards from '@/components/contractor/JobSummaryCards';
 import QuickLogModal from '@/components/contractor/QuickLogModal';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import ScanButton from '@/components/scan/ScanButton';
+import type { ScanResult } from '@/components/scan/ScanButton';
 
 /* ─── Types ─────────────────────────────────────────────── */
 interface Job {
@@ -90,8 +93,21 @@ interface Document {
   name: string;
   url: string;
   doc_type: string;
+  doc_category: string | null;
+  title: string | null;
+  description: string | null;
+  metadata: Record<string, unknown> | null;
   created_at: string;
 }
+
+const DOC_CATEGORIES = [
+  { value: 'scan', label: 'Scan', icon: FileText },
+  { value: 'incident_report', label: 'Incident Report', icon: AlertTriangle },
+  { value: 'best_practice', label: 'Best Practice', icon: BookOpen },
+  { value: 'note', label: 'Note', icon: FileText },
+  { value: 'photo', label: 'Photo', icon: ImageIcon },
+  { value: 'other', label: 'Other', icon: FolderOpen },
+];
 
 /* ─── Tabs ──────────────────────────────────────────────── */
 const TABS = [
@@ -118,6 +134,9 @@ export default function JobDetailPage() {
   const [quickLogOpen, setQuickLogOpen] = useState(false);
   const [statusEditing, setStatusEditing] = useState(false);
   const [newStatus, setNewStatus] = useState('');
+  const [docForm, setDocForm] = useState({ title: '', category: 'note', description: '' });
+  const [docSaving, setDocSaving] = useState(false);
+  const [showDocForm, setShowDocForm] = useState(false);
 
   const loadJob = useCallback(async () => {
     const [jobRes, summaryRes, timeRes, invoiceRes, docRes] = await Promise.all([
@@ -212,6 +231,43 @@ export default function JobDetailPage() {
     });
     setStatusEditing(false);
     loadJob();
+  }
+
+  /* ─── Scan Handler ──────────────────────────────────── */
+  function handleScanResult(result: ScanResult) {
+    // Save scan result as a job document with metadata
+    offlineFetch(`/api/contractor/jobs/${id}/documents`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: `Scan: ${result.documentType}`,
+        doc_category: 'scan',
+        doc_type: result.documentType,
+        metadata: { extracted: result.extracted, prefills: result.prefills, confidence: result.confidence },
+        url: result.imageUrl || null,
+      }),
+    }).then(() => loadJob());
+  }
+
+  /* ─── Add Document ─────────────────────────────────── */
+  async function addDocument(e: React.FormEvent) {
+    e.preventDefault();
+    setDocSaving(true);
+    const res = await offlineFetch(`/api/contractor/jobs/${id}/documents`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: docForm.title,
+        doc_category: docForm.category,
+        description: docForm.description || null,
+      }),
+    });
+    setDocSaving(false);
+    if (res.ok) {
+      setDocForm({ title: '', category: 'note', description: '' });
+      setShowDocForm(false);
+      loadJob();
+    }
   }
 
   if (loading) {
@@ -531,23 +587,91 @@ export default function JobDetailPage() {
       )}
 
       {tab === 'documents' && (
-        <div className="space-y-3">
-          {documents.length === 0 ? (
-            <p className="text-sm text-neutral-500 text-center py-6">No documents uploaded yet.</p>
-          ) : (
-            documents.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-3">
-                <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-sm text-amber-400 hover:underline truncate">
-                  {doc.name}
-                </a>
-                <span className="text-xs text-neutral-500 ml-2">{doc.doc_type}</span>
+        <div className="space-y-4">
+          {/* Scan button for this job */}
+          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+            <h3 className="text-sm font-medium text-neutral-200 mb-3">Scan Document</h3>
+            <ScanButton onResult={handleScanResult} />
+            <p className="text-xs text-neutral-500 mt-2">Scan pay stubs, call sheets, invoices, or receipts. Extracted data is saved to this job.</p>
+          </div>
+
+          {/* Add document form */}
+          {showDocForm ? (
+            <form onSubmit={addDocument} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 space-y-3" aria-label="Add document">
+              <div>
+                <label htmlFor="doc-title" className="block text-sm text-neutral-400 mb-1">Title</label>
+                <input id="doc-title" className={inputClass} value={docForm.title} onChange={(e) => setDocForm(p => ({ ...p, title: e.target.value }))} required />
               </div>
-            ))
+              <div>
+                <label htmlFor="doc-category" className="block text-sm text-neutral-400 mb-1">Category</label>
+                <select id="doc-category" className={inputClass} value={docForm.category} onChange={(e) => setDocForm(p => ({ ...p, category: e.target.value }))}>
+                  {DOC_CATEGORIES.filter(c => c.value !== 'scan').map(c => (
+                    <option key={c.value} value={c.value}>{c.label}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="doc-desc" className="block text-sm text-neutral-400 mb-1">Description</label>
+                <textarea id="doc-desc" className={inputClass} rows={3} value={docForm.description} onChange={(e) => setDocForm(p => ({ ...p, description: e.target.value }))} />
+              </div>
+              <div className="flex gap-2">
+                <button type="submit" disabled={docSaving} className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
+                  {docSaving ? <Loader2 size={14} className="animate-spin" /> : 'Save'}
+                </button>
+                <button type="button" onClick={() => setShowDocForm(false)} className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11">Cancel</button>
+              </div>
+            </form>
+          ) : (
+            <button
+              onClick={() => setShowDocForm(true)}
+              className="flex items-center gap-1.5 rounded-lg border border-dashed border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:border-amber-600 hover:text-amber-400 min-h-11 w-full justify-center"
+            >
+              <Plus size={14} aria-hidden="true" /> Add Note / Incident Report
+            </button>
           )}
-          {/* Upload placeholder — Cloudinary upload widget would go here */}
-          <p className="text-xs text-neutral-500 text-center">
-            Document upload via Cloudinary widget coming soon.
-          </p>
+
+          {/* Document list */}
+          {documents.length === 0 ? (
+            <p className="text-sm text-neutral-500 text-center py-4">No documents yet.</p>
+          ) : (
+            <div className="space-y-2">
+              {documents.map((doc) => {
+                const cat = DOC_CATEGORIES.find(c => c.value === (doc.doc_category || doc.doc_type));
+                const CatIcon = cat?.icon || FileText;
+                return (
+                  <div key={doc.id} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+                    <div className="flex items-start gap-3">
+                      <CatIcon size={16} className="text-neutral-500 mt-0.5 shrink-0" aria-hidden="true" />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          {doc.url ? (
+                            <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-amber-400 hover:underline truncate">
+                              {doc.title || doc.name}
+                            </a>
+                          ) : (
+                            <span className="text-sm font-medium text-neutral-100 truncate">{doc.title || doc.name}</span>
+                          )}
+                          <span className="text-xs text-neutral-500 shrink-0">{cat?.label || doc.doc_type}</span>
+                        </div>
+                        {doc.description && (
+                          <p className="text-xs text-neutral-400 mt-1">{doc.description}</p>
+                        )}
+                        {doc.metadata && doc.doc_category === 'scan' && (
+                          <details className="mt-2">
+                            <summary className="text-xs text-amber-400 cursor-pointer hover:underline">View extracted data</summary>
+                            <pre className="mt-1 text-xs text-neutral-400 bg-neutral-800 rounded-lg p-3 overflow-x-auto max-h-40">
+                              {JSON.stringify(doc.metadata, null, 2)}
+                            </pre>
+                          </details>
+                        )}
+                        <span className="text-xs text-neutral-500 mt-1 block">{new Date(doc.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
@@ -594,17 +718,6 @@ export default function JobDetailPage() {
           )}
         </div>
       )}
-
-      {/* Scan Pay Stub Button */}
-      <div className="flex justify-center pt-4 border-t border-neutral-800">
-        <button
-          onClick={() => {/* TODO: Open scan modal */}}
-          className="flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11"
-          aria-label="Scan pay stub to auto-fill time entry"
-        >
-          <Camera size={16} aria-hidden="true" /> Scan Pay Stub
-        </button>
-      </div>
 
       {/* Quick Log Modal */}
       <QuickLogModal
