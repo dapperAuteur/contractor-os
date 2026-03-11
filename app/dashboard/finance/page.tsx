@@ -251,7 +251,7 @@ export default function FinanceDashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin h-10 w-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -266,7 +266,7 @@ export default function FinanceDashboardPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-            <DollarSign className="w-7 h-7 text-fuchsia-600" />
+            <DollarSign className="w-7 h-7 text-amber-600" />
             Finance Dashboard
           </h1>
           <p className="text-gray-500 mt-1">Track spending, budgets, and income</p>
@@ -274,7 +274,7 @@ export default function FinanceDashboardPage() {
         <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
           >
             <Plus className="w-4 h-4" />
             Add Transaction
@@ -287,14 +287,14 @@ export default function FinanceDashboardPage() {
           />
           <button
             onClick={() => setShowTransfer(true)}
-            className="flex items-center gap-1.5 px-3 py-2 bg-fuchsia-50 text-fuchsia-700 rounded-lg text-sm font-medium hover:bg-fuchsia-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition"
           >
             <ArrowRightLeft className="w-4 h-4" />
             Transfer
           </button>
           <Link
             href="/dashboard/finance/import"
-            className="flex items-center gap-1.5 px-3 py-2 bg-fuchsia-50 text-fuchsia-700 rounded-lg text-sm font-medium hover:bg-fuchsia-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition"
           >
             <Upload className="w-4 h-4" />
             Import
@@ -361,7 +361,7 @@ export default function FinanceDashboardPage() {
               </p>
             </div>
           </div>
-          <Link href="/dashboard/finance/invoices" className="text-sm font-medium text-fuchsia-600 hover:underline">
+          <Link href="/dashboard/finance/invoices" className="text-sm font-medium text-amber-600 hover:underline">
             View Invoices
           </Link>
         </div>
@@ -372,10 +372,10 @@ export default function FinanceDashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
-              <Wallet className="w-4 h-4 text-fuchsia-600" />
+              <Wallet className="w-4 h-4 text-amber-600" />
               Accounts
             </h2>
-            <Link href="/dashboard/finance/accounts" className="text-xs text-fuchsia-600 hover:underline">
+            <Link href="/dashboard/finance/accounts" className="text-xs text-amber-600 hover:underline">
               Manage
             </Link>
           </div>
@@ -438,7 +438,7 @@ export default function FinanceDashboardPage() {
                   aria-checked={projectionToggles[key]}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
                     projectionToggles[key]
-                      ? 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200'
+                      ? 'bg-amber-50 text-amber-700 border-amber-200'
                       : 'bg-gray-50 text-gray-400 border-gray-200'
                   }`}
                 >
@@ -552,7 +552,7 @@ export default function FinanceDashboardPage() {
             <h2 className="text-lg font-semibold text-gray-900">Spending by Category</h2>
             <button
               onClick={() => setShowCatForm(true)}
-              className="text-xs text-fuchsia-600 hover:text-fuchsia-700 font-medium flex items-center gap-1"
+              className="text-xs text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
             >
               <Settings className="w-3 h-3" />
               Manage
@@ -625,7 +625,7 @@ export default function FinanceDashboardPage() {
       <div className="flex justify-center">
         <Link
           href="/dashboard/finance/transactions"
-          className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-fuchsia-700 bg-fuchsia-50 hover:bg-fuchsia-100 rounded-xl transition"
+          className="flex items-center gap-2 px-6 py-3 text-sm font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-xl transition"
         >
           View All Transactions
           <ArrowRight className="w-4 h-4" />
@@ -761,7 +761,7 @@ export default function FinanceDashboardPage() {
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 disabled:opacity-50 transition flex items-center justify-center gap-2"
             >
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               Save
@@ -822,7 +822,7 @@ export default function FinanceDashboardPage() {
             <div className="flex gap-3 pt-2">
               <button
                 type="submit"
-                className="flex-1 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition"
+                className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
               >
                 Create
               </button>

@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  // Block redundant upgrades (only for main CentOS plans)
+  // Block redundant upgrades (only for main JobHub plans)
   const isTeacherPlan = plan === 'teacher' || plan === 'teacher-annual';
   const isContractorPlan = plan.startsWith('contractor-');
   const isListerPlan = plan.startsWith('lister-');
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       mode: 'subscription',
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${baseUrl}/dashboard/contractor?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/contractor-pricing`,
+      cancel_url: `${baseUrl}/pricing`,
       metadata: { supabase_user_id: user.id, plan: 'contractor' },
     });
   } else if (isListerPlan) {

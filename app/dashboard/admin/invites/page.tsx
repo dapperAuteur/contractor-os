@@ -257,7 +257,7 @@ export default function AdminInvitesPage() {
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
                           inv.product === 'contractor' ? 'bg-amber-100 text-amber-700'
                             : inv.product === 'lister' ? 'bg-indigo-100 text-indigo-700'
-                            : 'bg-fuchsia-100 text-fuchsia-700'
+                            : 'bg-amber-100 text-amber-700'
                         }`}>
                           {inv.product === 'centos' ? 'CentOS' : inv.product === 'contractor' ? 'Contractor' : 'Lister'}
                         </span>
@@ -387,7 +387,7 @@ export default function AdminInvitesPage() {
                       form.product === p.value
                         ? p.value === 'contractor' ? 'bg-amber-600 text-white border-amber-600'
                           : p.value === 'lister' ? 'bg-indigo-600 text-white border-indigo-600'
-                          : 'bg-fuchsia-600 text-white border-fuchsia-600'
+                          : 'bg-amber-600 text-white border-amber-600'
                         : 'border-gray-300 text-gray-700 hover:border-gray-400'
                     }`}
                   >
@@ -396,9 +396,9 @@ export default function AdminInvitesPage() {
                 ))}
               </div>
               <p className="text-xs text-gray-400 mt-1">
-                {form.product === 'contractor' ? 'Invite link redirects to contractor.centenarianos.com'
-                  : form.product === 'lister' ? 'Invite link redirects to lister.centenarianos.com'
-                  : 'Invite link redirects to centenarianos.com'}
+                {form.product === 'contractor' ? 'Invite link redirects to contractor.jobhub.com'
+                  : form.product === 'lister' ? 'Invite link redirects to lister.jobhub.com'
+                  : 'Invite link redirects to jobhub.com'}
               </p>
             </div>
 

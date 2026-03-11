@@ -103,7 +103,7 @@ function TopContentTable({
                     <p className="text-gray-400 text-xs">@{item.username}</p>
                   </td>
                   <td className="px-4 py-2.5 text-right">
-                    <span className="text-fuchsia-400 font-semibold text-sm">{item[countKey]}</span>
+                    <span className="text-amber-400 font-semibold text-sm">{item[countKey]}</span>
                   </td>
                   <td className="px-3 py-2.5 w-8">
                     <a
@@ -140,7 +140,7 @@ export default function AdminEngagementPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }

@@ -7,7 +7,7 @@ import {
 } from '@/lib/features/contractor-features';
 
 export const metadata = {
-  title: 'JobHub Features — CentenarianOS',
+  title: 'JobHub Features — JobHub',
   description:
     'Explore every feature of JobHub, the contractor management app. Track jobs, manage rates, log travel, handle invoicing, and more.',
 };

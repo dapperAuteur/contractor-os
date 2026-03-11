@@ -31,7 +31,7 @@ export class OfflineSyncManager {
   private static instance: OfflineSyncManager;
   private db: IDBDatabase | null = null;
   private syncInProgress = false;
-  private readonly DB_NAME = 'centenarian_offline';
+  private readonly DB_NAME = 'jobhub_offline';
   private readonly DB_VERSION = 3;
   private listeners = new Set<StatusListener>();
   private initPromise: Promise<void>;

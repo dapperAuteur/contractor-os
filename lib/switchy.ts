@@ -32,7 +32,7 @@ interface CreateParams {
 export async function createShortLink(params: CreateParams): Promise<SwitchyLink | null> {
   if (!process.env.SWITCHY_API_TOKEN) return null;
 
-  const domain = process.env.SWITCHY_DOMAIN ?? 'i.centenarianos.com';
+  const domain = process.env.SWITCHY_DOMAIN ?? 'i.jobhub.app';
 
   const body = {
     url: params.url,

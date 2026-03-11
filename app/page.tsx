@@ -1,371 +1,195 @@
-'use client';
-
 import Link from 'next/link';
-import { ArrowRight, Zap, Shield, TrendingUp, Heart, Menu, X, HardHat, Users } from 'lucide-react';
-import { useState } from 'react';
-import SiteFooter from '@/components/ui/SiteFooter';
-import { useAuth } from '@/lib/hooks/useAuth';
-import { MODULES } from '@/lib/features/modules';
+import {
+  HardHat, FileText, CreditCard, BarChart3, Users, Building2,
+  MapPin, Scale, Car, DollarSign, ScanLine, Shield, ArrowRight, Play,
+} from 'lucide-react';
 
-export default function LandingPage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, loading: authLoading } = useAuth();
-  const isLoggedIn = !authLoading && !!user;
+const FEATURES = [
+  { slug: 'jobs', icon: HardHat, title: 'Job Management', desc: 'Track assignments, time entries with ST/OT/DT splits, and generate invoices automatically.' },
+  { slug: 'rate-cards', icon: CreditCard, title: 'Rate Cards', desc: 'Save rate presets by union and department. Quick-apply to new jobs.' },
+  { slug: 'reports', icon: BarChart3, title: 'Financial Reports', desc: 'Earnings by client, 1099 tracking, job comparison, and tax-ready exports.' },
+  { slug: 'board', icon: Users, title: 'Job Board', desc: 'Find replacement work or share jobs with trusted colleagues.' },
+  { slug: 'venues', icon: Building2, title: 'Venue Knowledge Base', desc: 'Parking, WiFi, load-in details, schematics for every venue you work.' },
+  { slug: 'cities', icon: MapPin, title: 'City Guides', desc: 'Community restaurant, hotel, gym, and coffee recommendations by city.' },
+  { slug: 'union', icon: Scale, title: 'Union Contract Chat', desc: 'Upload contracts, ask questions with AI. RAG-powered with mandatory disclaimers.' },
+  { slug: 'travel', icon: Car, title: 'Mileage + Expenses', desc: 'Automatic distance calculation, trip logging, fuel tracking, expense reports.' },
+  { slug: 'invoices', icon: FileText, title: 'Invoice Generation', desc: 'Auto-generate invoices from time entries with rate-based line items and benefits.' },
+  { slug: 'finance', icon: DollarSign, title: 'Dues Tracking', desc: 'Track union memberships across multiple locals. Dues scheduling and payment history.' },
+  { slug: 'scan', icon: ScanLine, title: 'Pay Stub Scan', desc: 'Upload a photo of your pay stub. AI extracts hours, rates, and benefits.' },
+];
 
-  const dashboardHref = '/dashboard';
-  const primaryLabel = isLoggedIn ? 'Go to Dashboard' : 'Get Started';
-  const primaryHref = isLoggedIn ? dashboardHref : '/pricing';
-
+export default function ContractorLandingPage() {
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
-      {/* Header - Mobile First */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-linear-to-br from-fuchsia-500 to-sky-500 rounded-lg shrink-0"></div>
-              <span className="text-lg sm:text-xl font-bold text-gray-900">CentenarianOS</span>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-4">
-              <Link href="/features" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Features
-              </Link>
-              <Link href="/demo" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Demo
-              </Link>
-              <Link href="/academy" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Academy
-              </Link>
-              <Link href="/blog" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Blog
-              </Link>
-              <Link href="/recipes" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Recipes
-              </Link>
-              <Link href="/coaching" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Coaching
-              </Link>
-              <Link href="/tech-roadmap" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Roadmap
-              </Link>
-              <Link href="/contribute" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                Contribute
-              </Link>
-              <Link
-                href={primaryHref}
-                className="px-4 py-2 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-medium text-sm"
-              >
-                {primaryLabel}
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-gray-900"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+      {/* Nav */}
+      <nav className="border-b border-neutral-800 px-4 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <div className="flex items-center gap-2">
+            <HardHat size={24} className="text-amber-400" aria-hidden="true" />
+            <span className="text-lg font-bold">JobHub</span>
           </div>
-
-          {/* Mobile Menu */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden mt-4 pb-4 space-y-4">
-              <Link
-                href="/features"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Features
-              </Link>
-              <Link
-                href="/demo"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Demo
-              </Link>
-              <Link
-                href="/academy"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Academy
-              </Link>
-              <Link
-                href="/blog"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Blog
-              </Link>
-              <Link
-                href="/recipes"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Recipes
-              </Link>
-              <Link
-                href="/coaching"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Coaching
-              </Link>
-              <Link
-                href="/tech-roadmap"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Tech Roadmap
-              </Link>
-              <Link
-                href="/contribute"
-                className="block text-gray-600 hover:text-gray-900 font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contribute
-              </Link>
-              <Link
-                href={primaryHref}
-                className="block w-full text-center px-4 py-2 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-medium"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {primaryLabel}
-              </Link>
-            </div>
-          )}
-        </nav>
-      </header>
-
-      {/* Hero Section - Mobile First */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 md:pt-20 pb-8 sm:pb-12 md:pb-16">
-        <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4 sm:mb-6 leading-tight">
-            Turn <span className="text-transparent bg-clip-text bg-linear-to-r from-fuchsia-600 to-sky-600">Multi-Decade Goals</span> Into Daily Action
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 px-2">
-            The personal operating system for executing audacious, long-term goals through data-driven daily habits. Plan, fuel, track, and iterate—all in one place.
-          </p>
-
-          {/* Buttons - Stack on mobile, wrap on tablet+ */}
-          <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-3 sm:gap-4 px-4 sm:px-0">
-            <Link
-              href={primaryHref}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-semibold text-base sm:text-lg flex items-center justify-center"
-            >
-              {isLoggedIn ? 'Go to Dashboard' : 'Start Your Journey'}
-              <ArrowRight className="ml-2 w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <Link href="/pricing" className="text-sm text-neutral-400 hover:text-neutral-200 min-h-11 flex items-center">
+              Pricing
+            </Link>
+            <Link href="/features/contractor" className="text-sm text-neutral-400 hover:text-neutral-200 min-h-11 flex items-center">
+              Features
             </Link>
             <Link
-              href="/demo"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-fuchsia-300 text-fuchsia-700 rounded-lg hover:bg-fuchsia-50 transition-colors font-semibold text-base sm:text-lg text-center"
+              href="/login"
+              className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center"
             >
-              Try the Demo
+              Log In
             </Link>
             <Link
-              href="/tech-roadmap"
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 transition-colors font-semibold text-base sm:text-lg text-center"
+              href="/signup"
+              className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 min-h-11 flex items-center"
             >
-              View Tech Roadmap
+              Get Started
             </Link>
           </div>
         </div>
-      </section>
+      </nav>
 
-      {/* Coaching CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <Link
-          href="/coaching"
-          className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-linear-to-br from-fuchsia-950 to-indigo-950 text-white rounded-2xl px-6 py-5 hover:opacity-95 transition group"
-          aria-label="Learn about personal longevity coaching"
-        >
-          <div className="text-center sm:text-left">
-            <p className="text-xs font-semibold uppercase tracking-widest text-fuchsia-300 mb-1">1-on-1 Coaching</p>
-            <p className="text-lg sm:text-xl font-bold">Want expert guidance, not just tools?</p>
-            <p className="text-sm text-fuchsia-200 mt-0.5">Personalized longevity coaching for executives, founders, and creative professionals.</p>
-          </div>
-          <span className="shrink-0 px-5 py-2.5 bg-fuchsia-500 hover:bg-fuchsia-400 text-white text-sm font-semibold rounded-xl transition whitespace-nowrap">
-            Learn About Coaching
-          </span>
-        </Link>
-      </section>
-
-      {/* All Modules */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-6 sm:mb-8 md:mb-12">
-          Your Personal Operating System
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {MODULES.map((mod) => (
-            <Link
-              key={mod.slug}
-              href={`/features/${mod.slug}`}
-              className={`group bg-white rounded-2xl shadow-lg p-6 border-t-4 ${mod.color} hover:shadow-xl transition`}
-            >
-              <mod.Icon className={`w-10 h-10 ${mod.iconColor} mb-3`} />
-              <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-fuchsia-600 transition">{mod.name}</h3>
-              <p className="text-sm text-gray-600 mb-3">
-                {mod.description}
-              </p>
-              <ul className="space-y-1.5 text-sm text-gray-600">
-                {mod.features.map((f) => (
-                  <li key={f} className="flex items-start">
-                    <span className={`${mod.checkColor} mr-2 shrink-0`}>&check;</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* For Contractors & Crew Coordinators */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="rounded-2xl border border-amber-200 bg-linear-to-br from-amber-50 to-white p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                <HardHat className="w-6 h-6 text-amber-600" aria-hidden="true" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-gray-900">For Contractors</h3>
-                <p className="text-sm text-gray-500">Independent broadcast & production crews</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">Track jobs, log hours, generate invoices, build venue knowledge bases, and manage union memberships — all in one place. Interactive walkthroughs guide you through every feature.</p>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Link href="/features/contractor" className="text-sm font-semibold text-amber-600 hover:underline min-h-11 flex items-center">
-                Explore All Features &rarr;
-              </Link>
-              <Link href="/contractor-landing" className="text-sm font-semibold text-gray-500 hover:text-amber-600 hover:underline min-h-11 flex items-center sm:ml-4">
-                About JobHub
-              </Link>
-            </div>
-          </div>
-          <div className="rounded-2xl border border-indigo-200 bg-linear-to-br from-indigo-50 to-white p-6 sm:p-8">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center">
-                <Users className="w-6 h-6 text-indigo-600" aria-hidden="true" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-gray-900">For Crew Coordinators</h3>
-                <p className="text-sm text-gray-500">Staffing agencies & union leaders</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600 mb-4">Create jobs, manage rosters, dispatch assignments, and communicate with your crew through individual and group messaging. Try each feature with a guided demo login.</p>
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Link href="/features/lister" className="text-sm font-semibold text-indigo-600 hover:underline min-h-11 flex items-center">
-                Explore All Features &rarr;
-              </Link>
-              <Link href="/lister-landing" className="text-sm font-semibold text-gray-500 hover:text-indigo-600 hover:underline min-h-11 flex items-center sm:ml-4">
-                About CrewOps
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why CentenarianOS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
-        <div className="bg-gray-100 rounded-2xl p-6 sm:p-8 md:p-12">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-6 sm:mb-8">
-            Built for Real Life
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            <div className="flex items-start space-x-3 sm:space-x-4">
-              <Zap className="w-7 h-7 sm:w-8 sm:h-8 text-fuchsia-600 shrink-0" />
-              <div>
-                <h3 className="font-bold text-gray-900 mb-1 sm:mb-2 text-base sm:text-lg">Offline-First</h3>
-                <p className="text-gray-600 text-sm">
-                  Works without internet. Syncs automatically when connected.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3 sm:space-x-4">
-              <Shield className="w-7 h-7 sm:w-8 sm:h-8 text-fuchsia-600 shrink-0" />
-              <div>
-                <h3 className="font-bold text-gray-900 mb-1 sm:mb-2 text-base sm:text-lg">Privacy-First</h3>
-                <p className="text-gray-600 text-sm">
-                  Your data encrypted at rest and in transit. No third-party sharing.
-                </p>
-              </div>
-            </div>
-            <div className="flex items-start space-x-3 sm:space-x-4">
-              <TrendingUp className="w-7 h-7 sm:w-8 sm:h-8 text-fuchsia-600 shrink-0" />
-              <div>
-                <h3 className="font-bold text-gray-900 mb-1 sm:mb-2 text-base sm:text-lg">Data-Driven</h3>
-                <p className="text-gray-600 text-sm">
-                  Find correlations between habits and outcomes. Make informed adjustments.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Rise Wellness */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
-        <div className="bg-fuchsia-50 border border-fuchsia-200 rounded-2xl p-6 sm:p-8 md:p-10">
-          <div className="flex items-center gap-2 mb-3">
-            <Heart className="w-6 h-6 text-fuchsia-600" />
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Mental Health Matters</h2>
-          </div>
-          <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-4 max-w-3xl">
-            CentenarianOS is proud to collaborate with <strong>Rise Wellness of Indiana</strong>, an
-            independent mental health provider offering compassionate, personalized, holistic care.
-            Their evidence-based approach to anxiety, depression, ADHD, maternal mental health, and
-            more supports our community&apos;s whole-person wellness journey.
-          </p>
-          <p className="text-gray-500 text-xs mb-5">
-            Rise Wellness of Indiana is an independent organization, not affiliated with CentenarianOS, B4C LLC, or AwesomeWebStore.com.
-          </p>
+      {/* Hero */}
+      <section className="mx-auto max-w-4xl px-4 py-20 text-center">
+        <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+          Your Job Hub.
+          <span className="block text-amber-400">One Place for Everything.</span>
+        </h1>
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">
+          Jobs, invoices, mileage, expenses, union contracts, venue knowledge — all in one
+          tool built for independent broadcast and production contractors.
+        </p>
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link
-            href="/safety#rise-wellness"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white rounded-lg font-semibold text-sm transition"
+            href="/signup"
+            className="flex items-center gap-2 rounded-lg bg-amber-600 px-6 py-3 text-base font-medium text-white hover:bg-amber-500 min-h-11"
           >
-            <Heart className="w-4 h-4" />
-            Learn More &amp; Contact Rise Wellness
+            Get Started <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+          <Link
+            href="/demo"
+            className="flex items-center gap-2 rounded-lg border border-amber-600/50 px-6 py-3 text-base text-amber-400 hover:bg-amber-600/10 min-h-11"
+          >
+            <Play size={16} aria-hidden="true" /> Try the Demo
+          </Link>
+          <Link
+            href="/pricing"
+            className="flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 text-base text-neutral-300 hover:bg-neutral-800 min-h-11"
+          >
+            View Pricing
           </Link>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16">
-        <div className="bg-linear-to-r from-fuchsia-600 to-sky-600 rounded-2xl p-6 sm:p-8 md:p-12 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">
-            Start Your Centenarian Journey Today
-          </h2>
-          <p className="text-white/90 mb-6 sm:mb-8 text-base sm:text-lg max-w-2xl mx-auto px-2">
-            Join the community and take control of your long-term goals, finances, health, and productivity.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+      {/* Features — each card links to detail page */}
+      <section className="mx-auto max-w-6xl px-4 py-16" aria-label="Features">
+        <h2 className="mb-4 text-center text-2xl font-bold sm:text-3xl">Built for Contractors</h2>
+        <p className="mb-10 text-center text-neutral-400 text-sm">Click any feature to learn more and try the demo</p>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURES.map((f) => (
             <Link
-              href={primaryHref}
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-fuchsia-600 rounded-lg hover:bg-gray-100 transition-colors font-bold text-base sm:text-lg"
+              key={f.slug}
+              href={`/features/contractor/${f.slug}`}
+              className="group rounded-xl border border-neutral-800 bg-neutral-900 p-5 hover:border-neutral-700 hover:bg-neutral-800/80 transition"
             >
-              {isLoggedIn ? 'Go to Dashboard' : 'View Plans & Get Started'}
-              <ArrowRight className="ml-2 w-5 h-5" />
+              <f.icon size={20} className="text-amber-400 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-neutral-100 group-hover:text-white transition">{f.title}</h3>
+              <p className="mt-1 text-sm text-neutral-400">{f.desc}</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-amber-400 group-hover:text-amber-300 transition">
+                Learn more <ArrowRight size={12} aria-hidden="true" />
+              </span>
             </Link>
-            <Link
-              href="/demo"
-              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 bg-white/20 text-white border border-white/40 rounded-lg hover:bg-white/30 transition-colors font-semibold text-base sm:text-lg"
-            >
-              Try the Demo
-            </Link>
+          ))}
+          {/* Privacy — no detail page */}
+          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
+            <Shield size={20} className="text-amber-400 mb-3" aria-hidden="true" />
+            <h3 className="text-base font-semibold text-neutral-100">Privacy First</h3>
+            <p className="mt-1 text-sm text-neutral-400">Your data stays yours. RLS-protected, no data sharing without your consent.</p>
           </div>
         </div>
       </section>
 
-      <SiteFooter theme="light" />
+      {/* Demo Section */}
+      <section className="border-t border-neutral-800 py-16">
+        <div className="mx-auto max-w-3xl px-4 text-center">
+          <h2 className="text-2xl font-bold sm:text-3xl mb-3">Try Before You Buy</h2>
+          <p className="text-neutral-400 mb-2">
+            Explore JobHub with a pre-loaded demo account. Real data, real features — no signup required.
+          </p>
+          <p className="text-sm text-neutral-500 mb-8">
+            Shared account. Data resets daily. Do not enter personal information.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/demo"
+              className="flex items-center gap-2 rounded-xl bg-amber-600 px-8 py-3.5 text-base font-semibold text-white hover:bg-amber-500 transition min-h-11"
+            >
+              <Play size={18} aria-hidden="true" /> Launch Demo
+            </Link>
+            <Link
+              href="/features/contractor"
+              className="flex items-center gap-2 rounded-xl border border-neutral-700 px-8 py-3.5 text-base text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+            >
+              Explore All Features
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-4 sm:grid-cols-3 text-left">
+            <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+              <p className="text-sm font-medium text-amber-400 mb-1">Pre-loaded Data</p>
+              <p className="text-xs text-neutral-500">Jobs, invoices, rate cards, contacts, financial transactions, and more.</p>
+            </div>
+            <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+              <p className="text-sm font-medium text-amber-400 mb-1">Interactive Tours</p>
+              <p className="text-xs text-neutral-500">Guided walkthroughs for every module. Start from any feature page.</p>
+            </div>
+            <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
+              <p className="text-sm font-medium text-amber-400 mb-1">Full Access</p>
+              <p className="text-xs text-neutral-500">Every feature unlocked. Try jobs, venues, cities, invoicing, travel, and more.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Academy Link */}
+      <section className="border-t border-neutral-800 py-12 text-center">
+        <p className="text-sm text-neutral-400">New to JobHub?</p>
+        <p className="mt-1 text-lg font-semibold text-neutral-200">Take the free Contractor Job Hub Guide</p>
+        <p className="mt-2 text-sm text-neutral-500">15 lessons covering everything from job creation to 1099 tracking. No account required.</p>
+        <Link href="/academy" className="mt-3 inline-block text-sm font-medium text-amber-400 hover:text-amber-300 min-h-11">
+          Browse Academy courses &rarr;
+        </Link>
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-neutral-800 py-16 text-center">
+        <h2 className="text-2xl font-bold">Ready to get organized?</h2>
+        <p className="mt-2 text-neutral-400">$10/month or $100/year. No free tier — just the tools you need.</p>
+        <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-6 py-3 text-base font-medium text-white hover:bg-amber-500 min-h-11"
+          >
+            Get Started <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 text-sm text-neutral-300 hover:border-neutral-500 min-h-11"
+          >
+            Already have an account? Log in
+          </Link>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
+        <div className="mt-2 flex justify-center gap-4">
+          <Link href="/terms" className="hover:text-neutral-400">Terms</Link>
+          <Link href="/privacy" className="hover:text-neutral-400">Privacy</Link>
+        </div>
+      </footer>
     </div>
   );
 }

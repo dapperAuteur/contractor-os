@@ -56,7 +56,7 @@ export default function AdminSidebar({ onNavigate }: { onNavigate?: () => void }
             href={href}
             onClick={onNavigate}
             aria-current={active ? 'page' : undefined}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-fuchsia-400 focus-visible:outline-none ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:outline-none ${
               active ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
             }`}
           >
@@ -64,7 +64,7 @@ export default function AdminSidebar({ onNavigate }: { onNavigate?: () => void }
             <span className="flex-1">{label}</span>
             {badge > 0 && (
               <span
-                className="px-1.5 py-0.5 bg-fuchsia-600 text-white text-xs font-bold rounded-full min-w-5 text-center leading-tight"
+                className="px-1.5 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full min-w-5 text-center leading-tight"
                 aria-label={`${badge > 99 ? '99+' : badge} unread`}
               >
                 {badge > 99 ? '99+' : badge}

@@ -43,7 +43,7 @@ const PHASES = [
     title: 'Phase 3: Publishing Platform (Blog & Community)',
     status: 'completed' as const,
     quarter: 'Q1 2026',
-    description: 'A full content publishing system for the CentenarianOS community.',
+    description: 'A full content publishing system for the JobHub community.',
     items: [
       { done: true, text: 'Blog system with rich text editor and Cloudinary media upload' },
       { done: true, text: 'Public blog pages with likes, saves, and reading progress events' },
@@ -58,7 +58,7 @@ const PHASES = [
   },
   {
     id: 4,
-    title: 'Phase 4: Centenarian Academy (LMS)',
+    title: 'Phase 4: JobHub Academy (LMS)',
     status: 'in-progress' as const,
     quarter: 'Q1–Q2 2026',
     description: 'A full learning management system — create, publish, sell, and take courses.',
@@ -184,7 +184,7 @@ const PHASES = [
     description: 'Auto-generate tracked short links via Switchy.io so every share is measured.',
     items: [
       { done: false, text: 'Switchy.io API integration — auto-create short link on every publish' },
-      { done: false, text: 'Custom domain short links (i.centenarianos.com/[slug])' },
+      { done: false, text: 'Custom domain short links (i.jobhub.app/[slug])' },
       { done: false, text: 'Share bars use Switchy short links (blog, recipes, courses)' },
       { done: false, text: 'OG metadata (title, description, image) synced to Switchy on edit' },
       { done: false, text: 'Admin backfill page — create short links for all existing content' },
@@ -271,7 +271,7 @@ const PHASES = [
     title: 'Phase 13: User Experience & Personalization',
     status: 'in-progress' as const,
     quarter: 'Q2 2026',
-    description: 'Reduce friction and let users tailor CentenarianOS to how they actually work.',
+    description: 'Reduce friction and let users tailor JobHub to how they actually work.',
     items: [
       { done: true, text: 'Dashboard home preference — choose which page you land on after login or clicking "Go to Dashboard"' },
       { done: true, text: 'Life Categories — user-defined life-area tags with analytics across all 11 module types' },
@@ -345,7 +345,7 @@ export default function RoadmapPage() {
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-linear-to-br from-fuchsia-500 to-sky-500 rounded-lg" />
             <Link href="/dashboard/roadmap">
-              <span className="text-xl font-bold text-gray-900">CentenarianOS</span>
+              <span className="text-xl font-bold text-gray-900">JobHub</span>
             </Link>
           </div>
         </nav>
@@ -395,7 +395,7 @@ export default function RoadmapPage() {
         {/* CTA buttons */}
         <div className="flex flex-wrap gap-3">
           <a
-            href="https://github.com/dapperAuteur/centenarian-os"
+            href="https://github.com/dapperAuteur/jobhub-app"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
@@ -490,11 +490,11 @@ export default function RoadmapPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Help Build the Future</h2>
           <p className="text-gray-400 mb-8 text-lg">
-            CentenarianOS is open source. Contribute code, suggest features, or report bugs.
+            JobHub is open source. Contribute code, suggest features, or report bugs.
           </p>
           <div className="flex justify-center flex-wrap gap-4">
             <a
-              href="https://github.com/dapperAuteur/centenarian-os"
+              href="https://github.com/dapperAuteur/jobhub-app"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-semibold"

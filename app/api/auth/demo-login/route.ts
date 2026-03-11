@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server';
 import { trackUsage } from '@/lib/trackUsage';
 
 export async function POST(request: Request) {
-  const email = 'demo@centenarianos.com';
+  const email = 'demo@jobhub.com';
   const password = process.env.DEMO_VISITOR_PASSWORD;
 
   if (!password) {
@@ -40,5 +40,5 @@ export async function POST(request: Request) {
     detail: from ? `from:${from}` : 'from:demo-page',
   });
 
-  return NextResponse.json({ ok: true, redirect: redirectPath || '/dashboard/planner' });
+  return NextResponse.json({ ok: true, redirect: redirectPath || '/dashboard/contractor' });
 }

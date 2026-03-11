@@ -63,7 +63,7 @@ function SortTh({
     >
       {label}
       {active
-        ? (sortDir === 'asc' ? <ChevronUp className="w-3 h-3 text-fuchsia-400" /> : <ChevronDown className="w-3 h-3 text-fuchsia-400" />)
+        ? (sortDir === 'asc' ? <ChevronUp className="w-3 h-3 text-amber-400" /> : <ChevronDown className="w-3 h-3 text-amber-400" />)
         : <ChevronUp className="w-3 h-3 opacity-20" />
       }
     </button>
@@ -73,7 +73,7 @@ function SortTh({
 
 export default function AdminMessagesPageWrapper() {
   return (
-    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" /></div>}>
       <AdminMessagesPage />
     </Suspense>
   );
@@ -260,7 +260,7 @@ function AdminMessagesPage() {
                 key={o.value}
                 type="button"
                 onClick={() => setScope(o.value)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${scope === o.value ? 'bg-fuchsia-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${scope === o.value ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
               >
                 {o.label}
               </button>
@@ -278,7 +278,7 @@ function AdminMessagesPage() {
               placeholder="user@example.com"
               value={targetEmail}
               onChange={(e) => { setTargetEmail(e.target.value); setTargetId(null); }}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
             />
             <button
               type="button"
@@ -300,8 +300,8 @@ function AdminMessagesPage() {
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            placeholder="Important update from CentenarianOS"
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500"
+            placeholder="Important update from JobHub"
+            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
           />
         </div>
 
@@ -329,7 +329,7 @@ function AdminMessagesPage() {
           type="button"
           onClick={sendMessage}
           disabled={sending}
-          className="flex items-center gap-2 px-5 py-2.5 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition font-semibold text-sm disabled:opacity-60"
+          className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-500 transition font-semibold text-sm disabled:opacity-60"
         >
           <Send className="w-4 h-4" />
           {sending ? 'Sending…' : 'Send Message'}
@@ -371,7 +371,7 @@ function AdminMessagesPage() {
                     <div className="flex items-center gap-2">
                       <p className="font-medium text-white text-sm">{m.subject}</p>
                       {userReplies.length > 0 && (
-                        <span className="px-1.5 py-0.5 bg-fuchsia-600 text-white text-xs font-bold rounded-full">
+                        <span className="px-1.5 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full">
                           {userReplies.length}
                         </span>
                       )}
@@ -422,10 +422,10 @@ function AdminMessagesPage() {
                           >
                             <div className={`max-w-[80%] rounded-xl px-4 py-3 ${
                               reply.is_admin
-                                ? 'bg-fuchsia-900/40 border border-fuchsia-800/50 text-fuchsia-100'
+                                ? 'bg-amber-900/40 border border-amber-800/50 text-amber-100'
                                 : 'bg-gray-800 border border-gray-700 text-gray-200'
                             }`}>
-                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-fuchsia-400' : 'text-gray-400'}`}>
+                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-amber-400' : 'text-gray-400'}`}>
                                 {reply.is_admin ? 'You (Admin)' : 'User'}
                               </p>
                               <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
@@ -450,7 +450,7 @@ function AdminMessagesPage() {
                         rows={3}
                         placeholder="Write your reply…"
                         aria-label="Reply to message"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-fuchsia-500 resize-none"
+                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                       />
                       <div className="flex items-center justify-between mt-3 gap-3">
                         <MediaUploader
@@ -468,7 +468,7 @@ function AdminMessagesPage() {
                             type="button"
                             onClick={() => sendThreadReply(m.id)}
                             disabled={replySending === m.id || !(replyText[m.id] ?? '').trim()}
-                            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-50"
                           >
                             {replySending === m.id
                               ? <Loader2 className="w-4 h-4 animate-spin" />

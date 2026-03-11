@@ -180,7 +180,7 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
     { user_id: userId, amount: 1200.00, type: 'expense', description: 'Camera crew — Colts vs Dolphins', vendor: 'Jake Morrison', transaction_date: daysAgo(5), source: 'manual', account_id: bizCheckingId },
     { user_id: userId, amount: 900.00, type: 'expense', description: 'Audio crew — Pacers vs Thunder', vendor: 'Carlos Reyes', transaction_date: daysAgo(8), source: 'manual', account_id: bizCheckingId },
     { user_id: userId, amount: 600.00, type: 'expense', description: 'Utility crew — IU vs Michigan State', vendor: 'Nicole Foster', transaction_date: daysAgo(12), source: 'manual', account_id: bizCheckingId },
-    { user_id: userId, amount: 49.99, type: 'expense', description: 'CrewOps monthly subscription', vendor: 'CentenarianOS', transaction_date: daysAgo(15), source: 'manual', account_id: bizCreditId },
+    { user_id: userId, amount: 49.99, type: 'expense', description: 'CrewOps monthly subscription', vendor: 'JobHub', transaction_date: daysAgo(15), source: 'manual', account_id: bizCreditId },
     { user_id: userId, amount: 29.99, type: 'expense', description: 'Google Workspace subscription', vendor: 'Google', transaction_date: daysAgo(18), source: 'manual', account_id: bizCreditId },
     { user_id: userId, amount: 245.00, type: 'expense', description: 'Office supplies — printer ink + paper', vendor: 'Staples', transaction_date: daysAgo(22), source: 'manual', account_id: bizCreditId },
   ]);

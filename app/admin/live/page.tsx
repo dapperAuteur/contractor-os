@@ -98,7 +98,7 @@ export default function AdminLivePage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -110,12 +110,12 @@ export default function AdminLivePage() {
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
             <Radio className="w-6 h-6 text-red-500" /> Live Sessions
           </h1>
-          <p className="text-gray-400 text-sm mt-1">Manage CentenarianOS Team live sessions. Members will be notified by email when a session is created.</p>
+          <p className="text-gray-400 text-sm mt-1">Manage JobHub Team live sessions. Members will be notified by email when a session is created.</p>
         </div>
         {!creating && (
           <button
             onClick={() => setCreating(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition"
           >
             <Plus className="w-4 h-4" /> New Session
           </button>
@@ -132,7 +132,7 @@ export default function AdminLivePage() {
               required
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
             />
           </div>
 
@@ -142,7 +142,7 @@ export default function AdminLivePage() {
               value={form.description}
               onChange={(e) => setForm({ ...form, description: e.target.value })}
               rows={2}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500 resize-none"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
 
@@ -153,7 +153,7 @@ export default function AdminLivePage() {
                 type="datetime-local"
                 value={form.scheduled_at}
                 onChange={(e) => setForm({ ...form, scheduled_at: e.target.value })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
             <div>
@@ -161,7 +161,7 @@ export default function AdminLivePage() {
               <select
                 value={form.visibility}
                 onChange={(e) => setForm({ ...form, visibility: e.target.value as typeof form.visibility })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               >
                 <option value="public">Public (anyone)</option>
                 <option value="members">Members only</option>
@@ -177,7 +177,7 @@ export default function AdminLivePage() {
                 type="datetime-local"
                 value={form.published_at}
                 onChange={(e) => setForm({ ...form, published_at: e.target.value })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
           )}
@@ -190,7 +190,7 @@ export default function AdminLivePage() {
               onChange={(e) => setForm({ ...form, embed_code: e.target.value })}
               rows={3}
               placeholder="<iframe src='https://player.viloud.tv/embed/...' ...></iframe>"
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-fuchsia-500 resize-none"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm font-mono focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
 
@@ -214,7 +214,7 @@ export default function AdminLivePage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-5 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+              className="px-5 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-50"
             >
               {saving ? 'Creating…' : 'Create & Notify Members'}
             </button>

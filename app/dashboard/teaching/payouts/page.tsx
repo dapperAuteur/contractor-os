@@ -43,7 +43,7 @@ function PayoutsContent() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -86,14 +86,14 @@ function PayoutsContent() {
         {!status?.onboarded && (
           <>
             <p className="text-gray-400 text-sm mb-4">
-              CentenarianOS uses Stripe Connect to send your earnings directly to your bank account.
+              JobHub uses Stripe Connect to send your earnings directly to your bank account.
               You keep the majority of each course sale; a small platform fee covers payment processing.
             </p>
             <button
               type="button"
               onClick={handleConnect}
               disabled={redirecting}
-              className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-lg font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition disabled:opacity-50"
             >
               {redirecting
                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting…</>
@@ -128,7 +128,7 @@ function PayoutsContent() {
 
 export default function PayoutsPage() {
   return (
-    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" /></div>}>
       <PayoutsContent />
     </Suspense>
   );

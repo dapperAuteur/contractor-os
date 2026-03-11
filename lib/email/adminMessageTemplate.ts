@@ -33,7 +33,7 @@ export function adminMessageTemplate({
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#c026d3,#0284c7);padding:32px 40px;">
-              <p style="margin:0;color:#fff;font-size:22px;font-weight:700;">CentenarianOS</p>
+              <p style="margin:0;color:#fff;font-size:22px;font-weight:700;">JobHub</p>
               <p style="margin:6px 0 0;color:rgba(255,255,255,.8);font-size:14px;">Message from Admin</p>
             </td>
           </tr>
@@ -61,8 +61,8 @@ export function adminMessageTemplate({
           <!-- Footer -->
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #f3f4f6;color:#9ca3af;font-size:12px;">
-              You received this message because you have a CentenarianOS account.
-              <br>© ${new Date().getFullYear()} CentenarianOS
+              You received this message because you have a JobHub account.
+              <br>© ${new Date().getFullYear()} JobHub
             </td>
           </tr>
         </table>

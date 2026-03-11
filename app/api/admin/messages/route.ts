@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
   // Send emails via Resend in batches
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   const html = adminMessageTemplate({ subject, body, siteUrl });
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com';
+  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'admin@jobhub.com';
   const resend = getResend();
 
   let sent = 0;

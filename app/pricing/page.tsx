@@ -1,38 +1,32 @@
 'use client';
 
-// app/pricing/page.tsx
-// Public pricing page — no auth required
-
+import { useState } from 'react';
 import Link from 'next/link';
-import { useState, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useAuth } from '@/lib/hooks/useAuth';
-import { Check, Shirt, Zap, ArrowLeft, HardHat, Users } from 'lucide-react';
-import PurchaseModal from '@/components/PurchaseModal';
-import SiteFooter from '@/components/ui/SiteFooter';
-import PageViewTracker from '@/components/ui/PageViewTracker';
+import { HardHat, Check, ArrowRight, Loader2 } from 'lucide-react';
 
-function FromSignupBanner() {
-  const searchParams = useSearchParams();
-  if (searchParams.get('from') !== 'signup') return null;
-  return (
-    <div className="mb-8 max-w-xl mx-auto bg-fuchsia-50 border border-fuchsia-200 text-fuchsia-800 rounded-xl px-5 py-4 text-center text-sm font-medium">
-      Account created! Choose a plan below to access your dashboard.
-    </div>
-  );
-}
+const FEATURES = [
+  'Unlimited jobs, time entries, and invoices',
+  'Rate cards with quick-apply',
+  'Earnings reports and 1099 tracking',
+  'Job comparison tool',
+  'Job board and replacement finding',
+  'Venue knowledge base',
+  'City guides with community sharing',
+  'Union contract RAG chat (AI-powered)',
+  'Union membership and dues tracking',
+  'Pay stub scanning (Gemini Vision)',
+  'Mileage and expense tracking',
+  'Document storage and uploads',
+  'CSV import and export',
+  'Mobile-first dark theme',
+];
 
-const POLICIES = 'No Refunds. Cancel Anytime. Monthly fees are not transferable to lifetime membership.';
-
-export default function PricingPage() {
-  const { user } = useAuth();
-  const [loadingPlan, setLoadingPlan] = useState<'monthly' | 'lifetime' | null>(null);
+export default function ContractorPricingPage() {
+  const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-  const [pendingPlan, setPendingPlan] = useState<'monthly' | 'lifetime' | null>(null);
 
-  async function handleCheckout(plan: 'monthly' | 'lifetime') {
-    setLoadingPlan(plan);
+  async function handleCheckout(plan: 'contractor-monthly' | 'contractor-annual') {
+    setLoading(plan);
     setError(null);
     try {
       const res = await fetch('/api/stripe/checkout', {
@@ -40,290 +34,137 @@ export default function PricingPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plan }),
       });
-
-      if (res.status === 401) {
-        // Show inline auth modal instead of redirecting away
-        setPendingPlan(plan);
-        setShowPurchaseModal(true);
-        setLoadingPlan(null);
+      const data = await res.json();
+      if (!res.ok) {
+        if (res.status === 401) {
+          window.location.href = '/signup';
+          return;
+        }
+        setError(data.error ?? 'Something went wrong');
         return;
       }
-
-      const data = await res.json();
-      if (!res.ok || !data.url) {
-        throw new Error(data.error ?? 'Failed to start checkout');
+      if (data.url) {
+        window.location.href = data.url;
       }
-
-      window.location.href = data.url;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
-      setLoadingPlan(null);
-    }
-  }
-
-  function handleAuthSuccess() {
-    if (pendingPlan) {
-      handleCheckout(pendingPlan);
-      setPendingPlan(null);
+    } catch {
+      setError('Network error. Please try again.');
+    } finally {
+      setLoading(null);
     }
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
-      <PageViewTracker path="/pricing" />
-      {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-            <ArrowLeft className="w-4 h-4" />
-            <span className="font-medium">CentenarianOS</span>
+    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+      {/* Nav */}
+      <nav className="border-b border-neutral-800 px-4 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <HardHat size={24} className="text-amber-400" aria-hidden="true" />
+            <span className="text-lg font-bold">JobHub</span>
           </Link>
-          <div className="flex items-center space-x-4">
-            {user ? (
-              <Link
-                href="/dashboard"
-                className="px-4 py-2 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors text-sm font-medium"
-              >
-                Go to Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900 font-medium">
-                  Log in
-                </Link>
-                <Link
-                  href="/signup"
-                  className="px-4 py-2 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors text-sm font-medium"
-                >
-                  Create Account
-                </Link>
-              </>
-            )}
+          <div className="flex items-center gap-3">
+            <Link href="/login" className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center">
+              Log In
+            </Link>
+            <Link href="/signup" className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 min-h-11 flex items-center">
+              Get Started
+            </Link>
           </div>
-        </nav>
-      </header>
-
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <Suspense fallback={null}>
-          <FromSignupBanner />
-        </Suspense>
-
-        {/* Coaching CTA */}
-        <Link
-          href="/coaching"
-          className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-linear-to-br from-fuchsia-950 to-indigo-950 text-white rounded-2xl px-6 py-5 mb-12 hover:opacity-95 transition"
-          aria-label="Learn about personal longevity coaching"
-        >
-          <div className="text-center sm:text-left">
-            <p className="text-xs font-semibold uppercase tracking-widest text-fuchsia-300 mb-1">Prefer a guide over a plan?</p>
-            <p className="text-lg font-bold">Work with a coach, not just a platform.</p>
-            <p className="text-sm text-fuchsia-200 mt-0.5">Personalized 1-on-1 longevity coaching for those who want expert support alongside the tools.</p>
-          </div>
-          <span className="shrink-0 px-5 py-2.5 bg-fuchsia-500 hover:bg-fuchsia-400 text-white text-sm font-semibold rounded-xl transition whitespace-nowrap">
-            See Coaching Options
-          </span>
-        </Link>
-
-        <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">
-            Simple, Transparent Pricing
-          </h1>
-          <p className="text-lg text-gray-600">
-            Choose a plan and unlock your full personal operating system.
-          </p>
         </div>
+      </nav>
+
+      <section className="mx-auto max-w-4xl px-4 py-16">
+        <h1 className="text-center text-3xl font-extrabold sm:text-4xl">Simple Pricing</h1>
+        <p className="mt-3 text-center text-neutral-400">Everything included. No feature gating. No surprises.</p>
 
         {error && (
-          <div className="mb-8 max-w-md mx-auto bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm text-center">
+          <div role="alert" className="mt-6 rounded-lg border border-red-800 bg-red-900/30 px-4 py-3 text-center text-sm text-red-300">
             {error}
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          {/* Monthly Plan */}
-          <div className="bg-white rounded-2xl border-2 border-fuchsia-400 p-8 flex flex-col relative shadow-lg">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="bg-fuchsia-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                Popular
-              </span>
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {/* Monthly */}
+          <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+            <h2 className="text-lg font-semibold text-neutral-200">Monthly</h2>
+            <div className="mt-3">
+              <span className="text-4xl font-extrabold text-amber-400">$10</span>
+              <span className="text-neutral-500">/month</span>
             </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-1">Monthly</h2>
-              <p className="text-gray-500 text-sm">Full access, cancel anytime</p>
-              <div className="mt-4">
-                <span className="text-4xl font-extrabold text-gray-900">$10</span>
-                <span className="text-gray-500 text-sm ml-1">/month</span>
-              </div>
-            </div>
-            <ul className="space-y-3 mb-8 flex-1">
-              {[
-                'Roadmap & goal hierarchy',
-                'Daily task planner (week/3-day/daily views)',
-                'Fuel & nutrition tracking (NCV framework)',
-                'Focus Engine (timer, debrief, pain log)',
-                'Travel & vehicle tracking with fuel OCR',
-                'Financial dashboard (accounts, budgets, brands)',
-                'Bank account linking via Teller (auto-sync)',
-                'Health metrics & wearable sync (Garmin, Oura, WHOOP)',
-                'Workouts, exercises & Nomad Longevity OS protocol',
-                'Equipment & asset tracking with valuations',
-                'Smart scanner — AI-powered receipt & document OCR',
-                'Life Categories — tag activities across all modules',
-                'Life Retrospective with Google Calendar import',
-                'Correlation analysis across health & lifestyle metrics',
-                'Academy courses & 15+ tutorial guides',
-                'Data Hub — bulk import/export for all modules',
-                'Cross-module linking, saved contacts & blog publishing',
-                'Interactive feature walkthroughs & guided onboarding',
-              ].map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-700">
-                  <Check className="w-4 h-4 text-fuchsia-500 mt-0.5 shrink-0" />
-                  {f}
-                </li>
-              ))}
-            </ul>
+            <p className="mt-2 text-sm text-neutral-500">Cancel anytime. No commitment.</p>
             <button
-              onClick={() => handleCheckout('monthly')}
-              disabled={loadingPlan !== null}
-              className="w-full px-4 py-3 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              onClick={() => handleCheckout('contractor-monthly')}
+              disabled={loading !== null}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11"
             >
-              {loadingPlan === 'monthly' ? (
-                <span className="animate-spin inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+              {loading === 'contractor-monthly' ? (
+                <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</>
               ) : (
-                <Zap className="w-4 h-4" />
+                <>Subscribe <ArrowRight size={16} aria-hidden="true" /></>
               )}
-              {loadingPlan === 'monthly' ? 'Redirecting...' : 'Start Monthly'}
             </button>
           </div>
 
-          {/* Lifetime Plan */}
-          <div className="bg-linear-to-b from-gray-900 to-gray-800 rounded-2xl border-2 border-gray-700 p-8 flex flex-col text-white relative">
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span className="bg-lime-500 text-gray-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
-                Best Value
-              </span>
+          {/* Annual */}
+          <div className="rounded-2xl border-2 border-amber-600 bg-neutral-900 p-6 relative">
+            <span className="absolute -top-3 left-4 rounded-full bg-amber-600 px-3 py-0.5 text-xs font-bold text-white">
+              Save $20
+            </span>
+            <h2 className="text-lg font-semibold text-neutral-200">Annual</h2>
+            <div className="mt-3">
+              <span className="text-4xl font-extrabold text-amber-400">$100</span>
+              <span className="text-neutral-500">/year</span>
             </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-bold mb-1">Lifetime</h2>
-              <p className="text-gray-400 text-sm">Pay once, own it forever</p>
-              <div className="mt-4">
-                <span className="text-4xl font-extrabold">$100</span>
-                <span className="text-gray-400 text-sm ml-1">one-time</span>
-              </div>
-            </div>
-            <ul className="space-y-3 mb-8 flex-1">
-              {[
-                'Everything in Monthly',
-                'No recurring fees ever',
-              ].map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
-                  <Check className="w-4 h-4 text-lime-400 mt-0.5 shrink-0" />
-                  {f}
-                </li>
-              ))}
-              <li className="flex items-start gap-2 text-sm text-lime-300 font-semibold">
-                <Shirt className="w-4 h-4 text-lime-400 mt-0.5 shrink-0" />
-                Free CentenarianOS shirt from AwesomeWebStore.com
-              </li>
-            </ul>
+            <p className="mt-2 text-sm text-neutral-500">$8.33/month, billed annually.</p>
             <button
-              onClick={() => handleCheckout('lifetime')}
-              disabled={loadingPlan !== null}
-              className="w-full px-4 py-3 bg-lime-500 text-gray-900 rounded-lg hover:bg-lime-400 transition-colors font-bold text-sm disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              onClick={() => handleCheckout('contractor-annual')}
+              disabled={loading !== null}
+              className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11"
             >
-              {loadingPlan === 'lifetime' ? (
-                <span className="animate-spin inline-block w-4 h-4 border-2 border-gray-900 border-t-transparent rounded-full" />
+              {loading === 'contractor-annual' ? (
+                <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</>
               ) : (
-                <Shirt className="w-4 h-4" />
+                <>Subscribe <ArrowRight size={16} aria-hidden="true" /></>
               )}
-              {loadingPlan === 'lifetime' ? 'Redirecting...' : 'Get Lifetime Access'}
             </button>
           </div>
         </div>
 
-        {/* Policies */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-gray-500 font-medium">{POLICIES}</p>
-        </div>
-
-        {/* Contractor & Lister Products */}
-        <div className="mt-16 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">For Contractors & Crew Coordinators</h2>
-          <p className="text-sm text-gray-500 text-center mb-8">Separate products with their own subscriptions — independent from CentenarianOS.</p>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-xl border border-amber-200 p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-                  <HardHat className="w-5 h-5 text-amber-600" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900">JobHub</h3>
-                  <p className="text-xs text-gray-500">For independent contractors</p>
-                </div>
+        {/* Feature list */}
+        <div className="mt-16">
+          <h2 className="text-xl font-bold text-center mb-6">Everything Included</h2>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {FEATURES.map((f) => (
+              <div key={f} className="flex items-start gap-2 py-1">
+                <Check size={16} className="mt-0.5 text-amber-400 shrink-0" aria-hidden="true" />
+                <span className="text-sm text-neutral-300">{f}</span>
               </div>
-              <p className="text-sm text-gray-600 mb-3">Job tracking, time entries, invoices, rate cards, venue KB, city guides, union tools, and reports. Interactive walkthroughs for every feature.</p>
-              <p className="text-sm font-semibold text-amber-600 mb-3">$10/month or $100/year</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Link href="/contractor-pricing" className="text-xs text-amber-600 hover:underline font-medium min-h-11 flex items-center">
-                  View pricing &rarr;
-                </Link>
-                <Link href="/features/contractor" className="text-xs text-gray-500 hover:text-amber-600 hover:underline font-medium min-h-11 flex items-center sm:ml-3">
-                  Explore features &rarr;
-                </Link>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl border border-indigo-200 p-6">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                  <Users className="w-5 h-5 text-indigo-600" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900">CrewOps</h3>
-                  <p className="text-xs text-gray-500">For crew coordinators & union leaders</p>
-                </div>
-              </div>
-              <p className="text-sm text-gray-600 mb-3">Job listing, roster management, assignment dispatch, group messaging, availability, and reports. Try each feature with a guided demo login.</p>
-              <p className="text-sm font-semibold text-indigo-600 mb-3">From $10/month (intro)</p>
-              <div className="flex flex-col sm:flex-row gap-2">
-                <Link href="/lister-pricing" className="text-xs text-indigo-600 hover:underline font-medium min-h-11 flex items-center">
-                  View pricing &rarr;
-                </Link>
-                <Link href="/features/lister" className="text-xs text-gray-500 hover:text-indigo-600 hover:underline font-medium min-h-11 flex items-center sm:ml-3">
-                  Explore features &rarr;
-                </Link>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* Try demo */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-600">
-            Want to try before you buy?{' '}
-            <Link href="/demo" className="text-fuchsia-600 hover:underline font-medium">
-              Explore the demo account
-            </Link>
-          </p>
+        {/* FAQ */}
+        <div className="mt-16 space-y-4">
+          <h2 className="text-xl font-bold text-center mb-6">FAQ</h2>
+          {[
+            { q: 'Is there a free plan?', a: 'No. We offer a focused paid product with no feature limits. Sign up and subscribe to get started.' },
+            { q: 'Can I cancel anytime?', a: 'Yes. Monthly plans cancel immediately. Annual plans run through the billing period.' },
+            { q: 'Do I need another subscription?', a: 'No. JobHub is a standalone product. You can subscribe to it independently.' },
+            { q: 'What payment methods are accepted?', a: 'All major credit cards via Stripe. Secure checkout with no card data stored on our servers.' },
+            { q: 'Is my data private?', a: 'Yes. Row-level security ensures your data is isolated. Shared features (job board, city guides, union docs) are opt-in only.' },
+            { q: 'How do I get help if I have a problem?', a: 'Customer support is managed by a real human — not AI. Reach out through the in-app feedback form or email and a team member will respond personally.' },
+          ].map((faq) => (
+            <details key={faq.q} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 group">
+              <summary className="cursor-pointer font-medium text-neutral-200 text-sm">{faq.q}</summary>
+              <p className="mt-2 text-sm text-neutral-400">{faq.a}</p>
+            </details>
+          ))}
         </div>
+      </section>
 
-        {/* Feature comparison note */}
-        <div className="mt-4 bg-gray-50 rounded-xl p-6 text-center">
-          <p className="text-sm text-gray-600">
-            Have questions?{' '}
-            <a href="mailto:support@centenarianos.com" className="text-fuchsia-600 hover:underline font-medium">
-              Contact support
-            </a>
-          </p>
-        </div>
-      </main>
-
-      <SiteFooter theme="light" />
-
-      <PurchaseModal
-        isOpen={showPurchaseModal}
-        onClose={() => setShowPurchaseModal(false)}
-        onAuthSuccess={handleAuthSuccess}
-      />
+      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

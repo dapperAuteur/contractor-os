@@ -11,7 +11,7 @@ export default function LandingPage() {
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-sky-500 rounded-lg"></div>
             <Link href="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold text-gray-900">CentenarianOS</span>
+              <span className="text-xl font-bold text-gray-900">JobHub</span>
             </Link>
           </div>
           <div className="flex items-center space-x-6">
@@ -142,7 +142,7 @@ export default function LandingPage() {
       <section className="bg-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Why CentenarianOS?
+            Why JobHub?
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="flex items-start space-x-4">
@@ -180,7 +180,7 @@ export default function LandingPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="bg-gradient-to-r from-fuchsia-600 to-sky-600 rounded-2xl p-12 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Start Your Centenarian Journey Today
+            Start Your JobHub Journey Today
           </h2>
           <p className="text-white/90 mb-8 text-lg max-w-2xl mx-auto">
             Join the beta and help shape the future of long-term goal execution.
@@ -200,7 +200,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex justify-between items-center">
             <p className="text-gray-600 text-sm">
-              © 2025 CentenarianOS. Open source under MIT License.
+              © 2025 JobHub. Open source under MIT License.
             </p>
             <div className="flex space-x-6">
               <Link href="/academy" className="text-gray-600 hover:text-gray-900 text-sm">
@@ -213,7 +213,7 @@ export default function LandingPage() {
                 Contribute
               </Link>
               <a 
-                href="https://github.com/dapperAuteur/centenarian-os" 
+                href="https://github.com/dapperAuteur/jobhub-app" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-600 hover:text-gray-900 text-sm"

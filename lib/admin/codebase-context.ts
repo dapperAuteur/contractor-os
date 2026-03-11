@@ -3,10 +3,10 @@
 // Update this file when significant features ship.
 
 export const CODEBASE_CONTEXT = `
-## CentenarianOS — Architecture & Feature Reference
+## JobHub — Architecture & Feature Reference
 
 ### Product Overview
-CentenarianOS is a comprehensive longevity-focused life-management platform. It combines financial tracking, health metrics, travel logging, meal planning, fitness programming, and educational courses into a single dashboard — all built around the idea that living to 100+ requires intentional daily systems.
+JobHub is a comprehensive longevity-focused life-management platform. It combines financial tracking, health metrics, travel logging, meal planning, fitness programming, and educational courses into a single dashboard — all built around the idea that living to 100+ requires intentional daily systems.
 
 ### Tech Stack
 - **Framework**: Next.js 15 App Router (TypeScript, app/ directory structure)

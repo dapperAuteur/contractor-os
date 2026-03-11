@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import InstitutionDirectory from './InstitutionDirectory';
 
 export const metadata: Metadata = {
-  title: 'Financial Institutions Directory | CentenarianOS',
+  title: 'Financial Institutions Directory | JobHub',
   description: 'Compare APRs, fees, rewards, and policies across financial institutions. Community-sourced, anonymized data for educational purposes.',
 };
 

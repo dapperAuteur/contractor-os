@@ -165,7 +165,7 @@ export default function ListerPricingPage() {
       </section>
 
       <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} CentenarianOS. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
       </footer>
     </div>
   );

@@ -7,7 +7,7 @@ import {
 } from '@/lib/features/lister-features';
 
 export const metadata = {
-  title: 'CrewOps Features — CentenarianOS',
+  title: 'CrewOps Features — JobHub',
   description:
     'Explore every feature of CrewOps, the crew management app. Create jobs, manage rosters, assign contractors, and communicate with your team.',
 };

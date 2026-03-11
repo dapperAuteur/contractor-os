@@ -7,7 +7,7 @@ const HEADER = `
           <!-- Header -->
           <tr>
             <td style="background:linear-gradient(135deg,#c026d3,#0284c7);padding:32px 40px;">
-              <p style="margin:0;color:#fff;font-size:22px;font-weight:700;">CentenarianOS</p>
+              <p style="margin:0;color:#fff;font-size:22px;font-weight:700;">JobHub</p>
             </td>
           </tr>`;
 
@@ -16,7 +16,7 @@ const FOOTER = `
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #f3f4f6;color:#9ca3af;font-size:12px;">
               If you did not request this email, you can safely ignore it.
-              <br>&copy; 2025 CentenarianOS. All rights reserved.
+              <br>&copy; 2025 JobHub. All rights reserved.
             </td>
           </tr>`;
 
@@ -53,7 +53,7 @@ export const confirmSignup = wrap(
   `
           <tr>
             <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#111827;">Welcome to CentenarianOS</h1>
+              <h1 style="margin:0;font-size:20px;font-weight:700;color:#111827;">Welcome to JobHub</h1>
             </td>
           </tr>
           <tr>
@@ -86,7 +86,7 @@ export const magicLink = wrap(
   `
           <tr>
             <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#111827;">Sign In to CentenarianOS</h1>
+              <h1 style="margin:0;font-size:20px;font-weight:700;color:#111827;">Sign In to JobHub</h1>
             </td>
           </tr>
           <tr>
@@ -124,7 +124,7 @@ export const changeEmail = wrap(
           </tr>
           <tr>
             <td style="padding:16px 40px 24px;color:#374151;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">You requested to change your email address on CentenarianOS. Click the button below to confirm this change.</p>
+              <p style="margin:0 0 16px;">You requested to change your email address on JobHub. Click the button below to confirm this change.</p>
             </td>
           </tr>
           <tr>
@@ -191,7 +191,7 @@ export const reauthentication = wrap(
           </tr>
           <tr>
             <td style="padding:16px 40px 24px;color:#374151;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">For your security, please verify your identity to continue with the requested action on CentenarianOS.</p>
+              <p style="margin:0 0 16px;">For your security, please verify your identity to continue with the requested action on JobHub.</p>
             </td>
           </tr>
           <tr>
@@ -215,7 +215,7 @@ export const reauthentication = wrap(
  * Supabase variable: {{ .ConfirmationURL }}
  */
 export const invite = wrap(
-  "You're Invited to CentenarianOS",
+  "You're Invited to JobHub",
   `
           <tr>
             <td style="padding:32px 40px 0;">
@@ -224,7 +224,7 @@ export const invite = wrap(
           </tr>
           <tr>
             <td style="padding:16px 40px 24px;color:#374151;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">You&rsquo;ve been invited to join CentenarianOS — a longevity-focused life operating system for planning, health tracking, finance, and more.</p>
+              <p style="margin:0 0 16px;">You&rsquo;ve been invited to join JobHub — a longevity-focused life operating system for planning, health tracking, finance, and more.</p>
               <p style="margin:0 0 16px;">Click the button below to accept your invitation and set up your account.</p>
             </td>
           </tr>

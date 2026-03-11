@@ -109,7 +109,7 @@ export default function MessagesPage() {
   // User viewing:  their replies (is_admin=false) are "mine" → right side
   function getReplyMeta(reply: Reply) {
     const isMine = isAdmin ? reply.is_admin : !reply.is_admin;
-    const label = isMine ? 'You' : (reply.is_admin ? 'CentenarianOS Team' : 'Member');
+    const label = isMine ? 'You' : (reply.is_admin ? 'JobHub Team' : 'Member');
     return { isMine, label };
   }
 
@@ -118,7 +118,7 @@ export default function MessagesPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -126,13 +126,13 @@ export default function MessagesPage() {
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <div className="flex items-center gap-3 mb-2">
-        <Bell className="w-6 h-6 text-fuchsia-600" />
+        <Bell className="w-6 h-6 text-amber-600" />
         <h1 className="text-3xl font-bold text-gray-900">Messages</h1>
         {unread > 0 && (
-          <span className="px-2 py-0.5 bg-fuchsia-600 text-white text-xs font-bold rounded-full">{unread} new</span>
+          <span className="px-2 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full">{unread} new</span>
         )}
       </div>
-      <p className="text-gray-500 mb-8">Messages from the CentenarianOS team. You can reply to any message.</p>
+      <p className="text-gray-500 mb-8">Messages from the JobHub team. You can reply to any message.</p>
 
       {messages.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
@@ -147,7 +147,7 @@ export default function MessagesPage() {
             return (
               <div
                 key={m.id}
-                className={`rounded-2xl border transition ${m.is_read ? 'bg-white border-gray-200' : 'bg-fuchsia-50 border-fuchsia-200'}`}
+                className={`rounded-2xl border transition ${m.is_read ? 'bg-white border-gray-200' : 'bg-amber-50 border-amber-200'}`}
               >
                 {/* Header — click to toggle */}
                 <button
@@ -155,7 +155,7 @@ export default function MessagesPage() {
                   className="w-full flex items-start gap-3 p-5 text-left"
                   onClick={() => openMessage(m.id)}
                 >
-                  {!m.is_read && <div className="w-2 h-2 rounded-full bg-fuchsia-600 mt-1.5 shrink-0" />}
+                  {!m.is_read && <div className="w-2 h-2 rounded-full bg-amber-600 mt-1.5 shrink-0" />}
                   {m.is_read && <CheckCircle className="w-4 h-4 text-gray-300 mt-0.5 shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-4 mb-0.5">
@@ -186,7 +186,7 @@ export default function MessagesPage() {
                         )}
                       </div>
                     )}
-                    <p className="text-xs text-gray-400">— CentenarianOS Team</p>
+                    <p className="text-xs text-gray-400">— JobHub Team</p>
 
                     {/* Thread */}
                     {!thread?.loaded && (
@@ -204,10 +204,10 @@ export default function MessagesPage() {
                             <div key={reply.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
                               <div className={`max-w-[80%] rounded-xl px-4 py-3 ${
                                 isMine
-                                  ? 'bg-fuchsia-50 border border-fuchsia-200 text-gray-800'
+                                  ? 'bg-amber-50 border border-amber-200 text-gray-800'
                                   : 'bg-purple-50 border border-purple-100 text-gray-800'
                               }`}>
-                                <p className={`text-xs font-semibold mb-1 ${isMine ? 'text-fuchsia-600' : 'text-purple-600'}`}>
+                                <p className={`text-xs font-semibold mb-1 ${isMine ? 'text-amber-600' : 'text-purple-600'}`}>
                                   {label}
                                 </p>
                                 <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
@@ -230,8 +230,8 @@ export default function MessagesPage() {
                         value={replyText[m.id] ?? ''}
                         onChange={(e) => setReplyText((prev) => ({ ...prev, [m.id]: e.target.value }))}
                         rows={3}
-                        placeholder={isAdmin ? 'Reply as the CentenarianOS team…' : 'Reply to the team…'}
-                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent resize-none"
+                        placeholder={isAdmin ? 'Reply as the JobHub team…' : 'Reply to the team…'}
+                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
                       />
                       <div className="flex items-center justify-between mt-2 gap-3">
                         <MediaUploader
@@ -248,7 +248,7 @@ export default function MessagesPage() {
                             type="button"
                             onClick={() => sendReply(m.id)}
                             disabled={sending === m.id || !(replyText[m.id] ?? '').trim()}
-                            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-50"
                           >
                             {sending === m.id
                               ? <Loader2 className="w-4 h-4 animate-spin" />

@@ -4,8 +4,8 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | CentenarianOS',
-  description: 'Privacy Policy for CentenarianOS, operated by B4C LLC / AwesomeWebStore.com.',
+  title: 'Privacy Policy | JobHub',
+  description: 'Privacy Policy for JobHub, operated by B4C LLC / AwesomeWebStore.com.',
 };
 
 export default function PrivacyPage() {
@@ -21,7 +21,7 @@ export default function PrivacyPage() {
 
         <Section title="1. Who We Are">
           <p>
-            CentenarianOS (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a longevity and health education platform operated by
+            JobHub (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a longevity and health education platform operated by
             B4C LLC and AwesomeWebStore.com, founded by Anthony McDonald. This Privacy Policy explains
             how we collect, use, store, and protect your personal information.
           </p>
@@ -158,8 +158,8 @@ export default function PrivacyPage() {
           </ul>
           <p className="mt-3">
             To exercise these rights, email us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-fuchsia-400 hover:underline">
-              hello@centenarianos.com
+            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
+              hello@jobhub.app
             </a>
             .
           </p>
@@ -184,8 +184,8 @@ export default function PrivacyPage() {
         <Section title="12. Contact">
           <p>
             Privacy questions or requests:{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-fuchsia-400 hover:underline">
-              hello@centenarianos.com
+            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
+              hello@jobhub.app
             </a>
             <br />
             B4C LLC / AwesomeWebStore.com — Indianapolis, Indiana, USA

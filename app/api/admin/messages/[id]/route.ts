@@ -78,13 +78,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       if (userEmail) {
         const resend = getResend();
         await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
+          from: process.env.RESEND_FROM_EMAIL ?? 'admin@jobhub.com',
           to: userEmail,
           subject: `Re: ${msg.subject}`,
-          html: `<p>The CentenarianOS team replied to your message thread:</p>
-                 <blockquote style="border-left:3px solid #c026d3;padding-left:12px;color:#374151;">${body}</blockquote>
+          html: `<p>The JobHub team replied to your message thread:</p>
+                 <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${body}</blockquote>
                  <p><a href="${siteUrl}/dashboard/messages">View in your inbox →</a></p>
-                 <p style="color:#9ca3af;font-size:12px;">— CentenarianOS Team</p>`,
+                 <p style="color:#9ca3af;font-size:12px;">— JobHub Team</p>`,
         });
       }
     }

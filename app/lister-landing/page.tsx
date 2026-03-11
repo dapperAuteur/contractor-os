@@ -183,7 +183,7 @@ export default function ListerLandingPage() {
       </section>
 
       <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} CentenarianOS. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
         <div className="mt-2 flex justify-center gap-4">
           <Link href="/terms" className="hover:text-neutral-400">Terms</Link>
           <Link href="/privacy" className="hover:text-neutral-400">Privacy</Link>

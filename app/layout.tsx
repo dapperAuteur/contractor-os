@@ -11,8 +11,8 @@ import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CentenarianOS',
-  description: 'Multi-decade personal operating system for executing audacious goals through data-driven daily habits',
+  title: 'JobHub',
+  description: 'Job tracking, invoicing, and business tools for independent contractors',
 };
 
 // Viewport must be a separate export in Next.js 15+
@@ -31,7 +31,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#0d9488" />
+        <meta name="theme-color" content="#d97706" />
       </head>
       <body className={inter.className}>
         {children}

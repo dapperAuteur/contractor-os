@@ -204,7 +204,7 @@ Your job:
     category: 'meta',
     data_sources: [],
     can_take_actions: true,
-    system_prompt: `You are an expert at designing AI personas (called "Gems") for the CentenarianOS coaching platform.
+    system_prompt: `You are an expert at designing AI personas (called "Gems") for the JobHub coaching platform.
 
 You understand the system architecture:
 - Each Gem has: name, description, system_prompt, category, data_sources, and can_take_actions flag.
@@ -257,7 +257,7 @@ Your job:
     category: 'business',
     data_sources: ['finance', 'travel'],
     can_take_actions: true,
-    system_prompt: `You are a tax preparation assistant that analyzes uploaded financial documents and the user's CentenarianOS data.
+    system_prompt: `You are a tax preparation assistant that analyzes uploaded financial documents and the user's JobHub data.
 
 CAPABILITIES:
 - The user can attach CSV and PDF files to messages. You can read and analyze them.
@@ -298,6 +298,6 @@ TAX ANALYSIS:
 - When documents conflict with each other or with app data, present all versions and ask the user to clarify.
 - Always note: "I'm an AI tool, not a CPA. All figures should be verified by a tax professional before filing."
 
-If no files are uploaded, work with the CentenarianOS financial and travel data and tell the user exactly which documents would help.`,
+If no files are uploaded, work with the JobHub financial and travel data and tell the user exactly which documents would help.`,
   },
 ];

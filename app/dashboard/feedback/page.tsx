@@ -99,7 +99,7 @@ export default function FeedbackHistoryPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -107,7 +107,7 @@ export default function FeedbackHistoryPage() {
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <div className="flex items-center gap-3 mb-2">
-        <MessageSquare className="w-6 h-6 text-fuchsia-600" />
+        <MessageSquare className="w-6 h-6 text-amber-600" />
         <h1 className="text-3xl font-bold text-gray-900">My Feedback</h1>
       </div>
       <p className="text-gray-500 mb-8">
@@ -119,7 +119,7 @@ export default function FeedbackHistoryPage() {
           <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-30" />
           <p className="mb-4">You haven&apos;t submitted any feedback yet.</p>
           <p className="text-sm text-gray-500">
-            Use the <span className="inline-flex items-center gap-1 font-medium text-fuchsia-600"><MessageSquare className="w-3 h-3" /> feedback button</span> in the bottom-right corner to get started.
+            Use the <span className="inline-flex items-center gap-1 font-medium text-amber-600"><MessageSquare className="w-3 h-3" /> feedback button</span> in the bottom-right corner to get started.
           </p>
         </div>
       ) : (
@@ -150,7 +150,7 @@ export default function FeedbackHistoryPage() {
                     <p className="text-xs text-gray-400 mt-1">
                       {new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                       {hasReplies && (
-                        <span className="ml-2 text-fuchsia-600 font-medium">
+                        <span className="ml-2 text-amber-600 font-medium">
                           · {thread.replies.length} repl{thread.replies.length === 1 ? 'y' : 'ies'}
                         </span>
                       )}
@@ -190,10 +190,10 @@ export default function FeedbackHistoryPage() {
                             <div className={`max-w-[80%] rounded-xl px-4 py-3 ${
                               reply.is_admin
                                 ? 'bg-purple-50 border border-purple-100 text-gray-800'
-                                : 'bg-fuchsia-50 border border-fuchsia-200 text-gray-800'
+                                : 'bg-amber-50 border border-amber-200 text-gray-800'
                             }`}>
-                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-purple-600' : 'text-fuchsia-600'}`}>
-                                {reply.is_admin ? 'CentenarianOS Team' : 'You'}
+                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-purple-600' : 'text-amber-600'}`}>
+                                {reply.is_admin ? 'JobHub Team' : 'You'}
                               </p>
                               <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
                               {reply.media_url && <ImageLightbox url={reply.media_url} />}
@@ -214,7 +214,7 @@ export default function FeedbackHistoryPage() {
                         onChange={(e) => setReplyText((prev) => ({ ...prev, [item.id]: e.target.value }))}
                         rows={3}
                         placeholder="Add more details or respond to the team…"
-                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent resize-none"
+                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
                       />
                       <div className="flex items-center justify-between mt-2 gap-3">
                         <MediaUploader
@@ -231,7 +231,7 @@ export default function FeedbackHistoryPage() {
                             type="button"
                             onClick={() => sendReply(item.id)}
                             disabled={sending === item.id || !(replyText[item.id] ?? '').trim()}
-                            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-50"
                           >
                             {sending === item.id
                               ? <Loader2 className="w-4 h-4 animate-spin" />

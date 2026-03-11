@@ -110,7 +110,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
                   <BookOpen className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-gray-800 rounded-xl rounded-tl-none px-4 py-3 text-sm text-gray-200 leading-relaxed">
-                  Hi! I can answer questions about Centenarian Academy — how to enroll, watch lessons, submit assignments, create courses, and more. What do you need help with?
+                  Hi! I can answer questions about JobHub Academy — how to enroll, watch lessons, submit assignments, create courses, and more. What do you need help with?
                 </div>
               </div>
 

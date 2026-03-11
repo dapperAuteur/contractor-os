@@ -91,7 +91,7 @@ export default function DesktopNav({
         <div className="hidden lg:flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold text-gray-900 shrink-0 mr-4">
-            CentenarianOS
+            JobHub
           </Link>
 
           {/* Group dropdown buttons */}
@@ -297,7 +297,7 @@ export default function DesktopNav({
               <Menu className="w-5 h-5" />
             </button>
             <Link href="/" className="text-xl font-bold text-gray-900">
-              CentenarianOS
+              JobHub
             </Link>
           </div>
           <div className="flex items-center gap-2">

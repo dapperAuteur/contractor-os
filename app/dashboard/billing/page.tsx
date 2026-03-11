@@ -91,7 +91,7 @@ export default function BillingPage() {
   if (loading || syncLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-3">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
         {syncLoading && (
           <p className="text-sm text-gray-500">Confirming your payment&hellip;</p>
         )}
@@ -116,7 +116,7 @@ export default function BillingPage() {
       {justPaid && !syncError && (
         <div className="mb-6 flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 rounded-xl px-5 py-4">
           <CheckCircle className="w-5 h-5 shrink-0" />
-          <span className="font-medium">Payment successful — welcome to CentenarianOS!</span>
+          <span className="font-medium">Payment successful — welcome to JobHub!</span>
         </div>
       )}
 
@@ -126,9 +126,9 @@ export default function BillingPage() {
 
         {isAdmin && (
           <div className="flex items-center gap-3">
-            <Shield className="w-5 h-5 text-fuchsia-600 shrink-0" />
+            <Shield className="w-5 h-5 text-amber-600 shrink-0" />
             <div>
-              <span className="text-lg font-bold text-fuchsia-700">Admin — Full Access</span>
+              <span className="text-lg font-bold text-amber-700">Admin — Full Access</span>
               <p className="text-sm text-gray-500 mt-1">You have unrestricted access to all features.</p>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function BillingPage() {
             </div>
             <Link
               href="/pricing"
-              className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-500 transition-colors text-sm font-semibold"
             >
               <Zap className="w-4 h-4" />
               Upgrade
@@ -155,7 +155,7 @@ export default function BillingPage() {
         {status === 'monthly' && (
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <span className="inline-flex items-center gap-2 text-lg font-bold text-fuchsia-700">
+              <span className="inline-flex items-center gap-2 text-lg font-bold text-amber-700">
                 <Zap className="w-5 h-5" />
                 Monthly — $10/month
               </span>
@@ -232,7 +232,7 @@ export default function BillingPage() {
             >
               AwesomeWebStore.com
             </a>{' '}
-            to claim your free CentenarianOS shirt.
+            to claim your free JobHub shirt.
           </p>
           <div className="flex items-center gap-3">
             <code className="flex-1 bg-white border border-lime-300 rounded-lg px-4 py-3 text-lg font-mono font-bold text-lime-900 tracking-widest">
@@ -257,7 +257,7 @@ export default function BillingPage() {
             <div>
               <h3 className="font-bold mb-1">Upgrade to Lifetime for $100</h3>
               <p className="text-sm text-gray-400 mb-4">
-                Pay once, own it forever — plus get a free CentenarianOS shirt from AwesomeWebStore.com.
+                Pay once, own it forever — plus get a free JobHub shirt from AwesomeWebStore.com.
               </p>
               <Link
                 href="/pricing"

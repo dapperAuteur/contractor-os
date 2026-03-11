@@ -28,7 +28,6 @@ export default function SiteFooter({ theme = 'dark' }: SiteFooterProps) {
           <Link href="/safety" className={linkCls}>Safety &amp; Resources</Link>
           <Link href="/safety#rise-wellness" className={linkCls}>Rise Wellness</Link>
           <Link href="/blog" className={linkCls}>Blog</Link>
-          <Link href="/recipes" className={linkCls}>Recipes</Link>
           <Link href="/academy" className={linkCls}>Academy</Link>
         </nav>
         <p className={`${copyCls} text-center sm:text-right shrink-0`}>

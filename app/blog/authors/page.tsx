@@ -59,7 +59,7 @@ export default async function AuthorsPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Authors</h1>
         <p className="mt-1 text-gray-500">
-          {sorted.length} {sorted.length === 1 ? 'writer' : 'writers'} sharing on CentenarianOS.{' '}
+          {sorted.length} {sorted.length === 1 ? 'writer' : 'writers'} sharing on JobHub.{' '}
           <Link href="/blog" className="text-sky-600 hover:underline">
             ← All posts
           </Link>

@@ -1035,10 +1035,10 @@ export async function seedVisitor(supabase: SupabaseClient, userId: string): Pro
   // ── Blog Posts ──
   const { error: blogErr } = await supabase.from('blog_posts').insert([
     {
-      user_id: userId, title: 'Why I Track Everything: My Centenarian OS Journey',
+      user_id: userId, title: 'Why I Track Everything: My JobHub Journey',
       slug: 'why-i-track-everything',
       excerpt: 'How combining financial, health, and productivity tracking into one system changed my approach to longevity.',
-      content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Six months ago I started tracking my resting heart rate, daily spending, workout volume, and sleep in a single dashboard. The correlations were eye-opening. On weeks where I slept 7+ hours consistently, my spending dropped 15% (fewer impulse purchases), my workout performance improved, and my focus sessions were 20% longer. The data tells a clear story: health, wealth, and productivity are deeply connected. CentenarianOS makes these connections visible.' }] }] },
+      content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Six months ago I started tracking my resting heart rate, daily spending, workout volume, and sleep in a single dashboard. The correlations were eye-opening. On weeks where I slept 7+ hours consistently, my spending dropped 15% (fewer impulse purchases), my workout performance improved, and my focus sessions were 20% longer. The data tells a clear story: health, wealth, and productivity are deeply connected. JobHub makes these connections visible.' }] }] },
       visibility: 'public', tags: ['longevity', 'tracking', 'personal'],
       published_at: new Date(Date.now() - 10 * 86400000).toISOString(),
     },

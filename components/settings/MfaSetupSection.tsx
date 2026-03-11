@@ -60,7 +60,7 @@ export default function MfaSetupSection() {
     try {
       const { data, error: enrollError } = await supabase.auth.mfa.enroll({
         factorType: 'totp',
-        friendlyName: 'CentenarianOS',
+        friendlyName: 'JobHub',
       });
       if (enrollError) throw enrollError;
       setFactorId(data.id);

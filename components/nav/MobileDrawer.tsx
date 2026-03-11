@@ -86,7 +86,7 @@ export default function MobileDrawer({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <span className="text-lg font-bold text-gray-900">CentenarianOS</span>
+          <span className="text-lg font-bold text-gray-900">JobHub</span>
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-gray-100 transition"

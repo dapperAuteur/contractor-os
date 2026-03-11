@@ -1,4 +1,4 @@
-# CentenarianOS — Code Style & Quality Guidelines
+# JobHub — Code Style & Quality Guidelines
 
 ## Dark Theme Contrast Rules
 
@@ -22,7 +22,6 @@ This project uses dark-themed pages (`bg-neutral-950`, `bg-neutral-900`) for the
 ### Accent colors by product:
 - **Contractor (JobHub):** `amber` — buttons: `bg-amber-600 hover:bg-amber-500`, text: `text-amber-400`, focus: `focus:ring-amber-500`
 - **Lister (CrewOps):** `indigo` — buttons: `bg-indigo-600 hover:bg-indigo-500`, text: `text-indigo-400`, focus: `focus:ring-indigo-500`
-- **Main CentOS:** `sky` for actions, `fuchsia` for branding
 
 ### Form inputs on dark backgrounds:
 ```
@@ -54,17 +53,15 @@ Never use `border-gray-300` or `bg-white` on dark-themed pages.
 
 ---
 
-## Subdomain-Aware Pages
+## App Architecture
 
-Login, signup, and public pages must detect the subdomain via `useAppMode()` hook and render product-appropriate branding:
-- Contractor subdomain: JobHub logo (HardHat icon), amber accent, dark theme
-- Lister subdomain: CrewOps logo (Users icon), indigo accent, dark theme
-- Main domain: CentenarianOS branding, light theme
-
-Post-login redirects must respect the subdomain:
-- Contractor → `/dashboard/contractor`
-- Lister → `/dashboard/contractor/lister`
-- Main → `/dashboard/planner`
+- This is a standalone JobHub app (contractor + lister). No subdomain detection.
+- `useAppMode()` always returns `'contractor'`.
+- Lister users are detected via `profile.contractor_role === 'lister'` in the dashboard layout.
+- Login/signup always show JobHub branding (amber accent, dark theme).
+- Post-login redirect: `/dashboard/contractor` (or user's `dashboard_home` preference).
+- Blog is admin-only (locked for non-admin users).
+- MFA is optional — users can enable/disable in settings, not enforced in middleware.
 
 ---
 

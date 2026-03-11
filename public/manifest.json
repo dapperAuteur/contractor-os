@@ -1,10 +1,10 @@
 {
-  "name": "CentenarianOS",
-  "short_name": "CentOS",
-  "start_url": "/dashboard/planner",
+  "name": "JobHub",
+  "short_name": "JobHub",
+  "start_url": "/dashboard/contractor",
   "display": "standalone",
-  "theme_color": "#0d9488",
-  "background_color": "#f9fafb",
+  "theme_color": "#d97706",
+  "background_color": "#0a0a0a",
   "icons": [
     {
       "src": "/icon-192.png",

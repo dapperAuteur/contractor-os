@@ -14,8 +14,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'student',
-    title: 'What is Centenarian Academy?',
-    content: `Centenarian Academy is the learning platform inside CentenarianOS. Members can enroll in courses taught by longevity experts, health coaches, and community teachers. Courses include video lessons, text content, audio tracks, assignments, live sessions, and an optional Choose-Your-Own-Adventure (CYOA) learning path. The Academy is accessible at /academy from the main navigation.`,
+    title: 'What is JobHub Academy?',
+    content: `JobHub Academy is the learning platform inside JobHub. Members can enroll in courses taught by longevity experts, health coaches, and community teachers. Courses include video lessons, text content, audio tracks, assignments, live sessions, and an optional Choose-Your-Own-Adventure (CYOA) learning path. The Academy is accessible at /academy from the main navigation.`,
   },
   {
     role: 'student',
@@ -65,7 +65,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'student',
     title: 'How to watch live sessions',
-    content: `Live sessions from the CentenarianOS team are at /live. The page shows upcoming and currently live sessions. When a session is live the Join Live button activates and opens the embedded video stream. Per-course live sessions scheduled by your instructor appear on the course detail page.`,
+    content: `Live sessions from the JobHub team are at /live. The page shows upcoming and currently live sessions. When a session is live the Join Live button activates and opens the embedded video stream. Per-course live sessions scheduled by your instructor appear on the course detail page.`,
   },
   {
     role: 'student',
@@ -77,7 +77,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'teacher',
-    title: 'How to become a teacher on Centenarian Academy',
+    title: 'How to become a teacher on JobHub Academy',
     content: `To publish courses you need a Teacher account. From your dashboard go to Teaching in the sidebar. If you do not have a teacher plan, you will be prompted to subscribe. Complete Stripe Checkout for the teacher subscription. Once payment is confirmed your account is upgraded to teacher role. You can then create and publish courses.`,
   },
   {
@@ -131,7 +131,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Blog and how do I access it?',
-    content: `The Blog is a public writing space inside CentenarianOS where members share their health journeys, longevity research, recipes, and insights. The public blog listing is at /blog. To write your own posts, go to Dashboard → Blog or /dashboard/blog. Posts are tied to your username — visitors can see all your posts at /blog/[username]. You must set a username in Dashboard → Profile before you can publish.`,
+    content: `The Blog is a public writing space inside JobHub where members share their health journeys, longevity research, recipes, and insights. The public blog listing is at /blog. To write your own posts, go to Dashboard → Blog or /dashboard/blog. Posts are tied to your username — visitors can see all your posts at /blog/[username]. You must set a username in Dashboard → Profile before you can publish.`,
   },
   {
     role: 'all',
@@ -146,7 +146,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Blog visibility options and scheduling',
-    content: `Each blog post has a visibility setting: Draft — only visible to you, not listed anywhere. Public — visible to everyone including visitors who are not logged in, indexed by search engines. Members Only (authenticated_only) — visible only to logged-in CentenarianOS members. Scheduled — set a future date and time; the post automatically becomes public at that time. To schedule a post: set Visibility to Scheduled, pick a date and time, click Save. The post stays hidden until the scheduled moment.`,
+    content: `Each blog post has a visibility setting: Draft — only visible to you, not listed anywhere. Public — visible to everyone including visitors who are not logged in, indexed by search engines. Members Only (authenticated_only) — visible only to logged-in JobHub members. Scheduled — set a future date and time; the post automatically becomes public at that time. To schedule a post: set Visibility to Scheduled, pick a date and time, click Save. The post stays hidden until the scheduled moment.`,
   },
   {
     role: 'all',
@@ -169,7 +169,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Recipes module?',
-    content: `Recipes is the cooking and nutrition library inside CentenarianOS. Members can create, share, and discover longevity-focused recipes with automatic nutrition tracking. Every recipe gets a NCV (Nutritional Caloric Value) score — Green, Yellow, or Red — showing how nutrient-dense the calories are. The public recipe listing is at /recipes. Manage your own recipes at Dashboard → Recipes (/dashboard/recipes).`,
+    content: `Recipes is the cooking and nutrition library inside JobHub. Members can create, share, and discover longevity-focused recipes with automatic nutrition tracking. Every recipe gets a NCV (Nutritional Caloric Value) score — Green, Yellow, or Red — showing how nutrient-dense the calories are. The public recipe listing is at /recipes. Manage your own recipes at Dashboard → Recipes (/dashboard/recipes).`,
   },
   {
     role: 'all',
@@ -189,7 +189,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to import a recipe from a website',
-    content: `Go to Dashboard → Recipes → Import Recipe (or /dashboard/recipes/import). Paste the full URL of any recipe page from a major cooking website. Click Import. CentenarianOS reads the recipe's structured data (schema.org/Recipe format) and fills in title, description, ingredients, prep time, cook time, servings, and instructions automatically. Review and adjust the imported recipe — look up USDA nutrition data for each ingredient — then publish or save as draft. Works with most major recipe sites including AllRecipes, Food Network, and NYT Cooking.`,
+    content: `Go to Dashboard → Recipes → Import Recipe (or /dashboard/recipes/import). Paste the full URL of any recipe page from a major cooking website. Click Import. JobHub reads the recipe's structured data (schema.org/Recipe format) and fills in title, description, ingredients, prep time, cook time, servings, and instructions automatically. Review and adjust the imported recipe — look up USDA nutrition data for each ingredient — then publish or save as draft. Works with most major recipe sites including AllRecipes, Food Network, and NYT Cooking.`,
   },
   {
     role: 'all',
@@ -207,7 +207,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use the in-app help chat',
-    content: `The Help button appears as part of the floating action menu (the fuchsia button in the bottom-right corner). Click the button to expand it, then click the question mark (Help) option. A chat drawer opens where you can ask any question about using Centenarian Academy. The system searches the tutorial documentation and uses AI to give you a direct answer. The chat is context-aware — ask things like How do I submit an assignment, How do I create a CYOA course, or How do I set up Stripe payouts.`,
+    content: `The Help button appears as part of the floating action menu (the fuchsia button in the bottom-right corner). Click the button to expand it, then click the question mark (Help) option. A chat drawer opens where you can ask any question about using JobHub Academy. The system searches the tutorial documentation and uses AI to give you a direct answer. The chat is context-aware — ask things like How do I submit an assignment, How do I create a CYOA course, or How do I set up Stripe payouts.`,
   },
   {
     role: 'all',
@@ -281,7 +281,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Contractor Hub (JobHub)?',
-    content: `The Contractor Hub (branded as JobHub) is a dedicated module for independent contractors in broadcast, production, and live events. It provides job tracking, time entry logging, invoice generation, rate cards, venue knowledge bases, city guides, union contract chat, and union membership/dues tracking. Access it at /dashboard/contractor or via the contractor subdomain (contractor.centenarianos.com). The Contractor Hub is a separate paid product from CentenarianOS — you need a Contractor subscription ($10/month or $100/year).`,
+    content: `The Contractor Hub (branded as JobHub) is a dedicated module for independent contractors in broadcast, production, and live events. It provides job tracking, time entry logging, invoice generation, rate cards, venue knowledge bases, city guides, union contract chat, and union membership/dues tracking. Access it at /dashboard/contractor or via the contractor subdomain (contractor.jobhub.app). The Contractor Hub is a separate paid product from JobHub — you need a Contractor subscription ($10/month or $100/year).`,
   },
   {
     role: 'all',
@@ -346,7 +346,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Contractor pricing and billing',
-    content: `The Contractor Hub (JobHub) is a separate paid product. Pricing: $10/month or $100/year (save $20). No free tier — access is via paid subscription or admin/peer invite. The subscription is independent from CentenarianOS and Lister subscriptions. Manage your subscription at Dashboard → Billing. Visit contractor.centenarianos.com/pricing for details.`,
+    content: `The Contractor Hub (JobHub) is a separate paid product. Pricing: $10/month or $100/year (save $20). No free tier — access is via paid subscription or admin/peer invite. The subscription is independent from JobHub and Lister subscriptions. Manage your subscription at Dashboard → Billing. Visit contractor.jobhub.app/pricing for details.`,
   },
 
   // ─── LISTER / CREW COORDINATOR ──────────────────────────────────────────
@@ -354,7 +354,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Lister platform (CrewOps)?',
-    content: `The Lister platform (branded as CrewOps) is for crew coordinators, staffing agencies, and union leaders who list and assign jobs to contractors. It includes job creation, crew roster management, assignment dispatch, group messaging, and availability tracking. Access it at /dashboard/contractor/lister or via the lister subdomain (lister.centenarianos.com). The Lister is a separate paid product — pricing starts at $10/month (intro promo, regularly $50/month).`,
+    content: `The Lister platform (branded as CrewOps) is for crew coordinators, staffing agencies, and union leaders who list and assign jobs to contractors. It includes job creation, crew roster management, assignment dispatch, group messaging, and availability tracking. Access it at /dashboard/contractor/lister or via the lister subdomain (lister.jobhub.app). The Lister is a separate paid product — pricing starts at $10/month (intro promo, regularly $50/month).`,
   },
   {
     role: 'all',
@@ -384,7 +384,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Lister pricing and billing',
-    content: `The Lister platform (CrewOps) is a separate paid product. Standard pricing: $50/month or $500/year. Introductory promo: $10/month or $100/year (limited time). The promo is controlled via platform settings. No free tier — access is via paid subscription or admin invite. The subscription is independent from CentenarianOS and Contractor Hub subscriptions. Visit lister.centenarianos.com/pricing for details.`,
+    content: `The Lister platform (CrewOps) is a separate paid product. Standard pricing: $50/month or $500/year. Introductory promo: $10/month or $100/year (limited time). The promo is controlled via platform settings. No free tier — access is via paid subscription or admin invite. The subscription is independent from JobHub and Contractor Hub subscriptions. Visit lister.jobhub.app/pricing for details.`,
   },
   {
     role: 'all',
@@ -407,7 +407,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Supported video providers for embedding',
-    content: `CentenarianOS supports embedding videos from these providers: YouTube (paste any youtube.com or youtu.be link — automatically converted to embed format), Viloud.tv (paste the Viloud stream URL), Mux (paste the Mux playback URL), and Cloudinary (upload directly or paste a Cloudinary video URL — rendered with native HTML5 video player). For other providers, use the social embed tab in the media modal to paste raw HTML embed code (iframes).`,
+    content: `JobHub supports embedding videos from these providers: YouTube (paste any youtube.com or youtu.be link — automatically converted to embed format), Viloud.tv (paste the Viloud stream URL), Mux (paste the Mux playback URL), and Cloudinary (upload directly or paste a Cloudinary video URL — rendered with native HTML5 video player). For other providers, use the social embed tab in the media modal to paste raw HTML embed code (iframes).`,
   },
 
   // ─── EXERCISE & WORKOUT VIDEO ─────────────────────────────────────────────
@@ -428,7 +428,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What are interactive feature walkthroughs?',
-    content: `Every major module in CentenarianOS has an interactive walkthrough — a step-by-step guided tour that highlights key UI elements and explains how to use the feature. Walkthroughs are offered when you first visit a module. Each step shows a tooltip card with a title, description, and progress bar. You can advance with Next, skip individual steps with Skip, or exit anytime. Your progress is saved so you can resume where you left off. Walkthroughs cover the Planner, Finance, Travel, Health Metrics, Workouts, Equipment, Academy, and more.`,
+    content: `Every major module in JobHub has an interactive walkthrough — a step-by-step guided tour that highlights key UI elements and explains how to use the feature. Walkthroughs are offered when you first visit a module. Each step shows a tooltip card with a title, description, and progress bar. You can advance with Next, skip individual steps with Skip, or exit anytime. Your progress is saved so you can resume where you left off. Walkthroughs cover the Planner, Finance, Travel, Health Metrics, Workouts, Equipment, Academy, and more.`,
   },
   {
     role: 'all',
@@ -438,7 +438,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to explore features before signing up',
-    content: `CentenarianOS has public feature pages where you can explore each module before creating an account. Visit /features/contractor to see all JobHub (Contractor Hub) features, or /features/lister to see all CrewOps (Lister) features. Each feature page shows detailed descriptions, screenshots, and a Try Demo Login button that lets you log in with a demo account to explore the module hands-on. These pages are accessible without signing up.`,
+    content: `JobHub has public feature pages where you can explore each module before creating an account. Visit /features/contractor to see all JobHub (Contractor Hub) features, or /features/lister to see all CrewOps (Lister) features. Each feature page shows detailed descriptions, screenshots, and a Try Demo Login button that lets you log in with a demo account to explore the module hands-on. These pages are accessible without signing up.`,
   },
 
   // ─── BLOG IMPORT ──────────────────────────────────────────────────────────
@@ -462,7 +462,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is Nomad Longevity OS?',
-    content: `Nomad Longevity OS is a built-in fitness protocol inside CentenarianOS designed for people who travel frequently and need flexible workout routines. It includes 28 pre-loaded exercises and 12 workout templates organized into four programs: AM (morning mobility), PM (evening recovery), Hotel (bodyweight-only for hotel rooms), and Gym (full equipment). The Friction Protocol helps you choose the right workout based on your available time, equipment, and energy. Access it at Dashboard → Workouts → Nomad OS. All exercises include detailed instructions and form cues.`,
+    content: `Nomad Longevity OS is a built-in fitness protocol inside JobHub designed for people who travel frequently and need flexible workout routines. It includes 28 pre-loaded exercises and 12 workout templates organized into four programs: AM (morning mobility), PM (evening recovery), Hotel (bodyweight-only for hotel rooms), and Gym (full equipment). The Friction Protocol helps you choose the right workout based on your available time, equipment, and energy. Access it at Dashboard → Workouts → Nomad OS. All exercises include detailed instructions and form cues.`,
   },
   {
     role: 'all',
@@ -512,7 +512,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to connect wearables and sync health data',
-    content: `CentenarianOS integrates with three wearable platforms via OAuth: Oura (ring), WHOOP (strap), and Garmin (watch). Go to Dashboard → Settings → Wearable Connections and click Connect next to your device. Complete the OAuth flow to authorize data sharing. Once connected, your daily metrics (resting heart rate, HRV, sleep duration, sleep score, steps, activity calories, respiratory rate) sync automatically each day. You can also import health data via CSV from Apple Health, Google Health, InBody, and Hume Health using the Data Hub import.`,
+    content: `JobHub integrates with three wearable platforms via OAuth: Oura (ring), WHOOP (strap), and Garmin (watch). Go to Dashboard → Settings → Wearable Connections and click Connect next to your device. Complete the OAuth flow to authorize data sharing. Once connected, your daily metrics (resting heart rate, HRV, sleep duration, sleep score, steps, activity calories, respiratory rate) sync automatically each day. You can also import health data via CSV from Apple Health, Google Health, InBody, and Hume Health using the Data Hub import.`,
   },
 
   // ─── LIFE RETROSPECTIVE ───────────────────────────────────────────────────

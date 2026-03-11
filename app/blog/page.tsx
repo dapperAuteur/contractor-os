@@ -38,7 +38,7 @@ export default async function BlogIndexPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Blog</h1>
         <p className="mt-1 text-gray-500">
-          Latest posts from the CentenarianOS community.{' '}
+          Latest posts from the JobHub community.{' '}
           <Link href="/blog/authors" className="text-sky-600 hover:underline">
             Browse authors →
           </Link>

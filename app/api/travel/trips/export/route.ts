@@ -53,6 +53,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Date', 'Mode', 'Origin', 'Destination', 'Distance Miles', 'Duration Min', 'Purpose', 'Cost', 'Trip Category', 'Tax Category', 'Round Trip', 'CO2 kg', 'Vehicle', 'Notes'],
     rows,
-    'centenarianos-trips-export.csv',
+    'jobhub-trips-export.csv',
   );
 }

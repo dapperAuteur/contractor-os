@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     : '';
 
   return {
-    title: `${name} — CentenarianOS`,
-    description: profile.bio || `${name} has completed ${stats.courses_completed} courses on CentenarianOS.`,
+    title: `${name} — JobHub`,
+    description: profile.bio || `${name} has completed ${stats.courses_completed} courses on JobHub.`,
     openGraph: {
       title: name,
       description: `${stats.courses_completed} courses · ${stats.metric_streak}-day streak · ${stats.paths_completed} paths`,

@@ -6,9 +6,9 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'Safety & Resources | CentenarianOS',
+  title: 'Safety & Resources | JobHub',
   description:
-    'Health and safety information, medical disclaimers, and mental health resources for CentenarianOS users.',
+    'Health and safety information, medical disclaimers, and mental health resources for JobHub users.',
 };
 
 export default function SafetyPage() {
@@ -29,7 +29,7 @@ export default function SafetyPage() {
             <div>
               <h2 className="text-lg font-semibold text-yellow-300 mb-2">Medical Disclaimer</h2>
               <p className="text-yellow-100/80 text-sm leading-relaxed">
-                CentenarianOS is a <strong>self-tracking and education platform</strong>. It is{' '}
+                JobHub is a <strong>self-tracking and education platform</strong>. It is{' '}
                 <strong>NOT a medical service, clinic, or healthcare provider</strong>. All content on
                 this platform — including course lessons, AI-generated health insights, blog posts,
                 recipes, and metric summaries — is for <strong>informational and educational
@@ -65,7 +65,7 @@ export default function SafetyPage() {
               </strong>
             </p>
             <p>
-              CentenarianOS, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless for
+              JobHub, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless for
               any decisions you make based on content, tools, or insights from this platform. See our{' '}
               <Link href="/terms" className="text-fuchsia-400 hover:underline">Terms of Use</Link> for
               full details.
@@ -105,7 +105,7 @@ export default function SafetyPage() {
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <h3 className="text-lg font-bold text-white mb-1">Rise Wellness of Indiana</h3>
             <p className="text-fuchsia-300 text-xs font-medium mb-4 uppercase tracking-wide">
-              Independent Mental Health Provider — Not affiliated with CentenarianOS
+              Independent Mental Health Provider — Not affiliated with JobHub
             </p>
 
             <p className="text-gray-300 text-sm leading-relaxed mb-4">
@@ -175,7 +175,7 @@ export default function SafetyPage() {
             {/* Non-affiliation disclaimer */}
             <p className="mt-4 text-xs text-gray-500 leading-relaxed">
               Rise Wellness of Indiana is an independent organization. They are not affiliated with,
-              employed by, or endorsed by CentenarianOS, B4C LLC, AwesomeWebStore.com, or Anthony
+              employed by, or endorsed by JobHub, B4C LLC, AwesomeWebStore.com, or Anthony
               McDonald. We are grateful for their collaboration on mental health safety resources for
               our community.
             </p>

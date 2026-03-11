@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     destination = '/dashboard/contractor/lister';
   } else {
     baseUrl = siteUrl;
-    destination = '/dashboard/planner';
+    destination = '/dashboard/contractor';
   }
   const redirectTo = `${baseUrl}/auth/callback?next=${encodeURIComponent(destination)}`;
 

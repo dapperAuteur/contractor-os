@@ -111,7 +111,7 @@ export default function TeacherCoursesPage() {
           <ChevronLeft className="w-4 h-4" /> Academy
         </Link>
         <span className="text-gray-700">·</span>
-        <Link href="/" className="text-fuchsia-400 font-semibold text-sm">CentenarianOS</Link>
+        <Link href="/" className="text-fuchsia-400 font-semibold text-sm">JobHub</Link>
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-12">
