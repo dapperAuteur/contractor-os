@@ -154,6 +154,7 @@ export default function DashboardLayout({
         username={username}
         unreadMessages={unreadMessages}
         onLogout={handleLogout}
+        isAdmin={isAdmin}
         untoured={untoured}
         onToursChanged={refreshTours}
       >

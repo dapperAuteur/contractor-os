@@ -12,15 +12,16 @@ interface Props {
   username: string | null;
   unreadMessages: number;
   onLogout: () => void;
+  isAdmin?: boolean;
   untoured?: Set<string>;
   onToursChanged?: () => void;
   children: React.ReactNode;
 }
 
-export default function ContractorLayout({ username, unreadMessages, onLogout, untoured, onToursChanged, children }: Props) {
+export default function ContractorLayout({ username, unreadMessages, onLogout, isAdmin, untoured, onToursChanged, children }: Props) {
   return (
     <div className="min-h-screen bg-neutral-950 dark-input">
-      <ContractorNav username={username} unreadMessages={unreadMessages} onLogout={onLogout} untoured={untoured} />
+      <ContractorNav username={username} unreadMessages={unreadMessages} onLogout={onLogout} isAdmin={isAdmin} untoured={untoured} />
       <MfaBanner />
       <OfflineIndicator />
       <main id="main-content" className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 pb-20 lg:pb-6">
