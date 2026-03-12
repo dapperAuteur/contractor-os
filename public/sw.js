@@ -123,6 +123,44 @@ self.addEventListener('push', (event) => {
   }
 });
 
+// ── Client-side notification scheduling ─────────────────────────
+// The main thread sends upcoming notifications; we schedule them with setTimeout.
+const scheduledTimers = new Map(); // tag → timerId
+
+self.addEventListener('message', (event) => {
+  if (event.data?.type === 'SCHEDULE_NOTIFICATIONS') {
+    const notifications = event.data.notifications || [];
+
+    // Clear any previously scheduled timers
+    for (const [tag, timerId] of scheduledTimers) {
+      clearTimeout(timerId);
+      scheduledTimers.delete(tag);
+    }
+
+    const now = Date.now();
+    for (const n of notifications) {
+      const fireAt = new Date(n.scheduledAt).getTime();
+      const delay = fireAt - now;
+      if (delay <= 0 || delay > 48 * 60 * 60 * 1000) continue; // skip past or >48h
+
+      const timerId = setTimeout(() => {
+        self.registration.showNotification(n.title, {
+          body: n.body,
+          icon: '/icon-192.png',
+          badge: '/icon-192.png',
+          tag: n.tag,
+          data: { url: n.url || '/dashboard/contractor' },
+          actions: [{ action: 'open', title: 'Open' }],
+          vibrate: [200, 100, 200],
+        });
+        scheduledTimers.delete(n.tag);
+      }, delay);
+
+      scheduledTimers.set(n.tag, timerId);
+    }
+  }
+});
+
 // Notification click handler — navigate to the relevant page
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();

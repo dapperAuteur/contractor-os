@@ -13,6 +13,7 @@ import ContractorLayout from '@/components/nav/ContractorLayout';
 import ListerLayout from '@/components/nav/ListerLayout';
 import OfflineIndicator from '@/components/ui/OfflineIndicator';
 import MfaBanner from '@/components/ui/MfaBanner';
+import NotificationScheduler from '@/components/NotificationScheduler';
 import { SyncProvider } from '@/lib/contexts/SyncContext';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -158,6 +159,7 @@ export default function DashboardLayout({
       >
         <MfaBanner />
         <OfflineIndicator />
+        <NotificationScheduler />
         {children}
       </LayoutComponent>
     </SyncProvider>

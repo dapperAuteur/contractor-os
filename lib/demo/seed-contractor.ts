@@ -234,6 +234,8 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
     { user_id: userId, name: 'CBS Camera Op', union_local: 'IATSE 317', department: 'Camera', rate_type: 'hourly', st_rate: 65, ot_rate: 97.5, dt_rate: 130, use_count: 12 },
     { user_id: userId, name: 'ESPN Camera Op', union_local: 'IATSE 317', department: 'Camera', rate_type: 'hourly', st_rate: 70, ot_rate: 105, dt_rate: 140, use_count: 8 },
     { user_id: userId, name: 'BTN Utility', department: 'Utility', rate_type: 'hourly', st_rate: 45, ot_rate: 67.5, dt_rate: 90, use_count: 5 },
+    { user_id: userId, name: 'Fox Sports Camera', department: 'Camera', rate_type: 'hourly', st_rate: 65, ot_rate: 97.5, dt_rate: 130, use_count: 6 },
+    { user_id: userId, name: 'NFL Network Camera', union_local: 'IATSE 317', department: 'Camera', rate_type: 'hourly', st_rate: 75, ot_rate: 112.5, dt_rate: 150, use_count: 3 },
   ];
   const { error: rcErr } = await db.from('contractor_rate_cards').insert(rateCards);
   if (rcErr) throw new Error(`Rate cards: ${rcErr.message}`);
@@ -244,6 +246,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
     { user_id: userId, city_name: 'Bloomington', state: 'IN', region: 'Midwest', is_shared: false, notes: 'IU campus — smaller town, fewer options.' },
     { user_id: userId, city_name: 'Tempe', state: 'AZ', region: 'Southwest', is_shared: true, notes: 'ASU area. Great weather, good food scene.' },
     { user_id: userId, city_name: 'Tucson', state: 'AZ', region: 'Southwest', is_shared: false, notes: 'UofA territory. Hot but affordable.' },
+    { user_id: userId, city_name: 'Glendale', state: 'AZ', region: 'Southwest', is_shared: true, notes: 'State Farm Stadium. Cards and big events.' },
   ];
   const { data: guides, error: gErr } = await db.from('city_guides').insert(cityGuides).select('id, city_name');
   if (gErr) throw new Error(`City guides: ${gErr.message}`);
@@ -269,6 +272,9 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
     // Bloomington
     { user_id: userId, city_guide_id: guideMap['Bloomington'], category: 'restaurant', name: 'Nick\'s English Hut', address: '423 E Kirkwood Ave, Bloomington', rating: 4, price_range: 1, notes: 'Classic IU hangout. Sink the Biz game.' },
     { user_id: userId, city_guide_id: guideMap['Bloomington'], category: 'restaurant', name: 'FARMbloomington', address: '108 E Kirkwood Ave, Bloomington', rating: 5, price_range: 3, notes: 'Farm-to-table. Excellent cocktails.' },
+    // Glendale
+    { user_id: userId, city_guide_id: guideMap['Glendale'], category: 'restaurant', name: 'Westgate Entertainment District', address: '6751 N Sunset Blvd, Glendale', rating: 4, price_range: 2, notes: 'Tons of food options walking distance from stadium.' },
+    { user_id: userId, city_guide_id: guideMap['Glendale'], category: 'hotel', name: 'Renaissance Phoenix Glendale', address: '9495 W Coyotes Blvd, Glendale', rating: 4, price_range: 3, notes: 'Right next to State Farm Stadium. Book early for NFL games.' },
   ];
 
   if (Object.keys(guideMap).length > 0) {
@@ -432,6 +438,8 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
       { user_id: userId, vehicle_id: vehicleId, date: daysAgo(3), odometer_miles: 48720, miles_since_last_fill: 280, gallons: 16.2, total_cost: 55.89, cost_per_gallon: 3.45, mpg_display: 17.3, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
       { user_id: userId, vehicle_id: vehicleId, date: daysAgo(10), odometer_miles: 48440, miles_since_last_fill: 265, gallons: 15.8, total_cost: 54.51, cost_per_gallon: 3.45, mpg_display: 16.8, station: 'Shell', fuel_grade: 'regular', source: 'manual' },
       { user_id: userId, vehicle_id: vehicleId, date: daysAgo(20), odometer_miles: 48175, miles_since_last_fill: 290, gallons: 16.5, total_cost: 57.09, cost_per_gallon: 3.46, mpg_display: 17.6, station: 'Chevron', fuel_grade: 'regular', source: 'manual' },
+      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(28), odometer_miles: 47885, miles_since_last_fill: 275, gallons: 16.0, total_cost: 54.40, cost_per_gallon: 3.40, mpg_display: 17.2, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
+      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(38), odometer_miles: 47610, miles_since_last_fill: 260, gallons: 15.5, total_cost: 52.70, cost_per_gallon: 3.40, mpg_display: 16.8, station: 'BP', fuel_grade: 'regular', source: 'manual' },
     ]);
     if (fuelErr) throw new Error(`Contractor fuel logs: ${fuelErr.message}`);
   }
@@ -439,6 +447,9 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   const { error: tripErr } = await db.from('trips').insert([
     { user_id: userId, vehicle_id: vehicleId, date: daysAgo(3), mode: 'car', origin: 'Home', destination: 'Lucas Oil Stadium', distance_miles: 48.5, duration_min: 55, trip_category: 'travel', tax_category: 'business', source: 'manual' },
     { user_id: userId, vehicle_id: vehicleId, date: daysAgo(6), mode: 'car', origin: 'Home', destination: 'Gainbridge Fieldhouse', distance_miles: 45.2, duration_min: 50, trip_category: 'travel', tax_category: 'business', source: 'manual' },
+    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(12), mode: 'car', origin: 'Home', destination: 'Simon Skjodt Assembly Hall', distance_miles: 52.8, duration_min: 60, trip_category: 'travel', tax_category: 'business', source: 'manual' },
+    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(18), mode: 'car', origin: 'Home', destination: 'Lucas Oil Stadium', distance_miles: 48.5, duration_min: 55, trip_category: 'travel', tax_category: 'business', source: 'manual' },
+    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(25), mode: 'car', origin: 'Home', destination: 'Gainbridge Fieldhouse', distance_miles: 45.2, duration_min: 50, trip_category: 'travel', tax_category: 'business', source: 'manual' },
   ]);
   if (tripErr) throw new Error(`Contractor trips: ${tripErr.message}`);
 
@@ -458,6 +469,8 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
     { user_id: userId, name: 'Sachtler Video 18 Tripod', category_id: eqCatIdFn('Broadcast'), brand: 'Sachtler', purchase_date: daysAgo(300), purchase_price: 1800, current_value: 1500, condition: 'good' },
     { user_id: userId, name: 'Teradek Bolt 4K', category_id: eqCatIdFn('Broadcast'), brand: 'Teradek', purchase_date: daysAgo(180), purchase_price: 2200, current_value: 2000, condition: 'excellent' },
     { user_id: userId, name: 'iPad Pro 12.9"', category_id: eqCatIdFn('Electronics'), brand: 'Apple', purchase_date: daysAgo(120), purchase_price: 1099, current_value: 950, condition: 'good' },
+    { user_id: userId, name: 'Pelican 1650 Case', category_id: eqCatIdFn('Broadcast'), brand: 'Pelican', purchase_date: daysAgo(90), purchase_price: 349, current_value: 320, condition: 'excellent' },
+    { user_id: userId, name: 'Sony MDR-7506 Headphones', category_id: eqCatIdFn('Broadcast'), brand: 'Sony', purchase_date: daysAgo(200), purchase_price: 99, current_value: 75, condition: 'good' },
   ]);
   if (eqErr) throw new Error(`Contractor equipment: ${eqErr.message}`);
 
@@ -480,14 +493,22 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
       { user_id: userId, name: 'Goblet Squats', category_id: exCatId('Strength'), default_sets: 3, default_reps: 12, primary_muscles: ['quads', 'glutes', 'core'], instructions: 'Hold kettlebell at chest for camera-stability training' },
       { user_id: userId, name: 'Farmer\'s Walks', category_id: exCatId('Strength'), default_sets: 3, default_duration_sec: 60, primary_muscles: ['forearms', 'traps', 'core'], instructions: 'Grip strength for handheld camera work' },
       { user_id: userId, name: 'Treadmill Intervals', category_id: exCatId('Cardio'), default_duration_sec: 1200, primary_muscles: ['legs', 'cardio'] },
+      { user_id: userId, name: 'Hip Flexor Stretch', category_id: exCatId('Mobility'), default_sets: 2, default_duration_sec: 30, primary_muscles: ['hip flexors', 'quads'], instructions: 'Essential after standing all day on camera platform' },
+      { user_id: userId, name: 'Dead Hangs', category_id: exCatId('Strength'), default_sets: 3, default_duration_sec: 45, primary_muscles: ['forearms', 'shoulders', 'lats'], instructions: 'Decompresses spine after carrying heavy camera rigs' },
     ])
     .select('id, name');
   if (exErr) throw new Error(`Contractor exercises: ${exErr.message}`);
 
-  // 14. Workout Log
+  // 14. Workout Logs
   const { data: logData, error: logErr } = await db
     .from('workout_logs')
-    .insert([{ user_id: userId, name: 'Pre-Show Warm-up', date: daysAgo(3), duration_min: 35, overall_feeling: 4, purpose: ['mobility', 'strength'] }])
+    .insert([
+      { user_id: userId, name: 'Pre-Show Warm-up', date: daysAgo(3), duration_min: 35, overall_feeling: 4, purpose: ['mobility', 'strength'] },
+      { user_id: userId, name: 'Hotel Gym Session', date: daysAgo(8), duration_min: 45, overall_feeling: 3, purpose: ['strength', 'cardio'] },
+      { user_id: userId, name: 'Morning Stretch', date: daysAgo(12), duration_min: 20, overall_feeling: 4, purpose: ['mobility'] },
+      { user_id: userId, name: 'Quick Cardio', date: daysAgo(15), duration_min: 25, overall_feeling: 3, purpose: ['cardio'] },
+      { user_id: userId, name: 'Full Body Workout', date: daysAgo(20), duration_min: 55, overall_feeling: 5, purpose: ['strength', 'mobility', 'cardio'] },
+    ])
     .select('id');
   if (logErr) throw new Error(`Contractor workout log: ${logErr.message}`);
   const logId = logData?.[0]?.id;
@@ -520,6 +541,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
     { user_id: userId, name: 'Health', icon: 'heart', color: '#ef4444', sort_order: 2 },
     { user_id: userId, name: 'Finance', icon: 'dollar-sign', color: '#10b981', sort_order: 3 },
     { user_id: userId, name: 'Travel', icon: 'map-pin', color: '#3b82f6', sort_order: 4 },
+    { user_id: userId, name: 'Relationships', icon: 'users', color: '#8b5cf6', sort_order: 5 },
   ]);
   if (lcErr) throw new Error(`Contractor life categories: ${lcErr.message}`);
 
@@ -527,6 +549,9 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   const { error: fsErr } = await db.from('focus_sessions').insert([
     { user_id: userId, start_time: new Date(Date.now() - 86400000 - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 86400000 - 60 * 60000).toISOString(), duration: 30, notes: 'Reviewing call sheets for B1G Tournament', session_type: 'work' },
     { user_id: userId, start_time: new Date(Date.now() - 172800000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 172800000 - 35 * 60000).toISOString(), duration: 25, notes: 'Logging time entries for completed Colts games', session_type: 'work' },
+    { user_id: userId, start_time: new Date(Date.now() - 259200000 - 45 * 60000).toISOString(), end_time: new Date(Date.now() - 259200000 - 20 * 60000).toISOString(), duration: 25, notes: 'Creating invoices for CBS Sports jobs', session_type: 'work' },
+    { user_id: userId, start_time: new Date(Date.now() - 345600000 - 75 * 60000).toISOString(), end_time: new Date(Date.now() - 345600000 - 45 * 60000).toISOString(), duration: 30, notes: 'Equipment inventory and condition check', session_type: 'work' },
+    { user_id: userId, start_time: new Date(Date.now() - 432000000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 432000000 - 35 * 60000).toISOString(), duration: 25, notes: 'Updating city guide entries for Indianapolis', session_type: 'work' },
   ]);
   if (fsErr) throw new Error(`Contractor focus sessions: ${fsErr.message}`);
 

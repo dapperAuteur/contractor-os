@@ -77,6 +77,9 @@ export const CLEAR_ORDER = [
   'vehicles',
   'usage_events',
   'app_logs',
+  'notification_log',
+  'notification_preferences',
+  'push_subscriptions',
 ];
 
 export async function clearUserData(supabase: SupabaseClient, userId: string): Promise<void> {
