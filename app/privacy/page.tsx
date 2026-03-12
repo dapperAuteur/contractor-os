@@ -1,5 +1,6 @@
 // app/privacy/page.tsx
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
@@ -16,14 +17,14 @@ export default function PrivacyPage() {
         <div className="max-w-3xl mx-auto px-6 py-16">
         <h1 className="text-3xl font-bold text-white mb-2">Privacy Policy</h1>
         <p className="text-gray-400 text-sm mb-10">
-          Last updated: February 21, 2026 &nbsp;·&nbsp; Operated by B4C LLC / AwesomeWebStore.com
+          Last updated: March 11, 2026 &nbsp;&middot;&nbsp; Operated by B4C LLC / AwesomeWebStore.com
         </p>
 
         <Section title="1. Who We Are">
           <p>
-            JobHub (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a longevity and health education platform operated by
-            B4C LLC and AwesomeWebStore.com, founded by Anthony McDonald. This Privacy Policy explains
-            how we collect, use, store, and protect your personal information.
+            JobHub (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a contractor management and job tracking platform
+            operated by B4C LLC and AwesomeWebStore.com, founded by Anthony McDonald. This Privacy
+            Policy explains how we collect, use, store, and protect your personal information.
           </p>
         </Section>
 
@@ -36,42 +37,54 @@ export default function PrivacyPage() {
             <li>Billing information (processed by Stripe — we do not store card numbers)</li>
           </ul>
 
-          <h3 className="font-medium text-gray-100 mt-4 mb-1">Health &amp; Metrics Data</h3>
+          <h3 className="font-medium text-gray-100 mt-4 mb-1">Job & Financial Data</h3>
           <p>
-            If you choose to use the Metrics features, we collect daily health data you enter manually,
-            including: resting heart rate, step count, sleep hours, activity minutes, and optional
-            enrichment metrics (HRV, SpO2, sleep score, stress score, recovery score, active calories).
-            Body weight tracking requires explicit opt-in acknowledgment.
+            When you use JobHub to track your work, we store the data you enter, including:
+            job details, client names, time entries, pay rates, invoices, expenses, mileage logs,
+            and estimated pay dates.
           </p>
           <p className="mt-2">
-            <strong>This data is private by default.</strong> It is never sold. Your public profile
-            shows only aggregate summaries (e.g., day-logging streak count), never raw metric values.
+            <strong>This data is private by default.</strong> Only you can see your jobs and
+            financial data unless you explicitly choose to post a job on the public board.
+          </p>
+
+          <h3 className="font-medium text-gray-100 mt-4 mb-1">Scanned Documents</h3>
+          <p>
+            When you use the document scanner, images are sent to our server for AI processing.
+            Based on your settings, scanned images may or may not be saved to your account. Extracted
+            data (text fields, amounts, dates) is stored as part of your job records.
           </p>
 
           <h3 className="font-medium text-gray-100 mt-4 mb-1">Content You Create</h3>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Blog posts, recipes, and recipe ingredients</li>
+            <li>Blog posts and comments</li>
+            <li>Job documents (incident reports, best practices, notes)</li>
             <li>Course enrollment and lesson progress</li>
-            <li>Assignment submissions and course messages</li>
             <li>Feedback you submit to the platform</li>
           </ul>
 
+          <h3 className="font-medium text-gray-100 mt-4 mb-1">Push Notification Data</h3>
+          <p>
+            If you enable push notifications, we store your browser push subscription endpoint
+            and device user agent to deliver notifications. You can disable notifications at any
+            time in Settings.
+          </p>
+
           <h3 className="font-medium text-gray-100 mt-4 mb-1">Usage Data</h3>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Blog post and recipe view events (session-based, with referrer and country)</li>
-            <li>Share events (copy link, email, social)</li>
-            <li>Read depth tracking on blog posts</li>
-            <li>Device type and browser (collected by Vercel Analytics)</li>
+            <li>Page views and feature usage (collected by Vercel Analytics, anonymized)</li>
+            <li>Device type and browser</li>
           </ul>
         </Section>
 
         <Section title="3. How We Use Your Information">
           <ul className="list-disc pl-5 space-y-1">
             <li>To operate and improve the Platform</li>
-            <li>To personalize your learning experience and generate AI-powered insights</li>
+            <li>To process document scans and generate data extractions</li>
+            <li>To send push notifications for job reminders (clock in, pay day, etc.)</li>
             <li>To process payments and manage subscriptions through Stripe</li>
-            <li>To send transactional emails (account creation, billing, course updates)</li>
-            <li>To display your public content (blog posts, recipes, public profile)</li>
+            <li>To send transactional emails (account creation, billing)</li>
+            <li>To display your public content (blog posts, public job listings)</li>
             <li>To analyze how features are used so we can improve them</li>
           </ul>
           <p className="mt-3">
@@ -81,11 +94,11 @@ export default function PrivacyPage() {
 
         <Section title="4. AI-Powered Features">
           <p>
-            Some features (the in-app help chat and health metric insights) use Google Gemini, an
-            AI service operated by Google. When you use these features:
+            Document scanning and data extraction use Google Gemini, an AI service operated by
+            Google. When you scan a document:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Your question or anonymized metric data is sent to Google&apos;s API</li>
+            <li>The document image is sent to Google&apos;s API for text extraction</li>
             <li>Your name, email, and account ID are never included in AI prompts</li>
             <li>Google&apos;s data handling is governed by the{' '}
               <a
@@ -105,8 +118,8 @@ export default function PrivacyPage() {
           <div className="mt-3 space-y-2">
             <Provider name="Supabase" purpose="Database hosting and authentication (PostgreSQL + row-level security)" />
             <Provider name="Stripe" purpose="Payment processing and subscription management" />
-            <Provider name="Cloudinary" purpose="Media storage (images and videos you upload)" />
-            <Provider name="Google (Gemini API)" purpose="AI-powered insights and help chat" />
+            <Provider name="Cloudinary" purpose="Media storage (images and documents you upload)" />
+            <Provider name="Google Gemini" purpose="AI-powered document scanning and data extraction" />
             <Provider name="Vercel" purpose="Platform hosting, edge functions, and analytics" />
           </div>
           <p className="mt-3">
@@ -115,20 +128,17 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section title="6. Health Data — Special Protections">
+        <Section title="6. Financial Data — Special Protections">
           <p>
-            Health and biometric data you enter is stored in your private account only. It is:
+            Job data, time entries, invoices, and financial records you enter are stored in your
+            private account only. This data is:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
-            <li>Protected by row-level security — only you and server-side processes can read it</li>
-            <li>Never shared with other users, teachers, or third parties without your consent</li>
+            <li>Protected by row-level security — only you and authorized server processes can read it</li>
+            <li>Never shared with other users without your explicit consent (e.g., posting a job publicly)</li>
             <li>Not used for advertising or profiling</li>
             <li>Accessible to you in full — you can export or delete it at any time</li>
           </ul>
-          <p className="mt-3">
-            We are not a HIPAA-covered entity. Health data you enter is consumer self-tracking data,
-            not clinical health records.
-          </p>
         </Section>
 
         <Section title="7. Cookies and Session Storage">
@@ -139,22 +149,30 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section title="8. Data Retention">
+        <Section title="8. Offline Data & Service Worker">
+          <p>
+            JobHub works offline using a service worker and IndexedDB. Data created while offline
+            is stored locally on your device and synced to the server when connectivity is restored.
+            This local data is not accessible to other websites or applications.
+          </p>
+        </Section>
+
+        <Section title="9. Data Retention">
           <p>
             We retain your account data for as long as your account is active. If you delete your
-            account, your personal data (profile, health metrics, and private content) is deleted
-            within 30 days. Public content (blog posts, recipes you published) may be retained in
+            account, your personal data (profile, jobs, financial records, and private content) is
+            deleted within 30 days. Public content (blog posts you published) may be retained in
             anonymized form unless you explicitly request full deletion.
           </p>
         </Section>
 
-        <Section title="9. Your Rights">
+        <Section title="10. Your Rights">
           <ul className="list-disc pl-5 space-y-1">
             <li><strong>Access:</strong> Request a copy of the data we hold about you</li>
             <li><strong>Correction:</strong> Update inaccurate or incomplete information</li>
             <li><strong>Deletion:</strong> Request deletion of your account and personal data</li>
-            <li><strong>Portability:</strong> Export your health metrics data as CSV</li>
-            <li><strong>Opt-out:</strong> Disable optional features (AI insights, metric tracking) at any time</li>
+            <li><strong>Portability:</strong> Export your job and financial data</li>
+            <li><strong>Opt-out:</strong> Disable push notifications, scan image saving, or public job listings at any time</li>
           </ul>
           <p className="mt-3">
             To exercise these rights, email us at{' '}
@@ -165,7 +183,7 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section title="10. Children's Privacy">
+        <Section title="11. Children's Privacy">
           <p>
             The Platform is not directed at children under 18. We do not knowingly collect personal
             information from minors. If you believe a minor has created an account, contact us for
@@ -173,7 +191,7 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section title="11. Changes to This Policy">
+        <Section title="12. Changes to This Policy">
           <p>
             We may update this Privacy Policy periodically. Material changes will be communicated by
             email or by a notice on the Platform. Your continued use after changes take effect
@@ -181,7 +199,7 @@ export default function PrivacyPage() {
           </p>
         </Section>
 
-        <Section title="12. Contact">
+        <Section title="13. Contact">
           <p>
             Privacy questions or requests:{' '}
             <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
@@ -189,6 +207,9 @@ export default function PrivacyPage() {
             </a>
             <br />
             B4C LLC / AwesomeWebStore.com — Indianapolis, Indiana, USA
+          </p>
+          <p className="mt-3">
+            See also: <Link href="/terms" className="text-fuchsia-400 hover:underline">Terms of Use</Link> | <Link href="/community" className="text-fuchsia-400 hover:underline">Community Code of Conduct</Link>
           </p>
         </Section>
 

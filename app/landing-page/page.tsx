@@ -4,12 +4,12 @@ import { ArrowRight, Target, Utensils, Brain, TrendingUp, Zap, Shield } from 'lu
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-white">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-sky-500 rounded-lg"></div>
+            <div className="w-8 h-8 bg-linear-to-br from-fuchsia-500 to-sky-500 rounded-lg"></div>
             <Link href="/" className="flex items-center space-x-2">
               <span className="text-xl font-bold text-gray-900">JobHub</span>
             </Link>
@@ -38,7 +38,7 @@ export default function LandingPage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div className="text-center max-w-3xl mx-auto">
           <h1 className="text-5xl sm:text-6xl font-extrabold text-gray-900 mb-6">
-            Turn <span className="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-sky-600">Multi-Decade Goals</span> Into Daily Action
+            Turn <span className="text-transparent bg-clip-text bg-linear-to-r from-fuchsia-600 to-sky-600">Multi-Decade Goals</span> Into Daily Action
           </h1>
           <p className="text-xl text-gray-600 mb-8">
             The personal operating system for executing audacious, long-term goals through data-driven daily habits. Plan, fuel, track, and iterate—all offline-first.
@@ -146,7 +146,7 @@ export default function LandingPage() {
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="flex items-start space-x-4">
-              <Zap className="w-8 h-8 text-fuchsia-600 flex-shrink-0" />
+              <Zap className="w-8 h-8 text-fuchsia-600 shrink-0" />
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">Offline-First</h3>
                 <p className="text-gray-600 text-sm">
@@ -155,7 +155,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex items-start space-x-4">
-              <Shield className="w-8 h-8 text-fuchsia-600 flex-shrink-0" />
+              <Shield className="w-8 h-8 text-fuchsia-600 shrink-0" />
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">Privacy-First</h3>
                 <p className="text-gray-600 text-sm">
@@ -164,7 +164,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="flex items-start space-x-4">
-              <TrendingUp className="w-8 h-8 text-fuchsia-600 flex-shrink-0" />
+              <TrendingUp className="w-8 h-8 text-fuchsia-600 shrink-0" />
               <div>
                 <h3 className="font-bold text-gray-900 mb-2">Data-Driven</h3>
                 <p className="text-gray-600 text-sm">
@@ -178,7 +178,7 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-gradient-to-r from-fuchsia-600 to-sky-600 rounded-2xl p-12 text-center">
+        <div className="bg-linear-to-r from-fuchsia-600 to-sky-600 rounded-2xl p-12 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Start Your JobHub Journey Today
           </h2>

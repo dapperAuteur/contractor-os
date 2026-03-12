@@ -12,6 +12,10 @@ import {
   Image as ImageIcon,
   Sparkles,
   Package,
+  HardHat,
+  FileText,
+  ClipboardList,
+  Stethoscope,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import type { DocumentType } from '@/lib/ocr/classify';
@@ -20,6 +24,9 @@ import type {
   ReceiptLineItem,
   RecipeExtraction,
   MaintenanceExtraction,
+  PayStubExtraction,
+  InvoiceExtraction,
+  CallSheetExtraction,
 } from '@/lib/ocr/extractors';
 import ContactAutocomplete from '@/components/ui/ContactAutocomplete';
 import type { ScanResult } from './ScanButton';
@@ -43,6 +50,9 @@ interface ScanResultRouterProps {
   onCreateTransaction?: (data: ReceiptExtraction, contactId?: string, scanImageId?: string) => void;
   onCreateRecipe?: (data: RecipeExtraction, contactId?: string) => void;
   onCreateMaintenance?: (data: MaintenanceExtraction, contactId?: string) => void;
+  onCreateJob?: (prefill: Record<string, unknown>) => void;
+  onCreateInvoice?: (prefill: Record<string, unknown>) => void;
+  onAddToJob?: (prefill: Record<string, unknown>) => void;
   onDismiss: () => void;
 }
 
@@ -52,6 +62,8 @@ const DOC_TYPE_LABELS: Record<DocumentType, string> = {
   fuel_receipt: 'Fuel Receipt',
   maintenance_invoice: 'Maintenance Invoice',
   pay_stub: 'Pay Stub / Estimated Pay',
+  invoice: 'Billing Invoice',
+  call_sheet: 'Call Sheet / Work Assignment',
   medical: 'Medical Document',
   unknown: 'Unknown Document',
 };
@@ -62,12 +74,15 @@ const DOC_TYPE_ICONS: Record<DocumentType, typeof DollarSign> = {
   fuel_receipt: Fuel,
   maintenance_invoice: Wrench,
   pay_stub: DollarSign,
-  medical: AlertCircle,
+  invoice: FileText,
+  call_sheet: ClipboardList,
+  medical: Stethoscope,
   unknown: AlertCircle,
 };
 
 const OVERRIDE_OPTIONS: DocumentType[] = [
-  'receipt', 'recipe', 'fuel_receipt', 'maintenance_invoice', 'pay_stub', 'medical',
+  'receipt', 'recipe', 'fuel_receipt', 'maintenance_invoice',
+  'pay_stub', 'invoice', 'call_sheet', 'medical',
 ];
 
 export default function ScanResultRouter({
@@ -75,6 +90,9 @@ export default function ScanResultRouter({
   onCreateTransaction,
   onCreateRecipe,
   onCreateMaintenance,
+  onCreateJob,
+  onCreateInvoice,
+  onAddToJob,
   onDismiss,
 }: ScanResultRouterProps) {
   const [documentType, setDocumentType] = useState<DocumentType>(result.documentType);
@@ -86,23 +104,24 @@ export default function ScanResultRouter({
   const [itemMatches, setItemMatches] = useState<ItemMatch[]>([]);
   const [matchLoading, setMatchLoading] = useState(false);
 
-  // Set initial contact name from extracted data
   useEffect(() => {
     const data = result.extracted;
     if (result.documentType === 'receipt' && (data as unknown as ReceiptExtraction).vendor) {
       setContactName((data as unknown as ReceiptExtraction).vendor || '');
     } else if (result.documentType === 'maintenance_invoice' && (data as unknown as MaintenanceExtraction).shop_name) {
       setContactName((data as unknown as MaintenanceExtraction).shop_name || '');
-    } else if (result.documentType === 'recipe' && (data as unknown as RecipeExtraction).author) {
-      setContactName((data as unknown as RecipeExtraction).author || '');
+    } else if (result.documentType === 'invoice' && (data as unknown as InvoiceExtraction).vendor) {
+      setContactName((data as unknown as InvoiceExtraction).vendor || '');
+    } else if (result.documentType === 'call_sheet' && (data as unknown as CallSheetExtraction).client_name) {
+      setContactName((data as unknown as CallSheetExtraction).client_name || '');
+    } else if (result.documentType === 'pay_stub' && (data as unknown as PayStubExtraction).client_name) {
+      setContactName((data as unknown as PayStubExtraction).client_name || '');
     }
   }, [result]);
 
-  // Match line items for receipts
   const matchItems = useCallback(async (data: Record<string, unknown>) => {
     const receipt = data as unknown as ReceiptExtraction;
     if (!receipt.line_items?.length) return;
-
     setMatchLoading(true);
     try {
       const res = await offlineFetch('/api/ocr/match-items', {
@@ -128,46 +147,36 @@ export default function ScanResultRouter({
   }, []);
 
   useEffect(() => {
-    if (documentType === 'receipt') {
-      matchItems(extracted);
-    }
+    if (documentType === 'receipt') matchItems(extracted);
   }, [documentType, extracted, matchItems]);
 
-  // Re-extract with overridden document type
   const handleOverride = async (newType: DocumentType) => {
-    if (newType === documentType) {
-      setShowOverride(false);
-      return;
-    }
+    if (newType === documentType) { setShowOverride(false); return; }
     setReExtracting(true);
     setShowOverride(false);
     setDocumentType(newType);
-
-    // Note: we can't re-extract without re-sending images.
-    // For now, keep the extracted data and let the user know.
-    // A full re-extraction would require storing the images temporarily.
     setReExtracting(false);
   };
 
   const confidenceColor =
     result.confidence >= 0.8
-      ? 'text-green-700 bg-green-50'
+      ? 'text-green-400 bg-green-900/30'
       : result.confidence >= 0.5
-        ? 'text-amber-700 bg-amber-50'
-        : 'text-red-700 bg-red-50';
+        ? 'text-amber-400 bg-amber-900/30'
+        : 'text-red-400 bg-red-900/30';
 
   const Icon = DOC_TYPE_ICONS[documentType];
 
   return (
     <div className="space-y-6">
-      {/* Header: Document type + confidence */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-purple-50 rounded-lg">
-            <Icon className="w-5 h-5 text-purple-600" />
+          <div className="p-2 bg-amber-900/30 rounded-lg">
+            <Icon className="w-5 h-5 text-amber-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900">
+            <h3 className="font-semibold text-neutral-100">
               {DOC_TYPE_LABELS[documentType]}
             </h3>
             <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${confidenceColor}`}>
@@ -176,22 +185,21 @@ export default function ScanResultRouter({
           </div>
         </div>
 
-        {/* Override dropdown */}
         <div className="relative">
           <button
             onClick={() => setShowOverride(!showOverride)}
-            className="text-sm text-purple-600 hover:text-purple-800 flex items-center gap-1"
+            className="text-sm text-amber-400 hover:text-amber-300 flex items-center gap-1 min-h-11"
           >
             Change type <ChevronDown className="w-3 h-3" />
           </button>
           {showOverride && (
-            <div className="absolute right-0 top-8 bg-white border border-gray-200 rounded-xl shadow-lg z-10 w-56">
+            <div className="absolute right-0 top-12 bg-neutral-800 border border-neutral-700 rounded-xl shadow-lg z-10 w-56">
               {OVERRIDE_OPTIONS.map((type) => (
                 <button
                   key={type}
                   onClick={() => handleOverride(type)}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-50 first:rounded-t-xl last:rounded-b-xl ${
-                    type === documentType ? 'bg-purple-50 text-purple-700 font-medium' : 'text-gray-700'
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-neutral-700 first:rounded-t-xl last:rounded-b-xl ${
+                    type === documentType ? 'bg-amber-900/30 text-amber-400 font-medium' : 'text-neutral-300'
                   }`}
                 >
                   {DOC_TYPE_LABELS[type]}
@@ -203,7 +211,7 @@ export default function ScanResultRouter({
       </div>
 
       {reExtracting && (
-        <div className="flex items-center gap-2 text-sm text-purple-600">
+        <div className="flex items-center gap-2 text-sm text-amber-400">
           <Sparkles className="w-4 h-4 animate-pulse" />
           Re-analyzing document...
         </div>
@@ -211,40 +219,35 @@ export default function ScanResultRouter({
 
       {/* Contact attachment */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          {documentType === 'recipe' ? 'Author / Source' : 'Vendor / Provider'}
+        <label className="block text-sm font-medium text-neutral-300 mb-1">
+          {documentType === 'recipe' ? 'Author / Source' : 'Vendor / Client'}
         </label>
         <ContactAutocomplete
           value={contactName}
           onChange={(name, defaultCategoryId) => {
             setContactName(name);
-            // contactId will be set by the autocomplete internally
             void defaultCategoryId;
           }}
           contactType="vendor"
           placeholder={
             documentType === 'recipe'
               ? 'Recipe author or source...'
-              : 'Store, restaurant, or service provider...'
+              : 'Store, client, or service provider...'
           }
         />
       </div>
 
       {/* Saved image indicator */}
       {result.imageUrl && (
-        <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 px-3 py-2 rounded-lg">
+        <div className="flex items-center gap-2 text-sm text-green-400 bg-green-900/30 px-3 py-2 rounded-lg">
           <ImageIcon className="w-4 h-4" />
           Image saved
         </div>
       )}
 
-      {/* Module-specific preview */}
+      {/* Module-specific previews */}
       {documentType === 'receipt' && (
-        <ReceiptPreview
-          data={extracted as unknown as ReceiptExtraction}
-          itemMatches={itemMatches}
-          matchLoading={matchLoading}
-        />
+        <ReceiptPreview data={extracted as unknown as ReceiptExtraction} itemMatches={itemMatches} matchLoading={matchLoading} />
       )}
       {documentType === 'recipe' && (
         <RecipePreview data={extracted as unknown as RecipeExtraction} />
@@ -252,27 +255,30 @@ export default function ScanResultRouter({
       {documentType === 'maintenance_invoice' && (
         <MaintenancePreview data={extracted as unknown as MaintenanceExtraction} />
       )}
+      {documentType === 'pay_stub' && (
+        <PayStubPreview data={extracted as unknown as PayStubExtraction} />
+      )}
+      {documentType === 'invoice' && (
+        <InvoicePreview data={extracted as unknown as InvoiceExtraction} />
+      )}
+      {documentType === 'call_sheet' && (
+        <CallSheetPreview data={extracted as unknown as CallSheetExtraction} />
+      )}
 
       {/* Confidence notes */}
       {(extracted as { confidence_notes?: string }).confidence_notes && (
-        <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 px-3 py-2 rounded-lg">
+        <div className="flex items-start gap-2 text-sm text-amber-400 bg-amber-900/30 px-3 py-2 rounded-lg">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           {(extracted as { confidence_notes: string }).confidence_notes}
         </div>
       )}
 
       {/* Action buttons */}
-      <div className="flex gap-3 pt-2">
+      <div className="flex flex-col sm:flex-row gap-3 pt-2">
         {documentType === 'receipt' && onCreateTransaction && (
           <button
-            onClick={() =>
-              onCreateTransaction(
-                extracted as unknown as ReceiptExtraction,
-                contactId,
-                result.scanImageId,
-              )
-            }
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition"
+            onClick={() => onCreateTransaction(extracted as unknown as ReceiptExtraction, contactId, result.scanImageId)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11"
           >
             <DollarSign className="w-4 h-4" />
             Create Transaction
@@ -280,10 +286,8 @@ export default function ScanResultRouter({
         )}
         {documentType === 'recipe' && onCreateRecipe && (
           <button
-            onClick={() =>
-              onCreateRecipe(extracted as unknown as RecipeExtraction, contactId)
-            }
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition"
+            onClick={() => onCreateRecipe(extracted as unknown as RecipeExtraction, contactId)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11"
           >
             <ChefHat className="w-4 h-4" />
             Create Recipe
@@ -291,25 +295,223 @@ export default function ScanResultRouter({
         )}
         {documentType === 'maintenance_invoice' && onCreateMaintenance && (
           <button
-            onClick={() =>
-              onCreateMaintenance(
-                extracted as unknown as MaintenanceExtraction,
-                contactId,
-              )
-            }
-            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-purple-600 text-white rounded-xl font-medium hover:bg-purple-700 transition"
+            onClick={() => onCreateMaintenance(extracted as unknown as MaintenanceExtraction, contactId)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11"
           >
             <Wrench className="w-4 h-4" />
             Create Maintenance Record
           </button>
         )}
+        {(documentType === 'pay_stub' || documentType === 'call_sheet') && onCreateJob && result.prefills?.job && (
+          <button
+            onClick={() => onCreateJob(result.prefills.job!)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11"
+          >
+            <HardHat className="w-4 h-4" />
+            Create Job
+          </button>
+        )}
+        {(documentType === 'pay_stub' || documentType === 'call_sheet') && onAddToJob && result.prefills?.job && (
+          <button
+            onClick={() => onAddToJob(result.prefills.job!)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-amber-600/50 text-amber-400 rounded-xl font-medium hover:bg-amber-600/10 transition min-h-11"
+          >
+            <HardHat className="w-4 h-4" />
+            Add to Existing Job
+          </button>
+        )}
+        {documentType === 'invoice' && onCreateInvoice && result.prefills?.invoice && (
+          <button
+            onClick={() => onCreateInvoice(result.prefills.invoice!)}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11"
+          >
+            <FileText className="w-4 h-4" />
+            Create Invoice
+          </button>
+        )}
         <button
           onClick={onDismiss}
-          className="px-4 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl transition"
+          className="px-4 py-3 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 rounded-xl transition min-h-11"
         >
           Cancel
         </button>
       </div>
+    </div>
+  );
+}
+
+// ── Pay Stub Preview ────────────────────────────────────────────
+
+function PayStubPreview({ data }: { data: PayStubExtraction }) {
+  const totalEarnings = data.earnings?.reduce((sum, e) => sum + (e.amount || 0), 0) ?? 0;
+  const totalBenefits = data.benefits?.reduce((sum, b) => sum + (b.amount || 0), 0) ?? 0;
+
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {data.client_name && (
+          <SummaryCard label="Client" value={data.client_name} />
+        )}
+        {data.event_name && (
+          <SummaryCard label="Event" value={data.event_name} />
+        )}
+        {data.work_date && (
+          <SummaryCard label="Work Date" value={data.work_date} />
+        )}
+        {data.total_hours != null && (
+          <SummaryCard label="Hours" value={`${data.total_hours}h`} />
+        )}
+      </div>
+
+      {data.earnings?.length > 0 && (
+        <div>
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">Earnings</h5>
+          <div className="border border-neutral-700 rounded-xl overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-neutral-800">
+                <tr>
+                  <th className="text-left px-3 py-2 text-neutral-400 font-medium">Type</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Rate</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Hours</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-800">
+                {data.earnings.map((e, i) => (
+                  <tr key={i}>
+                    <td className="px-3 py-2 text-neutral-100">{e.type}</td>
+                    <td className="px-3 py-2 text-right text-neutral-300">{e.rate != null ? `$${e.rate.toFixed(2)}` : '—'}</td>
+                    <td className="px-3 py-2 text-right text-neutral-300">{e.hours ?? '—'}</td>
+                    <td className="px-3 py-2 text-right text-neutral-100">${e.amount.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-2 text-sm text-neutral-400 text-right">
+            Total Earnings: <span className="text-neutral-100 font-medium">${totalEarnings.toFixed(2)}</span>
+          </div>
+        </div>
+      )}
+
+      {data.benefits?.length > 0 && (
+        <div>
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">Benefits</h5>
+          <ul className="space-y-1 text-sm">
+            {data.benefits.map((b, i) => (
+              <li key={i} className="flex justify-between text-neutral-300">
+                <span>{b.name}</span>
+                <span className="text-neutral-100">${b.amount.toFixed(2)}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-2 text-sm text-neutral-400 text-right">
+            Total Benefits: <span className="text-neutral-100 font-medium">${totalBenefits.toFixed(2)}</span>
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-4 text-sm text-neutral-400">
+        {data.time_in && <span>In: {data.time_in}</span>}
+        {data.time_out && <span>Out: {data.time_out}</span>}
+        {data.est_pay_date && <span>Pay Date: {data.est_pay_date}</span>}
+      </div>
+    </div>
+  );
+}
+
+// ── Invoice Preview ─────────────────────────────────────────────
+
+function InvoicePreview({ data }: { data: InvoiceExtraction }) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {data.vendor && <SummaryCard label="Vendor" value={data.vendor} />}
+        {data.invoice_number && <SummaryCard label="Invoice #" value={data.invoice_number} />}
+        {data.date && <SummaryCard label="Date" value={data.date} />}
+        {data.total != null && <SummaryCard label="Total" value={`$${data.total.toFixed(2)}`} />}
+      </div>
+
+      {data.line_items?.length > 0 && (
+        <div>
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">Line Items ({data.line_items.length})</h5>
+          <div className="border border-neutral-700 rounded-xl overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-neutral-800">
+                <tr>
+                  <th className="text-left px-3 py-2 text-neutral-400 font-medium">Description</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Qty</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Price</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Amount</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-800">
+                {data.line_items.map((item, i) => (
+                  <tr key={i}>
+                    <td className="px-3 py-2 text-neutral-100">{item.description}</td>
+                    <td className="px-3 py-2 text-right text-neutral-300">{item.quantity}</td>
+                    <td className="px-3 py-2 text-right text-neutral-300">${item.unit_price.toFixed(2)}</td>
+                    <td className="px-3 py-2 text-right text-neutral-100">${item.amount.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-4 text-sm text-neutral-400">
+        {data.subtotal != null && <span>Subtotal: ${data.subtotal.toFixed(2)}</span>}
+        {data.tax != null && <span>Tax: ${data.tax.toFixed(2)}</span>}
+        {data.due_date && <span>Due: {data.due_date}</span>}
+        {data.payment_terms && <span>{data.payment_terms}</span>}
+      </div>
+    </div>
+  );
+}
+
+// ── Call Sheet Preview ──────────────────────────────────────────
+
+function CallSheetPreview({ data }: { data: CallSheetExtraction }) {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {data.client_name && <SummaryCard label="Client" value={data.client_name} />}
+        {data.event_name && <SummaryCard label="Event" value={data.event_name} />}
+        {data.job_number && <SummaryCard label="Job #" value={data.job_number} />}
+        {data.location_name && <SummaryCard label="Location" value={data.location_name} />}
+        {data.department && <SummaryCard label="Department" value={data.department} />}
+        {data.union_local && <SummaryCard label="Union" value={data.union_local} />}
+      </div>
+
+      {data.work_dates?.length > 0 && (
+        <div>
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">
+            Work Dates ({data.work_dates.length})
+          </h5>
+          <div className="flex flex-wrap gap-2">
+            {data.work_dates.map((date, i) => (
+              <span key={i} className="px-2.5 py-1 bg-amber-900/30 text-amber-400 text-sm rounded-lg">
+                {date}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="flex gap-4 text-sm text-neutral-400">
+        {data.call_time && <span>Call: {data.call_time}</span>}
+        {data.wrap_time && <span>Wrap: {data.wrap_time}</span>}
+      </div>
+
+      <div className="flex gap-4 text-sm text-neutral-400">
+        {data.poc_name && <span>POC: {data.poc_name} {data.poc_phone && `(${data.poc_phone})`}</span>}
+        {data.crew_coordinator_name && <span>Coord: {data.crew_coordinator_name} {data.crew_coordinator_phone && `(${data.crew_coordinator_phone})`}</span>}
+      </div>
+
+      {data.notes && (
+        <p className="text-sm text-neutral-400 whitespace-pre-wrap">{data.notes}</p>
+      )}
     </div>
   );
 }
@@ -327,78 +529,46 @@ function ReceiptPreview({
 }) {
   return (
     <div className="space-y-4">
-      {/* Summary row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {data.vendor && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Vendor</div>
-            <div className="font-medium text-gray-900 truncate">{data.vendor}</div>
-          </div>
-        )}
-        {data.date && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Date</div>
-            <div className="font-medium text-gray-900">{data.date}</div>
-          </div>
-        )}
-        {data.total_amount != null && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Total</div>
-            <div className="font-medium text-gray-900">${data.total_amount.toFixed(2)}</div>
-          </div>
-        )}
-        {data.suggested_category && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Category</div>
-            <div className="font-medium text-gray-900 capitalize">{data.suggested_category}</div>
-          </div>
-        )}
+        {data.vendor && <SummaryCard label="Vendor" value={data.vendor} />}
+        {data.date && <SummaryCard label="Date" value={data.date} />}
+        {data.total_amount != null && <SummaryCard label="Total" value={`$${data.total_amount.toFixed(2)}`} />}
+        {data.suggested_category && <SummaryCard label="Category" value={data.suggested_category} />}
       </div>
 
-      {/* Line items */}
       {data.line_items?.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-gray-700 mb-2">
-            Line Items ({data.line_items.length})
-          </h4>
-          <div className="border border-gray-200 rounded-xl overflow-hidden">
+          <h4 className="text-sm font-medium text-neutral-300 mb-2">Line Items ({data.line_items.length})</h4>
+          <div className="border border-neutral-700 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-neutral-800">
                 <tr>
-                  <th className="text-left px-3 py-2 text-gray-600 font-medium">Item</th>
-                  <th className="text-right px-3 py-2 text-gray-600 font-medium">Qty</th>
-                  <th className="text-right px-3 py-2 text-gray-600 font-medium">Price</th>
-                  <th className="text-right px-3 py-2 text-gray-600 font-medium">Status</th>
+                  <th className="text-left px-3 py-2 text-neutral-400 font-medium">Item</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Qty</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Price</th>
+                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-neutral-800">
                 {data.line_items.map((item, i) => {
                   const match = itemMatches.find(
-                    (m) =>
-                      m.original_name.toLowerCase() === item.description.toLowerCase(),
+                    (m) => m.original_name.toLowerCase() === item.description.toLowerCase(),
                   );
                   return (
-                    <tr key={i} className="hover:bg-gray-50">
-                      <td className="px-3 py-2 text-gray-900">{item.description}</td>
-                      <td className="px-3 py-2 text-right text-gray-600">{item.quantity}</td>
-                      <td className="px-3 py-2 text-right text-gray-900">
-                        ${item.total.toFixed(2)}
-                      </td>
+                    <tr key={i}>
+                      <td className="px-3 py-2 text-neutral-100">{item.description}</td>
+                      <td className="px-3 py-2 text-right text-neutral-300">{item.quantity}</td>
+                      <td className="px-3 py-2 text-right text-neutral-100">${item.total.toFixed(2)}</td>
                       <td className="px-3 py-2 text-right">
                         {matchLoading ? (
-                          <span className="text-xs text-gray-400">...</span>
+                          <span className="text-xs text-neutral-500">...</span>
                         ) : match && !match.is_new ? (
-                          <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-xs text-green-400 bg-green-900/30 px-2 py-0.5 rounded-full">
                             <Check className="w-3 h-3" />
                             Found
-                            {match.matches[0]?.last_price != null && (
-                              <span className="text-green-600">
-                                (${match.matches[0].last_price.toFixed(2)})
-                              </span>
-                            )}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-xs text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
+                          <span className="inline-flex items-center gap-1 text-xs text-blue-400 bg-blue-900/30 px-2 py-0.5 rounded-full">
                             <Package className="w-3 h-3" />
                             New
                           </span>
@@ -413,8 +583,7 @@ function ReceiptPreview({
         </div>
       )}
 
-      {/* Tax / tip breakdown */}
-      <div className="flex gap-4 text-sm text-gray-600">
+      <div className="flex gap-4 text-sm text-neutral-400">
         {data.subtotal != null && <span>Subtotal: ${data.subtotal.toFixed(2)}</span>}
         {data.tax != null && <span>Tax: ${data.tax.toFixed(2)}</span>}
         {data.tip != null && <span>Tip: ${data.tip.toFixed(2)}</span>}
@@ -429,25 +598,19 @@ function ReceiptPreview({
 function RecipePreview({ data }: { data: RecipeExtraction }) {
   return (
     <div className="space-y-4">
-      {data.title && (
-        <h4 className="text-lg font-semibold text-gray-900">{data.title}</h4>
-      )}
-
-      <div className="flex gap-4 text-sm text-gray-600">
+      {data.title && <h4 className="text-lg font-semibold text-neutral-100">{data.title}</h4>}
+      <div className="flex gap-4 text-sm text-neutral-400">
         {data.servings && <span>Serves {data.servings}</span>}
         {data.prep_time_minutes && <span>Prep: {data.prep_time_minutes}m</span>}
         {data.cook_time_minutes && <span>Cook: {data.cook_time_minutes}m</span>}
       </div>
-
       {data.ingredients?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-gray-700 mb-2">
-            Ingredients ({data.ingredients.length})
-          </h5>
-          <ul className="space-y-1 text-sm text-gray-800">
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">Ingredients ({data.ingredients.length})</h5>
+          <ul className="space-y-1 text-sm text-neutral-300">
             {data.ingredients.map((ing, i) => (
               <li key={i} className="flex gap-2">
-                <span className="text-gray-500 min-w-[4rem] text-right">
+                <span className="text-neutral-500 min-w-[4rem] text-right">
                   {ing.quantity != null ? `${ing.quantity} ${ing.unit || ''}` : ''}
                 </span>
                 <span>{ing.name}</span>
@@ -456,13 +619,10 @@ function RecipePreview({ data }: { data: RecipeExtraction }) {
           </ul>
         </div>
       )}
-
       {data.instructions && (
         <div>
-          <h5 className="text-sm font-medium text-gray-700 mb-1">Instructions</h5>
-          <p className="text-sm text-gray-600 line-clamp-4 whitespace-pre-wrap">
-            {data.instructions}
-          </p>
+          <h5 className="text-sm font-medium text-neutral-300 mb-1">Instructions</h5>
+          <p className="text-sm text-neutral-400 line-clamp-4 whitespace-pre-wrap">{data.instructions}</p>
         </div>
       )}
     </div>
@@ -475,70 +635,48 @@ function MaintenancePreview({ data }: { data: MaintenanceExtraction }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {data.shop_name && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Shop</div>
-            <div className="font-medium text-gray-900 truncate">{data.shop_name}</div>
-          </div>
-        )}
-        {data.date && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Date</div>
-            <div className="font-medium text-gray-900">{data.date}</div>
-          </div>
-        )}
-        {data.total_cost != null && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Total</div>
-            <div className="font-medium text-gray-900">${data.total_cost.toFixed(2)}</div>
-          </div>
-        )}
-        {data.odometer != null && (
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="text-xs text-gray-500">Odometer</div>
-            <div className="font-medium text-gray-900">
-              {data.odometer.toLocaleString()} mi
-            </div>
-          </div>
-        )}
+        {data.shop_name && <SummaryCard label="Shop" value={data.shop_name} />}
+        {data.date && <SummaryCard label="Date" value={data.date} />}
+        {data.total_cost != null && <SummaryCard label="Total" value={`$${data.total_cost.toFixed(2)}`} />}
+        {data.odometer != null && <SummaryCard label="Odometer" value={`${data.odometer.toLocaleString()} mi`} />}
       </div>
-
       {data.services?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-gray-700 mb-2">Services</h5>
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">Services</h5>
           <ul className="space-y-1 text-sm">
             {data.services.map((s, i) => (
-              <li key={i} className="flex justify-between text-gray-800">
+              <li key={i} className="flex justify-between text-neutral-300">
                 <span>{s.description}</span>
-                <span className="text-gray-600">${s.cost.toFixed(2)}</span>
+                <span className="text-neutral-100">${s.cost.toFixed(2)}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
-
       {data.parts?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-gray-700 mb-2">Parts</h5>
+          <h5 className="text-sm font-medium text-neutral-300 mb-2">Parts</h5>
           <ul className="space-y-1 text-sm">
             {data.parts.map((p, i) => (
-              <li key={i} className="flex justify-between text-gray-800">
-                <span>
-                  {p.name} {p.quantity > 1 ? `x${p.quantity}` : ''}
-                </span>
-                <span className="text-gray-600">${p.cost.toFixed(2)}</span>
+              <li key={i} className="flex justify-between text-neutral-300">
+                <span>{p.name} {p.quantity > 1 ? `x${p.quantity}` : ''}</span>
+                <span className="text-neutral-100">${p.cost.toFixed(2)}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
+    </div>
+  );
+}
 
-      {(data.labor_cost != null || data.parts_cost != null) && (
-        <div className="flex gap-4 text-sm text-gray-600">
-          {data.labor_cost != null && <span>Labor: ${data.labor_cost.toFixed(2)}</span>}
-          {data.parts_cost != null && <span>Parts: ${data.parts_cost.toFixed(2)}</span>}
-        </div>
-      )}
+// ── Shared summary card ─────────────────────────────────────────
+
+function SummaryCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="bg-neutral-800 rounded-lg p-3">
+      <div className="text-xs text-neutral-500">{label}</div>
+      <div className="font-medium text-neutral-100 truncate">{value}</div>
     </div>
   );
 }

@@ -381,7 +381,7 @@ export default function FinanceDashboardPage() {
           </div>
           <div className="flex gap-3 flex-wrap">
             {accounts.filter((a) => a.is_active).map((acct) => (
-              <div key={acct.id} className="bg-white border border-gray-200 rounded-xl px-4 py-3 min-w-[160px]">
+              <div key={acct.id} className="bg-white border border-gray-200 rounded-xl px-4 py-3 min-w-40">
                 <p className="text-xs text-gray-500 mb-0.5">
                   {ACCOUNT_TYPE_LABEL[acct.account_type] ?? acct.account_type}
                   {acct.last_four && <span className="ml-1">··{acct.last_four}</span>}
@@ -488,7 +488,7 @@ export default function FinanceDashboardPage() {
                 {summary.projections.monthlyTimeline.map((m) => (
                   <div
                     key={m.month}
-                    className="min-w-[140px] border border-gray-100 rounded-xl p-3 shrink-0"
+                    className="min-w-35 border border-gray-100 rounded-xl p-3 shrink-0"
                     role="listitem"
                   >
                     <p className="text-xs font-medium text-gray-500 mb-2">{m.label}</p>
@@ -519,7 +519,7 @@ export default function FinanceDashboardPage() {
         <div className="bg-white border border-gray-200 rounded-2xl p-5">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Trend</h2>
           {chartData.length > 0 ? (
-            <div className="h-[250px] sm:h-[300px]">
+            <div className="h-62.5 sm:h-75">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -559,7 +559,7 @@ export default function FinanceDashboardPage() {
             </button>
           </div>
           {pieData.length > 0 ? (
-            <div className="h-[250px] sm:h-[300px]">
+            <div className="h-62.5 sm:h-75">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -815,7 +815,7 @@ export default function FinanceDashboardPage() {
                   type="color"
                   value={catForm.color}
                   onChange={(e) => setCatForm((p) => ({ ...p, color: e.target.value }))}
-                  className="w-full mt-1 h-[38px] border border-gray-200 rounded-lg cursor-pointer"
+                  className="w-full mt-1 h-9.5 border border-gray-200 rounded-lg cursor-pointer"
                 />
               </div>
             </div>

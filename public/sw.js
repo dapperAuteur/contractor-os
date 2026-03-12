@@ -1,7 +1,7 @@
 // File: public/sw.js
 // Service Worker — stale-while-revalidate for API, cache-first for pages, offline fallback
 
-const CACHE_VERSION = 'centos-v5';
+const CACHE_VERSION = 'jobhub-v1';
 const STATIC_URLS = [
   '/offline.html',
 ];
@@ -89,6 +89,57 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => new Response('', { status: 503 }));
+    })
+  );
+});
+
+// Push notification handler
+self.addEventListener('push', (event) => {
+  if (!event.data) return;
+
+  try {
+    const payload = event.data.json();
+    const options = {
+      body: payload.body || '',
+      icon: payload.icon || '/icon-192.png',
+      badge: payload.badge || '/icon-192.png',
+      tag: payload.tag || 'jobhub-notification',
+      data: { url: payload.url || '/dashboard/contractor' },
+      actions: [{ action: 'open', title: 'Open' }],
+      vibrate: [200, 100, 200],
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(payload.title || 'JobHub', options)
+    );
+  } catch {
+    // Fallback for non-JSON payloads
+    event.waitUntil(
+      self.registration.showNotification('JobHub', {
+        body: event.data.text(),
+        icon: '/icon-192.png',
+      })
+    );
+  }
+});
+
+// Notification click handler — navigate to the relevant page
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  const url = event.notification.data?.url || '/dashboard/contractor';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clients) => {
+      // Focus existing tab if one is open
+      for (const client of clients) {
+        if (client.url.includes(self.location.origin) && 'focus' in client) {
+          client.navigate(url);
+          return client.focus();
+        }
+      }
+      // Open new tab
+      return self.clients.openWindow(url);
     })
   );
 });

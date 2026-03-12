@@ -8,6 +8,8 @@ export type DocumentType =
   | 'fuel_receipt'
   | 'maintenance_invoice'
   | 'pay_stub'
+  | 'invoice'
+  | 'call_sheet'
   | 'medical'
   | 'unknown';
 
@@ -25,6 +27,8 @@ Classify as ONE of these types:
 - "fuel_receipt" — a gas station pump receipt or a car dashboard showing fuel/odometer displays
 - "maintenance_invoice" — a mechanic, auto shop, or vehicle service invoice
 - "pay_stub" — a pay stub, estimated pay screen, work invoice, or contractor payment summary showing hours worked, rates, and earnings
+- "invoice" — a billing invoice showing vendor, line items, amounts due, and payment terms (NOT a pay stub or receipt)
+- "call_sheet" — a production call sheet, crew schedule, or work assignment showing job details, dates, locations, contacts, and crew info
 - "medical" — a medical bill, lab result, prescription, or health-related document
 - "unknown" — cannot determine the document type
 

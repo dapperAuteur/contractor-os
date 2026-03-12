@@ -1,11 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
 import ContactAutocomplete from '@/components/ui/ContactAutocomplete';
 import RateCardSelect from '@/components/contractor/RateCardSelect';
+import DateCalendarPicker from '@/components/ui/DateCalendarPicker';
+import ScanButton from '@/components/scan/ScanButton';
+import type { ScanResult } from '@/components/scan/ScanButton';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 const RATE_TYPES = ['hourly', 'daily', 'flat'];
@@ -29,6 +32,8 @@ export default function NewJobPage() {
     status: 'assigned',
     start_date: '',
     end_date: '',
+    is_multi_day: false,
+    scheduled_dates: [] as string[],
     pay_rate: '',
     ot_rate: '',
     dt_rate: '',
@@ -46,8 +51,73 @@ export default function NewJobPage() {
     extra_pay: '',
   });
 
+  const searchParams = useSearchParams();
+
   const set = (field: string, value: string | boolean | null) =>
     setForm((prev) => ({ ...prev, [field]: value }));
+
+  // Load prefill data from scan (via sessionStorage)
+  useEffect(() => {
+    if (searchParams.get('from') !== 'scan') return;
+    try {
+      const raw = sessionStorage.getItem('scan_job_prefill');
+      if (!raw) return;
+      const prefill = JSON.parse(raw);
+      setForm((prev) => ({
+        ...prev,
+        job_number: prefill.job_number ?? prev.job_number,
+        client_name: prefill.client_name ?? prev.client_name,
+        event_name: prefill.event_name ?? prev.event_name,
+        location_name: prefill.location_name ?? prev.location_name,
+        poc_name: prefill.poc_name ?? prev.poc_name,
+        poc_phone: prefill.poc_phone ?? prev.poc_phone,
+        crew_coordinator_name: prefill.crew_coordinator_name ?? prev.crew_coordinator_name,
+        crew_coordinator_phone: prefill.crew_coordinator_phone ?? prev.crew_coordinator_phone,
+        start_date: prefill.start_date ?? prev.start_date,
+        end_date: prefill.end_date ?? prev.end_date,
+        is_multi_day: prefill.is_multi_day ?? prev.is_multi_day,
+        scheduled_dates: prefill.scheduled_dates ?? prev.scheduled_dates,
+        pay_rate: prefill.pay_rate != null ? String(prefill.pay_rate) : prev.pay_rate,
+        ot_rate: prefill.ot_rate != null ? String(prefill.ot_rate) : prev.ot_rate,
+        dt_rate: prefill.dt_rate != null ? String(prefill.dt_rate) : prev.dt_rate,
+        union_local: prefill.union_local ?? prev.union_local,
+        department: prefill.department ?? prev.department,
+        est_pay_date: prefill.est_pay_date ?? prev.est_pay_date,
+        notes: prefill.notes ?? prev.notes,
+      }));
+      sessionStorage.removeItem('scan_job_prefill');
+    } catch {
+      // ignore parse errors
+    }
+  }, [searchParams]);
+
+  // Inline scan: apply extracted data directly to form
+  const handleInlineScan = useCallback((result: ScanResult) => {
+    const prefill = result.prefills?.job;
+    if (!prefill) return;
+    setForm((prev) => ({
+      ...prev,
+      job_number: (prefill.job_number as string) ?? prev.job_number,
+      client_name: (prefill.client_name as string) ?? prev.client_name,
+      event_name: (prefill.event_name as string) ?? prev.event_name,
+      location_name: (prefill.location_name as string) ?? prev.location_name,
+      poc_name: (prefill.poc_name as string) ?? prev.poc_name,
+      poc_phone: (prefill.poc_phone as string) ?? prev.poc_phone,
+      crew_coordinator_name: (prefill.crew_coordinator_name as string) ?? prev.crew_coordinator_name,
+      crew_coordinator_phone: (prefill.crew_coordinator_phone as string) ?? prev.crew_coordinator_phone,
+      start_date: (prefill.start_date as string) ?? prev.start_date,
+      end_date: (prefill.end_date as string) ?? prev.end_date,
+      is_multi_day: (prefill.is_multi_day as boolean) ?? prev.is_multi_day,
+      scheduled_dates: (prefill.scheduled_dates as string[]) ?? prev.scheduled_dates,
+      pay_rate: prefill.pay_rate != null ? String(prefill.pay_rate) : prev.pay_rate,
+      ot_rate: prefill.ot_rate != null ? String(prefill.ot_rate) : prev.ot_rate,
+      dt_rate: prefill.dt_rate != null ? String(prefill.dt_rate) : prev.dt_rate,
+      union_local: (prefill.union_local as string) ?? prev.union_local,
+      department: (prefill.department as string) ?? prev.department,
+      est_pay_date: (prefill.est_pay_date as string) ?? prev.est_pay_date,
+      notes: (prefill.notes as string) ?? prev.notes,
+    }));
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -76,6 +146,8 @@ export default function NewJobPage() {
         status: form.status,
         start_date: form.start_date || null,
         end_date: form.end_date || null,
+        is_multi_day: form.is_multi_day,
+        scheduled_dates: form.scheduled_dates.length > 0 ? form.scheduled_dates : [],
         pay_rate: form.pay_rate ? parseFloat(form.pay_rate) : null,
         ot_rate: form.ot_rate ? parseFloat(form.ot_rate) : null,
         dt_rate: form.dt_rate ? parseFloat(form.dt_rate) : null,
@@ -120,7 +192,16 @@ export default function NewJobPage() {
           </div>
         )}
 
-        {/* Rate Card Pre-fill */}
+        {/* Import tools: Rate Card + Scan */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <ScanButton
+            onResult={handleInlineScan}
+            onError={(msg) => setError(msg)}
+            moduleHint="call_sheet"
+            label="Import from Image"
+            className="flex items-center gap-2 px-4 py-2.5 border border-amber-600/50 text-amber-400 rounded-lg text-sm font-medium hover:bg-amber-600/10 transition cursor-pointer min-h-11"
+          />
+        </div>
         <RateCardSelect
           onSelect={(card) => {
             setForm((prev) => ({
@@ -187,16 +268,40 @@ export default function NewJobPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <label className={labelClass}>Start Date</label>
-              <input type="date" className={inputClass} value={form.start_date} onChange={(e) => set('start_date', e.target.value)} />
+          <label className="flex items-center gap-2 text-sm text-neutral-300">
+            <input
+              type="checkbox"
+              checked={form.is_multi_day}
+              onChange={(e) => set('is_multi_day', e.target.checked)}
+              className="rounded border-neutral-600"
+            />
+            Multi-day job (non-consecutive dates)
+          </label>
+
+          {form.is_multi_day ? (
+            <DateCalendarPicker
+              selectedDates={form.scheduled_dates}
+              onChange={(dates) => {
+                setForm((prev) => ({
+                  ...prev,
+                  scheduled_dates: dates,
+                  start_date: dates.length > 0 ? dates[0] : prev.start_date,
+                  end_date: dates.length > 0 ? dates[dates.length - 1] : prev.end_date,
+                }));
+              }}
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <label className={labelClass}>Start Date</label>
+                <input type="date" className={inputClass} value={form.start_date} onChange={(e) => set('start_date', e.target.value)} />
+              </div>
+              <div>
+                <label className={labelClass}>End Date</label>
+                <input type="date" className={inputClass} value={form.end_date} onChange={(e) => set('end_date', e.target.value)} />
+              </div>
             </div>
-            <div>
-              <label className={labelClass}>End Date</label>
-              <input type="date" className={inputClass} value={form.end_date} onChange={(e) => set('end_date', e.target.value)} />
-            </div>
-          </div>
+          )}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0a0a0a"/>
+  <g transform="translate(256 240)" fill="none" stroke="#d97706" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Hard hat shape -->
+    <path d="M-120 40 L-120 0 C-120 -80 -80 -140 0 -160 C80 -140 120 -80 120 0 L120 40" fill="#d97706" fill-opacity="0.2"/>
+    <line x1="-140" y1="40" x2="140" y2="40"/>
+    <!-- Brim -->
+    <path d="M-140 40 C-140 55 -130 65 -110 65 L110 65 C130 65 140 55 140 40"/>
+    <!-- Center line -->
+    <line x1="0" y1="-160" x2="0" y2="-100" stroke-width="20"/>
+  </g>
+  <!-- JH text -->
+  <text x="256" y="400" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="100" font-weight="800" fill="#d97706">JH</text>
+</svg>

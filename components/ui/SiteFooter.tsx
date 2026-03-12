@@ -25,8 +25,8 @@ export default function SiteFooter({ theme = 'dark' }: SiteFooterProps) {
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm">
           <Link href="/terms" className={linkCls}>Terms of Use</Link>
           <Link href="/privacy" className={linkCls}>Privacy Policy</Link>
+          <Link href="/community" className={linkCls}>Community Conduct</Link>
           <Link href="/safety" className={linkCls}>Safety &amp; Resources</Link>
-          <Link href="/safety#rise-wellness" className={linkCls}>Rise Wellness</Link>
           <Link href="/blog" className={linkCls}>Blog</Link>
           <Link href="/academy" className={linkCls}>Academy</Link>
         </nav>
