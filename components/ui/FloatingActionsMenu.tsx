@@ -39,16 +39,16 @@ export default function FloatingActionsMenu({ userRole }: Props) {
             open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
           }`}
         >
-          <span className="bg-gray-900 text-gray-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-gray-700">
+          <span className="bg-neutral-900 text-neutral-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-neutral-700">
             Help
           </span>
           <button
             onClick={openHelp}
             title="Open help chat"
-            className="bg-gray-800 text-white rounded-full p-3 shadow-lg hover:bg-gray-700 border border-gray-700 transition-colors"
+            className="bg-neutral-800 text-white rounded-full p-3 shadow-lg hover:bg-neutral-700 border border-neutral-700 transition-colors"
             aria-label="Open help chat"
           >
-            <HelpCircle className="w-5 h-5 text-fuchsia-400" />
+            <HelpCircle className="w-5 h-5 text-amber-400" />
           </button>
         </div>
 
@@ -58,16 +58,16 @@ export default function FloatingActionsMenu({ userRole }: Props) {
             open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
           }`}
         >
-          <span className="bg-gray-900 text-gray-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-gray-700">
+          <span className="bg-neutral-900 text-neutral-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-neutral-700">
             Feedback
           </span>
           <button
             onClick={openFeedback}
             title="Share feedback"
-            className="bg-gray-800 text-white rounded-full p-3 shadow-lg hover:bg-gray-700 border border-gray-700 transition-colors"
+            className="bg-neutral-800 text-white rounded-full p-3 shadow-lg hover:bg-neutral-700 border border-neutral-700 transition-colors"
             aria-label="Share feedback"
           >
-            <MessageCircle className="w-5 h-5 text-fuchsia-400" />
+            <MessageCircle className="w-5 h-5 text-amber-400" />
           </button>
         </div>
 
@@ -75,7 +75,7 @@ export default function FloatingActionsMenu({ userRole }: Props) {
         <button
           onClick={() => setOpen((v) => !v)}
           title={open ? 'Close menu' : 'Help & Feedback'}
-          className="bg-fuchsia-600 text-white rounded-full p-3.5 shadow-lg hover:bg-fuchsia-700 transition-colors pointer-events-auto"
+          className="bg-amber-600 text-white rounded-full p-3.5 shadow-lg hover:bg-amber-500 transition-colors pointer-events-auto"
           aria-label={open ? 'Close menu' : 'Help & Feedback'}
         >
           {open
