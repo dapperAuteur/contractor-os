@@ -204,22 +204,22 @@ export default function JobDetailPage() {
   /* ─── Toggle Public / Share Contacts ────────────────── */
   async function togglePublic() {
     const newVal = !job?.is_public;
+    setJob((prev) => prev ? { ...prev, is_public: newVal } : prev);
     await offlineFetch(`/api/contractor/jobs/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ is_public: newVal }),
     });
-    loadJob();
   }
 
   async function toggleShareContacts() {
     const newVal = !job?.share_contacts;
+    setJob((prev) => prev ? { ...prev, share_contacts: newVal } : prev);
     await offlineFetch(`/api/contractor/jobs/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ share_contacts: newVal }),
     });
-    loadJob();
   }
 
   /* ─── Status Update ─────────────────────────────────── */
