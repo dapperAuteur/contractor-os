@@ -38,7 +38,7 @@ function ToolbarBtn({
       onClick={onClick}
       className={`p-1.5 rounded transition text-sm ${
         active
-          ? 'bg-fuchsia-600 text-white'
+          ? 'bg-amber-600 text-white'
           : 'text-gray-400 hover:bg-gray-700 hover:text-white'
       }`}
     >

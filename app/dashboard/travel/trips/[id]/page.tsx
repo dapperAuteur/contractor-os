@@ -99,7 +99,7 @@ export default function TripDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin h-8 w-8 text-sky-600" />
+        <Loader2 className="animate-spin h-8 w-8 text-amber-600" />
       </div>
     );
   }
@@ -108,7 +108,7 @@ export default function TripDetailPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 text-center text-gray-400">
         <p>Trip not found.</p>
-        <Link href="/dashboard/travel/trips" className="text-sky-600 hover:underline mt-2 inline-block">Back to trips</Link>
+        <Link href="/dashboard/travel/trips" className="text-amber-600 hover:underline mt-2 inline-block">Back to trips</Link>
       </div>
     );
   }
@@ -125,7 +125,7 @@ export default function TripDetailPage() {
           </Link>
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-sky-100 text-sky-700">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400">
                 <ModeIcon className="w-3 h-3" />
                 {trip.mode.charAt(0).toUpperCase() + trip.mode.slice(1)}
               </span>
@@ -265,7 +265,7 @@ export default function TripDetailPage() {
           <button
             onClick={handleDuplicate}
             disabled={!!actionLoading}
-            className="flex items-center gap-1.5 px-3 py-2 bg-sky-50 text-sky-700 rounded-lg text-sm font-medium hover:bg-sky-100 disabled:opacity-50 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-500/10 text-amber-400 rounded-lg text-sm font-medium hover:bg-amber-500/10 disabled:opacity-50 transition"
           >
             <Copy className="w-3.5 h-3.5" /> Duplicate
           </button>

@@ -1,7 +1,7 @@
 'use client';
 
 // app/admin/live/page.tsx
-// Admin: create and manage CentOS Team live sessions.
+// Admin: create and manage Work.WitUS Team live sessions.
 
 import { useEffect, useState } from 'react';
 import { Radio, Plus, Trash2, Eye } from 'lucide-react';
@@ -44,7 +44,7 @@ export default function AdminLivePage() {
 
   function loadSessions() {
     // Fetch all sessions for admin (including non-public) — use admin API
-    fetch('/api/live?host_type=centos_team')
+    fetch('/api/live?host_type=witus_team')
       .then((r) => r.json())
       .then((d) => { setSessions(Array.isArray(d) ? d : []); setLoading(false); })
       .catch(() => setLoading(false));
@@ -110,7 +110,7 @@ export default function AdminLivePage() {
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
             <Radio className="w-6 h-6 text-red-500" /> Live Sessions
           </h1>
-          <p className="text-gray-400 text-sm mt-1">Manage JobHub Team live sessions. Members will be notified by email when a session is created.</p>
+          <p className="text-gray-400 text-sm mt-1">Manage Work.WitUS Team live sessions. Members will be notified by email when a session is created.</p>
         </div>
         {!creating && (
           <button

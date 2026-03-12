@@ -12,7 +12,6 @@ import { Link2, Loader2, CheckCircle2, Eye, Globe, TrendingUp, ExternalLink, Ref
 
 interface ShortlinkCounts {
   blog: { with: number; without: number };
-  recipe: { with: number; without: number };
   course: { with: number; without: number };
   feature?: { total: number };
 }
@@ -28,7 +27,7 @@ interface TrafficData {
 
 const USER_TYPE_COLORS: Record<string, string> = {
   anonymous: '#6b7280',
-  real: '#d946ef',
+  real: '#f59e0b',
   admin: '#f59e0b',
   demo: '#22c55e',
   tutorial: '#8b5cf6',
@@ -86,20 +85,19 @@ export default function LinksAndTrafficPage() {
 
   const s = traffic?.summary;
   const totalShortLinks = counts
-    ? (counts.blog.with + counts.recipe.with + counts.course.with)
+    ? (counts.blog.with + counts.course.with)
     : 0;
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[40vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
       </div>
     );
   }
 
   const shortlinkSections = [
     { key: 'blog', label: 'Blog Posts', data: counts?.blog },
-    { key: 'recipe', label: 'Recipes', data: counts?.recipe },
     { key: 'course', label: 'Courses', data: counts?.course },
   ];
 
@@ -107,7 +105,6 @@ export default function LinksAndTrafficPage() {
     { label: 'All', value: '' },
     { label: 'Features', value: '/features/' },
     { label: 'Blog', value: '/blog/' },
-    { label: 'Recipes', value: '/recipes/' },
     { label: 'Academy', value: '/academy/' },
     { label: 'Institutions', value: '/institutions/' },
     { label: 'Pricing', value: '/pricing' },
@@ -117,7 +114,7 @@ export default function LinksAndTrafficPage() {
     <div className="space-y-6 p-6">
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-3">
-          <Link2 className="w-6 h-6 text-fuchsia-500" />
+          <Link2 className="w-6 h-6 text-amber-500" />
           Links & Traffic
         </h1>
         <p className="text-sm text-gray-400 mt-1">Short links, page views, referrers, and campaign tracking</p>
@@ -157,7 +154,7 @@ export default function LinksAndTrafficPage() {
                 onClick={() => setPathPrefix(opt.value)}
                 className={`px-2 py-1 text-xs rounded-lg transition ${
                   pathPrefix === opt.value
-                    ? 'bg-fuchsia-600 text-white'
+                    ? 'bg-amber-600 text-white'
                     : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                 }`}
               >
@@ -206,7 +203,7 @@ export default function LinksAndTrafficPage() {
             <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider">
               <Link2 className="w-3.5 h-3.5" /> Short Links
             </div>
-            <p className="text-2xl font-bold text-fuchsia-400 mt-1">{totalShortLinks}</p>
+            <p className="text-2xl font-bold text-amber-400 mt-1">{totalShortLinks}</p>
           </div>
         </div>
       )}
@@ -224,7 +221,7 @@ export default function LinksAndTrafficPage() {
                   <YAxis tick={{ fontSize: 11, fill: '#6b7280' }} allowDecimals={false} />
                   <Tooltip contentStyle={{ background: '#111827', border: '1px solid #374151', fontSize: 12 }} />
                   <Legend wrapperStyle={{ fontSize: 12, color: '#9ca3af' }} />
-                  <Area type="monotone" dataKey="count" name="Views" stroke="#d946ef" fill="#d946ef" fillOpacity={0.2} strokeWidth={2} />
+                  <Area type="monotone" dataKey="count" name="Views" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.2} strokeWidth={2} />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -246,7 +243,7 @@ export default function LinksAndTrafficPage() {
                   <tbody>
                     {traffic.byPath.slice(0, 20).map((p) => (
                       <tr key={p.path} className="border-b border-gray-800/50 hover:bg-gray-800/30">
-                        <td className="py-2 px-3 text-fuchsia-400 truncate max-w-xs">{p.path}</td>
+                        <td className="py-2 px-3 text-amber-400 truncate max-w-xs">{p.path}</td>
                         <td className="py-2 px-3 text-right text-gray-200 font-medium">{p.count}</td>
                         <td className="py-2 px-3 text-right text-gray-400">{p.unique_referrers}</td>
                       </tr>
@@ -333,7 +330,7 @@ export default function LinksAndTrafficPage() {
                 <button
                   onClick={() => sync(key)}
                   disabled={syncing !== null || (data?.without || 0) === 0}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-medium hover:bg-fuchsia-700 transition disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-medium hover:bg-amber-500 transition disabled:opacity-50"
                 >
                   {syncing === key ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
                   Sync
@@ -359,7 +356,7 @@ export default function LinksAndTrafficPage() {
               <button
                 onClick={() => sync('feature')}
                 disabled={syncing !== null}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-medium hover:bg-fuchsia-700 transition disabled:opacity-50"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-medium hover:bg-amber-500 transition disabled:opacity-50"
               >
                 {syncing === 'feature' ? <Loader2 className="w-3 h-3 animate-spin" /> : null}
                 Sync

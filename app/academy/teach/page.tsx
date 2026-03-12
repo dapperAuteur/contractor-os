@@ -10,8 +10,8 @@ import { useAuth } from '@/lib/hooks/useAuth';
 
 const BENEFITS = [
   { icon: BookOpen,   title: 'Flexible Course Formats',   desc: 'Video, audio, text, slides — or mix them all. Linear or CYOA adventure paths.' },
-  { icon: Users,      title: 'Built-In Audience',          desc: 'Reach the JobHub community of health-focused learners immediately.' },
-  { icon: DollarSign, title: 'Keep the Majority',          desc: 'Set your own price. JobHub takes a small platform fee; the rest goes to you via Stripe.' },
+  { icon: Users,      title: 'Built-In Audience',          desc: 'Reach the Work.WitUS community of health-focused learners immediately.' },
+  { icon: DollarSign, title: 'Keep the Majority',          desc: 'Set your own price. Work.WitUS takes a small platform fee; the rest goes to you via Stripe.' },
   { icon: Zap,        title: 'Assignments & Live Sessions', desc: 'Grade submissions, give feedback, and host live streams — all in one place.' },
 ];
 
@@ -44,15 +44,15 @@ export default function TeachLandingPage() {
     <main className="min-h-screen bg-gray-950 text-white">
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
-        <span className="inline-block px-3 py-1 mb-6 rounded-full bg-fuchsia-900/50 text-fuchsia-300 text-sm font-medium">
-          JobHub Academy — Teach
+        <span className="inline-block px-3 py-1 mb-6 rounded-full bg-amber-900/50 text-amber-300 text-sm font-medium">
+          Work.WitUS Academy — Teach
         </span>
         <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
           Share your knowledge.<br />
           Build a sustainable income.
         </h1>
         <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-          Host free or paid courses on JobHub. Reach an audience obsessed with living
+          Host free or paid courses on Work.WitUS. Reach an audience obsessed with living
           healthier, longer lives — and get paid directly through Stripe.
         </p>
       </section>
@@ -61,7 +61,7 @@ export default function TeachLandingPage() {
       <section className="max-w-4xl mx-auto px-6 pb-16 grid grid-cols-1 sm:grid-cols-2 gap-5">
         {BENEFITS.map(({ icon: Icon, title, desc }) => (
           <div key={title} className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <Icon className="w-6 h-6 text-fuchsia-400 mb-4" />
+            <Icon className="w-6 h-6 text-amber-400 mb-4" />
             <h3 className="font-semibold text-white mb-2">{title}</h3>
             <p className="text-gray-400 text-sm">{desc}</p>
           </div>
@@ -82,7 +82,7 @@ export default function TeachLandingPage() {
               onClick={() => setPlan('teacher')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 plan === 'teacher'
-                  ? 'bg-fuchsia-600 text-white'
+                  ? 'bg-amber-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:text-white'
               }`}
             >
@@ -92,12 +92,12 @@ export default function TeachLandingPage() {
               onClick={() => setPlan('teacher-annual')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 plan === 'teacher-annual'
-                  ? 'bg-fuchsia-600 text-white'
+                  ? 'bg-amber-600 text-white'
                   : 'bg-gray-800 text-gray-400 hover:text-white'
               }`}
             >
               Annual
-              <span className="ml-1.5 text-xs text-fuchsia-300">Save ~20%</span>
+              <span className="ml-1.5 text-xs text-amber-300">Save ~20%</span>
             </button>
           </div>
 
@@ -112,7 +112,7 @@ export default function TeachLandingPage() {
               'Stripe Connect payouts',
             ].map((feat) => (
               <div key={feat} className="flex items-center gap-3 text-sm text-gray-300">
-                <CheckCircle className="w-4 h-4 text-fuchsia-400 shrink-0" />
+                <CheckCircle className="w-4 h-4 text-amber-400 shrink-0" />
                 {feat}
               </div>
             ))}
@@ -121,7 +121,7 @@ export default function TeachLandingPage() {
           <button
             onClick={handleSubscribe}
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-fuchsia-600 text-white rounded-xl font-semibold text-base hover:bg-fuchsia-700 transition disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl font-semibold text-base hover:bg-amber-700 transition disabled:opacity-50"
           >
             {loading ? 'Redirecting…' : (
               <>
@@ -139,7 +139,7 @@ export default function TeachLandingPage() {
 
         <p className="text-center text-gray-600 text-sm mt-6">
           Already a teacher?{' '}
-          <Link href="/dashboard/teaching" className="text-fuchsia-400 hover:text-fuchsia-300">
+          <Link href="/dashboard/teaching" className="text-amber-400 hover:text-amber-300">
             Go to your dashboard
           </Link>
         </p>

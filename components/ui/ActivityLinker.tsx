@@ -48,18 +48,18 @@ const TYPE_LABELS: Record<EntityType, string> = {
 };
 
 const TYPE_COLORS: Record<EntityType, string> = {
-  task: 'bg-violet-50 text-violet-700 border-violet-200',
-  trip: 'bg-sky-50 text-sky-700 border-sky-200',
-  route: 'bg-sky-50 text-sky-700 border-sky-200',
-  transaction: 'bg-green-50 text-green-700 border-green-200',
-  recipe: 'bg-amber-50 text-amber-700 border-amber-200',
-  fuel_log: 'bg-orange-50 text-orange-700 border-orange-200',
-  maintenance: 'bg-gray-50 text-gray-700 border-gray-200',
-  invoice: 'bg-blue-50 text-blue-700 border-blue-200',
-  workout: 'bg-rose-50 text-rose-700 border-rose-200',
-  equipment: 'bg-teal-50 text-teal-700 border-teal-200',
-  focus_session: 'bg-orange-50 text-orange-700 border-orange-200',
-  exercise: 'bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200',
+  task: 'bg-violet-900/20 text-violet-400 border-violet-800',
+  trip: 'bg-amber-900/20 text-amber-400 border-amber-800',
+  route: 'bg-amber-900/20 text-amber-400 border-amber-800',
+  transaction: 'bg-green-900/20 text-green-400 border-green-800',
+  recipe: 'bg-amber-900/20 text-amber-400 border-amber-800',
+  fuel_log: 'bg-orange-900/20 text-orange-400 border-orange-800',
+  maintenance: 'bg-neutral-800 text-neutral-300 border-neutral-700',
+  invoice: 'bg-blue-900/20 text-blue-400 border-blue-800',
+  workout: 'bg-rose-900/20 text-rose-400 border-rose-800',
+  equipment: 'bg-teal-900/20 text-teal-400 border-teal-800',
+  focus_session: 'bg-orange-900/20 text-orange-400 border-orange-800',
+  exercise: 'bg-amber-900/20 text-amber-400 border-amber-800',
   daily_log: 'bg-indigo-50 text-indigo-700 border-indigo-200',
 };
 
@@ -347,7 +347,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
         <button
           type="button"
           onClick={() => setShowAdd(!showAdd)}
-          className="text-xs text-sky-600 hover:text-sky-700 font-medium flex items-center gap-1"
+          className="text-xs text-amber-600 hover:text-amber-400 font-medium flex items-center gap-1"
         >
           <Plus className="w-3 h-3" />
           Link
@@ -413,7 +413,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                   type="button"
                   onClick={handleSearch}
                   disabled={searching}
-                  className="px-2 py-1.5 bg-sky-600 text-white rounded-lg text-xs hover:bg-sky-700 transition disabled:opacity-50"
+                  className="px-2 py-1.5 bg-amber-600 text-white rounded-lg text-xs hover:bg-amber-500 transition disabled:opacity-50"
                 >
                   <Search className="w-3 h-3" />
                 </button>
@@ -429,7 +429,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                   key={r.id}
                   type="button"
                   onClick={() => handleAdd(r.id)}
-                  className="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-sky-50 rounded transition truncate"
+                  className="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-amber-500/10 rounded transition truncate"
                 >
                   {r.display_name}
                 </button>

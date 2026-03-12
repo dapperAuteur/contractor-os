@@ -79,13 +79,13 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               <Link
                 href="/dashboard/feedback"
                 onClick={handleClose}
-                className="px-5 py-2 border border-fuchsia-300 text-fuchsia-700 rounded-lg text-sm font-semibold hover:bg-fuchsia-50 transition-colors"
+                className="px-5 py-2 border border-amber-300 text-amber-700 rounded-lg text-sm font-semibold hover:bg-amber-500/10 transition-colors"
               >
                 View My Feedback
               </Link>
               <button
                 onClick={handleClose}
-                className="px-5 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition-colors"
+                className="px-5 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition-colors"
               >
                 Close
               </button>
@@ -105,7 +105,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     onClick={() => setCategory(value)}
                     className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 text-center transition-colors ${
                       category === value
-                        ? 'border-fuchsia-500 bg-fuchsia-50 text-fuchsia-700'
+                        ? 'border-amber-500 bg-amber-500/10 text-amber-700'
                         : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                     }`}
                   >
@@ -135,7 +135,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     ? 'Describe the feature you\'d like to see…'
                     : 'Share your thoughts…'
                 }
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent resize-none"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
               />
               <p className="text-xs text-gray-400 mt-1 text-right">{message.length}/2000</p>
             </div>
@@ -164,7 +164,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               <button
                 type="submit"
                 disabled={submitting || !message.trim()}
-                className="px-5 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition-colors disabled:opacity-60"
+                className="px-5 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition-colors disabled:opacity-60"
               >
                 {submitting ? 'Sending…' : 'Send Feedback'}
               </button>

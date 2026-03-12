@@ -177,7 +177,7 @@ export default function LessonPlayerPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
   }
@@ -202,7 +202,7 @@ export default function LessonPlayerPage() {
         </div>
         <div className="flex-1" />
         {navigationMode === 'cyoa' && (
-          <span className="flex items-center gap-1 text-fuchsia-400 text-xs shrink-0">
+          <span className="flex items-center gap-1 text-amber-400 text-xs shrink-0">
             <GitBranch className="w-3.5 h-3.5" /> <span className="hidden sm:inline">Adventure Mode</span>
           </span>
         )}
@@ -272,7 +272,7 @@ export default function LessonPlayerPage() {
         {lessonGlossary.length > 0 && (
           <div className="mb-6 bg-gray-900 border border-gray-800 rounded-xl sm:rounded-2xl overflow-hidden">
             <div className="px-4 sm:px-6 py-3 border-b border-gray-800 flex items-center gap-2">
-              <BookMarked className="w-4 h-4 text-fuchsia-400" />
+              <BookMarked className="w-4 h-4 text-amber-400" />
               <span className="text-sm font-semibold text-white">Key Terms in This Lesson</span>
               <span className="text-xs text-gray-500 ml-1">({lessonGlossary.length})</span>
             </div>
@@ -288,23 +288,23 @@ export default function LessonPlayerPage() {
         {lessonAssignments.length > 0 && (
           <div className="mb-6">
             <h2 className="text-base font-bold mb-3 flex items-center gap-2">
-              <ClipboardList className="w-4 h-4 text-fuchsia-400" /> Assignments for this Lesson
+              <ClipboardList className="w-4 h-4 text-amber-400" /> Assignments for this Lesson
             </h2>
             <div className="space-y-2">
               {lessonAssignments.map((a) => (
                 <Link
                   key={a.id}
                   href={`/academy/${courseId}/assignments/${a.id}`}
-                  className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-fuchsia-700/50 transition group"
+                  className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-amber-700/50 transition group"
                 >
-                  <ClipboardList className="w-4 h-4 text-fuchsia-400 shrink-0" />
+                  <ClipboardList className="w-4 h-4 text-amber-400 shrink-0" />
                   <span className="flex-1 text-sm text-gray-200 group-hover:text-white">{a.title}</span>
                   {a.due_date && (
                     <span className="text-xs text-gray-500 shrink-0">
                       Due {new Date(a.due_date).toLocaleDateString()}
                     </span>
                   )}
-                  <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-fuchsia-400 transition shrink-0" />
+                  <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition shrink-0" />
                 </Link>
               ))}
             </div>
@@ -328,7 +328,7 @@ export default function LessonPlayerPage() {
           <button
             type="button"
             onClick={markComplete}
-            className="flex items-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-xl font-semibold hover:bg-fuchsia-700 transition mb-6 min-h-11 w-full sm:w-auto justify-center sm:justify-start"
+            className="flex items-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-xl font-semibold hover:bg-amber-700 transition mb-6 min-h-11 w-full sm:w-auto justify-center sm:justify-start"
           >
             <CheckCircle className="w-4 h-4" /> Mark as Complete
           </button>
@@ -345,7 +345,7 @@ export default function LessonPlayerPage() {
             {navigationMode === 'cyoa' && crossroads !== null && (
               <div>
                 <h2 className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2">
-                  <GitBranch className="w-5 h-5 text-fuchsia-400" /> Choose Your Next Path
+                  <GitBranch className="w-5 h-5 text-amber-400" /> Choose Your Next Path
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {crossroads.map((opt) => {
@@ -358,7 +358,7 @@ export default function LessonPlayerPage() {
                         href={href}
                         className={`p-4 rounded-xl border transition text-left min-h-18 flex flex-col justify-center ${
                           opt.path_type === 'linear'
-                            ? 'bg-fuchsia-900/20 border-fuchsia-700/50 hover:bg-fuchsia-900/40'
+                            ? 'bg-amber-900/20 border-amber-700/50 hover:bg-amber-900/40'
                             : opt.path_type === 'semantic'
                             ? 'bg-indigo-900/20 border-indigo-700/50 hover:bg-indigo-900/40'
                             : opt.path_type === 'cross_course'
@@ -399,7 +399,7 @@ export default function LessonPlayerPage() {
                 {adjacentLessons.next ? (
                   <Link
                     href={`/academy/${courseId}/lessons/${adjacentLessons.next}`}
-                    className="flex items-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-xl font-semibold hover:bg-fuchsia-700 transition min-h-11"
+                    className="flex items-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-xl font-semibold hover:bg-amber-700 transition min-h-11"
                   >
                     Next Lesson <ChevronRight className="w-4 h-4" />
                   </Link>

@@ -67,9 +67,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       const { data: msg } = await db.from('admin_messages').select('subject').eq('id', id).maybeSingle();
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@jobhub.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
         to: adminEmail,
-        subject: `[JobHub] User replied to: ${msg?.subject ?? 'a message'}`,
+        subject: `[Work.WitUS] User replied to: ${msg?.subject ?? 'a message'}`,
         html: `<p><strong>${user.email}</strong> replied to your message "${msg?.subject ?? ''}":</p>
                <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${body}</blockquote>
                <p><a href="${siteUrl}/admin/messages">View in Admin Dashboard →</a></p>`,

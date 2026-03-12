@@ -71,7 +71,7 @@ export default function BlogDashboardPage() {
                   href={`/blog/${profile.username}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sky-600 hover:underline"
+                  className="text-amber-400 hover:underline"
                 >
                   /blog/{profile.username}
                 </a>
@@ -98,7 +98,7 @@ export default function BlogDashboardPage() {
               )}
               <Link
                 href="/dashboard/blog/new"
-                className="flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition"
+                className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
               >
                 <PenLine className="w-4 h-4" />
                 New post
@@ -119,7 +119,7 @@ export default function BlogDashboardPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium border-b-2 transition ${
                   activeTab === tab.id
-                    ? 'border-sky-500 text-sky-600'
+                    ? 'border-amber-500 text-amber-400'
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >

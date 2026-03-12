@@ -110,7 +110,7 @@ export default function MarkdownImporter() {
             <span
               className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
                 step === s
-                  ? 'bg-sky-600 text-white'
+                  ? 'bg-amber-600 text-white'
                   : i < ['paste', 'preview', 'edit'].indexOf(step)
                   ? 'bg-green-500 text-white'
                   : 'bg-gray-200 text-gray-500'
@@ -144,7 +144,7 @@ export default function MarkdownImporter() {
               onChange={(e) => setRaw(e.target.value)}
               placeholder={`---\ntitle: My Post Title\ntags: health, longevity\n---\n\n# My Post Title\n\nYour markdown content here...`}
               rows={18}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm font-mono text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 resize-y"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm font-mono text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-y"
             />
           </div>
 
@@ -159,7 +159,7 @@ export default function MarkdownImporter() {
             type="button"
             onClick={handleParse}
             disabled={!raw.trim()}
-            className="flex items-center gap-2 px-5 py-2.5 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-40 transition"
+            className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 disabled:opacity-40 transition"
           >
             <FileText className="w-4 h-4" />
             Parse &amp; preview
@@ -177,7 +177,7 @@ export default function MarkdownImporter() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
 
@@ -190,20 +190,20 @@ export default function MarkdownImporter() {
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
               placeholder="Add tag, press Enter"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-1">
                 {tags.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full text-xs"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded-full text-xs"
                   >
                     {t}
                     <button
                       type="button"
                       onClick={() => setTags(tags.filter((x) => x !== t))}
-                      className="text-sky-400 hover:text-sky-700"
+                      className="text-amber-400 hover:text-amber-500"
                     >
                       ×
                     </button>
@@ -228,7 +228,7 @@ export default function MarkdownImporter() {
               <button
                 type="button"
                 onClick={() => setStep('edit')}
-                className="flex items-center gap-1 text-xs text-sky-600 hover:underline"
+                className="flex items-center gap-1 text-xs text-amber-400 hover:underline"
               >
                 <Eye className="w-3.5 h-3.5" />
                 Open in editor to fine-tune
@@ -257,7 +257,7 @@ export default function MarkdownImporter() {
             <button
               type="button"
               onClick={() => setStep('edit')}
-              className="flex items-center gap-2 px-4 py-2 border border-sky-300 text-sky-700 rounded-lg text-sm hover:bg-sky-50 transition"
+              className="flex items-center gap-2 px-4 py-2 border border-amber-500 text-amber-400 rounded-lg text-sm hover:bg-amber-500/10 transition"
             >
               <EyeOff className="w-4 h-4" />
               Edit in Tiptap
@@ -266,7 +266,7 @@ export default function MarkdownImporter() {
               type="button"
               onClick={handleSave}
               disabled={saving || !title.trim()}
-              className="flex items-center gap-2 px-5 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-50 transition ml-auto"
+              className="flex items-center gap-2 px-5 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 disabled:opacity-50 transition ml-auto"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
               {saving ? 'Saving…' : 'Save post'}
@@ -284,7 +284,7 @@ export default function MarkdownImporter() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
 
@@ -313,7 +313,7 @@ export default function MarkdownImporter() {
               type="button"
               onClick={handleSave}
               disabled={saving || !title.trim()}
-              className="flex items-center gap-2 px-5 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-50 transition ml-auto"
+              className="flex items-center gap-2 px-5 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 disabled:opacity-50 transition ml-auto"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
               {saving ? 'Saving…' : 'Save post'}

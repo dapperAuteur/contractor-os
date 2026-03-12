@@ -345,7 +345,7 @@ export default function TravelPage() {
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-10 flex items-center justify-center h-64">
-        <div className="animate-spin h-8 w-8 border-4 border-sky-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -369,7 +369,7 @@ export default function TravelPage() {
           </button>
           <button
             onClick={() => setShowAddTrip(true)}
-            className="flex items-center gap-1.5 px-3 py-2 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-500 transition"
           >
             <Plus className="w-4 h-4" />
             Add Trip
@@ -555,7 +555,7 @@ export default function TravelPage() {
           <h2 className="text-sm font-semibold text-gray-700">Vehicles</h2>
           <button
             onClick={() => { setVehicleForm({ type: 'car', nickname: '', make: '', model: '', year: '', color: '', ownership_type: 'owned', trip_mode: '' }); setEditingVehicle(null); setShowAddVehicle(true); }}
-            className="text-xs text-sky-600 hover:text-sky-700 font-medium flex items-center gap-1"
+            className="text-xs text-amber-600 hover:text-amber-400 font-medium flex items-center gap-1"
           >
             <Plus className="w-3 h-3" /> Add
           </button>
@@ -584,7 +584,7 @@ export default function TravelPage() {
                     </p>
                   </div>
                   <div className="flex gap-2 shrink-0">
-                    <button onClick={() => handleEditVehicle(v)} className="text-xs text-sky-500 hover:text-sky-700 transition">edit</button>
+                    <button onClick={() => handleEditVehicle(v)} className="text-xs text-amber-500 hover:text-amber-400 transition">edit</button>
                     {v.ownership_type === 'owned' && (
                       <button onClick={() => handleRetireVehicle(v.id)} className="text-xs text-gray-400 hover:text-gray-600 transition">retire</button>
                     )}
@@ -619,7 +619,7 @@ export default function TravelPage() {
                         </div>
                         <button
                           onClick={() => handleReactivateVehicle(v.id)}
-                          className="text-xs text-sky-500 hover:text-sky-700 transition shrink-0"
+                          className="text-xs text-amber-500 hover:text-amber-400 transition shrink-0"
                         >
                           reactivate
                         </button>
@@ -637,7 +637,7 @@ export default function TravelPage() {
       <div className="bg-white border border-gray-200 rounded-2xl p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold text-gray-700">Recent Trips</h2>
-          <Link href="/dashboard/travel/trips" className="text-xs text-sky-600 hover:text-sky-700 font-medium flex items-center gap-1">
+          <Link href="/dashboard/travel/trips" className="text-xs text-amber-600 hover:text-amber-400 font-medium flex items-center gap-1">
             View all <ChevronRight className="w-3 h-3" />
           </Link>
         </div>
@@ -686,8 +686,8 @@ export default function TravelPage() {
                 disabled={loggingTemplate === t.id}
                 className="flex items-center gap-3 border border-gray-100 rounded-xl p-3 text-left hover:bg-gray-50 transition disabled:opacity-50"
               >
-                <div className="w-8 h-8 bg-sky-50 rounded-lg flex items-center justify-center shrink-0">
-                  <Play className="w-4 h-4 text-sky-600" />
+                <div className="w-8 h-8 bg-amber-500/10 rounded-lg flex items-center justify-center shrink-0">
+                  <Play className="w-4 h-4 text-amber-600" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-900 truncate">{t.name}</p>
@@ -842,14 +842,14 @@ export default function TravelPage() {
                   <button
                     type="button"
                     onClick={() => setTripForm((f) => ({ ...f, trip_category: 'travel' }))}
-                    className={`flex-1 py-2 font-medium transition ${tripForm.trip_category === 'travel' ? 'bg-sky-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex-1 py-2 font-medium transition ${tripForm.trip_category === 'travel' ? 'bg-amber-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     Travel
                   </button>
                   <button
                     type="button"
                     onClick={() => setTripForm((f) => ({ ...f, trip_category: 'fitness' }))}
-                    className={`flex-1 py-2 font-medium transition ${tripForm.trip_category === 'fitness' ? 'bg-sky-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex-1 py-2 font-medium transition ${tripForm.trip_category === 'fitness' ? 'bg-amber-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     Fitness
                   </button>
@@ -924,7 +924,7 @@ export default function TravelPage() {
               Cancel
             </button>
             <button type="submit" disabled={savingTrip}
-              className="flex-1 bg-sky-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50">
+              className="flex-1 bg-amber-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50">
               {savingTrip ? 'Saving...' : 'Save Trip'}
             </button>
           </div>
@@ -1025,7 +1025,7 @@ export default function TravelPage() {
               Cancel
             </button>
             <button type="submit" disabled={savingVehicle}
-              className="flex-1 bg-sky-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50">
+              className="flex-1 bg-amber-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50">
               {savingVehicle ? 'Saving...' : editingVehicle ? 'Update Vehicle' : 'Add Vehicle'}
             </button>
           </div>

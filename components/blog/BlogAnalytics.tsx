@@ -146,7 +146,7 @@ export default function BlogAnalytics({ userId }: BlogAnalyticsProps) {
       {/* Summary cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Total views', value: totalViews, icon: <Eye className="w-5 h-5 text-sky-500" /> },
+          { label: 'Total views', value: totalViews, icon: <Eye className="w-5 h-5 text-amber-400" /> },
           { label: 'Posts', value: posts.length, icon: <BarChart2 className="w-5 h-5 text-indigo-500" /> },
           { label: 'Views (30d)', value: viewEvents.length, icon: <TrendingUp className="w-5 h-5 text-green-500" /> },
           { label: 'Shares (30d)', value: totalShares, icon: <Share2 className="w-5 h-5 text-orange-500" /> },

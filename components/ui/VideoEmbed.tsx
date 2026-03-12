@@ -31,7 +31,7 @@ export default function VideoEmbed({ url, title, className }: VideoEmbedProps) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors ${className ?? ''}`}
+      className={`inline-flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors ${className ?? ''}`}
     >
       <ExternalLink className="h-4 w-4" aria-hidden="true" />
       Watch video

@@ -58,7 +58,7 @@ interface ProjectionToggles {
   showChart: boolean;
 }
 
-const PROJECTIONS_KEY = 'centos_finance_projections';
+const PROJECTIONS_KEY = 'witus_work_finance_projections';
 const DEFAULT_TOGGLES: ProjectionToggles = { showCard: true, showTimeline: true, showChart: true };
 
 interface Summary {

@@ -55,7 +55,7 @@ function FilePreview({ file, onRemove }: { file: SubmissionFile; onRemove: () =>
         <img src={file.url} alt={file.name} className="w-14 h-14 object-cover rounded-lg shrink-0" />
       ) : (
         <div className="w-14 h-14 bg-gray-700 rounded-lg flex items-center justify-center shrink-0">
-          <Icon className="w-6 h-6 text-fuchsia-400" />
+          <Icon className="w-6 h-6 text-amber-400" />
         </div>
       )}
       <div className="flex-1 min-w-0">
@@ -71,7 +71,7 @@ function FilePreview({ file, onRemove }: { file: SubmissionFile; onRemove: () =>
             href={file.url}
             target="_blank"
             rel="noreferrer"
-            className="text-xs text-fuchsia-400 hover:underline"
+            className="text-xs text-amber-400 hover:underline"
           >
             View / download
           </a>

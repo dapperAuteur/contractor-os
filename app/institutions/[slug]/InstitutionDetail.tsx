@@ -86,7 +86,7 @@ export default function InstitutionDetail() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
       </div>
     );
   }
@@ -95,7 +95,7 @@ export default function InstitutionDetail() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 text-center text-gray-400">
         <p>Institution not found.</p>
-        <Link href="/institutions" className="text-fuchsia-600 hover:underline mt-2 inline-block">Back to directory</Link>
+        <Link href="/institutions" className="text-amber-600 hover:underline mt-2 inline-block">Back to directory</Link>
       </div>
     );
   }
@@ -125,7 +125,7 @@ export default function InstitutionDetail() {
               </span>
               {institution.website && (
                 <a href={institution.website} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-fuchsia-600 hover:underline">
+                  className="flex items-center gap-1 text-amber-600 hover:underline">
                   <ExternalLink className="w-3.5 h-3.5" /> Website
                 </a>
               )}
@@ -214,7 +214,7 @@ export default function InstitutionDetail() {
             <div key={offer.id} className="bg-white border border-gray-200 rounded-2xl p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-fuchsia-100 text-fuchsia-700">
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-700">
                     {OFFER_TYPE_LABELS[offer.offer_type] ?? offer.offer_type}
                   </span>
                   <h3 className="text-base font-semibold text-gray-900 mt-1">{offer.title}</h3>
@@ -230,7 +230,7 @@ export default function InstitutionDetail() {
                     href={offer.short_link_url || offer.url!}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="shrink-0 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition flex items-center gap-1"
+                    className="shrink-0 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition flex items-center gap-1"
                   >
                     <ExternalLink className="w-3.5 h-3.5" /> View
                   </a>

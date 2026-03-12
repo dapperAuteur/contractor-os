@@ -61,7 +61,7 @@ export default function ContractorInvitePage() {
         Invite Fellow Contractors
       </h1>
       <p className="text-sm text-neutral-400">
-        Invite colleagues, fellow union members, or anyone who could benefit from JobHub.
+        Invite colleagues, fellow union members, or anyone who could benefit from Work.WitUS.
         They&apos;ll receive a magic link to get started. You can send up to 10 invites.
       </p>
 

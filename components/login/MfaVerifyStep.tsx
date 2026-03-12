@@ -77,7 +77,7 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
   if (initializing) {
     return (
       <div className="flex flex-col items-center justify-center py-12 space-y-3">
-        <Loader2 className="w-6 h-6 animate-spin text-sky-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-amber-600" />
         <p className="text-sm text-gray-500">Preparing verification...</p>
       </div>
     );
@@ -86,8 +86,8 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
   return (
     <div className="space-y-6">
       <div className="flex flex-col items-center text-center space-y-2">
-        <div className="w-12 h-12 rounded-full bg-sky-100 flex items-center justify-center">
-          <Shield className="w-6 h-6 text-sky-600" />
+        <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center">
+          <Shield className="w-6 h-6 text-amber-600" />
         </div>
         <h2 className="text-lg font-semibold text-gray-900">Two-factor authentication</h2>
         <p className="text-sm text-gray-500">
@@ -117,7 +117,7 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
             onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             required
             autoFocus
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent form-input text-center text-2xl tracking-widest font-mono"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent form-input text-center text-2xl tracking-widest font-mono"
             placeholder="000000"
           />
         </div>
@@ -125,7 +125,7 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
         <button
           type="submit"
           disabled={loading || code.length !== 6}
-          className="w-full bg-sky-600 text-white py-3 rounded-lg font-semibold hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 flex items-center justify-center gap-2"
+          className="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 flex items-center justify-center gap-2"
         >
           {loading && <Loader2 className="w-4 h-4 animate-spin" />}
           {loading ? 'Verifying...' : 'Verify'}

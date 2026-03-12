@@ -23,7 +23,7 @@ const ROLE_STYLES: Record<string, { color: string; icon: typeof HardHat; label: 
 };
 
 const PRODUCT_LABELS: Record<string, string> = {
-  centos: 'JobHub',
+  centos: 'Work.WitUS',
   contractor: 'Contractor Hub',
   lister: 'Lister',
 };

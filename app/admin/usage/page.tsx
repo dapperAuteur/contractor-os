@@ -151,7 +151,7 @@ export default function AdminUsagePage() {
             <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider">
               <Star className="w-3.5 h-3.5" /> Top Module
             </div>
-            <p className="text-2xl font-bold text-fuchsia-400 mt-1">{s.topModule ?? '—'}</p>
+            <p className="text-2xl font-bold text-amber-400 mt-1">{s.topModule ?? '—'}</p>
           </div>
         </div>
       )}
@@ -236,7 +236,7 @@ export default function AdminUsagePage() {
               <tbody>
                 {data.topFeatures.map((f, i) => (
                   <tr key={i} className="border-b border-gray-800/50 hover:bg-gray-800/30">
-                    <td className="py-2 px-3 text-fuchsia-400">{f.module}</td>
+                    <td className="py-2 px-3 text-amber-400">{f.module}</td>
                     <td className="py-2 px-3 text-gray-300">{f.action}</td>
                     <td className="py-2 px-3 text-gray-400 truncate max-w-xs">{f.detail || '—'}</td>
                     <td className="py-2 px-3 text-right text-gray-200 font-medium">{f.count}</td>

@@ -333,7 +333,7 @@ export default function AccountsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin h-8 w-8 text-fuchsia-600" />
+        <Loader2 className="animate-spin h-8 w-8 text-amber-600" />
       </div>
     );
   }
@@ -347,7 +347,7 @@ export default function AccountsPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <CreditCard className="w-6 h-6 text-fuchsia-600" />
+              <CreditCard className="w-6 h-6 text-amber-600" />
               Financial Accounts
             </h1>
             <p className="text-gray-500 text-sm mt-0.5">Manage your bank accounts, credit cards, and loans</p>
@@ -387,7 +387,7 @@ export default function AccountsPage() {
           </button>
           <button
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-1.5 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition"
           >
             <Plus className="w-4 h-4" />
             Add Account
@@ -624,7 +624,7 @@ export default function AccountsPage() {
                   </div>
                   <div className="flex gap-2 pt-1">
                     <button onClick={() => handleSaveEdit(acct.id)}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition">
+                      className="flex items-center gap-1 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition">
                       <Check className="w-3.5 h-3.5" /> Save
                     </button>
                     <button onClick={() => setEditId(null)}
@@ -646,7 +646,7 @@ export default function AccountsPage() {
                     </div>
                     <Link
                       href={`/dashboard/finance/transactions?account_id=${acct.id}&account_name=${encodeURIComponent(acct.name)}`}
-                      className="font-semibold text-gray-900 hover:text-fuchsia-600 transition"
+                      className="font-semibold text-gray-900 hover:text-amber-600 transition"
                     >
                       {acct.name}
                       {acct.last_four && <span className="text-gray-400 font-normal ml-2 text-sm">··{acct.last_four}</span>}
@@ -736,7 +736,7 @@ export default function AccountsPage() {
                     )}
                     <button
                       onClick={() => { setEditId(acct.id); setEditForm({ name: acct.name, account_type: acct.account_type, institution_name: acct.institution_name ?? '', last_four: acct.last_four ?? '', interest_rate: acct.interest_rate?.toString() ?? '', credit_limit: acct.credit_limit?.toString() ?? '', opening_balance: String(acct.opening_balance ?? 0), monthly_fee: acct.monthly_fee?.toString() ?? '', due_date: acct.due_date?.toString() ?? '', statement_date: acct.statement_date?.toString() ?? '', notes: acct.notes ?? '', dispute_window_days: acct.dispute_window_days?.toString() ?? '', default_return_days: acct.default_return_days?.toString() ?? '', promo_apr: acct.promo_apr?.toString() ?? '', promo_apr_expires: acct.promo_apr_expires ?? '', promo_description: acct.promo_description ?? '', bt_apr: acct.bt_apr?.toString() ?? '', bt_fee_percent: acct.bt_fee_percent?.toString() ?? '', bt_expires: acct.bt_expires ?? '', bt_description: acct.bt_description ?? '', rewards_type: acct.rewards_type ?? '', rewards_rate: acct.rewards_rate ?? '', annual_fee: acct.annual_fee?.toString() ?? '' }); }}
-                      className="p-1.5 text-gray-400 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-lg transition"
+                      className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-500/10 rounded-lg transition"
                       title="Edit"
                     >
                       <Pencil className="w-4 h-4" />
@@ -938,7 +938,7 @@ export default function AccountsPage() {
           </div>
           <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button type="submit" disabled={saving}
-              className="flex-1 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition flex items-center justify-center gap-2">
+              className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition flex items-center justify-center gap-2">
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               Add Account
             </button>

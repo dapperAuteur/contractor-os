@@ -20,7 +20,7 @@ export interface ModuleTour {
 }
 
 // ────────────────────────────────────────────────
-// Contractor (JobHub) Tours
+// Contractor (Work.WitUS) Tours
 // ────────────────────────────────────────────────
 
 export const CONTRACTOR_TOURS: ModuleTour[] = [

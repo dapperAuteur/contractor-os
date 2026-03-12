@@ -106,7 +106,7 @@ export default function CategorySelect<T extends { id: string; name: string }>({
             <button
               type="submit"
               disabled={saving || !name.trim()}
-              className="shrink-0 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition"
+              className="shrink-0 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-medium hover:bg-amber-700 disabled:opacity-50 transition"
             >
               {saving ? '...' : 'Add'}
             </button>

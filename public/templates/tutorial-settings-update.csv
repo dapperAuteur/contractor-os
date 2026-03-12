@@ -1,5 +1,5 @@
 module_title,module_order,lesson_order,title,lesson_type,duration_seconds,is_free_preview,content_url,text_content,content_format
-Settings,1,4,Module Tours,text,180,true,,"Every major module in CentenarianOS has an interactive walkthrough — a guided tour that highlights key UI elements and explains how to use the feature step by step. If you dismissed a tour or want to re-take one, the Module Tours section in Settings is where you manage them.
+Settings,1,4,Module Tours,text,180,true,,"Every major module in Work.WitUS has an interactive walkthrough — a guided tour that highlights key UI elements and explains how to use the feature step by step. If you dismissed a tour or want to re-take one, the Module Tours section in Settings is where you manage them.
 
 ---
 
@@ -43,4 +43,4 @@ Tours are available for Planner, Finance, Travel, Health Metrics, Workouts, Equi
 
 ### Feature Pages
 
-You can also explore modules before taking a tour by visiting the public feature pages at **/features/contractor** (JobHub) or **/features/lister** (CrewOps). These pages describe each module in detail and offer a **Try Demo Login** button to explore with pre-loaded sample data.",markdown
+You can also explore modules before taking a tour by visiting the public feature pages at **/features/contractor** (Work.WitUS) or **/features/lister** (CrewOps). These pages describe each module in detail and offer a **Try Demo Login** button to explore with pre-loaded sample data.",markdown

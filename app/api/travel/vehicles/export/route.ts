@@ -39,6 +39,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Type', 'Nickname', 'Make', 'Model', 'Year', 'Color', 'Ownership Type', 'Trip Mode', 'Active'],
     rows,
-    'jobhub-vehicles-export.csv',
+    'work-witus-vehicles-export.csv',
   );
 }

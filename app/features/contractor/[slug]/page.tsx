@@ -22,7 +22,7 @@ export default function ContractorFeatureSlugPage() {
     <FeatureDetailPage
       feature={feature}
       app="contractor"
-      appName="JobHub"
+      appName="Work.WitUS"
       relatedFeatures={related}
     />
   );

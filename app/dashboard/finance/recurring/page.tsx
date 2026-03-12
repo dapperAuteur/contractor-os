@@ -155,7 +155,7 @@ export default function RecurringPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin h-8 w-8 text-fuchsia-600" />
+        <Loader2 className="animate-spin h-8 w-8 text-amber-600" />
       </div>
     );
   }
@@ -169,7 +169,7 @@ export default function RecurringPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <RefreshCw className="w-6 h-6 text-fuchsia-600" />
+              <RefreshCw className="w-6 h-6 text-amber-600" />
               Recurring Payments
             </h1>
             <p className="text-gray-500 text-sm mt-0.5">Auto-generated on each visit when due</p>
@@ -177,7 +177,7 @@ export default function RecurringPage() {
         </div>
         <button
           onClick={() => setShowAdd(true)}
-          className="flex items-center gap-1.5 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition"
+          className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition"
         >
           <Plus className="w-4 h-4" />
           Add Recurring
@@ -243,7 +243,7 @@ export default function RecurringPage() {
                   />
                   <div className="flex gap-2 pt-1">
                     <button onClick={() => handleSaveEdit(rp.id)}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 transition">
+                      className="flex items-center gap-1 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 transition">
                       <Check className="w-3.5 h-3.5" /> Save
                     </button>
                     <button onClick={() => setEditId(null)}
@@ -301,7 +301,7 @@ export default function RecurringPage() {
                           category_id: rp.category_id ?? '',
                         });
                       }}
-                      className="p-1.5 text-gray-400 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-lg transition"
+                      className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-500/10 rounded-lg transition"
                       title="Edit"
                     >
                       <Pencil className="w-4 h-4" />
@@ -378,7 +378,7 @@ export default function RecurringPage() {
           </div>
           <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button type="submit" disabled={saving}
-              className="flex-1 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition flex items-center justify-center gap-2">
+              className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition flex items-center justify-center gap-2">
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               Add Recurring
             </button>

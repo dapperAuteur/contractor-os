@@ -105,7 +105,7 @@ export default function DisputeSection({
           )}
         </div>
         {!editing && (
-          <button onClick={() => setEditing(true)} className="text-xs text-fuchsia-600 hover:underline">
+          <button onClick={() => setEditing(true)} className="text-xs text-amber-600 hover:underline">
             Edit
           </button>
         )}
@@ -135,7 +135,7 @@ export default function DisputeSection({
           </div>
           <div className="flex gap-2">
             <button onClick={handleSave} disabled={saving}
-              className="flex items-center gap-1 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition">
+              className="flex items-center gap-1 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition">
               {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />} Save
             </button>
             <button onClick={() => { setEditing(false); setStatus(disputeStatus ?? ''); setDate(disputeDate ?? ''); setNotes(disputeNotes ?? ''); }}

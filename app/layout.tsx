@@ -11,7 +11,7 @@ import { Analytics } from "@vercel/analytics/next"
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'JobHub',
+  title: 'Work.WitUS',
   description: 'Job tracking, invoicing, and business tools for independent contractors',
 };
 

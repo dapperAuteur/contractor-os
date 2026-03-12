@@ -81,7 +81,7 @@ export default function ShareBar({ postUrl, postTitle, postId, emailUrl, linkedi
       <button
         onClick={handleCopy}
         title="Copy link"
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-sky-600 hover:bg-sky-50 border border-gray-200 rounded-lg transition"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 border border-neutral-800 rounded-lg transition"
       >
         <Link2 className="w-4 h-4" />
         {copied ? 'Copied!' : 'Copy link'}
@@ -90,7 +90,7 @@ export default function ShareBar({ postUrl, postTitle, postId, emailUrl, linkedi
       <button
         onClick={handleEmail}
         title={`Share "${postTitle}" via email`}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-sky-600 hover:bg-sky-50 border border-gray-200 rounded-lg transition"
+        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 border border-neutral-800 rounded-lg transition"
       >
         <Mail className="w-4 h-4" />
         Email

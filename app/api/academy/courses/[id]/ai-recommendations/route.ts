@@ -71,7 +71,7 @@ async function generateRecommendations(db: ReturnType<typeof getDb>, courseId: s
     .map((c, i) => `${i + 1}. "${c.title}" (ID: ${c.id}) — ${c.description?.slice(0, 100) || 'No description'} [Category: ${c.category || 'None'}]`)
     .join('\n');
 
-  const prompt = `You are a learning advisor on JobHub, a health and longevity education platform.
+  const prompt = `You are a learning advisor on Work.WitUS, a health and longevity education platform.
 
 Current course: "${course.title}"
 Description: ${course.description || 'None'}

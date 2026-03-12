@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     .eq('id', user.id)
     .single();
 
-  // Block redundant upgrades (only for main JobHub plans)
+  // Block redundant upgrades (only for main Work.WitUS plans)
   const isTeacherPlan = plan === 'teacher' || plan === 'teacher-annual';
   const isContractorPlan = plan.startsWith('contractor-');
   const isListerPlan = plan.startsWith('lister-');

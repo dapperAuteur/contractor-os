@@ -65,7 +65,7 @@ export default function PromoCodesPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -80,7 +80,7 @@ export default function PromoCodesPage() {
         {!creating && (
           <button
             onClick={() => setCreating(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition"
           >
             <Plus className="w-4 h-4" /> New Code
           </button>
@@ -99,7 +99,7 @@ export default function PromoCodesPage() {
                 value={form.code}
                 onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
                 placeholder="SUMMER20"
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm font-mono tracking-wide focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm font-mono tracking-wide focus:outline-none focus:border-amber-500"
               />
             </div>
             <div>
@@ -111,7 +111,7 @@ export default function PromoCodesPage() {
                 max={100}
                 value={form.discount_percent}
                 onChange={(e) => setForm({ ...form, discount_percent: Number(e.target.value) })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function PromoCodesPage() {
                 value={form.max_uses}
                 onChange={(e) => setForm({ ...form, max_uses: e.target.value })}
                 placeholder="Unlimited"
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
             <div>
@@ -134,7 +134,7 @@ export default function PromoCodesPage() {
                 type="datetime-local"
                 value={form.expires_at}
                 onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function PromoCodesPage() {
             <button
               type="submit"
               disabled={saving}
-              className="px-5 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+              className="px-5 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50"
             >
               {saving ? 'Creating…' : 'Create Code'}
             </button>
@@ -180,7 +180,7 @@ export default function PromoCodesPage() {
             <tbody className="divide-y divide-gray-800">
               {codes.map((c) => (
                 <tr key={c.id} className="hover:bg-gray-800/40 transition">
-                  <td className="px-5 py-3 font-mono text-fuchsia-300 font-medium">{c.code}</td>
+                  <td className="px-5 py-3 font-mono text-amber-300 font-medium">{c.code}</td>
                   <td className="px-5 py-3 text-white">{c.discount_percent}% off</td>
                   <td className="px-5 py-3 text-gray-400">
                     {c.uses_count}{c.max_uses ? ` / ${c.max_uses}` : ''}

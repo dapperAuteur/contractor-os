@@ -1,4 +1,4 @@
-# JobHub
+# Work.WitUS
 
 A contractor management platform for freelance workers and crew coordinators to track jobs, log time, manage invoices, scan documents, and organize work schedules.
 
@@ -66,7 +66,7 @@ CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=
 VAPID_PRIVATE_KEY=
-VAPID_SUBJECT=mailto:admin@jobhub.app
+VAPID_SUBJECT=mailto:admin@centenarianos.com
 CRON_SECRET=
 ```
 

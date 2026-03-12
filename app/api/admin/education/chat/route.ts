@@ -72,7 +72,7 @@ export async function POST(req: NextRequest) {
 
   const modePrompt = MODE_INSTRUCTIONS[mode ?? 'general'] ?? MODE_INSTRUCTIONS.general;
 
-  const systemPrompt = `You are an expert AI assistant helping the founder/admin of JobHub prepare for presentations, interviews, and discussions about their product and its technical architecture.
+  const systemPrompt = `You are an expert AI assistant helping the founder/admin of Work.WitUS prepare for presentations, interviews, and discussions about their product and its technical architecture.
 
 ${modePrompt}
 

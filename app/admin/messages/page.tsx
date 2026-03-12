@@ -300,7 +300,7 @@ function AdminMessagesPage() {
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
-            placeholder="Important update from JobHub"
+            placeholder="Important update from Work.WitUS"
             className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
           />
         </div>

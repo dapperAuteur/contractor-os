@@ -127,7 +127,7 @@ export default function TransactionDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin h-8 w-8 text-fuchsia-600" />
+        <Loader2 className="animate-spin h-8 w-8 text-amber-600" />
       </div>
     );
   }
@@ -136,7 +136,7 @@ export default function TransactionDetailPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 text-center text-gray-400">
         <p>Transaction not found.</p>
-        <Link href="/dashboard/finance/transactions" className="text-fuchsia-600 hover:underline mt-2 inline-block">Back to transactions</Link>
+        <Link href="/dashboard/finance/transactions" className="text-amber-600 hover:underline mt-2 inline-block">Back to transactions</Link>
       </div>
     );
   }
@@ -233,13 +233,13 @@ export default function TransactionDetailPage() {
       {linkedInvoice && (
         <Link
           href={`/dashboard/finance/invoices/${linkedInvoice.id}`}
-          className="block bg-fuchsia-50 border border-fuchsia-200 rounded-2xl p-4 hover:bg-fuchsia-100 transition"
+          className="block bg-amber-500/10 border border-amber-200 rounded-2xl p-4 hover:bg-amber-500/10 transition"
         >
-          <h3 className="text-sm font-medium text-fuchsia-800 mb-1 flex items-center gap-1.5">
+          <h3 className="text-sm font-medium text-amber-800 mb-1 flex items-center gap-1.5">
             <FileText className="w-4 h-4" />
             Linked Invoice
           </h3>
-          <p className="text-sm text-fuchsia-700">
+          <p className="text-sm text-amber-700">
             {linkedInvoice.invoice_number ? `Invoice ${linkedInvoice.invoice_number}` : 'Invoice'} — {linkedInvoice.contact_name} — {fmtCurrency(linkedInvoice.total)}
           </p>
         </Link>
@@ -287,7 +287,7 @@ export default function TransactionDetailPage() {
           <button
             onClick={handleDuplicate}
             disabled={!!actionLoading}
-            className="flex items-center gap-1.5 px-3 py-2 bg-fuchsia-50 text-fuchsia-700 rounded-lg text-sm font-medium hover:bg-fuchsia-100 disabled:opacity-50 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-500/10 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-500/10 disabled:opacity-50 transition"
           >
             <Copy className="w-3.5 h-3.5" /> Duplicate
           </button>

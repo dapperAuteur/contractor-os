@@ -45,6 +45,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Name', 'Category', 'Brand', 'Model', 'Serial Number', 'Purchase Date', 'Purchase Price', 'Current Value', 'Warranty Expires', 'Condition', 'Notes', 'Ownership'],
     rows,
-    'jobhub-equipment-export.csv',
+    'work-witus-equipment-export.csv',
   );
 }

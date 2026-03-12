@@ -240,7 +240,7 @@ export default function InvoiceTemplateModal({ isOpen, onClose, invoice, onSaved
             <button
               type="button"
               onClick={() => setShowFieldPicker(!showFieldPicker)}
-              className="text-xs text-fuchsia-600 hover:underline font-medium flex items-center gap-1"
+              className="text-xs text-amber-600 hover:underline font-medium flex items-center gap-1"
             >
               <Plus className="w-3 h-3" /> Add field
             </button>
@@ -257,7 +257,7 @@ export default function InvoiceTemplateModal({ isOpen, onClose, invoice, onSaved
                           key={f.key}
                           type="button"
                           onClick={() => { toggleField(f); setShowFieldPicker(false); }}
-                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-fuchsia-50 hover:text-fuchsia-700 transition"
+                          className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-amber-500/10 hover:text-amber-700 transition"
                         >
                           {f.label}
                         </button>
@@ -281,7 +281,7 @@ export default function InvoiceTemplateModal({ isOpen, onClose, invoice, onSaved
                       type="button"
                       onClick={() => { addCustomField(); setShowFieldPicker(false); }}
                       disabled={!customFieldLabel.trim()}
-                      className="px-2 py-1 bg-fuchsia-600 text-white rounded-md text-xs disabled:opacity-50"
+                      className="px-2 py-1 bg-amber-600 text-white rounded-md text-xs disabled:opacity-50"
                     >
                       Add
                     </button>

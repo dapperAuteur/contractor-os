@@ -102,7 +102,7 @@ export default function FinanceImportPage() {
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Upload className="w-6 h-6 text-fuchsia-600" />
+            <Upload className="w-6 h-6 text-amber-600" />
             Import Transactions
           </h1>
           <p className="text-sm text-gray-500">Upload or paste a CSV file to bulk import</p>
@@ -110,20 +110,20 @@ export default function FinanceImportPage() {
       </div>
 
       {/* Template download */}
-      <div className="bg-fuchsia-50 border border-fuchsia-100 rounded-xl p-4 flex items-start gap-3">
-        <FileText className="w-5 h-5 text-fuchsia-600 shrink-0 mt-0.5" />
+      <div className="bg-amber-500/10 border border-amber-500/10 rounded-xl p-4 flex items-start gap-3">
+        <FileText className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm text-fuchsia-800 font-medium">CSV Format</p>
-          <p className="text-xs text-fuchsia-600 mt-1">
-            Required columns: <code className="bg-fuchsia-100 px-1 rounded">date</code>, <code className="bg-fuchsia-100 px-1 rounded">amount</code>.
-            Optional: <code className="bg-fuchsia-100 px-1 rounded">type</code>, <code className="bg-fuchsia-100 px-1 rounded">description</code>,
-            <code className="bg-fuchsia-100 px-1 rounded"> vendor</code>, <code className="bg-fuchsia-100 px-1 rounded">category</code>.
+          <p className="text-sm text-amber-800 font-medium">CSV Format</p>
+          <p className="text-xs text-amber-600 mt-1">
+            Required columns: <code className="bg-amber-500/10 px-1 rounded">date</code>, <code className="bg-amber-500/10 px-1 rounded">amount</code>.
+            Optional: <code className="bg-amber-500/10 px-1 rounded">type</code>, <code className="bg-amber-500/10 px-1 rounded">description</code>,
+            <code className="bg-amber-500/10 px-1 rounded"> vendor</code>, <code className="bg-amber-500/10 px-1 rounded">category</code>.
             Negative amounts are auto-classified as expenses.
           </p>
           <a
             href="/templates/finance-import-template.csv"
             download
-            className="inline-flex items-center gap-1 mt-2 text-xs text-fuchsia-700 font-medium hover:underline"
+            className="inline-flex items-center gap-1 mt-2 text-xs text-amber-700 font-medium hover:underline"
           >
             <Download className="w-3 h-3" />
             Download template
@@ -139,7 +139,7 @@ export default function FinanceImportPage() {
             type="file"
             accept=".csv,.txt"
             onChange={handleFileUpload}
-            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-fuchsia-50 file:text-fuchsia-700 hover:file:bg-fuchsia-100"
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-amber-500/10 file:text-amber-700 hover:file:bg-amber-500/10"
           />
         </div>
         <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
@@ -168,7 +168,7 @@ export default function FinanceImportPage() {
             <button
               onClick={handleImport}
               disabled={importing}
-              className="px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition"
+              className="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition"
             >
               {importing ? 'Importing...' : `Import ${rows.length} Transactions`}
             </button>

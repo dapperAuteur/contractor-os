@@ -9,6 +9,12 @@ export function daysAgo(n: number): string {
   return d.toISOString().split('T')[0];
 }
 
+export function daysFromNow(n: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().split('T')[0];
+}
+
 // Deletion order respects FK constraints (children before parents)
 export const CLEAR_ORDER = [
   'lister_messages',
@@ -1038,10 +1044,10 @@ export async function seedVisitor(supabase: SupabaseClient, userId: string): Pro
   // ── Blog Posts ──
   const { error: blogErr } = await supabase.from('blog_posts').insert([
     {
-      user_id: userId, title: 'Why I Track Everything: My JobHub Journey',
+      user_id: userId, title: 'Why I Track Everything: My Work.WitUS Journey',
       slug: 'why-i-track-everything',
       excerpt: 'How combining financial, health, and productivity tracking into one system changed my approach to longevity.',
-      content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Six months ago I started tracking my resting heart rate, daily spending, workout volume, and sleep in a single dashboard. The correlations were eye-opening. On weeks where I slept 7+ hours consistently, my spending dropped 15% (fewer impulse purchases), my workout performance improved, and my focus sessions were 20% longer. The data tells a clear story: health, wealth, and productivity are deeply connected. JobHub makes these connections visible.' }] }] },
+      content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'Six months ago I started tracking my resting heart rate, daily spending, workout volume, and sleep in a single dashboard. The correlations were eye-opening. On weeks where I slept 7+ hours consistently, my spending dropped 15% (fewer impulse purchases), my workout performance improved, and my focus sessions were 20% longer. The data tells a clear story: health, wealth, and productivity are deeply connected. Work.WitUS makes these connections visible.' }] }] },
       visibility: 'public', tags: ['longevity', 'tracking', 'personal'],
       published_at: new Date(Date.now() - 10 * 86400000).toISOString(),
     },

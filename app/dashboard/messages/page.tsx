@@ -109,7 +109,7 @@ export default function MessagesPage() {
   // User viewing:  their replies (is_admin=false) are "mine" → right side
   function getReplyMeta(reply: Reply) {
     const isMine = isAdmin ? reply.is_admin : !reply.is_admin;
-    const label = isMine ? 'You' : (reply.is_admin ? 'JobHub Team' : 'Member');
+    const label = isMine ? 'You' : (reply.is_admin ? 'Work.WitUS Team' : 'Member');
     return { isMine, label };
   }
 
@@ -132,7 +132,7 @@ export default function MessagesPage() {
           <span className="px-2 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full">{unread} new</span>
         )}
       </div>
-      <p className="text-gray-500 mb-8">Messages from the JobHub team. You can reply to any message.</p>
+      <p className="text-gray-500 mb-8">Messages from the Work.WitUS team. You can reply to any message.</p>
 
       {messages.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
@@ -186,7 +186,7 @@ export default function MessagesPage() {
                         )}
                       </div>
                     )}
-                    <p className="text-xs text-gray-400">— JobHub Team</p>
+                    <p className="text-xs text-gray-400">— Work.WitUS Team</p>
 
                     {/* Thread */}
                     {!thread?.loaded && (
@@ -230,7 +230,7 @@ export default function MessagesPage() {
                         value={replyText[m.id] ?? ''}
                         onChange={(e) => setReplyText((prev) => ({ ...prev, [m.id]: e.target.value }))}
                         rows={3}
-                        placeholder={isAdmin ? 'Reply as the JobHub team…' : 'Reply to the team…'}
+                        placeholder={isAdmin ? 'Reply as the Work.WitUS team…' : 'Reply to the team…'}
                         className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
                       />
                       <div className="flex items-center justify-between mt-2 gap-3">

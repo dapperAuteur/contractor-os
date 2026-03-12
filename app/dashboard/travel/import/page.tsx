@@ -266,7 +266,7 @@ export default function TravelImportPage() {
 
         <p className="text-xs text-gray-400 text-center">
           For best results, scan one fill-up at a time using the{' '}
-          <Link href="/dashboard/travel/fuel" className="text-sky-600 hover:underline">Fuel Log</Link> page.
+          <Link href="/dashboard/travel/fuel" className="text-amber-600 hover:underline">Fuel Log</Link> page.
         </p>
       </div>
 
@@ -348,7 +348,7 @@ function CommuteSettingsForm() {
         <button
           type="submit"
           disabled={saving}
-          className="px-4 py-2 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50"
+          className="px-4 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50"
         >
           {saving ? 'Saving…' : 'Save Settings'}
         </button>

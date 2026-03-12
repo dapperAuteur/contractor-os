@@ -119,7 +119,7 @@ export default function TeachingLearningPathsPage() {
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-            <Layers className="w-7 h-7 text-fuchsia-600" />
+            <Layers className="w-7 h-7 text-amber-600" />
             Learning Paths
           </h1>
           <p className="text-gray-500 mt-1">
@@ -130,7 +130,7 @@ export default function TeachingLearningPathsPage() {
           <button
             onClick={handleSuggest}
             disabled={suggesting}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm border border-fuchsia-200 text-fuchsia-700 bg-fuchsia-50 hover:bg-fuchsia-100 rounded-xl font-medium transition disabled:opacity-50"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm border border-amber-200 text-amber-700 bg-amber-500/10 hover:bg-amber-500/10 rounded-xl font-medium transition disabled:opacity-50"
           >
             {suggesting
               ? <><Loader2 className="w-4 h-4 animate-spin" /> Generating…</>
@@ -139,7 +139,7 @@ export default function TeachingLearningPathsPage() {
           </button>
           <Link
             href="/dashboard/teaching/learning-paths/new"
-            className="flex items-center gap-1.5 px-4 py-2 text-sm bg-fuchsia-600 text-white rounded-xl font-medium hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-700 transition"
           >
             <Plus className="w-4 h-4" />
             New Path
@@ -157,12 +157,12 @@ export default function TeachingLearningPathsPage() {
       {suggestions.length > 0 && (
         <section>
           <h2 className="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-fuchsia-500" />
+            <Sparkles className="w-4 h-4 text-amber-500" />
             AI Suggestions — Review & Accept
           </h2>
           <div className="space-y-4">
             {suggestions.map((s) => (
-              <div key={s.title} className="bg-fuchsia-50 border border-fuchsia-200 rounded-xl p-5">
+              <div key={s.title} className="bg-amber-500/10 border border-amber-200 rounded-xl p-5">
                 <div className="flex items-start justify-between gap-4 mb-3">
                   <div>
                     <h3 className="font-semibold text-gray-900 text-base">{s.title}</h3>
@@ -180,7 +180,7 @@ export default function TeachingLearningPathsPage() {
                   {s.courses.map((c, i) => (
                     <span
                       key={c.id}
-                      className="px-2.5 py-1 bg-white border border-fuchsia-200 text-fuchsia-800 rounded-lg text-xs font-medium"
+                      className="px-2.5 py-1 bg-white border border-amber-200 text-amber-800 rounded-lg text-xs font-medium"
                     >
                       {i + 1}. {c.title}
                     </span>
@@ -189,7 +189,7 @@ export default function TeachingLearningPathsPage() {
                 <button
                   onClick={() => acceptSuggestion(s)}
                   disabled={creating === s.title}
-                  className="flex items-center gap-1.5 px-4 py-2 text-sm bg-fuchsia-600 text-white rounded-lg font-medium hover:bg-fuchsia-700 transition disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-4 py-2 text-sm bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition disabled:opacity-50"
                 >
                   {creating === s.title
                     ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Creating…</>
@@ -207,7 +207,7 @@ export default function TeachingLearningPathsPage() {
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Paths</h2>
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin h-8 w-8 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+            <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
           </div>
         ) : paths.length === 0 ? (
           <div className="text-center py-16 text-gray-400 border-2 border-dashed border-gray-200 rounded-2xl">
@@ -216,7 +216,7 @@ export default function TeachingLearningPathsPage() {
             <p className="text-sm mb-5">Create your first path or let AI suggest one.</p>
             <Link
               href="/dashboard/teaching/learning-paths/new"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-fuchsia-600 text-white rounded-lg font-medium hover:bg-fuchsia-700 transition"
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm bg-amber-600 text-white rounded-lg font-medium hover:bg-amber-700 transition"
             >
               <Plus className="w-4 h-4" />
               Create Path

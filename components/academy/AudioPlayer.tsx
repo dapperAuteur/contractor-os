@@ -147,7 +147,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
       <div className="p-4 sm:p-6">
         {/* Current chapter label */}
         {currentChapter && (
-          <p className="text-xs text-fuchsia-400 font-medium mb-2 truncate">{currentChapter.title}</p>
+          <p className="text-xs text-amber-400 font-medium mb-2 truncate">{currentChapter.title}</p>
         )}
 
         {/* Progress bar */}
@@ -157,7 +157,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
           onClick={handleProgressClick}
         >
           <div
-            className="absolute top-0 left-0 h-full bg-fuchsia-500 rounded-full transition-[width] duration-100"
+            className="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-[width] duration-100"
             style={{ width: `${progress}%` }}
           />
           {/* Chapter markers on progress bar */}
@@ -189,7 +189,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
 
           <button
             onClick={togglePlay}
-            className="p-3 bg-fuchsia-600 text-white rounded-full hover:bg-fuchsia-700 transition shrink-0"
+            className="p-3 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition shrink-0"
           >
             {playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
           </button>
@@ -220,7 +220,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
           {hasChapters && (
             <button
               onClick={() => setShowChapters((s) => !s)}
-              className={`p-2 rounded-lg transition ${showChapters ? 'text-fuchsia-400 bg-fuchsia-900/30' : 'text-gray-500 hover:text-white'}`}
+              className={`p-2 rounded-lg transition ${showChapters ? 'text-amber-400 bg-amber-900/30' : 'text-gray-500 hover:text-white'}`}
               title="Chapters"
             >
               <ListMusic className="w-4 h-4" />
@@ -229,7 +229,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
           {hasTranscript && (
             <button
               onClick={() => setShowTranscript((s) => !s)}
-              className={`p-2 rounded-lg transition ${showTranscript ? 'text-fuchsia-400 bg-fuchsia-900/30' : 'text-gray-500 hover:text-white'}`}
+              className={`p-2 rounded-lg transition ${showTranscript ? 'text-amber-400 bg-amber-900/30' : 'text-gray-500 hover:text-white'}`}
               title="Transcript"
             >
               <FileText className="w-4 h-4" />
@@ -257,13 +257,13 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
                   onClick={() => seekTo(ch.startTime)}
                   className={`w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
                     isCurrent
-                      ? 'bg-fuchsia-900/30 text-fuchsia-300'
+                      ? 'bg-amber-900/30 text-amber-300'
                       : 'text-gray-400 hover:text-white hover:bg-gray-800'
                   }`}
                 >
                   <span className="tabular-nums text-xs shrink-0 w-10 text-right">{formatTime(ch.startTime)}</span>
                   <span className="flex-1 truncate">{ch.title}</span>
-                  {isCurrent && <Play className="w-3 h-3 text-fuchsia-400 shrink-0" />}
+                  {isCurrent && <Play className="w-3 h-3 text-amber-400 shrink-0" />}
                 </button>
               );
             })}
@@ -300,7 +300,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
                 onClick={() => seekTo(seg.startTime)}
                 className={`w-full text-left flex gap-3 px-2 py-1.5 rounded-lg text-sm transition ${
                   i === activeSegmentIndex
-                    ? 'bg-fuchsia-900/20 text-white'
+                    ? 'bg-amber-900/20 text-white'
                     : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
                 }`}
               >

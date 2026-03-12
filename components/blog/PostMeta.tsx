@@ -27,9 +27,9 @@ export default function PostMeta({
   authorUsername,
 }: PostMetaProps) {
   return (
-    <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+    <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400">
       {(authorDisplayName || authorUsername) && (
-        <span className="font-medium text-gray-700">
+        <span className="font-medium text-neutral-200">
           {authorDisplayName || authorUsername}
         </span>
       )}
@@ -54,7 +54,7 @@ export default function PostMeta({
           {tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full text-xs font-medium"
+              className="px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded-full text-xs font-medium"
             >
               {tag}
             </span>

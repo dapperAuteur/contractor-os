@@ -205,7 +205,7 @@ export default function LifeCategoryTagger({
             <button
               type="button"
               onClick={() => setShowDropdown((p) => !p)}
-              className="text-xs text-fuchsia-600 hover:text-fuchsia-700 font-medium flex items-center gap-1"
+              className="text-xs text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
             >
               <Plus className="w-3 h-3" />
               Tag

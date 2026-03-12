@@ -14,8 +14,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'student',
-    title: 'What is JobHub Academy?',
-    content: `JobHub Academy is the learning platform inside JobHub. Members can enroll in courses taught by longevity experts, health coaches, and community teachers. Courses include video lessons, text content, audio tracks, assignments, live sessions, and an optional Choose-Your-Own-Adventure (CYOA) learning path. The Academy is accessible at /academy from the main navigation.`,
+    title: 'What is Work.WitUS Academy?',
+    content: `Work.WitUS Academy is the learning platform inside Work.WitUS. Members can enroll in courses taught by longevity experts, health coaches, and community teachers. Courses include video lessons, text content, audio tracks, assignments, live sessions, and an optional Choose-Your-Own-Adventure (CYOA) learning path. The Academy is accessible at /academy from the main navigation.`,
   },
   {
     role: 'student',
@@ -65,7 +65,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'student',
     title: 'How to watch live sessions',
-    content: `Live sessions from the JobHub team are at /live. The page shows upcoming and currently live sessions. When a session is live the Join Live button activates and opens the embedded video stream. Per-course live sessions scheduled by your instructor appear on the course detail page.`,
+    content: `Live sessions from the Work.WitUS team are at /live. The page shows upcoming and currently live sessions. When a session is live the Join Live button activates and opens the embedded video stream. Per-course live sessions scheduled by your instructor appear on the course detail page.`,
   },
   {
     role: 'student',
@@ -77,7 +77,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'teacher',
-    title: 'How to become a teacher on JobHub Academy',
+    title: 'How to become a teacher on Work.WitUS Academy',
     content: `To publish courses you need a Teacher account. From your dashboard go to Teaching in the sidebar. If you do not have a teacher plan, you will be prompted to subscribe. Complete Stripe Checkout for the teacher subscription. Once payment is confirmed your account is upgraded to teacher role. You can then create and publish courses.`,
   },
   {
@@ -131,7 +131,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Blog and how do I access it?',
-    content: `The Blog is a public writing space inside JobHub where members share their health journeys, longevity research, recipes, and insights. The public blog listing is at /blog. To write your own posts, go to Dashboard → Blog or /dashboard/blog. Posts are tied to your username — visitors can see all your posts at /blog/[username]. You must set a username in Dashboard → Profile before you can publish.`,
+    content: `The Blog is a public writing space inside Work.WitUS where members share their health journeys, longevity research, recipes, and insights. The public blog listing is at /blog. To write your own posts, go to Dashboard → Blog or /dashboard/blog. Posts are tied to your username — visitors can see all your posts at /blog/[username]. You must set a username in Dashboard → Profile before you can publish.`,
   },
   {
     role: 'all',
@@ -146,7 +146,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Blog visibility options and scheduling',
-    content: `Each blog post has a visibility setting: Draft — only visible to you, not listed anywhere. Public — visible to everyone including visitors who are not logged in, indexed by search engines. Members Only (authenticated_only) — visible only to logged-in JobHub members. Scheduled — set a future date and time; the post automatically becomes public at that time. To schedule a post: set Visibility to Scheduled, pick a date and time, click Save. The post stays hidden until the scheduled moment.`,
+    content: `Each blog post has a visibility setting: Draft — only visible to you, not listed anywhere. Public — visible to everyone including visitors who are not logged in, indexed by search engines. Members Only (authenticated_only) — visible only to logged-in Work.WitUS members. Scheduled — set a future date and time; the post automatically becomes public at that time. To schedule a post: set Visibility to Scheduled, pick a date and time, click Save. The post stays hidden until the scheduled moment.`,
   },
   {
     role: 'all',
@@ -169,7 +169,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Recipes module?',
-    content: `Recipes is the cooking and nutrition library inside JobHub. Members can create, share, and discover longevity-focused recipes with automatic nutrition tracking. Every recipe gets a NCV (Nutritional Caloric Value) score — Green, Yellow, or Red — showing how nutrient-dense the calories are. The public recipe listing is at /recipes. Manage your own recipes at Dashboard → Recipes (/dashboard/recipes).`,
+    content: `Recipes is the cooking and nutrition library inside Work.WitUS. Members can create, share, and discover longevity-focused recipes with automatic nutrition tracking. Every recipe gets a NCV (Nutritional Caloric Value) score — Green, Yellow, or Red — showing how nutrient-dense the calories are. The public recipe listing is at /recipes. Manage your own recipes at Dashboard → Recipes (/dashboard/recipes).`,
   },
   {
     role: 'all',
@@ -189,7 +189,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to import a recipe from a website',
-    content: `Go to Dashboard → Recipes → Import Recipe (or /dashboard/recipes/import). Paste the full URL of any recipe page from a major cooking website. Click Import. JobHub reads the recipe's structured data (schema.org/Recipe format) and fills in title, description, ingredients, prep time, cook time, servings, and instructions automatically. Review and adjust the imported recipe — look up USDA nutrition data for each ingredient — then publish or save as draft. Works with most major recipe sites including AllRecipes, Food Network, and NYT Cooking.`,
+    content: `Go to Dashboard → Recipes → Import Recipe (or /dashboard/recipes/import). Paste the full URL of any recipe page from a major cooking website. Click Import. Work.WitUS reads the recipe's structured data (schema.org/Recipe format) and fills in title, description, ingredients, prep time, cook time, servings, and instructions automatically. Review and adjust the imported recipe — look up USDA nutrition data for each ingredient — then publish or save as draft. Works with most major recipe sites including AllRecipes, Food Network, and NYT Cooking.`,
   },
   {
     role: 'all',
@@ -207,7 +207,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use the in-app help chat',
-    content: `The Help button appears as part of the floating action menu (the fuchsia button in the bottom-right corner). Click the button to expand it, then click the question mark (Help) option. A chat drawer opens where you can ask any question about using JobHub Academy. The system searches the tutorial documentation and uses AI to give you a direct answer. The chat is context-aware — ask things like How do I submit an assignment, How do I create a CYOA course, or How do I set up Stripe payouts.`,
+    content: `The Help button appears as part of the floating action menu (the fuchsia button in the bottom-right corner). Click the button to expand it, then click the question mark (Help) option. A chat drawer opens where you can ask any question about using Work.WitUS Academy. The system searches the tutorial documentation and uses AI to give you a direct answer. The chat is context-aware — ask things like How do I submit an assignment, How do I create a CYOA course, or How do I set up Stripe payouts.`,
   },
   {
     role: 'all',
@@ -280,8 +280,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'all',
-    title: 'What is the Contractor Hub (JobHub)?',
-    content: `The Contractor Hub (branded as JobHub) is a dedicated module for independent contractors in broadcast, production, and live events. It provides job tracking, time entry logging, invoice generation, rate cards, venue knowledge bases, city guides, union contract chat, and union membership/dues tracking. Access it at /dashboard/contractor or via the contractor subdomain (contractor.jobhub.app). The Contractor Hub is a separate paid product from JobHub — you need a Contractor subscription ($10/month or $100/year).`,
+    title: 'What is the Contractor Hub (Work.WitUS)?',
+    content: `The Contractor Hub (branded as Work.WitUS) is a dedicated module for independent contractors in broadcast, production, and live events. It provides job tracking, time entry logging, invoice generation, rate cards, venue knowledge bases, city guides, union contract chat, and union membership/dues tracking. Access it at /dashboard/contractor or via the contractor subdomain (work.witus.online). The Contractor Hub is a separate paid product from Work.WitUS — you need a Contractor subscription ($10/month or $100/year).`,
   },
   {
     role: 'all',
@@ -346,7 +346,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Contractor pricing and billing',
-    content: `The Contractor Hub (JobHub) is a separate paid product. Pricing: $10/month or $100/year (save $20). No free tier — access is via paid subscription or admin/peer invite. The subscription is independent from JobHub and Lister subscriptions. Manage your subscription at Dashboard → Billing. Visit contractor.jobhub.app/pricing for details.`,
+    content: `The Contractor Hub (Work.WitUS) is a separate paid product. Pricing: $10/month or $100/year (save $20). No free tier — access is via paid subscription or admin/peer invite. The subscription is independent from Work.WitUS and Lister subscriptions. Manage your subscription at Dashboard → Billing. Visit work.witus.online/pricing for details.`,
   },
 
   // ─── LISTER / CREW COORDINATOR ──────────────────────────────────────────
@@ -354,7 +354,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Lister platform (CrewOps)?',
-    content: `The Lister platform (branded as CrewOps) is for crew coordinators, staffing agencies, and union leaders who list and assign jobs to contractors. It includes job creation, crew roster management, assignment dispatch, group messaging, and availability tracking. Access it at /dashboard/contractor/lister or via the lister subdomain (lister.jobhub.app). The Lister is a separate paid product — pricing starts at $10/month (intro promo, regularly $50/month).`,
+    content: `The Lister platform (branded as CrewOps) is for crew coordinators, staffing agencies, and union leaders who list and assign jobs to contractors. It includes job creation, crew roster management, assignment dispatch, group messaging, and availability tracking. Access it at /dashboard/contractor/lister or via the lister subdomain (lister.witus.online). The Lister is a separate paid product — pricing starts at $10/month (intro promo, regularly $50/month).`,
   },
   {
     role: 'all',
@@ -379,12 +379,12 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to invite contractors and listers',
-    content: `Go to Lister Dashboard → Invite. Listers can invite both contractors and other listers using the product selector dropdown. Enter the email, choose "As Contractor" or "As Lister", and send. They'll receive a magic link. You can send up to 10 invites. Inviting as Contractor gives them JobHub access; inviting as Lister gives them CrewOps access.`,
+    content: `Go to Lister Dashboard → Invite. Listers can invite both contractors and other listers using the product selector dropdown. Enter the email, choose "As Contractor" or "As Lister", and send. They'll receive a magic link. You can send up to 10 invites. Inviting as Contractor gives them Work.WitUS access; inviting as Lister gives them CrewOps access.`,
   },
   {
     role: 'all',
     title: 'Lister pricing and billing',
-    content: `The Lister platform (CrewOps) is a separate paid product. Standard pricing: $50/month or $500/year. Introductory promo: $10/month or $100/year (limited time). The promo is controlled via platform settings. No free tier — access is via paid subscription or admin invite. The subscription is independent from JobHub and Contractor Hub subscriptions. Visit lister.jobhub.app/pricing for details.`,
+    content: `The Lister platform (CrewOps) is a separate paid product. Standard pricing: $50/month or $500/year. Introductory promo: $10/month or $100/year (limited time). The promo is controlled via platform settings. No free tier — access is via paid subscription or admin invite. The subscription is independent from Work.WitUS and Contractor Hub subscriptions. Visit lister.witus.online/pricing for details.`,
   },
   {
     role: 'all',
@@ -407,7 +407,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Supported video providers for embedding',
-    content: `JobHub supports embedding videos from these providers: YouTube (paste any youtube.com or youtu.be link — automatically converted to embed format), Viloud.tv (paste the Viloud stream URL), Mux (paste the Mux playback URL), and Cloudinary (upload directly or paste a Cloudinary video URL — rendered with native HTML5 video player). For other providers, use the social embed tab in the media modal to paste raw HTML embed code (iframes).`,
+    content: `Work.WitUS supports embedding videos from these providers: YouTube (paste any youtube.com or youtu.be link — automatically converted to embed format), Viloud.tv (paste the Viloud stream URL), Mux (paste the Mux playback URL), and Cloudinary (upload directly or paste a Cloudinary video URL — rendered with native HTML5 video player). For other providers, use the social embed tab in the media modal to paste raw HTML embed code (iframes).`,
   },
 
   // ─── EXERCISE & WORKOUT VIDEO ─────────────────────────────────────────────
@@ -428,7 +428,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What are interactive feature walkthroughs?',
-    content: `Every major module in JobHub has an interactive walkthrough — a step-by-step guided tour that highlights key UI elements and explains how to use the feature. Walkthroughs are offered when you first visit a module. Each step shows a tooltip card with a title, description, and progress bar. You can advance with Next, skip individual steps with Skip, or exit anytime. Your progress is saved so you can resume where you left off. Walkthroughs cover the Planner, Finance, Travel, Health Metrics, Workouts, Equipment, Academy, and more.`,
+    content: `Every major module in Work.WitUS has an interactive walkthrough — a step-by-step guided tour that highlights key UI elements and explains how to use the feature. Walkthroughs are offered when you first visit a module. Each step shows a tooltip card with a title, description, and progress bar. You can advance with Next, skip individual steps with Skip, or exit anytime. Your progress is saved so you can resume where you left off. Walkthroughs cover the Planner, Finance, Travel, Health Metrics, Workouts, Equipment, Academy, and more.`,
   },
   {
     role: 'all',
@@ -438,7 +438,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to explore features before signing up',
-    content: `JobHub has public feature pages where you can explore each module before creating an account. Visit /features/contractor to see all JobHub (Contractor Hub) features, or /features/lister to see all CrewOps (Lister) features. Each feature page shows detailed descriptions, screenshots, and a Try Demo Login button that lets you log in with a demo account to explore the module hands-on. These pages are accessible without signing up.`,
+    content: `Work.WitUS has public feature pages where you can explore each module before creating an account. Visit /features/contractor to see all Work.WitUS (Contractor Hub) features, or /features/lister to see all CrewOps (Lister) features. Each feature page shows detailed descriptions, screenshots, and a Try Demo Login button that lets you log in with a demo account to explore the module hands-on. These pages are accessible without signing up.`,
   },
 
   // ─── BLOG IMPORT ──────────────────────────────────────────────────────────
@@ -454,7 +454,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How does offline mode work for contractor and lister pages?',
-    content: `Contractor (JobHub) and Lister (CrewOps) pages work offline. When you load any page while connected, data is automatically cached in your browser's IndexedDB. If you lose connectivity, cached data is displayed so you can still browse your jobs, roster, assignments, messages, and other content. Changes you make while offline (creating, editing, deleting) are queued and automatically replayed when your connection returns. Text-based pages like tutorials and academy lessons are also available offline once loaded. The offline system uses the offlineFetch wrapper around standard fetch calls.`,
+    content: `Contractor (Work.WitUS) and Lister (CrewOps) pages work offline. When you load any page while connected, data is automatically cached in your browser's IndexedDB. If you lose connectivity, cached data is displayed so you can still browse your jobs, roster, assignments, messages, and other content. Changes you make while offline (creating, editing, deleting) are queued and automatically replayed when your connection returns. Text-based pages like tutorials and academy lessons are also available offline once loaded. The offline system uses the offlineFetch wrapper around standard fetch calls.`,
   },
 
   // ─── WORKOUTS & NOMAD OS ──────────────────────────────────────────────────
@@ -462,7 +462,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is Nomad Longevity OS?',
-    content: `Nomad Longevity OS is a built-in fitness protocol inside JobHub designed for people who travel frequently and need flexible workout routines. It includes 28 pre-loaded exercises and 12 workout templates organized into four programs: AM (morning mobility), PM (evening recovery), Hotel (bodyweight-only for hotel rooms), and Gym (full equipment). The Friction Protocol helps you choose the right workout based on your available time, equipment, and energy. Access it at Dashboard → Workouts → Nomad OS. All exercises include detailed instructions and form cues.`,
+    content: `Nomad Longevity OS is a built-in fitness protocol inside Work.WitUS designed for people who travel frequently and need flexible workout routines. It includes 28 pre-loaded exercises and 12 workout templates organized into four programs: AM (morning mobility), PM (evening recovery), Hotel (bodyweight-only for hotel rooms), and Gym (full equipment). The Friction Protocol helps you choose the right workout based on your available time, equipment, and energy. Access it at Dashboard → Workouts → Nomad OS. All exercises include detailed instructions and form cues.`,
   },
   {
     role: 'all',
@@ -512,7 +512,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to connect wearables and sync health data',
-    content: `JobHub integrates with three wearable platforms via OAuth: Oura (ring), WHOOP (strap), and Garmin (watch). Go to Dashboard → Settings → Wearable Connections and click Connect next to your device. Complete the OAuth flow to authorize data sharing. Once connected, your daily metrics (resting heart rate, HRV, sleep duration, sleep score, steps, activity calories, respiratory rate) sync automatically each day. You can also import health data via CSV from Apple Health, Google Health, InBody, and Hume Health using the Data Hub import.`,
+    content: `Work.WitUS integrates with three wearable platforms via OAuth: Oura (ring), WHOOP (strap), and Garmin (watch). Go to Dashboard → Settings → Wearable Connections and click Connect next to your device. Complete the OAuth flow to authorize data sharing. Once connected, your daily metrics (resting heart rate, HRV, sleep duration, sleep score, steps, activity calories, respiratory rate) sync automatically each day. You can also import health data via CSV from Apple Health, Google Health, InBody, and Hume Health using the Data Hub import.`,
   },
 
   // ─── LIFE RETROSPECTIVE ───────────────────────────────────────────────────
@@ -551,8 +551,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'contractor',
-    title: 'What is JobHub?',
-    content: `JobHub is a contractor management platform for freelance workers in broadcast, events, and production. It helps you track jobs, manage invoices, log time entries, organize equipment, track travel and fuel expenses, manage union memberships, and stay on top of your finances. The main dashboard is at /dashboard/contractor. From there you can access all your jobs, invoices, contacts, venues, city guides, and more.`,
+    title: 'What is Work.WitUS?',
+    content: `Work.WitUS is a contractor management platform for freelance workers in broadcast, events, and production. It helps you track jobs, manage invoices, log time entries, organize equipment, track travel and fuel expenses, manage union memberships, and stay on top of your finances. The main dashboard is at /dashboard/contractor. From there you can access all your jobs, invoices, contacts, venues, city guides, and more.`,
   },
   {
     role: 'contractor',
@@ -577,7 +577,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to manage contacts',
-    content: `Contacts are your clients, vendors, and crew members. They appear throughout JobHub — in jobs, invoices, and the job board. Each contact has a name, type (vendor/client/crew), email, phone, and optional company. Contacts can have multiple locations attached. You can manage contacts from the Contacts page or they are auto-created when you add a new client to a job.`,
+    content: `Contacts are your clients, vendors, and crew members. They appear throughout Work.WitUS — in jobs, invoices, and the job board. Each contact has a name, type (vendor/client/crew), email, phone, and optional company. Contacts can have multiple locations attached. You can manage contacts from the Contacts page or they are auto-created when you add a new client to a job.`,
   },
   {
     role: 'contractor',
@@ -637,17 +637,17 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to use the Data Hub',
-    content: `The Data Hub at /dashboard/data is your personal data dashboard. It aggregates metrics from across JobHub — health metrics, workout logs, focus sessions, and life categories. Track daily steps, sleep hours, resting heart rate, and more. Log workouts with exercises, sets, reps, and RPE. Use focus sessions to track deep work time on admin tasks. Life categories let you rate and reflect on different areas of your life.`,
+    content: `The Data Hub at /dashboard/data is your personal data dashboard. It aggregates metrics from across Work.WitUS — health metrics, workout logs, focus sessions, and life categories. Track daily steps, sleep hours, resting heart rate, and more. Log workouts with exercises, sets, reps, and RPE. Use focus sessions to track deep work time on admin tasks. Life categories let you rate and reflect on different areas of your life.`,
   },
   {
     role: 'contractor',
     title: 'How to submit feedback or get help',
-    content: `Click the amber floating button in the bottom-right corner of any dashboard page. This opens a speed-dial menu with two options: Help opens an AI-powered chat that answers questions about JobHub features using your documentation. Feedback opens a form where you can report bugs, request features, or share general feedback. You can attach images or screenshots. Your feedback is sent to the admin team and you can view your submission history and admin replies at /dashboard/feedback.`,
+    content: `Click the amber floating button in the bottom-right corner of any dashboard page. This opens a speed-dial menu with two options: Help opens an AI-powered chat that answers questions about Work.WitUS features using your documentation. Feedback opens a form where you can report bugs, request features, or share general feedback. You can attach images or screenshots. Your feedback is sent to the admin team and you can view your submission history and admin replies at /dashboard/feedback.`,
   },
   {
     role: 'contractor',
     title: 'How does offline mode work?',
-    content: `JobHub works offline as a Progressive Web App (PWA). When you lose internet, a banner appears and the app continues to function using cached data. Actions you take offline (adding time entries, notes, etc.) are queued and sync automatically when you reconnect. The service worker caches API responses and static assets. Install JobHub to your home screen from your browser for the best offline experience.`,
+    content: `Work.WitUS works offline as a Progressive Web App (PWA). When you lose internet, a banner appears and the app continues to function using cached data. Actions you take offline (adding time entries, notes, etc.) are queued and sync automatically when you reconnect. The service worker caches API responses and static assets. Install Work.WitUS to your home screen from your browser for the best offline experience.`,
   },
 
   // ─── LISTER (CrewOps) ──────────────────────────────────────────────────────
@@ -655,7 +655,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'lister',
     title: 'What is CrewOps (Lister mode)?',
-    content: `CrewOps is the lister side of JobHub, designed for crew coordinators who assign contractors to jobs. As a lister, you manage a roster of contractors, create and post jobs, assign crew to events, check availability, and communicate with your team. Your dashboard is at /dashboard/contractor/lister. Lister mode is activated when your profile has contractor_role set to "lister".`,
+    content: `CrewOps is the lister side of Work.WitUS, designed for crew coordinators who assign contractors to jobs. As a lister, you manage a roster of contractors, create and post jobs, assign crew to events, check availability, and communicate with your team. Your dashboard is at /dashboard/contractor/lister. Lister mode is activated when your profile has contractor_role set to "lister".`,
   },
   {
     role: 'lister',
@@ -665,7 +665,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'lister',
     title: 'How to manage your crew roster',
-    content: `Go to /dashboard/contractor/lister/roster to manage your crew. Add contractors with name, email, phone, skills (e.g. Camera, Utility, Audio), and availability notes. Search your roster by name, email, or skill. Each roster entry shows a use count tracking how many times you have assigned that contractor. If a contractor has a JobHub account, their @username appears as a linked badge. Remove contractors you no longer work with.`,
+    content: `Go to /dashboard/contractor/lister/roster to manage your crew. Add contractors with name, email, phone, skills (e.g. Camera, Utility, Audio), and availability notes. Search your roster by name, email, or skill. Each roster entry shows a use count tracking how many times you have assigned that contractor. If a contractor has a Work.WitUS account, their @username appears as a linked badge. Remove contractors you no longer work with.`,
   },
   {
     role: 'lister',
@@ -685,7 +685,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'lister',
     title: 'How to create and manage message groups',
-    content: `Go to /dashboard/contractor/lister/groups to organize your crew into groups for bulk messaging. Create a group with a name and description (e.g. "Camera Department", "Indianapolis Crew", "Audio Team"). Add members from your roster — only contractors with linked JobHub accounts can be added. Expand a group to see all members. Use groups to quickly send announcements or updates to specific departments or locations.`,
+    content: `Go to /dashboard/contractor/lister/groups to organize your crew into groups for bulk messaging. Create a group with a name and description (e.g. "Camera Department", "Indianapolis Crew", "Audio Team"). Add members from your roster — only contractors with linked Work.WitUS accounts can be added. Expand a group to see all members. Use groups to quickly send announcements or updates to specific departments or locations.`,
   },
   {
     role: 'lister',

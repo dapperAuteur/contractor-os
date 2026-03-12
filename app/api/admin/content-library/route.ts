@@ -81,7 +81,7 @@ const TUTORIAL_SERIES = [
   },
   {
     slug: 'getting-started',
-    title: 'Getting Started with JobHub',
+    title: 'Getting Started with Work.WitUS',
     description: 'Your first stop — explore the platform, pricing, demo account, and interactive walkthroughs.',
     category: 'Platform Guide',
     tags: ['tutorial', 'getting-started', 'onboarding', 'demo'],
@@ -180,7 +180,7 @@ const TUTORIAL_SERIES = [
   },
   {
     slug: 'academy',
-    title: 'Navigating the JobHub Academy',
+    title: 'Navigating the Work.WitUS Academy',
     description: 'Browse courses, enroll, navigate lessons, complete assignments, and use CYOA adventure mode.',
     category: 'Platform Guide',
     tags: ['tutorial', 'academy', 'courses', 'learning', 'cyoa'],
@@ -252,7 +252,7 @@ const TUTORIAL_SERIES = [
   },
   {
     slug: 'contractor',
-    title: 'Contractor Job Hub Guide',
+    title: 'Contractor Work.WitUS Guide',
     description: 'Manage gigs, log hours, generate invoices, track union dues, and build your venue knowledge base.',
     category: 'Platform Guide',
     tags: ['tutorial', 'contractor', 'jobs', 'invoices', 'unions', 'venues'],

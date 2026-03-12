@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
       const link = await createShortLink({
         url: `${siteUrl}/features/${mod.slug}`,
         slug: toSwitchySlug('f', mod.slug),
-        title: `${mod.name} — JobHub`,
+        title: `${mod.name} — Work.WitUS`,
         description: mod.tagline,
         tags: ['feature'],
       });

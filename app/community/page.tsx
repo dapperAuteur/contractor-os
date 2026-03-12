@@ -5,8 +5,8 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'Community Conduct | JobHub',
-  description: 'Community guidelines and code of conduct for JobHub, operated by B4C LLC / AwesomeWebStore.com.',
+  title: 'Community Conduct | Work.WitUS',
+  description: 'Community guidelines and code of conduct for Work.WitUS, operated by B4C LLC / AwesomeWebStore.com.',
 };
 
 export default function CommunityPage() {
@@ -22,7 +22,7 @@ export default function CommunityPage() {
 
         <Section title="1. Purpose">
           <p>
-            JobHub is a professional platform for contractors, listers, and crew coordinators to manage
+            Work.WitUS is a professional platform for contractors, listers, and crew coordinators to manage
             jobs, track time, share knowledge, and build community. This Code of Conduct ensures a safe,
             respectful, and productive environment for all users.
           </p>
@@ -83,7 +83,7 @@ export default function CommunityPage() {
 
         <Section title="6. Safety Reporting">
           <p>
-            JobHub encourages users to document workplace incidents, safety concerns, and best
+            Work.WitUS encourages users to document workplace incidents, safety concerns, and best
             practices through the job documents feature. When reporting incidents:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
@@ -107,8 +107,8 @@ export default function CommunityPage() {
           <p className="mt-3">
             We reserve the right to take action at our discretion. Decisions may be appealed by
             contacting us at{' '}
-            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
-              hello@jobhub.app
+            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+              hello@centenarianos.com
             </a>.
           </p>
         </Section>
@@ -116,8 +116,8 @@ export default function CommunityPage() {
         <Section title="8. Reporting Violations">
           <p>
             If you witness or experience a violation of this Code of Conduct, please report it to{' '}
-            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
-              hello@jobhub.app
+            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+              hello@centenarianos.com
             </a>{' '}
             with as much detail as possible. All reports are reviewed confidentially.
           </p>
@@ -126,9 +126,9 @@ export default function CommunityPage() {
         <Section title="9. Relationship to Other Policies">
           <p>
             This Code of Conduct works alongside our{' '}
-            <Link href="/terms" className="text-fuchsia-400 hover:underline">Terms of Use</Link>{' '}
+            <Link href="/terms" className="text-amber-400 hover:underline">Terms of Use</Link>{' '}
             and{' '}
-            <Link href="/privacy" className="text-fuchsia-400 hover:underline">Privacy Policy</Link>.
+            <Link href="/privacy" className="text-amber-400 hover:underline">Privacy Policy</Link>.
             In the event of a conflict, the Terms of Use take precedence.
           </p>
         </Section>
@@ -143,8 +143,8 @@ export default function CommunityPage() {
         <Section title="11. Contact">
           <p>
             Questions or concerns? Reach us at{' '}
-            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
-              hello@jobhub.app
+            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+              hello@centenarianos.com
             </a>.
           </p>
         </Section>

@@ -56,7 +56,7 @@ export default function CloudinaryUploader({
           <button
             type="button"
             onClick={() => open()}
-            className="flex items-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-sky-400 hover:text-sky-600 transition w-full justify-center"
+            className="flex items-center gap-2 px-4 py-2 border-2 border-dashed border-gray-300 rounded-lg text-sm text-gray-600 hover:border-amber-400 hover:text-amber-400 transition w-full justify-center"
           >
             <Upload className="w-4 h-4" />
             Click to upload {mediaType === 'image' ? 'image' : 'video'}

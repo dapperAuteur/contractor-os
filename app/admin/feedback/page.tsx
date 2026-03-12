@@ -123,7 +123,7 @@ export default function AdminFeedbackPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -196,7 +196,7 @@ export default function AdminFeedbackPage() {
                 >
                   {/* Unread dot */}
                   {!item.is_read_by_admin && (
-                    <span className="w-2 h-2 rounded-full bg-fuchsia-500 shrink-0" />
+                    <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
                   )}
                   {item.is_read_by_admin && (
                     <span className="w-2 h-2 rounded-full bg-transparent shrink-0" />
@@ -220,7 +220,7 @@ export default function AdminFeedbackPage() {
                   </span>
 
                   {thread?.replies?.length > 0 && (
-                    <span className="text-xs text-fuchsia-400 shrink-0">{thread.replies.length} repl{thread.replies.length === 1 ? 'y' : 'ies'}</span>
+                    <span className="text-xs text-amber-400 shrink-0">{thread.replies.length} repl{thread.replies.length === 1 ? 'y' : 'ies'}</span>
                   )}
 
                   {isOpen
@@ -262,10 +262,10 @@ export default function AdminFeedbackPage() {
                           >
                             <div className={`max-w-[80%] rounded-xl px-4 py-3 ${
                               reply.is_admin
-                                ? 'bg-fuchsia-900/40 border border-fuchsia-800/50 text-fuchsia-100'
+                                ? 'bg-amber-900/40 border border-amber-800/50 text-amber-500/10'
                                 : 'bg-gray-800 border border-gray-700 text-gray-200'
                             }`}>
-                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-fuchsia-400' : 'text-gray-400'}`}>
+                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-amber-400' : 'text-gray-400'}`}>
                                 {reply.is_admin ? 'You (Admin)' : (reply.sender_display_name ?? reply.sender_username ?? 'User')}
                               </p>
                               <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
@@ -288,7 +288,7 @@ export default function AdminFeedbackPage() {
                         rows={3}
                         placeholder="Write your reply… (user will be notified by email)"
                         aria-label="Reply to feedback"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-fuchsia-500 resize-none"
+                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                       />
                       <div className="flex items-center justify-between mt-3 gap-3">
                         <MediaUploader
@@ -306,7 +306,7 @@ export default function AdminFeedbackPage() {
                             type="button"
                             onClick={() => sendReply(item.id)}
                             disabled={sending === item.id || !(replyText[item.id] ?? '').trim()}
-                            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50"
                           >
                             {sending === item.id
                               ? <Loader2 className="w-4 h-4 animate-spin" />

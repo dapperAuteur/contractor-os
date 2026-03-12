@@ -141,7 +141,7 @@ export default function CourseAssignmentsPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
   }
@@ -158,14 +158,14 @@ export default function CourseAssignmentsPage() {
             <ChevronLeft className="w-4 h-4" /> Course Editor
           </Link>
           <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <ClipboardList className="w-6 h-6 text-fuchsia-400" /> Assignments
+            <ClipboardList className="w-6 h-6 text-amber-400" /> Assignments
           </h1>
         </div>
         {!creating && (
           <button
             type="button"
             onClick={() => setCreating(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition"
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition"
           >
             <Plus className="w-4 h-4" /> New Assignment
           </button>
@@ -182,7 +182,7 @@ export default function CourseAssignmentsPage() {
               type="text"
               value={newForm.title}
               onChange={(e) => setNewForm((f) => ({ ...f, title: e.target.value }))}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
             />
           </div>
           <div>
@@ -191,7 +191,7 @@ export default function CourseAssignmentsPage() {
               value={newForm.description}
               onChange={(e) => setNewForm((f) => ({ ...f, description: e.target.value }))}
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500 resize-none"
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
           <div>
@@ -200,7 +200,7 @@ export default function CourseAssignmentsPage() {
               type="datetime-local"
               value={newForm.due_date}
               onChange={(e) => setNewForm((f) => ({ ...f, due_date: e.target.value }))}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
             />
           </div>
           <div>
@@ -213,7 +213,7 @@ export default function CourseAssignmentsPage() {
                   onClick={() => setNewForm((f) => ({ ...f, scope: s, module_id: '', lesson_id: '' }))}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition min-h-9 ${
                     newForm.scope === s
-                      ? 'bg-fuchsia-600 text-white'
+                      ? 'bg-amber-600 text-white'
                       : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
                   }`}
                 >
@@ -228,7 +228,7 @@ export default function CourseAssignmentsPage() {
               <select
                 value={newForm.module_id}
                 onChange={(e) => setNewForm((f) => ({ ...f, module_id: e.target.value }))}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
               >
                 <option value="">Select module...</option>
                 {modules.map((m) => (
@@ -244,7 +244,7 @@ export default function CourseAssignmentsPage() {
                 <select
                   value={newForm.module_id}
                   onChange={(e) => setNewForm((f) => ({ ...f, module_id: e.target.value, lesson_id: '' }))}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                 >
                   <option value="">Select module...</option>
                   {modules.map((m) => (
@@ -258,7 +258,7 @@ export default function CourseAssignmentsPage() {
                   <select
                     value={newForm.lesson_id}
                     onChange={(e) => setNewForm((f) => ({ ...f, lesson_id: e.target.value }))}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                   >
                     <option value="">Select lesson...</option>
                     {modules
@@ -278,7 +278,7 @@ export default function CourseAssignmentsPage() {
               type="button"
               onClick={handleCreate}
               disabled={saving}
-              className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               {saving ? 'Saving…' : 'Create'}
@@ -312,7 +312,7 @@ export default function CourseAssignmentsPage() {
                   onClick={() => toggleExpand(a.id)}
                   className="w-full flex items-center gap-4 px-5 py-4 text-left hover:bg-gray-800/50 transition"
                 >
-                  <ClipboardList className="w-4 h-4 text-fuchsia-400 shrink-0" />
+                  <ClipboardList className="w-4 h-4 text-amber-400 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="font-medium text-white text-sm">{a.title}</p>
@@ -380,7 +380,7 @@ export default function CourseAssignmentsPage() {
                             )}
                             {sub.media_url && (
                               <a href={sub.media_url} target="_blank" rel="noreferrer"
-                                className="text-fuchsia-400 text-xs hover:underline mb-3 block">
+                                className="text-amber-400 text-xs hover:underline mb-3 block">
                                 View attached media
                               </a>
                             )}
@@ -395,18 +395,18 @@ export default function CourseAssignmentsPage() {
                                   placeholder="Grade (e.g. A, 90/100, Pass)"
                                   value={gradeForm.grade}
                                   onChange={(e) => setGradeForm((f) => ({ ...f, grade: e.target.value }))}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                                 />
                                 <textarea
                                   placeholder="Feedback for student…"
                                   value={gradeForm.teacher_feedback}
                                   onChange={(e) => setGradeForm((f) => ({ ...f, teacher_feedback: e.target.value }))}
                                   rows={3}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500 resize-none"
+                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500 resize-none"
                                 />
                                 <div className="flex gap-2">
                                   <button type="button" onClick={() => handleGrade(a.id, sub.id)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-semibold hover:bg-fuchsia-700 transition">
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-semibold hover:bg-amber-700 transition">
                                     <CheckCircle className="w-3.5 h-3.5" /> Save Grade
                                   </button>
                                   <button type="button" onClick={() => setGradingId(null)}
@@ -418,7 +418,7 @@ export default function CourseAssignmentsPage() {
                             ) : (
                               <button type="button"
                                 onClick={() => { setGradingId(sub.id); setGradeForm({ grade: sub.grade ?? '', teacher_feedback: sub.teacher_feedback ?? '' }); }}
-                                className="text-xs text-fuchsia-400 hover:text-fuchsia-300 transition mt-1">
+                                className="text-xs text-amber-400 hover:text-amber-300 transition mt-1">
                                 {sub.grade ? 'Edit Grade' : 'Grade Submission'}
                               </button>
                             )}

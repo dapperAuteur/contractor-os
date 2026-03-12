@@ -122,7 +122,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
           type="button"
           onClick={() => setMode('file')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-            mode === 'file' ? 'bg-fuchsia-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            mode === 'file' ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
           }`}
         >
           <Upload className="w-3 h-3" /> CSV File
@@ -131,7 +131,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
           type="button"
           onClick={() => setMode('sheets')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-            mode === 'sheets' ? 'bg-fuchsia-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            mode === 'sheets' ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
           }`}
         >
           <FileSpreadsheet className="w-3 h-3" /> Google Sheets
@@ -168,13 +168,13 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
             value={sheetsUrl}
             onChange={(e) => setSheetsUrl(e.target.value)}
             placeholder="https://docs.google.com/spreadsheets/d/..."
-            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500"
+            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
           />
           <button
             type="button"
             onClick={handleSheetsImport}
             disabled={loading || !sheetsUrl.trim()}
-            className="px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+            className="px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-semibold hover:bg-amber-700 transition disabled:opacity-50"
           >
             {loading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Link2 className="w-3.5 h-3.5" />}
           </button>

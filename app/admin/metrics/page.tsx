@@ -127,7 +127,7 @@ export default function AdminMetricsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin h-10 w-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -137,7 +137,7 @@ export default function AdminMetricsPage() {
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-white flex items-center gap-2">
-          <Activity className="w-7 h-7 text-fuchsia-400" />
+          <Activity className="w-7 h-7 text-amber-400" />
           Metrics Configuration
         </h1>
         <p className="text-gray-400 mt-1">
@@ -215,7 +215,7 @@ export default function AdminMetricsPage() {
       <section>
         <button
           onClick={() => setShowUserPanel((v) => !v)}
-          className="flex items-center gap-2 text-lg font-semibold text-white hover:text-fuchsia-400 transition"
+          className="flex items-center gap-2 text-lg font-semibold text-white hover:text-amber-400 transition"
         >
           Per-User Access Testing
           {showUserPanel ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
@@ -235,11 +235,11 @@ export default function AdminMetricsPage() {
                 value={userQuery}
                 onChange={(e) => setUserQuery(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && searchUsers()}
-                className="flex-1 px-4 py-2 text-sm bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+                className="flex-1 px-4 py-2 text-sm bg-gray-800 border border-gray-700 text-white placeholder-gray-500 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
               <button
                 onClick={searchUsers}
-                className="flex items-center gap-1.5 px-4 py-2 text-sm bg-fuchsia-600 text-white rounded-xl hover:bg-fuchsia-700 transition font-medium"
+                className="flex items-center gap-1.5 px-4 py-2 text-sm bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition font-medium"
               >
                 <Search className="w-4 h-4" />
                 Search
@@ -286,7 +286,7 @@ export default function AdminMetricsPage() {
 
                 {userPermsLoading ? (
                   <div className="p-8 flex justify-center">
-                    <div className="animate-spin h-6 w-6 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+                    <div className="animate-spin h-6 w-6 border-4 border-amber-600 border-t-transparent rounded-full" />
                   </div>
                 ) : (
                   <table className="w-full text-sm">

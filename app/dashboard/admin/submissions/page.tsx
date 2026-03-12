@@ -112,7 +112,7 @@ export default function AdminSubmissionsPage() {
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Inbox className="w-7 h-7 text-fuchsia-600 shrink-0" />
+            <Inbox className="w-7 h-7 text-amber-600 shrink-0" />
             Library Submissions
           </h1>
           <p className="text-gray-600 text-sm mt-1">
@@ -143,7 +143,7 @@ export default function AdminSubmissionsPage() {
             onClick={() => setFilter(val)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
               filter === val
-                ? 'bg-fuchsia-600 text-white border-fuchsia-600'
+                ? 'bg-amber-600 text-white border-amber-600'
                 : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
             }`}
           >
@@ -155,7 +155,7 @@ export default function AdminSubmissionsPage() {
       {/* List */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-fuchsia-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
         </div>
       ) : visible.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
@@ -181,9 +181,9 @@ export default function AdminSubmissionsPage() {
               >
                 <div className="flex items-start gap-3">
                   {/* Icon */}
-                  <div className={`p-2 rounded-lg shrink-0 ${isExercise ? 'bg-fuchsia-50' : 'bg-indigo-50'}`}>
+                  <div className={`p-2 rounded-lg shrink-0 ${isExercise ? 'bg-amber-500/10' : 'bg-indigo-50'}`}>
                     {isExercise
-                      ? <Dumbbell className="w-4 h-4 text-fuchsia-600" />
+                      ? <Dumbbell className="w-4 h-4 text-amber-600" />
                       : <Package className="w-4 h-4 text-indigo-600" />
                     }
                   </div>
@@ -226,7 +226,7 @@ export default function AdminSubmissionsPage() {
                         </span>
                       )}
                       {n.entity_meta.primary_muscles?.slice(0, 3).map((m) => (
-                        <span key={m} className="text-[10px] px-1.5 py-0.5 bg-fuchsia-50 text-fuchsia-700 rounded">
+                        <span key={m} className="text-[10px] px-1.5 py-0.5 bg-amber-500/10 text-amber-700 rounded">
                           {m}
                         </span>
                       ))}
@@ -259,7 +259,7 @@ export default function AdminSubmissionsPage() {
                         <button
                           onClick={() => handlePromote(n)}
                           disabled={!!promoting[n.id]}
-                          className="px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-semibold hover:bg-fuchsia-700 disabled:opacity-50 flex items-center gap-1.5"
+                          className="px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-semibold hover:bg-amber-700 disabled:opacity-50 flex items-center gap-1.5"
                         >
                           {promoting[n.id]
                             ? <><Loader2 className="w-3 h-3 animate-spin" /> Promoting...</>

@@ -94,7 +94,7 @@ export async function POST(request: NextRequest) {
     .join('\n\n---\n\n');
 
   // 3. Build system prompt
-  const systemPrompt = `You are a helpful assistant for JobHub Academy, a learning platform inside JobHub focused on longevity and healthy living.
+  const systemPrompt = `You are a helpful assistant for Work.WitUS Academy, a learning platform inside Work.WitUS focused on longevity and healthy living.
 
 Answer the user's question using ONLY the documentation context provided below. Be concise, friendly, and specific. If the answer involves a page path (like /academy/my-courses), include it. If the context does not contain enough information to answer the question, say so honestly and suggest they contact support.
 

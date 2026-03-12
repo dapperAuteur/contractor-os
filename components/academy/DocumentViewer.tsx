@@ -32,7 +32,7 @@ export default function DocumentViewer({ documents }: DocumentViewerProps) {
   return (
     <div className="mb-6">
       <h3 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-        <FileText className="w-4 h-4 text-fuchsia-400" /> Primary Sources
+        <FileText className="w-4 h-4 text-amber-400" /> Primary Sources
       </h3>
 
       {/* Document cards */}
@@ -42,9 +42,9 @@ export default function DocumentViewer({ documents }: DocumentViewerProps) {
             key={doc.id}
             type="button"
             onClick={() => setSelectedIdx(idx)}
-            className="flex items-start gap-3 p-3 bg-gray-900 border border-gray-800 rounded-xl hover:border-fuchsia-700/50 transition text-left group"
+            className="flex items-start gap-3 p-3 bg-gray-900 border border-gray-800 rounded-xl hover:border-amber-700/50 transition text-left group"
           >
-            <FileText className="w-5 h-5 text-gray-600 group-hover:text-fuchsia-400 transition shrink-0 mt-0.5" />
+            <FileText className="w-5 h-5 text-gray-600 group-hover:text-amber-400 transition shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-200 group-hover:text-white transition truncate">{doc.title}</p>
               {doc.description && (

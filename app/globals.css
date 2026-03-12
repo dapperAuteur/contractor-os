@@ -170,13 +170,13 @@ body {
 }
 
 .blog-content a {
-  color: #0284c7; /* sky-600 */
+  color: #d97706; /* amber-600 */
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .blog-content a:hover {
-  color: #0369a1; /* sky-700 */
+  color: #b45309; /* amber-700 */
 }
 
 .blog-content ul,
@@ -198,19 +198,19 @@ body {
 }
 
 .blog-content blockquote {
-  border-left: 4px solid #0ea5e9; /* sky-500 */
+  border-left: 4px solid #f59e0b; /* amber-500 */
   padding-left: 1rem;
   margin-left: 0;
   margin-bottom: 1.25rem;
-  color: #4b5563; /* gray-600 */
+  color: #a3a3a3; /* neutral-400 */
   font-style: italic;
 }
 
 .blog-content code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.875em;
-  background: #f3f4f6; /* gray-100 */
-  color: #374151; /* gray-700 */
+  background: #262626; /* neutral-800 */
+  color: #e5e5e5; /* neutral-200 */
   padding: 0.15em 0.4em;
   border-radius: 0.25rem;
 }
@@ -241,7 +241,7 @@ body {
 
 .blog-content hr {
   border: none;
-  border-top: 2px solid #e5e7eb; /* gray-200 */
+  border-top: 2px solid #404040; /* neutral-700 */
   margin: 2rem 0;
 }
 
@@ -270,14 +270,14 @@ body {
 .form-input {
   @apply w-full px-4 py-2 rounded-lg border transition-colors;
   @apply bg-white border-gray-300 text-gray-900;
-  @apply focus:ring-2 focus:ring-sky-500 focus:border-transparent focus:outline-none;
+  @apply focus:ring-2 focus:ring-amber-500 focus:border-transparent focus:outline-none;
 }
 
 @media (prefers-color-scheme: dark) {
   .form-input {
     /* Keep background white and text dark for high contrast in dark mode */
     @apply bg-white border-gray-600 text-gray-900;
-    @apply focus:ring-sky-500;
+    @apply focus:ring-amber-500;
   }
 }
 

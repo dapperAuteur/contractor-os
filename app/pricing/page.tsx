@@ -60,7 +60,7 @@ export default function ContractorPricingPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <HardHat size={24} className="text-amber-400" aria-hidden="true" />
-            <span className="text-lg font-bold">JobHub</span>
+            <span className="text-lg font-bold">Work.WitUS</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/login" className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center">
@@ -149,7 +149,7 @@ export default function ContractorPricingPage() {
           {[
             { q: 'Is there a free plan?', a: 'No. We offer a focused paid product with no feature limits. Sign up and subscribe to get started.' },
             { q: 'Can I cancel anytime?', a: 'Yes. Monthly plans cancel immediately. Annual plans run through the billing period.' },
-            { q: 'Do I need another subscription?', a: 'No. JobHub is a standalone product. You can subscribe to it independently.' },
+            { q: 'Do I need another subscription?', a: 'No. Work.WitUS is a standalone product. You can subscribe to it independently.' },
             { q: 'What payment methods are accepted?', a: 'All major credit cards via Stripe. Secure checkout with no card data stored on our servers.' },
             { q: 'Is my data private?', a: 'Yes. Row-level security ensures your data is isolated. Shared features (job board, city guides, union docs) are opt-in only.' },
             { q: 'How do I get help if I have a problem?', a: 'Customer support is managed by a real human — not AI. Reach out through the in-app feedback form or email and a team member will respond personally.' },
@@ -163,7 +163,8 @@ export default function ContractorPricingPage() {
       </section>
 
       <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
       </footer>
     </div>
   );

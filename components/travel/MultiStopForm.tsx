@@ -335,7 +335,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
           <button
             type="button"
             onClick={addStop}
-            className="flex items-center gap-1 text-xs text-sky-600 hover:text-sky-700 font-medium transition"
+            className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-400 font-medium transition"
           >
             <Plus className="w-3.5 h-3.5" />
             Add stop
@@ -349,7 +349,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                 type="checkbox"
                 checked={isRoundTrip}
                 onChange={(e) => setIsRoundTrip(e.target.checked)}
-                className="rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
               />
               <span className="text-xs font-medium text-gray-600">Round trip (return to start)</span>
             </label>
@@ -362,7 +362,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
               }
               if (!d && !t && !c) return null;
               return (
-                <p className="text-xs text-sky-600 mt-1 ml-6">
+                <p className="text-xs text-amber-600 mt-1 ml-6">
                   Return leg auto-added:{' '}
                   {d > 0 && <span>{d.toFixed(1)} mi</span>}
                   {d > 0 && t > 0 && <span> &middot; </span>}
@@ -379,7 +379,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                 type="checkbox"
                 checked={saveTemplate}
                 onChange={(e) => setSaveTemplate(e.target.checked)}
-                className="rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
               />
               <span className="text-xs font-medium text-gray-600">Save as reusable template</span>
             </label>
@@ -408,7 +408,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 bg-sky-600 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50"
+            className="flex-1 bg-amber-600 text-white rounded-xl py-2.5 text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50"
           >
             {saving ? 'Saving...' : isEdit ? 'Update Route' : 'Save Route'}
           </button>

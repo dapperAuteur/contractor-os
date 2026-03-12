@@ -167,7 +167,7 @@ export default function ContactAutocomplete({
           <button
             type="button"
             onClick={handleSave}
-            className="text-xs text-fuchsia-600 hover:underline font-medium"
+            className="text-xs text-amber-600 hover:underline font-medium"
           >
             Save
           </button>

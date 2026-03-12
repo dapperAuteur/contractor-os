@@ -42,7 +42,7 @@ export default function TeachingLayout({ children }: { children: React.ReactNode
                   href={href}
                   className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition ${
                     active
-                      ? 'bg-fuchsia-900/40 text-fuchsia-300'
+                      ? 'bg-amber-900/40 text-amber-300'
                       : 'text-gray-400 hover:bg-gray-800 hover:text-white'
                   }`}
                 >

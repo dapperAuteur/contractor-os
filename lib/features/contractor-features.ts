@@ -1,5 +1,5 @@
 // lib/features/contractor-features.ts
-// Feature page configs for Contractor (JobHub) app.
+// Feature page configs for Contractor (Work.WitUS) app.
 
 export interface FeatureConfig {
   slug: string;

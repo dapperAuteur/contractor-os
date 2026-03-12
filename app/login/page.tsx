@@ -149,7 +149,7 @@ function LoginContent() {
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <HardHat size={24} className="text-amber-400" aria-hidden="true" />
-            <span className="text-lg font-bold">JobHub</span>
+            <span className="text-lg font-bold">Work.WitUS</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/pricing" className="text-sm text-neutral-400 hover:text-neutral-200">Pricing</Link>
@@ -184,7 +184,7 @@ function LoginContent() {
           <>
           <header className="mb-6">
             <h1 className="text-3xl font-bold text-neutral-100">Welcome back</h1>
-            <p className="text-neutral-400 mt-2">Log in to JobHub</p>
+            <p className="text-neutral-400 mt-2">Log in to Work.WitUS</p>
           </header>
 
           {/* Tabs */}
@@ -312,6 +312,15 @@ function LoginContent() {
                     <p className="text-sm mb-4 text-neutral-400">
                       Check your email at <span className="font-medium text-neutral-100">{otpEmail}</span>. You&apos;ll receive either a login link (click to sign in) or a 6-digit code to enter below.
                     </p>
+                    <div className="rounded-lg border border-neutral-700 bg-neutral-800 p-3 mb-4 text-xs text-neutral-400">
+                      <p>
+                        Your login link will come from{' '}
+                        <span className="font-medium text-amber-400">CentenarianOS.com</span>
+                        {' '}&mdash;{' '}
+                        <span className="text-neutral-300">Work.WitUS</span> and CentenarianOS share a unified account system powered by{' '}
+                        <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="font-medium text-amber-400 hover:underline">WitUS.online</a>.
+                      </p>
+                    </div>
                     <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-neutral-300">
                       6-digit code
                     </label>
@@ -355,7 +364,8 @@ function LoginContent() {
       </main>
 
       <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
       </footer>
     </div>
   );

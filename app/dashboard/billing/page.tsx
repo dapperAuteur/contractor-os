@@ -116,7 +116,7 @@ export default function BillingPage() {
       {justPaid && !syncError && (
         <div className="mb-6 flex items-center gap-3 bg-green-50 border border-green-200 text-green-800 rounded-xl px-5 py-4">
           <CheckCircle className="w-5 h-5 shrink-0" />
-          <span className="font-medium">Payment successful — welcome to JobHub!</span>
+          <span className="font-medium">Payment successful — welcome to Work.WitUS!</span>
         </div>
       )}
 
@@ -140,7 +140,7 @@ export default function BillingPage() {
               <span className="inline-flex items-center gap-2 text-lg font-bold text-gray-700">
                 Free
               </span>
-              <p className="text-sm text-gray-500 mt-1">Blog and Recipes access only.</p>
+              <p className="text-sm text-neutral-400 mt-1">Blog and Academy access only.</p>
             </div>
             <Link
               href="/pricing"
@@ -232,7 +232,7 @@ export default function BillingPage() {
             >
               AwesomeWebStore.com
             </a>{' '}
-            to claim your free JobHub shirt.
+            to claim your free Work.WitUS shirt.
           </p>
           <div className="flex items-center gap-3">
             <code className="flex-1 bg-white border border-lime-300 rounded-lg px-4 py-3 text-lg font-mono font-bold text-lime-900 tracking-widest">
@@ -257,7 +257,7 @@ export default function BillingPage() {
             <div>
               <h3 className="font-bold mb-1">Upgrade to Lifetime for $100</h3>
               <p className="text-sm text-gray-400 mb-4">
-                Pay once, own it forever — plus get a free JobHub shirt from AwesomeWebStore.com.
+                Pay once, own it forever — plus get a free Work.WitUS shirt from AwesomeWebStore.com.
               </p>
               <Link
                 href="/pricing"

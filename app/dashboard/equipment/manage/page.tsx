@@ -148,7 +148,7 @@ export default function EquipmentManagePage() {
           </button>
           <button
             onClick={() => setShowAddModal(true)}
-            className="px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 hover:bg-fuchsia-700 rounded-xl transition flex items-center gap-1.5"
+            className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
             Add Item
@@ -269,7 +269,7 @@ export default function EquipmentManagePage() {
             />
             <button
               onClick={handleAddCategory}
-              className="px-3 py-2 text-sm font-medium text-white bg-fuchsia-600 hover:bg-fuchsia-700 rounded-lg transition"
+              className="px-3 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition"
             >
               Add
             </button>

@@ -2,7 +2,7 @@
 // Seeds a realistic contractor account with real venues and sports schedules.
 
 import { SupabaseClient } from '@supabase/supabase-js';
-import { daysAgo } from './seed';
+import { daysAgo, daysFromNow } from './seed';
 
 // ─── Real Venues ──────────────────────────────────────────────────────────
 const VENUES = [
@@ -45,7 +45,21 @@ const VENUE_KB: Record<string, Record<string, string>> = {
   },
 };
 
-// ─── Real Schedules ───────────────────────────────────────────────────────
+// ─── Event Templates (dates are relative to seed time) ──────────────────
+interface GameEventTemplate {
+  client: string;
+  event: string;
+  venue: string;
+  /** Offset in days from today. Negative = past, positive = future, 0 = today. */
+  offsetDays: number;
+  /** Duration in days (0 = single-day event). */
+  durationDays: number;
+  department: string;
+  rate: number;
+  ot_rate: number;
+  union?: string;
+}
+
 interface GameEvent {
   client: string;
   event: string;
@@ -58,59 +72,63 @@ interface GameEvent {
   union?: string;
 }
 
-const EVENTS: GameEvent[] = [
-  // Colts (NFL) — Lucas Oil Stadium
-  { client: 'CBS Sports', event: 'Colts vs Dolphins', venue: 'Lucas Oil Stadium', start: '2025-09-07', end: '2025-09-07', department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
-  { client: 'CBS Sports', event: 'Colts vs Broncos', venue: 'Lucas Oil Stadium', start: '2025-09-14', end: '2025-09-14', department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
-  { client: 'Fox Sports', event: 'Colts vs Raiders', venue: 'Lucas Oil Stadium', start: '2025-10-05', end: '2025-10-05', department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
-  { client: 'ESPN', event: 'Colts vs Cardinals', venue: 'Lucas Oil Stadium', start: '2025-10-12', end: '2025-10-12', department: 'Camera', rate: 70, ot_rate: 105, union: 'IATSE 317' },
-  { client: 'NBC Sports', event: 'Colts vs Texans', venue: 'Lucas Oil Stadium', start: '2025-11-30', end: '2025-11-30', department: 'Camera', rate: 70, ot_rate: 105, union: 'IATSE 317' },
-  { client: 'Fox Sports', event: 'Colts vs 49ers', venue: 'Lucas Oil Stadium', start: '2025-12-22', end: '2025-12-22', department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
+// Spread: ~40% past, ~10% this week, ~50% upcoming
+const EVENT_TEMPLATES: GameEventTemplate[] = [
+  // ── Past events (completed / invoiced / paid) ──
+  { client: 'CBS Sports', event: 'Colts vs Dolphins', venue: 'Lucas Oil Stadium', offsetDays: -60, durationDays: 0, department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
+  { client: 'CBS Sports', event: 'Colts vs Broncos', venue: 'Lucas Oil Stadium', offsetDays: -53, durationDays: 0, department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
+  { client: 'Fox Sports', event: 'Colts vs Raiders', venue: 'Lucas Oil Stadium', offsetDays: -42, durationDays: 0, department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
+  { client: 'ESPN', event: 'Colts vs Cardinals', venue: 'Lucas Oil Stadium', offsetDays: -35, durationDays: 0, department: 'Camera', rate: 70, ot_rate: 105, union: 'IATSE 317' },
+  { client: 'Fox Sports', event: 'Cardinals vs Panthers', venue: 'State Farm Stadium', offsetDays: -46, durationDays: 0, department: 'Camera', rate: 70, ot_rate: 105 },
+  { client: 'ESPN', event: 'Cardinals vs Seahawks (TNF)', venue: 'State Farm Stadium', offsetDays: -39, durationDays: 0, department: 'Camera', rate: 75, ot_rate: 112.5 },
+  { client: 'Big Ten Network', event: 'IU vs North Texas', venue: 'Memorial Stadium', offsetDays: -50, durationDays: 0, department: 'Utility', rate: 45, ot_rate: 67.5 },
+  { client: 'ESPN', event: 'Pacers vs Thunder', venue: 'Gainbridge Fieldhouse', offsetDays: -28, durationDays: 0, department: 'Camera', rate: 55, ot_rate: 82.5, union: 'IATSE 317' },
+  { client: 'NBC Sports', event: 'Pacers vs Warriors', venue: 'Gainbridge Fieldhouse', offsetDays: -21, durationDays: 0, department: 'Camera', rate: 55, ot_rate: 82.5, union: 'IATSE 317' },
+  { client: 'ESPN', event: 'Arizona vs UCLA', venue: 'McKale Center at ALKEME Arena', offsetDays: -14, durationDays: 0, department: 'Camera', rate: 55, ot_rate: 82.5 },
+  { client: 'ESPN+', event: 'ASU vs Gonzaga', venue: 'Desert Financial Arena', offsetDays: -10, durationDays: 0, department: 'Camera', rate: 50, ot_rate: 75 },
 
-  // NFL Combine — Lucas Oil
-  { client: 'NFL Network', event: 'NFL Draft Combine 2026', venue: 'Lucas Oil Stadium', start: '2026-02-23', end: '2026-03-02', department: 'Camera', rate: 75, ot_rate: 112.5, union: 'IATSE 317' },
+  // ── This week (in_progress) ──
+  { client: 'NFL Network', event: 'NFL Draft Combine', venue: 'Lucas Oil Stadium', offsetDays: -1, durationDays: 7, department: 'Camera', rate: 75, ot_rate: 112.5, union: 'IATSE 317' },
+  { client: 'CBS Sports', event: 'B1G Women\'s Basketball Tournament', venue: 'Gainbridge Fieldhouse', offsetDays: 0, durationDays: 4, department: 'Camera', rate: 60, ot_rate: 90, union: 'IATSE 317' },
 
-  // Pacers (NBA) — Gainbridge Fieldhouse
-  { client: 'ESPN', event: 'Pacers vs Thunder', venue: 'Gainbridge Fieldhouse', start: '2025-10-23', end: '2025-10-23', department: 'Camera', rate: 55, ot_rate: 82.5, union: 'IATSE 317' },
-  { client: 'NBC Sports', event: 'Pacers vs Warriors', venue: 'Gainbridge Fieldhouse', start: '2025-11-01', end: '2025-11-01', department: 'Camera', rate: 55, ot_rate: 82.5, union: 'IATSE 317' },
-  { client: 'Fox Sports Indiana', event: 'Pacers vs Kings', venue: 'Gainbridge Fieldhouse', start: '2025-12-08', end: '2025-12-08', department: 'Camera', rate: 50, ot_rate: 75, union: 'IATSE 317' },
-  { client: 'ESPN', event: 'Pacers vs Knicks', venue: 'Gainbridge Fieldhouse', start: '2026-03-13', end: '2026-03-13', department: 'Camera', rate: 55, ot_rate: 82.5, union: 'IATSE 317' },
-
-  // B1G Tourney — Gainbridge
-  { client: 'CBS Sports', event: 'B1G Women\'s Basketball Tournament', venue: 'Gainbridge Fieldhouse', start: '2026-03-04', end: '2026-03-08', department: 'Camera', rate: 60, ot_rate: 90, union: 'IATSE 317' },
-
-  // IU Football — Memorial Stadium
-  { client: 'Big Ten Network', event: 'IU vs North Texas', venue: 'Memorial Stadium', start: '2025-09-06', end: '2025-09-06', department: 'Utility', rate: 45, ot_rate: 67.5 },
-  { client: 'Big Ten Network', event: 'IU vs Michigan State', venue: 'Memorial Stadium', start: '2025-10-18', end: '2025-10-18', department: 'Utility', rate: 45, ot_rate: 67.5 },
-
-  // IU Basketball — Assembly Hall
-  { client: 'Big Ten Network', event: 'IU vs Purdue', venue: 'Simon Skjodt Assembly Hall', start: '2026-01-27', end: '2026-01-27', department: 'Camera', rate: 50, ot_rate: 75 },
-
-  // Cardinals (NFL) — State Farm Stadium
-  { client: 'Fox Sports', event: 'Cardinals vs Panthers', venue: 'State Farm Stadium', start: '2025-09-14', end: '2025-09-14', department: 'Camera', rate: 70, ot_rate: 105 },
-  { client: 'ESPN', event: 'Cardinals vs Seahawks (TNF)', venue: 'State Farm Stadium', start: '2025-09-25', end: '2025-09-25', department: 'Camera', rate: 75, ot_rate: 112.5 },
-  { client: 'Fox Sports', event: 'Cardinals vs Packers', venue: 'State Farm Stadium', start: '2025-10-19', end: '2025-10-19', department: 'Camera', rate: 70, ot_rate: 105 },
-  { client: 'CBS Sports', event: 'Cardinals vs 49ers', venue: 'State Farm Stadium', start: '2025-11-16', end: '2025-11-16', department: 'Camera', rate: 65, ot_rate: 97.5 },
-  { client: 'Fox Sports', event: 'Cardinals vs Rams', venue: 'State Farm Stadium', start: '2025-12-07', end: '2025-12-07', department: 'Camera', rate: 70, ot_rate: 105 },
-
-  // Suns (NBA) — Footprint Center
-  { client: 'ESPN', event: 'Suns vs Lakers', venue: 'Footprint Center', start: '2025-12-23', end: '2025-12-23', department: 'Camera', rate: 60, ot_rate: 90 },
-  { client: 'TNT', event: 'Suns vs Mavericks', venue: 'Footprint Center', start: '2026-02-10', end: '2026-02-10', department: 'Camera', rate: 60, ot_rate: 90 },
-
-  // ASU Football — Mountain America Stadium
-  { client: 'ESPN', event: 'ASU vs TCU', venue: 'Mountain America Stadium', start: '2025-09-26', end: '2025-09-26', department: 'Utility', rate: 45, ot_rate: 67.5 },
-  { client: 'Fox Sports', event: 'ASU vs Arizona (Territorial Cup)', venue: 'Mountain America Stadium', start: '2025-11-28', end: '2025-11-28', department: 'Camera', rate: 55, ot_rate: 82.5 },
-
-  // ASU Basketball — Desert Financial Arena
-  { client: 'ESPN+', event: 'ASU vs Gonzaga', venue: 'Desert Financial Arena', start: '2025-11-14', end: '2025-11-14', department: 'Camera', rate: 50, ot_rate: 75 },
-
-  // Arizona Football — Arizona Stadium (not in venues list, add Tucson)
-  { client: 'ESPN', event: 'Arizona vs BYU', venue: 'Casino Del Sol Stadium', start: '2025-10-11', end: '2025-10-11', department: 'Utility', rate: 45, ot_rate: 67.5 },
-
-  // Arizona Basketball — McKale Center
-  { client: 'ESPN', event: 'Arizona vs UCLA', venue: 'McKale Center at ALKEME Arena', start: '2025-11-14', end: '2025-11-14', department: 'Camera', rate: 55, ot_rate: 82.5 },
-  { client: 'CBS Sports', event: 'Arizona vs Kansas', venue: 'McKale Center at ALKEME Arena', start: '2026-02-28', end: '2026-02-28', department: 'Camera', rate: 60, ot_rate: 90 },
+  // ── Upcoming events (confirmed / assigned) ──
+  { client: 'NBC Sports', event: 'Colts vs Texans', venue: 'Lucas Oil Stadium', offsetDays: 7, durationDays: 0, department: 'Camera', rate: 70, ot_rate: 105, union: 'IATSE 317' },
+  { client: 'Fox Sports', event: 'Colts vs 49ers', venue: 'Lucas Oil Stadium', offsetDays: 14, durationDays: 0, department: 'Camera', rate: 65, ot_rate: 97.5, union: 'IATSE 317' },
+  { client: 'Fox Sports Indiana', event: 'Pacers vs Kings', venue: 'Gainbridge Fieldhouse', offsetDays: 10, durationDays: 0, department: 'Camera', rate: 50, ot_rate: 75, union: 'IATSE 317' },
+  { client: 'ESPN', event: 'Pacers vs Knicks', venue: 'Gainbridge Fieldhouse', offsetDays: 21, durationDays: 0, department: 'Camera', rate: 55, ot_rate: 82.5, union: 'IATSE 317' },
+  { client: 'Big Ten Network', event: 'IU vs Michigan State', venue: 'Memorial Stadium', offsetDays: 18, durationDays: 0, department: 'Utility', rate: 45, ot_rate: 67.5 },
+  { client: 'Big Ten Network', event: 'IU vs Purdue', venue: 'Simon Skjodt Assembly Hall', offsetDays: 28, durationDays: 0, department: 'Camera', rate: 50, ot_rate: 75 },
+  { client: 'Fox Sports', event: 'Cardinals vs Packers', venue: 'State Farm Stadium', offsetDays: 24, durationDays: 0, department: 'Camera', rate: 70, ot_rate: 105 },
+  { client: 'CBS Sports', event: 'Cardinals vs 49ers', venue: 'State Farm Stadium', offsetDays: 35, durationDays: 0, department: 'Camera', rate: 65, ot_rate: 97.5 },
+  { client: 'Fox Sports', event: 'Cardinals vs Rams', venue: 'State Farm Stadium', offsetDays: 42, durationDays: 0, department: 'Camera', rate: 70, ot_rate: 105 },
+  { client: 'ESPN', event: 'Suns vs Lakers', venue: 'Footprint Center', offsetDays: 30, durationDays: 0, department: 'Camera', rate: 60, ot_rate: 90 },
+  { client: 'TNT', event: 'Suns vs Mavericks', venue: 'Footprint Center', offsetDays: 45, durationDays: 0, department: 'Camera', rate: 60, ot_rate: 90 },
+  { client: 'ESPN', event: 'ASU vs TCU', venue: 'Mountain America Stadium', offsetDays: 38, durationDays: 0, department: 'Utility', rate: 45, ot_rate: 67.5 },
+  { client: 'Fox Sports', event: 'ASU vs Arizona (Territorial Cup)', venue: 'Mountain America Stadium', offsetDays: 52, durationDays: 0, department: 'Camera', rate: 55, ot_rate: 82.5 },
+  { client: 'ESPN', event: 'Arizona vs BYU', venue: 'Casino Del Sol Stadium', offsetDays: 56, durationDays: 0, department: 'Utility', rate: 45, ot_rate: 67.5 },
+  { client: 'CBS Sports', event: 'Arizona vs Kansas', venue: 'McKale Center at ALKEME Arena', offsetDays: 60, durationDays: 0, department: 'Camera', rate: 60, ot_rate: 90 },
 ];
+
+/** Convert templates to concrete events with real dates at seed time */
+function buildEvents(): GameEvent[] {
+  return EVENT_TEMPLATES.map((t) => {
+    const start = t.offsetDays >= 0 ? daysFromNow(t.offsetDays) : daysAgo(-t.offsetDays);
+    const end = t.durationDays > 0
+      ? (t.offsetDays >= 0 ? daysFromNow(t.offsetDays + t.durationDays) : daysAgo(-t.offsetDays - t.durationDays))
+      : start;
+    return {
+      client: t.client,
+      event: t.event,
+      venue: t.venue,
+      start,
+      end,
+      department: t.department,
+      rate: t.rate,
+      ot_rate: t.ot_rate,
+      union: t.union,
+    };
+  });
+}
 
 // ─── Fake Contacts ────────────────────────────────────────────────────────
 const CONTACTS = [
@@ -161,7 +179,8 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   const locationMap: Record<string, string> = {};
   for (const l of locations ?? []) locationMap[l.label] = l.id;
 
-  // 3. Create contractor jobs from events
+  // 3. Create contractor jobs from events (dates computed relative to today)
+  const EVENTS = buildEvents();
   const today = new Date().toISOString().split('T')[0];
   const jobInserts = EVENTS.map((e, i) => {
     const isPast = e.end < today;
@@ -296,7 +315,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
       join_date: '2018-06-15',
       dues_amount: 125.00,
       dues_frequency: 'quarterly',
-      next_dues_date: '2026-04-01',
+      next_dues_date: daysFromNow(30),
       initiation_fee: 500.00,
       initiation_paid: true,
       notes: 'Primary local — Indiana. Camera department.',
@@ -310,7 +329,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
       join_date: '2021-03-01',
       dues_amount: 95.00,
       dues_frequency: 'quarterly',
-      next_dues_date: '2026-03-15',
+      next_dues_date: daysFromNow(15),
       initiation_fee: 350.00,
       initiation_paid: true,
       notes: 'Secondary local. Audio/electrical work.',
@@ -324,13 +343,13 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   for (const m of memberships ?? []) membershipMap[`${m.union_name}-${m.local_number}`] = m.id;
 
   const duesInserts = [
-    // IATSE 317 — last 3 quarters paid
-    { membership_id: membershipMap['IATSE-317'], user_id: userId, amount: 125.00, payment_date: '2025-07-01', period_start: '2025-07-01', period_end: '2025-09-30', payment_method: 'check', confirmation_number: 'IA-2025-Q3' },
-    { membership_id: membershipMap['IATSE-317'], user_id: userId, amount: 125.00, payment_date: '2025-10-01', period_start: '2025-10-01', period_end: '2025-12-31', payment_method: 'check', confirmation_number: 'IA-2025-Q4' },
-    { membership_id: membershipMap['IATSE-317'], user_id: userId, amount: 125.00, payment_date: '2026-01-05', period_start: '2026-01-01', period_end: '2026-03-31', payment_method: 'online', confirmation_number: 'IA-2026-Q1' },
+    // IATSE 317 — last 3 quarters paid (relative to today)
+    { membership_id: membershipMap['IATSE-317'], user_id: userId, amount: 125.00, payment_date: daysAgo(180), period_start: daysAgo(180), period_end: daysAgo(90), payment_method: 'check', confirmation_number: 'IA-Q1' },
+    { membership_id: membershipMap['IATSE-317'], user_id: userId, amount: 125.00, payment_date: daysAgo(90), period_start: daysAgo(90), period_end: daysAgo(1), payment_method: 'check', confirmation_number: 'IA-Q2' },
+    { membership_id: membershipMap['IATSE-317'], user_id: userId, amount: 125.00, payment_date: daysAgo(5), period_start: daysAgo(1), period_end: daysFromNow(89), payment_method: 'online', confirmation_number: 'IA-Q3' },
     // IBEW 1220 — last 2 quarters paid
-    { membership_id: membershipMap['IBEW-1220'], user_id: userId, amount: 95.00, payment_date: '2025-09-15', period_start: '2025-10-01', period_end: '2025-12-31', payment_method: 'online', confirmation_number: 'IB-2025-Q4' },
-    { membership_id: membershipMap['IBEW-1220'], user_id: userId, amount: 95.00, payment_date: '2025-12-28', period_start: '2026-01-01', period_end: '2026-03-31', payment_method: 'online', confirmation_number: 'IB-2026-Q1' },
+    { membership_id: membershipMap['IBEW-1220'], user_id: userId, amount: 95.00, payment_date: daysAgo(95), period_start: daysAgo(90), period_end: daysAgo(1), payment_method: 'online', confirmation_number: 'IB-Q1' },
+    { membership_id: membershipMap['IBEW-1220'], user_id: userId, amount: 95.00, payment_date: daysAgo(3), period_start: daysAgo(1), period_end: daysFromNow(89), payment_method: 'online', confirmation_number: 'IB-Q2' },
   ];
   const validDues = duesInserts.filter((d) => d.membership_id);
   if (validDues.length > 0) {
@@ -561,7 +580,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
       user_id: userId, title: 'A Day in the Life of a Freelance Camera Operator',
       slug: 'day-in-the-life-freelance-camera-operator',
       excerpt: 'From call sheets to camera platforms — what a typical game day looks like for a freelance broadcast camera op.',
-      content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'My alarm goes off at 4:30 AM on game day. By 5:15 I\'m loading the truck with my FX9, Sachtler tripod, and a Pelican case full of cables. The call time is usually 6 hours before kickoff for NFL games, 4 hours for NBA. Once I arrive at the venue, I check in at security, grab my credential, and head to my assigned camera position. The next few hours are a blur of cable runs, lens checks, white balance, and rehearsals with the director. When the red light goes on, all that prep pays off. After wrap, I break down my gear, drive home, log my hours in JobHub, and start prepping for the next show.' }] }] },
+      content: { type: 'doc', content: [{ type: 'paragraph', content: [{ type: 'text', text: 'My alarm goes off at 4:30 AM on game day. By 5:15 I\'m loading the truck with my FX9, Sachtler tripod, and a Pelican case full of cables. The call time is usually 6 hours before kickoff for NFL games, 4 hours for NBA. Once I arrive at the venue, I check in at security, grab my credential, and head to my assigned camera position. The next few hours are a blur of cable runs, lens checks, white balance, and rehearsals with the director. When the red light goes on, all that prep pays off. After wrap, I break down my gear, drive home, log my hours in Work.WitUS, and start prepping for the next show.' }] }] },
       visibility: 'public', tags: ['freelance', 'camera', 'broadcast', 'behind-the-scenes'],
       published_at: new Date(Date.now() - 7 * 86400000).toISOString(),
     },

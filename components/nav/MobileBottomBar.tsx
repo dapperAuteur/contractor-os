@@ -78,7 +78,7 @@ export default function MobileBottomBar({
                 aria-label={label}
                 onClick={() => handleTabPress(id)}
                 className={`flex-1 flex flex-col items-center justify-center gap-0.5 transition-colors ${
-                  isActive ? 'text-fuchsia-600' : 'text-gray-400 hover:text-gray-600'
+                  isActive ? 'text-amber-600' : 'text-gray-400 hover:text-gray-600'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -106,7 +106,7 @@ export default function MobileBottomBar({
                   key={item.href}
                   href={item.href}
                   className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
-                    active ? 'text-fuchsia-700 bg-fuchsia-50' : 'text-gray-700 hover:bg-gray-50'
+                    active ? 'text-amber-700 bg-amber-500/10' : 'text-gray-700 hover:bg-gray-50'
                   }`}
                   onClick={() => setOpenSheet(null)}
                   aria-current={active ? 'page' : undefined}

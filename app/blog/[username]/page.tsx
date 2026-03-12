@@ -31,18 +31,18 @@ export default async function UserBlogPage({ params }: Props) {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
       {/* Author header */}
-      <header className="mb-10 pb-8 border-b border-gray-200">
-        <h1 className="text-3xl font-bold text-gray-900">
+      <header className="mb-10 pb-8 border-b border-neutral-800">
+        <h1 className="text-3xl font-bold text-neutral-100">
           {p.display_name || p.username}&apos;s blog
         </h1>
         {p.bio && (
-          <p className="mt-2 text-gray-600 max-w-xl">{p.bio}</p>
+          <p className="mt-2 text-neutral-400 max-w-xl">{p.bio}</p>
         )}
       </header>
 
       {/* Post grid */}
       {!posts?.length ? (
-        <p className="text-gray-400 text-center py-16">No posts published yet.</p>
+        <p className="text-neutral-500 text-center py-16">No posts published yet.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {posts.map((post) => (

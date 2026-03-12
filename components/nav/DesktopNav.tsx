@@ -81,7 +81,7 @@ export default function DesktopNav({
       {/* Skip to content — visually hidden, accessible on focus */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-3 focus:py-2 focus:bg-fuchsia-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-100 focus:px-3 focus:py-2 focus:bg-amber-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-medium"
       >
         Skip to content
       </a>
@@ -91,7 +91,7 @@ export default function DesktopNav({
         <div className="hidden lg:flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="text-xl font-bold text-gray-900 shrink-0 mr-4">
-            JobHub
+            Work.WitUS
           </Link>
 
           {/* Group dropdown buttons */}
@@ -105,7 +105,7 @@ export default function DesktopNav({
                     onClick={() => setOpenGroup(isOpen ? null : group.id)}
                     className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition ${
                       active
-                        ? 'text-fuchsia-700 bg-fuchsia-50'
+                        ? 'text-amber-700 bg-amber-500/10'
                         : 'text-gray-700 hover:bg-gray-100'
                     }`}
                     aria-expanded={isOpen}
@@ -131,7 +131,7 @@ export default function DesktopNav({
                             href={item.href}
                             className={`flex items-center gap-2.5 px-3 py-2 text-sm transition ${
                               active
-                                ? 'bg-fuchsia-50 text-fuchsia-700'
+                                ? 'bg-amber-500/10 text-amber-700'
                                 : 'text-gray-700 hover:bg-gray-50'
                             }`}
                             role="menuitem"
@@ -180,7 +180,7 @@ export default function DesktopNav({
             {isAdmin && (
               <Link
                 href="/admin"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-fuchsia-400 rounded-lg text-xs font-bold hover:bg-gray-800 transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-900 text-amber-400 rounded-lg text-xs font-bold hover:bg-gray-800 transition"
               >
                 <Shield className="w-3 h-3" />
                 Admin
@@ -191,7 +191,7 @@ export default function DesktopNav({
             {!subLoading && !hasAccess && (
               <Link
                 href="/pricing"
-                className="flex items-center gap-1 px-3 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-bold hover:bg-fuchsia-700 transition"
+                className="flex items-center gap-1 px-3 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-bold hover:bg-amber-700 transition"
               >
                 <Zap className="w-3 h-3" />
                 Upgrade
@@ -206,7 +206,7 @@ export default function DesktopNav({
             >
               <Bell className="w-5 h-5" />
               {unreadMessages > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-fuchsia-600 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-amber-600 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                   {unreadMessages > 9 ? '9+' : unreadMessages}
                 </span>
               )}
@@ -297,14 +297,14 @@ export default function DesktopNav({
               <Menu className="w-5 h-5" />
             </button>
             <Link href="/" className="text-xl font-bold text-gray-900">
-              JobHub
+              Work.WitUS
             </Link>
           </div>
           <div className="flex items-center gap-2">
             {!subLoading && !hasAccess && (
               <Link
                 href="/pricing"
-                className="flex items-center gap-1 px-2 py-1.5 bg-fuchsia-600 text-white rounded-lg text-xs font-bold hover:bg-fuchsia-700 transition"
+                className="flex items-center gap-1 px-2 py-1.5 bg-amber-600 text-white rounded-lg text-xs font-bold hover:bg-amber-700 transition"
               >
                 <Zap className="w-3 h-3" />
                 Upgrade
@@ -317,7 +317,7 @@ export default function DesktopNav({
             >
               <Bell className="w-5 h-5" />
               {unreadMessages > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-fuchsia-600 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-amber-600 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                   {unreadMessages > 9 ? '9+' : unreadMessages}
                 </span>
               )}

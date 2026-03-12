@@ -68,7 +68,7 @@ export default function AdminCoursesPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -80,7 +80,7 @@ export default function AdminCoursesPage() {
       </Link>
 
       <div className="flex items-center gap-3 mb-1">
-        <BookOpen className="w-6 h-6 text-fuchsia-400" />
+        <BookOpen className="w-6 h-6 text-amber-400" />
         <h1 className="text-2xl font-bold text-white">Course Management</h1>
       </div>
       <p className="text-gray-400 text-sm mb-8">

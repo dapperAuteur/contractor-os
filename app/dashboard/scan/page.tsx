@@ -9,7 +9,7 @@ import { Camera, ScanLine, ExternalLink } from 'lucide-react';
 import ScanButton from '@/components/scan/ScanButton';
 import ScanResultRouter from '@/components/scan/ScanResultRouter';
 import type { ScanResult } from '@/components/scan/ScanButton';
-import type { ReceiptExtraction, RecipeExtraction, MaintenanceExtraction } from '@/lib/ocr/extractors';
+import type { ReceiptExtraction, MaintenanceExtraction } from '@/lib/ocr/extractors';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 export default function ScanPage() {
@@ -96,48 +96,6 @@ export default function ScanPage() {
         setScanResult(null);
       } catch {
         setError('Failed to create transaction');
-      } finally {
-        setCreating(false);
-      }
-    },
-    [],
-  );
-
-  const handleCreateRecipe = useCallback(
-    async (data: RecipeExtraction) => {
-      setCreating(true);
-      try {
-        const res = await offlineFetch('/api/recipes', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            title: data.title || 'Scanned Recipe',
-            description: data.author ? `From ${data.author}` : undefined,
-            visibility: 'draft',
-            servings: data.servings,
-            prep_time_minutes: data.prep_time_minutes,
-            cook_time_minutes: data.cook_time_minutes,
-            source_url: null,
-            ingredients: data.ingredients?.map((ing, i) => ({
-              name: ing.name,
-              quantity: ing.quantity,
-              unit: ing.unit,
-              sort_order: i,
-            })),
-          }),
-        });
-
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({ error: 'Failed to create recipe' }));
-          setError(err.error);
-          return;
-        }
-
-        const result = await res.json();
-        setSuccess({ type: 'Recipe', href: `/dashboard/recipes/${result.id}/edit` });
-        setScanResult(null);
-      } catch {
-        setError('Failed to create recipe');
       } finally {
         setCreating(false);
       }
@@ -244,7 +202,6 @@ export default function ScanPage() {
           <ScanResultRouter
             result={scanResult}
             onCreateTransaction={handleCreateTransaction}
-            onCreateRecipe={handleCreateRecipe}
             onCreateMaintenance={handleCreateMaintenance}
             onCreateJob={handleCreateJob}
             onCreateInvoice={handleCreateInvoice}

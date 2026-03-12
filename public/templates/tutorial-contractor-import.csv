@@ -1,7 +1,7 @@
 module_title,module_order,lesson_order,title,lesson_type,duration_seconds,is_free_preview,content_url,text_content,content_format,audio_chapters,transcript_content,map_content,documents,podcast_links,quiz_content
-Getting Started,1,1,Welcome to JobHub,text,120,true,,"# Lesson 01: Welcome to JobHub
+Getting Started,1,1,Welcome to Work.WitUS,text,120,true,,"# Lesson 01: Welcome to Work.WitUS
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Getting Started
 **Duration:** ~5 min
 **Lesson type:** text / video
@@ -12,7 +12,7 @@ Getting Started,1,1,Welcome to JobHub,text,120,true,,"# Lesson 01: Welcome to Jo
 
 ## Narrator Script
 
-Welcome to the Contractor Job Hub Guide — a free tutorial for the JobHub module inside CentenarianOS.
+Welcome to the Contractor Work.WitUS Guide — a free tutorial for the Work.WitUS platform.
 
 If you're an independent contractor in broadcast, production, or live events, this module was built for you. By the end of this course, you'll know how to track every job, log your hours, generate invoices, manage rate cards, build venue knowledge bases, track union memberships and dues, and compare job profitability.
 
@@ -20,9 +20,9 @@ Let's start with a quick tour of the Contractor Hub dashboard.
 
 ---
 
-### What is JobHub?
+### What is Work.WitUS?
 
-JobHub is the central workspace for managing your freelance career. It lives at /dashboard/contractor and is also available as a standalone app at contractor.centenarianos.com.
+Work.WitUS is the central workspace for managing your freelance career. It lives at /dashboard/contractor and is also available as a standalone app at Work.WitUS.Online.
 
 The hub has several core areas:
 
@@ -52,7 +52,7 @@ After that, you'll have five topic areas to explore in any order: Jobs & Time En
 ",markdown,,,,,,
 Getting Started,1,2,Creating Your First Job,text,120,true,,"# Lesson 02: Creating Your First Job
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Jobs & Time Entries
 **Duration:** ~6 min
 **Lesson type:** text / video
@@ -63,7 +63,7 @@ Getting Started,1,2,Creating Your First Job,text,120,true,,"# Lesson 02: Creatin
 
 ## Narrator Script
 
-Jobs are the backbone of JobHub. Every time you get booked for a gig, you create a job record. Everything else — time entries, invoices, expenses, mileage — links back to that job.
+Jobs are the backbone of Work.WitUS. Every time you get booked for a gig, you create a job record. Everything else — time entries, invoices, expenses, mileage — links back to that job.
 
 ---
 
@@ -116,7 +116,7 @@ You can update the status from the job detail page at any time.
 ",markdown,,,,,,
 Jobs & Time Entries,2,3,Time Entries and Hour Logging,text,120,true,,"# Lesson 03: Time Entries and Hour Logging
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Jobs & Time Entries
 **Duration:** ~5 min
 **Lesson type:** text / video
@@ -173,7 +173,7 @@ For events like the NFL Combine (7+ days), you'll have one entry per work day. T
 ",markdown,,,,,,
 Jobs & Time Entries,2,4,Job Documents and Uploads,text,120,true,,"# Lesson 04: Job Documents and Uploads
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Jobs & Time Entries
 **Duration:** ~4 min
 **Lesson type:** text / video
@@ -220,7 +220,7 @@ Toggle ""Shared"" on any document to make it visible to other contractors who've
 ",markdown,,,,,,
 Jobs & Time Entries,2,5,Generating Invoices from Time Entries,text,120,true,,"# Lesson 05: Generating Invoices from Time Entries
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Invoices & Rate Cards
 **Duration:** ~6 min
 **Lesson type:** text / video
@@ -231,7 +231,7 @@ Jobs & Time Entries,2,5,Generating Invoices from Time Entries,text,120,true,,"# 
 
 ## Narrator Script
 
-Getting paid starts with a clean invoice. JobHub can generate invoices automatically from your time entries — no spreadsheet needed.
+Getting paid starts with a clean invoice. Work.WitUS can generate invoices automatically from your time entries — no spreadsheet needed.
 
 ---
 
@@ -282,7 +282,7 @@ Generated invoices live in the main Finance → Invoices module. When you mark a
 ",markdown,,,,,,
 Invoices & Rate Cards,3,6,Rate Cards,text,120,true,,"# Lesson 06: Rate Cards
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Invoices & Rate Cards
 **Duration:** ~4 min
 **Lesson type:** text / video
@@ -331,7 +331,7 @@ When creating a new job, select a rate card from the dropdown. All rate fields a
 ",markdown,,,,,,
 Invoices & Rate Cards,3,7,Pay Stub Scanning,text,120,true,,"# Lesson 07: Pay Stub Scanning
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Invoices & Rate Cards
 **Duration:** ~4 min
 **Lesson type:** text / video
@@ -342,7 +342,7 @@ Invoices & Rate Cards,3,7,Pay Stub Scanning,text,120,true,,"# Lesson 07: Pay Stu
 
 ## Narrator Script
 
-Sometimes you receive a pay stub or earnings statement instead of generating your own invoice. JobHub can scan it and extract the data for you.
+Sometimes you receive a pay stub or earnings statement instead of generating your own invoice. Work.WitUS can scan it and extract the data for you.
 
 ---
 
@@ -377,7 +377,7 @@ This uses the same AI-powered scanning engine as the Smart Scan module — the s
 ",markdown,,,,,,
 Invoices & Rate Cards,3,8,Venue Knowledge Base,text,120,true,,"# Lesson 08: Venue Knowledge Base
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Venues & City Guides
 **Duration:** ~5 min
 **Lesson type:** text / video
@@ -427,7 +427,7 @@ Toggle ""Shared"" on a venue to make your knowledge base entries visible to othe
 ",markdown,,,,,,
 Venues & City Guides,4,9,City Guides,text,120,true,,"# Lesson 09: City Guides
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Venues & City Guides
 **Duration:** ~4 min
 **Lesson type:** text / video
@@ -474,7 +474,7 @@ Toggle ""Shared"" on your city guide to make it visible to all platform users. O
 ",markdown,,,,,,
 Venues & City Guides,4,10,Union Contract Chat (RAG),text,120,true,,"# Lesson 10: Union Contract Chat (RAG)
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Union Tools
 **Duration:** ~6 min
 **Lesson type:** text / video
@@ -527,7 +527,7 @@ You can submit documents to the platform admin for inclusion in a shared knowled
 ",markdown,,,,,,
 Union Tools,5,11,Union Memberships and Dues,text,120,true,,"# Lesson 11: Union Memberships and Dues
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Union Tools
 **Duration:** ~5 min
 **Lesson type:** text / video
@@ -586,7 +586,7 @@ The Dues Summary view shows: total paid YTD across all unions, overdue membershi
 ",markdown,,,,,,
 Union Tools,5,12,Inviting Fellow Contractors,text,120,true,,"# Lesson 12: Inviting Fellow Contractors
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Union Tools
 **Duration:** ~3 min
 **Lesson type:** text / video
@@ -597,7 +597,7 @@ Union Tools,5,12,Inviting Fellow Contractors,text,120,true,,"# Lesson 12: Inviti
 
 ## Narrator Script
 
-JobHub is more useful when your crew is on it too. The invite system lets you bring in fellow contractors with a simple email.
+Work.WitUS is more useful when your crew is on it too. The invite system lets you bring in fellow contractors with a simple email.
 
 ---
 
@@ -615,7 +615,7 @@ Each contractor can send up to 10 invites. The invite list shows the status of e
 
 ### Why Invite?
 
-When your crew is on JobHub:
+When your crew is on Work.WitUS:
 - Share venue knowledge base entries
 - Contribute to city guides together
 - Post jobs on the board when you need a replacement
@@ -631,7 +631,7 @@ When your crew is on JobHub:
 ",markdown,,,,,,
 Union Tools,5,13,Reports and 1099 Tracking,text,120,true,,"# Lesson 13: Reports and 1099 Tracking
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Reports & Collaboration
 **Duration:** ~5 min
 **Lesson type:** text / video
@@ -677,7 +677,7 @@ Export any report view as CSV for your accountant or tax preparation software.
 ",markdown,,,,,,
 Reports & Collaboration,6,14,Job Board and Job Comparison,text,120,true,,"# Lesson 14: Job Board and Job Comparison
 
-**Course:** Contractor Job Hub Guide
+**Course:** Contractor Work.WitUS Guide
 **Module:** Reports & Collaboration
 **Duration:** ~5 min
 **Lesson type:** text / video

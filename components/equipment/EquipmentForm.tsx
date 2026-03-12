@@ -221,7 +221,7 @@ export default function EquipmentForm({
           <span className="text-gray-400 font-normal ml-1">— optional, pre-fills name, brand &amp; model</span>
         </label>
         {form.catalog_id && linkedCatalogLabel ? (
-          <div className="flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-lg px-3 py-2 text-sm text-sky-700">
+          <div className="flex items-center gap-2 bg-amber-900/20 border border-amber-800 rounded-lg px-3 py-2 text-sm text-amber-400">
             <span className="flex-1 truncate">From catalog: {linkedCatalogLabel}</span>
             <button
               type="button"
@@ -229,7 +229,7 @@ export default function EquipmentForm({
               aria-label="Unlink catalog item"
               className="shrink-0"
             >
-              <X className="w-4 h-4 text-sky-400 hover:text-sky-600" />
+              <X className="w-4 h-4 text-amber-400 hover:text-amber-600" />
             </button>
           </div>
         ) : (
@@ -485,7 +485,7 @@ export default function EquipmentForm({
         <button
           type="submit"
           disabled={saving || !form.name.trim()}
-          className="px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 hover:bg-fuchsia-700 rounded-lg transition disabled:opacity-50"
+          className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition disabled:opacity-50"
         >
           {saving ? 'Saving...' : submitLabel}
         </button>

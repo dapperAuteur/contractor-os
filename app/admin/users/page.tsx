@@ -27,15 +27,15 @@ type SortDir = 'asc' | 'desc';
 
 const STATUS_BADGE: Record<string, string> = {
   free: 'bg-gray-800 text-gray-300',
-  monthly: 'bg-fuchsia-900/50 text-fuchsia-300',
+  monthly: 'bg-amber-900/50 text-amber-300',
   lifetime: 'bg-lime-900/50 text-lime-300',
 };
 
 function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
   if (!active) return <ChevronUp className="w-3 h-3 opacity-20" />;
   return dir === 'asc'
-    ? <ChevronUp className="w-3 h-3 text-fuchsia-400" />
-    : <ChevronDown className="w-3 h-3 text-fuchsia-400" />;
+    ? <ChevronUp className="w-3 h-3 text-amber-400" />
+    : <ChevronDown className="w-3 h-3 text-amber-400" />;
 }
 
 // Inner component — uses useSearchParams, must be inside <Suspense>
@@ -122,14 +122,14 @@ function AdminUsersContent() {
             aria-label="Search users by email or username"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full bg-gray-900 border border-gray-700 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500"
+            className="w-full bg-gray-900 border border-gray-700 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
           />
         </div>
         {(['all', 'free', 'monthly', 'lifetime', 'promo_pending'] as const).map((f) => (
           <button
             key={f}
             onClick={() => { setFilter(f); setPage(1); }}
-            className={`px-3 py-2 rounded-lg text-xs font-semibold transition ${filter === f ? 'bg-fuchsia-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+            className={`px-3 py-2 rounded-lg text-xs font-semibold transition ${filter === f ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
           >
             {f === 'promo_pending' ? '⚠ No promo code' : f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
@@ -138,7 +138,7 @@ function AdminUsersContent() {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+          <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
         </div>
       ) : (
         <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden overflow-x-auto">
@@ -219,7 +219,7 @@ export default function AdminUsersPage() {
     <Suspense
       fallback={
         <div className="flex justify-center py-20">
-          <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+          <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
         </div>
       }
     >

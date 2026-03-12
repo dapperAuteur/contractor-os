@@ -139,7 +139,7 @@ export default function DataHubPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-          <Database className="w-6 h-6 text-fuchsia-600" />
+          <Database className="w-6 h-6 text-amber-600" />
           Data Hub
         </h1>
         <p className="text-sm text-gray-500 mt-1">
@@ -148,8 +148,8 @@ export default function DataHubPage() {
       </div>
 
       {/* Instructions */}
-      <div className="bg-fuchsia-50 border border-fuchsia-200 rounded-xl p-4 text-sm text-gray-700 space-y-2">
-        <p className="font-medium text-fuchsia-900">How it works</p>
+      <div className="bg-amber-500/10 border border-amber-200 rounded-xl p-4 text-sm text-gray-700 space-y-2">
+        <p className="font-medium text-amber-900">How it works</p>
         <ul className="list-disc list-inside space-y-1 text-gray-600">
           <li><strong>Export</strong> — click the Export button to download all your data as a CSV file. Add date range or filter parameters to the URL for filtered exports.</li>
           <li><strong>Import</strong> — download the CSV template, fill in your data, then upload it on the import page. Preview your data before confirming.</li>
@@ -164,7 +164,7 @@ export default function DataHubPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-fuchsia-50 rounded-xl flex items-center justify-center text-fuchsia-600">
+              <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600">
                 <Calendar className="w-5 h-5" />
               </div>
               <div>
@@ -175,7 +175,7 @@ export default function DataHubPage() {
             <div className="flex items-center gap-2 flex-wrap">
               <Link
                 href="/dashboard/data/import/google-calendar"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-fuchsia-50 text-fuchsia-700 rounded-lg text-xs font-semibold hover:bg-fuchsia-100 transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 text-amber-700 rounded-lg text-xs font-semibold hover:bg-amber-500/10 transition"
               >
                 <Upload className="w-3 h-3" />
                 Import .ics
@@ -196,7 +196,7 @@ export default function DataHubPage() {
             className="bg-white border border-gray-200 rounded-xl p-5 space-y-3"
           >
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-fuchsia-50 rounded-xl flex items-center justify-center text-fuchsia-600">
+              <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600">
                 {mod.icon}
               </div>
               <div>
@@ -208,7 +208,7 @@ export default function DataHubPage() {
             <div className="flex items-center gap-2 flex-wrap">
               <Link
                 href={mod.importHref}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-fuchsia-50 text-fuchsia-700 rounded-lg text-xs font-semibold hover:bg-fuchsia-100 transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 text-amber-700 rounded-lg text-xs font-semibold hover:bg-amber-500/10 transition"
               >
                 <Upload className="w-3 h-3" />
                 Import

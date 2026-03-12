@@ -46,7 +46,7 @@ export default function TeachingStudentsPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -65,7 +65,7 @@ export default function TeachingStudentsPage() {
         placeholder="Search by name, email, or course…"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        className="w-full mb-6 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-fuchsia-500"
+        className="w-full mb-6 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-amber-500"
       />
 
       {filtered.length === 0 ? (
@@ -98,7 +98,7 @@ export default function TeachingStudentsPage() {
                     {s.email && (
                       <a
                         href={`mailto:${s.email}`}
-                        className="flex items-center gap-1 text-gray-500 hover:text-fuchsia-400 text-xs mt-0.5 transition"
+                        className="flex items-center gap-1 text-gray-500 hover:text-amber-400 text-xs mt-0.5 transition"
                       >
                         <Mail className="w-3 h-3" />
                         {s.email}

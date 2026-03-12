@@ -12,7 +12,7 @@ import { NAV_GROUPS } from '@/components/nav/NavConfig';
 interface Invite {
   id: string;
   email: string;
-  product: 'centos' | 'contractor' | 'lister';
+  product: 'witus' | 'contractor' | 'lister';
   access_type: 'trial' | 'lifetime';
   expires_at: string | null;
   is_active: boolean;
@@ -29,7 +29,7 @@ interface Invite {
 
 const MODULE_GROUPS = [
   {
-    label: 'CentOS',
+    label: 'Work.WitUS',
     items: NAV_GROUPS.filter((g) => ['operate', 'health', 'life'].includes(g.id))
       .flatMap((g) => g.items.filter((i) => i.paid && !i.adminOnly).map((i) => ({ label: i.label, href: i.href }))),
   },
@@ -54,7 +54,7 @@ function fmtDate(d: string | null) {
 
 const EMPTY_FORM = {
   email: '',
-  product: 'centos' as 'centos' | 'contractor' | 'lister',
+  product: 'witus' as 'witus' | 'contractor' | 'lister',
   access_type: 'trial' as 'trial' | 'lifetime',
   expires_at: '',
   all_modules: true,
@@ -96,7 +96,7 @@ export default function AdminInvitesPage() {
     setEditId(invite.id);
     setForm({
       email: invite.email,
-      product: invite.product ?? 'centos',
+      product: invite.product ?? 'witus',
       access_type: invite.access_type,
       expires_at: invite.expires_at ? invite.expires_at.slice(0, 10) : '',
       all_modules: invite.allowed_modules === null,
@@ -259,7 +259,8 @@ export default function AdminInvitesPage() {
                             : inv.product === 'lister' ? 'bg-indigo-100 text-indigo-700'
                             : 'bg-amber-100 text-amber-700'
                         }`}>
-                          {inv.product === 'centos' ? 'CentOS' : inv.product === 'contractor' ? 'Contractor' : 'Lister'}
+                          {inv.product === 'witus' ? 'Work.WitUS' : inv.product === 'contractor' ? 'Contractor' : 'Lister'}
+
                         </span>
                       </td>
                       <td className="px-4 py-3">
@@ -374,7 +375,7 @@ export default function AdminInvitesPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Product</label>
               <div className="flex gap-2">
                 {([
-                  { value: 'centos', label: 'CentOS' },
+                  { value: 'witus', label: 'Work.WitUS' },
                   { value: 'contractor', label: 'Contractor' },
                   { value: 'lister', label: 'Lister' },
                 ] as const).map((p) => (
@@ -396,9 +397,9 @@ export default function AdminInvitesPage() {
                 ))}
               </div>
               <p className="text-xs text-gray-400 mt-1">
-                {form.product === 'contractor' ? 'Invite link redirects to contractor.jobhub.com'
-                  : form.product === 'lister' ? 'Invite link redirects to lister.jobhub.com'
-                  : 'Invite link redirects to jobhub.com'}
+                {form.product === 'contractor' ? 'Invite link redirects to Work.WitUS.Online'
+                  : form.product === 'lister' ? 'Invite link redirects to Work.WitUS.Online'
+                  : 'Invite link redirects to Work.WitUS.Online'}
               </p>
             </div>
 

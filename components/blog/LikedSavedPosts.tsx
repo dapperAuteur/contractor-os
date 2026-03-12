@@ -98,7 +98,7 @@ export default function LikedSavedPosts({ userId, mode }: Props) {
   if (loading) {
     return (
       <div className="flex justify-center py-12">
-        <div className="animate-spin h-6 w-6 border-4 border-sky-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-6 w-6 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -124,7 +124,7 @@ export default function LikedSavedPosts({ userId, mode }: Props) {
       {posts.map((post) => (
         <div
           key={post.post_id}
-          className="flex items-start justify-between gap-4 p-4 bg-white border border-gray-200 rounded-xl hover:border-sky-200 hover:bg-sky-50 transition"
+          className="flex items-start justify-between gap-4 p-4 bg-neutral-900 border border-neutral-800 rounded-xl hover:border-amber-700 hover:bg-amber-500/10 transition"
         >
           <div className="min-w-0 flex-1">
             <p className="font-medium text-gray-900 truncate">{post.title}</p>
@@ -145,7 +145,7 @@ export default function LikedSavedPosts({ userId, mode }: Props) {
             href={`/blog/${post.author_username}/${post.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 text-gray-400 hover:text-sky-600 transition"
+            className="shrink-0 text-gray-400 hover:text-amber-400 transition"
             title="Open post"
           >
             <ExternalLink className="w-4 h-4" />

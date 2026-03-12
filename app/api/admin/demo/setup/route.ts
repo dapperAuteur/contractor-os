@@ -3,10 +3,10 @@
 // then seeds their data. Returns the user UUIDs so you can add them to env vars.
 //
 // Usage (run once after deploy):
-//   curl -X POST https://jobhub.com/api/admin/demo/setup \
+//   curl -X POST https://work.witus.online/api/admin/demo/setup \
 //     -H "Authorization: Bearer YOUR_CRON_SECRET" \
 //     -H "Content-Type: application/json" \
-//     -d '{"tutorial_email":"tutorial@jobhub.com","tutorial_password":"YourPassword1!","visitor_email":"demo@jobhub.com","visitor_password":"YourPassword2!"}'
+//     -d '{"tutorial_email":"tutorial@centenarianos.com","tutorial_password":"YourPassword1!","visitor_email":"demo@centenarianos.com","visitor_password":"YourPassword2!"}'
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
