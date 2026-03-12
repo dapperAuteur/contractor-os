@@ -3,10 +3,10 @@
 
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Analytics } from "@vercel/analytics/next"
 import { Inter } from 'next/font/google';
 import './globals.css';
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration';
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ['latin'] });
 

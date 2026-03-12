@@ -3,10 +3,6 @@
     {
       "path": "/api/admin/demo/reset",
       "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/notifications",
-      "schedule": "*/15 * * * *"
     }
   ]
 }

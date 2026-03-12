@@ -11,7 +11,7 @@ import {
   Package, ScanLine, Database, Settings, Bell, LogOut,
   UserCircle, ChevronDown, Menu, X, MessageCircle,
   BarChart3, ArrowUpDown, Users, Building2, MapPin, Scale, Inbox, IdCard, UserPlus,
-  Sparkles, RotateCcw,
+  Sparkles, RotateCcw, Shield,
 } from 'lucide-react';
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
 
@@ -179,11 +179,12 @@ export interface ContractorNavProps {
   username: string | null;
   unreadMessages: number;
   onLogout: () => void;
+  isAdmin?: boolean;
   /** Set of module slugs whose tours are still 'available' (show sparkle badge) */
   untoured?: Set<string>;
 }
 
-export default function ContractorNav({ username, unreadMessages, onLogout, untoured }: ContractorNavProps) {
+export default function ContractorNav({ username, unreadMessages, onLogout, isAdmin, untoured }: ContractorNavProps) {
   const pathname = usePathname();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -253,6 +254,19 @@ export default function ContractorNav({ username, unreadMessages, onLogout, unto
 
             {/* Right actions */}
             <div className="flex items-center gap-1 pl-4 border-l border-neutral-800 ml-auto">
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className={`flex items-center justify-center min-h-11 min-w-11 rounded-lg transition ${
+                    pathname.startsWith('/admin')
+                      ? 'text-amber-400 bg-amber-400/10'
+                      : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800'
+                  }`}
+                  aria-label="Admin Panel"
+                >
+                  <Shield className="w-5 h-5" aria-hidden="true" />
+                </Link>
+              )}
               <Link
                 href="/dashboard/messages"
                 className="relative flex items-center justify-center min-h-11 min-w-11 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition"
@@ -470,6 +484,11 @@ export default function ContractorNav({ username, unreadMessages, onLogout, unto
               <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
                 <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> Feedback
               </Link>
+              {isAdmin && (
+                <Link href="/admin" className={`flex items-center gap-3 px-4 py-2.5 text-sm transition ${pathname.startsWith('/admin') ? 'text-amber-400 bg-amber-400/10' : 'text-neutral-300 hover:bg-neutral-800'}`}>
+                  <Shield className="w-4 h-4 shrink-0" aria-hidden="true" /> Admin Panel
+                </Link>
+              )}
             </div>
 
             <div className="border-t border-neutral-800 my-1" />

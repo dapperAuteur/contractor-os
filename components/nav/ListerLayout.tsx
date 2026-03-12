@@ -12,6 +12,7 @@ interface Props {
   username: string | null;
   unreadMessages: number;
   onLogout: () => void;
+  isAdmin?: boolean;
   untoured?: Set<string>;
   onToursChanged?: () => void;
   children: React.ReactNode;
