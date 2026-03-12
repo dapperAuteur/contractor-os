@@ -186,13 +186,13 @@ export default function EditJobPage() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40';
-  const labelClass = 'block text-sm font-medium text-neutral-300 mb-1';
+    'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
+  const labelClass = 'block text-sm font-medium text-slate-700 mb-1';
 
   if (loading) {
     return (
       <div className="mx-auto max-w-3xl p-4">
-        <div className="flex items-center gap-3 py-12 justify-center text-neutral-400" role="status" aria-label="Loading job">
+        <div className="flex items-center gap-3 py-12 justify-center text-slate-500" role="status" aria-label="Loading job">
           <Loader2 size={20} className="animate-spin" aria-hidden="true" />
           <span>Loading job...</span>
         </div>
@@ -203,7 +203,7 @@ export default function EditJobPage() {
   if (notFound) {
     return (
       <div className="mx-auto max-w-3xl p-4">
-        <Link href="/dashboard/contractor" className="mb-4 inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-200 min-h-11 py-2" aria-label="Back to Jobs">
+        <Link href="/dashboard/contractor" className="mb-4 inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 min-h-11 py-2" aria-label="Back to Jobs">
           <ArrowLeft size={14} aria-hidden="true" /> Back to Jobs
         </Link>
         <div className="rounded-lg border border-red-800 bg-red-900/30 px-4 py-3 text-sm text-red-300" role="alert">
@@ -215,11 +215,11 @@ export default function EditJobPage() {
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <Link href={`/dashboard/contractor/jobs/${id}`} className="mb-4 inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-200 min-h-11 py-2" aria-label="Back to job detail">
+      <Link href={`/dashboard/contractor/jobs/${id}`} className="mb-4 inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 min-h-11 py-2" aria-label="Back to job detail">
         <ArrowLeft size={14} aria-hidden="true" /> Back to Job
       </Link>
 
-      <h1 className="mb-6 text-2xl font-bold text-neutral-100">Edit Job</h1>
+      <h1 className="mb-6 text-2xl font-bold text-slate-900">Edit Job</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
@@ -258,8 +258,8 @@ export default function EditJobPage() {
         />
 
         {/* Job Info */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Job Info</legend>
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Job Info</legend>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -304,12 +304,12 @@ export default function EditJobPage() {
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-neutral-300">
+          <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={form.is_multi_day}
               onChange={(e) => set('is_multi_day', e.target.checked)}
-              className="rounded border-neutral-600"
+              className="rounded border-slate-300"
             />
             Multi-day job (non-consecutive dates)
           </label>
@@ -352,8 +352,8 @@ export default function EditJobPage() {
         </fieldset>
 
         {/* Contacts */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Contacts</legend>
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Contacts</legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className={labelClass}>POC Name</label>
@@ -375,8 +375,8 @@ export default function EditJobPage() {
         </fieldset>
 
         {/* Pay Rates */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Pay Rates</legend>
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Pay Rates</legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <label htmlFor="rate-type" className={labelClass}>Rate Type</label>
@@ -412,14 +412,14 @@ export default function EditJobPage() {
         </fieldset>
 
         {/* Travel Benefits */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Travel Benefits</legend>
-          <label className="flex items-center gap-2 text-sm text-neutral-300">
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Travel Benefits</legend>
+          <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={form.benefits_eligible}
               onChange={(e) => set('benefits_eligible', e.target.checked)}
-              className="rounded border-neutral-600"
+              className="rounded border-slate-300"
             />
             Benefits Eligible
           </label>

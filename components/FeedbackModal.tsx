@@ -73,8 +73,8 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
         {submitted ? (
           <div className="flex flex-col items-center gap-3 py-6 text-center">
             <CheckCircle className="w-12 h-12 text-green-500" />
-            <h3 className="text-lg font-semibold text-gray-900">Thank you!</h3>
-            <p className="text-sm text-gray-500">Your feedback has been received. We review every submission and will reply in the thread.</p>
+            <h3 className="text-lg font-semibold text-slate-900">Thank you!</h3>
+            <p className="text-sm text-slate-500">Your feedback has been received. We review every submission and will reply in the thread.</p>
             <div className="flex items-center gap-3 mt-2">
               <Link
                 href="/dashboard/feedback"
@@ -95,7 +95,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Category selection */}
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-2">What kind of feedback is this?</p>
+              <p className="text-sm font-medium text-slate-700 mb-2">What kind of feedback is this?</p>
               <div className="grid grid-cols-3 gap-2">
                 {CATEGORIES.map(({ value, label, icon: Icon, description }) => (
                   <button
@@ -106,12 +106,12 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 text-center transition-colors ${
                       category === value
                         ? 'border-amber-500 bg-amber-500/10 text-amber-700'
-                        : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
+                        : 'border-slate-200 text-slate-600 hover:border-slate-300 hover:bg-slate-50'
                     }`}
                   >
                     <Icon className="w-5 h-5" />
                     <span className="text-xs font-semibold">{label}</span>
-                    <span className="text-xs text-gray-400 hidden sm:block">{description}</span>
+                    <span className="text-xs text-slate-400 hidden sm:block">{description}</span>
                   </button>
                 ))}
               </div>
@@ -119,7 +119,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
             {/* Message */}
             <div>
-              <label htmlFor="feedback-message" className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label htmlFor="feedback-message" className="block text-sm font-medium text-slate-700 mb-1.5">
                 Your message
               </label>
               <textarea
@@ -135,9 +135,9 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
                     ? 'Describe the feature you\'d like to see…'
                     : 'Share your thoughts…'
                 }
-                className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
               />
-              <p className="text-xs text-gray-400 mt-1 text-right">{message.length}/2000</p>
+              <p className="text-xs text-slate-400 mt-1 text-right">{message.length}/2000</p>
             </div>
 
             {/* Media attachment */}
@@ -157,7 +157,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
               <button
                 type="button"
                 onClick={handleClose}
-                className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                className="px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
               >
                 Cancel
               </button>

@@ -134,10 +134,10 @@ export default function ListerGroupsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h1 className="text-2xl font-bold text-neutral-100">Message Groups</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Message Groups</h1>
         <button
           onClick={() => setShowCreate(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white"
         >
           <Plus size={14} aria-hidden="true" /> Create Group
         </button>
@@ -145,36 +145,36 @@ export default function ListerGroupsPage() {
 
       {/* Create form */}
       {showCreate && (
-        <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4 space-y-3">
+        <div className="rounded-xl border border-slate-300 bg-white p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-100">New Group</h2>
-            <button onClick={() => setShowCreate(false)} className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Close">
+            <h2 className="text-lg font-semibold text-slate-900">New Group</h2>
+            <button onClick={() => setShowCreate(false)} className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Close">
               <X size={18} aria-hidden="true" />
             </button>
           </div>
 
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Group Name *</span>
+            <span className="text-xs font-medium text-slate-500">Group Name *</span>
             <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               placeholder="Camera Department" />
           </label>
 
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Description</span>
+            <span className="text-xs font-medium text-slate-500">Description</span>
             <input type="text" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               placeholder="All camera operators for Indianapolis events" />
           </label>
 
           <div className="flex gap-2 pt-1">
             <button onClick={createGroup} disabled={saving || !form.name.trim()}
-              className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-900">
+              className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white">
               {saving ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Plus size={14} aria-hidden="true" />}
               {saving ? 'Creating...' : 'Create'}
             </button>
             <button onClick={() => setShowCreate(false)}
-              className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
               Cancel
             </button>
           </div>
@@ -184,10 +184,10 @@ export default function ListerGroupsPage() {
       {/* Groups list */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
         </div>
       ) : groups.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           No groups yet. Create one to organize your contractors.
         </div>
       ) : (
@@ -195,7 +195,7 @@ export default function ListerGroupsPage() {
           {groups.map((g) => {
             const isExpanded = expandedId === g.id;
             return (
-              <article key={g.id} role="listitem" className="rounded-xl border border-neutral-800 bg-neutral-900">
+              <article key={g.id} role="listitem" className="rounded-xl border border-slate-200 bg-white">
                 <div className="flex items-center justify-between gap-3 p-4">
                   <button
                     onClick={() => toggleExpand(g.id)}
@@ -203,11 +203,11 @@ export default function ListerGroupsPage() {
                     aria-expanded={isExpanded}
                     aria-label={`Toggle ${g.name} details`}
                   >
-                    <ChevronRight size={14} className={`text-neutral-500 shrink-0 transition-transform ${isExpanded ? 'rotate-90' : ''}`} aria-hidden="true" />
+                    <ChevronRight size={14} className={`text-slate-400 shrink-0 transition-transform ${isExpanded ? 'rotate-90' : ''}`} aria-hidden="true" />
                     <UsersRound size={16} className="text-indigo-400 shrink-0" aria-hidden="true" />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-neutral-100">{g.name}</p>
-                      <p className="text-xs text-neutral-500">
+                      <p className="text-sm font-medium text-slate-900">{g.name}</p>
+                      <p className="text-xs text-slate-400">
                         {g.member_count} member{g.member_count !== 1 ? 's' : ''}
                         {g.description && ` · ${g.description}`}
                       </p>
@@ -216,7 +216,7 @@ export default function ListerGroupsPage() {
                   <button
                     onClick={() => deleteGroup(g.id)}
                     disabled={deletingId === g.id}
-                    className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     aria-label={`Delete group ${g.name}`}
                   >
                     {deletingId === g.id ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Trash2 size={14} aria-hidden="true" />}
@@ -225,22 +225,22 @@ export default function ListerGroupsPage() {
 
                 {/* Expanded detail */}
                 {isExpanded && (
-                  <div className="border-t border-neutral-800 px-4 py-3 space-y-3">
+                  <div className="border-t border-slate-200 px-4 py-3 space-y-3">
                     {loadingDetail ? (
                       <div className="flex justify-center py-4">
-                        <Loader2 className="animate-spin text-neutral-500" size={18} aria-label="Loading..." />
+                        <Loader2 className="animate-spin text-slate-400" size={18} aria-label="Loading..." />
                       </div>
                     ) : detail ? (
                       <>
                         {/* Add member */}
                         <div className="flex gap-2 items-end">
                           <label className="flex-1">
-                            <span className="text-xs font-medium text-neutral-400">Add Member</span>
+                            <span className="text-xs font-medium text-slate-500">Add Member</span>
                             <div className="relative mt-1">
                               <select
                                 value={selectedMember}
                                 onChange={(e) => setSelectedMember(e.target.value)}
-                                className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 pr-8 text-sm text-neutral-100 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none"
+                                className="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 pr-8 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none"
                               >
                                 <option value="">Select contractor...</option>
                                 {assignableContacts
@@ -249,7 +249,7 @@ export default function ListerGroupsPage() {
                                     <option key={c.id} value={c.linked_user_id!}>{c.name}{c.username ? ` (@${c.username})` : ''}</option>
                                   ))}
                               </select>
-                              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" aria-hidden="true" />
+                              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true" />
                             </div>
                           </label>
                           <button
@@ -264,16 +264,16 @@ export default function ListerGroupsPage() {
 
                         {/* Members list */}
                         {detail.members.length === 0 ? (
-                          <p className="text-xs text-neutral-500">No members yet.</p>
+                          <p className="text-xs text-slate-400">No members yet.</p>
                         ) : (
                           <div className="space-y-1">
                             {detail.members.map((m) => (
-                              <div key={m.id} className="flex items-center justify-between gap-2 rounded-lg bg-neutral-800/50 px-3 py-2">
-                                <span className="text-sm text-neutral-200">@{m.username}</span>
+                              <div key={m.id} className="flex items-center justify-between gap-2 rounded-lg bg-slate-100/50 px-3 py-2">
+                                <span className="text-sm text-slate-800">@{m.username}</span>
                                 <button
                                   onClick={() => removeMember(g.id, m.user_id)}
                                   disabled={removingMemberId === m.user_id}
-                                  className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                  className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                                   aria-label={`Remove ${m.username}`}
                                 >
                                   {removingMemberId === m.user_id ? <Loader2 size={12} className="animate-spin" aria-label="Loading..." /> : <UserMinus size={12} aria-hidden="true" />}

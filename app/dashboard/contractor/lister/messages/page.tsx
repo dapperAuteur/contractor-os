@@ -115,17 +115,17 @@ export default function ListerMessagesPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h1 className="text-2xl font-bold text-neutral-100">Messages</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Messages</h1>
         <button
           onClick={() => setShowCompose(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white"
         >
           <Send size={14} aria-hidden="true" /> Compose
         </button>
       </div>
 
       {/* Folder tabs */}
-      <div className="flex gap-1 border-b border-neutral-800" role="tablist" aria-label="Message folders">
+      <div className="flex gap-1 border-b border-slate-200" role="tablist" aria-label="Message folders">
         {[
           { id: 'inbox' as const, label: 'Inbox', icon: Inbox },
           { id: 'sent' as const, label: 'Sent', icon: Send },
@@ -140,7 +140,7 @@ export default function ListerMessagesPage() {
               className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 ${
                 folder === t.id
                   ? 'border-indigo-500 text-indigo-400'
-                  : 'border-transparent text-neutral-500 hover:text-neutral-300'
+                  : 'border-transparent text-slate-400 hover:text-slate-700'
               }`}
             >
               <Icon size={14} aria-hidden="true" />
@@ -152,10 +152,10 @@ export default function ListerMessagesPage() {
 
       {/* Compose form */}
       {showCompose && (
-        <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4 space-y-3">
+        <div className="rounded-xl border border-slate-300 bg-white p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-100">New Message</h2>
-            <button onClick={() => setShowCompose(false)} className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Close">
+            <h2 className="text-lg font-semibold text-slate-900">New Message</h2>
+            <button onClick={() => setShowCompose(false)} className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Close">
               <X size={18} aria-hidden="true" />
             </button>
           </div>
@@ -172,7 +172,7 @@ export default function ListerMessagesPage() {
                 className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition ${
                   form.mode === id
                     ? 'bg-indigo-600 text-white'
-                    : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200'
+                    : 'bg-slate-100 text-slate-500 hover:text-slate-800'
                 }`}
               >
                 <Icon size={14} aria-hidden="true" /> {label}
@@ -182,58 +182,58 @@ export default function ListerMessagesPage() {
 
           {form.mode === 'individual' ? (
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">To *</span>
+              <span className="text-xs font-medium text-slate-500">To *</span>
               <div className="relative mt-1">
                 <select
                   value={form.recipient_id}
                   onChange={(e) => setForm({ ...form, recipient_id: e.target.value })}
-                  className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 pr-8 text-sm text-neutral-100 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none"
+                  className="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 pr-8 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none"
                 >
                   <option value="">Select recipient...</option>
                   {assignableContacts.map((c) => (
                     <option key={c.id} value={c.linked_user_id!}>{c.name}{c.username ? ` (@${c.username})` : ''}</option>
                   ))}
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" aria-hidden="true" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true" />
               </div>
             </label>
           ) : (
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Group *</span>
+              <span className="text-xs font-medium text-slate-500">Group *</span>
               <div className="relative mt-1">
                 <select
                   value={form.group_id}
                   onChange={(e) => setForm({ ...form, group_id: e.target.value })}
-                  className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 pr-8 text-sm text-neutral-100 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none"
+                  className="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 pr-8 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 appearance-none"
                 >
                   <option value="">Select group...</option>
                   {groups.map((g) => (
                     <option key={g.id} value={g.id}>{g.name} ({g.member_count} members)</option>
                   ))}
                 </select>
-                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-500 pointer-events-none" aria-hidden="true" />
+                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true" />
               </div>
             </label>
           )}
 
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Subject</span>
+            <span className="text-xs font-medium text-slate-500">Subject</span>
             <input
               type="text"
               value={form.subject}
               onChange={(e) => setForm({ ...form, subject: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
               placeholder="Job offer for upcoming event"
             />
           </label>
 
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Message *</span>
+            <span className="text-xs font-medium text-slate-500">Message *</span>
             <textarea
               value={form.body}
               onChange={(e) => setForm({ ...form, body: e.target.value })}
               rows={4}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 resize-none"
               placeholder="Write your message..."
             />
           </label>
@@ -241,12 +241,12 @@ export default function ListerMessagesPage() {
           <div className="flex gap-2 pt-1">
             <button onClick={sendMessage}
               disabled={sending || !form.body.trim() || (form.mode === 'individual' ? !form.recipient_id : !form.group_id)}
-              className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-900">
+              className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white">
               {sending ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Send size={14} aria-hidden="true" />}
               {sending ? 'Sending...' : 'Send'}
             </button>
             <button onClick={() => setShowCompose(false)}
-              className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-11">
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-11">
               Cancel
             </button>
           </div>
@@ -256,10 +256,10 @@ export default function ListerMessagesPage() {
       {/* Message list */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
         </div>
       ) : messages.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           {folder === 'inbox' ? 'No messages in your inbox.' : 'No sent messages.'}
         </div>
       ) : (
@@ -270,7 +270,7 @@ export default function ListerMessagesPage() {
               <article
                 key={m.id}
                 role="listitem"
-                className={`rounded-xl border bg-neutral-900 p-4 ${isUnread ? 'border-indigo-700/50' : 'border-neutral-800'}`}
+                className={`rounded-xl border bg-white p-4 ${isUnread ? 'border-indigo-700/50' : 'border-slate-200'}`}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1" onClick={() => isUnread && markRead(m.id)} role={isUnread ? 'button' : undefined} tabIndex={isUnread ? 0 : undefined}>
@@ -278,15 +278,15 @@ export default function ListerMessagesPage() {
                       {isUnread ? (
                         <Mail size={14} className="text-indigo-400 shrink-0" aria-hidden="true" />
                       ) : (
-                        <MailOpen size={14} className="text-neutral-500 shrink-0" aria-hidden="true" />
+                        <MailOpen size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
                       )}
-                      {m.subject && <span className={`text-sm font-medium ${isUnread ? 'text-neutral-100' : 'text-neutral-300'}`}>{m.subject}</span>}
+                      {m.subject && <span className={`text-sm font-medium ${isUnread ? 'text-slate-900' : 'text-slate-700'}`}>{m.subject}</span>}
                       {m.group_name && (
                         <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-xs text-indigo-400">{m.group_name}</span>
                       )}
                     </div>
-                    <p className={`mt-1 text-sm ${isUnread ? 'text-neutral-200' : 'text-neutral-400'} line-clamp-2`}>{m.body}</p>
-                    <div className="mt-1 text-xs text-neutral-500 flex gap-2">
+                    <p className={`mt-1 text-sm ${isUnread ? 'text-slate-800' : 'text-slate-500'} line-clamp-2`}>{m.body}</p>
+                    <div className="mt-1 text-xs text-slate-400 flex gap-2">
                       {folder === 'inbox' ? (
                         <span>From: {m.sender_username ?? 'Unknown'}</span>
                       ) : (
@@ -300,7 +300,7 @@ export default function ListerMessagesPage() {
                     <button
                       onClick={() => deleteMessage(m.id)}
                       disabled={deletingId === m.id}
-                      className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                      className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       aria-label={`Delete message${m.subject ? `: ${m.subject}` : ''}`}
                     >
                       {deletingId === m.id ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Trash2 size={14} aria-hidden="true" />}

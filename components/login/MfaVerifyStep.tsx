@@ -78,7 +78,7 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
     return (
       <div className="flex flex-col items-center justify-center py-12 space-y-3">
         <Loader2 className="w-6 h-6 animate-spin text-amber-600" />
-        <p className="text-sm text-gray-500">Preparing verification...</p>
+        <p className="text-sm text-neutral-400">Preparing verification...</p>
       </div>
     );
   }
@@ -89,21 +89,21 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
         <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center">
           <Shield className="w-6 h-6 text-amber-600" />
         </div>
-        <h2 className="text-lg font-semibold text-gray-900">Two-factor authentication</h2>
-        <p className="text-sm text-gray-500">
+        <h2 className="text-lg font-semibold text-neutral-100">Two-factor authentication</h2>
+        <p className="text-sm text-neutral-400">
           Enter the 6-digit code from your authenticator app.
         </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm" role="alert">
+        <div className="bg-red-900/30 text-red-400 border border-red-800 p-3 rounded-lg text-sm" role="alert">
           {error}
         </div>
       )}
 
       <form onSubmit={handleVerify} className="space-y-6">
         <div>
-          <label htmlFor="mfa-code" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="mfa-code" className="block text-sm font-medium text-neutral-300 mb-1">
             Authentication code
           </label>
           <input
@@ -117,7 +117,7 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
             onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
             required
             autoFocus
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent form-input text-center text-2xl tracking-widest font-mono"
+            className="w-full px-4 py-2 border border-neutral-700 bg-neutral-800 text-neutral-100 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-center text-2xl tracking-widest font-mono placeholder-neutral-500"
             placeholder="000000"
           />
         </div>
@@ -134,7 +134,7 @@ export default function MfaVerifyStep({ onVerified, onCancel }: MfaVerifyStepPro
         <button
           type="button"
           onClick={onCancel}
-          className="w-full text-sm text-gray-500 hover:text-gray-700 transition"
+          className="w-full text-sm text-neutral-400 hover:text-neutral-200 transition"
         >
           Cancel and sign out
         </button>

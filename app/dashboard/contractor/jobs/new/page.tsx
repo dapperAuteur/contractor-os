@@ -174,16 +174,16 @@ export default function NewJobPage() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40';
-  const labelClass = 'block text-sm font-medium text-neutral-300 mb-1';
+    'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
+  const labelClass = 'block text-sm font-medium text-slate-700 mb-1';
 
   return (
     <div className="mx-auto max-w-3xl p-4">
-      <Link href="/dashboard/contractor" className="mb-4 inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-200 min-h-11 py-2" aria-label="Back to Jobs">
+      <Link href="/dashboard/contractor" className="mb-4 inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 min-h-11 py-2" aria-label="Back to Jobs">
         <ArrowLeft size={14} aria-hidden="true" /> Back to Jobs
       </Link>
 
-      <h1 className="mb-6 text-2xl font-bold text-neutral-100">New Job</h1>
+      <h1 className="mb-6 text-2xl font-bold text-slate-900">New Job</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
@@ -222,8 +222,8 @@ export default function NewJobPage() {
         />
 
         {/* Job Info */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Job Info</legend>
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Job Info</legend>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
@@ -268,12 +268,12 @@ export default function NewJobPage() {
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-neutral-300">
+          <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={form.is_multi_day}
               onChange={(e) => set('is_multi_day', e.target.checked)}
-              className="rounded border-neutral-600"
+              className="rounded border-slate-300"
             />
             Multi-day job (non-consecutive dates)
           </label>
@@ -316,8 +316,8 @@ export default function NewJobPage() {
         </fieldset>
 
         {/* Contacts */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Contacts</legend>
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Contacts</legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className={labelClass}>POC Name</label>
@@ -339,8 +339,8 @@ export default function NewJobPage() {
         </fieldset>
 
         {/* Pay Rates */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Pay Rates</legend>
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Pay Rates</legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <label htmlFor="rate-type" className={labelClass}>Rate Type</label>
@@ -376,14 +376,14 @@ export default function NewJobPage() {
         </fieldset>
 
         {/* Benefits */}
-        <fieldset className="space-y-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-          <legend className="px-2 text-sm font-semibold text-neutral-200">Travel Benefits</legend>
-          <label className="flex items-center gap-2 text-sm text-neutral-300">
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-2 text-sm font-semibold text-slate-800">Travel Benefits</legend>
+          <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
               checked={form.benefits_eligible}
               onChange={(e) => set('benefits_eligible', e.target.checked)}
-              className="rounded border-neutral-600"
+              className="rounded border-slate-300"
             />
             Benefits Eligible
           </label>

@@ -196,12 +196,12 @@ export default function MaintenancePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/travel" className="text-gray-400 hover:text-gray-600 transition">
+          <Link href="/dashboard/travel" className="text-slate-400 hover:text-slate-600 transition">
             <ChevronLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Maintenance Log</h1>
-            <p className="text-sm text-gray-500">{records.length} service records</p>
+            <h1 className="text-2xl font-bold text-slate-900">Maintenance Log</h1>
+            <p className="text-sm text-slate-500">{records.length} service records</p>
           </div>
         </div>
         <button
@@ -225,32 +225,32 @@ export default function MaintenancePage() {
       )}
 
       {records.length === 0 ? (
-        <div className="bg-white border border-gray-200 rounded-2xl py-16 text-center">
+        <div className="bg-white border border-slate-200 rounded-2xl py-16 text-center">
           <Wrench className="w-8 h-8 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-400 text-sm">No maintenance records yet.</p>
-          <p className="text-gray-400 text-xs mt-1">Log oil changes, tire rotations, and more.</p>
+          <p className="text-slate-400 text-sm">No maintenance records yet.</p>
+          <p className="text-slate-400 text-xs mt-1">Log oil changes, tire rotations, and more.</p>
         </div>
       ) : (
         Object.values(byVehicle).map(({ vehicle, records: vRecords }) => (
-          <div key={vehicle?.id ?? 'none'} className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-            <div className="px-5 py-4 border-b border-gray-100 bg-gray-50">
-              <h2 className="text-sm font-semibold text-gray-700">
+          <div key={vehicle?.id ?? 'none'} className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 bg-slate-50">
+              <h2 className="text-sm font-semibold text-slate-700">
                 {vehicle ? `${vehicle.type === 'car' ? '🚗' : '🚲'} ${vehicle.nickname}` : 'Unassigned'}
               </h2>
             </div>
             <div className="divide-y divide-gray-100">
               {vRecords.map((r) => (
-                <div key={r.id} className="px-5 py-4 flex items-start justify-between cursor-pointer hover:bg-gray-50 transition" onClick={() => router.push(`/dashboard/travel/maintenance/${r.id}`)}>
+                <div key={r.id} className="px-5 py-4 flex items-start justify-between cursor-pointer hover:bg-slate-50 transition" onClick={() => router.push(`/dashboard/travel/maintenance/${r.id}`)}>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-900">
+                      <span className="text-sm font-medium text-slate-900">
                         {SERVICE_LABELS[r.service_type] ?? r.service_type}
                       </span>
                       {r.cost != null && (
-                        <span className="text-xs text-gray-500">{fmtMoney(r.cost)}</span>
+                        <span className="text-xs text-slate-500">{fmtMoney(r.cost)}</span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-600 mt-0.5">
+                    <p className="text-xs text-slate-600 mt-0.5">
                       {r.date}
                       {r.odometer_at_service && ` · ${r.odometer_at_service.toLocaleString()} mi`}
                       {r.vendor && ` · ${r.vendor}`}
@@ -260,7 +260,7 @@ export default function MaintenancePage() {
                         Next: {r.next_service_date ?? `@ ${r.next_service_miles?.toLocaleString()} mi`}
                       </p>
                     )}
-                    {r.notes && <p className="text-xs text-gray-600 mt-0.5">{r.notes}</p>}
+                    {r.notes && <p className="text-xs text-slate-600 mt-0.5">{r.notes}</p>}
                   </div>
                   <div className="flex gap-3 ml-4 shrink-0" onClick={(e) => e.stopPropagation()}>
                     <button
@@ -286,14 +286,14 @@ export default function MaintenancePage() {
       {/* Linked transaction confirmation dialog */}
       <Modal isOpen={!!linkedTxDialog} onClose={() => setLinkedTxDialog(null)} title="Delete linked transaction?" size="sm">
         <div className="p-6 space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-slate-600">
             This service record had a linked finance expense. Do you also want to delete it?
           </p>
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <button
             onClick={() => setLinkedTxDialog(null)}
-            className="flex-1 border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="flex-1 border border-slate-200 rounded-xl py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
           >
             Keep transaction
           </button>
@@ -312,31 +312,31 @@ export default function MaintenancePage() {
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="maint-service-type" className="block text-xs font-medium text-gray-600 mb-1">Service Type *</label>
+                <label htmlFor="maint-service-type" className="block text-xs font-medium text-slate-600 mb-1">Service Type *</label>
                 <select id="maint-service-type" value={form.service_type}
                   aria-required="true"
                   onChange={(e) => setForm((f) => ({ ...f, service_type: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
                   {Object.entries(SERVICE_LABELS).map(([k, v]) => (
                     <option key={k} value={k}>{v}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label htmlFor="maint-date" className="block text-xs font-medium text-gray-600 mb-1">Date *</label>
+                <label htmlFor="maint-date" className="block text-xs font-medium text-slate-600 mb-1">Date *</label>
                 <input id="maint-date" type="date" value={form.date} required
                   aria-required="true"
                   onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
             </div>
 
             {vehicles.length > 0 && (
               <div>
-                <label htmlFor="maint-vehicle" className="block text-xs font-medium text-gray-600 mb-1">Vehicle</label>
+                <label htmlFor="maint-vehicle" className="block text-xs font-medium text-slate-600 mb-1">Vehicle</label>
                 <select id="maint-vehicle" value={form.vehicle_id}
                   onChange={(e) => setForm((f) => ({ ...f, vehicle_id: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
                   <option value="">Select vehicle</option>
                   {vehicles.map((v) => <option key={v.id} value={v.id}>{v.nickname}</option>)}
                 </select>
@@ -345,27 +345,27 @@ export default function MaintenancePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="maint-odometer" className="block text-xs font-medium text-gray-600 mb-1">Odometer</label>
+                <label htmlFor="maint-odometer" className="block text-xs font-medium text-slate-600 mb-1">Odometer</label>
                 <input id="maint-odometer" type="number" step="0.1" value={form.odometer_at_service} placeholder="98832"
                   onChange={(e) => setForm((f) => ({ ...f, odometer_at_service: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="maint-cost" className="block text-xs font-medium text-gray-600 mb-1">Cost ($)</label>
+                <label htmlFor="maint-cost" className="block text-xs font-medium text-slate-600 mb-1">Cost ($)</label>
                 <input id="maint-cost" type="number" step="0.01" value={form.cost} placeholder="0.00"
                   onChange={(e) => setForm((f) => ({ ...f, cost: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="maint-vendor" className="block text-xs font-medium text-gray-600 mb-1">Shop / Vendor</label>
+              <label htmlFor="maint-vendor" className="block text-xs font-medium text-slate-600 mb-1">Shop / Vendor</label>
               <ContactAutocomplete
                 value={form.vendor}
                 contactType="vendor"
                 placeholder="Jiffy Lube"
                 onChange={(name) => setForm((f) => ({ ...f, vendor: name }))}
-                inputClassName="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                inputClassName="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
               />
             </div>
 
@@ -379,35 +379,35 @@ export default function MaintenancePage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="maint-next-miles" className="block text-xs font-medium text-gray-600 mb-1">Next service (miles)</label>
+                <label htmlFor="maint-next-miles" className="block text-xs font-medium text-slate-600 mb-1">Next service (miles)</label>
                 <input id="maint-next-miles" type="number" value={form.next_service_miles} placeholder="103000"
                   onChange={(e) => setForm((f) => ({ ...f, next_service_miles: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="maint-next-date" className="block text-xs font-medium text-gray-600 mb-1">Next service date</label>
+                <label htmlFor="maint-next-date" className="block text-xs font-medium text-slate-600 mb-1">Next service date</label>
                 <input id="maint-next-date" type="date" value={form.next_service_date}
                   onChange={(e) => setForm((f) => ({ ...f, next_service_date: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="maint-notes" className="block text-xs font-medium text-gray-600 mb-1">Notes</label>
+              <label htmlFor="maint-notes" className="block text-xs font-medium text-slate-600 mb-1">Notes</label>
               <input id="maint-notes" type="text" value={form.notes} placeholder="Optional notes"
                 onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
             </div>
 
             {editingId && (
-              <div className="pt-3 border-t border-gray-200">
+              <div className="pt-3 border-t border-slate-200">
                 <ActivityLinker entityType="maintenance" entityId={editingId} />
               </div>
             )}
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button type="button" onClick={() => { setShowForm(false); setEditingId(null); }}
-              className="flex-1 border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+              className="flex-1 border border-slate-200 rounded-xl py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
               Cancel
             </button>
             <button type="submit" disabled={saving}

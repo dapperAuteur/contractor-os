@@ -45,7 +45,7 @@ const REQUEST_STATUS_STYLES: Record<string, string> = {
   pending: 'bg-yellow-500/20 text-yellow-300',
   accepted: 'bg-green-500/20 text-green-300',
   declined: 'bg-red-500/20 text-red-300',
-  withdrawn: 'bg-neutral-500/20 text-neutral-400',
+  withdrawn: 'bg-neutral-500/20 text-slate-500',
 };
 
 export default function JobBoardPage() {
@@ -119,10 +119,10 @@ export default function JobBoardPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-4 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">Job Board</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Job Board</h1>
 
       {/* Tab switcher */}
-      <div className="flex gap-1 border-b border-neutral-800" role="tablist" aria-label="Board views">
+      <div className="flex gap-1 border-b border-slate-200" role="tablist" aria-label="Board views">
         {[
           { id: 'board' as const, label: 'Available Jobs', icon: Search },
           { id: 'outgoing' as const, label: 'My Requests', icon: Send },
@@ -136,7 +136,7 @@ export default function JobBoardPage() {
             className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500 ${
               view === t.id
                 ? 'border-amber-500 text-amber-400'
-                : 'border-transparent text-neutral-500 hover:text-neutral-300'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
             <t.icon size={14} aria-hidden="true" />
@@ -149,23 +149,23 @@ export default function JobBoardPage() {
       {view === 'board' && (
         <>
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" aria-hidden="true" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
             <input
               type="text"
               placeholder="Search by client, event, location, union..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-neutral-700 bg-neutral-900 py-2.5 pl-9 pr-3 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               aria-label="Search available jobs"
             />
           </div>
 
           {loading ? (
             <div className="flex justify-center py-16">
-              <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+              <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
             </div>
           ) : filtered.length === 0 ? (
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+            <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
               {search ? 'No jobs match your search.' : 'No jobs available right now.'}
             </div>
           ) : (
@@ -174,7 +174,7 @@ export default function JobBoardPage() {
                 <article
                   key={job.id}
                   role="listitem"
-                  className="rounded-xl border border-neutral-800 bg-neutral-900 p-4"
+                  className="rounded-xl border border-slate-200 bg-white p-4"
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
@@ -182,19 +182,19 @@ export default function JobBoardPage() {
                         <span className="font-mono text-sm text-amber-400">{job.job_number}</span>
                         <JobStatusBadge status={job.status} />
                         {job.union_local && (
-                          <span className="text-xs text-neutral-500">{job.union_local}</span>
+                          <span className="text-xs text-slate-400">{job.union_local}</span>
                         )}
                         {job.department && (
-                          <span className="text-xs text-neutral-500">· {job.department}</span>
+                          <span className="text-xs text-slate-400">· {job.department}</span>
                         )}
                       </div>
-                      <div className="mt-1 text-neutral-100 font-medium">
+                      <div className="mt-1 text-slate-900 font-medium">
                         {job.client_name}
                         {job.event_name && (
-                          <span className="text-neutral-400 font-normal"> — {job.event_name}</span>
+                          <span className="text-slate-500 font-normal"> — {job.event_name}</span>
                         )}
                       </div>
-                      <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-neutral-500">
+                      <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-400">
                         {job.location_name && (
                           <span className="flex items-center gap-1">
                             <MapPin size={11} aria-hidden="true" /> {job.location_name}
@@ -218,7 +218,7 @@ export default function JobBoardPage() {
                           <span className="text-green-400">Benefits</span>
                         )}
                       </div>
-                      <div className="mt-1 text-xs text-neutral-500">
+                      <div className="mt-1 text-xs text-slate-400">
                         Posted by {job.poster_username}
                       </div>
                     </div>
@@ -238,21 +238,21 @@ export default function JobBoardPage() {
                             onChange={(e) => setRequestMessage(e.target.value)}
                             placeholder="Optional message to poster..."
                             rows={2}
-                            className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 resize-none"
+                            className="w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 resize-none"
                             aria-label="Message to job poster"
                           />
                           <div className="flex gap-2">
                             <button
                               onClick={() => sendRequest(job.id)}
                               disabled={sendingRequest}
-                              className="flex-1 flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+                              className="flex-1 flex min-h-11 items-center justify-center gap-1.5 rounded-lg bg-amber-600 px-3 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
                             >
                               {sendingRequest ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Send size={14} aria-hidden="true" />}
                               Send
                             </button>
                             <button
                               onClick={() => { setRequestingId(null); setRequestMessage(''); }}
-                              className="min-h-11 rounded-lg border border-neutral-700 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                              className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
                             >
                               Cancel
                             </button>
@@ -261,7 +261,7 @@ export default function JobBoardPage() {
                       ) : (
                         <button
                           onClick={() => setRequestingId(job.id)}
-                          className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+                          className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
                         >
                           <Send size={14} aria-hidden="true" /> Request
                         </button>
@@ -280,10 +280,10 @@ export default function JobBoardPage() {
         <>
           {loading ? (
             <div className="flex justify-center py-16">
-              <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+              <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
             </div>
           ) : requests.length === 0 ? (
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+            <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
               {view === 'incoming' ? 'No incoming requests.' : 'No outgoing requests.'}
             </div>
           ) : (
@@ -292,20 +292,20 @@ export default function JobBoardPage() {
                 <article
                   key={req.id}
                   role="listitem"
-                  className="rounded-xl border border-neutral-800 bg-neutral-900 p-4"
+                  className="rounded-xl border border-slate-200 bg-white p-4"
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div className="min-w-0 flex-1">
                       {req.job && (
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="font-mono text-sm text-amber-400">{req.job.job_number}</span>
-                          <span className="text-neutral-100 text-sm font-medium">{req.job.client_name}</span>
+                          <span className="text-slate-900 text-sm font-medium">{req.job.client_name}</span>
                           {req.job.event_name && (
-                            <span className="text-neutral-400 text-sm">— {req.job.event_name}</span>
+                            <span className="text-slate-500 text-sm">— {req.job.event_name}</span>
                           )}
                         </div>
                       )}
-                      <div className="mt-1 flex items-center gap-2 flex-wrap text-xs text-neutral-500">
+                      <div className="mt-1 flex items-center gap-2 flex-wrap text-xs text-slate-400">
                         <span>
                           {view === 'incoming' ? `From: ${req.requester_username}` : `To: ${req.poster_username}`}
                         </span>
@@ -315,13 +315,13 @@ export default function JobBoardPage() {
                         </span>
                       </div>
                       {req.message && (
-                        <p className="mt-2 text-sm text-neutral-300 bg-neutral-800 rounded-lg px-3 py-2">
+                        <p className="mt-2 text-sm text-slate-700 bg-slate-100 rounded-lg px-3 py-2">
                           {req.message}
                         </p>
                       )}
                       {req.poster_note && view === 'outgoing' && (
-                        <p className="mt-1 text-sm text-neutral-400 bg-neutral-800/50 rounded-lg px-3 py-2">
-                          <span className="text-xs text-neutral-500">Reply: </span>{req.poster_note}
+                        <p className="mt-1 text-sm text-slate-500 bg-slate-100/50 rounded-lg px-3 py-2">
+                          <span className="text-xs text-slate-400">Reply: </span>{req.poster_note}
                         </p>
                       )}
                     </div>
@@ -334,7 +334,7 @@ export default function JobBoardPage() {
                             <button
                               onClick={() => handleAction(req.id, 'accepted')}
                               disabled={actionLoading === req.id}
-                              className="flex min-h-11 items-center gap-1.5 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+                              className="flex min-h-11 items-center gap-1.5 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-white"
                               aria-label={`Accept request from ${req.requester_username}`}
                             >
                               <Check size={14} aria-hidden="true" /> Accept
@@ -342,7 +342,7 @@ export default function JobBoardPage() {
                             <button
                               onClick={() => handleAction(req.id, 'declined')}
                               disabled={actionLoading === req.id}
-                              className="min-h-11 rounded-lg border border-neutral-700 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                              className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
                               aria-label={`Decline request from ${req.requester_username}`}
                             >
                               Decline
@@ -352,7 +352,7 @@ export default function JobBoardPage() {
                           <button
                             onClick={() => handleAction(req.id, 'withdrawn')}
                             disabled={actionLoading === req.id}
-                            className="min-h-11 rounded-lg border border-neutral-700 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                            className="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
                             aria-label="Withdraw request"
                           >
                             Withdraw

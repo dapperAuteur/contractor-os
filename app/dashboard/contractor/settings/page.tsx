@@ -118,39 +118,39 @@ export default function ContractorSettingsPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="animate-spin text-neutral-500" size={28} aria-label="Loading..." />
+        <Loader2 className="animate-spin text-slate-400" size={28} aria-label="Loading..." />
       </div>
     );
   }
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">Contractor Settings</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Contractor Settings</h1>
 
       {/* Home Address */}
-      <section className="rounded-xl border border-neutral-800 bg-neutral-900 p-5 space-y-4">
+      <section className="rounded-xl border border-slate-200 bg-white p-5 space-y-4">
         <div className="flex items-center gap-2">
           <MapPin size={18} className="text-amber-400" aria-hidden="true" />
-          <h2 className="text-lg font-semibold text-neutral-100">Home Address</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Home Address</h2>
         </div>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-slate-500">
           Set your home address to auto-calculate mileage to job venues. Your address is geocoded
           using OpenStreetMap (open-source, no tracking). Only the address text is sent — nothing else.
         </p>
 
         <label className="block">
-          <span className="text-xs font-medium text-neutral-400">Address</span>
+          <span className="text-xs font-medium text-slate-500">Address</span>
           <input
             type="text"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+            className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
             placeholder="123 Main St, Indianapolis, IN 46204"
           />
         </label>
 
         {settings?.home_lat && settings?.home_lng && (
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-slate-400">
             Current coordinates: {settings.home_lat.toFixed(4)}, {settings.home_lng.toFixed(4)}
           </p>
         )}
@@ -159,7 +159,7 @@ export default function ContractorSettingsPage() {
           <button
             onClick={saveHomeAddress}
             disabled={saving || !address.trim()}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+            className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
           >
             {geocoding ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Save size={14} aria-hidden="true" />}
             {geocoding ? 'Geocoding...' : 'Save Home Address'}
@@ -168,9 +168,9 @@ export default function ContractorSettingsPage() {
       </section>
 
       {/* Distance Unit */}
-      <section className="rounded-xl border border-neutral-800 bg-neutral-900 p-5 space-y-4">
-        <h2 className="text-lg font-semibold text-neutral-100">Distance Unit</h2>
-        <p className="text-sm text-neutral-400">
+      <section className="rounded-xl border border-slate-200 bg-white p-5 space-y-4">
+        <h2 className="text-lg font-semibold text-slate-900">Distance Unit</h2>
+        <p className="text-sm text-slate-500">
           Choose miles or kilometers for distance calculations.
         </p>
 
@@ -187,7 +187,7 @@ export default function ContractorSettingsPage() {
               className={`rounded-lg px-4 py-2.5 text-sm font-medium transition ${
                 unit === opt.id
                   ? 'bg-amber-600 text-white'
-                  : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-700'
+                  : 'bg-slate-100 text-slate-500 hover:text-slate-800 hover:bg-slate-200'
               }`}
             >
               {opt.label}
@@ -198,7 +198,7 @@ export default function ContractorSettingsPage() {
         <button
           onClick={saveUnitOnly}
           disabled={saving}
-          className="flex items-center gap-1.5 rounded-lg bg-neutral-700 px-4 py-2.5 text-sm font-medium text-neutral-200 hover:bg-neutral-600 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="flex items-center gap-1.5 rounded-lg bg-slate-200 px-4 py-2.5 text-sm font-medium text-slate-800 hover:bg-slate-300 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
         >
           <Save size={14} aria-hidden="true" />
           Update Unit
@@ -206,12 +206,12 @@ export default function ContractorSettingsPage() {
       </section>
 
       {/* Module Tours */}
-      <section className="rounded-xl border border-neutral-800 bg-neutral-900 p-5 space-y-4">
+      <section className="rounded-xl border border-slate-200 bg-white p-5 space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles size={18} className="text-amber-400" aria-hidden="true" />
-          <h2 className="text-lg font-semibold text-neutral-100">Module Tours</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Module Tours</h2>
         </div>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-slate-500">
           Re-take any feature walkthrough to refresh your memory.
         </p>
 
@@ -220,10 +220,10 @@ export default function ContractorSettingsPage() {
             {tours.map((t) => (
               <div
                 key={t.module_slug}
-                className="flex items-center justify-between rounded-lg bg-neutral-800 px-4 py-3"
+                className="flex items-center justify-between rounded-lg bg-slate-100 px-4 py-3"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-neutral-200 capitalize">
+                  <span className="text-sm text-slate-800 capitalize">
                     {t.module_slug.replace(/-/g, ' ')}
                   </span>
                   <span className={`text-xs px-2 py-0.5 rounded-full ${
@@ -232,8 +232,8 @@ export default function ContractorSettingsPage() {
                       : t.status === 'in_progress'
                         ? 'bg-amber-900/40 text-amber-400'
                         : t.status === 'skipped'
-                          ? 'bg-neutral-700 text-neutral-400'
-                          : 'bg-neutral-700 text-neutral-500'
+                          ? 'bg-slate-200 text-slate-500'
+                          : 'bg-slate-200 text-slate-400'
                   }`}>
                     {t.status === 'in_progress' ? 'in progress' : t.status}
                   </span>
@@ -248,7 +248,7 @@ export default function ContractorSettingsPage() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-neutral-500">No tours started yet. Explore features to begin.</p>
+          <p className="text-sm text-slate-400">No tours started yet. Explore features to begin.</p>
         )}
 
         {tours.length > 0 && (
@@ -274,7 +274,7 @@ export default function ContractorSettingsPage() {
         </div>
       )}
 
-      <p className="text-xs text-neutral-500">
+      <p className="text-xs text-slate-400">
         Distance is estimated using the Haversine formula with a 1.3x driving multiplier.
         Accurate within ~10-20% of actual driving distance.
       </p>

@@ -262,12 +262,12 @@ export default function FuelLogPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/travel" className="text-gray-400 hover:text-gray-600 transition">
+          <Link href="/dashboard/travel" className="text-slate-400 hover:text-slate-600 transition">
             <ChevronLeft className="w-5 h-5" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Fuel Log</h1>
-            <p className="text-sm text-gray-500">{total} fill-ups tracked</p>
+            <h1 className="text-2xl font-bold text-slate-900">Fuel Log</h1>
+            <p className="text-sm text-slate-500">{total} fill-ups tracked</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -296,8 +296,8 @@ export default function FuelLogPage() {
       {/* Charts */}
       {chartData.length > 1 && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white border border-gray-200 rounded-2xl p-5">
-            <h2 className="text-sm font-semibold text-gray-700 mb-4">MPG Over Time</h2>
+          <div className="bg-white border border-slate-200 rounded-2xl p-5">
+            <h2 className="text-sm font-semibold text-slate-700 mb-4">MPG Over Time</h2>
             <div className="h-45">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
@@ -312,8 +312,8 @@ export default function FuelLogPage() {
             </div>
           </div>
           {spendData.length > 1 && (
-            <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <h2 className="text-sm font-semibold text-gray-700 mb-4">Monthly Fuel Spend</h2>
+            <div className="bg-white border border-slate-200 rounded-2xl p-5">
+              <h2 className="text-sm font-semibold text-slate-700 mb-4">Monthly Fuel Spend</h2>
               <div className="h-45">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={spendData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
@@ -332,19 +332,19 @@ export default function FuelLogPage() {
       )}
 
       {/* Fuel Log Table */}
-      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h2 className="text-sm font-semibold text-gray-700">Fill-Up History</h2>
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-semibold text-slate-700">Fill-Up History</h2>
         </div>
         {logs.length === 0 ? (
           <div className="py-12 text-center">
-            <p className="text-gray-400 text-sm">No fuel logs yet.</p>
-            <p className="text-gray-400 text-xs mt-1">Upload dashboard photos or add manually.</p>
+            <p className="text-slate-400 text-sm">No fuel logs yet.</p>
+            <p className="text-slate-400 text-xs mt-1">Upload dashboard photos or add manually.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
                 <tr>
                   <th className="px-4 py-3 text-left">Date</th>
                   <th className="px-4 py-3 text-right">ODO</th>
@@ -360,20 +360,20 @@ export default function FuelLogPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-gray-50 transition cursor-pointer" onClick={() => router.push(`/dashboard/travel/fuel/${log.id}`)}>
-                    <td className="px-4 py-3 text-gray-900 font-medium whitespace-nowrap">{log.date}</td>
-                    <td className="px-4 py-3 text-right text-gray-700 whitespace-nowrap">
+                  <tr key={log.id} className="hover:bg-slate-50 transition cursor-pointer" onClick={() => router.push(`/dashboard/travel/fuel/${log.id}`)}>
+                    <td className="px-4 py-3 text-slate-900 font-medium whitespace-nowrap">{log.date}</td>
+                    <td className="px-4 py-3 text-right text-slate-700 whitespace-nowrap">
                       {log.odometer_miles ? log.odometer_miles.toLocaleString() : '—'}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-700">{fmt(log.miles_since_last_fill)}</td>
-                    <td className="px-4 py-3 text-right text-gray-700">{fmt(log.miles_this_month)}</td>
+                    <td className="px-4 py-3 text-right text-slate-700">{fmt(log.miles_since_last_fill)}</td>
+                    <td className="px-4 py-3 text-right text-slate-700">{fmt(log.miles_this_month)}</td>
                     <td className="px-4 py-3 text-right font-medium text-blue-700">
                       {fmt(log.mpg_display ?? log.mpg_calculated, 1)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-700">{fmt(log.gallons, 3)}</td>
-                    <td className="px-4 py-3 text-right font-medium text-gray-900">{fmtMoney(log.total_cost)}</td>
-                    <td className="px-4 py-3 text-right text-gray-600">{fmt(log.cost_per_gallon, 3)}</td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">
+                    <td className="px-4 py-3 text-right text-slate-700">{fmt(log.gallons, 3)}</td>
+                    <td className="px-4 py-3 text-right font-medium text-slate-900">{fmtMoney(log.total_cost)}</td>
+                    <td className="px-4 py-3 text-right text-slate-600">{fmt(log.cost_per_gallon, 3)}</td>
+                    <td className="px-4 py-3 text-slate-600 text-xs">
                       {log.station ?? '—'}
                       {log.source === 'image_ocr' && (
                         <span className="ml-1 text-purple-500 font-medium" title="OCR scan">
@@ -406,14 +406,14 @@ export default function FuelLogPage() {
       {/* Linked transaction confirmation dialog */}
       <Modal isOpen={!!linkedTxDialog} onClose={() => setLinkedTxDialog(null)} title="Delete linked transaction?" size="sm">
         <div className="p-6 space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-slate-600">
             This fuel log had a linked finance expense. Do you also want to delete it?
           </p>
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <button
             onClick={() => setLinkedTxDialog(null)}
-            className="flex-1 border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="flex-1 border border-slate-200 rounded-xl py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
           >
             Keep transaction
           </button>
@@ -439,23 +439,23 @@ export default function FuelLogPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="fuel-date" className="block text-xs font-medium text-gray-600 mb-1">Date *</label>
+                <label htmlFor="fuel-date" className="block text-xs font-medium text-slate-600 mb-1">Date *</label>
                 <input
                   id="fuel-date"
                   type="date" value={form.date} required
                   aria-required="true"
                   onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
               {vehicles.length > 0 && (
                 <div>
-                  <label htmlFor="fuel-vehicle" className="block text-xs font-medium text-gray-600 mb-1">Vehicle</label>
+                  <label htmlFor="fuel-vehicle" className="block text-xs font-medium text-slate-600 mb-1">Vehicle</label>
                   <select
                     id="fuel-vehicle"
                     value={form.vehicle_id}
                     onChange={(e) => setForm((f) => ({ ...f, vehicle_id: e.target.value }))}
-                    className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                    className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                   >
                     <option value="">Select vehicle</option>
                     {vehicles.map((v) => <option key={v.id} value={v.id}>{v.nickname}</option>)}
@@ -466,37 +466,37 @@ export default function FuelLogPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label htmlFor="fuel-odometer" className="block text-xs font-medium text-gray-600 mb-1">Odometer</label>
+                <label htmlFor="fuel-odometer" className="block text-xs font-medium text-slate-600 mb-1">Odometer</label>
                 <input id="fuel-odometer" type="number" step="0.1" value={form.odometer_miles} placeholder="98832"
                   onChange={(e) => setForm((f) => ({ ...f, odometer_miles: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="fuel-trip-a" className="block text-xs font-medium text-gray-600 mb-1">Trip A (since fill)</label>
+                <label htmlFor="fuel-trip-a" className="block text-xs font-medium text-slate-600 mb-1">Trip A (since fill)</label>
                 <input id="fuel-trip-a" type="number" step="0.1" value={form.miles_since_last_fill} placeholder="270.8"
                   onChange={(e) => setForm((f) => ({ ...f, miles_since_last_fill: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="fuel-trip-b" className="block text-xs font-medium text-gray-600 mb-1">Trip B (this month)</label>
+                <label htmlFor="fuel-trip-b" className="block text-xs font-medium text-slate-600 mb-1">Trip B (this month)</label>
                 <input id="fuel-trip-b" type="number" step="0.1" value={form.miles_this_month} placeholder="270.8"
                   onChange={(e) => setForm((f) => ({ ...f, miles_this_month: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="fuel-mpg" className="block text-xs font-medium text-gray-600 mb-1">MPG (display)</label>
+                <label htmlFor="fuel-mpg" className="block text-xs font-medium text-slate-600 mb-1">MPG (display)</label>
                 <input id="fuel-mpg" type="number" step="0.1" value={form.mpg_display} placeholder="29.8"
                   onChange={(e) => setForm((f) => ({ ...f, mpg_display: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="fuel-grade" className="block text-xs font-medium text-gray-600 mb-1">Fuel Grade</label>
+                <label htmlFor="fuel-grade" className="block text-xs font-medium text-slate-600 mb-1">Fuel Grade</label>
                 <select id="fuel-grade" value={form.fuel_grade}
                   onChange={(e) => setForm((f) => ({ ...f, fuel_grade: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm">
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm">
                   {['regular','midgrade','premium','diesel','e85'].map((g) => (
                     <option key={g} value={g}>{g}</option>
                   ))}
@@ -506,33 +506,33 @@ export default function FuelLogPage() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label htmlFor="fuel-gallons" className="block text-xs font-medium text-gray-600 mb-1">Gallons</label>
+                <label htmlFor="fuel-gallons" className="block text-xs font-medium text-slate-600 mb-1">Gallons</label>
                 <input id="fuel-gallons" type="number" step="0.001" value={form.gallons} placeholder="9.352"
                   onChange={(e) => setForm((f) => ({ ...f, gallons: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="fuel-total-cost" className="block text-xs font-medium text-gray-600 mb-1">Total Cost ($)</label>
+                <label htmlFor="fuel-total-cost" className="block text-xs font-medium text-slate-600 mb-1">Total Cost ($)</label>
                 <input id="fuel-total-cost" type="number" step="0.01" value={form.total_cost} placeholder="21.50"
                   onChange={(e) => setForm((f) => ({ ...f, total_cost: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
               <div>
-                <label htmlFor="fuel-cpg" className="block text-xs font-medium text-gray-600 mb-1">$/gal</label>
+                <label htmlFor="fuel-cpg" className="block text-xs font-medium text-slate-600 mb-1">$/gal</label>
                 <input id="fuel-cpg" type="number" step="0.001" value={form.cost_per_gallon} placeholder="2.299"
                   onChange={(e) => setForm((f) => ({ ...f, cost_per_gallon: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm" />
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm" />
               </div>
             </div>
 
             <div>
-              <label htmlFor="fuel-station" className="block text-xs font-medium text-gray-600 mb-1">Station</label>
+              <label htmlFor="fuel-station" className="block text-xs font-medium text-slate-600 mb-1">Station</label>
               <ContactAutocomplete
                 value={form.station}
                 contactType="vendor"
                 placeholder="Costco"
                 onChange={(name) => setForm((f) => ({ ...f, station: name }))}
-                inputClassName="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                inputClassName="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
               />
             </div>
 
@@ -545,14 +545,14 @@ export default function FuelLogPage() {
             />
 
             {editingId && (
-              <div className="pt-3 border-t border-gray-200">
+              <div className="pt-3 border-t border-slate-200">
                 <ActivityLinker entityType="fuel_log" entityId={editingId} />
               </div>
             )}
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button type="button" onClick={() => { setShowForm(false); setOcrNotes(''); setEditingId(null); }}
-              className="flex-1 border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
+              className="flex-1 border border-slate-200 rounded-xl py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
               Cancel
             </button>
             <button type="submit" disabled={saving}

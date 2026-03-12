@@ -320,10 +320,11 @@ textarea::placeholder {
 .dark-input textarea,
 .dark-input select,
 .dark-input input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
-  color: #e5e7eb; /* gray-200 — readable on gray-800 backgrounds */
-  color-scheme: dark; /* ensures browser-native icons (date picker, number spinners) render light on dark inputs */
+  color: #e5e7eb; /* gray-200 — readable on dark backgrounds (admin pages) */
+  color-scheme: dark; /* ensures browser-native icons (date picker, spinners) render light */
 }
 .dark-input textarea::placeholder,
 .dark-input input::placeholder {
   color: #6b7280; /* gray-500 */
 }
+/* ─── End dark-background form controls ──────────────────────────────────── */

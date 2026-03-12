@@ -164,15 +164,15 @@ export default function RecurringPage() {
     <div className="max-w-4xl mx-auto px-4 py-10 space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/finance" className="p-2 rounded-lg hover:bg-gray-100 transition">
-            <ArrowLeft className="w-4 h-4 text-gray-600" />
+          <Link href="/dashboard/finance" className="p-2 rounded-lg hover:bg-slate-100 transition">
+            <ArrowLeft className="w-4 h-4 text-slate-600" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
               <RefreshCw className="w-6 h-6 text-amber-600" />
               Recurring Payments
             </h1>
-            <p className="text-gray-500 text-sm mt-0.5">Auto-generated on each visit when due</p>
+            <p className="text-slate-500 text-sm mt-0.5">Auto-generated on each visit when due</p>
           </div>
         </div>
         <button
@@ -191,48 +191,48 @@ export default function RecurringPage() {
       )}
 
       {items.length === 0 ? (
-        <div className="text-center py-20 text-gray-400">
+        <div className="text-center py-20 text-slate-400">
           <Calendar className="w-12 h-12 mx-auto mb-4 opacity-40" />
           <p>No recurring payments yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {items.map((rp) => (
-            <div key={rp.id} className={`bg-white border rounded-2xl p-5 ${!rp.is_active ? 'opacity-60' : 'border-gray-200'}`}>
+            <div key={rp.id} className={`bg-white border rounded-2xl p-5 ${!rp.is_active ? 'opacity-60' : 'border-slate-200'}`}>
               {editId === rp.id ? (
                 <div className="space-y-3">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="text-xs text-gray-500">Description</label>
+                      <label className="text-xs text-slate-500">Description</label>
                       <input value={editForm.description ?? ''} onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
-                        className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg" />
+                        className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500">Account</label>
+                      <label className="text-xs text-slate-500">Account</label>
                       <select value={editForm.account_id ?? ''} onChange={(e) => setEditForm((f) => ({ ...f, account_id: e.target.value }))}
-                        className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg">
+                        className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg">
                         {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                       </select>
                     </div>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div>
-                      <label className="text-xs text-gray-500">Amount ($)</label>
+                      <label className="text-xs text-slate-500">Amount ($)</label>
                       <input type="number" step="0.01" value={editForm.amount ?? ''} onChange={(e) => setEditForm((f) => ({ ...f, amount: e.target.value }))}
-                        className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg" />
+                        className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" />
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500">Type</label>
+                      <label className="text-xs text-slate-500">Type</label>
                       <select value={editForm.type ?? 'expense'} onChange={(e) => setEditForm((f) => ({ ...f, type: e.target.value }))}
-                        className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg">
+                        className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg">
                         <option value="expense">Expense</option>
                         <option value="income">Income</option>
                       </select>
                     </div>
                     <div>
-                      <label className="text-xs text-gray-500">Day of Month</label>
+                      <label className="text-xs text-slate-500">Day of Month</label>
                       <input type="number" min="1" max="28" value={editForm.day_of_month ?? ''} onChange={(e) => setEditForm((f) => ({ ...f, day_of_month: e.target.value }))}
-                        className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg" />
+                        className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" />
                     </div>
                   </div>
                   <CategorySelect
@@ -247,7 +247,7 @@ export default function RecurringPage() {
                       <Check className="w-3.5 h-3.5" /> Save
                     </button>
                     <button onClick={() => setEditId(null)}
-                      className="flex items-center gap-1 px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg text-sm hover:bg-gray-200 transition">
+                      className="flex items-center gap-1 px-3 py-1.5 bg-slate-100 text-slate-600 rounded-lg text-sm hover:bg-slate-200 transition">
                       <X className="w-3.5 h-3.5" /> Cancel
                     </button>
                   </div>
@@ -260,30 +260,30 @@ export default function RecurringPage() {
                         {rp.type === 'expense' ? 'Expense' : 'Income'}
                       </span>
                       {!rp.is_active && (
-                        <span className="text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">Paused</span>
+                        <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">Paused</span>
                       )}
                       {rp.budget_categories && (
-                        <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full">{rp.budget_categories.name}</span>
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{rp.budget_categories.name}</span>
                       )}
                     </div>
-                    <p className="font-semibold text-gray-900">{rp.description}</p>
+                    <p className="font-semibold text-slate-900">{rp.description}</p>
                     <div className="flex flex-wrap gap-4 mt-2 text-sm">
                       <div>
-                        <span className="text-gray-400 text-xs">Amount</span>
-                        <p className="font-bold text-gray-900">${Number(rp.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+                        <span className="text-slate-400 text-xs">Amount</span>
+                        <p className="font-bold text-slate-900">${Number(rp.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
                       </div>
                       <div>
-                        <span className="text-gray-400 text-xs">Account</span>
-                        <p className="text-gray-700">{rp.financial_accounts?.name ?? '—'}</p>
+                        <span className="text-slate-400 text-xs">Account</span>
+                        <p className="text-slate-700">{rp.financial_accounts?.name ?? '—'}</p>
                       </div>
                       <div>
-                        <span className="text-gray-400 text-xs">Due</span>
-                        <p className="text-gray-700">Day {rp.day_of_month}</p>
+                        <span className="text-slate-400 text-xs">Due</span>
+                        <p className="text-slate-700">Day {rp.day_of_month}</p>
                       </div>
                       {rp.last_generated && (
                         <div>
-                          <span className="text-gray-400 text-xs">Last Generated</span>
-                          <p className="text-gray-700">{new Date(rp.last_generated).toLocaleDateString()}</p>
+                          <span className="text-slate-400 text-xs">Last Generated</span>
+                          <p className="text-slate-700">{new Date(rp.last_generated).toLocaleDateString()}</p>
                         </div>
                       )}
                     </div>
@@ -301,21 +301,21 @@ export default function RecurringPage() {
                           category_id: rp.category_id ?? '',
                         });
                       }}
-                      className="p-1.5 text-gray-400 hover:text-amber-600 hover:bg-amber-500/10 rounded-lg transition"
+                      className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-500/10 rounded-lg transition"
                       title="Edit"
                     >
                       <Pencil className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => handleToggle(rp)}
-                      className="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition"
+                      className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition"
                       title={rp.is_active ? 'Pause' : 'Resume'}
                     >
                       {rp.is_active ? <X className="w-4 h-4" /> : <Check className="w-4 h-4" />}
                     </button>
                     <button
                       onClick={() => handleDelete(rp.id)}
-                      className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
+                      className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
                       title="Delete"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -333,40 +333,40 @@ export default function RecurringPage() {
         <form onSubmit={handleAdd}>
           <div className="p-6 space-y-4">
             <div>
-              <label htmlFor="rec-description" className="text-xs font-medium text-gray-600">Description *</label>
+              <label htmlFor="rec-description" className="text-xs font-medium text-slate-600">Description *</label>
               <input id="rec-description" required aria-required="true" value={form.description} onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg" placeholder="e.g. Car payment" />
+                className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" placeholder="e.g. Car payment" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="rec-account" className="text-xs font-medium text-gray-600">Account *</label>
+                <label htmlFor="rec-account" className="text-xs font-medium text-slate-600">Account *</label>
                 <select id="rec-account" required aria-required="true" value={form.account_id} onChange={(e) => setForm((f) => ({ ...f, account_id: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg">
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg">
                   <option value="">Select…</option>
                   {accounts.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
                 </select>
               </div>
               <div>
-                <label htmlFor="rec-amount" className="text-xs font-medium text-gray-600">Amount ($) *</label>
+                <label htmlFor="rec-amount" className="text-xs font-medium text-slate-600">Amount ($) *</label>
                 <input id="rec-amount" required aria-required="true" type="number" step="0.01" min="0.01" value={form.amount}
                   onChange={(e) => setForm((f) => ({ ...f, amount: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg" placeholder="0.00" />
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" placeholder="0.00" />
               </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="rec-type" className="text-xs font-medium text-gray-600">Type</label>
+                <label htmlFor="rec-type" className="text-xs font-medium text-slate-600">Type</label>
                 <select id="rec-type" value={form.type} onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg">
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg">
                   <option value="expense">Expense</option>
                   <option value="income">Income</option>
                 </select>
               </div>
               <div>
-                <label htmlFor="rec-day" className="text-xs font-medium text-gray-600">Day of Month (1-28) *</label>
+                <label htmlFor="rec-day" className="text-xs font-medium text-slate-600">Day of Month (1-28) *</label>
                 <input id="rec-day" required aria-required="true" type="number" min="1" max="28" value={form.day_of_month}
                   onChange={(e) => setForm((f) => ({ ...f, day_of_month: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg" placeholder="e.g. 15" />
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" placeholder="e.g. 15" />
               </div>
             </div>
             <CategorySelect
@@ -376,14 +376,14 @@ export default function RecurringPage() {
               onCategoryCreated={(cat) => setCategories((prev) => [...prev, cat])}
             />
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button type="submit" disabled={saving}
               className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition flex items-center justify-center gap-2">
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               Add Recurring
             </button>
             <button type="button" onClick={() => setShowAdd(false)}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition">
               Cancel
             </button>
           </div>

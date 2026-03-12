@@ -216,9 +216,9 @@ export default function EquipmentForm({
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Catalog Search */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">
+        <label className="block text-xs font-medium text-slate-700 mb-1">
           Search Equipment Catalog
-          <span className="text-gray-400 font-normal ml-1">— optional, pre-fills name, brand &amp; model</span>
+          <span className="text-slate-400 font-normal ml-1">— optional, pre-fills name, brand &amp; model</span>
         </label>
         {form.catalog_id && linkedCatalogLabel ? (
           <div className="flex items-center gap-2 bg-amber-900/20 border border-amber-800 rounded-lg px-3 py-2 text-sm text-amber-400">
@@ -235,27 +235,27 @@ export default function EquipmentForm({
         ) : (
           <div className="space-y-1.5">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" aria-hidden="true" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" aria-hidden="true" />
               <input
                 type="text"
                 value={catalogSearch}
                 onChange={(e) => handleCatalogInput(e.target.value)}
                 placeholder="Search: treadmill, barbell, kettlebell..."
-                className="w-full border border-gray-200 rounded-lg pl-9 pr-3 py-2 text-sm"
+                className="w-full border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-sm"
               />
             </div>
-            {catalogSearching && <p className="text-xs text-gray-400">Searching...</p>}
+            {catalogSearching && <p className="text-xs text-slate-400">Searching...</p>}
             {catalogResults.length > 0 && (
-              <div className="border border-gray-200 rounded-lg max-h-40 overflow-y-auto">
+              <div className="border border-slate-200 rounded-lg max-h-40 overflow-y-auto">
                 {catalogResults.map((item) => (
                   <button
                     key={item.id}
                     type="button"
                     onClick={() => selectCatalogItem(item)}
-                    className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 border-b border-gray-100 last:border-0"
+                    className="w-full text-left px-3 py-2 text-xs text-slate-700 hover:bg-slate-50 border-b border-slate-100 last:border-0"
                   >
                     <span className="font-medium">{item.brand ? `${item.brand} ` : ''}{item.name}</span>
-                    {item.category && <span className="ml-2 text-gray-400">{item.category}</span>}
+                    {item.category && <span className="ml-2 text-slate-400">{item.category}</span>}
                   </button>
                 ))}
               </div>
@@ -267,22 +267,22 @@ export default function EquipmentForm({
       {/* Name + Category row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Name *</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Name *</label>
           <input
             type="text"
             value={form.name}
             onChange={(e) => set('name', e.target.value)}
             required
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
             placeholder="Sony A7III"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Category</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Category</label>
           <select
             value={form.category_id || ''}
             onChange={(e) => set('category_id', e.target.value || null)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           >
             <option value="">None</option>
             {categories.map((c) => (
@@ -295,21 +295,21 @@ export default function EquipmentForm({
       {/* Brand + Model */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Brand</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Brand</label>
           <input
             type="text"
             value={form.brand}
             onChange={(e) => set('brand', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Model</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Model</label>
           <input
             type="text"
             value={form.model}
             onChange={(e) => set('model', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
       </div>
@@ -317,20 +317,20 @@ export default function EquipmentForm({
       {/* Serial + Condition */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Serial Number</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Serial Number</label>
           <input
             type="text"
             value={form.serial_number}
             onChange={(e) => set('serial_number', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Condition</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Condition</label>
           <select
             value={form.condition}
             onChange={(e) => set('condition', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           >
             <option value="">--</option>
             {CONDITIONS.map((c) => (
@@ -343,35 +343,35 @@ export default function EquipmentForm({
       {/* Purchase date + price + current value */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Purchase Date</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Purchase Date</label>
           <input
             type="date"
             value={form.purchase_date}
             onChange={(e) => set('purchase_date', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Purchase Price</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Purchase Price</label>
           <input
             type="number"
             step="0.01"
             min="0"
             value={form.purchase_price}
             onChange={(e) => set('purchase_price', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
             placeholder="0.00"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Current Value</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Current Value</label>
           <input
             type="number"
             step="0.01"
             min="0"
             value={form.current_value}
             onChange={(e) => set('current_value', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
             placeholder="0.00"
           />
         </div>
@@ -380,20 +380,20 @@ export default function EquipmentForm({
       {/* Warranty + Ownership */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Warranty Expires</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Warranty Expires</label>
           <input
             type="date"
             value={form.warranty_expires}
             onChange={(e) => set('warranty_expires', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-700 mb-1">Ownership</label>
+          <label className="block text-xs font-medium text-slate-700 mb-1">Ownership</label>
           <select
             value={form.ownership_type}
             onChange={(e) => set('ownership_type', e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           >
             <option value="own">I Own This</option>
             <option value="access">I Have Access</option>
@@ -403,7 +403,7 @@ export default function EquipmentForm({
 
       {/* Linked Purchase Transaction */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">Linked Purchase Transaction</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">Linked Purchase Transaction</label>
         {form.transaction_id && linkedTxLabel ? (
           <div className="flex items-center gap-2 bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-sm text-green-700">
             <span className="flex-1 truncate">{linkedTxLabel}</span>
@@ -420,39 +420,39 @@ export default function EquipmentForm({
                 onChange={(e) => setTxSearch(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); searchTransactions(); } }}
                 placeholder="Search transactions by vendor..."
-                className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
               />
               <button
                 type="button"
                 onClick={searchTransactions}
                 disabled={txSearching}
-                className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition disabled:opacity-50"
+                className="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition disabled:opacity-50"
               >
                 <Search className="w-4 h-4" />
               </button>
             </div>
             {txResults.length > 0 && (
-              <div className="border border-gray-200 rounded-lg max-h-32 overflow-y-auto">
+              <div className="border border-slate-200 rounded-lg max-h-32 overflow-y-auto">
                 {txResults.map((tx) => (
                   <button
                     key={tx.id}
                     type="button"
                     onClick={() => selectTransaction(tx)}
-                    className="w-full text-left px-3 py-2 text-xs text-gray-700 hover:bg-gray-50 border-b border-gray-100 last:border-0"
+                    className="w-full text-left px-3 py-2 text-xs text-slate-700 hover:bg-slate-50 border-b border-slate-100 last:border-0"
                   >
                     {tx.vendor || 'Transaction'} &middot; ${Number(tx.amount).toFixed(2)} &middot; {tx.transaction_date}
                   </button>
                 ))}
               </div>
             )}
-            {txSearching && <p className="text-xs text-gray-400">Searching...</p>}
+            {txSearching && <p className="text-xs text-slate-400">Searching...</p>}
           </div>
         )}
       </div>
 
       {/* Image */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">Photo</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">Photo</label>
         <MediaUploader
           currentUrl={form.image_url || null}
           accept="image/*"
@@ -464,12 +464,12 @@ export default function EquipmentForm({
 
       {/* Notes */}
       <div>
-        <label className="block text-xs font-medium text-gray-700 mb-1">Notes</label>
+        <label className="block text-xs font-medium text-slate-700 mb-1">Notes</label>
         <textarea
           value={form.notes}
           onChange={(e) => set('notes', e.target.value)}
           rows={2}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm resize-none"
+          className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm resize-none"
         />
       </div>
 
@@ -478,7 +478,7 @@ export default function EquipmentForm({
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition"
+          className="px-4 py-2 text-sm text-slate-600 hover:bg-slate-100 rounded-lg transition"
         >
           Cancel
         </button>

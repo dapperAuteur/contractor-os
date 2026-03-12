@@ -1,7 +1,7 @@
 'use client';
 
 // components/nav/ContractorLayout.tsx
-// Dark-themed layout shell for the contractor subdomain.
+// Light "Clean Slate" layout shell for the contractor dashboard.
 
 import ContractorNav from './ContractorNav';
 import OfflineIndicator from '@/components/ui/OfflineIndicator';
@@ -21,7 +21,7 @@ interface Props {
 
 export default function ContractorLayout({ username, unreadMessages, onLogout, isAdmin, untoured, onToursChanged, children }: Props) {
   return (
-    <div className="min-h-screen bg-neutral-950 dark-input">
+    <div className="min-h-screen bg-slate-50">
       <ContractorNav username={username} unreadMessages={unreadMessages} onLogout={onLogout} isAdmin={isAdmin} untoured={untoured} />
       <MfaBanner />
       <OfflineIndicator />

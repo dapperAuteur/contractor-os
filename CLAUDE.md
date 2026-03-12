@@ -1,33 +1,42 @@
 # Work.WitUS — Code Style & Quality Guidelines
 
-## Dark Theme Contrast Rules
+## "Clean Slate" Light Theme — Color System
 
-This project uses dark-themed pages (`bg-neutral-950`, `bg-neutral-900`) for the contractor (Work.WitUS) and lister (CrewOps) products. All text, icons, and interactive elements on these backgrounds **must** meet WCAG 2.1 AA contrast requirements (4.5:1 for normal text, 3:1 for large text and UI components).
+The contractor dashboard uses a **light "Clean Slate" theme** (inspired by Linear/Vercel/Stripe). The login page remains dark for brand identity.
 
-### Allowed text colors on dark backgrounds (bg-neutral-950 / bg-neutral-900):
-- `text-neutral-100` — primary text (headings, body)
-- `text-neutral-200` — strong secondary text
-- `text-neutral-300` — secondary text, form labels
-- `text-neutral-400` — tertiary text, descriptions, placeholders
-- `text-neutral-500` — minimum for any visible text (footers, counters, timestamps, icons)
+### Dashboard page & content area (light):
+- Page background: `bg-slate-50`
+- Card / section background: `bg-white`
+- Card border: `border-slate-200`
+- Heading text: `text-slate-900`
+- Body / secondary text: `text-slate-500`
+- Form labels: `text-slate-700`
 
-### NEVER use on dark backgrounds:
-- `text-neutral-600` — fails contrast on bg-neutral-900/950
-- `text-neutral-700`, `text-neutral-800`, `text-neutral-900` — invisible
-- `text-gray-*` variants (designed for light backgrounds)
+### Standard form input (dashboard):
+```
+w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900
+placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30
+```
 
-### Border colors on dark backgrounds:
-- Use `border-neutral-700` or `border-neutral-800` — never `border-gray-*`
+### Standard label (dashboard):
+```
+block text-sm font-medium text-slate-700 mb-1
+```
+
+### NEVER use `gray-*` in the dashboard — always use `slate-*` equivalents.
+
+### Login / auth pages (dark — preserved for branding):
+- Background: `bg-neutral-950`, card: `bg-neutral-900`, border: `border-neutral-800`
+- Text on dark: `text-neutral-100` (primary), `text-neutral-300` (labels), `text-neutral-400` (secondary)
+- Inputs on dark: `border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500`
+- Wrap dark form pages with `dark-input` class for browser-native icon rendering
+
+### Admin pages (dark):
+- Use `dark-input` wrapper class — it applies `color: #e5e7eb` and `color-scheme: dark` to all inputs so native browser icons render correctly
 
 ### Accent colors by product:
-- **Contractor (Work.WitUS):** `amber` — buttons: `bg-amber-600 hover:bg-amber-500`, text: `text-amber-400`, focus: `focus:ring-amber-500`
+- **Contractor (Work.WitUS):** `amber` — buttons: `bg-amber-600 hover:bg-amber-500`, text: `text-amber-400` (dark) / `text-amber-600` (light), focus: `focus:ring-amber-500`
 - **Lister (CrewOps):** `indigo` — buttons: `bg-indigo-600 hover:bg-indigo-500`, text: `text-indigo-400`, focus: `focus:ring-indigo-500`
-
-### Form inputs on dark backgrounds:
-```
-border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-{accent}-500
-```
-Never use `border-gray-300` or `bg-white` on dark-themed pages.
 
 ---
 
@@ -80,4 +89,6 @@ This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for d
 - Use `.maybeSingle()` not `.single()` for Supabase queries that may return no rows
 - Service role client (`SUPABASE_SERVICE_ROLE_KEY`) for API routes bypassing RLS
 - Tailwind v4: `shrink-0` not `flex-shrink-0`, `bg-linear-to-b` not `bg-gradient-to-b`
-- Never use `text-neutral-600` or darker on dark backgrounds — this is the single most common contrast bug
+- Dashboard uses `slate-*` colors (light theme) — never use `gray-*` or `neutral-*` in dashboard pages
+- Login/admin pages use `neutral-*` colors (dark theme) — never use `gray-*` or `slate-*` there
+- Most common contrast bug: using `text-gray-*` anywhere (wrong scale for both dark and light contexts)

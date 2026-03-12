@@ -117,8 +117,8 @@ export default function VenuesPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">Venues</h1>
-      <p className="text-sm text-neutral-500">
+      <h1 className="text-2xl font-bold text-slate-900">Venues</h1>
+      <p className="text-sm text-slate-400">
         Knowledge base for venues from your jobs. Add parking, WiFi, load-in details, and more.
       </p>
 
@@ -127,16 +127,16 @@ export default function VenuesPage() {
         placeholder="Search venues..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
         aria-label="Search venues"
       />
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           {search ? 'No venues match your search.' : 'No venues yet. Venues appear here when you add locations to jobs.'}
         </div>
       ) : (
@@ -151,7 +151,7 @@ export default function VenuesPage() {
               <article
                 key={venue.id}
                 role="listitem"
-                className="rounded-xl border border-neutral-800 bg-neutral-900"
+                className="rounded-xl border border-slate-200 bg-white"
               >
                 {/* Header */}
                 <button
@@ -163,8 +163,8 @@ export default function VenuesPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <Building2 size={16} className="text-amber-400 shrink-0" aria-hidden="true" />
-                      <span className="font-medium text-neutral-100">{venue.label}</span>
-                      <span className="text-xs text-neutral-500">
+                      <span className="font-medium text-slate-900">{venue.label}</span>
+                      <span className="text-xs text-slate-400">
                         {venue.job_count} job{venue.job_count !== 1 ? 's' : ''}
                       </span>
                       {hasKb && (
@@ -174,22 +174,22 @@ export default function VenuesPage() {
                       )}
                     </div>
                     {venue.address && (
-                      <div className="mt-1 flex items-center gap-1 text-xs text-neutral-500">
+                      <div className="mt-1 flex items-center gap-1 text-xs text-slate-400">
                         <MapPin size={11} aria-hidden="true" />
                         {venue.address}
                       </div>
                     )}
                   </div>
                   {isExpanded ? (
-                    <ChevronUp size={16} className="text-neutral-500 shrink-0" aria-hidden="true" />
+                    <ChevronUp size={16} className="text-slate-400 shrink-0" aria-hidden="true" />
                   ) : (
-                    <ChevronDown size={16} className="text-neutral-500 shrink-0" aria-hidden="true" />
+                    <ChevronDown size={16} className="text-slate-400 shrink-0" aria-hidden="true" />
                   )}
                 </button>
 
                 {/* Expanded details */}
                 {isExpanded && (
-                  <div className="border-t border-neutral-800 p-4 space-y-4">
+                  <div className="border-t border-slate-200 p-4 space-y-4">
                     {venue.schematics_url && !isEditing && (
                       <a
                         href={venue.schematics_url}
@@ -207,24 +207,24 @@ export default function VenuesPage() {
                       /* Edit mode */
                       <div className="space-y-3">
                         <label className="block">
-                          <span className="text-xs font-medium text-neutral-400">Schematics URL</span>
+                          <span className="text-xs font-medium text-slate-500">Schematics URL</span>
                           <input
                             type="url"
                             value={editSchematics}
                             onChange={(e) => setEditSchematics(e.target.value)}
                             placeholder="https://..."
-                            className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                            className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                           />
                         </label>
 
                         {KB_FIELDS.map((f) => (
                           <label key={f.key} className="block">
-                            <span className="text-xs font-medium text-neutral-400">{f.label}</span>
+                            <span className="text-xs font-medium text-slate-500">{f.label}</span>
                             <textarea
                               value={editKb[f.key] ?? ''}
                               onChange={(e) => updateKbField(f.key, e.target.value)}
                               rows={2}
-                              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 resize-none"
+                              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 resize-none"
                               placeholder={`${f.label} details...`}
                             />
                           </label>
@@ -232,7 +232,7 @@ export default function VenuesPage() {
 
                         {/* Custom fields */}
                         <div>
-                          <span className="text-xs font-medium text-neutral-400">Custom Fields</span>
+                          <span className="text-xs font-medium text-slate-500">Custom Fields</span>
                           {(editKb.custom ?? []).map((c, i) => (
                             <div key={i} className="mt-1 flex gap-2">
                               <input
@@ -240,7 +240,7 @@ export default function VenuesPage() {
                                 value={c.key}
                                 onChange={(e) => updateCustomField(i, 'key', e.target.value)}
                                 placeholder="Label"
-                                className="w-1/3 rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                                className="w-1/3 rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                                 aria-label={`Custom field ${i + 1} label`}
                               />
                               <input
@@ -248,12 +248,12 @@ export default function VenuesPage() {
                                 value={c.value}
                                 onChange={(e) => updateCustomField(i, 'value', e.target.value)}
                                 placeholder="Value"
-                                className="flex-1 rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                                className="flex-1 rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                                 aria-label={`Custom field ${i + 1} value`}
                               />
                               <button
                                 onClick={() => removeCustomField(i)}
-                                className="min-h-11 min-w-11 flex items-center justify-center rounded-lg border border-neutral-700 text-neutral-500 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                className="min-h-11 min-w-11 flex items-center justify-center rounded-lg border border-slate-300 text-slate-400 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
                                 aria-label={`Remove custom field ${i + 1}`}
                               >
                                 <X size={14} aria-hidden="true" />
@@ -272,14 +272,14 @@ export default function VenuesPage() {
                           <button
                             onClick={() => saveKb(venue.id)}
                             disabled={saving}
-                            className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+                            className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
                           >
                             {saving ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Save size={14} aria-hidden="true" />}
                             Save
                           </button>
                           <button
                             onClick={() => setEditingId(null)}
-                            className="min-h-11 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                            className="min-h-11 rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
                           >
                             Cancel
                           </button>
@@ -294,8 +294,8 @@ export default function VenuesPage() {
                               (f) =>
                                 kb[f.key] && (
                                   <div key={f.key}>
-                                    <dt className="text-xs font-medium text-neutral-400">{f.label}</dt>
-                                    <dd className="mt-0.5 whitespace-pre-wrap text-sm text-neutral-200">
+                                    <dt className="text-xs font-medium text-slate-500">{f.label}</dt>
+                                    <dd className="mt-0.5 whitespace-pre-wrap text-sm text-slate-800">
                                       {kb[f.key]}
                                     </dd>
                                   </div>
@@ -303,18 +303,18 @@ export default function VenuesPage() {
                             )}
                             {(kb.custom ?? []).map((c, i) => (
                               <div key={i}>
-                                <dt className="text-xs font-medium text-neutral-400">{c.key}</dt>
-                                <dd className="mt-0.5 text-sm text-neutral-200">{c.value}</dd>
+                                <dt className="text-xs font-medium text-slate-500">{c.key}</dt>
+                                <dd className="mt-0.5 text-sm text-slate-800">{c.value}</dd>
                               </div>
                             ))}
                           </dl>
                         ) : (
-                          <p className="text-sm text-neutral-500">No knowledge base info yet.</p>
+                          <p className="text-sm text-slate-400">No knowledge base info yet.</p>
                         )}
 
                         <button
                           onClick={() => startEdit(venue)}
-                          className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-neutral-300 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 sm:w-auto"
+                          className="flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 sm:w-auto"
                         >
                           Edit Knowledge Base
                         </button>

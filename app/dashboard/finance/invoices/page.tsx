@@ -68,11 +68,11 @@ interface Brand {
 }
 
 const STATUS_BADGE: Record<string, { bg: string; text: string; Icon: typeof Clock }> = {
-  draft: { bg: 'bg-gray-100', text: 'text-gray-700', Icon: FileText },
+  draft: { bg: 'bg-slate-100', text: 'text-slate-700', Icon: FileText },
   sent: { bg: 'bg-blue-100', text: 'text-blue-700', Icon: Clock },
   paid: { bg: 'bg-green-100', text: 'text-green-700', Icon: CheckCircle2 },
   overdue: { bg: 'bg-red-100', text: 'text-red-700', Icon: AlertTriangle },
-  cancelled: { bg: 'bg-gray-100', text: 'text-gray-500', Icon: X },
+  cancelled: { bg: 'bg-slate-100', text: 'text-slate-500', Icon: X },
 };
 
 export default function InvoicesPage() {
@@ -245,8 +245,8 @@ export default function InvoicesPage() {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Invoices & Receivables</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900">Invoices & Receivables</h1>
+          <p className="text-sm text-slate-500 mt-1">
             <Link href="/dashboard/finance" className="text-amber-600 hover:underline">Finance</Link>
             {' / '}Invoices
           </p>
@@ -263,16 +263,16 @@ export default function InvoicesPage() {
                 <ChevronDown className="w-3 h-3" />
               </button>
               {showTemplates && (
-                <div className="absolute right-0 mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-lg z-10 py-1">
+                <div className="absolute right-0 mt-1 w-64 bg-white border border-slate-200 rounded-xl shadow-lg z-10 py-1">
                   {templates.map((t) => (
                     <button
                       key={t.id}
                       onClick={() => { setShowTemplates(false); createFromTemplate(t.id); }}
-                      className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition"
+                      className="w-full text-left px-4 py-2 text-sm hover:bg-slate-50 transition"
                     >
-                      <span className="font-medium text-gray-900">{t.name}</span>
-                      {t.contact_name && <span className="text-gray-500 ml-1">({t.contact_name})</span>}
-                      <span className="text-xs text-gray-400 block">${Number(t.total).toFixed(2)} · Used {t.use_count}x</span>
+                      <span className="font-medium text-slate-900">{t.name}</span>
+                      {t.contact_name && <span className="text-slate-500 ml-1">({t.contact_name})</span>}
+                      <span className="text-xs text-slate-400 block">${Number(t.total).toFixed(2)} · Used {t.use_count}x</span>
                     </button>
                   ))}
                 </div>
@@ -292,16 +292,16 @@ export default function InvoicesPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="bg-white border rounded-xl p-4">
-          <p className="text-xs font-medium text-gray-500 uppercase">Owed to You</p>
+          <p className="text-xs font-medium text-slate-500 uppercase">Owed to You</p>
           <p className="text-xl font-bold text-green-600">${totalReceivable.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
         </div>
         <div className="bg-white border rounded-xl p-4">
-          <p className="text-xs font-medium text-gray-500 uppercase">You Owe</p>
+          <p className="text-xs font-medium text-slate-500 uppercase">You Owe</p>
           <p className="text-xl font-bold text-red-600">${totalPayable.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
         </div>
         <div className={`bg-white border rounded-xl p-4 ${overdue.length > 0 ? 'border-red-300' : ''}`}>
-          <p className="text-xs font-medium text-gray-500 uppercase">Overdue</p>
-          <p className={`text-xl font-bold ${overdue.length > 0 ? 'text-red-600' : 'text-gray-400'}`}>{overdue.length}</p>
+          <p className="text-xs font-medium text-slate-500 uppercase">Overdue</p>
+          <p className={`text-xl font-bold ${overdue.length > 0 ? 'text-red-600' : 'text-slate-400'}`}>{overdue.length}</p>
         </div>
       </div>
 
@@ -312,19 +312,19 @@ export default function InvoicesPage() {
             key={d}
             onClick={() => setFilter(d)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-              filter === d ? 'bg-amber-500/10 text-amber-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              filter === d ? 'bg-amber-500/10 text-amber-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
             {d === 'all' ? 'All' : d === 'receivable' ? 'Receivable' : 'Payable'}
           </button>
         ))}
-        <div className="w-px bg-gray-200 mx-1" />
+        <div className="w-px bg-slate-200 mx-1" />
         {(['active', 'paid', 'all'] as const).map((s) => (
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-              statusFilter === s ? 'bg-amber-500/10 text-amber-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              statusFilter === s ? 'bg-amber-500/10 text-amber-700' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
             {s === 'active' ? 'Active' : s === 'paid' ? 'Paid' : 'All Status'}
@@ -335,7 +335,7 @@ export default function InvoicesPage() {
       {/* Invoice list */}
       <div className="space-y-3">
         {filteredInvoices.length === 0 && (
-          <div className="text-center py-12 text-gray-400">
+          <div className="text-center py-12 text-slate-400">
             <FileText className="w-10 h-10 mx-auto mb-3" />
             <p>No invoices yet. Create one to start tracking.</p>
           </div>
@@ -359,8 +359,8 @@ export default function InvoicesPage() {
                     <ArrowUpRight className="w-5 h-5 text-red-500 shrink-0" />
                   )}
                   <div>
-                    <p className="font-medium text-gray-900">{inv.contact_name}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-medium text-slate-900">{inv.contact_name}</p>
+                    <p className="text-xs text-slate-500">
                       {inv.invoice_number && `${inv.invoice_number} · `}
                       {new Date(inv.invoice_date).toLocaleDateString()}
                       {inv.due_date && ` · Due ${new Date(inv.due_date).toLocaleDateString()}`}
@@ -373,7 +373,7 @@ export default function InvoicesPage() {
                       {inv.direction === 'receivable' ? '+' : '-'}${Number(inv.total).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </p>
                     {balanceDue > 0 && balanceDue < Number(inv.total) && (
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-slate-500">
                         ${balanceDue.toLocaleString('en-US', { minimumFractionDigits: 2 })} remaining
                       </p>
                     )}
@@ -388,7 +388,7 @@ export default function InvoicesPage() {
               {/* Line items summary */}
               {inv.invoice_items?.length > 0 && (
                 <div
-                  className="mt-2 pl-8 text-xs text-gray-500 cursor-pointer"
+                  className="mt-2 pl-8 text-xs text-slate-500 cursor-pointer"
                   onClick={() => router.push(`/dashboard/finance/invoices/${inv.id}`)}
                 >
                   {inv.invoice_items.map((item, i) => (
@@ -429,7 +429,7 @@ export default function InvoicesPage() {
                 )}
                 <button
                   onClick={() => setLinkingId(inv.id)}
-                  className="px-3 py-1 text-xs font-medium bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100"
+                  className="px-3 py-1 text-xs font-medium bg-slate-50 text-slate-600 rounded-lg hover:bg-slate-100"
                 >
                   <Link2 className="w-3 h-3 inline mr-1" />
                   Link
@@ -448,7 +448,7 @@ export default function InvoicesPage() {
             <button
               onClick={() => setForm({ ...form, direction: 'receivable' })}
               className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium border transition ${
-                form.direction === 'receivable' ? 'bg-green-50 border-green-300 text-green-700' : 'bg-gray-50 border-gray-200 text-gray-600'
+                form.direction === 'receivable' ? 'bg-green-50 border-green-300 text-green-700' : 'bg-slate-50 border-slate-200 text-slate-600'
               }`}
             >
               <ArrowDownLeft className="w-4 h-4" />
@@ -457,7 +457,7 @@ export default function InvoicesPage() {
             <button
               onClick={() => setForm({ ...form, direction: 'payable' })}
               className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-medium border transition ${
-                form.direction === 'payable' ? 'bg-red-50 border-red-300 text-red-700' : 'bg-gray-50 border-gray-200 text-gray-600'
+                form.direction === 'payable' ? 'bg-red-50 border-red-300 text-red-700' : 'bg-slate-50 border-slate-200 text-slate-600'
               }`}
             >
               <ArrowUpRight className="w-4 h-4" />
@@ -467,7 +467,7 @@ export default function InvoicesPage() {
 
           {/* Contact */}
           <div>
-            <label htmlFor="inv-contact" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="inv-contact" className="block text-sm font-medium text-slate-700 mb-1">
               {form.direction === 'receivable' ? 'Client / Customer' : 'Vendor / Creditor'}
             </label>
             <ContactAutocomplete
@@ -480,42 +480,42 @@ export default function InvoicesPage() {
           {/* Invoice number + dates */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label htmlFor="inv-number" className="block text-xs font-medium text-gray-600 mb-1">Invoice #</label>
+              <label htmlFor="inv-number" className="block text-xs font-medium text-slate-600 mb-1">Invoice #</label>
               <input
                 id="inv-number"
                 type="text"
                 value={form.invoice_number}
                 onChange={(e) => setForm({ ...form, invoice_number: e.target.value })}
                 placeholder="INV-001"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
               />
             </div>
             <div>
-              <label htmlFor="inv-date" className="block text-xs font-medium text-gray-600 mb-1">Date</label>
+              <label htmlFor="inv-date" className="block text-xs font-medium text-slate-600 mb-1">Date</label>
               <input
                 id="inv-date"
                 type="date"
                 value={form.invoice_date}
                 onChange={(e) => setForm({ ...form, invoice_date: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="inv-due-date" className="block text-xs font-medium text-gray-600 mb-1">Due Date</label>
+            <label htmlFor="inv-due-date" className="block text-xs font-medium text-slate-600 mb-1">Due Date</label>
             <input
               id="inv-due-date"
               type="date"
               value={form.due_date}
               onChange={(e) => setForm({ ...form, due_date: e.target.value })}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
             />
           </div>
 
           {/* Line items */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Line Items</label>
+            <label className="block text-sm font-medium text-slate-700 mb-2">Line Items</label>
             <div className="space-y-2">
               {lineItems.map((li, i) => (
                 <div key={i} className="flex gap-2 items-start">
@@ -524,7 +524,7 @@ export default function InvoicesPage() {
                     placeholder="Description"
                     value={li.description}
                     onChange={(e) => updateLineItem(i, 'description', e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+                    className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
                     aria-label={`Line item ${i + 1} description`}
                   />
                   <input
@@ -532,7 +532,7 @@ export default function InvoicesPage() {
                     placeholder="Qty"
                     value={li.quantity}
                     onChange={(e) => updateLineItem(i, 'quantity', e.target.value)}
-                    className="w-16 border border-gray-300 rounded-lg px-2 py-2 text-sm text-center text-gray-900"
+                    className="w-16 border border-slate-300 rounded-lg px-2 py-2 text-sm text-center text-slate-900"
                     min="1"
                     aria-label={`Line item ${i + 1} quantity`}
                   />
@@ -541,13 +541,13 @@ export default function InvoicesPage() {
                     placeholder="Price"
                     value={li.unit_price}
                     onChange={(e) => updateLineItem(i, 'unit_price', e.target.value)}
-                    className="w-24 border border-gray-300 rounded-lg px-2 py-2 text-sm text-right text-gray-900"
+                    className="w-24 border border-slate-300 rounded-lg px-2 py-2 text-sm text-right text-slate-900"
                     step="0.01"
                     min="0"
                     aria-label={`Line item ${i + 1} unit price`}
                   />
                   {lineItems.length > 1 && (
-                    <button onClick={() => removeLineItem(i)} className="p-2 text-gray-400 hover:text-red-500" aria-label={`Remove line item ${i + 1}`}>
+                    <button onClick={() => removeLineItem(i)} className="p-2 text-slate-400 hover:text-red-500" aria-label={`Remove line item ${i + 1}`}>
                       <X className="w-4 h-4" />
                     </button>
                   )}
@@ -560,7 +560,7 @@ export default function InvoicesPage() {
             >
               + Add line item
             </button>
-            <p className="text-right text-sm font-bold text-gray-900 mt-2">
+            <p className="text-right text-sm font-bold text-slate-900 mt-2">
               Total: ${lineTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </p>
           </div>
@@ -568,12 +568,15 @@ export default function InvoicesPage() {
           {/* Optional fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label htmlFor="inv-account" className="block text-xs font-medium text-gray-600 mb-1">Account</label>
+              <div className="flex items-center justify-between mb-1">
+                <label htmlFor="inv-account" className="block text-xs font-medium text-slate-600">Account</label>
+                <Link href="/dashboard/finance/accounts" className="text-xs text-amber-600 hover:text-amber-700 font-medium">Manage accounts</Link>
+              </div>
               <select
                 id="inv-account"
                 value={form.account_id}
                 onChange={(e) => setForm({ ...form, account_id: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
               >
                 <option value="">None</option>
                 {accounts.map((a) => (
@@ -591,12 +594,12 @@ export default function InvoicesPage() {
 
           {brands.length > 0 && (
             <div>
-              <label htmlFor="inv-brand" className="block text-xs font-medium text-gray-600 mb-1">Brand</label>
+              <label htmlFor="inv-brand" className="block text-xs font-medium text-slate-600 mb-1">Brand</label>
               <select
                 id="inv-brand"
                 value={form.brand_id}
                 onChange={(e) => setForm({ ...form, brand_id: e.target.value })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
               >
                 <option value="">None</option>
                 {brands.map((b) => (
@@ -607,17 +610,17 @@ export default function InvoicesPage() {
           )}
 
           <div>
-            <label htmlFor="inv-notes" className="block text-xs font-medium text-gray-600 mb-1">Notes</label>
+            <label htmlFor="inv-notes" className="block text-xs font-medium text-slate-600 mb-1">Notes</label>
             <textarea
               id="inv-notes"
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
               rows={2}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
             />
           </div>
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <button
             onClick={handleCreate}
             disabled={saving || !form.contact_name.trim() || lineTotal <= 0}
@@ -628,7 +631,7 @@ export default function InvoicesPage() {
           </button>
           <button
             onClick={() => setShowCreate(false)}
-            className="px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+            className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             Cancel
           </button>

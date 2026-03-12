@@ -51,7 +51,7 @@ export default function ContractorHubPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <HardHat className="text-amber-400" size={28} aria-hidden="true" />
-          <h1 className="text-2xl font-bold text-neutral-100">Work.WitUS</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Work.WitUS</h1>
         </div>
         <div className="flex gap-2">
           <Link
@@ -63,7 +63,7 @@ export default function ContractorHubPage() {
           </Link>
           <Link
             href="/dashboard/contractor/jobs"
-            className="flex items-center gap-1.5 rounded-lg border border-neutral-700 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 min-h-11"
             aria-label="View all jobs"
           >
             All Jobs <ArrowRight size={14} aria-hidden="true" />
@@ -74,8 +74,8 @@ export default function ContractorHubPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {stats.map((s) => (
-          <div key={s.status} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 text-center">
-            <div className="text-3xl font-bold text-neutral-100">{s.value}</div>
+          <div key={s.status} className="rounded-xl border border-slate-200 bg-white p-4 text-center">
+            <div className="text-3xl font-bold text-slate-900">{s.value}</div>
             <div className="mt-1">
               <JobStatusBadge status={s.status} />
             </div>
@@ -85,13 +85,13 @@ export default function ContractorHubPage() {
 
       {/* Upcoming / Active Jobs */}
       <div>
-        <h2 className="mb-3 text-lg font-semibold text-neutral-200">Upcoming & Active</h2>
+        <h2 className="mb-3 text-lg font-semibold text-slate-800">Upcoming & Active</h2>
         {loading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading jobs" />
+            <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading jobs" />
           </div>
         ) : upcoming.length === 0 ? (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+          <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
             No upcoming jobs.{' '}
             <Link href="/dashboard/contractor/jobs/new" className="text-amber-400 hover:underline">
               Create one
@@ -103,18 +103,18 @@ export default function ContractorHubPage() {
               <Link
                 key={job.id}
                 href={`/dashboard/contractor/jobs/${job.id}`}
-                className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700 transition-colors"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition-colors"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-sm text-amber-400">{job.job_number}</span>
                     <JobStatusBadge status={job.status} />
                   </div>
-                  <div className="mt-1 text-neutral-100 font-medium truncate">
+                  <div className="mt-1 text-slate-900 font-medium truncate">
                     {job.client_name}
-                    {job.event_name && <span className="text-neutral-400"> — {job.event_name}</span>}
+                    {job.event_name && <span className="text-slate-500"> — {job.event_name}</span>}
                   </div>
-                  <div className="mt-0.5 text-xs text-neutral-500">
+                  <div className="mt-0.5 text-xs text-slate-400">
                     {job.location_name && <span>{job.location_name} · </span>}
                     {job.start_date && <span>{new Date(job.start_date + 'T00:00').toLocaleDateString()}</span>}
                     {job.end_date && job.end_date !== job.start_date && (
@@ -122,7 +122,7 @@ export default function ContractorHubPage() {
                     )}
                   </div>
                 </div>
-                <ArrowRight size={16} className="shrink-0 text-neutral-500" aria-hidden="true" />
+                <ArrowRight size={16} className="shrink-0 text-slate-400" aria-hidden="true" />
               </Link>
             ))}
           </div>

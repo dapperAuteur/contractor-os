@@ -265,11 +265,11 @@ export default function FinanceDashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-2">
             <DollarSign className="w-7 h-7 text-amber-600" />
             Finance Dashboard
           </h1>
-          <p className="text-gray-500 mt-1">Track spending, budgets, and income</p>
+          <p className="text-slate-500 mt-1">Track spending, budgets, and income</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <button
@@ -301,28 +301,28 @@ export default function FinanceDashboardPage() {
           </Link>
           <Link
             href="/dashboard/finance/accounts"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             <CreditCard className="w-4 h-4" />
             Accounts
           </Link>
           <Link
             href="/dashboard/finance/recurring"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             <RefreshCw className="w-4 h-4" />
             Recurring
           </Link>
           <Link
             href="/dashboard/finance/invoices"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             <FileText className="w-4 h-4" />
             Invoices
           </Link>
           <Link
             href="/dashboard/finance/brands"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             <Wallet className="w-4 h-4" />
             Brands
@@ -336,7 +336,7 @@ export default function FinanceDashboardPage() {
           </Link>
           <a
             href="/api/finance/export"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
             <Download className="w-4 h-4" />
             Export
@@ -355,7 +355,7 @@ export default function FinanceDashboardPage() {
                 {reminders.overdue_count > 0 && reminders.due_soon_count > 0 && ' · '}
                 {reminders.due_soon_count > 0 && `${reminders.due_soon_count} due soon`}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-slate-500">
                 {reminders.invoices.filter((r) => r.urgency === 'overdue').map((r) => r.contact_name).join(', ')}
                 {reminders.accounts.filter((r) => r.urgency === 'due_now' || r.urgency === 'due_soon').map((r) => r.name).join(', ')}
               </p>
@@ -371,7 +371,7 @@ export default function FinanceDashboardPage() {
       {accounts.filter((a) => a.is_active).length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+            <h2 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
               <Wallet className="w-4 h-4 text-amber-600" />
               Accounts
             </h2>
@@ -381,13 +381,13 @@ export default function FinanceDashboardPage() {
           </div>
           <div className="flex gap-3 flex-wrap">
             {accounts.filter((a) => a.is_active).map((acct) => (
-              <div key={acct.id} className="bg-white border border-gray-200 rounded-xl px-4 py-3 min-w-40">
-                <p className="text-xs text-gray-500 mb-0.5">
+              <div key={acct.id} className="bg-white border border-slate-200 rounded-xl px-4 py-3 min-w-40">
+                <p className="text-xs text-slate-500 mb-0.5">
                   {ACCOUNT_TYPE_LABEL[acct.account_type] ?? acct.account_type}
                   {acct.last_four && <span className="ml-1">··{acct.last_four}</span>}
                 </p>
-                <p className="text-sm font-semibold text-gray-800 truncate">{acct.name}</p>
-                <p className={`text-base font-bold mt-0.5 ${acct.balance < 0 ? 'text-red-600' : 'text-gray-900'}`}>
+                <p className="text-sm font-semibold text-slate-800 truncate">{acct.name}</p>
+                <p className={`text-base font-bold mt-0.5 ${acct.balance < 0 ? 'text-red-600' : 'text-slate-900'}`}>
                   {acct.balance < 0 ? '-' : ''}${Math.abs(acct.balance).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </p>
               </div>
@@ -398,22 +398,22 @@ export default function FinanceDashboardPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5">
+          <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
             <TrendingDown className="w-4 h-4 text-red-500" />
             Expenses This Month
           </div>
-          <p className="text-2xl font-bold text-gray-900">${cm.expenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+          <p className="text-2xl font-bold text-slate-900">${cm.expenses.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
         </div>
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5">
+          <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
             <TrendingUp className="w-4 h-4 text-green-500" />
             Income This Month
           </div>
-          <p className="text-2xl font-bold text-gray-900">${cm.income.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
+          <p className="text-2xl font-bold text-slate-900">${cm.income.toLocaleString('en-US', { minimumFractionDigits: 2 })}</p>
         </div>
         <div className={`bg-white border rounded-2xl p-5 ${cm.net >= 0 ? 'border-green-200' : 'border-red-200'}`}>
-          <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+          <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
             <DollarSign className="w-4 h-4" />
             Net This Month
           </div>
@@ -427,7 +427,7 @@ export default function FinanceDashboardPage() {
       {hasProjections && (
         <>
           <div className="flex items-center gap-3 flex-wrap" role="group" aria-label="Projection display options">
-            <span className="text-xs font-medium text-gray-500">Projections:</span>
+            <span className="text-xs font-medium text-slate-500">Projections:</span>
             {(['showCard', 'showTimeline', 'showChart'] as const).map((key) => {
               const labels = { showCard: 'Summary Card', showTimeline: 'Timeline', showChart: 'Chart Overlay' };
               return (
@@ -439,7 +439,7 @@ export default function FinanceDashboardPage() {
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition border ${
                     projectionToggles[key]
                       ? 'bg-amber-50 text-amber-700 border-amber-200'
-                      : 'bg-gray-50 text-gray-400 border-gray-200'
+                      : 'bg-slate-50 text-slate-400 border-slate-200'
                   }`}
                 >
                   {labels[key]}
@@ -452,7 +452,7 @@ export default function FinanceDashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {summary.projections.currentMonth.receivable > 0 && (
                 <div className="bg-white border border-dashed border-green-300 rounded-2xl p-5">
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                  <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
                     <FileText className="w-4 h-4 text-green-500" aria-hidden="true" />
                     Projected Income
                     <span className="ml-auto text-xs bg-green-50 text-green-600 px-1.5 py-0.5 rounded-full">
@@ -466,7 +466,7 @@ export default function FinanceDashboardPage() {
               )}
               {summary.projections.currentMonth.payable > 0 && (
                 <div className="bg-white border border-dashed border-red-300 rounded-2xl p-5">
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-1">
+                  <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
                     <FileText className="w-4 h-4 text-red-500" aria-hidden="true" />
                     Projected Expenses
                     <span className="ml-auto text-xs bg-red-50 text-red-600 px-1.5 py-0.5 rounded-full">
@@ -482,16 +482,16 @@ export default function FinanceDashboardPage() {
           )}
 
           {projectionToggles.showTimeline && summary?.projections?.monthlyTimeline && summary.projections.monthlyTimeline.length > 0 && (
-            <div className="bg-white border border-gray-200 rounded-2xl p-5">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4">Invoice Timeline</h2>
+            <div className="bg-white border border-slate-200 rounded-2xl p-5">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4">Invoice Timeline</h2>
               <div className="flex gap-3 overflow-x-auto pb-2" role="list" aria-label="Monthly projected invoice amounts">
                 {summary.projections.monthlyTimeline.map((m) => (
                   <div
                     key={m.month}
-                    className="min-w-35 border border-gray-100 rounded-xl p-3 shrink-0"
+                    className="min-w-35 border border-slate-100 rounded-xl p-3 shrink-0"
                     role="listitem"
                   >
-                    <p className="text-xs font-medium text-gray-500 mb-2">{m.label}</p>
+                    <p className="text-xs font-medium text-slate-500 mb-2">{m.label}</p>
                     {m.receivable > 0 && (
                       <p className="text-sm font-semibold text-green-600">
                         +${m.receivable.toLocaleString('en-US', { minimumFractionDigits: 2 })}
@@ -502,7 +502,7 @@ export default function FinanceDashboardPage() {
                         -${m.payable.toLocaleString('en-US', { minimumFractionDigits: 2 })}
                       </p>
                     )}
-                    <p className="text-xs text-gray-400 mt-1">
+                    <p className="text-xs text-slate-400 mt-1">
                       {m.count} invoice{m.count !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -516,8 +516,8 @@ export default function FinanceDashboardPage() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Monthly Trend Bar Chart */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Monthly Trend</h2>
+        <div className="bg-white border border-slate-200 rounded-2xl p-5">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">Monthly Trend</h2>
           {chartData.length > 0 ? (
             <div className="h-62.5 sm:h-75">
               <ResponsiveContainer width="100%" height="100%">
@@ -542,14 +542,14 @@ export default function FinanceDashboardPage() {
               </ResponsiveContainer>
             </div>
           ) : (
-            <p className="text-sm text-gray-400 py-12 text-center">No transaction data yet</p>
+            <p className="text-sm text-slate-400 py-12 text-center">No transaction data yet</p>
           )}
         </div>
 
         {/* Category Spending Pie Chart */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Spending by Category</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Spending by Category</h2>
             <button
               onClick={() => setShowCatForm(true)}
               className="text-xs text-amber-600 hover:text-amber-700 font-medium flex items-center gap-1"
@@ -582,15 +582,15 @@ export default function FinanceDashboardPage() {
               </ResponsiveContainer>
             </div>
           ) : (
-            <p className="text-sm text-gray-400 py-12 text-center">No categorized spending yet</p>
+            <p className="text-sm text-slate-400 py-12 text-center">No categorized spending yet</p>
           )}
         </div>
       </div>
 
       {/* Budget Progress */}
       {(summary?.categoryBreakdown || []).some((c) => c.monthly_budget) && (
-        <div className="bg-white border border-gray-200 rounded-2xl p-5">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Budget Progress</h2>
+        <div className="bg-white border border-slate-200 rounded-2xl p-5">
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">Budget Progress</h2>
           <div className="space-y-3">
             {(summary?.categoryBreakdown || [])
               .filter((c) => c.monthly_budget)
@@ -600,12 +600,12 @@ export default function FinanceDashboardPage() {
                 return (
                   <div key={cat.id}>
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="font-medium text-gray-700">{cat.name}</span>
-                      <span className={`text-xs font-medium ${over ? 'text-red-600' : 'text-gray-500'}`}>
+                      <span className="font-medium text-slate-700">{cat.name}</span>
+                      <span className={`text-xs font-medium ${over ? 'text-red-600' : 'text-slate-500'}`}>
                         ${cat.spent.toFixed(2)} / ${cat.monthly_budget?.toFixed(2)}
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all"
                         style={{
@@ -645,19 +645,19 @@ export default function FinanceDashboardPage() {
           <div className="p-6 space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="txn-type" className="text-xs font-medium text-gray-600">Type</label>
+                <label htmlFor="txn-type" className="text-xs font-medium text-slate-600">Type</label>
                 <select
                   id="txn-type"
                   value={addForm.type}
                   onChange={(e) => setAddForm((p) => ({ ...p, type: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                 >
                   <option value="expense">Expense</option>
                   <option value="income">Income</option>
                 </select>
               </div>
               <div>
-                <label htmlFor="txn-amount" className="text-xs font-medium text-gray-600">Amount ($)</label>
+                <label htmlFor="txn-amount" className="text-xs font-medium text-slate-600">Amount ($)</label>
                 <input
                   id="txn-amount"
                   type="number"
@@ -667,13 +667,13 @@ export default function FinanceDashboardPage() {
                   aria-required="true"
                   value={addForm.amount}
                   onChange={(e) => setAddForm((p) => ({ ...p, amount: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                   placeholder="0.00"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="txn-date" className="text-xs font-medium text-gray-600">Date</label>
+              <label htmlFor="txn-date" className="text-xs font-medium text-slate-600">Date</label>
               <input
                 id="txn-date"
                 type="date"
@@ -681,23 +681,23 @@ export default function FinanceDashboardPage() {
                 aria-required="true"
                 value={addForm.transaction_date}
                 onChange={(e) => setAddForm((p) => ({ ...p, transaction_date: e.target.value }))}
-                className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
               />
             </div>
             <div>
-              <label htmlFor="txn-description" className="text-xs font-medium text-gray-600">Description</label>
+              <label htmlFor="txn-description" className="text-xs font-medium text-slate-600">Description</label>
               <input
                 id="txn-description"
                 type="text"
                 value={addForm.description}
                 onChange={(e) => setAddForm((p) => ({ ...p, description: e.target.value }))}
-                className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                 placeholder="What was this for?"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="txn-vendor" className="text-xs font-medium text-gray-600">
+                <label htmlFor="txn-vendor" className="text-xs font-medium text-slate-600">
                   {addForm.type === 'income' ? 'Source / Payer' : 'Vendor'}
                 </label>
                 <ContactAutocomplete
@@ -711,7 +711,7 @@ export default function FinanceDashboardPage() {
                       category_id: defaultCategoryId ?? p.category_id,
                     }));
                   }}
-                  inputClassName="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                  inputClassName="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                 />
               </div>
               <CategorySelect
@@ -723,12 +723,12 @@ export default function FinanceDashboardPage() {
             </div>
             {accounts.filter((a) => a.is_active).length > 0 && (
               <div>
-                <label htmlFor="txn-account" className="text-xs font-medium text-gray-600">Account</label>
+                <label htmlFor="txn-account" className="text-xs font-medium text-slate-600">Account</label>
                 <select
                   id="txn-account"
                   value={addForm.account_id}
                   onChange={(e) => setAddForm((p) => ({ ...p, account_id: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                 >
                   <option value="">No account</option>
                   {accounts.filter((a) => a.is_active).map((a) => (
@@ -741,12 +741,12 @@ export default function FinanceDashboardPage() {
             )}
             {brands.length > 0 && (
               <div>
-                <label htmlFor="txn-brand" className="text-xs font-medium text-gray-600">Brand (optional)</label>
+                <label htmlFor="txn-brand" className="text-xs font-medium text-slate-600">Brand (optional)</label>
                 <select
                   id="txn-brand"
                   value={addForm.brand_id}
                   onChange={(e) => setAddForm((p) => ({ ...p, brand_id: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                 >
                   <option value="">No brand</option>
                   {brands.map((b) => (
@@ -756,7 +756,7 @@ export default function FinanceDashboardPage() {
               </div>
             )}
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3"
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3"
             style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button
               type="submit"
@@ -769,7 +769,7 @@ export default function FinanceDashboardPage() {
             <button
               type="button"
               onClick={() => setShowAdd(false)}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+              className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
             >
               Cancel
             </button>
@@ -782,7 +782,7 @@ export default function FinanceDashboardPage() {
         <div className="p-6 space-y-4">
           <form onSubmit={handleAddCategory} className="space-y-3">
             <div>
-              <label htmlFor="cat-name" className="text-xs font-medium text-gray-600">Name</label>
+              <label htmlFor="cat-name" className="text-xs font-medium text-slate-600">Name</label>
               <input
                 id="cat-name"
                 type="text"
@@ -790,13 +790,13 @@ export default function FinanceDashboardPage() {
                 aria-required="true"
                 value={catForm.name}
                 onChange={(e) => setCatForm((p) => ({ ...p, name: e.target.value }))}
-                className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                 placeholder="e.g. Supplements, Gym, Food"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label htmlFor="cat-budget" className="text-xs font-medium text-gray-600">Monthly Budget ($)</label>
+                <label htmlFor="cat-budget" className="text-xs font-medium text-slate-600">Monthly Budget ($)</label>
                 <input
                   id="cat-budget"
                   type="number"
@@ -804,18 +804,18 @@ export default function FinanceDashboardPage() {
                   min="0"
                   value={catForm.monthly_budget}
                   onChange={(e) => setCatForm((p) => ({ ...p, monthly_budget: e.target.value }))}
-                  className="w-full mt-1 px-3 py-2 text-sm border border-gray-200 rounded-lg"
+                  className="w-full mt-1 px-3 py-2 text-sm border border-slate-200 rounded-lg"
                   placeholder="Optional"
                 />
               </div>
               <div>
-                <label htmlFor="cat-color" className="text-xs font-medium text-gray-600">Color</label>
+                <label htmlFor="cat-color" className="text-xs font-medium text-slate-600">Color</label>
                 <input
                   id="cat-color"
                   type="color"
                   value={catForm.color}
                   onChange={(e) => setCatForm((p) => ({ ...p, color: e.target.value }))}
-                  className="w-full mt-1 h-9.5 border border-gray-200 rounded-lg cursor-pointer"
+                  className="w-full mt-1 h-9.5 border border-slate-200 rounded-lg cursor-pointer"
                 />
               </div>
             </div>
@@ -829,7 +829,7 @@ export default function FinanceDashboardPage() {
               <button
                 type="button"
                 onClick={() => setShowCatForm(false)}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition"
+                className="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
               >
                 Cancel
               </button>
@@ -839,15 +839,15 @@ export default function FinanceDashboardPage() {
           {/* Existing categories list */}
           {categories.length > 0 && (
             <div className="border-t pt-3 space-y-2">
-              <p className="text-xs font-medium text-gray-500">Existing Categories</p>
+              <p className="text-xs font-medium text-slate-500">Existing Categories</p>
               {categories.map((c) => (
                 <div key={c.id} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: c.color }} aria-hidden="true" />
-                    <span className="text-gray-700">{c.name}</span>
+                    <span className="text-slate-700">{c.name}</span>
                   </div>
                   {c.monthly_budget && (
-                    <span className="text-xs text-gray-400">${c.monthly_budget}/mo</span>
+                    <span className="text-xs text-slate-400">${c.monthly_budget}/mo</span>
                   )}
                 </div>
               ))}

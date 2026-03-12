@@ -152,7 +152,7 @@ export default function CityGuideDetailPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-16">
-        <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+        <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function CityGuideDetailPage() {
   if (!guide) {
     return (
       <div className="mx-auto max-w-4xl p-4">
-        <p className="text-neutral-500">City guide not found.</p>
+        <p className="text-slate-400">City guide not found.</p>
       </div>
     );
   }
@@ -172,15 +172,15 @@ export default function CityGuideDetailPage() {
         <div>
           <button
             onClick={() => router.push('/dashboard/contractor/cities')}
-            className="mb-2 flex min-h-11 items-center gap-1 py-2 text-sm text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded"
+            className="mb-2 flex min-h-11 items-center gap-1 py-2 text-sm text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded"
             aria-label="Back to city guides"
           >
             <ArrowLeft size={14} aria-hidden="true" /> Back
           </button>
-          <h1 className="text-2xl font-bold text-neutral-100">
+          <h1 className="text-2xl font-bold text-slate-900">
             {guide.city_name}{guide.state ? `, ${guide.state}` : ''}
           </h1>
-          <div className="flex items-center gap-2 mt-1 text-sm text-neutral-500">
+          <div className="flex items-center gap-2 mt-1 text-sm text-slate-400">
             {guide.region && <span>{guide.region}</span>}
             {guide.is_shared ? (
               <span className="flex items-center gap-1 text-green-400"><Globe size={12} aria-hidden="true" /> Shared</span>
@@ -189,12 +189,12 @@ export default function CityGuideDetailPage() {
             )}
             <span>· {entries.length} {entries.length === 1 ? 'entry' : 'entries'}</span>
           </div>
-          {guide.notes && <p className="mt-2 text-sm text-neutral-400">{guide.notes}</p>}
+          {guide.notes && <p className="mt-2 text-sm text-slate-500">{guide.notes}</p>}
         </div>
         {isOwner && (
           <button
             onClick={() => setShowAdd(true)}
-            className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+            className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
           >
             <Plus size={14} aria-hidden="true" /> Add Entry
           </button>
@@ -206,7 +206,7 @@ export default function CityGuideDetailPage() {
         <button
           onClick={() => setFilterCat(null)}
           className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-            !filterCat ? 'bg-amber-600 text-white' : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200'
+            !filterCat ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-500 hover:text-slate-800'
           }`}
         >
           All
@@ -219,7 +219,7 @@ export default function CityGuideDetailPage() {
               key={c.value}
               onClick={() => setFilterCat(filterCat === c.value ? null : c.value)}
               className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-                filterCat === c.value ? 'bg-amber-600 text-white' : 'bg-neutral-800 text-neutral-400 hover:text-neutral-200'
+                filterCat === c.value ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-500 hover:text-slate-800'
               }`}
             >
               {c.label} ({count})
@@ -230,17 +230,17 @@ export default function CityGuideDetailPage() {
 
       {/* Add/Edit form */}
       {(showAdd || editingId) && (
-        <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4 space-y-3">
-          <h2 className="text-lg font-semibold text-neutral-100">
+        <div className="rounded-xl border border-slate-300 bg-white p-4 space-y-3">
+          <h2 className="text-lg font-semibold text-slate-900">
             {editingId ? 'Edit Entry' : 'New Entry'}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Category *</span>
+              <span className="text-xs font-medium text-slate-500">Category *</span>
               <select
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c.value} value={c.value}>{c.label}</option>
@@ -248,33 +248,33 @@ export default function CityGuideDetailPage() {
               </select>
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Name *</span>
+              <span className="text-xs font-medium text-slate-500">Name *</span>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 placeholder="Place name"
               />
             </label>
           </div>
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Address</span>
+            <span className="text-xs font-medium text-slate-500">Address</span>
             <input
               type="text"
               value={form.address}
               onChange={(e) => setForm({ ...form, address: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               placeholder="123 Main St"
             />
           </label>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Rating (1-5)</span>
+              <span className="text-xs font-medium text-slate-500">Rating (1-5)</span>
               <select
                 value={form.rating}
                 onChange={(e) => setForm({ ...form, rating: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               >
                 <option value="">—</option>
                 {[1, 2, 3, 4, 5].map((n) => (
@@ -283,11 +283,11 @@ export default function CityGuideDetailPage() {
               </select>
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Price Range</span>
+              <span className="text-xs font-medium text-slate-500">Price Range</span>
               <select
                 value={form.price_range}
                 onChange={(e) => setForm({ ...form, price_range: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               >
                 <option value="">—</option>
                 {[1, 2, 3, 4].map((n) => (
@@ -296,23 +296,23 @@ export default function CityGuideDetailPage() {
               </select>
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">URL</span>
+              <span className="text-xs font-medium text-slate-500">URL</span>
               <input
                 type="url"
                 value={form.url}
                 onChange={(e) => setForm({ ...form, url: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 placeholder="https://..."
               />
             </label>
           </div>
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Notes</span>
+            <span className="text-xs font-medium text-slate-500">Notes</span>
             <textarea
               value={form.notes}
               onChange={(e) => setForm({ ...form, notes: e.target.value })}
               rows={2}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 resize-none"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 resize-none"
               placeholder="Tips, recommendations..."
             />
           </label>
@@ -320,14 +320,14 @@ export default function CityGuideDetailPage() {
             <button
               onClick={() => (editingId ? updateEntry(editingId) : addEntry())}
               disabled={saving || !form.name.trim()}
-              className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+              className="flex min-h-11 items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
             >
               {saving ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Save size={14} aria-hidden="true" />}
               {editingId ? 'Update' : 'Add'}
             </button>
             <button
               onClick={() => { setShowAdd(false); setEditingId(null); setForm(emptyForm); }}
-              className="min-h-11 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="min-h-11 rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               Cancel
             </button>
@@ -337,7 +337,7 @@ export default function CityGuideDetailPage() {
 
       {/* Entries grouped by category */}
       {Object.keys(grouped).length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           {filterCat ? 'No entries in this category.' : 'No entries yet. Add your first recommendation.'}
         </div>
       ) : (
@@ -346,22 +346,22 @@ export default function CityGuideDetailPage() {
             const CatIcon = getCatIcon(cat);
             return (
               <section key={cat} aria-label={getCatLabel(cat)}>
-                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-neutral-300">
+                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
                   <CatIcon size={14} className="text-amber-400" aria-hidden="true" />
                   {getCatLabel(cat)}
-                  <span className="text-xs text-neutral-500">({catEntries.length})</span>
+                  <span className="text-xs text-slate-400">({catEntries.length})</span>
                 </h3>
                 <div className="space-y-2" role="list">
                   {catEntries.map((entry) => (
                     <article
                       key={entry.id}
                       role="listitem"
-                      className="rounded-xl border border-neutral-800 bg-neutral-900 p-3"
+                      className="rounded-xl border border-slate-200 bg-white p-3"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-medium text-neutral-100 text-sm">{entry.name}</span>
+                            <span className="font-medium text-slate-900 text-sm">{entry.name}</span>
                             {entry.rating && (
                               <span className="flex items-center gap-0.5 text-xs text-amber-400">
                                 <Star size={10} aria-hidden="true" fill="currentColor" />
@@ -369,26 +369,26 @@ export default function CityGuideDetailPage() {
                               </span>
                             )}
                             {entry.price_range && (
-                              <span className="text-xs text-neutral-500">
+                              <span className="text-xs text-slate-400">
                                 {PRICE_LABELS[entry.price_range]}
                               </span>
                             )}
                           </div>
                           {entry.address && (
-                            <p className="mt-0.5 text-xs text-neutral-500">{entry.address}</p>
+                            <p className="mt-0.5 text-xs text-slate-400">{entry.address}</p>
                           )}
                           {entry.notes && (
-                            <p className="mt-1 text-sm text-neutral-400">{entry.notes}</p>
+                            <p className="mt-1 text-sm text-slate-500">{entry.notes}</p>
                           )}
                           {entry.near_venue_name && (
-                            <p className="mt-0.5 text-xs text-neutral-500">Near {entry.near_venue_name}</p>
+                            <p className="mt-0.5 text-xs text-slate-400">Near {entry.near_venue_name}</p>
                           )}
                         </div>
                         {isOwner && (
                           <div className="flex gap-1 shrink-0">
                             <button
                               onClick={() => startEdit(entry)}
-                              className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                              className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
                               aria-label={`Edit ${entry.name}`}
                             >
                               <Edit2 size={14} aria-hidden="true" />
@@ -396,7 +396,7 @@ export default function CityGuideDetailPage() {
                             <button
                               onClick={() => deleteEntry(entry.id)}
                               disabled={deletingId === entry.id}
-                              className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                              className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
                               aria-label={`Delete ${entry.name}`}
                             >
                               {deletingId === entry.id ? (

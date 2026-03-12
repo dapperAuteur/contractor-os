@@ -15,13 +15,13 @@ interface Summary {
 
 function Card({ icon: Icon, label, value, sub }: { icon: typeof Clock; label: string; value: string; sub?: string }) {
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4" role="region" aria-label={label}>
-      <div className="flex items-center gap-2 text-neutral-400 text-sm mb-1">
+    <div className="rounded-xl border border-slate-200 bg-white p-4" role="region" aria-label={label}>
+      <div className="flex items-center gap-2 text-slate-500 text-sm mb-1">
         <Icon size={14} aria-hidden="true" />
         <span>{label}</span>
       </div>
-      <div className="text-xl font-bold text-neutral-100">{value}</div>
-      {sub && <div className="text-xs text-neutral-500 mt-0.5">{sub}</div>}
+      <div className="text-xl font-bold text-slate-900">{value}</div>
+      {sub && <div className="text-xs text-slate-400 mt-0.5">{sub}</div>}
     </div>
   );
 }

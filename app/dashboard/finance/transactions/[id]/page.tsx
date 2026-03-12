@@ -134,7 +134,7 @@ export default function TransactionDetailPage() {
 
   if (!transaction) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-10 text-center text-gray-400">
+      <div className="max-w-4xl mx-auto px-4 py-10 text-center text-slate-400">
         <p>Transaction not found.</p>
         <Link href="/dashboard/finance/transactions" className="text-amber-600 hover:underline mt-2 inline-block">Back to transactions</Link>
       </div>
@@ -148,8 +148,8 @@ export default function TransactionDetailPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/finance/transactions" className="p-2 rounded-lg hover:bg-gray-100 transition">
-            <ArrowLeft className="w-4 h-4 text-gray-600" />
+          <Link href="/dashboard/finance/transactions" className="p-2 rounded-lg hover:bg-slate-100 transition">
+            <ArrowLeft className="w-4 h-4 text-slate-600" />
           </Link>
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -157,15 +157,15 @@ export default function TransactionDetailPage() {
                 {isIncome ? <ArrowDownLeft className="w-3 h-3" /> : <ArrowUpRight className="w-3 h-3" />}
                 {isIncome ? 'Income' : 'Expense'}
               </span>
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+              <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
                 {SOURCE_LABELS[transaction.source] || transaction.source}
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900">
+            <h1 className="text-2xl font-bold text-slate-900">
               {transaction.description || transaction.vendor || 'Transaction'}
             </h1>
             {transaction.vendor && transaction.description && (
-              <p className="text-gray-500 text-sm">{transaction.vendor}</p>
+              <p className="text-slate-500 text-sm">{transaction.vendor}</p>
             )}
           </div>
         </div>
@@ -177,29 +177,29 @@ export default function TransactionDetailPage() {
       </div>
 
       {/* Details Card */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
-            <span className="text-gray-400 text-xs block">Date</span>
-            <span className="text-gray-900 font-medium flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5 text-gray-400" />
+            <span className="text-slate-400 text-xs block">Date</span>
+            <span className="text-slate-900 font-medium flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-slate-400" />
               {fmtDate(transaction.transaction_date)}
             </span>
           </div>
           {transaction.financial_accounts && (
             <div>
-              <span className="text-gray-400 text-xs block">Account</span>
-              <span className="text-gray-900 font-medium flex items-center gap-1">
-                <CreditCard className="w-3.5 h-3.5 text-gray-400" />
+              <span className="text-slate-400 text-xs block">Account</span>
+              <span className="text-slate-900 font-medium flex items-center gap-1">
+                <CreditCard className="w-3.5 h-3.5 text-slate-400" />
                 {transaction.financial_accounts.name}
               </span>
             </div>
           )}
           {transaction.user_brands && (
             <div>
-              <span className="text-gray-400 text-xs block">Brand</span>
-              <span className="text-gray-900 font-medium flex items-center gap-1">
-                <Building2 className="w-3.5 h-3.5 text-gray-400" />
+              <span className="text-slate-400 text-xs block">Brand</span>
+              <span className="text-slate-900 font-medium flex items-center gap-1">
+                <Building2 className="w-3.5 h-3.5 text-slate-400" />
                 {transaction.user_brands.name}
               </span>
             </div>
@@ -209,21 +209,21 @@ export default function TransactionDetailPage() {
         {transaction.budget_categories && (
           <div className="flex items-center gap-2 text-sm">
             <span className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: transaction.budget_categories.color }} />
-            <span className="text-gray-600">{transaction.budget_categories.name}</span>
+            <span className="text-slate-600">{transaction.budget_categories.name}</span>
           </div>
         )}
 
         {transaction.tags && transaction.tags.length > 0 && (
           <div className="flex items-center gap-2 flex-wrap">
-            <Tag className="w-3.5 h-3.5 text-gray-400" />
+            <Tag className="w-3.5 h-3.5 text-slate-400" />
             {transaction.tags.map((tag) => (
-              <span key={tag} className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">{tag}</span>
+              <span key={tag} className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full text-xs">{tag}</span>
             ))}
           </div>
         )}
 
         {transaction.notes && (
-          <div className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3">
+          <div className="text-sm text-slate-600 bg-slate-50 rounded-lg p-3">
             {transaction.notes}
           </div>
         )}
@@ -281,8 +281,8 @@ export default function TransactionDetailPage() {
       )}
 
       {/* Actions */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-4">
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Actions</h3>
+      <div className="bg-white border border-slate-200 rounded-2xl p-4">
+        <h3 className="text-sm font-medium text-slate-700 mb-3">Actions</h3>
         <div className="flex flex-wrap gap-2">
           <button
             onClick={handleDuplicate}
@@ -298,17 +298,17 @@ export default function TransactionDetailPage() {
           >
             <Trash2 className="w-3.5 h-3.5" /> Delete
           </button>
-          {actionLoading && <Loader2 className="w-4 h-4 animate-spin text-gray-400 self-center" />}
+          {actionLoading && <Loader2 className="w-4 h-4 animate-spin text-slate-400 self-center" />}
         </div>
       </div>
 
       {/* Activity Links */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5">
         <ActivityLinker entityType="transaction" entityId={transaction.id} />
       </div>
 
       {/* Life Categories */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-5">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5">
         <LifeCategoryTagger entityType="transaction" entityId={transaction.id} />
       </div>
     </div>
