@@ -21,7 +21,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5, // Allow zoom for accessibility
 };
-
+// 
 export default function RootLayout({
   children,
 }: {
