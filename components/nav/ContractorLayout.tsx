@@ -7,6 +7,7 @@ import ContractorNav from './ContractorNav';
 import OfflineIndicator from '@/components/ui/OfflineIndicator';
 import MfaBanner from '@/components/ui/MfaBanner';
 import TourRunner from '@/components/onboarding/TourRunner';
+import FloatingActionsMenu from '@/components/ui/FloatingActionsMenu';
 
 interface Props {
   username: string | null;
@@ -27,6 +28,7 @@ export default function ContractorLayout({ username, unreadMessages, onLogout, i
       <main id="main-content" className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 pb-20 lg:pb-6">
         {children}
       </main>
+      <FloatingActionsMenu />
       <TourRunner app="contractor" onToursChanged={onToursChanged} />
     </div>
   );

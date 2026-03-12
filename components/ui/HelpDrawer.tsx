@@ -18,10 +18,11 @@ interface Props {
 }
 
 const SUGGESTIONS = [
-  'How do I enroll in a course?',
-  'How do I submit an assignment?',
-  'What is CYOA mode?',
-  'How do I track my progress?',
+  'How do I log time entries?',
+  'How do I create an invoice?',
+  'How do I scan a pay stub?',
+  'How do I track travel expenses?',
+  'How do I manage union memberships?',
 ];
 
 export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
@@ -83,19 +84,19 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
 
       {/* Drawer */}
       <div
-        className={`fixed right-0 top-0 h-full w-full max-w-sm z-50 bg-gray-950 border-l border-gray-800 flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 h-full w-full max-w-sm z-50 bg-neutral-950 border-l border-neutral-800 flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800 shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
           <div className="flex items-center gap-2">
-            <HelpCircle className="w-5 h-5 text-fuchsia-400" />
-            <span className="font-semibold text-white text-sm">Academy Help</span>
+            <HelpCircle className="w-5 h-5 text-amber-400" />
+            <span className="font-semibold text-white text-sm">JobHub Help</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-gray-800 transition"
+            className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition"
           >
             <X className="w-4 h-4" />
           </button>
@@ -106,21 +107,21 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
           {messages.length === 0 && (
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <div className="w-7 h-7 rounded-full bg-fuchsia-600 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0 mt-0.5">
                   <BookOpen className="w-4 h-4 text-white" />
                 </div>
-                <div className="bg-gray-800 rounded-xl rounded-tl-none px-4 py-3 text-sm text-gray-200 leading-relaxed">
-                  Hi! I can answer questions about JobHub Academy — how to enroll, watch lessons, submit assignments, create courses, and more. What do you need help with?
+                <div className="bg-neutral-800 rounded-xl rounded-tl-none px-4 py-3 text-sm text-neutral-200 leading-relaxed">
+                  Hi! I can help with anything in JobHub — jobs, invoices, time entries, scanning, travel, equipment, union memberships, and more. What do you need help with?
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs text-gray-500 px-1">Suggested questions</p>
+                <p className="text-xs text-neutral-500 px-1">Suggested questions</p>
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
                     onClick={() => sendMessage(s)}
-                    className="w-full text-left px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm text-gray-300 hover:border-fuchsia-600 hover:text-white transition"
+                    className="w-full text-left px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-sm text-neutral-300 hover:border-amber-600 hover:text-white transition"
                   >
                     {s}
                   </button>
@@ -132,15 +133,15 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
           {messages.map((msg, i) => (
             <div key={i} className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
               {msg.role === 'assistant' && (
-                <div className="w-7 h-7 rounded-full bg-fuchsia-600 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0 mt-0.5">
                   <BookOpen className="w-4 h-4 text-white" />
                 </div>
               )}
               <div
                 className={`max-w-[85%] px-4 py-3 rounded-xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'user'
-                    ? 'bg-fuchsia-700/80 text-white rounded-tr-none ml-auto'
-                    : 'bg-gray-800 text-gray-200 rounded-tl-none'
+                    ? 'bg-amber-700/80 text-white rounded-tr-none ml-auto'
+                    : 'bg-neutral-800 text-neutral-200 rounded-tl-none'
                 }`}
               >
                 {msg.text}
@@ -150,10 +151,10 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
 
           {loading && (
             <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-full bg-fuchsia-600 flex items-center justify-center shrink-0">
+              <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0">
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
-              <div className="bg-gray-800 rounded-xl rounded-tl-none px-4 py-3">
+              <div className="bg-neutral-800 rounded-xl rounded-tl-none px-4 py-3">
                 <div className="flex gap-1">
                   <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:0ms]" />
                   <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:150ms]" />
@@ -167,28 +168,28 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
         </div>
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-gray-800 shrink-0">
+        <div className="px-4 py-3 border-t border-neutral-800 shrink-0">
           <div className="flex gap-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) sendMessage(input); }}
-              placeholder="Ask anything about the Academy…"
+              placeholder="Ask anything about JobHub…"
               disabled={loading}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500 disabled:opacity-50"
+              className="flex-1 bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 disabled:opacity-50"
             />
             <button
               type="button"
               onClick={() => sendMessage(input)}
               disabled={loading || !input.trim()}
-              className="p-2.5 bg-fuchsia-600 text-white rounded-xl hover:bg-fuchsia-700 transition disabled:opacity-50"
+              className="p-2.5 bg-amber-600 text-white rounded-xl hover:bg-amber-500 transition disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-xs text-gray-600 mt-2 text-center">
-            Answers are generated from Academy documentation.
+          <p className="text-xs text-neutral-500 mt-2 text-center">
+            Answers are generated from JobHub documentation.
           </p>
         </div>
       </div>

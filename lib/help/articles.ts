@@ -1,12 +1,12 @@
 // lib/help/articles.ts
-// Chunked tutorial content for the Academy RAG help system.
-// Role: 'student' | 'teacher' | 'admin' | 'all'
+// Chunked tutorial content for the RAG help system.
+// Role: 'student' | 'teacher' | 'admin' | 'contractor' | 'lister' | 'all'
 // Each chunk is embedded and stored in help_articles via /api/admin/help/ingest.
 
 export interface HelpArticle {
   title: string;
   content: string;
-  role: 'student' | 'teacher' | 'admin' | 'all';
+  role: 'student' | 'teacher' | 'admin' | 'contractor' | 'lister' | 'all';
 }
 
 export const HELP_ARTICLES: HelpArticle[] = [
@@ -545,5 +545,161 @@ export const HELP_ARTICLES: HelpArticle[] = [
     role: 'all',
     title: 'How does Teller bank account syncing work?',
     content: `Teller is a bank account linking API that lets you automatically import transactions. Go to Dashboard → Finance → Accounts and click Connect Bank Account. Select your bank from the Teller enrollment flow and authorize access. Once connected, your transactions sync daily. Each synced transaction includes date, amount, description, and merchant. You can categorize synced transactions and link them to contacts. If you disconnect, historical synced transactions remain in your account. Teller supports most major US banks and credit unions.`,
+  },
+
+  // ─── CONTRACTOR ─────────────────────────────────────────────────────────────
+
+  {
+    role: 'contractor',
+    title: 'What is JobHub?',
+    content: `JobHub is a contractor management platform for freelance workers in broadcast, events, and production. It helps you track jobs, manage invoices, log time entries, organize equipment, track travel and fuel expenses, manage union memberships, and stay on top of your finances. The main dashboard is at /dashboard/contractor. From there you can access all your jobs, invoices, contacts, venues, city guides, and more.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to view and manage jobs',
+    content: `Your jobs are listed at /dashboard/contractor/jobs. Each job shows the client, event name, venue, dates, status, and pay rate. Click any job to see full details including time entries, documents, and notes. Job statuses flow: assigned → confirmed → in_progress → completed → invoiced → paid. You can filter jobs by status, date range, and client. Multi-day jobs show all scheduled dates.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to log time entries',
+    content: `Open any job and scroll to the Time Entries section. Click Add Time Entry. Enter the work date, clock-in time, clock-out time, and break minutes. The system calculates standard hours, overtime hours (over 8h), and double-time hours (over 12h) automatically based on your rate card. You can also manually enter hours if you prefer. Time entries are used to generate invoices.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to create and send invoices',
+    content: `Go to /dashboard/finance/invoices and click Create Invoice. Select a job to auto-populate line items from time entries. You can add additional line items (per diem, equipment rental, mileage, etc.). Set the invoice date, due date, and payment terms. Save as draft or mark as sent. When payment is received, mark the invoice as paid and record the payment date. Invoice numbers auto-increment (INV-J-230001, etc.).`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use Rate Cards',
+    content: `Rate Cards store your standard rates for different clients and departments. Go to /dashboard/contractor/rate-cards to create and manage rate cards. Each card has a name, department, rate type (hourly/daily/flat), standard rate, overtime rate, double-time rate, and optional union local. When you create a new job, select a rate card to auto-fill the pay rates. Rate cards track how many times they have been used.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to manage contacts',
+    content: `Contacts are your clients, vendors, and crew members. They appear throughout JobHub — in jobs, invoices, and the job board. Each contact has a name, type (vendor/client/crew), email, phone, and optional company. Contacts can have multiple locations attached. You can manage contacts from the Contacts page or they are auto-created when you add a new client to a job.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the Document Scanner',
+    content: `Go to /dashboard/scan to scan pay stubs, call sheets, receipts, and other documents. Tap the camera icon to take a photo or upload an image/PDF. The scanner uses Gemini Vision AI to extract text and structured data from the document. Scanned data can be imported directly into jobs, invoices, or expenses. You can scan multi-page PDFs and multi-file batches. Scanned documents are stored in your job's document tab.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to track equipment',
+    content: `Go to /dashboard/equipment to manage your gear inventory. Add equipment with name, brand, category, purchase date, purchase price, current value, and condition. Organize equipment into categories (Broadcast, Electronics, etc.). Track depreciation over time. Equipment can be linked to jobs to track which gear you used on each show. This is helpful for insurance and tax purposes.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to manage union memberships',
+    content: `Go to /dashboard/contractor/union/memberships to track your union memberships. Add each membership with union name, local number, member ID, status, join date, dues amount, frequency, and next due date. You can log dues payments with amount, date, period, payment method, and confirmation number. The system reminds you when dues are coming up. You can also upload union documents and search them using the RAG-powered union doc search.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use City Guides',
+    content: `City Guides help you organize recommendations for cities where you work. Go to /dashboard/contractor/cities to create guides. Each guide has a city name, state, region, and notes. Add entries for restaurants, hotels, coffee shops, gyms, and other places you like. Rate each entry and add notes. When you travel to a city for work, your guide gives you quick access to your favorite spots. You can share guides with other contractors.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to track travel and vehicle expenses',
+    content: `Go to /dashboard/travel to manage your vehicles, trips, and fuel logs. Add your vehicles with make, model, year, and type. Log each trip with origin, destination, distance, duration, and tax category (business/personal). Log fuel fill-ups with gallons, cost, station, and odometer. The system calculates MPG and cost-per-mile. All business trips are tracked for IRS mileage deduction purposes. You can also create trip templates for routes you drive frequently.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use financial tracking',
+    content: `Go to /dashboard/finance/transactions to track income and expenses. Add transactions manually or sync from your bank via Teller. Categorize transactions into budget categories (Equipment, Travel, Meals, Union Dues, etc.). Set monthly budgets for each category and track spending. View reports and charts showing income vs expenses over time. Financial accounts (checking, savings, credit cards) track balances separately.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the Job Board',
+    content: `The Job Board at /dashboard/contractor/board lets you see available gigs posted by listers (crew coordinators). Browse open positions by date, location, and department. Apply to jobs directly from the board. Listers can also send you direct offers which appear in your Offers page at /dashboard/contractor/assignments. Accept or decline offers and they automatically create jobs in your schedule.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the Compare tool',
+    content: `The Compare tool at /dashboard/contractor/compare lets you compare pay rates across clients, events, and time periods. See which clients pay the most, which events are most profitable, and how your rates have changed over time. Compare standard time vs overtime earnings. This helps you negotiate better rates and prioritize higher-paying work.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use Reports',
+    content: `The Reports page at /dashboard/contractor/reports shows analytics and summaries of your work. View earnings by month, client, department, and venue. See total hours worked, average hourly rate, and year-to-date income. Export reports for tax preparation. Reports pull from your jobs, time entries, and invoices to give you a complete financial picture of your freelance business.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use Venues and knowledge base',
+    content: `Venues at /dashboard/contractor/venues store detailed information about the locations where you work. Each venue has an address and a knowledge base with sections for parking, load-in, wifi, power, catering, and security. The knowledge base is like a personal cheat sheet for each venue — write down everything you need to know for game day so you never forget where to park or which dock to use for load-in.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to enable push notifications',
+    content: `Go to /dashboard/settings and scroll to the Notifications section. Click Enable Push Notifications to subscribe your browser. You can then toggle individual reminders: Clock-In Reminder (configurable minutes before call time), Clock-Out Reminder, Pay Day Reminder, and Job Start Reminder. Notifications are scheduled by the service worker when you load the dashboard and fire at the appropriate times — no server polling needed.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the Data Hub',
+    content: `The Data Hub at /dashboard/data is your personal data dashboard. It aggregates metrics from across JobHub — health metrics, workout logs, focus sessions, and life categories. Track daily steps, sleep hours, resting heart rate, and more. Log workouts with exercises, sets, reps, and RPE. Use focus sessions to track deep work time on admin tasks. Life categories let you rate and reflect on different areas of your life.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to submit feedback or get help',
+    content: `Click the amber floating button in the bottom-right corner of any dashboard page. This opens a speed-dial menu with two options: Help opens an AI-powered chat that answers questions about JobHub features using your documentation. Feedback opens a form where you can report bugs, request features, or share general feedback. You can attach images or screenshots. Your feedback is sent to the admin team and you can view your submission history and admin replies at /dashboard/feedback.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How does offline mode work?',
+    content: `JobHub works offline as a Progressive Web App (PWA). When you lose internet, a banner appears and the app continues to function using cached data. Actions you take offline (adding time entries, notes, etc.) are queued and sync automatically when you reconnect. The service worker caches API responses and static assets. Install JobHub to your home screen from your browser for the best offline experience.`,
+  },
+
+  // ─── LISTER (CrewOps) ──────────────────────────────────────────────────────
+
+  {
+    role: 'lister',
+    title: 'What is CrewOps (Lister mode)?',
+    content: `CrewOps is the lister side of JobHub, designed for crew coordinators who assign contractors to jobs. As a lister, you manage a roster of contractors, create and post jobs, assign crew to events, check availability, and communicate with your team. Your dashboard is at /dashboard/contractor/lister. Lister mode is activated when your profile has contractor_role set to "lister".`,
+  },
+  {
+    role: 'lister',
+    title: 'How to use the Lister Dashboard',
+    content: `The lister dashboard at /dashboard/contractor/lister shows summary stats: total jobs, upcoming jobs, roster size, pending offers, accepted offers, fill rate, unread messages, and group count. Quick action buttons let you Create Job, Assign Contractors, or Send Message. Below is a list of your upcoming jobs with dates, venues, and assignment status.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to manage your crew roster',
+    content: `Go to /dashboard/contractor/lister/roster to manage your crew. Add contractors with name, email, phone, skills (e.g. Camera, Utility, Audio), and availability notes. Search your roster by name, email, or skill. Each roster entry shows a use count tracking how many times you have assigned that contractor. If a contractor has a JobHub account, their @username appears as a linked badge. Remove contractors you no longer work with.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to assign contractors to jobs',
+    content: `Go to /dashboard/contractor/lister/assign to create and manage job assignments. Select a job, then select a contractor from your roster to assign them. The contractor receives an offer notification. You can filter assignments by status: offered, accepted, declined, or removed. Track response notes from contractors. Remove assignments if plans change. The fill rate on your dashboard shows what percentage of assignments have been accepted.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to check contractor availability',
+    content: `Go to /dashboard/contractor/lister/availability to check who is available for upcoming dates. Set a date range (defaults to next 7 days). The page shows each contractor in your roster with their availability status — available (green) or busy (red with conflicting job info). This helps you quickly identify who you can assign to a new job without double-booking.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to send messages to contractors',
+    content: `Go to /dashboard/contractor/lister/messages to communicate with your crew. You can compose individual messages to a single contractor or group messages to a message group. Messages have an optional subject line. Your inbox shows received messages and you can switch to the Sent folder to see outgoing messages. Mark messages as read or delete sent messages. The unread counter appears in your nav bar.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to create and manage message groups',
+    content: `Go to /dashboard/contractor/lister/groups to organize your crew into groups for bulk messaging. Create a group with a name and description (e.g. "Camera Department", "Indianapolis Crew", "Audio Team"). Add members from your roster — only contractors with linked JobHub accounts can be added. Expand a group to see all members. Use groups to quickly send announcements or updates to specific departments or locations.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to create jobs as a lister',
+    content: `Listers create jobs the same way contractors do — go to /dashboard/contractor/jobs and click Create Job. Fill in client name, event name, venue, dates, department, and pay rates. Once created, you can assign contractors from your roster to the job. Jobs you create appear on the Job Board for contractors to discover. Track job status from assigned through to completed and paid.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to post jobs to the Job Board',
+    content: `When you create a job as a lister, it can be made visible on the Job Board at /dashboard/contractor/board. Contractors browsing the board can see open positions and apply. You receive applications and can accept or decline them. You can also send direct offers to specific contractors from your roster. The board helps you fill positions quickly when you need extra crew.`,
+  },
+  {
+    role: 'lister',
+    title: 'How to use lister reports',
+    content: `The Reports page at /dashboard/contractor/reports works for listers too. View analytics on jobs you have managed, assignment fill rates, contractor response times, and crew utilization. See which contractors accept the most offers and which are most reliable. Reports help you make data-driven decisions about crew management and identify your most dependable team members.`,
   },
 ];
