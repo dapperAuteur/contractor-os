@@ -17,7 +17,7 @@ const VISIBILITY_META: Record<PostVisibility, { label: string; icon: React.React
   private: { label: 'Private', icon: <EyeOff className="w-3.5 h-3.5" />, color: 'text-amber-700 bg-amber-50' },
   public: { label: 'Public', icon: <Globe className="w-3.5 h-3.5" />, color: 'text-green-700 bg-green-50' },
   authenticated_only: { label: 'Members', icon: <Users className="w-3.5 h-3.5" />, color: 'text-indigo-700 bg-indigo-50' },
-  scheduled: { label: 'Scheduled', icon: <Clock className="w-3.5 h-3.5" />, color: 'text-sky-700 bg-sky-50' },
+  scheduled: { label: 'Scheduled', icon: <Clock className="w-3.5 h-3.5" />, color: 'text-amber-400 bg-amber-500/10' },
 };
 
 function formatDate(iso: string | null) {
@@ -59,7 +59,7 @@ export default function BlogPostList({ userId, username }: BlogPostListProps) {
         <p className="text-gray-500">You haven&apos;t written any posts yet.</p>
         <Link
           href="/dashboard/blog/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
         >
           <PenLine className="w-4 h-4" />
           Write your first post
@@ -106,7 +106,7 @@ export default function BlogPostList({ userId, username }: BlogPostListProps) {
                 <Link
                   href={`/blog/${username}/${post.slug}`}
                   target="_blank"
-                  className="p-1.5 text-gray-400 hover:text-sky-600 transition"
+                  className="p-1.5 text-gray-400 hover:text-amber-400 transition"
                   title="View public post"
                 >
                   <Eye className="w-4 h-4" />

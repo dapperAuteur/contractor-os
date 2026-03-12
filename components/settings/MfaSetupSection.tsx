@@ -60,7 +60,7 @@ export default function MfaSetupSection() {
     try {
       const { data, error: enrollError } = await supabase.auth.mfa.enroll({
         factorType: 'totp',
-        friendlyName: 'JobHub',
+        friendlyName: 'Work.WitUS',
       });
       if (enrollError) throw enrollError;
       setFactorId(data.id);
@@ -141,7 +141,7 @@ export default function MfaSetupSection() {
     return (
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mt-6">
         <div className="flex items-center justify-center py-6">
-          <Loader2 className="w-5 h-5 animate-spin text-fuchsia-600" />
+          <Loader2 className="w-5 h-5 animate-spin text-amber-600" />
         </div>
       </div>
     );
@@ -186,7 +186,7 @@ export default function MfaSetupSection() {
           <button
             onClick={handleEnroll}
             disabled={loading}
-            className="px-5 py-2.5 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50 flex items-center gap-2"
+            className="px-5 py-2.5 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 flex items-center gap-2"
           >
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             Enable MFA
@@ -238,7 +238,7 @@ export default function MfaSetupSection() {
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                 required
                 autoFocus
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent form-input text-center text-2xl tracking-widest font-mono"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent form-input text-center text-2xl tracking-widest font-mono"
                 placeholder="000000"
               />
             </div>
@@ -246,7 +246,7 @@ export default function MfaSetupSection() {
               <button
                 type="submit"
                 disabled={loading || code.length !== 6}
-                className="px-5 py-2.5 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50 flex items-center gap-2"
+                className="px-5 py-2.5 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 flex items-center gap-2"
               >
                 {loading && <Loader2 className="w-4 h-4 animate-spin" />}
                 Verify &amp; Activate

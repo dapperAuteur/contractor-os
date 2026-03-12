@@ -86,7 +86,7 @@ function PayoutsContent() {
         {!status?.onboarded && (
           <>
             <p className="text-gray-400 text-sm mb-4">
-              JobHub uses Stripe Connect to send your earnings directly to your bank account.
+              Work.WitUS uses Stripe Connect to send your earnings directly to your bank account.
               You keep the majority of each course sale; a small platform fee covers payment processing.
             </p>
             <button

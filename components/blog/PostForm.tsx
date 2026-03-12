@@ -137,7 +137,7 @@ export default function PostForm({ post, username }: PostFormProps) {
             type="button"
             onClick={() => handleSave()}
             disabled={saving}
-            className="flex items-center gap-1.5 px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-50 transition"
+            className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 disabled:opacity-50 transition"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             {isEditing ? 'Update' : 'Publish'}
@@ -161,7 +161,7 @@ export default function PostForm({ post, username }: PostFormProps) {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Post title"
-              className="w-full px-0 py-2 text-3xl font-bold text-gray-900 border-0 border-b-2 border-gray-200 focus:border-sky-500 focus:outline-none bg-transparent placeholder-gray-300"
+              className="w-full px-0 py-2 text-3xl font-bold text-gray-900 border-0 border-b-2 border-gray-200 focus:border-amber-500 focus:outline-none bg-transparent placeholder-gray-300"
             />
           </div>
 
@@ -193,7 +193,7 @@ export default function PostForm({ post, username }: PostFormProps) {
                   href={publicUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-xs text-sky-600 hover:underline"
+                  className="inline-flex items-center gap-1 text-xs text-amber-400 hover:underline"
                 >
                   <ExternalLink className="w-3 h-3" />
                   View post
@@ -214,7 +214,7 @@ export default function PostForm({ post, username }: PostFormProps) {
                   setSlugManuallyEdited(true);
                 }}
                 placeholder="post-url-slug"
-                className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-900 font-mono focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="flex-1 px-3 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-900 font-mono focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
               <button
                 type="button"
@@ -239,7 +239,7 @@ export default function PostForm({ post, username }: PostFormProps) {
               placeholder="Brief summary shown in post listings…"
               maxLength={500}
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
             />
             <p className="text-xs text-gray-400 text-right">{excerpt.length}/500</p>
           </div>
@@ -279,20 +279,20 @@ export default function PostForm({ post, username }: PostFormProps) {
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
               placeholder="Type tag, press Enter or comma"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full text-xs"
+                    className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-500/10 text-amber-400 rounded-full text-xs"
                   >
                     {tag}
                     <button
                       type="button"
                       onClick={() => handleRemoveTag(tag)}
-                      className="text-sky-400 hover:text-sky-700"
+                      className="text-amber-400 hover:text-amber-400"
                     >
                       ×
                     </button>

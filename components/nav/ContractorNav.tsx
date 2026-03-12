@@ -236,7 +236,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
           <div className="hidden lg:flex items-center justify-between h-14">
             <Link href="/dashboard/contractor" className="flex items-center gap-2 text-lg font-bold text-amber-400 shrink-0 mr-4">
               <HardHat className="w-5 h-5" aria-hidden="true" />
-              JobHub
+              Work.WitUS
             </Link>
 
             <div className="flex items-center gap-0.5" role="menubar">
@@ -372,7 +372,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
               </button>
               <Link href="/dashboard/contractor" className="flex items-center gap-2 text-lg font-bold text-amber-400">
                 <HardHat className="w-5 h-5" aria-hidden="true" />
-                JobHub
+                Work.WitUS
               </Link>
             </div>
             <Link
@@ -404,7 +404,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
           >
             <div className="flex items-center justify-between px-4 py-4 border-b border-neutral-800">
               <span className="text-lg font-bold text-amber-400 flex items-center gap-2">
-                <HardHat className="w-5 h-5" aria-hidden="true" /> JobHub
+                <HardHat className="w-5 h-5" aria-hidden="true" /> Work.WitUS
               </span>
               <button onClick={() => setDrawerOpen(false)} className="flex items-center justify-center min-h-11 min-w-11 rounded-lg hover:bg-neutral-800 transition" aria-label="Close menu">
                 <X className="w-5 h-5 text-neutral-500" aria-hidden="true" />
@@ -421,7 +421,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                 aria-current={pathname === '/dashboard/contractor' ? 'page' : undefined}
               >
                 <HardHat className="w-5 h-5 shrink-0" aria-hidden="true" />
-                Job Hub
+                Work.WitUS
               </Link>
             </div>
 

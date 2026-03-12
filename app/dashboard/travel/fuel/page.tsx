@@ -252,7 +252,7 @@ export default function FuelLogPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 flex items-center justify-center h-64">
-        <div className="animate-spin h-8 w-8 border-4 border-sky-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -285,7 +285,7 @@ export default function FuelLogPage() {
           </label>
           <button
             onClick={() => { setForm(BLANK_FORM); setOcrNotes(''); setEditingId(null); setShowForm(true); }}
-            className="flex items-center gap-1.5 px-3 py-2 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-500 transition"
           >
             <Plus className="w-4 h-4" />
             Add Entry
@@ -384,7 +384,7 @@ export default function FuelLogPage() {
                     <td className="px-4 py-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => handleEdit(log)}
-                        className="text-xs text-sky-500 hover:text-sky-700 transition mr-2"
+                        className="text-xs text-amber-500 hover:text-amber-400 transition mr-2"
                       >
                         edit
                       </button>
@@ -556,7 +556,7 @@ export default function FuelLogPage() {
               Cancel
             </button>
             <button type="submit" disabled={saving}
-              className="flex-1 bg-sky-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50">
+              className="flex-1 bg-amber-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50">
               {saving ? 'Saving...' : 'Save Entry'}
             </button>
           </div>

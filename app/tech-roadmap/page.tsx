@@ -22,20 +22,20 @@ const PHASES = [
   },
   {
     id: 2,
-    title: 'Phase 2: Nutrition & Recipes (Fuel Module)',
+    title: 'Phase 2: Job Management & Scheduling',
     status: 'completed' as const,
     quarter: 'Q1 2026',
-    description: 'Track what fuels your journey — ingredients, meals, recipes.',
+    description: 'Core job tracking — create, schedule, and manage contractor work.',
     items: [
-      { done: true, text: 'Ingredient library with NCV (Nutrient Cost Value) framework' },
-      { done: true, text: 'Protocol-based meal logging system' },
+      { done: true, text: 'Job creation with client, location, and scope details' },
+      { done: true, text: 'Job scheduling with calendar integration' },
       { done: true, text: 'Cost tracking and budget alerts' },
-      { done: true, text: 'USDA FoodData Central API integration' },
-      { done: true, text: 'Open Food Facts API integration' },
-      { done: true, text: 'Auto inventory management' },
-      { done: true, text: 'Public recipe pages with likes, saves, and sharing' },
-      { done: true, text: 'Recipe import from any URL (JSON-LD scraping)' },
-      { done: true, text: 'Public cook/author profile pages' },
+      { done: true, text: 'Job status workflow (draft → scheduled → in-progress → complete)' },
+      { done: true, text: 'Client contact directory with auto-fill' },
+      { done: true, text: 'Job materials and expense tracking' },
+      { done: true, text: 'Public contractor profile pages' },
+      { done: true, text: 'Job import from documents (OCR extraction)' },
+      { done: true, text: 'Crew assignment and availability tracking' },
     ],
   },
   {
@@ -43,7 +43,7 @@ const PHASES = [
     title: 'Phase 3: Publishing Platform (Blog & Community)',
     status: 'completed' as const,
     quarter: 'Q1 2026',
-    description: 'A full content publishing system for the JobHub community.',
+    description: 'A full content publishing system for the Work.WitUS community.',
     items: [
       { done: true, text: 'Blog system with rich text editor and Cloudinary media upload' },
       { done: true, text: 'Public blog pages with likes, saves, and reading progress events' },
@@ -51,14 +51,14 @@ const PHASES = [
       { done: true, text: 'Public author profile pages' },
       { done: true, text: 'In-app AI help assistant with RAG (retrieval-augmented generation)' },
       { done: true, text: 'Terms of Use, Privacy Policy, and Safety / Medical Disclaimer pages' },
-      { done: true, text: 'Rise Wellness of Indiana mental health resources page' },
+      { done: true, text: 'Mental health resources and safety information page' },
       { done: true, text: 'Site footer with legal links on all public pages' },
       { done: true, text: 'Signup Terms + Privacy agreement checkbox' },
     ],
   },
   {
     id: 4,
-    title: 'Phase 4: JobHub Academy (LMS)',
+    title: 'Phase 4: Work.WitUS Academy (LMS)',
     status: 'in-progress' as const,
     quarter: 'Q1–Q2 2026',
     description: 'A full learning management system — create, publish, sell, and take courses.',
@@ -156,7 +156,7 @@ const PHASES = [
       { done: true, text: 'Daily energy and focus rating system' },
       { done: true, text: 'Pain tracking and body check logging' },
       { done: true, text: 'AI-assisted weekly review generation (Gemini summarization)' },
-      { done: true, text: 'Recipe ideas generated from current ingredient inventory (Gemini)' },
+      { done: true, text: 'Job estimate generation from project scope (Gemini)' },
       { done: true, text: 'Correlation analysis — cross-module data correlation engine with trend charts' },
       { done: true, text: 'Offline-first architecture with IndexedDB sync' },
     ],
@@ -184,8 +184,8 @@ const PHASES = [
     description: 'Auto-generate tracked short links via Switchy.io so every share is measured.',
     items: [
       { done: false, text: 'Switchy.io API integration — auto-create short link on every publish' },
-      { done: false, text: 'Custom domain short links (i.jobhub.app/[slug])' },
-      { done: false, text: 'Share bars use Switchy short links (blog, recipes, courses)' },
+      { done: false, text: 'Custom domain short links (i.work.witus.online/[slug])' },
+      { done: false, text: 'Share bars use Switchy short links (blog, courses)' },
       { done: false, text: 'OG metadata (title, description, image) synced to Switchy on edit' },
       { done: false, text: 'Admin backfill page — create short links for all existing content' },
     ],
@@ -271,7 +271,7 @@ const PHASES = [
     title: 'Phase 13: User Experience & Personalization',
     status: 'in-progress' as const,
     quarter: 'Q2 2026',
-    description: 'Reduce friction and let users tailor JobHub to how they actually work.',
+    description: 'Reduce friction and let users tailor Work.WitUS to how they actually work.',
     items: [
       { done: true, text: 'Dashboard home preference — choose which page you land on after login or clicking "Go to Dashboard"' },
       { done: true, text: 'Life Categories — user-defined life-area tags with analytics across all 11 module types' },
@@ -288,7 +288,7 @@ const PHASES = [
     description: 'AI-powered data extraction and cross-module intelligence tools.',
     items: [
       { done: true, text: 'Universal OCR scanner — Gemini Vision extracts data from receipts, fuel logs, and ingredient labels' },
-      { done: true, text: 'AI recipe ideas from current ingredient inventory (Gemini)' },
+      { done: true, text: 'AI job estimate generation from project scope (Gemini)' },
       { done: true, text: 'Life Retrospective — AI narrative synthesis across all modules' },
       { done: true, text: 'Google Calendar .ics import with pure-TS parser (no external deps)' },
       { done: true, text: 'In-app AI help assistant with RAG (retrieval-augmented generation)' },
@@ -307,12 +307,12 @@ const STATUS_CONFIG = {
     checkColor: 'text-lime-600',
   },
   'in-progress': {
-    border: 'border-fuchsia-500',
-    dot: 'bg-fuchsia-500',
-    badge: 'bg-fuchsia-100 text-fuchsia-800',
+    border: 'border-amber-500',
+    dot: 'bg-amber-500',
+    badge: 'bg-amber-100 text-amber-800',
     label: 'In Progress',
     icon: Clock,
-    checkColor: 'text-fuchsia-500',
+    checkColor: 'text-amber-500',
   },
   planned: {
     border: 'border-gray-300',
@@ -343,9 +343,9 @@ export default function RoadmapPage() {
             <span className="font-medium">Back to Home</span>
           </Link>
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-linear-to-br from-fuchsia-500 to-sky-500 rounded-lg" />
+            <div className="w-8 h-8 bg-linear-to-br from-amber-500 to-amber-600 rounded-lg" />
             <Link href="/dashboard/roadmap">
-              <span className="text-xl font-bold text-gray-900">JobHub</span>
+              <span className="text-xl font-bold text-gray-900">Work.WitUS</span>
             </Link>
           </div>
         </nav>
@@ -357,7 +357,7 @@ export default function RoadmapPage() {
           Product Roadmap
         </h1>
         <p className="text-xl text-gray-600 mb-2">
-          Our journey from MVP to a comprehensive personal longevity operating system.
+          Our journey from MVP to a comprehensive contractor operating system.
         </p>
         <p className="text-sm text-gray-400 mb-8">Updated March 2026</p>
 
@@ -374,7 +374,7 @@ export default function RoadmapPage() {
                 <p className="text-gray-500">Phases complete</p>
               </div>
               <div>
-                <p className="font-bold text-fuchsia-600 text-lg">{inProgress}</p>
+                <p className="font-bold text-amber-600 text-lg">{inProgress}</p>
                 <p className="text-gray-500">In progress</p>
               </div>
               <div>
@@ -385,7 +385,7 @@ export default function RoadmapPage() {
           </div>
           <div className="w-full bg-gray-100 rounded-full h-3">
             <div
-              className="bg-linear-to-r from-fuchsia-500 to-lime-500 h-3 rounded-full transition-all"
+              className="bg-linear-to-r from-amber-500 to-lime-500 h-3 rounded-full transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>
@@ -395,7 +395,7 @@ export default function RoadmapPage() {
         {/* CTA buttons */}
         <div className="flex flex-wrap gap-3">
           <a
-            href="https://github.com/dapperAuteur/jobhub-app"
+            href="https://github.com/dapperAuteur/work-witus-app"
             target="_blank"
             rel="noopener noreferrer"
             className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
@@ -404,13 +404,13 @@ export default function RoadmapPage() {
           </a>
           <Link
             href="/contribute"
-            className="px-6 py-3 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-medium"
+            className="px-6 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-medium"
           >
             Contribute
           </Link>
           <Link
             href="/academy"
-            className="px-6 py-3 border border-fuchsia-300 text-fuchsia-700 rounded-lg hover:bg-fuchsia-50 transition-colors font-medium"
+            className="px-6 py-3 border border-amber-300 text-amber-700 rounded-lg hover:bg-amber-50 transition-colors font-medium"
           >
             Try the Academy
           </Link>
@@ -458,7 +458,7 @@ export default function RoadmapPage() {
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-1.5">
                         <div
-                          className={`h-1.5 rounded-full ${phase.status === 'completed' ? 'bg-lime-500' : 'bg-fuchsia-500'}`}
+                          className={`h-1.5 rounded-full ${phase.status === 'completed' ? 'bg-lime-500' : 'bg-amber-500'}`}
                           style={{ width: `${(phaseDone / phaseTotal) * 100}%` }}
                         />
                       </div>
@@ -490,11 +490,11 @@ export default function RoadmapPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Help Build the Future</h2>
           <p className="text-gray-400 mb-8 text-lg">
-            JobHub is open source. Contribute code, suggest features, or report bugs.
+            Work.WitUS is open source. Contribute code, suggest features, or report bugs.
           </p>
           <div className="flex justify-center flex-wrap gap-4">
             <a
-              href="https://github.com/dapperAuteur/jobhub-app"
+              href="https://github.com/dapperAuteur/work-witus-app"
               target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-semibold"
@@ -503,7 +503,7 @@ export default function RoadmapPage() {
             </a>
             <Link
               href="/contribute"
-              className="px-8 py-3 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition-colors font-semibold"
+              className="px-8 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors font-semibold"
             >
               Contribution Guide
             </Link>

@@ -51,7 +51,7 @@ export default function InstitutionDirectory() {
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-          <Building2 className="w-8 h-8 text-fuchsia-600" />
+          <Building2 className="w-8 h-8 text-amber-600" />
           Financial Institutions
         </h1>
         <p className="text-gray-500 mt-2 max-w-2xl">
@@ -67,13 +67,13 @@ export default function InstitutionDirectory() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search institutions..."
-          className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500 focus:border-transparent"
+          className="w-full pl-10 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
         />
       </div>
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-fuchsia-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
         </div>
       ) : institutions.length === 0 ? (
         <div className="text-center py-20 text-gray-400">
@@ -86,7 +86,7 @@ export default function InstitutionDirectory() {
             <Link
               key={inst.id}
               href={`/institutions/${inst.slug}`}
-              className="bg-white border border-gray-200 rounded-2xl p-5 hover:shadow-md hover:border-fuchsia-200 transition group"
+              className="bg-white border border-gray-200 rounded-2xl p-5 hover:shadow-md hover:border-amber-200 transition group"
             >
               <div className="flex items-center gap-3 mb-3">
                 {inst.logo_url ? (
@@ -98,7 +98,7 @@ export default function InstitutionDirectory() {
                   </div>
                 )}
                 <div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-fuchsia-600 transition">{inst.name}</h3>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-amber-600 transition">{inst.name}</h3>
                   <span className="text-xs text-gray-400 flex items-center gap-1">
                     <Users className="w-3 h-3" /> {inst.account_count} user{inst.account_count !== 1 ? 's' : ''}
                   </span>

@@ -91,7 +91,7 @@ export default function FuelDetailPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin h-8 w-8 text-sky-600" />
+        <Loader2 className="animate-spin h-8 w-8 text-amber-600" />
       </div>
     );
   }
@@ -100,7 +100,7 @@ export default function FuelDetailPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 text-center text-gray-400">
         <p>Fuel log not found.</p>
-        <Link href="/dashboard/travel/fuel" className="text-sky-600 hover:underline mt-2 inline-block">Back to fuel logs</Link>
+        <Link href="/dashboard/travel/fuel" className="text-amber-600 hover:underline mt-2 inline-block">Back to fuel logs</Link>
       </div>
     );
   }

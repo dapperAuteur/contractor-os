@@ -7,7 +7,7 @@ import {
 } from '@/lib/features/lister-features';
 
 export const metadata = {
-  title: 'CrewOps Features — JobHub',
+  title: 'CrewOps Features — Work.WitUS',
   description:
     'Explore every feature of CrewOps, the crew management app. Create jobs, manage rosters, assign contractors, and communicate with your team.',
 };
@@ -29,7 +29,7 @@ export default function ListerFeaturesPage() {
             href="/features/contractor"
             className="text-amber-400 hover:text-amber-300 text-sm font-medium transition min-h-11 flex items-center"
           >
-            JobHub Features →
+            Work.WitUS Features →
           </Link>
         </div>
       </nav>
@@ -80,7 +80,7 @@ export default function ListerFeaturesPage() {
             href="/features/contractor"
             className="flex items-center justify-center px-6 py-3 border border-neutral-700 text-neutral-200 hover:bg-neutral-800 rounded-xl text-sm font-semibold transition min-h-11"
           >
-            Explore JobHub (Contractor) Features
+            Explore Work.WitUS (Contractor) Features
           </Link>
         </div>
       </div>

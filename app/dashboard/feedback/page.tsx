@@ -193,7 +193,7 @@ export default function FeedbackHistoryPage() {
                                 : 'bg-amber-50 border border-amber-200 text-gray-800'
                             }`}>
                               <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-purple-600' : 'text-amber-600'}`}>
-                                {reply.is_admin ? 'JobHub Team' : 'You'}
+                                {reply.is_admin ? 'Work.WitUS Team' : 'You'}
                               </p>
                               <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
                               {reply.media_url && <ImageLightbox url={reply.media_url} />}

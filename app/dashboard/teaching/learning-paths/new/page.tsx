@@ -46,7 +46,7 @@ export default function NewLearningPathPage() {
           Back to Learning Paths
         </Link>
         <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-          <Layers className="w-7 h-7 text-fuchsia-600" />
+          <Layers className="w-7 h-7 text-amber-600" />
           New Learning Path
         </h1>
         <p className="text-gray-500 mt-1">
@@ -65,7 +65,7 @@ export default function NewLearningPathPage() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Foundations of Health Metrics"
             required
-            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
@@ -78,7 +78,7 @@ export default function NewLearningPathPage() {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="What will students achieve by completing this path?"
             rows={4}
-            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500 resize-none"
+            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
           />
         </div>
 
@@ -92,7 +92,7 @@ export default function NewLearningPathPage() {
           <button
             type="submit"
             disabled={saving || !title.trim()}
-            className="px-5 py-2.5 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-40"
+            className="px-5 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-40"
           >
             {saving ? 'Creating…' : 'Create & Add Courses →'}
           </button>

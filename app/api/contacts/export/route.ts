@@ -62,6 +62,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Name', 'Contact Type', 'Notes', 'Location Label', 'Address', 'Lat', 'Lng'],
     rows,
-    'jobhub-contacts-export.csv',
+    'work-witus-contacts-export.csv',
   );
 }

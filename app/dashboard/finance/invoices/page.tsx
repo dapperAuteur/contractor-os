@@ -235,7 +235,7 @@ export default function InvoicesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-6 h-6 animate-spin text-fuchsia-600" />
+        <Loader2 className="w-6 h-6 animate-spin text-amber-600" />
       </div>
     );
   }
@@ -247,7 +247,7 @@ export default function InvoicesPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Invoices & Receivables</h1>
           <p className="text-sm text-gray-500 mt-1">
-            <Link href="/dashboard/finance" className="text-fuchsia-600 hover:underline">Finance</Link>
+            <Link href="/dashboard/finance" className="text-amber-600 hover:underline">Finance</Link>
             {' / '}Invoices
           </p>
         </div>
@@ -281,7 +281,7 @@ export default function InvoicesPage() {
           )}
           <button
             onClick={() => setShowCreate(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 text-sm font-medium"
           >
             <Plus className="w-4 h-4" />
             New Invoice
@@ -312,7 +312,7 @@ export default function InvoicesPage() {
             key={d}
             onClick={() => setFilter(d)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-              filter === d ? 'bg-fuchsia-100 text-fuchsia-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              filter === d ? 'bg-amber-500/10 text-amber-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {d === 'all' ? 'All' : d === 'receivable' ? 'Receivable' : 'Payable'}
@@ -324,7 +324,7 @@ export default function InvoicesPage() {
             key={s}
             onClick={() => setStatusFilter(s)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
-              statusFilter === s ? 'bg-fuchsia-100 text-fuchsia-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              statusFilter === s ? 'bg-amber-500/10 text-amber-700' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             {s === 'active' ? 'Active' : s === 'paid' ? 'Paid' : 'All Status'}
@@ -556,7 +556,7 @@ export default function InvoicesPage() {
             </div>
             <button
               onClick={addLineItem}
-              className="mt-2 text-xs text-fuchsia-600 hover:underline font-medium"
+              className="mt-2 text-xs text-amber-600 hover:underline font-medium"
             >
               + Add line item
             </button>
@@ -621,7 +621,7 @@ export default function InvoicesPage() {
           <button
             onClick={handleCreate}
             disabled={saving || !form.contact_name.trim() || lineTotal <= 0}
-            className="flex-1 py-2.5 bg-fuchsia-600 text-white rounded-lg font-medium text-sm hover:bg-fuchsia-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 py-2.5 bg-amber-600 text-white rounded-lg font-medium text-sm hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             Create Invoice

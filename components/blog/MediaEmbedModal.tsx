@@ -78,7 +78,7 @@ export default function MediaEmbedModal({ isOpen, onClose, onInsert }: MediaEmbe
               onClick={() => { setActiveTab(tab.id); setError(''); }}
               className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-t-lg border-b-2 transition ${
                 activeTab === tab.id
-                  ? 'border-sky-500 text-sky-600'
+                  ? 'border-amber-500 text-amber-400'
                   : 'border-transparent text-gray-500 hover:text-gray-700'
               }`}
             >
@@ -104,13 +104,13 @@ export default function MediaEmbedModal({ isOpen, onClose, onInsert }: MediaEmbe
               value={videoUrl}
               onChange={(e) => setVideoUrl(e.target.value)}
               placeholder="https://www.youtube.com/watch?v=... or any video URL"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
               onKeyDown={(e) => e.key === 'Enter' && handleVideoUrlInsert()}
             />
             <button
               type="button"
               onClick={handleVideoUrlInsert}
-              className="w-full px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition"
+              className="w-full px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
             >
               Embed video
             </button>
@@ -125,7 +125,7 @@ export default function MediaEmbedModal({ isOpen, onClose, onInsert }: MediaEmbe
               <select
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 {PLATFORMS.map((p) => <option key={p}>{p}</option>)}
               </select>
@@ -142,13 +142,13 @@ export default function MediaEmbedModal({ isOpen, onClose, onInsert }: MediaEmbe
                 onChange={(e) => setEmbedCode(e.target.value)}
                 placeholder='<blockquote class="twitter-tweet">...</blockquote>'
                 rows={5}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
               />
             </div>
             <button
               type="button"
               onClick={handleSocialInsert}
-              className="w-full px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 transition"
+              className="w-full px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 transition"
             >
               Insert embed
             </button>

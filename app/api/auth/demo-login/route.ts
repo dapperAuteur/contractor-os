@@ -3,14 +3,16 @@
 // Optional JSON body { from?: string } tracks which feature page drove the demo login.
 
 import { NextResponse } from 'next/server';
+import { createClient as createServerSupabase } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/server';
 import { trackUsage } from '@/lib/trackUsage';
 
 export async function POST(request: Request) {
-  const email = 'demo@jobhub.com';
+  const email = process.env.DEMO_CONTRACTOR_EMAIL;
   const password = process.env.DEMO_VISITOR_PASSWORD;
+  const demoUserId = process.env.DEMO_VISITOR_USER_ID;
 
-  if (!password) {
+  if (!email || !password || !demoUserId) {
     return NextResponse.json({ error: 'Demo login not configured' }, { status: 500 });
   }
 
@@ -25,11 +27,19 @@ export async function POST(request: Request) {
     }
   } catch { /* no body — that's fine */ }
 
+  // Ensure the demo user's password matches the env var (handles drift)
+  const adminClient = createServerSupabase(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+  await adminClient.auth.admin.updateUserById(demoUserId, { password });
+
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    return NextResponse.json({ error: 'Demo login failed' }, { status: 500 });
+    console.error('[demo-login] signInWithPassword failed:', error.message);
+    return NextResponse.json({ error: 'Demo login failed', detail: error.message }, { status: 500 });
   }
 
   // Fire-and-forget: track which page drove the demo login

@@ -56,7 +56,7 @@ export default function OfflineIndicator() {
   // ── Actively syncing ───────────────────────────────────────────────
   if (isSyncing && pending > 0) {
     return (
-      <div className="bg-sky-500 text-white text-sm text-center px-4 py-2 flex items-center justify-center gap-2">
+      <div className="bg-amber-500 text-white text-sm text-center px-4 py-2 flex items-center justify-center gap-2">
         <Loader2 className="w-4 h-4 shrink-0 animate-spin" />
         <span>
           Syncing {pending} change{pending !== 1 ? 's' : ''}&hellip;

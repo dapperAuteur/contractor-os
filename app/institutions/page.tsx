@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import InstitutionDirectory from './InstitutionDirectory';
 
 export const metadata: Metadata = {
-  title: 'Financial Institutions Directory | JobHub',
+  title: 'Financial Institutions Directory | Work.WitUS',
   description: 'Compare APRs, fees, rewards, and policies across financial institutions. Community-sourced, anonymized data for educational purposes.',
 };
 

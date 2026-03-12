@@ -2,11 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import * as LucideIcons from 'lucide-react';
 import { ArrowLeft, CheckCircle2, Play, Loader2 } from 'lucide-react';
 import type { FeatureConfig } from '@/lib/features/contractor-features';
-import VideoEmbed from '@/components/ui/VideoEmbed';
 
 interface FeatureDetailPageProps {
   feature: FeatureConfig;
@@ -21,7 +19,6 @@ export default function FeatureDetailPage({
   appName,
   relatedFeatures,
 }: FeatureDetailPageProps) {
-  const router = useRouter();
   const [demoLoading, setDemoLoading] = useState(false);
   const Icon = (LucideIcons as unknown as Record<string, LucideIcons.LucideIcon>)[feature.icon] || LucideIcons.Sparkles;
   const accent = app === 'contractor' ? 'amber' : 'indigo';
@@ -51,7 +48,7 @@ export default function FeatureDetailPage({
       });
       const data = await res.json();
       if (data.ok && data.redirect) {
-        router.push(data.redirect);
+        window.location.href = data.redirect;
       } else {
         setDemoLoading(false);
       }

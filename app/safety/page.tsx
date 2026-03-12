@@ -1,14 +1,14 @@
 // app/safety/page.tsx
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Phone, MapPin, Clock, ExternalLink, AlertTriangle, Heart, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, Heart, ShieldCheck } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'Safety & Resources | JobHub',
+  title: 'Safety & Resources | Work.WitUS',
   description:
-    'Workplace safety information, disclaimers, and mental health resources for JobHub users.',
+    'Workplace safety information, disclaimers, and mental health resources for Work.WitUS users.',
 };
 
 export default function SafetyPage() {
@@ -29,7 +29,7 @@ export default function SafetyPage() {
             <div>
               <h2 className="text-lg font-semibold text-amber-300 mb-2">Workplace Safety</h2>
               <p className="text-amber-100/80 text-sm leading-relaxed">
-                JobHub is a <strong>job tracking and management tool</strong>. It is{' '}
+                Work.WitUS is a <strong>job tracking and management tool</strong>. It is{' '}
                 <strong>NOT a safety compliance service or legal advisor</strong>. Always follow
                 your employer&apos;s safety protocols, OSHA guidelines, and local regulations on every
                 job site. Your safety is your responsibility.
@@ -60,7 +60,7 @@ export default function SafetyPage() {
               <li>
                 <strong className="text-white">Report hazards immediately.</strong> If you see an
                 unsafe condition, report it to your supervisor or crew coordinator right away. Use
-                JobHub&apos;s incident report feature to document it.
+                Work.WitUS&apos;s incident report feature to document it.
               </li>
               <li>
                 <strong className="text-white">Stay hydrated and rested.</strong> Long shifts in
@@ -74,9 +74,9 @@ export default function SafetyPage() {
               </li>
             </ul>
             <p>
-              JobHub, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless for
+              Work.WitUS, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless for
               any workplace incidents. See our{' '}
-              <Link href="/terms" className="text-fuchsia-400 hover:underline">Terms of Use</Link> for
+              <Link href="/terms" className="text-amber-400 hover:underline">Terms of Use</Link> for
               full details.
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function SafetyPage() {
           <h2 className="text-xl font-semibold text-white mb-3">Documenting Incidents</h2>
           <div className="text-gray-300 text-sm leading-relaxed space-y-3">
             <p>
-              JobHub provides tools to document incidents, best practices, and safety notes on each
+              Work.WitUS provides tools to document incidents, best practices, and safety notes on each
               job. We encourage all contractors to:
             </p>
             <ul className="list-disc pl-5 space-y-1">
@@ -97,7 +97,7 @@ export default function SafetyPage() {
               <li>Review past incidents before returning to a job site</li>
             </ul>
             <p>
-              <strong className="text-white">Important:</strong> JobHub&apos;s incident report
+              <strong className="text-white">Important:</strong> Work.WitUS&apos;s incident report
               feature is for personal record-keeping. For workplace injuries, always file official
               reports with your employer, workers&apos; compensation carrier, and OSHA as required
               by law.
@@ -128,83 +128,21 @@ export default function SafetyPage() {
           </ul>
         </div>
 
-        {/* Rise Wellness */}
-        <section id="rise-wellness" className="mb-10 scroll-mt-20">
+        {/* Mental Health Resources */}
+        <section className="mb-10">
           <div className="flex items-center gap-2 mb-4">
-            <Heart className="w-5 h-5 text-fuchsia-400" />
+            <Heart className="w-5 h-5 text-amber-400" />
             <h2 className="text-xl font-semibold text-white">Mental Health Support</h2>
           </div>
-
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-            <h3 className="text-lg font-bold text-white mb-1">Rise Wellness of Indiana</h3>
-            <p className="text-fuchsia-300 text-xs font-medium mb-4 uppercase tracking-wide">
-              Independent Mental Health Provider — Not affiliated with JobHub
-            </p>
-
-            <p className="text-gray-300 text-sm leading-relaxed mb-4">
+          <div className="text-gray-300 text-sm leading-relaxed space-y-3">
+            <p>
               Contract work can be demanding on your mental health — irregular schedules, physical
-              labor, and financial uncertainty take a toll. Rise Wellness of Indiana provides
-              compassionate, personalized mental health care to help you heal, grow, and thrive.
+              labor, and financial uncertainty take a toll. If you or someone you know is struggling,
+              please reach out to a qualified mental health professional.
             </p>
-
-            <div className="mb-5">
-              <h4 className="text-sm font-semibold text-gray-100 mb-2">Services offered:</h4>
-              <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm text-gray-400">
-                <li>• ADHD Testing &amp; Management</li>
-                <li>• Anxiety &amp; Depression</li>
-                <li>• Maternal Mental Health</li>
-                <li>• Medication Management</li>
-                <li>• GeneSight® Genetic Testing</li>
-                <li>• Behavioral Therapy &amp; Coaching</li>
-                <li>• Comprehensive ADHD Testing (from home)</li>
-                <li>• Routine Lab Testing</li>
-              </ul>
-            </div>
-
-            <div className="space-y-2 mb-5 text-sm">
-              <div className="flex items-start gap-2 text-gray-300">
-                <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-gray-500" />
-                <span>320 North Meridian Street, Indianapolis, IN 46204</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <Clock className="w-4 h-4 shrink-0 text-gray-500" />
-                <span>Monday – Saturday by appointment &nbsp;&middot;&nbsp; Sunday closed</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-300">
-                <Phone className="w-4 h-4 shrink-0 text-gray-500" />
-                <a
-                  href="tel:+13179650299"
-                  className="text-fuchsia-400 font-semibold hover:underline"
-                >
-                  317-965-0299
-                </a>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href="tel:+13179650299"
-                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white rounded-lg font-semibold text-sm transition"
-              >
-                <Phone className="w-4 h-4" />
-                Call Rise Wellness
-              </a>
-              <a
-                href="https://risewellnessofindiana.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-lg font-semibold text-sm transition"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Visit Website
-              </a>
-            </div>
-
-            <p className="mt-4 text-xs text-gray-500 leading-relaxed">
-              Rise Wellness of Indiana is an independent organization. They are not affiliated with,
-              employed by, or endorsed by JobHub, B4C LLC, AwesomeWebStore.com, or Anthony
-              McDonald. We are grateful for their collaboration on mental health safety resources for
-              our community.
+            <p>
+              The <strong className="text-white">988 Suicide &amp; Crisis Lifeline</strong> is available
+              24/7 by calling or texting <a href="tel:988" className="text-amber-400 font-semibold hover:underline">988</a> (US).
             </p>
           </div>
         </section>

@@ -86,7 +86,7 @@ export default function MobileDrawer({
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <span className="text-lg font-bold text-gray-900">JobHub</span>
+          <span className="text-lg font-bold text-gray-900">Work.WitUS</span>
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-gray-100 transition"
@@ -114,7 +114,7 @@ export default function MobileDrawer({
                       key={item.href}
                       href={item.href}
                       className={`flex items-center gap-3 px-6 py-2.5 text-sm font-medium transition ${
-                        active ? 'text-fuchsia-700 bg-fuchsia-50' : 'text-gray-700 hover:bg-gray-50'
+                        active ? 'text-amber-700 bg-amber-500/10' : 'text-gray-700 hover:bg-gray-50'
                       }`}
                       aria-current={active ? 'page' : undefined}
                     >
@@ -148,7 +148,7 @@ export default function MobileDrawer({
           {isAdmin && (
             <Link
               href="/admin"
-              className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-fuchsia-700 hover:bg-fuchsia-50 transition"
+              className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-amber-700 hover:bg-amber-500/10 transition"
             >
               <Shield className="w-4 h-4 shrink-0" />
               Admin Dashboard
@@ -168,7 +168,7 @@ export default function MobileDrawer({
             <Bell className="w-4 h-4 shrink-0" />
             Messages
             {unreadMessages > 0 && (
-              <span className="ml-auto w-5 h-5 bg-fuchsia-600 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+              <span className="ml-auto w-5 h-5 bg-amber-600 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                 {unreadMessages > 9 ? '9+' : unreadMessages}
               </span>
             )}

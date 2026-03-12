@@ -28,7 +28,7 @@ function ToolbarButton({ onClick, active, title, children, disabled }: ToolbarBu
       onClick={onClick}
       className={`p-1.5 rounded transition text-sm ${
         active
-          ? 'bg-sky-600 text-white'
+          ? 'bg-amber-600 text-white'
           : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
       } disabled:opacity-40 disabled:cursor-not-allowed`}
     >

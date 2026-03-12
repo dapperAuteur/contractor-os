@@ -160,7 +160,7 @@ export default function AdminInstitutionsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <Loader2 className="animate-spin h-8 w-8 text-fuchsia-500" />
+        <Loader2 className="animate-spin h-8 w-8 text-amber-500" />
       </div>
     );
   }
@@ -169,13 +169,13 @@ export default function AdminInstitutionsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Building2 className="w-6 h-6 text-fuchsia-400" />
+          <Building2 className="w-6 h-6 text-amber-400" />
           Institutions
         </h1>
         <button
           onClick={handleAggregate}
           disabled={aggregating}
-          className="flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition"
+          className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition"
         >
           <RefreshCw className={`w-4 h-4 ${aggregating ? 'animate-spin' : ''}`} />
           Run Aggregation
@@ -213,14 +213,14 @@ export default function AdminInstitutionsPage() {
                 <div className="flex items-center gap-2 shrink-0">
                   {inst.short_link_url ? (
                     <a href={inst.short_link_url} target="_blank" rel="noopener noreferrer"
-                      className="text-xs text-fuchsia-400 hover:underline flex items-center gap-1">
+                      className="text-xs text-amber-400 hover:underline flex items-center gap-1">
                       <ExternalLink className="w-3 h-3" /> {inst.short_link_url}
                     </a>
                   ) : (
                     <button
                       onClick={() => handleCreateShortLink('institution', inst.id)}
                       disabled={linkCreating === inst.id}
-                      className="flex items-center gap-1 px-2 py-1 text-xs text-gray-400 hover:text-fuchsia-400 hover:bg-gray-800 rounded transition disabled:opacity-50"
+                      className="flex items-center gap-1 px-2 py-1 text-xs text-gray-400 hover:text-amber-400 hover:bg-gray-800 rounded transition disabled:opacity-50"
                     >
                       {linkCreating === inst.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Link2 className="w-3 h-3" />}
                       Short Link
@@ -242,7 +242,7 @@ export default function AdminInstitutionsPage() {
                     <h4 className="text-sm font-medium text-gray-400">Offers</h4>
                     <button
                       onClick={() => setShowAddOffer(inst.id)}
-                      className="flex items-center gap-1 px-2 py-1 text-xs text-fuchsia-400 hover:bg-gray-800 rounded transition"
+                      className="flex items-center gap-1 px-2 py-1 text-xs text-amber-400 hover:bg-gray-800 rounded transition"
                     >
                       <Plus className="w-3 h-3" /> Add Offer
                     </button>
@@ -269,13 +269,13 @@ export default function AdminInstitutionsPage() {
                           <div className="flex items-center gap-1 shrink-0">
                             {offer.short_link_url ? (
                               <a href={offer.short_link_url} target="_blank" rel="noopener noreferrer"
-                                className="text-xs text-fuchsia-400 hover:underline">
+                                className="text-xs text-amber-400 hover:underline">
                                 <ExternalLink className="w-3 h-3" />
                               </a>
                             ) : (
                               <button onClick={() => handleCreateShortLink('offer', offer.id)}
                                 disabled={linkCreating === offer.id}
-                                className="p-1 text-gray-400 hover:text-fuchsia-400 transition disabled:opacity-50">
+                                className="p-1 text-gray-400 hover:text-amber-400 transition disabled:opacity-50">
                                 {linkCreating === offer.id ? <Loader2 className="w-3 h-3 animate-spin" /> : <Link2 className="w-3 h-3" />}
                               </button>
                             )}
@@ -305,35 +305,35 @@ export default function AdminInstitutionsPage() {
           <div>
             <label className="text-xs font-medium text-gray-600">Title *</label>
             <input value={offerForm.title} onChange={(e) => setOfferForm((f) => ({ ...f, title: e.target.value }))}
-              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500 placeholder-gray-400" placeholder="e.g. 0% APR for 15 Months" />
+              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-gray-400" placeholder="e.g. 0% APR for 15 Months" />
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Slug *</label>
             <input value={offerForm.slug} onChange={(e) => setOfferForm((f) => ({ ...f, slug: e.target.value }))}
-              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500 placeholder-gray-400" placeholder="e.g. chase-0-apr-15mo" />
+              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-gray-400" placeholder="e.g. chase-0-apr-15mo" />
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Type *</label>
             <select value={offerForm.offer_type} onChange={(e) => setOfferForm((f) => ({ ...f, offer_type: e.target.value }))}
-              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500">
+              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500">
               {OFFER_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Description</label>
             <textarea rows={2} value={offerForm.description} onChange={(e) => setOfferForm((f) => ({ ...f, description: e.target.value }))}
-              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" />
+              className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs font-medium text-gray-600">Expires</label>
               <input type="date" value={offerForm.expires_at} onChange={(e) => setOfferForm((f) => ({ ...f, expires_at: e.target.value }))}
-                className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500" />
+                className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500" />
             </div>
             <div>
               <label className="text-xs font-medium text-gray-600">URL</label>
               <input value={offerForm.url} onChange={(e) => setOfferForm((f) => ({ ...f, url: e.target.value }))}
-                className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500 placeholder-gray-400" placeholder="https://..." />
+                className="w-full mt-1 px-3 py-2 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-gray-400" placeholder="https://..." />
             </div>
           </div>
         </div>
@@ -341,7 +341,7 @@ export default function AdminInstitutionsPage() {
           <button
             onClick={() => showAddOffer && handleAddOffer(showAddOffer)}
             disabled={saving}
-            className="flex-1 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-medium hover:bg-fuchsia-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-700 disabled:opacity-50 transition flex items-center justify-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
             Add Offer

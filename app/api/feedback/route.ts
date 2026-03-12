@@ -87,9 +87,9 @@ export async function POST(request: NextRequest) {
     if (adminEmail) {
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@jobhub.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
         to: adminEmail,
-        subject: `[JobHub] New ${category} feedback from ${user.email}`,
+        subject: `[Work.WitUS] New ${category} feedback from ${user.email}`,
         html: `<p><strong>${user.email}</strong> submitted a <strong>${category}</strong> report:</p>
                <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${message.trim()}</blockquote>
                ${media_url ? `<p>📎 <a href="${media_url}">View attachment</a></p>` : ''}

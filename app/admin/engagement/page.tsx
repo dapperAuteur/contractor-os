@@ -8,20 +8,15 @@ import Link from 'next/link';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
-import { Heart, Bookmark, ChefHat, BookOpen, ExternalLink } from 'lucide-react';
+import { Heart, Bookmark, BookOpen, ExternalLink } from 'lucide-react';
 
 interface TopPost {
   id: string; title: string; slug: string; username: string;
   like_count: number; save_count: number;
 }
 
-interface TopRecipe {
-  id: string; name: string; slug: string; username: string;
-  like_count: number; save_count: number;
-}
-
 interface ActivityEntry {
-  type: 'blog_like' | 'blog_save' | 'recipe_like' | 'recipe_save';
+  type: 'blog_like' | 'blog_save';
   created_at: string;
   actor_username: string;
   content_title: string;
@@ -32,15 +27,11 @@ interface DayEntry {
   date: string;
   blog_likes: number;
   blog_saves: number;
-  recipe_likes: number;
-  recipe_saves: number;
 }
 
 interface EngagementData {
   topLikedPosts: TopPost[];
   topSavedPosts: TopPost[];
-  topLikedRecipes: TopRecipe[];
-  topSavedRecipes: TopRecipe[];
   recentActivity: ActivityEntry[];
   activityByDay: DayEntry[];
 }
@@ -48,15 +39,11 @@ interface EngagementData {
 const TYPE_LABEL: Record<string, string> = {
   blog_like:    'Blog Like',
   blog_save:    'Blog Save',
-  recipe_like:  'Recipe Like',
-  recipe_save:  'Recipe Save',
 };
 
 const TYPE_COLOR: Record<string, string> = {
-  blog_like:   'bg-fuchsia-900/40 text-fuchsia-300',
-  blog_save:   'bg-sky-900/40 text-sky-300',
-  recipe_like: 'bg-lime-900/40 text-lime-300',
-  recipe_save: 'bg-amber-900/40 text-amber-300',
+  blog_like:   'bg-amber-900/40 text-amber-300',
+  blog_save:   'bg-amber-900/40 text-amber-300',
 };
 
 function timeAgo(iso: string): string {
@@ -77,10 +64,10 @@ function TopContentTable({
   urlBase,
 }: {
   title: string;
-  posts: (TopPost | TopRecipe)[];
+  posts: (TopPost)[];
   icon: React.ElementType;
   countKey: 'like_count' | 'save_count';
-  urlBase: (item: TopPost | TopRecipe) => string;
+  urlBase: (item: TopPost) => string;
 }) {
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
@@ -94,7 +81,7 @@ function TopContentTable({
         <table className="w-full text-sm" aria-label={title}>
           <tbody>
             {posts.map((item, i) => {
-              const name = 'name' in item ? item.name : item.title;
+              const name = ('name' in item ? item.name : item.title) as string;
               return (
                 <tr key={item.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition">
                   <td className="px-4 py-2.5 text-gray-400 text-xs w-7">{i + 1}</td>
@@ -162,7 +149,7 @@ export default function AdminEngagementPage() {
       <section>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">Activity Timeline</h2>
         <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-          {data.activityByDay.every((d) => d.blog_likes + d.blog_saves + d.recipe_likes + d.recipe_saves === 0) ? (
+          {data.activityByDay.every((d) => d.blog_likes + d.blog_saves === 0) ? (
             <p className="text-center text-gray-400 py-10 text-sm">No activity in the last 30 days.</p>
           ) : (
             <ResponsiveContainer width="100%" height={280}>
@@ -181,10 +168,8 @@ export default function AdminEngagementPage() {
                   itemStyle={{ fontSize: 12 }}
                 />
                 <Legend wrapperStyle={{ fontSize: 12, color: '#9ca3af' }} />
-                <Line type="monotone" dataKey="blog_likes"   name="Blog Likes"    stroke="#d946ef" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="blog_saves"   name="Blog Saves"    stroke="#38bdf8" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="recipe_likes" name="Recipe Likes"  stroke="#84cc16" strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="recipe_saves" name="Recipe Saves"  stroke="#f59e0b" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="blog_likes"   name="Blog Likes"    stroke="#f59e0b" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="blog_saves"   name="Blog Saves"    stroke="#d97706" strokeWidth={2} dot={false} />
               </LineChart>
             </ResponsiveContainer>
           )}
@@ -202,13 +187,6 @@ export default function AdminEngagementPage() {
             countKey="like_count"
             urlBase={(item) => `${appUrl}/blog/${(item as TopPost).username}/${item.slug}`}
           />
-          <TopContentTable
-            title="Recipes"
-            posts={data.topLikedRecipes}
-            icon={ChefHat}
-            countKey="like_count"
-            urlBase={(item) => `${appUrl}/recipes/cooks/${(item as TopRecipe).username}/${item.slug}`}
-          />
         </div>
       </section>
 
@@ -222,13 +200,6 @@ export default function AdminEngagementPage() {
             icon={BookOpen}
             countKey="save_count"
             urlBase={(item) => `${appUrl}/blog/${(item as TopPost).username}/${item.slug}`}
-          />
-          <TopContentTable
-            title="Recipes"
-            posts={data.topSavedRecipes}
-            icon={ChefHat}
-            countKey="save_count"
-            urlBase={(item) => `${appUrl}/recipes/cooks/${(item as TopRecipe).username}/${item.slug}`}
           />
         </div>
       </section>

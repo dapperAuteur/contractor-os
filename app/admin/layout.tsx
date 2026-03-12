@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Menu, X } from 'lucide-react';
 import AdminSidebar from '@/components/admin/AdminSidebar';
+import FloatingActionsMenu from '@/components/ui/FloatingActionsMenu';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,7 +46,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-5 border-b border-gray-800 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1">Admin</p>
-            <p className="text-lg font-bold text-white">JobHub</p>
+            <p className="text-lg font-bold text-white">Work.WitUS</p>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -71,6 +72,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <main className="flex-1 overflow-auto pt-14 lg:pt-0">
         {children}
       </main>
+      <FloatingActionsMenu />
     </div>
   );
 }

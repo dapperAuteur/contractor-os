@@ -261,14 +261,14 @@ export default function TripsPage() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowMultiStop(true)}
-            className="flex items-center gap-1.5 px-3 py-2 border border-sky-600 text-sky-600 rounded-xl text-sm font-medium hover:bg-sky-50 transition"
+            className="flex items-center gap-1.5 px-3 py-2 border border-amber-600 text-amber-600 rounded-xl text-sm font-medium hover:bg-amber-500/10 transition"
           >
             <Route className="w-4 h-4" />
             Multi-Stop
           </button>
           <button
             onClick={() => { setForm(BLANK_FORM); setEditingId(null); setShowForm(true); }}
-            className="flex items-center gap-1.5 px-3 py-2 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-500 transition"
           >
             <Plus className="w-4 h-4" />
             Add Trip
@@ -286,9 +286,9 @@ export default function TripsPage() {
               onClick={() => { setModeFilter(m); setPage(0); }}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
                 modeFilter === m && !taxFilter && !categoryFilter
-                  ? 'bg-sky-600 text-white'
+                  ? 'bg-amber-600 text-white'
                   : modeFilter === m
-                    ? 'bg-sky-100 text-sky-700 border border-sky-300'
+                    ? 'bg-amber-500/10 text-amber-400 border border-amber-500'
                     : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -371,7 +371,7 @@ export default function TripsPage() {
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="py-16 flex items-center justify-center">
-            <div className="animate-spin h-6 w-6 border-4 border-sky-600 border-t-transparent rounded-full" />
+            <div className="animate-spin h-6 w-6 border-4 border-amber-600 border-t-transparent rounded-full" />
           </div>
         ) : trips.length === 0 ? (
           <div className="py-16 text-center">
@@ -412,7 +412,7 @@ export default function TripsPage() {
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
                         {t.is_round_trip && (
-                          <span className="text-xs bg-sky-50 text-sky-600 px-1.5 py-0.5 rounded font-medium">
+                          <span className="text-xs bg-amber-500/10 text-amber-600 px-1.5 py-0.5 rounded font-medium">
                             RT
                           </span>
                         )}
@@ -434,7 +434,7 @@ export default function TripsPage() {
                     <td className="px-4 py-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => handleEdit(t)}
-                        className="text-xs text-sky-500 hover:text-sky-700 transition mr-2"
+                        className="text-xs text-amber-500 hover:text-amber-400 transition mr-2"
                       >
                         edit
                       </button>
@@ -580,12 +580,12 @@ export default function TripsPage() {
                   type="checkbox"
                   checked={form.is_round_trip}
                   onChange={(e) => setForm((f) => ({ ...f, is_round_trip: e.target.checked }))}
-                  className="rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+                  className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
                 />
                 <span className="text-xs font-medium text-gray-600">Round trip (distance counted both ways)</span>
               </label>
               {form.is_round_trip && (form.distance_miles || form.duration_min || form.cost) && (
-                <p className="text-xs text-sky-600 mt-1 ml-6">
+                <p className="text-xs text-amber-600 mt-1 ml-6">
                   Effective total:{' '}
                   {form.distance_miles && <span>{(parseFloat(form.distance_miles) * 2).toFixed(1)} mi</span>}
                   {form.distance_miles && form.duration_min && <span> &middot; </span>}
@@ -670,14 +670,14 @@ export default function TripsPage() {
                   <button
                     type="button"
                     onClick={() => setForm((f) => ({ ...f, trip_category: 'travel' }))}
-                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'travel' ? 'bg-sky-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'travel' ? 'bg-amber-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     Travel
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm((f) => ({ ...f, trip_category: 'fitness' }))}
-                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'fitness' ? 'bg-sky-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'fitness' ? 'bg-amber-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
                   >
                     Fitness
                   </button>
@@ -736,7 +736,7 @@ export default function TripsPage() {
               Cancel
             </button>
             <button type="submit" disabled={saving}
-              className="flex-1 bg-sky-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50">
+              className="flex-1 bg-amber-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50">
               {saving ? 'Saving...' : editingId ? 'Update Trip' : 'Save Trip'}
             </button>
           </div>

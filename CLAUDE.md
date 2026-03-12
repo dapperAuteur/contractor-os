@@ -1,8 +1,8 @@
-# JobHub — Code Style & Quality Guidelines
+# Work.WitUS — Code Style & Quality Guidelines
 
 ## Dark Theme Contrast Rules
 
-This project uses dark-themed pages (`bg-neutral-950`, `bg-neutral-900`) for the contractor (JobHub) and lister (CrewOps) products. All text, icons, and interactive elements on these backgrounds **must** meet WCAG 2.1 AA contrast requirements (4.5:1 for normal text, 3:1 for large text and UI components).
+This project uses dark-themed pages (`bg-neutral-950`, `bg-neutral-900`) for the contractor (Work.WitUS) and lister (CrewOps) products. All text, icons, and interactive elements on these backgrounds **must** meet WCAG 2.1 AA contrast requirements (4.5:1 for normal text, 3:1 for large text and UI components).
 
 ### Allowed text colors on dark backgrounds (bg-neutral-950 / bg-neutral-900):
 - `text-neutral-100` — primary text (headings, body)
@@ -20,7 +20,7 @@ This project uses dark-themed pages (`bg-neutral-950`, `bg-neutral-900`) for the
 - Use `border-neutral-700` or `border-neutral-800` — never `border-gray-*`
 
 ### Accent colors by product:
-- **Contractor (JobHub):** `amber` — buttons: `bg-amber-600 hover:bg-amber-500`, text: `text-amber-400`, focus: `focus:ring-amber-500`
+- **Contractor (Work.WitUS):** `amber` — buttons: `bg-amber-600 hover:bg-amber-500`, text: `text-amber-400`, focus: `focus:ring-amber-500`
 - **Lister (CrewOps):** `indigo` — buttons: `bg-indigo-600 hover:bg-indigo-500`, text: `text-indigo-400`, focus: `focus:ring-indigo-500`
 
 ### Form inputs on dark backgrounds:
@@ -55,10 +55,10 @@ Never use `border-gray-300` or `bg-white` on dark-themed pages.
 
 ## App Architecture
 
-- This is a standalone JobHub app (contractor + lister). No subdomain detection.
+- This is a standalone Work.WitUS app (contractor + lister). No subdomain detection.
 - `useAppMode()` always returns `'contractor'`.
 - Lister users are detected via `profile.contractor_role === 'lister'` in the dashboard layout.
-- Login/signup always show JobHub branding (amber accent, dark theme).
+- Login/signup always show Work.WitUS branding (amber accent, dark theme).
 - Post-login redirect: `/dashboard/contractor` (or user's `dashboard_home` preference).
 - Blog is admin-only (locked for non-admin users).
 - MFA is optional — users can enable/disable in settings, not enforced in middleware.
@@ -71,7 +71,7 @@ This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for d
 - **Always use `IF NOT EXISTS` / `IF EXISTS`** in migrations
 - **Never drop columns** without checking both repos
 - **Copy new migrations to both repos** to keep schema history in sync
-- When adding columns that only JobHub uses, document them in `SHARED_DB.md`
+- When adding columns that only Work.WitUS uses, document them in `SHARED_DB.md`
 
 ---
 

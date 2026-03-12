@@ -5,8 +5,8 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | JobHub',
-  description: 'Privacy Policy for JobHub, operated by B4C LLC / AwesomeWebStore.com.',
+  title: 'Privacy Policy | Work.WitUS',
+  description: 'Privacy Policy for Work.WitUS, operated by B4C LLC / AwesomeWebStore.com.',
 };
 
 export default function PrivacyPage() {
@@ -22,7 +22,7 @@ export default function PrivacyPage() {
 
         <Section title="1. Who We Are">
           <p>
-            JobHub (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a contractor management and job tracking platform
+            Work.WitUS (&quot;we,&quot; &quot;us,&quot; &quot;our&quot;) is a contractor management and job tracking platform
             operated by B4C LLC and AwesomeWebStore.com, founded by Anthony McDonald. This Privacy
             Policy explains how we collect, use, store, and protect your personal information.
           </p>
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
 
           <h3 className="font-medium text-gray-100 mt-4 mb-1">Job & Financial Data</h3>
           <p>
-            When you use JobHub to track your work, we store the data you enter, including:
+            When you use Work.WitUS to track your work, we store the data you enter, including:
             job details, client names, time entries, pay rates, invoices, expenses, mileage logs,
             and estimated pay dates.
           </p>
@@ -105,7 +105,7 @@ export default function PrivacyPage() {
                 href="https://policies.google.com/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-fuchsia-400 hover:underline"
+                className="text-amber-400 hover:underline"
               >
                 Google Privacy Policy
               </a>
@@ -151,7 +151,7 @@ export default function PrivacyPage() {
 
         <Section title="8. Offline Data & Service Worker">
           <p>
-            JobHub works offline using a service worker and IndexedDB. Data created while offline
+            Work.WitUS works offline using a service worker and IndexedDB. Data created while offline
             is stored locally on your device and synced to the server when connectivity is restored.
             This local data is not accessible to other websites or applications.
           </p>
@@ -176,8 +176,8 @@ export default function PrivacyPage() {
           </ul>
           <p className="mt-3">
             To exercise these rights, email us at{' '}
-            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
-              hello@jobhub.app
+            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+              hello@centenarianos.com
             </a>
             .
           </p>
@@ -202,14 +202,14 @@ export default function PrivacyPage() {
         <Section title="13. Contact">
           <p>
             Privacy questions or requests:{' '}
-            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
-              hello@jobhub.app
+            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+              hello@centenarianos.com
             </a>
             <br />
             B4C LLC / AwesomeWebStore.com — Indianapolis, Indiana, USA
           </p>
           <p className="mt-3">
-            See also: <Link href="/terms" className="text-fuchsia-400 hover:underline">Terms of Use</Link> | <Link href="/community" className="text-fuchsia-400 hover:underline">Community Code of Conduct</Link>
+            See also: <Link href="/terms" className="text-amber-400 hover:underline">Terms of Use</Link> | <Link href="/community" className="text-amber-400 hover:underline">Community Code of Conduct</Link>
           </p>
         </Section>
 

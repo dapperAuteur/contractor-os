@@ -186,7 +186,7 @@ export default function MaintenancePage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10 flex items-center justify-center h-64">
-        <div className="animate-spin h-8 w-8 border-4 border-sky-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -206,7 +206,7 @@ export default function MaintenancePage() {
         </div>
         <button
           onClick={() => { setForm(BLANK_FORM); setEditingId(null); setShowForm(true); }}
-          className="flex items-center gap-1.5 px-3 py-2 bg-sky-600 text-white rounded-xl text-sm font-medium hover:bg-sky-700 transition"
+          className="flex items-center gap-1.5 px-3 py-2 bg-amber-600 text-white rounded-xl text-sm font-medium hover:bg-amber-500 transition"
         >
           <Plus className="w-4 h-4" />
           Add Service
@@ -265,7 +265,7 @@ export default function MaintenancePage() {
                   <div className="flex gap-3 ml-4 shrink-0" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleEdit(r)}
-                      className="text-xs text-sky-500 hover:text-sky-700 transition"
+                      className="text-xs text-amber-500 hover:text-amber-400 transition"
                     >
                       edit
                     </button>
@@ -411,7 +411,7 @@ export default function MaintenancePage() {
               Cancel
             </button>
             <button type="submit" disabled={saving}
-              className="flex-1 bg-sky-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-sky-700 transition disabled:opacity-50">
+              className="flex-1 bg-amber-600 text-white rounded-xl py-2 text-sm font-medium hover:bg-amber-500 transition disabled:opacity-50">
               {saving ? 'Saving...' : editingId ? 'Update Record' : 'Save Record'}
             </button>
           </div>

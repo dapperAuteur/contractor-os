@@ -5,12 +5,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Users, ChefHat, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map } from 'lucide-react';
+import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map } from 'lucide-react';
 
 interface Stats {
   users: { total: number; free: number; monthly: number; lifetime: number; newThisWeek: number };
-  content: { recipes: number; publicRecipes: number; blogPosts: number; publicPosts: number; newRecipesThisWeek: number; newBlogThisWeek: number };
-  featureUsage: { focusSessions: number; mealLogs: number; dailyLogs: number; roadmapTasks: number; recipeViews: number; blogViews: number };
+  content: { blogPosts: number; publicPosts: number; newBlogThisWeek: number };
+  featureUsage: { focusSessions: number; mealLogs: number; dailyLogs: number; roadmapTasks: number; blogViews: number };
   revenue: { lifetimeRevenue: number; monthlyMRR: number };
   promoCodesPending: number;
 }
@@ -18,7 +18,7 @@ interface Stats {
 function StatCard({ label, value, sub, icon: Icon, color = 'amber' }: { label: string; value: string | number; sub?: string; icon: React.ElementType; color?: string }) {
   const colors: Record<string, string> = {
     amber: 'bg-amber-900/30 text-amber-400',
-    sky: 'bg-sky-900/30 text-sky-400',
+    sky: 'bg-amber-900/30 text-amber-400',
     lime: 'bg-lime-900/30 text-lime-400',
   };
   return (
@@ -86,8 +86,6 @@ export default function AdminOverviewPage() {
       {/* Content */}
       <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">Content</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard label="Recipes" value={stats.content.recipes} sub={`${stats.content.publicRecipes} public`} icon={ChefHat} color="lime" />
-        <StatCard label="New Recipes" value={stats.content.newRecipesThisWeek} sub="this week" icon={ChefHat} color="sky" />
         <StatCard label="Blog Posts" value={stats.content.blogPosts} sub={`${stats.content.publicPosts} public`} icon={BookOpen} color="amber" />
         <StatCard label="New Posts" value={stats.content.newBlogThisWeek} sub="this week" icon={BookOpen} color="amber" />
       </div>
@@ -99,7 +97,6 @@ export default function AdminOverviewPage() {
         <StatCard label="Meal Logs" value={stats.featureUsage.mealLogs} icon={Utensils} color="sky" />
         <StatCard label="Daily Debriefs" value={stats.featureUsage.dailyLogs} icon={CalendarDays} color="lime" />
         <StatCard label="Roadmap Tasks" value={stats.featureUsage.roadmapTasks} icon={Map} color="amber" />
-        <StatCard label="Recipe Views" value={stats.featureUsage.recipeViews} icon={ChefHat} color="lime" />
         <StatCard label="Blog Views" value={stats.featureUsage.blogViews} icon={BookOpen} color="amber" />
       </div>
 

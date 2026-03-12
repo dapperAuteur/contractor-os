@@ -1,6 +1,6 @@
 {
-  "name": "JobHub",
-  "short_name": "JobHub",
+  "name": "Work.WitUS",
+  "short_name": "WitUS",
   "start_url": "/dashboard/contractor",
   "display": "standalone",
   "theme_color": "#d97706",

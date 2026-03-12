@@ -42,6 +42,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Date', 'Vehicle', 'Service Type', 'Odometer', 'Cost', 'Vendor', 'Next Service Date', 'Next Service Miles', 'Notes'],
     rows,
-    'jobhub-maintenance-export.csv',
+    'work-witus-maintenance-export.csv',
   );
 }

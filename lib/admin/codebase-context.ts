@@ -3,10 +3,10 @@
 // Update this file when significant features ship.
 
 export const CODEBASE_CONTEXT = `
-## JobHub — Architecture & Feature Reference
+## Work.WitUS — Architecture & Feature Reference
 
 ### Product Overview
-JobHub is a comprehensive longevity-focused life-management platform. It combines financial tracking, health metrics, travel logging, meal planning, fitness programming, and educational courses into a single dashboard — all built around the idea that living to 100+ requires intentional daily systems.
+Work.WitUS is a comprehensive longevity-focused life-management platform. It combines financial tracking, health metrics, travel logging, meal planning, fitness programming, and educational courses into a single dashboard — all built around the idea that living to 100+ requires intentional daily systems.
 
 ### Tech Stack
 - **Framework**: Next.js 15 App Router (TypeScript, app/ directory structure)
@@ -120,7 +120,7 @@ Overview, Users (list + detail), Messages, Content moderation, Engagement analyt
 - **Module tours**: TourOverlay component with server-persisted step progress, event tracking, and restart capability
 
 ### Tutorial Courses (19 series, 200+ lessons)
-Getting Started, Planner, Finance, Travel, Fuel, Engine, Health Metrics, Workouts, Exercises, Blog & Publishing, Recipes, Equipment, Correlations & Analytics, Academy (student), Teaching (teacher), Settings & Billing, Data Hub, Life Categories, Coach & Gems (admin-only), Contractor (JobHub, 15 lessons), Lister (CrewOps, 13 lessons). All use CYOA navigation with free preview lessons.
+Getting Started, Planner, Finance, Travel, Fuel, Engine, Health Metrics, Workouts, Exercises, Blog & Publishing, Recipes, Equipment, Correlations & Analytics, Academy (student), Teaching (teacher), Settings & Billing, Data Hub, Life Categories, Coach & Gems (admin-only), Contractor (Work.WitUS, 15 lessons), Lister (CrewOps, 13 lessons). All use CYOA navigation with free preview lessons.
 
 ### Project Stats
 - ~400+ TypeScript files

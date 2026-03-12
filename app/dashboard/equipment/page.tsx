@@ -76,14 +76,14 @@ export default function EquipmentHubPage() {
         <div className="flex gap-2">
           <button
             onClick={() => router.push('/dashboard/equipment/manage')}
-            className="px-4 py-2 text-sm font-medium text-white bg-fuchsia-600 hover:bg-fuchsia-700 rounded-xl transition flex items-center gap-1.5"
+            className="px-4 py-2 text-sm font-medium text-white bg-amber-600 hover:bg-amber-700 rounded-xl transition flex items-center gap-1.5"
           >
             <Plus className="w-4 h-4" />
             Add Item
           </button>
           <Link
             href="/dashboard/data/import/equipment"
-            className="flex items-center gap-1.5 px-3 py-2 bg-fuchsia-50 text-fuchsia-700 rounded-xl text-sm font-medium hover:bg-fuchsia-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-amber-500/10 text-amber-700 rounded-xl text-sm font-medium hover:bg-amber-500/10 transition"
           >
             <Upload className="w-4 h-4" />
             Import
@@ -144,7 +144,7 @@ export default function EquipmentHubPage() {
           </p>
           <button
             onClick={() => router.push('/dashboard/equipment/manage')}
-            className="mt-3 text-sm text-fuchsia-600 hover:text-fuchsia-700 font-medium"
+            className="mt-3 text-sm text-amber-600 hover:text-amber-700 font-medium"
           >
             Add your first item
           </button>

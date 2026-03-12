@@ -36,10 +36,10 @@ export default async function BlogIndexPage() {
     <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Blog</h1>
-        <p className="mt-1 text-gray-500">
-          Latest posts from the JobHub community.{' '}
-          <Link href="/blog/authors" className="text-sky-600 hover:underline">
+        <h1 className="text-3xl font-bold text-neutral-100">Blog</h1>
+        <p className="mt-1 text-neutral-400">
+          Latest posts from the Work.WitUS community.{' '}
+          <Link href="/blog/authors" className="text-amber-400 hover:underline">
             Browse authors →
           </Link>
         </p>
@@ -47,11 +47,11 @@ export default async function BlogIndexPage() {
 
       {/* Post grid */}
       {!posts?.length ? (
-        <div className="text-center py-20 text-gray-400">
+        <div className="text-center py-20 text-neutral-500">
           <p className="text-lg">No posts published yet.</p>
           <Link
             href="/dashboard/blog"
-            className="mt-4 inline-block text-sm text-sky-600 hover:underline"
+            className="mt-4 inline-block text-sm text-amber-400 hover:underline"
           >
             Be the first to write one →
           </Link>

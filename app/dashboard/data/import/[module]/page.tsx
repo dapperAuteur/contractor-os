@@ -258,7 +258,7 @@ export default function DynamicImportPage() {
         <h1 className="text-xl font-bold text-gray-900 mb-2">Module Not Found</h1>
         <p className="text-gray-500">
           The import module &quot;{slug}&quot; does not exist. Go back to the{' '}
-          <a href="/dashboard/data" className="text-fuchsia-600 underline">Data Hub</a>.
+          <a href="/dashboard/data" className="text-amber-600 underline">Data Hub</a>.
         </p>
       </div>
     );

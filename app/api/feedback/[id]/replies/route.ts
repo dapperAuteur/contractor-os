@@ -78,9 +78,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (adminEmail && !isAdmin) {
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@jobhub.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
         to: adminEmail,
-        subject: `[JobHub] User replied to feedback`,
+        subject: `[Work.WitUS] User replied to feedback`,
         html: `<p><strong>${user.email}</strong> replied to a feedback thread:</p>
                <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${body}</blockquote>
                <p><a href="${siteUrl}/admin/feedback">View in Admin Dashboard →</a></p>`,

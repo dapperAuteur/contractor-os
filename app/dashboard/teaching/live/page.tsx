@@ -16,7 +16,7 @@ export default function TeacherLivePage() {
         <p className="text-white font-semibold mb-2">Coming Soon</p>
         <p className="text-gray-500 text-sm max-w-sm mx-auto">
           Teacher-hosted live sessions will be available once the platform upgrades to Mux live streaming.
-          In the meantime, JobHub Team sessions are available at{' '}
+          In the meantime, Work.WitUS Team sessions are available at{' '}
           <a href="/live" className="text-amber-400 hover:underline">/live</a>.
         </p>
       </div>

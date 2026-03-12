@@ -31,7 +31,7 @@ export default function PostVisibilitySelector({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value as PostVisibility)}
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+        className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
       >
         {VISIBILITY_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>
@@ -52,7 +52,7 @@ export default function PostVisibilitySelector({
               onScheduledAtChange(e.target.value ? new Date(e.target.value).toISOString() : null)
             }
             min={new Date().toISOString().slice(0, 16)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
       )}

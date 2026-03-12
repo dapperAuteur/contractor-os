@@ -78,10 +78,10 @@ export default function AcademyPage() {
     <div className="text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         <div className="mb-8 sm:mb-12 text-center">
-          <h1 className="text-2xl sm:text-4xl font-bold mb-3">JobHub Academy</h1>
+          <h1 className="text-2xl sm:text-4xl font-bold mb-3">Work.WitUS Academy</h1>
           <p className="text-gray-400 text-base sm:text-lg">Expert-led courses to help you live longer, stronger.</p>
           <div className="flex items-center justify-center gap-2 mt-6">
-            <span className="px-4 py-1.5 bg-fuchsia-600 text-white rounded-full text-sm font-medium">Courses</span>
+            <span className="px-4 py-1.5 bg-amber-600 text-white rounded-full text-sm font-medium">Courses</span>
             <Link
               href="/academy/paths"
               className="flex items-center gap-1.5 px-4 py-1.5 border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 rounded-full text-sm font-medium transition"
@@ -101,14 +101,14 @@ export default function AcademyPage() {
               placeholder="Search courses…"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:border-fuchsia-500 min-h-11"
+              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:border-amber-500 min-h-11"
             />
           </div>
           {categories.length > 0 && (
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full sm:w-auto px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white focus:outline-none focus:border-fuchsia-500 min-h-11"
+              className="w-full sm:w-auto px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
             >
               <option value="">All Categories</option>
               {categories.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -117,7 +117,7 @@ export default function AcademyPage() {
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value as SortKey)}
-            className="w-full sm:w-auto px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white focus:outline-none focus:border-fuchsia-500 min-h-11"
+            className="w-full sm:w-auto px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
           >
             {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -125,7 +125,7 @@ export default function AcademyPage() {
 
         {loading ? (
           <div className="flex justify-center py-20">
-            <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+            <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
           </div>
         ) : courses.length === 0 ? (
           <div className="text-center py-20 text-gray-400">
@@ -138,7 +138,7 @@ export default function AcademyPage() {
               <Link
                 key={course.id}
                 href={`/academy/${course.id}`}
-                className="group bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-fuchsia-700/50 transition"
+                className="group bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-amber-700/50 transition"
               >
                 {/* Cover image */}
                 <div className="aspect-video bg-gray-800 relative overflow-hidden">
@@ -155,7 +155,7 @@ export default function AcademyPage() {
                     </div>
                   )}
                   {course.navigation_mode === 'cyoa' && (
-                    <span className="absolute top-2 right-2 px-2 py-1 bg-fuchsia-600/90 text-white text-xs font-bold rounded-full">
+                    <span className="absolute top-2 right-2 px-2 py-1 bg-amber-600/90 text-white text-xs font-bold rounded-full">
                       CYOA
                     </span>
                   )}
@@ -163,7 +163,7 @@ export default function AcademyPage() {
 
                 <div className="p-5">
                   {course.category && (
-                    <p className="text-fuchsia-400 text-xs font-semibold uppercase tracking-wide mb-2">{course.category}</p>
+                    <p className="text-amber-400 text-xs font-semibold uppercase tracking-wide mb-2">{course.category}</p>
                   )}
                   <h2 className="font-bold text-white mb-1 line-clamp-2">{course.title}</h2>
                   {course.description && (

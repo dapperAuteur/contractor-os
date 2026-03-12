@@ -20,7 +20,7 @@ export default function PhoneticGuideModal({ isOpen, onClose }: Props) {
           <ul className="space-y-1.5 text-gray-400">
             {PHONETIC_NOTATION_RULES.map((rule, i) => (
               <li key={i} className="flex gap-2">
-                <span className="text-fuchsia-400 shrink-0">{i + 1}.</span>
+                <span className="text-amber-400 shrink-0">{i + 1}.</span>
                 <span>{rule}</span>
               </li>
             ))}
@@ -45,7 +45,7 @@ export default function PhoneticGuideModal({ isOpen, onClose }: Props) {
                   <tbody className="divide-y divide-gray-800">
                     {entries.map((e, i) => (
                       <tr key={i}>
-                        <td className="px-3 py-1.5 text-fuchsia-400 font-mono font-semibold">{e.symbol}</td>
+                        <td className="px-3 py-1.5 text-amber-400 font-mono font-semibold">{e.symbol}</td>
                         <td className="px-3 py-1.5 text-gray-300">{e.example_word}</td>
                         <td className="px-3 py-1.5 text-gray-400 italic">{e.example_phonetic}</td>
                       </tr>
@@ -73,7 +73,7 @@ export default function PhoneticGuideModal({ isOpen, onClose }: Props) {
                   {section.examples.map((ex, i) => (
                     <tr key={i}>
                       <td className="px-3 py-1.5 text-gray-300">{ex.word}</td>
-                      <td className="px-3 py-1.5 text-fuchsia-400 italic font-mono">{ex.phonetic}</td>
+                      <td className="px-3 py-1.5 text-amber-400 italic font-mono">{ex.phonetic}</td>
                     </tr>
                   ))}
                 </tbody>

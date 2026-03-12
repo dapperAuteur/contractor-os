@@ -5,8 +5,8 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
-  title: 'Terms of Use | JobHub',
-  description: 'Terms of Use for JobHub, operated by B4C LLC / AwesomeWebStore.com.',
+  title: 'Terms of Use | Work.WitUS',
+  description: 'Terms of Use for Work.WitUS, operated by B4C LLC / AwesomeWebStore.com.',
 };
 
 export default function TermsPage() {
@@ -22,15 +22,15 @@ export default function TermsPage() {
 
         <Section title="1. Acceptance of Terms">
           <p>
-            By creating an account or using JobHub (&quot;the Platform,&quot; &quot;we,&quot; &quot;us&quot;), you agree to
+            By creating an account or using Work.WitUS (&quot;the Platform,&quot; &quot;we,&quot; &quot;us&quot;), you agree to
             these Terms of Use, our{' '}
-            <Link href="/privacy" className="text-fuchsia-400 hover:underline">Privacy Policy</Link>, and our{' '}
-            <Link href="/community" className="text-fuchsia-400 hover:underline">Community Code of Conduct</Link>.
+            <Link href="/privacy" className="text-amber-400 hover:underline">Privacy Policy</Link>, and our{' '}
+            <Link href="/community" className="text-amber-400 hover:underline">Community Code of Conduct</Link>.
             If you do not agree, do not use the Platform.
           </p>
           <p className="mt-3">
             The Platform is operated by B4C LLC and AwesomeWebStore.com. Anthony McDonald is the founder
-            and operator. References to &quot;JobHub,&quot; &quot;B4C LLC,&quot; &quot;AwesomeWebStore.com,&quot; and
+            and operator. References to &quot;Work.WitUS,&quot; &quot;B4C LLC,&quot; &quot;AwesomeWebStore.com,&quot; and
             &quot;Anthony McDonald&quot; in these terms refer collectively to the same operating entity and its
             principals.
           </p>
@@ -57,7 +57,7 @@ export default function TermsPage() {
 
         <Section title="4. Platform Description">
           <p>
-            JobHub is a contractor management platform that helps freelance contractors and crew
+            Work.WitUS is a contractor management platform that helps freelance contractors and crew
             coordinators track jobs, log time, manage invoices, scan documents, and organize work
             schedules. The Platform provides tools for:
           </p>
@@ -74,7 +74,7 @@ export default function TermsPage() {
 
         <Section title="5. Financial Data — Your Responsibility">
           <p className="font-semibold text-yellow-400">
-            IMPORTANT: JobHub is a record-keeping and productivity tool. It is NOT an accounting
+            IMPORTANT: Work.WitUS is a record-keeping and productivity tool. It is NOT an accounting
             firm, tax advisor, or financial services provider.
           </p>
           <p className="mt-3">
@@ -88,7 +88,7 @@ export default function TermsPage() {
             <li>Maintaining your own backup records for tax and legal purposes</li>
           </ul>
           <p className="mt-3">
-            <strong>JobHub, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless
+            <strong>Work.WitUS, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless
             from any claims, damages, or liability arising from your use of financial tracking tools,
             AI-generated document extractions, or any other feature of the Platform.</strong>
           </p>
@@ -114,7 +114,7 @@ export default function TermsPage() {
         <Section title="7. User-Generated Content">
           <p>
             You retain ownership of content you create on the Platform (blog posts, job documents,
-            incident reports, best practices). By publishing content publicly, you grant JobHub a
+            incident reports, best practices). By publishing content publicly, you grant Work.WitUS a
             non-exclusive, royalty-free license to display and distribute that content through the
             Platform.
           </p>
@@ -122,7 +122,7 @@ export default function TermsPage() {
             You agree not to post content that is: unlawful, defamatory, harassing, sexually explicit,
             or that infringes on the intellectual property rights of others. We reserve the right to
             remove content that violates these standards or our{' '}
-            <Link href="/community" className="text-fuchsia-400 hover:underline">Community Code of Conduct</Link>.
+            <Link href="/community" className="text-amber-400 hover:underline">Community Code of Conduct</Link>.
           </p>
         </Section>
 
@@ -133,16 +133,16 @@ export default function TermsPage() {
             shared based on your sharing preferences.
           </p>
           <p className="mt-3">
-            JobHub is not a party to any employment or contractor agreement between users. We do not
+            Work.WitUS is not a party to any employment or contractor agreement between users. We do not
             guarantee the quality, reliability, or availability of any contractor or job posting.
           </p>
         </Section>
 
         <Section title="9. Academy — Courses and Enrollments">
           <p>
-            JobHub Academy is a marketplace where independent teachers offer courses. JobHub
+            Work.WitUS Academy is a marketplace where independent teachers offer courses. Work.WitUS
             is the platform operator, not the employer or agent of any teacher. Course content reflects
-            the views of the individual teacher, not JobHub.
+            the views of the individual teacher, not Work.WitUS.
           </p>
           <p className="mt-3">
             Paid course enrollments are processed through Stripe. Refund eligibility is determined by
@@ -166,7 +166,7 @@ export default function TermsPage() {
 
         <Section title="11. Intellectual Property">
           <p>
-            The JobHub brand, logo, platform design, and proprietary code are owned by B4C LLC /
+            The Work.WitUS brand, logo, platform design, and proprietary code are owned by B4C LLC /
             AwesomeWebStore.com. You may not use our trademarks or branding without written permission.
           </p>
         </Section>
@@ -174,7 +174,7 @@ export default function TermsPage() {
         <Section title="12. Disclaimers and Limitation of Liability">
           <p>
             THE PLATFORM IS PROVIDED &quot;AS IS&quot; AND &quot;AS AVAILABLE&quot; WITHOUT WARRANTIES OF ANY KIND, EXPRESS
-            OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, JOBHUB, B4C LLC,
+            OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, WORK.WITUS, B4C LLC,
             AWESOMEWEBSTORE.COM, AND ANTHONY MCDONALD DISCLAIM ALL WARRANTIES, INCLUDING FITNESS FOR A
             PARTICULAR PURPOSE AND NON-INFRINGEMENT.
           </p>
@@ -203,8 +203,8 @@ export default function TermsPage() {
         <Section title="15. Contact">
           <p>
             Questions about these Terms? Contact us at{' '}
-            <a href="mailto:hello@jobhub.app" className="text-fuchsia-400 hover:underline">
-              hello@jobhub.app
+            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+              hello@centenarianos.com
             </a>
             .
           </p>

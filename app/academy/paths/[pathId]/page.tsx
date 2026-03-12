@@ -70,7 +70,7 @@ export default function LearningPathDetailPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-24">
-        <div className="animate-spin h-10 w-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -81,7 +81,7 @@ export default function LearningPathDetailPage() {
         <Layers className="w-12 h-12 text-gray-300 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Path not found</h1>
         <p className="text-gray-500 mb-6">This learning path may have been removed or is not yet published.</p>
-        <Link href="/academy/paths" className="text-fuchsia-600 hover:underline text-sm font-medium">
+        <Link href="/academy/paths" className="text-amber-600 hover:underline text-sm font-medium">
           ← Back to Learning Paths
         </Link>
       </div>
@@ -126,8 +126,8 @@ export default function LearningPathDetailPage() {
         )}
         <div className="flex-1 space-y-4">
           <div className="flex items-start gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-fuchsia-100 shrink-0 mt-0.5">
-              <Layers className="w-5 h-5 text-fuchsia-600" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-500/10 shrink-0 mt-0.5">
+              <Layers className="w-5 h-5 text-amber-600" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-gray-900 leading-tight">{path.title}</h1>
@@ -136,7 +136,7 @@ export default function LearningPathDetailPage() {
                   by{' '}
                   <Link
                     href={`/profiles/${path.profiles.username}`}
-                    className="text-fuchsia-600 hover:underline"
+                    className="text-amber-600 hover:underline"
                   >
                     {path.profiles.display_name || path.profiles.username}
                   </Link>
@@ -166,11 +166,11 @@ export default function LearningPathDetailPage() {
                 <span className="text-gray-600 font-medium">
                   {completedRequired.length} / {requiredCourses.length} required completed
                 </span>
-                <span className="text-fuchsia-600 font-semibold">{progress}%</span>
+                <span className="text-amber-600 font-semibold">{progress}%</span>
               </div>
               <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-fuchsia-600 rounded-full transition-all duration-500"
+                  className="h-full bg-amber-600 rounded-full transition-all duration-500"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -179,7 +179,7 @@ export default function LearningPathDetailPage() {
 
           {/* Path completion badge */}
           {pathCompleted && (
-            <div className="flex items-center gap-2 px-4 py-2.5 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold w-fit">
+            <div className="flex items-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold w-fit">
               <Trophy className="w-4 h-4" />
               Path Completed
             </div>
@@ -189,7 +189,7 @@ export default function LearningPathDetailPage() {
           {!pathCompleted && nextCourse && (
             <Link
               href={`/academy/${nextCourse.course_id}`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-fuchsia-600 hover:bg-fuchsia-700 text-white rounded-xl font-semibold text-sm transition"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl font-semibold text-sm transition"
             >
               {completedRequired.length === 0 ? 'Start Path' : 'Continue Path'}
               <ArrowRight className="w-4 h-4" />
@@ -209,7 +209,7 @@ export default function LearningPathDetailPage() {
               <Link
                 key={lpc.course_id}
                 href={`/academy/${lpc.course_id}`}
-                className="group flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-200 hover:border-fuchsia-200 hover:bg-fuchsia-50/30 transition"
+                className="group flex items-center gap-4 p-4 bg-white rounded-xl border border-gray-200 hover:border-amber-200 hover:bg-amber-500/10/30 transition"
               >
                 {/* Step number / check */}
                 <div className={`flex items-center justify-center w-9 h-9 rounded-full shrink-0 text-sm font-bold transition ${
@@ -235,7 +235,7 @@ export default function LearningPathDetailPage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 group-hover:text-fuchsia-700 transition truncate">
+                  <p className="font-semibold text-gray-900 group-hover:text-amber-700 transition truncate">
                     {c.title}
                   </p>
                   <div className="flex items-center gap-3 mt-0.5 text-xs text-gray-400">
@@ -251,7 +251,7 @@ export default function LearningPathDetailPage() {
                   </div>
                 </div>
 
-                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-fuchsia-400 transition shrink-0" />
+                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-amber-400 transition shrink-0" />
               </Link>
             );
           })}

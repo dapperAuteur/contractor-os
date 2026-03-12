@@ -94,7 +94,7 @@ export async function GET() {
     return `${i + 1}. "${p.title}" (ID: ${p.id}) — ${p.description ?? ''} [Courses: ${courseNames}]`;
   }).join('\n');
 
-  const prompt = `You are a personalized learning advisor on JobHub, a health and longevity education platform.
+  const prompt = `You are a personalized learning advisor on Work.WitUS, a health and longevity education platform.
 
 A student has completed or enrolled in these courses: ${history}
 

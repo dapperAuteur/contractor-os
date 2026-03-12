@@ -1,5 +1,5 @@
 module_title,module_order,lesson_order,title,lesson_type,duration_seconds,is_free_preview,content_url,text_content,content_format
-Platform Tour,2,6,Interactive Walkthroughs,text,240,true,,"CentenarianOS includes interactive walkthroughs for every major module — guided step-by-step tours that highlight exactly what to click and explain what each part of the interface does. Think of them as a personal tour guide built into the app.
+Platform Tour,2,6,Interactive Walkthroughs,text,240,true,,"Work.WitUS includes interactive walkthroughs for every major module — guided step-by-step tours that highlight exactly what to click and explain what each part of the interface does. Think of them as a personal tour guide built into the app.
 
 ---
 
@@ -27,7 +27,7 @@ Interactive tours cover:
 - **Equipment** — asset tracking, valuations, and categories
 - **Academy** — course browsing, enrollment, CYOA navigation
 - **Data Hub** — import/export for all modules
-- **Contractor (JobHub)** — jobs, time entries, invoices, rate cards, venues
+- **Contractor (Work.WitUS)** — jobs, time entries, invoices, rate cards, venues
 - **Lister (CrewOps)** — job listing, roster, assignments, messaging
 
 ---

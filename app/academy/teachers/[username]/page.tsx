@@ -88,7 +88,7 @@ export default function TeacherCoursesPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
   }
@@ -111,18 +111,18 @@ export default function TeacherCoursesPage() {
           <ChevronLeft className="w-4 h-4" /> Academy
         </Link>
         <span className="text-gray-700">·</span>
-        <Link href="/" className="text-fuchsia-400 font-semibold text-sm">JobHub</Link>
+        <Link href="/" className="text-amber-400 font-semibold text-sm">Work.WitUS</Link>
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Teacher profile header */}
         <div className="flex items-start gap-6 mb-12">
-          <div className="w-20 h-20 rounded-full bg-fuchsia-900/40 border-2 border-fuchsia-700 flex items-center justify-center shrink-0 overflow-hidden">
+          <div className="w-20 h-20 rounded-full bg-amber-900/40 border-2 border-amber-700 flex items-center justify-center shrink-0 overflow-hidden">
             {profile.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={profile.avatar_url} alt={displayName} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-3xl font-bold text-fuchsia-300">
+              <span className="text-3xl font-bold text-amber-300">
                 {displayName.charAt(0).toUpperCase()}
               </span>
             )}
@@ -134,7 +134,7 @@ export default function TeacherCoursesPage() {
               <p className="text-gray-300 mt-3 leading-relaxed max-w-xl">{profile.bio}</p>
             )}
             <div className="flex items-center gap-2 mt-4">
-              <BookOpen className="w-4 h-4 text-fuchsia-400" />
+              <BookOpen className="w-4 h-4 text-amber-400" />
               <span className="text-sm text-gray-400">
                 {courses.length} published course{courses.length !== 1 ? 's' : ''}
               </span>
@@ -174,11 +174,11 @@ export default function TeacherCoursesPage() {
                 {/* Content */}
                 <div className="p-5 flex flex-col flex-1">
                   <div className="flex items-start justify-between gap-2 mb-2">
-                    <Link href={`/academy/${course.id}`} className="font-semibold text-white hover:text-fuchsia-300 transition leading-snug line-clamp-2">
+                    <Link href={`/academy/${course.id}`} className="font-semibold text-white hover:text-amber-300 transition leading-snug line-clamp-2">
                       {course.title}
                     </Link>
                     {course.navigation_mode === 'cyoa' && (
-                      <span className="flex items-center gap-0.5 px-1.5 py-0.5 bg-fuchsia-900/40 text-fuchsia-400 text-xs rounded shrink-0">
+                      <span className="flex items-center gap-0.5 px-1.5 py-0.5 bg-amber-900/40 text-amber-400 text-xs rounded shrink-0">
                         <GitBranch className="w-2.5 h-2.5" /> CYOA
                       </span>
                     )}
@@ -191,7 +191,7 @@ export default function TeacherCoursesPage() {
                   )}
 
                   <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-800">
-                    <span className="text-sm font-medium text-fuchsia-400">
+                    <span className="text-sm font-medium text-amber-400">
                       {course.price_type === 'free' ? 'Free' : `$${course.price} · ${PRICE_LABEL[course.price_type]}`}
                     </span>
 
@@ -217,7 +217,7 @@ export default function TeacherCoursesPage() {
                         className="p-1.5 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
                       >
                         <Bookmark
-                          className={`w-4 h-4 transition ${course.saved ? 'fill-fuchsia-500 text-fuchsia-500' : 'text-gray-500'}`}
+                          className={`w-4 h-4 transition ${course.saved ? 'fill-amber-500 text-amber-500' : 'text-gray-500'}`}
                         />
                       </button>
                     </div>

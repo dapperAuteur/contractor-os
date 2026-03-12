@@ -47,6 +47,6 @@ export async function GET(request: NextRequest) {
   return buildCsvResponse(
     ['Date', 'Vehicle', 'Odometer Miles', 'Gallons', 'Total Cost', 'Cost Per Gallon', 'Fuel Grade', 'Station', 'MPG', 'Notes'],
     rows,
-    'jobhub-fuel-export.csv',
+    'work-witus-fuel-export.csv',
   );
 }

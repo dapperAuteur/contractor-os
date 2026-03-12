@@ -4,7 +4,7 @@
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
-const VAPID_SUBJECT = process.env.VAPID_SUBJECT || 'mailto:admin@jobhub.app';
+const VAPID_SUBJECT = process.env.VAPID_SUBJECT || 'mailto:admin@centenarianos.com';
 
 let configured = false;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

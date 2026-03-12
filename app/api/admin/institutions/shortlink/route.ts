@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jobhub.com';
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://work.witus.online';
 
   if (type === 'institution') {
     const { data: inst } = await db

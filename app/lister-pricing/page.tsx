@@ -165,7 +165,8 @@ export default function ListerPricingPage() {
       </section>
 
       <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
       </footer>
     </div>
   );

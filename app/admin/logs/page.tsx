@@ -159,7 +159,7 @@ export default function AdminLogsPage() {
                 key={l}
                 onClick={() => { setLevel(l); setPage(1); }}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-                  level === l ? 'bg-fuchsia-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  level === l ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
                 {l === 'all' ? 'All' : l.charAt(0).toUpperCase() + l.slice(1)}
@@ -260,7 +260,7 @@ export default function AdminLogsPage() {
                 <LevelIcon className={`w-4 h-4 shrink-0 ${style.text}`} />
                 <span className={`text-xs font-mono uppercase w-12 ${style.text}`}>{log.level}</span>
                 <span className="text-xs text-gray-400 w-16">{log.source}</span>
-                {log.module && <span className="text-xs text-fuchsia-400 w-24">{log.module}</span>}
+                {log.module && <span className="text-xs text-amber-400 w-24">{log.module}</span>}
                 <span className="text-sm text-gray-200 flex-1 truncate">{log.message}</span>
                 <span className="text-xs text-gray-400 shrink-0">{timeAgo(log.created_at)}</span>
                 {!log.is_reviewed && log.level !== 'info' && (

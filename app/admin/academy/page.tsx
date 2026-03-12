@@ -175,7 +175,7 @@ export default function AdminAcademyPage() {
             <h2 className="font-semibold text-white">Platform Fee</h2>
           </div>
           <label className="block text-sm text-gray-200 mb-2">
-            JobHub fee on each course sale (%)
+            Work.WitUS fee on each course sale (%)
           </label>
           <div className="flex items-center gap-2">
             <input

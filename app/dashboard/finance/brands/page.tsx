@@ -310,7 +310,7 @@ export default function BrandsPage() {
                 </button>
                 <button
                   onClick={() => openEdit(b)}
-                  className="p-1.5 text-gray-400 hover:text-sky-600 transition"
+                  className="p-1.5 text-gray-400 hover:text-amber-600 transition"
                 >
                   <Pencil className="w-4 h-4" />
                 </button>

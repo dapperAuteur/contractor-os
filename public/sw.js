@@ -1,7 +1,7 @@
 // File: public/sw.js
 // Service Worker — stale-while-revalidate for API, cache-first for pages, offline fallback
 
-const CACHE_VERSION = 'jobhub-v1';
+const CACHE_VERSION = 'witus-work-v1';
 const STATIC_URLS = [
   '/offline.html',
 ];
@@ -103,19 +103,19 @@ self.addEventListener('push', (event) => {
       body: payload.body || '',
       icon: payload.icon || '/icon-192.png',
       badge: payload.badge || '/icon-192.png',
-      tag: payload.tag || 'jobhub-notification',
+      tag: payload.tag || 'witus-work-notification',
       data: { url: payload.url || '/dashboard/contractor' },
       actions: [{ action: 'open', title: 'Open' }],
       vibrate: [200, 100, 200],
     };
 
     event.waitUntil(
-      self.registration.showNotification(payload.title || 'JobHub', options)
+      self.registration.showNotification(payload.title || 'Work.WitUS', options)
     );
   } catch {
     // Fallback for non-JSON payloads
     event.waitUntil(
-      self.registration.showNotification('JobHub', {
+      self.registration.showNotification('Work.WitUS', {
         body: event.data.text(),
         icon: '/icon-192.png',
       })

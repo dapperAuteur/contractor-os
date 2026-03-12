@@ -36,7 +36,7 @@ interface Transaction {
 }
 
 const SOURCE_MODULE_BADGE: Record<string, { label: string; className: string }> = {
-  fuel_log: { label: 'Fuel', className: 'bg-sky-50 text-sky-700' },
+  fuel_log: { label: 'Fuel', className: 'bg-amber-500/10 text-amber-400' },
   vehicle_maintenance: { label: 'Maint.', className: 'bg-amber-50 text-amber-700' },
   trip: { label: 'Trip', className: 'bg-orange-50 text-orange-700' },
 };
@@ -155,11 +155,11 @@ export default function TransactionsPage() {
 
       {/* Account filter banner */}
       {filterAccount && (
-        <div className="flex items-center justify-between gap-2 bg-fuchsia-50 border border-fuchsia-200 rounded-xl px-4 py-3 text-sm text-fuchsia-800">
+        <div className="flex items-center justify-between gap-2 bg-amber-500/10 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800">
           <span>Showing transactions for <strong>{urlAccountName || 'selected account'}</strong></span>
           <button
             onClick={() => { setFilterAccount(''); router.replace('/dashboard/finance/transactions'); }}
-            className="flex items-center gap-1 text-fuchsia-600 hover:text-fuchsia-800"
+            className="flex items-center gap-1 text-amber-600 hover:text-amber-800"
           >
             <X className="w-4 h-4" /> Clear
           </button>
@@ -223,7 +223,7 @@ export default function TransactionsPage() {
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="animate-spin h-8 w-8 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+            <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
           </div>
         ) : transactions.length === 0 ? (
           <div className="text-center py-20 text-gray-400 text-sm">
@@ -252,7 +252,7 @@ export default function TransactionsPage() {
                         placeholder="Description"
                       />
                       <div className="flex gap-2">
-                        <button onClick={() => handleEditSave(tx.id)} className="px-3 py-1 bg-fuchsia-600 text-white rounded text-xs">Save</button>
+                        <button onClick={() => handleEditSave(tx.id)} className="px-3 py-1 bg-amber-600 text-white rounded text-xs">Save</button>
                         <button onClick={() => setEditId(null)} className="px-3 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">Cancel</button>
                       </div>
                     </div>
@@ -412,7 +412,7 @@ export default function TransactionsPage() {
                     <td className="px-4 py-3 text-center" onClick={(e) => e.stopPropagation()}>
                       {editId === tx.id ? (
                         <div className="flex items-center justify-center gap-1">
-                          <button onClick={() => handleEditSave(tx.id)} className="px-2 py-1 bg-fuchsia-600 text-white rounded text-xs">Save</button>
+                          <button onClick={() => handleEditSave(tx.id)} className="px-2 py-1 bg-amber-600 text-white rounded text-xs">Save</button>
                           <button onClick={() => setEditId(null)} className="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-medium">Cancel</button>
                         </div>
                       ) : (
@@ -420,7 +420,7 @@ export default function TransactionsPage() {
                           <button onClick={() => startEdit(tx)} className="p-1.5 hover:bg-gray-100 rounded-lg transition" title="Edit">
                             <Edit3 className="w-3.5 h-3.5 text-gray-400" />
                           </button>
-                          <button onClick={() => setLinkingId(tx.id)} className="p-1.5 hover:bg-sky-50 rounded-lg transition" title="Link activities">
+                          <button onClick={() => setLinkingId(tx.id)} className="p-1.5 hover:bg-amber-500/10 rounded-lg transition" title="Link activities">
                             <Link2 className="w-3.5 h-3.5 text-gray-400" />
                           </button>
                           <button onClick={() => handleDelete(tx.id)} className="p-1.5 hover:bg-red-50 rounded-lg transition" title="Delete">

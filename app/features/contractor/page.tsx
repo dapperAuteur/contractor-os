@@ -7,9 +7,9 @@ import {
 } from '@/lib/features/contractor-features';
 
 export const metadata = {
-  title: 'JobHub Features — JobHub',
+  title: 'Work.WitUS Features — Work.WitUS',
   description:
-    'Explore every feature of JobHub, the contractor management app. Track jobs, manage rates, log travel, handle invoicing, and more.',
+    'Explore every feature of Work.WitUS, the contractor management app. Track jobs, manage rates, log travel, handle invoicing, and more.',
 };
 
 export default function ContractorFeaturesPage() {
@@ -41,7 +41,7 @@ export default function ContractorFeaturesPage() {
             <HardHat className="w-7 h-7 text-amber-400" aria-hidden="true" />
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-neutral-100 mb-3">
-            JobHub Features
+            Work.WitUS Features
           </h1>
           <p className="text-lg text-neutral-400 max-w-2xl">
             Everything a contractor needs to manage gigs, track earnings, and run their business — from assignment through payment.

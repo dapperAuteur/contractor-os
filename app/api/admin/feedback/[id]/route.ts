@@ -96,13 +96,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     if (userEmail) {
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@jobhub.com',
+        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
         to: userEmail,
-        subject: 'JobHub team replied to your feedback',
-        html: `<p>The JobHub team replied to your feedback submission:</p>
+        subject: 'Work.WitUS team replied to your feedback',
+        html: `<p>The Work.WitUS team replied to your feedback submission:</p>
                <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${body}</blockquote>
                <p><a href="${siteUrl}/dashboard/feedback">View your feedback history →</a></p>
-               <p style="color:#9ca3af;font-size:12px;">— JobHub Team</p>`,
+               <p style="color:#9ca3af;font-size:12px;">— Work.WitUS Team</p>`,
       });
     }
   } catch (e) {

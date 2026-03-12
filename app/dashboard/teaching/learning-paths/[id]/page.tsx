@@ -161,7 +161,7 @@ export default function EditLearningPathPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-24">
-        <div className="animate-spin h-10 w-10 border-4 border-fuchsia-600 border-t-transparent rounded-full" />
+        <div className="animate-spin h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -170,7 +170,7 @@ export default function EditLearningPathPage() {
     return (
       <div className="max-w-xl mx-auto px-4 py-24 text-center">
         <p className="text-gray-500">Path not found.</p>
-        <button onClick={() => router.back()} className="mt-4 text-fuchsia-600 hover:underline text-sm">
+        <button onClick={() => router.back()} className="mt-4 text-amber-600 hover:underline text-sm">
           ← Go back
         </button>
       </div>
@@ -190,7 +190,7 @@ export default function EditLearningPathPage() {
             Back to Paths
           </Link>
           <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <Layers className="w-6 h-6 text-fuchsia-600" />
+            <Layers className="w-6 h-6 text-amber-600" />
             Edit Path
           </h1>
         </div>
@@ -211,7 +211,7 @@ export default function EditLearningPathPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-1.5 px-4 py-2 bg-fuchsia-600 text-white text-sm rounded-xl font-medium hover:bg-fuchsia-700 transition disabled:opacity-50"
+            className="flex items-center gap-1.5 px-4 py-2 bg-amber-600 text-white text-sm rounded-xl font-medium hover:bg-amber-700 transition disabled:opacity-50"
           >
             {saving
               ? <><Loader2 className="w-4 h-4 animate-spin" /> Saving…</>
@@ -230,7 +230,7 @@ export default function EditLearningPathPage() {
             type="text"
             value={title}
             onChange={(e) => { setTitle(e.target.value); setSaved(false); }}
-            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
         <div>
@@ -239,7 +239,7 @@ export default function EditLearningPathPage() {
             value={description}
             onChange={(e) => { setDescription(e.target.value); setSaved(false); }}
             rows={3}
-            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500 resize-none"
+            className="w-full px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
           />
         </div>
       </section>
@@ -318,7 +318,7 @@ export default function EditLearningPathPage() {
               value={courseSearch}
               onChange={(e) => setCourseSearch(e.target.value)}
               placeholder="Search all published courses..."
-              className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+              className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
           <div className="grid sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto">
@@ -330,9 +330,9 @@ export default function EditLearningPathPage() {
                   <button
                     key={c.id}
                     onClick={() => addCourse(c)}
-                    className="flex items-center gap-2 text-left px-4 py-3 bg-white border border-gray-200 hover:border-fuchsia-300 hover:bg-fuchsia-50 rounded-xl text-sm transition"
+                    className="flex items-center gap-2 text-left px-4 py-3 bg-white border border-gray-200 hover:border-amber-300 hover:bg-amber-500/10 rounded-xl text-sm transition"
                   >
-                    <Plus className="w-4 h-4 text-fuchsia-500 shrink-0" />
+                    <Plus className="w-4 h-4 text-amber-500 shrink-0" />
                     <span className="truncate font-medium text-gray-800 flex-1">{c.title}</span>
                     {isExternal && (
                       <span className="flex items-center gap-0.5 text-xs text-amber-600 shrink-0">

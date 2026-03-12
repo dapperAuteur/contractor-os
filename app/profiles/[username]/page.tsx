@@ -27,8 +27,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     : '';
 
   return {
-    title: `${name} — JobHub`,
-    description: profile.bio || `${name} has completed ${stats.courses_completed} courses on JobHub.`,
+    title: `${name} — Work.WitUS`,
+    description: profile.bio || `${name} has completed ${stats.courses_completed} courses on Work.WitUS.`,
     openGraph: {
       title: name,
       description: `${stats.courses_completed} courses · ${stats.paths_completed} paths`,
@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 const BADGE_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string }> = {
   course_complete:  { label: 'Course Complete',     icon: BookMarked, color: 'bg-amber-900/40 text-amber-400' },
   path_complete:    { label: 'Path Complete',       icon: Layers,     color: 'bg-amber-900/40 text-amber-400' },
-  first_blog:       { label: 'First Blog Post',     icon: BookOpen,   color: 'bg-sky-900/40 text-sky-400' },
+  first_blog:       { label: 'First Blog Post',     icon: BookOpen,   color: 'bg-amber-900/40 text-amber-400' },
 };
 
 // ─── Page ─────────────────────────────────────────────────────────────────────

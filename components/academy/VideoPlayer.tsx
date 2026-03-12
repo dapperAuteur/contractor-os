@@ -171,7 +171,7 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
         {/* Play overlay when paused */}
         {!playing && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/20">
-            <div className="p-4 bg-fuchsia-600/90 rounded-full">
+            <div className="p-4 bg-amber-600/90 rounded-full">
               <Play className="w-8 h-8 text-white ml-1" />
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
           onClick={handleProgressClick}
         >
           <div
-            className="absolute top-0 left-0 h-full bg-fuchsia-500 rounded-full transition-[width] duration-100"
+            className="absolute top-0 left-0 h-full bg-amber-500 rounded-full transition-[width] duration-100"
             style={{ width: `${progress}%` }}
           />
           {sortedChapters.map((ch) => {
@@ -223,7 +223,7 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
 
           <button
             onClick={togglePlay}
-            className="p-2.5 bg-fuchsia-600 text-white rounded-full hover:bg-fuchsia-700 transition shrink-0"
+            className="p-2.5 bg-amber-600 text-white rounded-full hover:bg-amber-700 transition shrink-0"
           >
             {playing ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
           </button>
@@ -255,7 +255,7 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
           {hasChapters && (
             <button
               onClick={() => setShowChapters((s) => !s)}
-              className={`p-1.5 rounded-lg transition ${showChapters ? 'text-fuchsia-400 bg-fuchsia-900/30' : 'text-gray-500 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition ${showChapters ? 'text-amber-400 bg-amber-900/30' : 'text-gray-500 hover:text-white'}`}
               title="Chapters"
             >
               <ListMusic className="w-4 h-4" />
@@ -264,7 +264,7 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
           {hasTranscript && (
             <button
               onClick={() => setShowTranscript((s) => !s)}
-              className={`p-1.5 rounded-lg transition ${showTranscript ? 'text-fuchsia-400 bg-fuchsia-900/30' : 'text-gray-500 hover:text-white'}`}
+              className={`p-1.5 rounded-lg transition ${showTranscript ? 'text-amber-400 bg-amber-900/30' : 'text-gray-500 hover:text-white'}`}
               title="Transcript"
             >
               <FileText className="w-4 h-4" />
@@ -292,13 +292,13 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
                   onClick={() => seekTo(ch.startTime)}
                   className={`w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
                     isCurrent
-                      ? 'bg-fuchsia-900/30 text-fuchsia-300'
+                      ? 'bg-amber-900/30 text-amber-300'
                       : 'text-gray-400 hover:text-white hover:bg-gray-800'
                   }`}
                 >
                   <span className="tabular-nums text-xs shrink-0 w-10 text-right">{formatTime(ch.startTime)}</span>
                   <span className="flex-1 truncate">{ch.title}</span>
-                  {isCurrent && <Play className="w-3 h-3 text-fuchsia-400 shrink-0" />}
+                  {isCurrent && <Play className="w-3 h-3 text-amber-400 shrink-0" />}
                 </button>
               );
             })}
@@ -334,7 +334,7 @@ export default function VideoPlayer({ src, chapters, transcript, onEnded }: Vide
                 onClick={() => seekTo(seg.startTime)}
                 className={`w-full text-left flex gap-3 px-2 py-1.5 rounded-lg text-sm transition ${
                   i === activeSegmentIndex
-                    ? 'bg-fuchsia-900/20 text-white'
+                    ? 'bg-amber-900/20 text-white'
                     : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
                 }`}
               >

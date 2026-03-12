@@ -75,7 +75,7 @@ export default async function PublicPostPage({ params }: Props) {
 
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">{bp.title}</h1>
+          <h1 className="text-4xl font-bold text-neutral-100 mb-4 leading-tight">{bp.title}</h1>
           <PostMeta
             publishedAt={bp.published_at}
             readingTimeMinutes={bp.reading_time_minutes}
@@ -93,7 +93,7 @@ export default async function PublicPostPage({ params }: Props) {
         </div>
 
         {/* Content */}
-        <article>
+        <article className="prose prose-invert prose-neutral max-w-none">
           <TiptapRenderer content={bp.content} />
         </article>
 
@@ -101,7 +101,7 @@ export default async function PublicPostPage({ params }: Props) {
         <div data-read-depth="100" aria-hidden />
 
         {/* Like / Save / Share bar */}
-        <div className="mt-12 pt-6 border-t border-gray-200 flex flex-wrap items-center gap-3">
+        <div className="mt-12 pt-6 border-t border-neutral-800 flex flex-wrap items-center gap-3">
           <BlogLikeButton
             postId={bp.id}
             initialLiked={!!likeRow}
@@ -129,7 +129,7 @@ export default async function PublicPostPage({ params }: Props) {
         <div className="mt-8">
           <a
             href={`/blog/${p.username}`}
-            className="text-sm text-sky-600 hover:underline"
+            className="text-sm text-amber-400 hover:underline"
           >
             ← More posts by {p.display_name || p.username}
           </a>
@@ -147,15 +147,13 @@ export default async function PublicPostPage({ params }: Props) {
   // Post truly doesn't exist → 404
   if (!postId) notFound();
 
-  // Post exists but is restricted → log a blocked_visit event, then show the
-  // unavailable page with the author's other public posts.
+  // Post exists but is restricted → log a blocked_visit event
   const reqHeaders = await headers();
   const referrer =
     reqHeaders.get('referer') || reqHeaders.get('referrer') || null;
   const country =
     reqHeaders.get('cf-ipcountry') || reqHeaders.get('x-vercel-ip-country') || null;
 
-  // Fire-and-forget — don't let a failed event log break the page render
   await supabase
     .rpc('log_blog_event', {
       p_post_id: postId as string,
@@ -180,16 +178,16 @@ export default async function PublicPostPage({ params }: Props) {
     <main className="max-w-3xl mx-auto px-4 py-16">
       {/* Unavailable notice */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gray-100 mb-4">
-          <Lock className="w-6 h-6 text-gray-400" />
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-neutral-800 mb-4">
+          <Lock className="w-6 h-6 text-neutral-400" />
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-neutral-100 mb-2">
           This post is unavailable
         </h1>
-        <p className="text-gray-500 max-w-sm mx-auto">
+        <p className="text-neutral-400 max-w-sm mx-auto">
           This post may be private, a draft, or restricted to logged-in members.
           If you think this is a mistake, try{' '}
-          <Link href="/login" className="text-sky-600 hover:underline">
+          <Link href="/login" className="text-amber-400 hover:underline">
             signing in
           </Link>
           .
@@ -197,8 +195,8 @@ export default async function PublicPostPage({ params }: Props) {
       </div>
 
       {/* Other posts by this author */}
-      <div className="border-t border-gray-100 pt-10">
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-5">
+      <div className="border-t border-neutral-800 pt-10">
+        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-5">
           More posts by {p.display_name || p.username}
         </h2>
 
@@ -208,16 +206,16 @@ export default async function PublicPostPage({ params }: Props) {
               <li key={op.slug}>
                 <Link
                   href={`/blog/${p.username}/${op.slug}`}
-                  className="group block p-4 rounded-xl border border-gray-100 hover:border-sky-200 hover:bg-sky-50 transition"
+                  className="group block p-4 rounded-xl border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900 transition"
                 >
-                  <p className="font-medium text-gray-900 group-hover:text-sky-700">
+                  <p className="font-medium text-neutral-100 group-hover:text-amber-400">
                     {op.title}
                   </p>
                   {op.excerpt && (
-                    <p className="text-sm text-gray-500 mt-1 line-clamp-2">{op.excerpt}</p>
+                    <p className="text-sm text-neutral-400 mt-1 line-clamp-2">{op.excerpt}</p>
                   )}
                   {op.published_at && (
-                    <p className="text-xs text-gray-400 mt-2">
+                    <p className="text-xs text-neutral-500 mt-2">
                       {new Date(op.published_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -230,13 +228,13 @@ export default async function PublicPostPage({ params }: Props) {
             ))}
           </ul>
         ) : (
-          <p className="text-gray-400 text-sm">No public posts yet.</p>
+          <p className="text-neutral-500 text-sm">No public posts yet.</p>
         )}
 
         <div className="mt-6">
           <Link
             href={`/blog/${p.username}`}
-            className="text-sm text-sky-600 hover:underline"
+            className="text-sm text-amber-400 hover:underline"
           >
             ← View all posts by {p.display_name || p.username}
           </Link>

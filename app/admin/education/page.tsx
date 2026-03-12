@@ -48,7 +48,7 @@ const SUGGESTIONS: Record<Mode, string[]> = {
     'What are the most technically challenging parts of this codebase?',
   ],
   investor: [
-    'Give me a 30-second elevator pitch for JobHub.',
+    'Give me a 30-second elevator pitch for Work.WitUS.',
     'What is the revenue model and how does it scale?',
     'How does this platform differentiate from competitors?',
     'What is the technical moat that makes this hard to replicate?',
@@ -66,7 +66,7 @@ const SUGGESTIONS: Record<Mode, string[]> = {
     'Create a script for a 5-minute product walkthrough.',
   ],
   general: [
-    'What modules does JobHub include?',
+    'What modules does Work.WitUS include?',
     'How does the AI integration work across the platform?',
     'Explain the LMS / Academy system architecture.',
     'What wearable integrations are supported and how do they work?',

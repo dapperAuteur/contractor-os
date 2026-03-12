@@ -64,7 +64,7 @@ export default function ListerInvitePage() {
         Invite Users
       </h1>
       <p className="text-sm text-neutral-400">
-        Invite contractors to join JobHub or other listers to join CrewOps.
+        Invite contractors to join Work.WitUS or other listers to join CrewOps.
         They&apos;ll receive a magic link. You can send up to 10 invites.
       </p>
 

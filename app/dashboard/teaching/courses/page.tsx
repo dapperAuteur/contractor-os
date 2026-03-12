@@ -65,7 +65,7 @@ export default function TeachingCoursesPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function TeachingCoursesPage() {
         </div>
         <Link
           href="/dashboard/teaching/courses/new"
-          className="flex items-center justify-center gap-2 px-4 py-3 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition min-h-11 sm:w-auto"
+          className="flex items-center justify-center gap-2 px-4 py-3 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition min-h-11 sm:w-auto"
         >
           <Plus className="w-4 h-4" />
           New Course
@@ -92,7 +92,7 @@ export default function TeachingCoursesPage() {
           <p className="text-gray-500 mb-4">No courses yet. Create your first one!</p>
           <Link
             href="/dashboard/teaching/courses/new"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-fuchsia-600 text-white rounded-lg text-sm font-semibold hover:bg-fuchsia-700 transition"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition"
           >
             <Plus className="w-4 h-4" /> Create Course
           </Link>
@@ -108,7 +108,7 @@ export default function TeachingCoursesPage() {
                 <div className="flex items-center gap-2">
                   <p className="text-white font-medium truncate">{course.title}</p>
                   {course.navigation_mode === 'cyoa' && (
-                    <span className="px-1.5 py-0.5 text-xs rounded bg-fuchsia-900/50 text-fuchsia-300 font-medium shrink-0">
+                    <span className="px-1.5 py-0.5 text-xs rounded bg-amber-900/50 text-amber-300 font-medium shrink-0">
                       CYOA
                     </span>
                   )}

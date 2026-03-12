@@ -32,7 +32,7 @@ export interface ModuleData {
 export const MODULES: ModuleData[] = [
   {
     slug: 'contractor',
-    name: 'Contractor Hub (JobHub)',
+    name: 'Contractor Hub (Work.WitUS)',
     tagline: 'Your gigs, hours, invoices, and union tools — one place',
     description: 'A dedicated workspace for independent contractors in broadcast, production, and live events. Track jobs, log hours, generate invoices, manage rate cards, build venue knowledge bases, and stay on top of union memberships and dues.',
     color: 'border-amber-500',
@@ -251,7 +251,7 @@ export const MODULES: ModuleData[] = [
       },
       {
         title: 'Free Tutorial Library',
-        description: 'Tutorial series teach every JobHub module. Free for all users — the best way to learn the platform.',
+        description: 'Tutorial series teach every Work.WitUS module. Free for all users — the best way to learn the platform.',
       },
     ],
     dashboardPath: '/academy',

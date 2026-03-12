@@ -102,8 +102,8 @@ export default function ContentLibraryPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-fuchsia-100 flex items-center justify-center">
-            <Library className="w-5 h-5 text-fuchsia-600" aria-hidden="true" />
+          <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
+            <Library className="w-5 h-5 text-amber-600" aria-hidden="true" />
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Content Library</h1>
@@ -254,7 +254,7 @@ function ContentCard({
         {imported && item.courseId && (
           <a
             href={`/dashboard/teaching/courses/${item.courseId}`}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-fuchsia-600 bg-fuchsia-50 border border-fuchsia-200 rounded-lg hover:bg-fuchsia-100 transition min-h-11"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-amber-600 bg-amber-500/10 border border-amber-200 rounded-lg hover:bg-amber-500/10 transition min-h-11"
           >
             <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
             Edit Course
@@ -264,7 +264,7 @@ function ContentCard({
           <button
             onClick={onImport}
             disabled={importing}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-fuchsia-600 rounded-lg hover:bg-fuchsia-700 transition disabled:opacity-60 disabled:cursor-not-allowed min-h-11"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition disabled:opacity-60 disabled:cursor-not-allowed min-h-11"
           >
             {importing ? (
               <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -306,7 +306,7 @@ function ImportAllButton({
 
   if (running) {
     return (
-      <div className="inline-flex items-center gap-3 px-6 py-3 bg-fuchsia-50 border border-fuchsia-200 rounded-xl text-sm font-medium text-fuchsia-700">
+      <div className="inline-flex items-center gap-3 px-6 py-3 bg-amber-500/10 border border-amber-200 rounded-xl text-sm font-medium text-amber-700">
         <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
         Importing {progress} of {items.length}...
       </div>
@@ -317,7 +317,7 @@ function ImportAllButton({
     <button
       onClick={handleImportAll}
       disabled={!!importing}
-      className="inline-flex items-center gap-2 px-6 py-3 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-60 min-h-11"
+      className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-60 min-h-11"
     >
       <Upload className="w-4 h-4" aria-hidden="true" />
       Import All ({items.length} courses)

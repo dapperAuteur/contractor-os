@@ -92,7 +92,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
         <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
           <div className="flex items-center gap-2">
             <HelpCircle className="w-5 h-5 text-amber-400" />
-            <span className="font-semibold text-white text-sm">JobHub Help</span>
+            <span className="font-semibold text-white text-sm">Work.WitUS Help</span>
           </div>
           <button
             onClick={onClose}
@@ -111,7 +111,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
                   <BookOpen className="w-4 h-4 text-white" />
                 </div>
                 <div className="bg-neutral-800 rounded-xl rounded-tl-none px-4 py-3 text-sm text-neutral-200 leading-relaxed">
-                  Hi! I can help with anything in JobHub — jobs, invoices, time entries, scanning, travel, equipment, union memberships, and more. What do you need help with?
+                  Hi! I can help with anything in Work.WitUS — jobs, invoices, time entries, scanning, travel, equipment, union memberships, and more. What do you need help with?
                 </div>
               </div>
 
@@ -175,7 +175,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) sendMessage(input); }}
-              placeholder="Ask anything about JobHub…"
+              placeholder="Ask anything about Work.WitUS…"
               disabled={loading}
               className="flex-1 bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 disabled:opacity-50"
             />
@@ -189,7 +189,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
             </button>
           </div>
           <p className="text-xs text-neutral-500 mt-2 text-center">
-            Answers are generated from JobHub documentation.
+            Answers are generated from Work.WitUS documentation.
           </p>
         </div>
       </div>

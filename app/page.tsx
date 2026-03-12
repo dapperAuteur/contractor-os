@@ -26,7 +26,7 @@ export default function ContractorLandingPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-2">
             <HardHat size={24} className="text-amber-400" aria-hidden="true" />
-            <span className="text-lg font-bold">JobHub</span>
+            <span className="text-lg font-bold">Work.WitUS</span>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/pricing" className="text-sm text-neutral-400 hover:text-neutral-200 min-h-11 flex items-center">
@@ -54,7 +54,7 @@ export default function ContractorLandingPage() {
       {/* Hero */}
       <section className="mx-auto max-w-4xl px-4 py-20 text-center">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-          Your Job Hub.
+          Your Work Hub.
           <span className="block text-amber-400">One Place for Everything.</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">
@@ -116,7 +116,7 @@ export default function ContractorLandingPage() {
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-bold sm:text-3xl mb-3">Try Before You Buy</h2>
           <p className="text-neutral-400 mb-2">
-            Explore JobHub with a pre-loaded demo account. Real data, real features — no signup required.
+            Explore Work.WitUS with a pre-loaded demo account. Real data, real features — no signup required.
           </p>
           <p className="text-sm text-neutral-500 mb-8">
             Shared account. Data resets daily. Do not enter personal information.
@@ -154,8 +154,8 @@ export default function ContractorLandingPage() {
 
       {/* Academy Link */}
       <section className="border-t border-neutral-800 py-12 text-center">
-        <p className="text-sm text-neutral-400">New to JobHub?</p>
-        <p className="mt-1 text-lg font-semibold text-neutral-200">Take the free Contractor Job Hub Guide</p>
+        <p className="text-sm text-neutral-400">New to Work.WitUS?</p>
+        <p className="mt-1 text-lg font-semibold text-neutral-200">Take the free Contractor Work.WitUS Guide</p>
         <p className="mt-2 text-sm text-neutral-500">15 lessons covering everything from job creation to 1099 tracking. No account required.</p>
         <Link href="/academy" className="mt-3 inline-block text-sm font-medium text-amber-400 hover:text-amber-300 min-h-11">
           Browse Academy courses &rarr;
@@ -184,10 +184,13 @@ export default function ContractorLandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
-        <p>&copy; {new Date().getFullYear()} JobHub. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
         <div className="mt-2 flex justify-center gap-4">
           <Link href="/terms" className="hover:text-neutral-400">Terms</Link>
           <Link href="/privacy" className="hover:text-neutral-400">Privacy</Link>
+          <a href="https://CentenarianOS.com" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-400">CentenarianOS</a>
+          <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-400">WitUS.Online</a>
         </div>
       </footer>
     </div>

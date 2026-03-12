@@ -18,7 +18,7 @@ interface UserDetail {
     created_at: string;
   };
   email: string | null;
-  stats: { focusSessions: number; recipes: number; blogPosts: number };
+  stats: { focusSessions: number; blogPosts: number };
 }
 
 const SUBSCRIPTION_OPTIONS = ['free', 'monthly', 'lifetime'] as const;
@@ -85,7 +85,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
     }
   }
 
-  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" /></div>;
+  if (loading) return <div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" /></div>;
   if (!data) return <div className="p-8 text-red-400">User not found.</div>;
 
   const { profile, email, stats } = data;
@@ -101,7 +101,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        {[['Focus Sessions', stats.focusSessions], ['Recipes', stats.recipes], ['Blog Posts', stats.blogPosts]].map(([label, val]) => (
+        {[['Focus Sessions', stats.focusSessions], ['Blog Posts', stats.blogPosts]].map(([label, val]) => (
           <div key={label as string} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
             <p className="text-2xl font-bold text-white">{val}</p>
             <p className="text-gray-400 text-xs mt-1">{label}</p>
@@ -117,7 +117,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
             <button
               key={s}
               onClick={() => setSubStatus(s)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${subStatus === s ? 'bg-fuchsia-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${subStatus === s ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
             >
               {s}
             </button>
@@ -163,7 +163,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
             value={promoInput}
             onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
             placeholder="CENT-XXXXXX"
-            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white font-mono placeholder-gray-600 focus:outline-none focus:border-fuchsia-500"
+            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white font-mono placeholder-gray-600 focus:outline-none focus:border-amber-500"
           />
           <button
             onClick={retryPromo}
@@ -188,7 +188,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       <button
         onClick={saveChanges}
         disabled={saving}
-        className="flex items-center gap-2 px-5 py-2.5 bg-fuchsia-600 text-white rounded-lg hover:bg-fuchsia-700 transition font-semibold text-sm disabled:opacity-60"
+        className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition font-semibold text-sm disabled:opacity-60"
       >
         <Save className="w-4 h-4" />
         {saving ? 'Saving…' : 'Save Changes'}

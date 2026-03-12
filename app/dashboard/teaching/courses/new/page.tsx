@@ -80,7 +80,7 @@ export default function NewCoursePage() {
             value={form.title}
             onChange={(e) => set('title', e.target.value)}
             placeholder="e.g. Longevity Movement Fundamentals"
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500 text-sm"
+            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm"
           />
         </div>
 
@@ -93,7 +93,7 @@ export default function NewCoursePage() {
             onChange={(e) => set('description', e.target.value)}
             rows={4}
             placeholder="What will students learn? Who is this for?"
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500 text-sm resize-none"
+            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm resize-none"
           />
         </div>
 
@@ -104,7 +104,7 @@ export default function NewCoursePage() {
             id="course-category"
             value={form.category}
             onChange={(e) => set('category', e.target.value)}
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fuchsia-500 text-sm"
+            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 text-sm"
           >
             <option value="">Select a category…</option>
             {categories.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -124,7 +124,7 @@ export default function NewCoursePage() {
                 onClick={() => set('price_type', pt)}
                 className={`px-3 py-2.5 rounded-xl border text-sm font-medium transition ${
                   form.price_type === pt
-                    ? 'bg-fuchsia-900/40 border-fuchsia-600 text-fuchsia-300'
+                    ? 'bg-amber-900/40 border-amber-600 text-amber-300'
                     : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-gray-600'
                 }`}
               >
@@ -144,7 +144,7 @@ export default function NewCoursePage() {
                 onChange={(e) => set('price', e.target.value)}
                 placeholder="0.00"
                 aria-label={`Price in dollars${form.price_type === 'subscription' ? ' per month' : ''}`}
-                className="w-32 bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-fuchsia-500 text-sm"
+                className="w-32 bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500 text-sm"
               />
               {form.price_type === 'subscription' && <span className="text-gray-500 text-sm">/ month</span>}
             </div>
@@ -162,11 +162,11 @@ export default function NewCoursePage() {
               onClick={() => set('navigation_mode', 'linear')}
               className={`p-4 rounded-xl border text-left transition ${
                 form.navigation_mode === 'linear'
-                  ? 'bg-fuchsia-900/20 border-fuchsia-600'
+                  ? 'bg-amber-900/20 border-amber-600'
                   : 'bg-gray-900 border-gray-700 hover:border-gray-600'
               }`}
             >
-              <ArrowRight className="w-5 h-5 text-fuchsia-400 mb-2" aria-hidden="true" />
+              <ArrowRight className="w-5 h-5 text-amber-400 mb-2" aria-hidden="true" />
               <p className="font-semibold text-white text-sm">Linear</p>
               <p className="text-gray-400 text-xs mt-1">Students follow lessons in order, step by step.</p>
             </button>
@@ -177,11 +177,11 @@ export default function NewCoursePage() {
               onClick={() => set('navigation_mode', 'cyoa')}
               className={`p-4 rounded-xl border text-left transition ${
                 form.navigation_mode === 'cyoa'
-                  ? 'bg-fuchsia-900/20 border-fuchsia-600'
+                  ? 'bg-amber-900/20 border-amber-600'
                   : 'bg-gray-900 border-gray-700 hover:border-gray-600'
               }`}
             >
-              <GitBranch className="w-5 h-5 text-fuchsia-400 mb-2" aria-hidden="true" />
+              <GitBranch className="w-5 h-5 text-amber-400 mb-2" aria-hidden="true" />
               <p className="font-semibold text-white text-sm">Adventure (CYOA)</p>
               <p className="text-gray-400 text-xs mt-1">AI recommends branching paths after each lesson.</p>
             </button>
@@ -195,7 +195,7 @@ export default function NewCoursePage() {
             type="button"
             onClick={handleCreate}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-2.5 bg-fuchsia-600 text-white rounded-xl font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50"
+            className="flex items-center gap-2 px-6 py-2.5 bg-amber-600 text-white rounded-xl font-semibold hover:bg-amber-700 transition disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {saving ? 'Creating…' : 'Create Course'}

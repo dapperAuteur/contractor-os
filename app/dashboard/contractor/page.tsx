@@ -51,7 +51,7 @@ export default function ContractorHubPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <HardHat className="text-amber-400" size={28} aria-hidden="true" />
-          <h1 className="text-2xl font-bold text-neutral-100">Job Hub</h1>
+          <h1 className="text-2xl font-bold text-neutral-100">Work.WitUS</h1>
         </div>
         <div className="flex gap-2">
           <Link

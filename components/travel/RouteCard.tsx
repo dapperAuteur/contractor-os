@@ -75,7 +75,7 @@ export default function RouteCard({ route, onDelete, onEdit, onDuplicate, onExpa
         onClick={handleToggle}
         className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition text-left"
       >
-        <Route className="w-4 h-4 text-sky-500 shrink-0" />
+        <Route className="w-4 h-4 text-amber-500 shrink-0" />
         {expanded
           ? <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
           : <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
@@ -86,7 +86,7 @@ export default function RouteCard({ route, onDelete, onEdit, onDuplicate, onExpa
               {route.name || 'Multi-stop route'}
             </span>
             {route.is_round_trip && (
-              <span className="text-xs bg-sky-50 text-sky-600 px-1.5 py-0.5 rounded font-medium shrink-0">
+              <span className="text-xs bg-amber-500/10 text-amber-600 px-1.5 py-0.5 rounded font-medium shrink-0">
                 RT
               </span>
             )}
@@ -106,7 +106,7 @@ export default function RouteCard({ route, onDelete, onEdit, onDuplicate, onExpa
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onEdit(route.id); }}
-              className="text-gray-400 hover:text-sky-600 transition p-1"
+              className="text-gray-400 hover:text-amber-600 transition p-1"
             >
               <Pencil className="w-3.5 h-3.5" />
             </button>
@@ -115,7 +115,7 @@ export default function RouteCard({ route, onDelete, onEdit, onDuplicate, onExpa
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); onDuplicate(route.id); }}
-              className="text-gray-400 hover:text-sky-600 transition p-1"
+              className="text-gray-400 hover:text-amber-600 transition p-1"
             >
               <Copy className="w-3.5 h-3.5" />
             </button>

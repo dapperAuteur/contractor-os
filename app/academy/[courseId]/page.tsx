@@ -313,7 +313,7 @@ function CourseDetailContent() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" />
+        <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -341,7 +341,7 @@ function CourseDetailContent() {
           {/* Left: Course info */}
           <div className="lg:col-span-2">
             {course.category && (
-              <p className="text-fuchsia-400 text-xs font-semibold uppercase tracking-wide mb-3">{course.category}</p>
+              <p className="text-amber-400 text-xs font-semibold uppercase tracking-wide mb-3">{course.category}</p>
             )}
             <h1 className="text-2xl sm:text-3xl font-bold mb-4">{course.title}</h1>
 
@@ -356,7 +356,7 @@ function CourseDetailContent() {
               )}
               <span className="flex items-center gap-1"><BookOpen className="w-3.5 h-3.5" />{allLessons.length} lessons</span>
               {course.navigation_mode === 'cyoa' && (
-                <span className="flex items-center gap-1 text-fuchsia-400"><GitBranch className="w-3.5 h-3.5" />Adventure paths</span>
+                <span className="flex items-center gap-1 text-amber-400"><GitBranch className="w-3.5 h-3.5" />Adventure paths</span>
               )}
               {course.review_count > 0 && (
                 <span className="flex items-center gap-1 text-yellow-400">
@@ -370,7 +370,7 @@ function CourseDetailContent() {
             {(course.prerequisites?.length ?? 0) > 0 && (
               <div className="mb-6 bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-5">
                 <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-fuchsia-400" /> Prerequisites
+                  <Shield className="w-4 h-4 text-amber-400" /> Prerequisites
                 </h3>
                 <div className="space-y-2">
                   {course.prerequisites!.map((p) => (
@@ -384,7 +384,7 @@ function CourseDetailContent() {
                       )}
                       <Link
                         href={`/academy/${p.prerequisite_course_id}`}
-                        className="text-sm text-gray-300 hover:text-fuchsia-300 transition flex-1 truncate"
+                        className="text-sm text-gray-300 hover:text-amber-300 transition flex-1 truncate"
                       >
                         {p.title}
                       </Link>
@@ -402,7 +402,7 @@ function CourseDetailContent() {
                   ))}
                 </div>
                 {course.has_prerequisite_override && (
-                  <p className="text-xs text-fuchsia-400 mt-2 flex items-center gap-1">
+                  <p className="text-xs text-amber-400 mt-2 flex items-center gap-1">
                     <Shield className="w-3 h-3" /> Override granted by teacher
                   </p>
                 )}
@@ -418,7 +418,7 @@ function CourseDetailContent() {
                     <Link
                       key={r.id}
                       href={`/academy/${r.recommended_course_id}`}
-                      className="flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-xl px-3 py-2.5 hover:border-fuchsia-700/50 transition"
+                      className="flex items-center gap-2 bg-gray-900 border border-gray-800 rounded-xl px-3 py-2.5 hover:border-amber-700/50 transition"
                     >
                       {r.cover_image_url && (
                         /* eslint-disable-next-line @next/next/no-img-element */
@@ -436,8 +436,8 @@ function CourseDetailContent() {
 
             {/* Course update banner */}
             {hasUpdates && !updatesDismissed && (
-              <div className="mb-6 bg-fuchsia-900/20 border border-fuchsia-700/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
-                <p className="text-fuchsia-300 text-sm">
+              <div className="mb-6 bg-amber-900/20 border border-amber-700/30 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
+                <p className="text-amber-300 text-sm">
                   This course has been updated since your last visit.
                 </p>
                 <button
@@ -475,20 +475,20 @@ function CourseDetailContent() {
                       return (
                         <div key={lesson.id} className="flex items-center gap-3 px-4 sm:px-5 py-3">
                           {canAccess
-                            ? <Play className="w-3.5 h-3.5 text-fuchsia-400 shrink-0" />
+                            ? <Play className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                             : <Lock className="w-3.5 h-3.5 text-gray-600 shrink-0" />
                           }
                           {canAccess ? (
                             <Link
                               href={lessonHref}
-                              className="flex-1 text-sm min-w-0 text-gray-200 hover:text-fuchsia-300 transition"
+                              className="flex-1 text-sm min-w-0 text-gray-200 hover:text-amber-300 transition"
                             >
                               {lesson.title}
                               {lesson.is_free_preview && !course.enrolled && (
-                                <span className="ml-2 text-xs text-fuchsia-400">Free preview</span>
+                                <span className="ml-2 text-xs text-amber-400">Free preview</span>
                               )}
                               {lesson.is_new && (
-                                <span className="ml-2 text-xs font-semibold text-fuchsia-400 bg-fuchsia-900/20 px-1.5 py-0.5 rounded">New</span>
+                                <span className="ml-2 text-xs font-semibold text-amber-400 bg-amber-900/20 px-1.5 py-0.5 rounded">New</span>
                               )}
                               {lesson.is_updated && (
                                 <span className="ml-2 text-xs font-semibold text-amber-400 bg-amber-900/20 px-1.5 py-0.5 rounded">Updated</span>
@@ -505,7 +505,7 @@ function CourseDetailContent() {
                           {canAccess && (
                             <Link
                               href={lessonHref}
-                              className="text-xs text-fuchsia-400 hover:text-fuchsia-300 shrink-0"
+                              className="text-xs text-amber-400 hover:text-amber-300 shrink-0"
                             >
                               Start
                             </Link>
@@ -523,7 +523,7 @@ function CourseDetailContent() {
             {course.enrolled && assignments.length > 0 && (
               <div className="mt-8">
                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <ClipboardList className="w-5 h-5 text-fuchsia-400" /> Assignments
+                  <ClipboardList className="w-5 h-5 text-amber-400" /> Assignments
                 </h2>
                 <div className="space-y-2">
                   {assignments.map((a) => {
@@ -541,9 +541,9 @@ function CourseDetailContent() {
                       <Link
                         key={a.id}
                         href={`/academy/${courseId}/assignments/${a.id}`}
-                        className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 sm:px-5 py-3.5 hover:border-fuchsia-700/50 transition group"
+                        className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 sm:px-5 py-3.5 hover:border-amber-700/50 transition group"
                       >
-                        <ClipboardList className="w-4 h-4 text-fuchsia-400 shrink-0" />
+                        <ClipboardList className="w-4 h-4 text-amber-400 shrink-0" />
                         <div className="flex-1 min-w-0">
                           <span className="text-sm text-gray-200 group-hover:text-white">{a.title}</span>
                           {scopeLabel && (
@@ -556,7 +556,7 @@ function CourseDetailContent() {
                             {new Date(a.due_date).toLocaleDateString()}
                           </span>
                         )}
-                        <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-fuchsia-400 transition shrink-0" />
+                        <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition shrink-0" />
                       </Link>
                     );
                   })}
@@ -573,7 +573,7 @@ function CourseDetailContent() {
                     <Link
                       key={r.id}
                       href={`/academy/${r.recommended_course_id}`}
-                      className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-fuchsia-700/50 transition group"
+                      className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-amber-700/50 transition group"
                     >
                       {r.cover_image_url && (
                         /* eslint-disable-next-line @next/next/no-img-element */
@@ -583,7 +583,7 @@ function CourseDetailContent() {
                         <span className="text-sm text-gray-200 group-hover:text-white">{r.title}</span>
                         {r.notes && <p className="text-xs text-gray-500 mt-0.5">{r.notes}</p>}
                       </div>
-                      <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-fuchsia-400 transition shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition shrink-0" />
                     </Link>
                   ))}
                 </div>
@@ -594,7 +594,7 @@ function CourseDetailContent() {
             {aiRecs && (aiRecs.before.length > 0 || aiRecs.after.length > 0) && (
               <div className="mt-8">
                 <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                  <span className="text-fuchsia-400">✦</span> AI Suggested Courses
+                  <span className="text-amber-400">✦</span> AI Suggested Courses
                 </h2>
                 {aiRecs.before.length > 0 && (
                   <div className="mb-4">
@@ -604,7 +604,7 @@ function CourseDetailContent() {
                         <Link
                           key={r.course_id}
                           href={`/academy/${r.course_id}`}
-                          className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-fuchsia-700/50 transition group"
+                          className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-amber-700/50 transition group"
                         >
                           {r.cover_image_url && (
                             /* eslint-disable-next-line @next/next/no-img-element */
@@ -627,7 +627,7 @@ function CourseDetailContent() {
                         <Link
                           key={r.course_id}
                           href={`/academy/${r.course_id}`}
-                          className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-fuchsia-700/50 transition group"
+                          className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-amber-700/50 transition group"
                         >
                           {r.cover_image_url && (
                             /* eslint-disable-next-line @next/next/no-img-element */
@@ -670,14 +670,14 @@ function CourseDetailContent() {
                         onChange={(e) => setReviewBody(e.target.value)}
                         placeholder="Share your experience (optional)..."
                         rows={2}
-                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500 resize-none"
+                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                       />
                       <div className="flex items-center gap-3">
                         <button
                           type="button"
                           onClick={handleSubmitReview}
                           disabled={!reviewRating || submittingReview}
-                          className="flex items-center gap-2 px-4 py-2.5 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50 min-h-11"
+                          className="flex items-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 min-h-11"
                         >
                           {submittingReview ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
                           {myExistingReview ? 'Update' : 'Submit'}
@@ -744,7 +744,7 @@ function CourseDetailContent() {
                   onClick={() => setShowGlossary((v) => !v)}
                   className="w-full flex items-center gap-2 text-lg font-bold mb-2"
                 >
-                  <BookMarked className="w-5 h-5 text-fuchsia-400" />
+                  <BookMarked className="w-5 h-5 text-amber-400" />
                   Glossary
                   <span className="text-sm font-normal text-gray-500 ml-1">({glossaryTerms.length})</span>
                   <ChevronDown className={`w-4 h-4 ml-auto text-gray-600 transition-transform ${showGlossary ? 'rotate-180' : ''}`} />
@@ -759,7 +759,7 @@ function CourseDetailContent() {
                         value={glossarySearch}
                         onChange={(e) => setGlossarySearch(e.target.value)}
                         placeholder="Search terms..."
-                        className="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500"
+                        className="w-full bg-gray-900 border border-gray-800 rounded-xl pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                       />
                     </div>
 
@@ -812,7 +812,7 @@ function CourseDetailContent() {
                     return (
                       <Link
                         href={`/academy/${courseId}/lessons/${allLessons[0]?.id ?? ''}`}
-                        className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-xl font-semibold hover:bg-fuchsia-700 transition min-h-11"
+                        className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-xl font-semibold hover:bg-amber-700 transition min-h-11"
                       >
                         <Play className="w-4 h-4" /> Continue Learning
                       </Link>
@@ -825,7 +825,7 @@ function CourseDetailContent() {
                         type="button"
                         onClick={handleEnroll}
                         disabled={enrolling || !canEnroll}
-                        className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-xl font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50 mb-3 min-h-11"
+                        className="w-full flex items-center justify-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-xl font-semibold hover:bg-amber-700 transition disabled:opacity-50 mb-3 min-h-11"
                       >
                         {enrolling ? <Loader2 className="w-4 h-4 animate-spin" /> : !canEnroll ? <Lock className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
                         {enrolling ? 'Loading...' : !canEnroll ? 'Complete Prerequisites' : course.price_type === 'free' ? 'Enroll Free' : 'Enroll Now'}
@@ -861,7 +861,7 @@ function CourseDetailContent() {
                                     <select
                                       value={overrideAnswers[q.id] ?? ''}
                                       onChange={(e) => setOverrideAnswers((a) => ({ ...a, [q.id]: e.target.value }))}
-                                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-fuchsia-500"
+                                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                                     >
                                       <option value="">Select...</option>
                                       {q.options.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -875,7 +875,7 @@ function CourseDetailContent() {
                                           onClick={() => setOverrideAnswers((a) => ({ ...a, [q.id]: String(v) }))}
                                           className={`w-8 h-8 rounded-lg text-sm font-medium transition ${
                                             Number(overrideAnswers[q.id]) === v
-                                              ? 'bg-fuchsia-600 text-white'
+                                              ? 'bg-amber-600 text-white'
                                               : 'bg-gray-900 text-gray-400 hover:bg-gray-700'
                                           }`}
                                         >
@@ -888,7 +888,7 @@ function CourseDetailContent() {
                                       type="text"
                                       value={overrideAnswers[q.id] ?? ''}
                                       onChange={(e) => setOverrideAnswers((a) => ({ ...a, [q.id]: e.target.value }))}
-                                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500"
+                                      className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                     />
                                   )}
                                 </div>
@@ -898,13 +898,13 @@ function CourseDetailContent() {
                                 onChange={(e) => setOverrideReason(e.target.value)}
                                 placeholder="Additional reason (optional)..."
                                 rows={2}
-                                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-fuchsia-500 resize-none"
+                                className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                               />
                               <button
                                 type="button"
                                 onClick={handleRequestOverride}
                                 disabled={submittingOverride}
-                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50 min-h-11"
+                                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 min-h-11"
                               >
                                 {submittingOverride ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                                 Submit Request
@@ -945,7 +945,7 @@ function CourseDetailContent() {
 
 export default function CourseDetailPage() {
   return (
-    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-fuchsia-500 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="flex justify-center py-20"><div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" /></div>}>
       <CourseDetailContent />
     </Suspense>
   );

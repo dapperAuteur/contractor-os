@@ -87,7 +87,7 @@ export default function UsernameSetupModal({ isOpen, onComplete }: UsernameSetup
               placeholder="your-username"
               maxLength={30}
               required
-              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
             />
           </div>
           {error && <p className="text-xs text-red-500">{error}</p>}
@@ -104,7 +104,7 @@ export default function UsernameSetupModal({ isOpen, onComplete }: UsernameSetup
             onChange={(e) => setDisplayName(e.target.value)}
             placeholder="Your Name"
             maxLength={60}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
           />
         </div>
 
@@ -116,14 +116,14 @@ export default function UsernameSetupModal({ isOpen, onComplete }: UsernameSetup
             placeholder="A short bio for your blog…"
             maxLength={300}
             rows={2}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-sky-500 resize-none"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
           />
         </div>
 
         <button
           type="submit"
           disabled={saving || !username}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-sky-600 text-white rounded-lg text-sm font-medium hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-lg text-sm font-medium hover:bg-amber-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
         >
           {saving && <Loader2 className="w-4 h-4 animate-spin" />}
           {saving ? 'Saving…' : 'Start blogging'}

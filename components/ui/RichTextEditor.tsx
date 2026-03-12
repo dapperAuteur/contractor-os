@@ -32,7 +32,7 @@ function ToolbarButton({
       type="button"
       title={title}
       onClick={onClick}
-      className={`p-1.5 rounded transition text-sm ${active ? 'bg-fuchsia-600 text-white' : 'text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+      className={`p-1.5 rounded transition text-sm ${active ? 'bg-amber-600 text-white' : 'text-gray-400 hover:bg-gray-700 hover:text-white'}`}
     >
       {children}
     </button>
@@ -44,7 +44,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
     immediatelyRender: false,
     extensions: [
       StarterKit,
-      Link.configure({ openOnClick: false, HTMLAttributes: { class: 'text-fuchsia-400 underline' } }),
+      Link.configure({ openOnClick: false, HTMLAttributes: { class: 'text-amber-400 underline' } }),
       Image.configure({ HTMLAttributes: { class: 'max-w-full rounded-lg my-2' } }),
     ],
     content: value,
@@ -87,7 +87,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
   if (!editor) return null;
 
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden focus-within:border-fuchsia-500 transition">
+    <div className="border border-gray-700 rounded-lg overflow-hidden focus-within:border-amber-500 transition">
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-gray-700 bg-gray-900">
         <ToolbarButton title="Bold" active={editor.isActive('bold')} onClick={() => editor.chain().focus().toggleBold().run()}>

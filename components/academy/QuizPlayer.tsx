@@ -138,7 +138,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
             </h3>
             <button
               onClick={() => setReviewMode(false)}
-              className="text-sm text-fuchsia-400 hover:text-fuchsia-300 transition"
+              className="text-sm text-amber-400 hover:text-amber-300 transition"
             >
               Back to Results
             </button>
@@ -177,7 +177,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
               </button>
             )}
             {reviewIndex < questions.length - 1 && (
-              <button onClick={() => setReviewIndex((i) => i + 1)} className="px-4 py-2.5 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition min-h-11">
+              <button onClick={() => setReviewIndex((i) => i + 1)} className="px-4 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition min-h-11">
                 Next <ChevronRight className="w-3.5 h-3.5 inline ml-1" />
               </button>
             )}
@@ -219,7 +219,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
           {!result.passed && canRetry && (
             <button
               onClick={handleRetry}
-              className="flex items-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition min-h-11"
+              className="flex items-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition min-h-11"
             >
               <RotateCcw className="w-4 h-4" /> Try Again
             </button>
@@ -244,7 +244,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
         </span>
         <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
           <div
-            className="h-full bg-fuchsia-500 rounded-full transition-all duration-300"
+            className="h-full bg-amber-500 rounded-full transition-all duration-300"
             style={{ width: `${((currentIndex + (answered ? 1 : 0)) / questions.length) * 100}%` }}
           />
         </div>
@@ -261,8 +261,8 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
           let textColor = 'text-gray-200';
 
           if (selectedOptionId === opt.id && !answered) {
-            border = 'border-fuchsia-500';
-            bg = 'bg-fuchsia-900/20';
+            border = 'border-amber-500';
+            bg = 'bg-amber-900/20';
             textColor = 'text-white';
           }
 
@@ -322,7 +322,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
             type="button"
             onClick={handleConfirmAnswer}
             disabled={!selectedOptionId}
-            className="px-5 py-3 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-40 disabled:cursor-not-allowed min-h-11"
+            className="px-5 py-3 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-40 disabled:cursor-not-allowed min-h-11"
           >
             Check Answer
           </button>
@@ -331,7 +331,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
             type="button"
             onClick={handleNext}
             disabled={submitting}
-            className="flex items-center gap-2 px-5 py-3 bg-fuchsia-600 text-white rounded-xl text-sm font-semibold hover:bg-fuchsia-700 transition disabled:opacity-50 min-h-11"
+            className="flex items-center gap-2 px-5 py-3 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 min-h-11"
           >
             {submitting ? 'Submitting…' : isLastQuestion ? 'See Results' : 'Next Question'}
             {!isLastQuestion && !submitting && <ChevronRight className="w-3.5 h-3.5" />}

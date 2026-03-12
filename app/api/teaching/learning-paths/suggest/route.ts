@@ -70,7 +70,7 @@ export async function POST() {
     `${i + 1}. "${c.title}" (ID: ${c.id})${c.description ? ` — ${c.description.slice(0, 120)}` : ''}${c.category ? ` [${c.category}]` : ''}`
   ).join('\n');
 
-  const prompt = `You are an educational curriculum designer. A teacher has published the following courses on JobHub, a health and longevity education platform:
+  const prompt = `You are an educational curriculum designer. A teacher has published the following courses on Work.WitUS, an education platform for independent contractors:
 
 ${courseList}
 

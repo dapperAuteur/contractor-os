@@ -12,7 +12,7 @@ Getting Started,1,1,Welcome to CrewOps,text,120,true,,"# Lesson 01: Welcome to C
 
 ## Narrator Script
 
-Welcome to the Lister & Crew Coordinator Guide — a free tutorial for the CrewOps module inside CentenarianOS.
+Welcome to the Lister & Crew Coordinator Guide — a free tutorial for the CrewOps module on Work.WitUS.
 
 If you're a crew coordinator, staffing agency, or union leader who assigns contractors to jobs, this module was built for you. By the end of this course, you'll know how to create jobs, build a roster, dispatch assignments, send messages, manage groups, and track fill rates.
 
@@ -20,7 +20,7 @@ If you're a crew coordinator, staffing agency, or union leader who assigns contr
 
 ### What is CrewOps?
 
-CrewOps is the crew management platform for people who list and staff jobs. It lives at /dashboard/contractor/lister and is also available at lister.centenarianos.com.
+CrewOps is the crew management platform for people who list and staff jobs. It lives at /dashboard/contractor/lister and is also available at Work.WitUS.Online.
 
 The key areas:
 
@@ -73,7 +73,7 @@ Before you start creating jobs, let's set up your lister profile. This tells con
 
 ### Profile Fields
 
-Your lister profile extends your standard CentenarianOS profile with:
+Your lister profile extends your standard Work.WitUS profile with:
 
 - **Company Name** — Your staffing agency or crew service name (e.g., ""Midwest Crew Services"")
 - **Union Local** — If you're affiliated with a union (e.g., ""IATSE 317"")
@@ -179,7 +179,7 @@ For multi-day events with multiple positions, you can assign different contracto
 
 ### Contractor Experience
 
-When a contractor accepts an assignment, the job appears in their Job Hub as a regular job. They can log time entries, upload documents, and generate invoices against it. They see your company name and contact info on the job.
+When a contractor accepts an assignment, the job appears in their Work.WitUS as a regular job. They can log time entries, upload documents, and generate invoices against it. They see your company name and contact info on the job.
 
 ---
 
@@ -188,7 +188,7 @@ When a contractor accepts an assignment, the job appears in their Job Hub as a r
 - Assign contractors from your roster to specific jobs
 - Track offered/accepted/declined/removed statuses
 - Reassign easily when plans change
-- Accepted assignments appear in the contractor's own Job Hub
+- Accepted assignments appear in the contractor's own Work.WitUS
 ",markdown,,,,,,
 Jobs & Assignments,2,5,Tracking Assignments and Responses,text,120,true,,"# Lesson 05: Tracking Assignments and Responses
 
@@ -265,7 +265,7 @@ Go to Lister Dashboard → Roster. Add contractors with:
 - **Availability Notes** — Free-form notes like ""IATSE 317. Available weekends only."" or ""AZ market. Can travel for NFL.""
 - **Is Contractor** — Flagged as true for roster members
 
-If the contractor has a JobHub account, you can link their user ID for direct assignment dispatch.
+If the contractor has a Work.WitUS account, you can link their user ID for direct assignment dispatch.
 
 ### Organizing Your Roster
 
@@ -281,7 +281,7 @@ There's no limit on roster size. Build it over time as you work with new contrac
 
 - Store skills, availability, and contact info for every contractor
 - Filter by skill when staffing specific positions
-- Link to JobHub accounts for seamless assignment dispatch
+- Link to Work.WitUS accounts for seamless assignment dispatch
 - No roster size limit — add contractors as you work with them
 ",markdown,,,,,,
 Roster & Availability,3,7,Checking Availability,text,120,true,,"# Lesson 07: Checking Availability
@@ -363,7 +363,7 @@ Contractors see your messages in their contractor inbox. They can read and respo
 ### Key Takeaways
 
 - Direct messaging for confirmations, reminders, and feedback
-- Contractors see messages in their JobHub inbox
+- Contractors see messages in their Work.WitUS inbox
 - Read receipts let you know who's seen your messages
 ",markdown,,,,,,
 Messaging,4,9,Group Messaging,text,120,true,,"# Lesson 09: Group Messaging

@@ -160,7 +160,7 @@ export default function AssignmentPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-fuchsia-500" />
+        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
   }
@@ -198,7 +198,7 @@ export default function AssignmentPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
         {/* Header */}
         <div className="flex items-start gap-3 mb-2">
-          <ClipboardList className="w-6 h-6 text-fuchsia-400 shrink-0 mt-0.5" />
+          <ClipboardList className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
           <h1 className="text-2xl font-bold">{assignment.title}</h1>
         </div>
         {assignment.due_date && (
@@ -217,8 +217,8 @@ export default function AssignmentPage() {
 
         {/* Grade / feedback banner */}
         {submission?.grade && (
-          <div className="bg-fuchsia-900/20 border border-fuchsia-700/50 rounded-xl p-5 mb-6">
-            <p className="font-semibold text-fuchsia-300 mb-1">Grade: {submission.grade}</p>
+          <div className="bg-amber-900/20 border border-amber-700/50 rounded-xl p-5 mb-6">
+            <p className="font-semibold text-amber-300 mb-1">Grade: {submission.grade}</p>
             {submission.teacher_feedback && (
               <p className="text-gray-300 text-sm leading-relaxed">{submission.teacher_feedback}</p>
             )}
@@ -229,7 +229,7 @@ export default function AssignmentPage() {
         {metricSlots > 0 && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-5 mb-6">
             <h2 className="font-semibold text-white mb-3 flex items-center gap-2 text-sm">
-              <Activity className="w-4 h-4 text-fuchsia-400" />
+              <Activity className="w-4 h-4 text-amber-400" />
               Track Health Metrics
               <span className="text-gray-500 font-normal">({selectedMetrics.length}/{metricSlots} slots)</span>
             </h2>
@@ -245,7 +245,7 @@ export default function AssignmentPage() {
                     disabled={isDisabled}
                     className={`px-3 py-2 rounded-lg text-sm font-medium transition min-h-9 ${
                       isSelected
-                        ? 'bg-fuchsia-600 text-white'
+                        ? 'bg-amber-600 text-white'
                         : isDisabled
                         ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
                         : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
@@ -267,7 +267,7 @@ export default function AssignmentPage() {
         {/* Submission form */}
         <div className="dark-input bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-6 mb-6">
           <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
-            <FileEdit className="w-4 h-4 text-fuchsia-400" />
+            <FileEdit className="w-4 h-4 text-amber-400" />
             {isSubmitted ? 'Your Submission' : isDraft ? 'Draft' : 'Your Work'}
           </h2>
 
@@ -276,7 +276,7 @@ export default function AssignmentPage() {
             onChange={(e) => setContent(e.target.value)}
             rows={6}
             placeholder="Write your response here…"
-            className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500 resize-none mb-4"
+            className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none mb-4"
           />
 
           <div className="mb-5">
@@ -305,7 +305,7 @@ export default function AssignmentPage() {
               type="button"
               onClick={() => handleSave('submitted')}
               disabled={saving || (!content.trim() && mediaFiles.length === 0)}
-              className="flex items-center gap-2 px-5 py-2 bg-fuchsia-600 text-white rounded-xl font-semibold text-sm hover:bg-fuchsia-700 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2 bg-amber-600 text-white rounded-xl font-semibold text-sm hover:bg-amber-700 transition disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
               {isSubmitted ? (isDirty ? 'Update Submission' : 'Resubmit') : 'Submit'}
@@ -323,7 +323,7 @@ export default function AssignmentPage() {
         {submission && (
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
             <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <MessageCircle className="w-4 h-4 text-fuchsia-400" /> Feedback Thread
+              <MessageCircle className="w-4 h-4 text-amber-400" /> Feedback Thread
             </h2>
             {messages.length === 0 ? (
               <p className="text-gray-600 text-sm mb-4">
@@ -340,7 +340,7 @@ export default function AssignmentPage() {
                       <div className={`inline-block px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
                         msg.is_teacher
                           ? 'bg-gray-800 text-gray-200 rounded-tl-none'
-                          : 'bg-fuchsia-700/80 text-white rounded-tr-none'
+                          : 'bg-amber-700/80 text-white rounded-tr-none'
                       }`}>
                         {msg.body}
                       </div>
@@ -363,13 +363,13 @@ export default function AssignmentPage() {
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) handleSendMessage(); }}
                 placeholder="Message your teacher…"
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-fuchsia-500"
+                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
               />
               <button
                 type="button"
                 onClick={handleSendMessage}
                 disabled={sending || !newMessage.trim()}
-                className="p-2.5 bg-fuchsia-600 text-white rounded-xl hover:bg-fuchsia-700 transition disabled:opacity-50"
+                className="p-2.5 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition disabled:opacity-50"
               >
                 <Send className="w-4 h-4" />
               </button>
