@@ -163,18 +163,18 @@ export default function ContactAutocomplete({
       </datalist>
       {showSave && value.trim() && (
         <div className="flex items-center gap-1.5 mt-1">
-          <span className="text-xs text-gray-400">Save &ldquo;{value.trim()}&rdquo; as a contact?</span>
+          <span className="text-xs text-neutral-400">Save &ldquo;{value.trim()}&rdquo; as a contact?</span>
           <button
             type="button"
             onClick={handleSave}
-            className="text-xs text-amber-600 hover:underline font-medium"
+            className="text-xs text-amber-400 hover:underline font-medium"
           >
             Save
           </button>
           <button
             type="button"
             onClick={() => setShowSave(false)}
-            className="text-xs text-gray-400 hover:text-gray-600"
+            className="text-xs text-neutral-400 hover:text-neutral-200"
           >
             Dismiss
           </button>
@@ -183,7 +183,7 @@ export default function ContactAutocomplete({
       {showLocations && locations.length > 0 && (
         <select
           onChange={handleLocationChange}
-          className="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm mt-1 text-gray-600"
+          className="w-full border border-neutral-700 bg-neutral-800 rounded-lg px-3 py-1.5 text-sm mt-1 text-neutral-100"
           defaultValue={locations.find((l) => l.is_default)?.id ?? ''}
           aria-label="Select location"
         >
@@ -196,7 +196,7 @@ export default function ContactAutocomplete({
         </select>
       )}
       {showLocations && loadingLocations && (
-        <p className="text-xs text-gray-400 mt-1">Loading locations...</p>
+        <p className="text-xs text-neutral-400 mt-1">Loading locations...</p>
       )}
     </div>
   );

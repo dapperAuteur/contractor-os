@@ -9,8 +9,8 @@ import { trackUsage } from '@/lib/trackUsage';
 
 export async function POST(request: Request) {
   const email = process.env.DEMO_CONTRACTOR_EMAIL;
-  const password = process.env.DEMO_VISITOR_PASSWORD;
-  const demoUserId = process.env.DEMO_VISITOR_USER_ID;
+  const password = process.env.DEMO_CONTRACTOR_PASSWORD;
+  const demoUserId = process.env.DEMO_CONTRACTOR_USER_ID;
 
   if (!email || !password || !demoUserId) {
     return NextResponse.json({ error: 'Demo login not configured' }, { status: 500 });
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
   // Fire-and-forget: track which page drove the demo login
   trackUsage({
-    userId: process.env.DEMO_VISITOR_USER_ID,
+    userId: process.env.DEMO_CONTRACTOR_USER_ID,
     module: 'demo',
     action: 'login',
     detail: from ? `from:${from}` : 'from:demo-page',
