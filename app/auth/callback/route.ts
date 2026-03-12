@@ -12,6 +12,8 @@ export async function GET(request: NextRequest) {
   // Default to /dashboard — middleware rewrites to correct subdomain path
   const next = searchParams.get('next') ?? '/dashboard';
 
+  const type = searchParams.get('type');
+
   if (code) {
     const cookieStore = await cookies();
     const supabase = createServerClient(
@@ -34,6 +36,10 @@ export async function GET(request: NextRequest) {
 
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // Password reset flow — always send to the reset-password page
+      if (type === 'recovery') {
+        return NextResponse.redirect(new URL('/reset-password', request.url));
+      }
       return NextResponse.redirect(new URL(next, request.url));
     }
   }
