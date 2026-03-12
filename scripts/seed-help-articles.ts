@@ -13,7 +13,7 @@
 
 import 'dotenv/config';
 import { createClient } from '@supabase/supabase-js';
-import { articles, HelpArticle } from '../lib/help/articles';
+import { HELP_ARTICLES, HelpArticle } from '../lib/help/articles';
 
 const APP = 'contractor';
 const EMBEDDING_MODEL = 'gemini-embedding-001';
@@ -56,7 +56,7 @@ async function main() {
 
   const db = createClient(supabaseUrl, serviceRoleKey);
 
-  const toSeed = articles.filter((a) => INCLUDED_ROLES.includes(a.role));
+  const toSeed = HELP_ARTICLES.filter((a) => INCLUDED_ROLES.includes(a.role));
   console.log(`Seeding ${toSeed.length} articles for app="${APP}"...`);
 
   let inserted = 0;
