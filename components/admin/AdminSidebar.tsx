@@ -28,6 +28,7 @@ const NAV_ITEMS = [
   { href: '/admin/education',    label: 'Education',   icon: Sparkles,      exact: false, badgeKey: null },
   { href: '/admin/sync',            label: 'Sync & Data',    icon: RefreshCw,  exact: false, badgeKey: null },
   { href: '/admin/venue-requests',  label: 'Venue Requests', icon: MapPin,     exact: false, badgeKey: null },
+  { href: '/admin/referrals',       label: 'Referrals',      icon: Users,      exact: false, badgeKey: null },
 ];
 
 export default function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
