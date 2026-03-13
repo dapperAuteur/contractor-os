@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useId } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
@@ -24,6 +24,9 @@ export default function EditJobPage() {
   const [notFound, setNotFound] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [benefitDeductions, setBenefitDeductions] = useState<{ id: string; label: string; amount: string }[]>([]);
+  const deductionIdPrefix = useId();
 
   const [form, setForm] = useState({
     job_number: '',
@@ -104,6 +107,15 @@ export default function EditJobPage() {
           mileage_rate: tb.mileage_rate != null ? String(tb.mileage_rate) : '',
           extra_pay: tb.extra_pay != null ? String(tb.extra_pay) : '',
         });
+        // Load benefit deductions
+        const existingDeductions = Array.isArray(job.benefit_deductions) ? job.benefit_deductions : [];
+        setBenefitDeductions(
+          existingDeductions.map((d: { label: string; amount: number }, i: number) => ({
+            id: `loaded-${i}`,
+            label: d.label ?? '',
+            amount: d.amount != null ? String(d.amount) : '',
+          }))
+        );
       } catch {
         setNotFound(true);
       } finally {
@@ -179,6 +191,9 @@ export default function EditJobPage() {
         distance_from_home_miles: form.distance_from_home_miles ? parseFloat(form.distance_from_home_miles) : null,
         benefits_eligible: form.benefits_eligible,
         travel_benefits: Object.keys(travelBenefits).length > 0 ? travelBenefits : {},
+        benefit_deductions: benefitDeductions
+          .filter((d) => d.label.trim() && d.amount)
+          .map((d) => ({ label: d.label.trim(), amount: parseFloat(d.amount) })),
         union_local: form.union_local || null,
         department: form.department || null,
         est_pay_date: form.est_pay_date || null,
@@ -193,6 +208,7 @@ export default function EditJobPage() {
       return;
     }
 
+    router.refresh();
     router.push(`/dashboard/contractor/jobs/${id}`);
   }
 
@@ -325,13 +341,21 @@ export default function EditJobPage() {
             <input
               type="checkbox"
               checked={form.is_multi_day}
-              onChange={(e) => set('is_multi_day', e.target.checked)}
+              onChange={(e) => {
+                set('is_multi_day', e.target.checked);
+                if (e.target.checked) {
+                  setCalendarOpen(true);
+                } else {
+                  setCalendarOpen(false);
+                  setForm((prev) => ({ ...prev, scheduled_dates: [], start_date: '', end_date: '' }));
+                }
+              }}
               className="rounded border-slate-300"
             />
             Multi-day job (non-consecutive dates)
           </label>
 
-          {form.is_multi_day ? (
+          {form.is_multi_day && calendarOpen ? (
             <DateCalendarPicker
               selectedDates={form.scheduled_dates}
               onChange={(dates) => {
@@ -342,7 +366,23 @@ export default function EditJobPage() {
                   end_date: dates.length > 0 ? dates[dates.length - 1] : prev.end_date,
                 }));
               }}
+              onDone={() => setCalendarOpen(false)}
             />
+          ) : form.is_multi_day && !calendarOpen ? (
+            <div className="flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+              <span className="text-sm text-slate-700">
+                {form.scheduled_dates.length > 0
+                  ? `${form.scheduled_dates.length} date${form.scheduled_dates.length !== 1 ? 's' : ''} selected`
+                  : 'No dates selected'}
+              </span>
+              <button
+                type="button"
+                onClick={() => setCalendarOpen(true)}
+                className="text-sm text-amber-600 hover:text-amber-500 font-medium"
+              >
+                Edit dates
+              </button>
+            </div>
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
@@ -452,9 +492,9 @@ export default function EditJobPage() {
           </div>
         </fieldset>
 
-        {/* Travel Benefits */}
+        {/* Benefits & Travel */}
         <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
-          <legend className="px-2 text-sm font-semibold text-slate-800">Travel Benefits</legend>
+          <legend className="px-2 text-sm font-semibold text-slate-800">Benefits &amp; Travel</legend>
           <label className="flex items-center gap-2 text-sm text-slate-700">
             <input
               type="checkbox"
@@ -464,24 +504,78 @@ export default function EditJobPage() {
             />
             Benefits Eligible
           </label>
+
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Travel</p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div>
               <label htmlFor="meal-allowance" className={labelClass}>Meal Allowance</label>
               <input id="meal-allowance" type="number" step="0.01" className={inputClass} placeholder="25.00" value={form.meal_allowance} onChange={(e) => set('meal_allowance', e.target.value)} />
             </div>
             <div>
-              <label htmlFor="per-diem" className={labelClass}>Per Diem</label>
-              <input id="per-diem" type="number" step="0.01" className={inputClass} placeholder="75.00" value={form.per_diem} onChange={(e) => set('per_diem', e.target.value)} />
+              <label htmlFor="per-diem" className={labelClass}>Per Diem / Day</label>
+              <input id="per-diem" type="number" step="0.01" className={inputClass} placeholder="55.00" value={form.per_diem} onChange={(e) => set('per_diem', e.target.value)} />
             </div>
             <div>
-              <label htmlFor="mileage-rate" className={labelClass}>Mileage Rate</label>
-              <input id="mileage-rate" type="number" step="0.01" className={inputClass} placeholder="0.67" value={form.mileage_rate} onChange={(e) => set('mileage_rate', e.target.value)} />
+              <label htmlFor="mileage-rate" className={labelClass}>Mileage Rate ($/mi)</label>
+              <input id="mileage-rate" type="number" step="0.001" className={inputClass} placeholder="0.725" value={form.mileage_rate} onChange={(e) => set('mileage_rate', e.target.value)} />
             </div>
             <div>
-              <label htmlFor="extra-pay" className={labelClass}>Extra Pay</label>
+              <label htmlFor="extra-pay" className={labelClass}>Extra Travel Pay</label>
               <input id="extra-pay" type="number" step="0.01" className={inputClass} placeholder="0.00" value={form.extra_pay} onChange={(e) => set('extra_pay', e.target.value)} />
             </div>
           </div>
+
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mt-2">Employer Benefit Contributions</p>
+          <div className="space-y-2">
+            {benefitDeductions.map((ded, i) => (
+              <div key={ded.id} className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  className={inputClass + ' flex-1'}
+                  placeholder="e.g. IATSE 317 Health & Welfare"
+                  value={ded.label}
+                  onChange={(e) => setBenefitDeductions((prev) => prev.map((d, j) => j === i ? { ...d, label: e.target.value } : d))}
+                  aria-label={`Benefit deduction ${i + 1} label`}
+                />
+                <div className="relative w-32 shrink-0">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                  <input
+                    type="number"
+                    step="0.01"
+                    className={inputClass + ' pl-6'}
+                    placeholder="87.50"
+                    value={ded.amount}
+                    onChange={(e) => setBenefitDeductions((prev) => prev.map((d, j) => j === i ? { ...d, amount: e.target.value } : d))}
+                    aria-label={`Benefit deduction ${i + 1} amount`}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setBenefitDeductions((prev) => prev.filter((_, j) => j !== i))}
+                  className="shrink-0 p-2 text-slate-400 hover:text-red-500 min-h-11 min-w-11 flex items-center justify-center"
+                  aria-label={`Remove deduction ${i + 1}`}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setBenefitDeductions((prev) => [...prev, { id: `${deductionIdPrefix}-${Date.now()}`, label: '', amount: '' }])}
+              className="text-sm text-amber-600 hover:text-amber-500 font-medium py-1"
+            >
+              + Add deduction
+            </button>
+          </div>
+
+          {benefitDeductions.length > 0 && (
+            <div className="flex justify-between items-center rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
+              <span className="text-slate-600 font-medium">Est. Benefits Total</span>
+              <span className="font-semibold text-slate-900">
+                ${benefitDeductions.reduce((sum, d) => sum + (parseFloat(d.amount) || 0), 0).toFixed(2)}
+              </span>
+            </div>
+          )}
         </fieldset>
 
         {/* Notes */}

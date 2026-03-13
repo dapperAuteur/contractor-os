@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
     status: jobStatus, start_date, end_date,
     is_multi_day, scheduled_dates,
     pay_rate, ot_rate, dt_rate, rate_type,
-    distance_from_home_miles, benefits_eligible, travel_benefits,
+    distance_from_home_miles, benefits_eligible, travel_benefits, benefit_deductions,
     union_local, department, brand_id, est_pay_date,
     notes, metadata,
   } = body;
@@ -126,6 +126,28 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
+
+  // Check job limit from invite record (trial users may have a restricted cap)
+  const { data: invite } = await db
+    .from('invited_users')
+    .select('job_limit')
+    .eq('user_id', user.id)
+    .not('job_limit', 'is', null)
+    .maybeSingle();
+
+  if (invite?.job_limit != null) {
+    const { count: jobCount } = await db
+      .from('contractor_jobs')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', user.id);
+
+    if ((jobCount ?? 0) >= invite.job_limit) {
+      return NextResponse.json(
+        { error: `Trial limit reached (${invite.job_limit} job${invite.job_limit !== 1 ? 's' : ''}). Upgrade to continue creating jobs.`, upgrade_required: true },
+        { status: 402 },
+      );
+    }
+  }
   const { data, error } = await db
     .from('contractor_jobs')
     .insert({
@@ -154,6 +176,7 @@ export async function POST(request: NextRequest) {
       distance_from_home_miles: distance_from_home_miles ?? null,
       benefits_eligible: benefits_eligible ?? false,
       travel_benefits: travel_benefits ?? {},
+      benefit_deductions: benefit_deductions ?? [],
       union_local: union_local ?? null,
       department: department ?? null,
       brand_id: brand_id ?? null,

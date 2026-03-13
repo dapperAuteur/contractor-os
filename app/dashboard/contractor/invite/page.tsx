@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { Loader2, Send, UserPlus, CheckCircle, Clock, Mail } from 'lucide-react';
+import { Loader2, Send, UserPlus, CheckCircle, Clock, Mail, X } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 interface Invite {
@@ -19,6 +19,7 @@ export default function ContractorInvitePage() {
   const [sending, setSending] = useState(false);
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [revoking, setRevoking] = useState<string | null>(null);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -29,6 +30,19 @@ export default function ContractorInvitePage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  async function revokeInvite(id: string) {
+    setRevoking(id);
+    const res = await offlineFetch(`/api/contractor/invite/${id}`, { method: 'DELETE' });
+    setRevoking(null);
+    if (res.ok) {
+      setMessage({ type: 'success', text: 'Invite revoked.' });
+      load();
+    } else {
+      const data = await res.json();
+      setMessage({ type: 'error', text: data.error || 'Failed to revoke invite' });
+    }
+  }
 
   async function sendInvite(e: React.FormEvent) {
     e.preventDefault();
@@ -114,13 +128,25 @@ export default function ContractorInvitePage() {
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   {inv.accepted_at ? (
-                    <span className="flex items-center gap-1 text-green-400">
+                    <span className="flex items-center gap-1 text-green-600">
                       <CheckCircle size={12} aria-hidden="true" /> Accepted
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-slate-400">
-                      <Clock size={12} aria-hidden="true" /> Pending
-                    </span>
+                    <>
+                      <span className="flex items-center gap-1 text-slate-400">
+                        <Clock size={12} aria-hidden="true" /> Pending
+                      </span>
+                      <button
+                        onClick={() => revokeInvite(inv.id)}
+                        disabled={revoking === inv.id}
+                        className="flex items-center gap-1 rounded px-2 py-1 text-red-500 hover:bg-red-50 hover:text-red-600 disabled:opacity-50 min-h-8"
+                        aria-label={`Revoke invite to ${inv.email}`}
+                        title="Revoke invite"
+                      >
+                        {revoking === inv.id ? <Loader2 size={11} className="animate-spin" /> : <X size={11} aria-hidden="true" />}
+                        Revoke
+                      </button>
+                    </>
                   )}
                   <span className="text-slate-400">{new Date(inv.invited_at).toLocaleDateString()}</span>
                 </div>

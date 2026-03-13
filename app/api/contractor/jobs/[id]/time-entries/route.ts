@@ -43,13 +43,13 @@ export async function POST(request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const body = await request.json();
   const {
-    work_date, time_in, time_out, adjusted_in, adjusted_out,
+    work_date, dates, time_in, time_out, adjusted_in, adjusted_out,
     break_minutes, total_hours, st_hours, ot_hours, dt_hours,
     meal_provided, notes,
   } = body;
 
-  if (!work_date) {
-    return NextResponse.json({ error: 'work_date is required' }, { status: 400 });
+  if (!work_date && (!dates || dates.length === 0)) {
+    return NextResponse.json({ error: 'work_date or dates array is required' }, { status: 400 });
   }
 
   // Verify job ownership
@@ -63,24 +63,37 @@ export async function POST(request: NextRequest, ctx: Ctx) {
 
   if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
 
+  const entryBase = {
+    job_id: id,
+    user_id: user.id,
+    time_in: time_in ?? null,
+    time_out: time_out ?? null,
+    adjusted_in: adjusted_in ?? null,
+    adjusted_out: adjusted_out ?? null,
+    break_minutes: break_minutes ?? 0,
+    total_hours: total_hours ?? null,
+    st_hours: st_hours ?? null,
+    ot_hours: ot_hours ?? null,
+    dt_hours: dt_hours ?? null,
+    meal_provided: meal_provided ?? false,
+    notes: notes ?? null,
+  };
+
+  // Bulk insert: if `dates` array provided, insert one entry per date (skip existing)
+  if (Array.isArray(dates) && dates.length > 0) {
+    const rows = dates.map((d: string) => ({ ...entryBase, work_date: d }));
+    const { data: inserted, error } = await db
+      .from('job_time_entries')
+      .upsert(rows, { onConflict: 'job_id,user_id,work_date', ignoreDuplicates: true })
+      .select();
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ time_entries: inserted ?? [], count: inserted?.length ?? 0 }, { status: 201 });
+  }
+
+  // Single insert
   const { data, error } = await db
     .from('job_time_entries')
-    .insert({
-      job_id: id,
-      user_id: user.id,
-      work_date,
-      time_in: time_in ?? null,
-      time_out: time_out ?? null,
-      adjusted_in: adjusted_in ?? null,
-      adjusted_out: adjusted_out ?? null,
-      break_minutes: break_minutes ?? 0,
-      total_hours: total_hours ?? null,
-      st_hours: st_hours ?? null,
-      ot_hours: ot_hours ?? null,
-      dt_hours: dt_hours ?? null,
-      meal_provided: meal_provided ?? false,
-      notes: notes ?? null,
-    })
+    .insert({ ...entryBase, work_date })
     .select()
     .single();
 

@@ -25,6 +25,7 @@ interface Invite {
   accepted_at: string | null;
   user_id: string | null;
   notes: string | null;
+  job_limit: number | null;
 }
 
 const MODULE_GROUPS = [
@@ -61,6 +62,7 @@ const EMPTY_FORM = {
   allowed_modules: [] as string[],
   demo_profile: '' as '' | 'visitor' | 'tutorial' | 'contractor_demo' | 'lister_demo',
   notes: '',
+  job_limit: '' as string,
 };
 
 export default function AdminInvitesPage() {
@@ -103,6 +105,7 @@ export default function AdminInvitesPage() {
       allowed_modules: invite.allowed_modules ?? [],
       demo_profile: invite.demo_profile ?? '',
       notes: invite.notes ?? '',
+      job_limit: invite.job_limit != null ? String(invite.job_limit) : '',
     });
     setFormError('');
     setModalOpen(true);
@@ -121,6 +124,7 @@ export default function AdminInvitesPage() {
       allowed_modules: form.all_modules ? null : form.allowed_modules,
       demo_profile: form.demo_profile || null,
       notes: form.notes || null,
+      job_limit: form.job_limit ? parseInt(form.job_limit, 10) : null,
     };
 
     try {
@@ -238,6 +242,7 @@ export default function AdminInvitesPage() {
                   <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden md:table-cell">Expiry</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Modules</th>
                   <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Demo</th>
+                  <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden xl:table-cell">Job Limit</th>
                   <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
                 </tr>
               </thead>
@@ -286,6 +291,13 @@ export default function AdminInvitesPage() {
                           </div>
                         ) : (
                           <span className="text-gray-300 text-xs">—</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 hidden xl:table-cell text-gray-600 text-xs">
+                        {inv.job_limit != null ? (
+                          <span className="font-medium text-amber-700">{inv.job_limit} jobs</span>
+                        ) : (
+                          <span className="text-gray-300">∞</span>
                         )}
                       </td>
                       <td className="px-4 py-3">
@@ -524,6 +536,24 @@ export default function AdminInvitesPage() {
                   </button>
                 ))}
               </div>
+            </div>
+
+            {/* Job Limit */}
+            <div>
+              <label htmlFor="invite-job-limit" className="block text-sm font-medium text-gray-700 mb-1">
+                Job Limit <span className="text-gray-400 font-normal">(leave blank for unlimited)</span>
+              </label>
+              <input
+                id="invite-job-limit"
+                type="number"
+                min="1"
+                step="1"
+                value={form.job_limit}
+                onChange={(e) => setForm((f) => ({ ...f, job_limit: e.target.value }))}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                placeholder="e.g. 5"
+              />
+              <p className="text-xs text-gray-400 mt-1">Trial users will be prompted to upgrade after creating this many contractor jobs.</p>
             </div>
 
             {/* Notes */}
