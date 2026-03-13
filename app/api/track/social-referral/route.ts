@@ -32,20 +32,21 @@ export async function POST(request: NextRequest) {
 
   const db = getDb();
 
-  // Dedup: skip if same source+path logged in last 5 minutes
+  // Dedup: skip if same source+path+app logged in last 5 minutes
   const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
   const { count } = await db
     .from('social_referrals')
     .select('id', { count: 'exact', head: true })
     .eq('source', source)
     .eq('path', path)
+    .eq('app', 'workwitus')
     .gte('created_at', fiveMinutesAgo);
 
   if ((count ?? 0) > 0) {
     return NextResponse.json({ skipped: true });
   }
 
-  const { error } = await db.from('social_referrals').insert({ source, path });
+  const { error } = await db.from('social_referrals').insert({ source, path, app: 'workwitus' });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   return NextResponse.json({ logged: true });

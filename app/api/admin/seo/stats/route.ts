@@ -31,11 +31,12 @@ export async function GET() {
     { count: og30d },
     { data: topProfiles },
   ] = await Promise.all([
-    db.from('og_image_requests').select('id', { count: 'exact', head: true }),
-    db.from('og_image_requests').select('id', { count: 'exact', head: true }).gte('created_at', d7),
-    db.from('og_image_requests').select('id', { count: 'exact', head: true }).gte('created_at', d30),
+    db.from('og_image_requests').select('id', { count: 'exact', head: true }).eq('app', 'workwitus'),
+    db.from('og_image_requests').select('id', { count: 'exact', head: true }).eq('app', 'workwitus').gte('created_at', d7),
+    db.from('og_image_requests').select('id', { count: 'exact', head: true }).eq('app', 'workwitus').gte('created_at', d30),
     db.from('og_image_requests')
       .select('profile_username')
+      .eq('app', 'workwitus')
       .order('created_at', { ascending: false })
       .limit(5000),
   ]);
@@ -62,12 +63,13 @@ export async function GET() {
     { data: referralRows },
     { data: recentReferrals },
   ] = await Promise.all([
-    db.from('social_referrals').select('id', { count: 'exact', head: true }),
-    db.from('social_referrals').select('id', { count: 'exact', head: true }).gte('created_at', d7),
-    db.from('social_referrals').select('id', { count: 'exact', head: true }).gte('created_at', d30),
-    db.from('social_referrals').select('source').limit(5000),
+    db.from('social_referrals').select('id', { count: 'exact', head: true }).eq('app', 'workwitus'),
+    db.from('social_referrals').select('id', { count: 'exact', head: true }).eq('app', 'workwitus').gte('created_at', d7),
+    db.from('social_referrals').select('id', { count: 'exact', head: true }).eq('app', 'workwitus').gte('created_at', d30),
+    db.from('social_referrals').select('source').eq('app', 'workwitus').limit(5000),
     db.from('social_referrals')
       .select('source, path, created_at')
+      .eq('app', 'workwitus')
       .order('created_at', { ascending: false })
       .limit(50),
   ]);
