@@ -376,7 +376,7 @@ export default function NewJobPage() {
                 <input type="date" className={inputClass} value={form.end_date} onChange={(e) => set('end_date', e.target.value)} />
               </div>
             </div>
-          )}
+          ) : null}
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
