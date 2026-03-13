@@ -19,6 +19,7 @@ interface FeedbackEntry {
   is_read_by_admin: boolean;
   created_at: string;
   user_id: string;
+  app?: string | null;
   email?: string | null;
   profiles?: { username: string; display_name?: string | null } | null;
 }
@@ -206,6 +207,12 @@ export default function AdminFeedbackPage() {
                     <cfg.icon className="w-3 h-3" />
                     {cfg.label}
                   </span>
+
+                  {item.app && item.app !== 'centenarian' && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium shrink-0 bg-amber-900/40 text-amber-300">
+                      {item.app}
+                    </span>
+                  )}
 
                   <div className="flex-1 min-w-0">
                     <p className="text-gray-300 text-sm truncate">{item.message}</p>

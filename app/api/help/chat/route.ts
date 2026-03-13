@@ -62,12 +62,19 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+  // Admin-only while help articles are being built out
+  const db = getDb();
+  const { data: profile } = await db
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', user.id)
+    .maybeSingle();
+  if (!profile?.is_admin) return NextResponse.json({ error: 'Help chat is currently in admin preview.' }, { status: 403 });
+
   const { question, role } = await request.json();
   if (!question?.trim()) {
     return NextResponse.json({ error: 'question is required' }, { status: 400 });
   }
-
-  const db = getDb();
 
   // 1. Embed the question
   let queryEmbedding: number[];

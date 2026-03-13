@@ -41,14 +41,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  let body: { category?: string; message?: string; media_url?: string };
+  let body: { category?: string; message?: string; media_url?: string; source_app?: string };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
   }
 
-  const { category, message, media_url } = body;
+  const { category, message, media_url, source_app } = body;
+  const app = source_app?.trim() || 'centenarian';
 
   if (!category || !VALID_CATEGORIES.includes(category as Category)) {
     return NextResponse.json({ error: 'category must be one of: bug, feature, general' }, { status: 400 });
@@ -71,6 +72,7 @@ export async function POST(request: NextRequest) {
       message: message.trim(),
       media_url: media_url || null,
       is_read_by_admin: false,
+      app,
     })
     .select('id')
     .single();
@@ -89,8 +91,9 @@ export async function POST(request: NextRequest) {
       await resend.emails.send({
         from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
         to: adminEmail,
-        subject: `[Work.WitUS] New ${category} feedback from ${user.email}`,
-        html: `<p><strong>${user.email}</strong> submitted a <strong>${category}</strong> report:</p>
+        subject: `[${app}] New ${category} feedback from ${user.email}`,
+        html: `<p><strong>App:</strong> ${app}</p>
+               <p><strong>${user.email}</strong> submitted a <strong>${category}</strong> report:</p>
                <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${message.trim()}</blockquote>
                ${media_url ? `<p>📎 <a href="${media_url}">View attachment</a></p>` : ''}
                <p><a href="${siteUrl}/admin/feedback">Reply in Admin Dashboard →</a></p>`,

@@ -28,7 +28,7 @@ export default function ContractorLayout({ username, unreadMessages, onLogout, i
       <main id="main-content" className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 pb-20 lg:pb-6">
         {children}
       </main>
-      <FloatingActionsMenu />
+      <FloatingActionsMenu isAdmin={isAdmin} />
       <TourRunner app="contractor" onToursChanged={onToursChanged} />
     </div>
   );
