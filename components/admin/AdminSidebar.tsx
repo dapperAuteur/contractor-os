@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, MessageSquare, FileText, Heart, MessageCircle, GraduationCap, Radio, Activity, Building2, ScrollText, BarChart3, Link2, Sparkles, RefreshCw, MapPin } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, FileText, Heart, MessageCircle, GraduationCap, Radio, Activity, Building2, ScrollText, BarChart3, Link2, Sparkles, RefreshCw, MapPin, Globe } from 'lucide-react';
 
 interface UnreadCounts { feedback: number; messages: number; logs: number; }
 
@@ -28,6 +28,7 @@ const NAV_ITEMS = [
   { href: '/admin/education',    label: 'Education',   icon: Sparkles,      exact: false, badgeKey: null },
   { href: '/admin/sync',            label: 'Sync & Data',    icon: RefreshCw,  exact: false, badgeKey: null },
   { href: '/admin/venue-requests',  label: 'Venue Requests', icon: MapPin,     exact: false, badgeKey: null },
+  { href: '/admin/seo',             label: 'SEO',            icon: Globe,      exact: false, badgeKey: null },
   { href: '/admin/referrals',       label: 'Referrals',      icon: Users,      exact: false, badgeKey: null },
 ];
 

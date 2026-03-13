@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
@@ -12,9 +13,58 @@ import ReadDepthTracker from '@/components/blog/ReadDepthTracker';
 import { buildShareUrls } from '@/lib/blog/share';
 import { Lock } from 'lucide-react';
 import PageViewTracker from '@/components/ui/PageViewTracker';
+import { articleSchema } from '@/lib/seo/json-ld';
 import type { BlogPost, Profile } from '@/lib/types';
 
 type Props = { params: Promise<{ username: string; slug: string }> };
+
+// ─── Meta ─────────────────────────────────────────────────────────────────────
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { username, slug } = await params;
+  const supabase = await createClient();
+
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('id, display_name, username')
+    .eq('username', username)
+    .maybeSingle();
+
+  if (!profile) return { title: 'Post not found' };
+
+  const { data: post } = await supabase
+    .from('blog_posts')
+    .select('title, excerpt, cover_image_url, published_at')
+    .eq('user_id', profile.id)
+    .eq('slug', slug)
+    .eq('visibility', 'public')
+    .maybeSingle();
+
+  if (!post) return { title: 'Post not found' };
+
+  const author = profile.display_name || profile.username;
+
+  return {
+    title: post.title,
+    description: post.excerpt ?? undefined,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt ?? undefined,
+      type: 'article',
+      publishedTime: post.published_at ?? undefined,
+      authors: [author],
+      images: post.cover_image_url ? [{ url: post.cover_image_url, width: 1200, height: 630 }] : undefined,
+      url: `/blog/${username}/${slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.excerpt ?? undefined,
+      images: post.cover_image_url ? [post.cover_image_url] : undefined,
+    },
+    alternates: { canonical: `/blog/${username}/${slug}` },
+  };
+}
 
 export default async function PublicPostPage({ params }: Props) {
   const { username, slug } = await params;
@@ -54,8 +104,21 @@ export default async function PublicPostPage({ params }: Props) {
         ])
       : [{ data: null }, { data: null }];
 
+    const ldJson = articleSchema({
+      title: bp.title,
+      excerpt: bp.excerpt ?? null,
+      cover_image_url: bp.cover_image_url ?? null,
+      published_at: bp.published_at ?? null,
+      updated_at: bp.updated_at ?? null,
+      slug: bp.slug,
+      username: p.username,
+      author_name: p.display_name || p.username,
+      author_avatar: p.avatar_url ?? null,
+    });
+
     return (
       <main className="max-w-3xl mx-auto px-4 py-12">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }} />
         <PageViewTracker path={`/blog/${username}/${slug}`} />
         <ReadDepthTracker postId={bp.id} />
 
