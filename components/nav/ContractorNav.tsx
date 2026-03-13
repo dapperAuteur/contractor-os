@@ -124,8 +124,8 @@ function NavDropdown({
         }}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition min-h-11 ${
           groupActive
-            ? 'text-amber-400 bg-amber-400/10'
-            : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800'
+            ? 'text-amber-600 bg-amber-50'
+            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
         }`}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -139,7 +139,7 @@ function NavDropdown({
         <div
           ref={menuRef}
           role="menu"
-          className="absolute top-full left-0 mt-1 w-48 bg-neutral-900 rounded-xl shadow-lg border border-neutral-700 py-1 z-50"
+          className="absolute top-full left-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50"
           onKeyDown={handleKeyDown}
         >
           {group.items.map((item) => {
@@ -155,15 +155,15 @@ function NavDropdown({
                 role="menuitem"
                 className={`flex items-center gap-2.5 px-3 py-2.5 text-sm font-medium transition min-h-11 ${
                   active
-                    ? 'text-amber-400 bg-amber-400/10'
-                    : 'text-neutral-300 hover:text-neutral-100 hover:bg-neutral-800'
+                    ? 'text-amber-600 bg-amber-50'
+                    : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
                 }`}
                 onClick={() => setOpenGroup(null)}
               >
                 <ItemIcon className="w-4 h-4 shrink-0" aria-hidden="true" />
                 {item.label}
                 {showSparkle && (
-                  <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse ml-auto shrink-0" aria-hidden="true" />
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse ml-auto shrink-0" aria-hidden="true" />
                 )}
               </Link>
             );
@@ -221,7 +221,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
     <>
       <nav
         ref={navRef}
-        className="bg-neutral-950 border-b border-neutral-800 sticky top-0 z-50"
+        className="bg-white border-b border-slate-200 sticky top-0 z-50"
         aria-label="Contractor navigation"
       >
         <a
@@ -234,7 +234,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop (lg+) */}
           <div className="hidden lg:flex items-center justify-between h-14">
-            <Link href="/dashboard/contractor" className="flex items-center gap-2 text-lg font-bold text-amber-400 shrink-0 mr-4">
+            <Link href="/dashboard/contractor" className="flex items-center gap-2 text-lg font-bold text-amber-600 shrink-0 mr-4">
               <HardHat className="w-5 h-5" aria-hidden="true" />
               Work.WitUS
             </Link>
@@ -253,14 +253,14 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
             </div>
 
             {/* Right actions */}
-            <div className="flex items-center gap-1 pl-4 border-l border-neutral-800 ml-auto">
+            <div className="flex items-center gap-1 pl-4 border-l border-slate-200 ml-auto">
               {isAdmin && (
                 <Link
                   href="/admin"
                   className={`flex items-center justify-center min-h-11 min-w-11 rounded-lg transition ${
                     pathname.startsWith('/admin')
-                      ? 'text-amber-400 bg-amber-400/10'
-                      : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800'
+                      ? 'text-amber-600 bg-amber-50'
+                      : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
                   }`}
                   aria-label="Admin Panel"
                 >
@@ -269,12 +269,12 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
               )}
               <Link
                 href="/dashboard/messages"
-                className="relative flex items-center justify-center min-h-11 min-w-11 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition"
+                className="relative flex items-center justify-center min-h-11 min-w-11 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
                 aria-label={`Messages${unreadMessages > 0 ? `, ${unreadMessages} unread` : ''}`}
               >
                 <Bell className="w-5 h-5" aria-hidden="true" />
                 {unreadMessages > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-amber-500 text-neutral-950 text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                     {unreadMessages > 9 ? '9+' : unreadMessages}
                   </span>
                 )}
@@ -283,7 +283,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition min-h-11"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition min-h-11"
                   aria-expanded={userMenuOpen}
                   aria-haspopup="true"
                   aria-label="User menu"
@@ -293,11 +293,11 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-48 bg-neutral-900 rounded-xl shadow-lg border border-neutral-700 py-1 z-50" role="menu">
+                  <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50" role="menu">
                     {username && (
                       <Link
                         href={`/profiles/${username}`}
-                        className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                        className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
@@ -307,7 +307,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                     )}
                     <Link
                       href="/dashboard/contractor/settings"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -316,7 +316,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                     </Link>
                     <Link
                       href="/dashboard/settings"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -325,7 +325,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                     </Link>
                     <Link
                       href="/dashboard/billing"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -334,21 +334,21 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                     </Link>
                     <Link
                       href="/dashboard/feedback"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
                       Feedback
                     </Link>
-                    <div className="my-1 border-t border-neutral-700" />
+                    <div className="my-1 border-t border-slate-200" />
                     <div className="px-1" role="menuitem">
                       <TourRestartButton app="contractor" />
                     </div>
-                    <div className="my-1 border-t border-neutral-700" />
+                    <div className="my-1 border-t border-slate-200" />
                     <button
                       onClick={() => { setUserMenuOpen(false); onLogout(); }}
-                      className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition min-h-11"
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
                       role="menuitem"
                     >
                       <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -365,24 +365,24 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="flex items-center justify-center min-h-11 min-w-11 text-neutral-400 hover:bg-neutral-800 rounded-lg transition"
+                className="flex items-center justify-center min-h-11 min-w-11 text-slate-600 hover:bg-slate-100 rounded-lg transition"
                 aria-label="Open menu"
               >
                 <Menu className="w-5 h-5" aria-hidden="true" />
               </button>
-              <Link href="/dashboard/contractor" className="flex items-center gap-2 text-lg font-bold text-amber-400">
+              <Link href="/dashboard/contractor" className="flex items-center gap-2 text-lg font-bold text-amber-600">
                 <HardHat className="w-5 h-5" aria-hidden="true" />
                 Work.WitUS
               </Link>
             </div>
             <Link
               href="/dashboard/messages"
-              className="relative flex items-center justify-center min-h-11 min-w-11 text-neutral-400 hover:bg-neutral-800 rounded-lg transition"
+              className="relative flex items-center justify-center min-h-11 min-w-11 text-slate-500 hover:bg-slate-100 rounded-lg transition"
               aria-label={`Messages${unreadMessages > 0 ? `, ${unreadMessages} unread` : ''}`}
             >
               <Bell className="w-5 h-5" aria-hidden="true" />
               {unreadMessages > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-amber-500 text-neutral-950 text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                   {unreadMessages > 9 ? '9+' : unreadMessages}
                 </span>
               )}
@@ -394,20 +394,20 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
       {/* Mobile drawer */}
       {drawerOpen && (
         <>
-          <div className="fixed inset-0 bg-black/60 z-50 lg:hidden" onClick={() => setDrawerOpen(false)} aria-hidden="true" />
+          <div className="fixed inset-0 bg-black/40 z-50 lg:hidden" onClick={() => setDrawerOpen(false)} aria-hidden="true" />
           <div
             role="dialog"
             aria-modal="true"
             aria-label="Navigation"
-            className="fixed inset-y-0 left-0 z-50 w-72 bg-neutral-950 shadow-xl overflow-y-auto lg:hidden"
+            className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl overflow-y-auto lg:hidden"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 4rem)' }}
           >
-            <div className="flex items-center justify-between px-4 py-4 border-b border-neutral-800">
-              <span className="text-lg font-bold text-amber-400 flex items-center gap-2">
+            <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200">
+              <span className="text-lg font-bold text-amber-600 flex items-center gap-2">
                 <HardHat className="w-5 h-5" aria-hidden="true" /> Work.WitUS
               </span>
-              <button onClick={() => setDrawerOpen(false)} className="flex items-center justify-center min-h-11 min-w-11 rounded-lg hover:bg-neutral-800 transition" aria-label="Close menu">
-                <X className="w-5 h-5 text-neutral-500" aria-hidden="true" />
+              <button onClick={() => setDrawerOpen(false)} className="flex items-center justify-center min-h-11 min-w-11 rounded-lg hover:bg-slate-100 transition" aria-label="Close menu">
+                <X className="w-5 h-5 text-slate-400" aria-hidden="true" />
               </button>
             </div>
 
@@ -416,7 +416,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
               <Link
                 href="/dashboard/contractor"
                 className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
-                  pathname === '/dashboard/contractor' ? 'text-amber-400 bg-amber-400/10' : 'text-neutral-300 hover:bg-neutral-800'
+                  pathname === '/dashboard/contractor' ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'
                 }`}
                 aria-current={pathname === '/dashboard/contractor' ? 'page' : undefined}
               >
@@ -429,7 +429,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
             {NAV_GROUPS.map((group) => (
               <div key={group.label}>
                 <div className="px-4 pt-4 pb-1">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500">{group.label}</span>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{group.label}</span>
                 </div>
                 {group.items.map((item) => {
                   const Icon = item.icon;
@@ -441,14 +441,14 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                       key={item.href}
                       href={item.href}
                       className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
-                        active ? 'text-amber-400 bg-amber-400/10' : 'text-neutral-300 hover:bg-neutral-800'
+                        active ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'
                       }`}
                       aria-current={active ? 'page' : undefined}
                     >
                       <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
                       {item.label}
                       {showSparkle && (
-                        <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse ml-auto shrink-0" aria-hidden="true" />
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse ml-auto shrink-0" aria-hidden="true" />
                       )}
                     </Link>
                   );
@@ -456,46 +456,46 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
               </div>
             ))}
 
-            <div className="border-t border-neutral-800 my-2" />
+            <div className="border-t border-slate-200 my-2" />
 
             <div className="py-1">
               {username && (
-                <Link href={`/profiles/${username}`} className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+                <Link href={`/profiles/${username}`} className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                   <UserCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> My Profile
                 </Link>
               )}
-              <Link href="/dashboard/contractor/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/contractor/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Contractor Settings
               </Link>
-              <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Account Settings
               </Link>
-              <Link href="/dashboard/billing" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/billing" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <CreditCard className="w-4 h-4 shrink-0" aria-hidden="true" /> Billing
               </Link>
-              <Link href="/dashboard/messages" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/messages" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <Bell className="w-4 h-4 shrink-0" aria-hidden="true" /> Messages
                 {unreadMessages > 0 && (
-                  <span className="ml-auto w-5 h-5 bg-amber-500 text-neutral-950 text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                  <span className="ml-auto w-5 h-5 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
                     {unreadMessages > 9 ? '9+' : unreadMessages}
                   </span>
                 )}
               </Link>
-              <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> Feedback
               </Link>
               {isAdmin && (
-                <Link href="/admin" className={`flex items-center gap-3 px-4 py-2.5 text-sm transition ${pathname.startsWith('/admin') ? 'text-amber-400 bg-amber-400/10' : 'text-neutral-300 hover:bg-neutral-800'}`}>
+                <Link href="/admin" className={`flex items-center gap-3 px-4 py-2.5 text-sm transition ${pathname.startsWith('/admin') ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'}`}>
                   <Shield className="w-4 h-4 shrink-0" aria-hidden="true" /> Admin Panel
                 </Link>
               )}
             </div>
 
-            <div className="border-t border-neutral-800 my-1" />
+            <div className="border-t border-slate-200 my-1" />
             <div className="py-1 pb-4">
               <button
                 onClick={() => { setDrawerOpen(false); onLogout(); }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition min-h-11"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> Logout
               </button>
@@ -506,7 +506,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
 
       {/* Mobile bottom bar */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-neutral-950 border-t border-neutral-800 lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 lg:hidden"
         role="tablist"
         aria-label="Contractor navigation"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
@@ -527,7 +527,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
                 role="tab"
                 aria-selected={active}
                 className={`flex-1 flex flex-col items-center justify-center gap-0.5 min-h-11 transition-colors ${
-                  active ? 'text-amber-400' : 'text-neutral-500 hover:text-neutral-300'
+                  active ? 'text-amber-600' : 'text-slate-400 hover:text-slate-700'
                 }`}
               >
                 <Icon className="w-5 h-5" aria-hidden="true" />

@@ -135,7 +135,7 @@ export default function CompareJobsPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">Compare Jobs</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Compare Jobs</h1>
 
       {/* Job selector */}
       <section aria-label="Select jobs to compare">
@@ -167,25 +167,25 @@ export default function CompareJobsPage() {
 
           {/* Search + list */}
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" aria-hidden="true" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
             <input
               type="text"
               placeholder="Search jobs to add..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full rounded-lg border border-neutral-700 bg-neutral-900 py-2.5 pl-9 pr-3 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               aria-label="Search jobs"
             />
           </div>
 
           {jobsLoading ? (
             <div className="flex justify-center py-6">
-              <Loader2 className="animate-spin text-neutral-500" size={20} aria-label="Loading..." />
+              <Loader2 className="animate-spin text-slate-400" size={20} aria-label="Loading..." />
             </div>
           ) : (
-            <div className="max-h-48 overflow-y-auto rounded-xl border border-neutral-800 bg-neutral-900" role="listbox" aria-label="Available jobs" aria-multiselectable="true">
+            <div className="max-h-48 overflow-y-auto rounded-xl border border-slate-200 bg-white" role="listbox" aria-label="Available jobs" aria-multiselectable="true">
               {filtered.length === 0 ? (
-                <div className="p-4 text-center text-sm text-neutral-500">No jobs found.</div>
+                <div className="p-4 text-center text-sm text-slate-400">No jobs found.</div>
               ) : (
                 filtered.map((job) => {
                   const selected = selectedIds.includes(job.id);
@@ -197,26 +197,26 @@ export default function CompareJobsPage() {
                       aria-selected={selected}
                       disabled={disabled}
                       onClick={() => toggleJob(job.id)}
-                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm transition border-b border-neutral-800 last:border-b-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500 ${
+                      className={`w-full flex items-center gap-3 px-4 py-2.5 text-left text-sm transition border-b border-slate-200 last:border-b-0 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500 ${
                         selected
                           ? 'bg-amber-500/10 text-amber-300'
                           : disabled
-                            ? 'text-neutral-500 cursor-not-allowed'
-                            : 'text-neutral-300 hover:bg-neutral-800'
+                            ? 'text-slate-400 cursor-not-allowed'
+                            : 'text-slate-700 hover:bg-slate-100'
                       }`}
                     >
                       <span
                         className={`w-4 h-4 rounded border shrink-0 flex items-center justify-center ${
-                          selected ? 'border-amber-500 bg-amber-500' : 'border-neutral-600'
+                          selected ? 'border-amber-500 bg-amber-500' : 'border-slate-300'
                         }`}
                         aria-hidden="true"
                       >
-                        {selected && <span className="text-neutral-950 text-xs font-bold">✓</span>}
+                        {selected && <span className="text-slate-900 text-xs font-bold">✓</span>}
                       </span>
                       <span className="font-mono text-amber-400/70">{job.job_number}</span>
                       <span className="truncate">{job.client_name}</span>
                       {job.event_name && (
-                        <span className="hidden sm:inline truncate text-neutral-500">— {job.event_name}</span>
+                        <span className="hidden sm:inline truncate text-slate-400">— {job.event_name}</span>
                       )}
                     </button>
                   );
@@ -229,7 +229,7 @@ export default function CompareJobsPage() {
           <button
             onClick={compare}
             disabled={selectedIds.length < 2 || loading}
-            className="w-full sm:w-auto flex min-h-11 items-center justify-center gap-2 rounded-lg bg-amber-600 px-6 py-2.5 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-950 transition"
+            className="w-full sm:w-auto flex min-h-11 items-center justify-center gap-2 rounded-lg bg-amber-600 px-6 py-2.5 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-slate-50 transition"
             aria-label={`Compare ${selectedIds.length} selected jobs`}
           >
             {loading ? <Loader2 size={16} className="animate-spin" aria-label="Loading..." /> : <ArrowUpDown size={16} aria-hidden="true" />}
@@ -241,15 +241,15 @@ export default function CompareJobsPage() {
       {/* Comparison results */}
       {results && (
         <section aria-label="Comparison results">
-          <h2 className="text-lg font-semibold text-neutral-200 mb-3">Results</h2>
+          <h2 className="text-lg font-semibold text-slate-800 mb-3">Results</h2>
 
           {/* Mobile: stacked cards */}
           <div className="space-y-4 lg:hidden">
             {results.map((comp, ci) => (
-              <div key={comp.id} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 space-y-2">
+              <div key={comp.id} className="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
                 <div className="flex items-center gap-2 mb-2">
                   <span className="font-mono text-amber-400 text-sm">{comp.job_number}</span>
-                  <span className="text-neutral-100 font-medium text-sm truncate">{comp.client_name}</span>
+                  <span className="text-slate-900 font-medium text-sm truncate">{comp.client_name}</span>
                 </div>
                 {ROW_DEFS.map((row) => {
                   const raw = comp[row.key];
@@ -259,8 +259,8 @@ export default function CompareJobsPage() {
                   const isBest = bestIdx[row.key] === ci;
                   return (
                     <div key={row.key} className="flex items-center justify-between text-sm">
-                      <span className="text-neutral-500">{row.label}</span>
-                      <span className={isBest ? 'text-green-400 font-medium' : 'text-neutral-200'}>
+                      <span className="text-slate-400">{row.label}</span>
+                      <span className={isBest ? 'text-green-400 font-medium' : 'text-slate-800'}>
                         {val}
                       </span>
                     </div>
@@ -271,25 +271,25 @@ export default function CompareJobsPage() {
           </div>
 
           {/* Desktop: side-by-side table */}
-          <div className="hidden lg:block overflow-x-auto rounded-xl border border-neutral-800">
+          <div className="hidden lg:block overflow-x-auto rounded-xl border border-slate-200">
             <table className="w-full text-sm" role="table">
               <thead>
-                <tr className="bg-neutral-900">
-                  <th scope="col" className="sticky left-0 bg-neutral-900 text-left px-4 py-3 text-neutral-500 font-medium border-b border-neutral-800 z-10">
+                <tr className="bg-white">
+                  <th scope="col" className="sticky left-0 bg-white text-left px-4 py-3 text-slate-400 font-medium border-b border-slate-200 z-10">
                     Metric
                   </th>
                   {results.map((comp) => (
-                    <th key={comp.id} scope="col" className="text-left px-4 py-3 border-b border-neutral-800 min-w-[180px]">
+                    <th key={comp.id} scope="col" className="text-left px-4 py-3 border-b border-slate-200 min-w-[180px]">
                       <div className="font-mono text-amber-400">{comp.job_number}</div>
-                      <div className="text-neutral-400 font-normal text-xs truncate">{comp.client_name}</div>
+                      <div className="text-slate-500 font-normal text-xs truncate">{comp.client_name}</div>
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {ROW_DEFS.map((row, ri) => (
-                  <tr key={row.key} className={ri % 2 === 0 ? 'bg-neutral-950' : 'bg-neutral-900/50'}>
-                    <td className="sticky left-0 bg-inherit px-4 py-2 text-neutral-400 font-medium whitespace-nowrap z-10">
+                  <tr key={row.key} className={ri % 2 === 0 ? 'bg-slate-50' : 'bg-slate-100/50'}>
+                    <td className="sticky left-0 bg-inherit px-4 py-2 text-slate-500 font-medium whitespace-nowrap z-10">
                       {row.label}
                     </td>
                     {results.map((comp, ci) => {
@@ -299,7 +299,7 @@ export default function CompareJobsPage() {
                         : String(raw ?? '—');
                       const isBest = bestIdx[row.key] === ci;
                       return (
-                        <td key={comp.id} className={`px-4 py-2 whitespace-nowrap ${isBest ? 'text-green-400 font-medium' : 'text-neutral-200'}`}>
+                        <td key={comp.id} className={`px-4 py-2 whitespace-nowrap ${isBest ? 'text-green-400 font-medium' : 'text-slate-800'}`}>
                           {val}
                         </td>
                       );

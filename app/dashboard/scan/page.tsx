@@ -151,12 +151,12 @@ export default function ScanPage() {
     <div className="max-w-2xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-3 bg-amber-900/30 rounded-xl">
-          <ScanLine className="w-6 h-6 text-amber-400" aria-hidden="true" />
+        <div className="p-3 bg-amber-50 rounded-xl">
+          <ScanLine className="w-6 h-6 text-amber-600" aria-hidden="true" />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-neutral-100">Smart Scan</h1>
-          <p className="text-sm text-neutral-400">
+          <h1 className="text-2xl font-bold text-slate-900">Smart Scan</h1>
+          <p className="text-sm text-slate-500">
             Scan documents to auto-fill jobs, invoices, and expenses
           </p>
         </div>
@@ -164,13 +164,13 @@ export default function ScanPage() {
 
       {/* Scan area */}
       {!scanResult && !success && (
-        <div className="border-2 border-dashed border-neutral-700 rounded-2xl p-12 text-center space-y-4 hover:border-amber-600/50 transition">
-          <Camera className="w-12 h-12 text-neutral-500 mx-auto" aria-hidden="true" />
+        <div className="border-2 border-dashed border-slate-300 rounded-2xl p-12 text-center space-y-4 hover:border-amber-400 transition">
+          <Camera className="w-12 h-12 text-slate-400 mx-auto" aria-hidden="true" />
           <div>
-            <p className="text-neutral-200 font-medium">
+            <p className="text-slate-900 font-medium">
               Take a photo or select files
             </p>
-            <p className="text-sm text-neutral-400 mt-1">
+            <p className="text-sm text-slate-500 mt-1">
               Supports pay stubs, call sheets, invoices, receipts, and more (up to 10 files)
             </p>
           </div>
@@ -185,7 +185,7 @@ export default function ScanPage() {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-900/30 text-red-400 px-4 py-3 rounded-xl text-sm" role="alert">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm" role="alert">
           {error}
           <button
             onClick={() => setError('')}
@@ -198,7 +198,7 @@ export default function ScanPage() {
 
       {/* Scan result */}
       {scanResult && (
-        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6">
+        <div className="bg-white border border-slate-200 rounded-2xl p-6">
           <ScanResultRouter
             result={scanResult}
             onCreateTransaction={handleCreateTransaction}
@@ -209,7 +209,7 @@ export default function ScanPage() {
             onDismiss={() => setScanResult(null)}
           />
           {creating && (
-            <div className="mt-4 text-center text-sm text-amber-400">
+            <div className="mt-4 text-center text-sm text-amber-600">
               Creating...
             </div>
           )}
@@ -218,14 +218,14 @@ export default function ScanPage() {
 
       {/* Success */}
       {success && (
-        <div className="bg-green-900/30 border border-green-800 rounded-2xl p-6 text-center space-y-3">
-          <p className="text-green-400 font-medium">
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center space-y-3">
+          <p className="text-green-700 font-medium">
             {success.type} created successfully!
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <button
               onClick={() => router.push(success.href)}
-              className="flex items-center justify-center gap-1.5 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-500 transition min-h-11"
+              className="flex items-center justify-center gap-1.5 px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-medium hover:bg-green-700 transition min-h-11"
             >
               <ExternalLink className="w-4 h-4" aria-hidden="true" />
               View {success.type}
@@ -241,9 +241,9 @@ export default function ScanPage() {
       )}
 
       {/* Tips */}
-      <div className="bg-neutral-900 border border-neutral-800 rounded-2xl p-6 space-y-3">
-        <h3 className="font-semibold text-neutral-100">Tips for best results</h3>
-        <ul className="space-y-2 text-sm text-neutral-400">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-3">
+        <h3 className="font-semibold text-slate-900">Tips for best results</h3>
+        <ul className="space-y-2 text-sm text-slate-500">
           <li>- Use good lighting and lay documents flat</li>
           <li>- Avoid glare on thermal receipt paper</li>
           <li>- Fill the frame with the document text</li>

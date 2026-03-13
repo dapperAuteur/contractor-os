@@ -204,22 +204,22 @@ export default function JobDetailPage() {
   /* ─── Toggle Public / Share Contacts ────────────────── */
   async function togglePublic() {
     const newVal = !job?.is_public;
+    setJob((prev) => prev ? { ...prev, is_public: newVal } : prev);
     await offlineFetch(`/api/contractor/jobs/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ is_public: newVal }),
     });
-    loadJob();
   }
 
   async function toggleShareContacts() {
     const newVal = !job?.share_contacts;
+    setJob((prev) => prev ? { ...prev, share_contacts: newVal } : prev);
     await offlineFetch(`/api/contractor/jobs/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ share_contacts: newVal }),
     });
-    loadJob();
   }
 
   /* ─── Status Update ─────────────────────────────────── */
@@ -273,27 +273,27 @@ export default function JobDetailPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-24">
-        <Loader2 className="animate-spin text-neutral-500" size={32} aria-label="Loading job details" />
+        <Loader2 className="animate-spin text-slate-400" size={32} aria-label="Loading job details" />
       </div>
     );
   }
 
   if (!job) {
     return (
-      <div className="p-8 text-center text-neutral-500">
+      <div className="p-8 text-center text-slate-400">
         Job not found. <Link href="/dashboard/contractor" className="text-amber-400">Go back</Link>
       </div>
     );
   }
 
-  const inputClass = 'w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none';
+  const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none';
   const fmt = (n: number) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const fmtTime = (ts: string | null) => ts ? new Date(ts).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '—';
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4">
       {/* Header */}
-      <Link href="/dashboard/contractor" className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-200 min-h-11 py-2" aria-label="Back to Jobs">
+      <Link href="/dashboard/contractor" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 min-h-11 py-2" aria-label="Back to Jobs">
         <ArrowLeft size={14} aria-hidden="true" /> Jobs
       </Link>
 
@@ -304,7 +304,7 @@ export default function JobDetailPage() {
             {statusEditing ? (
               <div className="flex items-center gap-1">
                 <select
-                  className="rounded border border-neutral-700 bg-neutral-900 px-2 py-2 text-sm text-neutral-100"
+                  className="rounded border border-slate-300 bg-white px-2 py-2 text-sm text-slate-900"
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value)}
                   aria-label="Change job status"
@@ -314,7 +314,7 @@ export default function JobDetailPage() {
                   ))}
                 </select>
                 <button onClick={updateStatus} className="p-2 text-green-400 hover:text-green-300 min-h-11 min-w-11 flex items-center justify-center" aria-label="Confirm status change"><Check size={16} /></button>
-                <button onClick={() => setStatusEditing(false)} className="p-2 text-neutral-500 hover:text-neutral-300 min-h-11 min-w-11 flex items-center justify-center" aria-label="Cancel status change"><X size={16} /></button>
+                <button onClick={() => setStatusEditing(false)} className="p-2 text-slate-400 hover:text-slate-700 min-h-11 min-w-11 flex items-center justify-center" aria-label="Cancel status change"><X size={16} /></button>
               </div>
             ) : (
               <button onClick={() => { setNewStatus(job.status); setStatusEditing(true); }} aria-label={`Change job status, currently ${job.status.replace('_', ' ')}`} className="min-h-11 flex items-center">
@@ -322,11 +322,11 @@ export default function JobDetailPage() {
               </button>
             )}
           </div>
-          <h1 className="text-xl font-bold text-neutral-100 mt-1">
+          <h1 className="text-xl font-bold text-slate-900 mt-1">
             {job.client_name}
-            {job.event_name && <span className="text-neutral-400 font-normal"> — {job.event_name}</span>}
+            {job.event_name && <span className="text-slate-500 font-normal"> — {job.event_name}</span>}
           </h1>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-neutral-500 mt-1">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-400 mt-1">
             {job.location_name && <span>{job.location_name}</span>}
             {job.union_local && <span>{job.union_local}</span>}
             {job.department && <span>{job.department}</span>}
@@ -345,7 +345,7 @@ export default function JobDetailPage() {
           </button>
           <Link
             href={`/dashboard/contractor/jobs/${id}/edit`}
-            className="flex items-center gap-1.5 rounded-lg border border-neutral-700 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
             aria-label="Edit job details"
           >
             <Edit2 size={14} aria-hidden="true" /> Edit
@@ -355,7 +355,7 @@ export default function JobDetailPage() {
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 ${
               job.is_public
                 ? 'border-green-600/50 text-green-400 hover:bg-green-600/10'
-                : 'border-neutral-700 text-neutral-400 hover:bg-neutral-800'
+                : 'border-slate-300 text-slate-500 hover:bg-slate-100'
             }`}
             aria-label={job.is_public ? 'Job is public — click to make private' : 'Job is private — click to post on board'}
             title={job.is_public ? 'Posted on board — click to make private' : 'Click to post on job board'}
@@ -367,17 +367,17 @@ export default function JobDetailPage() {
 
         {/* Share controls — shown when job is public */}
         {job.is_public && (
-          <div className="flex items-center gap-3 text-xs text-neutral-500">
+          <div className="flex items-center gap-3 text-xs text-slate-400">
             <span>This job is visible on the board.</span>
             <label className="flex items-center gap-1.5 cursor-pointer">
               <input
                 type="checkbox"
                 checked={job.share_contacts}
                 onChange={toggleShareContacts}
-                className="rounded border-neutral-600 bg-neutral-800 text-amber-500 focus:ring-amber-500 focus:ring-offset-neutral-950"
+                className="rounded border-slate-300 bg-slate-100 text-amber-500 focus:ring-amber-500 focus:ring-offset-slate-50"
                 aria-label="Share contacts with accepted replacement"
               />
-              <span className="text-neutral-400">Share contacts when accepted</span>
+              <span className="text-slate-500">Share contacts when accepted</span>
             </label>
           </div>
         )}
@@ -387,7 +387,7 @@ export default function JobDetailPage() {
       {summary && <JobSummaryCards summary={summary} />}
 
       {/* Tabs */}
-      <div className="flex gap-1 overflow-x-auto border-b border-neutral-800 pb-0" role="tablist" aria-label="Job details sections">
+      <div className="flex gap-1 overflow-x-auto border-b border-slate-200 pb-0" role="tablist" aria-label="Job details sections">
         {TABS.map((t) => (
           <button
             key={t.id}
@@ -398,7 +398,7 @@ export default function JobDetailPage() {
             className={`flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-2.5 text-sm transition-colors min-h-11 ${
               tab === t.id
                 ? 'border-amber-500 text-amber-400'
-                : 'border-transparent text-neutral-500 hover:text-neutral-300'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
             <t.icon size={14} aria-hidden="true" /> {t.label}
@@ -410,26 +410,26 @@ export default function JobDetailPage() {
       {tab === 'time' && (
         <div className="space-y-4">
           {/* Add Time Entry Form */}
-          <form onSubmit={addTimeEntry} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 space-y-3" aria-label="Add time entry">
+          <form onSubmit={addTimeEntry} className="rounded-xl border border-slate-200 bg-white p-4 space-y-3" aria-label="Add time entry">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:flex lg:flex-wrap lg:items-end lg:gap-3">
               <div className="col-span-2 sm:col-span-1">
-                <label htmlFor="te-date" className="block text-sm text-neutral-400 mb-1">Date <span aria-hidden="true">*</span></label>
+                <label htmlFor="te-date" className="block text-sm text-slate-500 mb-1">Date <span aria-hidden="true">*</span></label>
                 <input id="te-date" type="date" className={inputClass} value={teForm.work_date} onChange={(e) => setTeForm(p => ({ ...p, work_date: e.target.value }))} required aria-required="true" />
               </div>
               <div>
-                <label htmlFor="te-total" className="block text-sm text-neutral-400 mb-1">Total Hrs</label>
+                <label htmlFor="te-total" className="block text-sm text-slate-500 mb-1">Total Hrs</label>
                 <input id="te-total" type="number" step="0.25" className={inputClass} value={teForm.total_hours} onChange={(e) => setTeForm(p => ({ ...p, total_hours: e.target.value }))} aria-label="Total hours" />
               </div>
               <div>
-                <label htmlFor="te-st" className="block text-sm text-neutral-400 mb-1">ST Hrs</label>
+                <label htmlFor="te-st" className="block text-sm text-slate-500 mb-1">ST Hrs</label>
                 <input id="te-st" type="number" step="0.25" className={inputClass} value={teForm.st_hours} onChange={(e) => setTeForm(p => ({ ...p, st_hours: e.target.value }))} aria-label="Straight time hours" />
               </div>
               <div>
-                <label htmlFor="te-ot" className="block text-sm text-neutral-400 mb-1">OT Hrs</label>
+                <label htmlFor="te-ot" className="block text-sm text-slate-500 mb-1">OT Hrs</label>
                 <input id="te-ot" type="number" step="0.25" className={inputClass} value={teForm.ot_hours} onChange={(e) => setTeForm(p => ({ ...p, ot_hours: e.target.value }))} aria-label="Overtime hours" />
               </div>
               <div className="col-span-2 sm:col-span-1 sm:flex-1 sm:min-w-30">
-                <label htmlFor="te-notes" className="block text-sm text-neutral-400 mb-1">Notes</label>
+                <label htmlFor="te-notes" className="block text-sm text-slate-500 mb-1">Notes</label>
                 <input id="te-notes" className={inputClass} placeholder="Optional" value={teForm.notes} onChange={(e) => setTeForm(p => ({ ...p, notes: e.target.value }))} aria-label="Time entry notes" />
               </div>
             </div>
@@ -440,15 +440,15 @@ export default function JobDetailPage() {
 
           {/* Time Entries List */}
           {timeEntries.length === 0 ? (
-            <p className="text-sm text-neutral-500 text-center py-6">No time entries yet.</p>
+            <p className="text-sm text-slate-400 text-center py-6">No time entries yet.</p>
           ) : (
             <>
             {/* Mobile card view */}
             <div className="space-y-2 lg:hidden">
               {timeEntries.map((te) => (
-                <div key={te.id} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 space-y-2">
+                <div key={te.id} className="rounded-xl border border-slate-200 bg-white p-4 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-neutral-100">{new Date(te.work_date + 'T00:00').toLocaleDateString()}</span>
+                    <span className="text-sm font-medium text-slate-900">{new Date(te.work_date + 'T00:00').toLocaleDateString()}</span>
                     <div className="flex items-center gap-2">
                       {te.invoice_id ? (
                         <Link href={`/dashboard/finance/invoices/${te.invoice_id}`} className="text-xs text-green-400 hover:underline px-2 py-1" aria-label="View invoice">View Invoice</Link>
@@ -457,18 +457,18 @@ export default function JobDetailPage() {
                           Generate
                         </button>
                       )}
-                      <button onClick={() => deleteTimeEntry(te.id)} className="p-2 text-neutral-500 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete time entry for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
+                      <button onClick={() => deleteTimeEntry(te.id)} className="p-2 text-slate-400 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete time entry for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
                         <Trash2 size={16} />
                       </button>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-sm">
-                    <div><span className="text-neutral-500 text-xs">Total</span><div className="text-neutral-100 font-medium">{te.total_hours ?? '—'}h</div></div>
-                    <div><span className="text-neutral-500 text-xs">ST</span><div className="text-neutral-400">{te.st_hours ?? '—'}h</div></div>
-                    <div><span className="text-neutral-500 text-xs">OT</span><div className="text-neutral-400">{te.ot_hours ?? '—'}h</div></div>
+                    <div><span className="text-slate-400 text-xs">Total</span><div className="text-slate-900 font-medium">{te.total_hours ?? '—'}h</div></div>
+                    <div><span className="text-slate-400 text-xs">ST</span><div className="text-slate-500">{te.st_hours ?? '—'}h</div></div>
+                    <div><span className="text-slate-400 text-xs">OT</span><div className="text-slate-500">{te.ot_hours ?? '—'}h</div></div>
                   </div>
                   {(te.time_in || te.time_out) && (
-                    <div className="text-xs text-neutral-500">
+                    <div className="text-xs text-slate-400">
                       {fmtTime(te.adjusted_in || te.time_in)} – {fmtTime(te.adjusted_out || te.time_out)}
                     </div>
                   )}
@@ -478,7 +478,7 @@ export default function JobDetailPage() {
             {/* Desktop table view */}
             <div className="hidden lg:block overflow-x-auto">
               <table className="w-full text-sm" aria-label="Time entries">
-                <thead className="text-neutral-500 text-xs border-b border-neutral-800">
+                <thead className="text-slate-400 text-xs border-b border-slate-200">
                   <tr>
                     <th scope="col" className="px-3 py-2 text-left">Date</th>
                     <th scope="col" className="px-3 py-2 text-right">In</th>
@@ -492,13 +492,13 @@ export default function JobDetailPage() {
                 </thead>
                 <tbody>
                   {timeEntries.map((te) => (
-                    <tr key={te.id} className="border-b border-neutral-800/50 hover:bg-neutral-800/30">
-                      <td className="px-3 py-2 text-neutral-100">{new Date(te.work_date + 'T00:00').toLocaleDateString()}</td>
-                      <td className="px-3 py-2 text-right text-neutral-400">{fmtTime(te.adjusted_in || te.time_in)}</td>
-                      <td className="px-3 py-2 text-right text-neutral-400">{fmtTime(te.adjusted_out || te.time_out)}</td>
-                      <td className="px-3 py-2 text-right text-neutral-100 font-medium">{te.total_hours ?? '—'}</td>
-                      <td className="px-3 py-2 text-right text-neutral-400">{te.st_hours ?? '—'}</td>
-                      <td className="px-3 py-2 text-right text-neutral-400">{te.ot_hours ?? '—'}</td>
+                    <tr key={te.id} className="border-b border-slate-200/50 hover:bg-slate-100/30">
+                      <td className="px-3 py-2 text-slate-900">{new Date(te.work_date + 'T00:00').toLocaleDateString()}</td>
+                      <td className="px-3 py-2 text-right text-slate-500">{fmtTime(te.adjusted_in || te.time_in)}</td>
+                      <td className="px-3 py-2 text-right text-slate-500">{fmtTime(te.adjusted_out || te.time_out)}</td>
+                      <td className="px-3 py-2 text-right text-slate-900 font-medium">{te.total_hours ?? '—'}</td>
+                      <td className="px-3 py-2 text-right text-slate-500">{te.st_hours ?? '—'}</td>
+                      <td className="px-3 py-2 text-right text-slate-500">{te.ot_hours ?? '—'}</td>
                       <td className="px-3 py-2 text-center">
                         {te.invoice_id ? (
                           <Link href={`/dashboard/finance/invoices/${te.invoice_id}`} className="text-xs text-green-400 hover:underline" aria-label="View invoice">View</Link>
@@ -514,7 +514,7 @@ export default function JobDetailPage() {
                         )}
                       </td>
                       <td className="px-3 py-2">
-                        <button onClick={() => deleteTimeEntry(te.id)} className="p-2 text-neutral-500 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete time entry for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
+                        <button onClick={() => deleteTimeEntry(te.id)} className="p-2 text-slate-400 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete time entry for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
                           <Trash2 size={16} />
                         </button>
                       </td>
@@ -544,24 +544,24 @@ export default function JobDetailPage() {
       {tab === 'invoices' && (
         <div className="space-y-2">
           {invoices.length === 0 ? (
-            <p className="text-sm text-neutral-500 text-center py-6">No invoices linked to this job.</p>
+            <p className="text-sm text-slate-400 text-center py-6">No invoices linked to this job.</p>
           ) : (
             invoices.map((inv) => (
               <Link
                 key={inv.id}
                 href={`/dashboard/finance/invoices/${inv.id}`}
-                className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700"
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300"
               >
                 <div>
-                  <span className="font-mono text-sm text-neutral-100">{inv.invoice_number || inv.id.slice(0, 8)}</span>
-                  <span className={`ml-2 text-xs ${inv.status === 'paid' ? 'text-green-400' : inv.status === 'draft' ? 'text-neutral-500' : 'text-yellow-400'}`}>
+                  <span className="font-mono text-sm text-slate-900">{inv.invoice_number || inv.id.slice(0, 8)}</span>
+                  <span className={`ml-2 text-xs ${inv.status === 'paid' ? 'text-green-400' : inv.status === 'draft' ? 'text-slate-400' : 'text-yellow-400'}`}>
                     {inv.status}
                   </span>
                   {inv.custom_fields?.work_date && (
-                    <span className="ml-2 text-xs text-neutral-500">{inv.custom_fields.work_date}</span>
+                    <span className="ml-2 text-xs text-slate-400">{inv.custom_fields.work_date}</span>
                   )}
                 </div>
-                <span className="text-neutral-100 font-medium">{fmt(inv.total)}</span>
+                <span className="text-slate-900 font-medium">{fmt(inv.total)}</span>
               </Link>
             ))
           )}
@@ -570,7 +570,7 @@ export default function JobDetailPage() {
 
       {tab === 'expenses' && (
         <div className="text-center py-6">
-          <p className="text-sm text-neutral-500 mb-2">View expenses linked to this job in the Finance module.</p>
+          <p className="text-sm text-slate-400 mb-2">View expenses linked to this job in the Finance module.</p>
           <Link href={`/dashboard/finance?job_id=${id}`} className="text-sm text-amber-400 hover:underline">
             Open Finance <DollarSign size={12} className="inline" aria-hidden="true" />
           </Link>
@@ -579,7 +579,7 @@ export default function JobDetailPage() {
 
       {tab === 'mileage' && (
         <div className="text-center py-6">
-          <p className="text-sm text-neutral-500 mb-2">View trips linked to this job in the Travel module.</p>
+          <p className="text-sm text-slate-400 mb-2">View trips linked to this job in the Travel module.</p>
           <Link href={`/dashboard/travel?job_id=${id}`} className="text-sm text-amber-400 hover:underline">
             Open Travel <Car size={12} className="inline" aria-hidden="true" />
           </Link>
@@ -589,21 +589,21 @@ export default function JobDetailPage() {
       {tab === 'documents' && (
         <div className="space-y-4">
           {/* Scan button for this job */}
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-            <h3 className="text-sm font-medium text-neutral-200 mb-3">Scan Document</h3>
+          <div className="rounded-xl border border-slate-200 bg-white p-4">
+            <h3 className="text-sm font-medium text-slate-800 mb-3">Scan Document</h3>
             <ScanButton onResult={handleScanResult} />
-            <p className="text-xs text-neutral-500 mt-2">Scan pay stubs, call sheets, invoices, or receipts. Extracted data is saved to this job.</p>
+            <p className="text-xs text-slate-400 mt-2">Scan pay stubs, call sheets, invoices, or receipts. Extracted data is saved to this job.</p>
           </div>
 
           {/* Add document form */}
           {showDocForm ? (
-            <form onSubmit={addDocument} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 space-y-3" aria-label="Add document">
+            <form onSubmit={addDocument} className="rounded-xl border border-slate-200 bg-white p-4 space-y-3" aria-label="Add document">
               <div>
-                <label htmlFor="doc-title" className="block text-sm text-neutral-400 mb-1">Title</label>
+                <label htmlFor="doc-title" className="block text-sm text-slate-500 mb-1">Title</label>
                 <input id="doc-title" className={inputClass} value={docForm.title} onChange={(e) => setDocForm(p => ({ ...p, title: e.target.value }))} required />
               </div>
               <div>
-                <label htmlFor="doc-category" className="block text-sm text-neutral-400 mb-1">Category</label>
+                <label htmlFor="doc-category" className="block text-sm text-slate-500 mb-1">Category</label>
                 <select id="doc-category" className={inputClass} value={docForm.category} onChange={(e) => setDocForm(p => ({ ...p, category: e.target.value }))}>
                   {DOC_CATEGORIES.filter(c => c.value !== 'scan').map(c => (
                     <option key={c.value} value={c.value}>{c.label}</option>
@@ -611,20 +611,20 @@ export default function JobDetailPage() {
                 </select>
               </div>
               <div>
-                <label htmlFor="doc-desc" className="block text-sm text-neutral-400 mb-1">Description</label>
+                <label htmlFor="doc-desc" className="block text-sm text-slate-500 mb-1">Description</label>
                 <textarea id="doc-desc" className={inputClass} rows={3} value={docForm.description} onChange={(e) => setDocForm(p => ({ ...p, description: e.target.value }))} />
               </div>
               <div className="flex gap-2">
                 <button type="submit" disabled={docSaving} className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
                   {docSaving ? <Loader2 size={14} className="animate-spin" /> : 'Save'}
                 </button>
-                <button type="button" onClick={() => setShowDocForm(false)} className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11">Cancel</button>
+                <button type="button" onClick={() => setShowDocForm(false)} className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 min-h-11">Cancel</button>
               </div>
             </form>
           ) : (
             <button
               onClick={() => setShowDocForm(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-dashed border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:border-amber-600 hover:text-amber-400 min-h-11 w-full justify-center"
+              className="flex items-center gap-1.5 rounded-lg border border-dashed border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:border-amber-600 hover:text-amber-400 min-h-11 w-full justify-center"
             >
               <Plus size={14} aria-hidden="true" /> Add Note / Incident Report
             </button>
@@ -632,16 +632,16 @@ export default function JobDetailPage() {
 
           {/* Document list */}
           {documents.length === 0 ? (
-            <p className="text-sm text-neutral-500 text-center py-4">No documents yet.</p>
+            <p className="text-sm text-slate-400 text-center py-4">No documents yet.</p>
           ) : (
             <div className="space-y-2">
               {documents.map((doc) => {
                 const cat = DOC_CATEGORIES.find(c => c.value === (doc.doc_category || doc.doc_type));
                 const CatIcon = cat?.icon || FileText;
                 return (
-                  <div key={doc.id} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+                  <div key={doc.id} className="rounded-xl border border-slate-200 bg-white p-4">
                     <div className="flex items-start gap-3">
-                      <CatIcon size={16} className="text-neutral-500 mt-0.5 shrink-0" aria-hidden="true" />
+                      <CatIcon size={16} className="text-slate-400 mt-0.5 shrink-0" aria-hidden="true" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           {doc.url ? (
@@ -649,22 +649,22 @@ export default function JobDetailPage() {
                               {doc.title || doc.name}
                             </a>
                           ) : (
-                            <span className="text-sm font-medium text-neutral-100 truncate">{doc.title || doc.name}</span>
+                            <span className="text-sm font-medium text-slate-900 truncate">{doc.title || doc.name}</span>
                           )}
-                          <span className="text-xs text-neutral-500 shrink-0">{cat?.label || doc.doc_type}</span>
+                          <span className="text-xs text-slate-400 shrink-0">{cat?.label || doc.doc_type}</span>
                         </div>
                         {doc.description && (
-                          <p className="text-xs text-neutral-400 mt-1">{doc.description}</p>
+                          <p className="text-xs text-slate-500 mt-1">{doc.description}</p>
                         )}
                         {doc.metadata && doc.doc_category === 'scan' && (
                           <details className="mt-2">
                             <summary className="text-xs text-amber-400 cursor-pointer hover:underline">View extracted data</summary>
-                            <pre className="mt-1 text-xs text-neutral-400 bg-neutral-800 rounded-lg p-3 overflow-x-auto max-h-40">
+                            <pre className="mt-1 text-xs text-slate-500 bg-slate-100 rounded-lg p-3 overflow-x-auto max-h-40">
                               {JSON.stringify(doc.metadata, null, 2)}
                             </pre>
                           </details>
                         )}
-                        <span className="text-xs text-neutral-500 mt-1 block">{new Date(doc.created_at).toLocaleDateString()}</span>
+                        <span className="text-xs text-slate-400 mt-1 block">{new Date(doc.created_at).toLocaleDateString()}</span>
                       </div>
                     </div>
                   </div>
@@ -678,17 +678,17 @@ export default function JobDetailPage() {
       {tab === 'contacts' && (
         <div className="space-y-3">
           {job.poc_name && (
-            <div className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
               <div>
-                <div className="text-xs text-neutral-500">Point of Contact</div>
-                <div className="text-neutral-100 font-medium">{job.poc_name}</div>
+                <div className="text-xs text-slate-400">Point of Contact</div>
+                <div className="text-slate-900 font-medium">{job.poc_name}</div>
               </div>
               {job.poc_phone && (
                 <div className="flex gap-2">
-                  <a href={`tel:${job.poc_phone}`} className="rounded-full bg-neutral-800 p-3 text-neutral-400 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.poc_name}`}>
+                  <a href={`tel:${job.poc_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.poc_name}`}>
                     <Phone size={16} aria-hidden="true" />
                   </a>
-                  <a href={`sms:${job.poc_phone}`} className="rounded-full bg-neutral-800 p-3 text-neutral-400 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.poc_name}`}>
+                  <a href={`sms:${job.poc_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.poc_name}`}>
                     <MessageSquare size={16} aria-hidden="true" />
                   </a>
                 </div>
@@ -696,17 +696,17 @@ export default function JobDetailPage() {
             </div>
           )}
           {job.crew_coordinator_name && (
-            <div className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
               <div>
-                <div className="text-xs text-neutral-500">Crew Coordinator</div>
-                <div className="text-neutral-100 font-medium">{job.crew_coordinator_name}</div>
+                <div className="text-xs text-slate-400">Crew Coordinator</div>
+                <div className="text-slate-900 font-medium">{job.crew_coordinator_name}</div>
               </div>
               {job.crew_coordinator_phone && (
                 <div className="flex gap-2">
-                  <a href={`tel:${job.crew_coordinator_phone}`} className="rounded-full bg-neutral-800 p-3 text-neutral-400 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.crew_coordinator_name}`}>
+                  <a href={`tel:${job.crew_coordinator_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.crew_coordinator_name}`}>
                     <Phone size={16} aria-hidden="true" />
                   </a>
-                  <a href={`sms:${job.crew_coordinator_phone}`} className="rounded-full bg-neutral-800 p-3 text-neutral-400 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.crew_coordinator_name}`}>
+                  <a href={`sms:${job.crew_coordinator_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.crew_coordinator_name}`}>
                     <MessageSquare size={16} aria-hidden="true" />
                   </a>
                 </div>
@@ -714,7 +714,7 @@ export default function JobDetailPage() {
             </div>
           )}
           {!job.poc_name && !job.crew_coordinator_name && (
-            <p className="text-sm text-neutral-500 text-center py-6">No contacts set for this job.</p>
+            <p className="text-sm text-slate-400 text-center py-6">No contacts set for this job.</p>
           )}
         </div>
       )}

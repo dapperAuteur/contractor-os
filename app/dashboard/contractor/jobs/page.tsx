@@ -52,7 +52,7 @@ export default function JobsListPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-4 p-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-neutral-100">All Jobs</h1>
+        <h1 className="text-2xl font-bold text-slate-900">All Jobs</h1>
         <Link
           href="/dashboard/contractor/jobs/new"
           className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-3 py-2.5 text-sm font-medium text-white hover:bg-amber-500 min-h-11"
@@ -65,23 +65,23 @@ export default function JobsListPage() {
       {/* Filters */}
       <div className="flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" aria-hidden="true" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
           <input
             type="text"
             placeholder="Search jobs..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             aria-label="Search jobs by number, client, event, or location"
-            className="w-full rounded-lg border border-neutral-700 bg-neutral-900 py-2.5 pl-9 pr-3 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none"
+            className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none"
           />
         </div>
         <div className="flex items-center gap-1.5">
-          <Filter size={14} className="text-neutral-500" aria-hidden="true" />
+          <Filter size={14} className="text-slate-400" aria-hidden="true" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             aria-label="Filter by job status"
-            className="rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none"
+            className="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none"
           >
             {STATUSES.map((s) => (
               <option key={s} value={s}>
@@ -95,10 +95,10 @@ export default function JobsListPage() {
       {/* Jobs List */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading jobs" />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading jobs" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           {search ? 'No jobs match your search.' : 'No jobs found.'}
         </div>
       ) : (
@@ -107,24 +107,24 @@ export default function JobsListPage() {
             <Link
               key={job.id}
               href={`/dashboard/contractor/jobs/${job.id}`}
-              className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-4 hover:border-neutral-700 transition-colors"
+              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition-colors"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="font-mono text-sm text-amber-400">{job.job_number}</span>
                   <JobStatusBadge status={job.status} />
                   {job.union_local && (
-                    <span className="text-xs text-neutral-500">{job.union_local}</span>
+                    <span className="text-xs text-slate-400">{job.union_local}</span>
                   )}
                   {job.department && (
-                    <span className="text-xs text-neutral-500">· {job.department}</span>
+                    <span className="text-xs text-slate-400">· {job.department}</span>
                   )}
                 </div>
-                <div className="mt-1 text-neutral-100 font-medium truncate">
+                <div className="mt-1 text-slate-900 font-medium truncate">
                   {job.client_name}
-                  {job.event_name && <span className="text-neutral-400"> — {job.event_name}</span>}
+                  {job.event_name && <span className="text-slate-500"> — {job.event_name}</span>}
                 </div>
-                <div className="mt-0.5 text-xs text-neutral-500">
+                <div className="mt-0.5 text-xs text-slate-400">
                   {job.location_name && <span>{job.location_name} · </span>}
                   {job.start_date && <span>{new Date(job.start_date + 'T00:00').toLocaleDateString()}</span>}
                   {job.end_date && job.end_date !== job.start_date && (

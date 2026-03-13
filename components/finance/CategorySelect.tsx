@@ -60,13 +60,13 @@ export default function CategorySelect<T extends { id: string; name: string }>({
 
   return (
     <div className={className}>
-      <label htmlFor={selectId} className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+      <label htmlFor={selectId} className="block text-xs font-medium text-slate-600 mb-1">{label}</label>
       <div className="flex items-center gap-1.5">
         <select
           id={selectId}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900"
+          className="flex-1 border border-slate-300 rounded-lg px-3 py-2 text-sm text-slate-900"
         >
           <option value="">None</option>
           {categories.map((c) => (
@@ -76,14 +76,14 @@ export default function CategorySelect<T extends { id: string; name: string }>({
         <button
           type="button"
           onClick={() => setShowForm((p) => !p)}
-          className="shrink-0 p-2 rounded-lg border text-gray-500 hover:bg-gray-50 transition"
+          className="shrink-0 p-2 rounded-lg border text-slate-500 hover:bg-slate-50 transition"
           aria-label={showForm ? 'Close new category form' : 'Add new category'}
         >
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
         </button>
       </div>
       {showForm && (
-        <form onSubmit={handleCreate} className="mt-2 p-3 border rounded-lg bg-gray-50 space-y-2">
+        <form onSubmit={handleCreate} className="mt-2 p-3 border rounded-lg bg-slate-50 space-y-2">
           <div className="flex items-center gap-2">
             <input
               type="text"
@@ -92,7 +92,7 @@ export default function CategorySelect<T extends { id: string; name: string }>({
               aria-label="New category name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="flex-1 px-2.5 py-1.5 text-sm border border-gray-300 rounded-lg bg-white text-gray-900"
+              className="flex-1 px-2.5 py-1.5 text-sm border border-slate-300 rounded-lg bg-white text-slate-900"
               placeholder="Category name"
               autoFocus
             />

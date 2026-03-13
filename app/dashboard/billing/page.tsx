@@ -93,7 +93,7 @@ export default function BillingPage() {
       <div className="flex flex-col items-center justify-center py-20 gap-3">
         <div className="animate-spin h-8 w-8 border-4 border-amber-600 border-t-transparent rounded-full" />
         {syncLoading && (
-          <p className="text-sm text-gray-500">Confirming your payment&hellip;</p>
+          <p className="text-sm text-slate-500">Confirming your payment&hellip;</p>
         )}
       </div>
     );
@@ -101,8 +101,8 @@ export default function BillingPage() {
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Billing</h1>
-      <p className="text-gray-500 mb-8">Manage your subscription and membership.</p>
+      <h1 className="text-3xl font-bold text-slate-900 mb-2">Billing</h1>
+      <p className="text-slate-500 mb-8">Manage your subscription and membership.</p>
 
       {/* Sync error banner */}
       {syncError && (
@@ -121,15 +121,15 @@ export default function BillingPage() {
       )}
 
       {/* Current plan */}
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Current Plan</h2>
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
+        <h2 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Current Plan</h2>
 
         {isAdmin && (
           <div className="flex items-center gap-3">
             <Shield className="w-5 h-5 text-amber-600 shrink-0" />
             <div>
               <span className="text-lg font-bold text-amber-700">Admin — Full Access</span>
-              <p className="text-sm text-gray-500 mt-1">You have unrestricted access to all features.</p>
+              <p className="text-sm text-slate-500 mt-1">You have unrestricted access to all features.</p>
             </div>
           </div>
         )}
@@ -137,7 +137,7 @@ export default function BillingPage() {
         {!isAdmin && status === 'free' && (
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <span className="inline-flex items-center gap-2 text-lg font-bold text-gray-700">
+              <span className="inline-flex items-center gap-2 text-lg font-bold text-slate-700">
                 Free
               </span>
               <p className="text-sm text-neutral-400 mt-1">Blog and Academy access only.</p>
@@ -164,17 +164,17 @@ export default function BillingPage() {
                   Cancels on {new Date(cancelAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
               ) : subscriptionExpiresAt ? (
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-slate-500 mt-1">
                   Renews on {new Date(subscriptionExpiresAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
               ) : (
-                <p className="text-sm text-gray-500 mt-1">Full access. Cancel anytime via the portal.</p>
+                <p className="text-sm text-slate-500 mt-1">Full access. Cancel anytime via the portal.</p>
               )}
             </div>
             <button
               onClick={openPortal}
               disabled={portalLoading}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-semibold disabled:opacity-60"
+              className="flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors text-sm font-semibold disabled:opacity-60"
             >
               {portalLoading ? (
                 <span className="animate-spin inline-block w-4 h-4 border-2 border-gray-500 border-t-transparent rounded-full" />
@@ -192,7 +192,7 @@ export default function BillingPage() {
               <CheckCircle className="w-5 h-5" />
               Lifetime Member
             </span>
-            <p className="text-sm text-gray-500 mt-1">Full access forever. No recurring charges.</p>
+            <p className="text-sm text-slate-500 mt-1">Full access forever. No recurring charges.</p>
           </div>
         )}
 
@@ -256,12 +256,12 @@ export default function BillingPage() {
             <Shirt className="w-5 h-5 text-lime-400 shrink-0 mt-0.5" />
             <div>
               <h3 className="font-bold mb-1">Upgrade to Lifetime for $100</h3>
-              <p className="text-sm text-gray-400 mb-4">
+              <p className="text-sm text-slate-400 mb-4">
                 Pay once, own it forever — plus get a free Work.WitUS shirt from AwesomeWebStore.com.
               </p>
               <Link
                 href="/pricing"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-lime-500 text-gray-900 rounded-lg hover:bg-lime-400 transition-colors text-sm font-bold"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-lime-500 text-slate-900 rounded-lg hover:bg-lime-400 transition-colors text-sm font-bold"
               >
                 View Lifetime Plan
                 <ArrowRight className="w-4 h-4" />
@@ -272,8 +272,8 @@ export default function BillingPage() {
       )}
 
       {/* Policies */}
-      <div className="rounded-xl bg-gray-50 border border-gray-200 px-5 py-4">
-        <p className="text-sm text-gray-500 font-medium">{POLICIES}</p>
+      <div className="rounded-xl bg-slate-50 border border-slate-200 px-5 py-4">
+        <p className="text-sm text-slate-500 font-medium">{POLICIES}</p>
       </div>
     </div>
   );

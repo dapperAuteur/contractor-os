@@ -37,7 +37,7 @@ interface Payment {
 
 const STATUS_STYLES: Record<string, { color: string; icon: typeof CheckCircle }> = {
   active: { color: 'text-green-400 bg-green-500/20', icon: CheckCircle },
-  inactive: { color: 'text-neutral-400 bg-neutral-500/20', icon: Clock },
+  inactive: { color: 'text-slate-500 bg-neutral-500/20', icon: Clock },
   suspended: { color: 'text-red-400 bg-red-500/20', icon: AlertTriangle },
   retired: { color: 'text-blue-400 bg-blue-500/20', icon: CheckCircle },
   honorary: { color: 'text-purple-400 bg-purple-500/20', icon: CheckCircle },
@@ -51,7 +51,7 @@ const FREQ_LABELS: Record<string, string> = {
 };
 
 const fmt = (n: number) => `$${n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-const inputClass = 'w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40';
+const inputClass = 'w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
 
 function getDuesUrgency(nextDate: string | null): 'overdue' | 'due_soon' | 'current' | 'none' {
   if (!nextDate) return 'none';
@@ -66,8 +66,8 @@ function getDuesUrgency(nextDate: string | null): 'overdue' | 'due_soon' | 'curr
 const URGENCY_STYLES: Record<string, string> = {
   overdue: 'border-red-700/50 bg-red-900/10',
   due_soon: 'border-yellow-700/50 bg-yellow-900/10',
-  current: 'border-neutral-800',
-  none: 'border-neutral-800',
+  current: 'border-slate-200',
+  none: 'border-slate-200',
 };
 
 const emptyForm = {
@@ -210,7 +210,7 @@ export default function UnionMembershipsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h1 className="text-2xl font-bold text-neutral-100">Union Memberships</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Union Memberships</h1>
         <button
           onClick={() => { setShowForm(true); setEditingId(null); setForm(emptyForm); }}
           className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
@@ -222,14 +222,14 @@ export default function UnionMembershipsPage() {
 
       {/* Form */}
       {showForm && (
-        <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4 space-y-3">
+        <div className="rounded-xl border border-slate-300 bg-white p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-100">
+            <h2 className="text-lg font-semibold text-slate-900">
               {editingId ? 'Edit Membership' : 'New Membership'}
             </h2>
             <button
               onClick={() => { setShowForm(false); setEditingId(null); }}
-              className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
               aria-label="Close form"
             >
               <X size={18} aria-hidden="true" />
@@ -238,22 +238,22 @@ export default function UnionMembershipsPage() {
 
           <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Union Name *</span>
+              <span className="text-xs font-medium text-slate-500">Union Name *</span>
               <input type="text" value={form.union_name} onChange={(e) => set('union_name', e.target.value)} className={inputClass} placeholder="IATSE" aria-required="true" />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Local Number *</span>
+              <span className="text-xs font-medium text-slate-500">Local Number *</span>
               <input type="text" value={form.local_number} onChange={(e) => set('local_number', e.target.value)} className={inputClass} placeholder="317" aria-required="true" />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Member ID</span>
+              <span className="text-xs font-medium text-slate-500">Member ID</span>
               <input type="text" value={form.member_id} onChange={(e) => set('member_id', e.target.value)} className={inputClass} placeholder="Card/ID number" />
             </label>
           </div>
 
           <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Status</span>
+              <span className="text-xs font-medium text-slate-500">Status</span>
               <select value={form.status} onChange={(e) => set('status', e.target.value)} className={inputClass}>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -263,15 +263,15 @@ export default function UnionMembershipsPage() {
               </select>
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Join Date</span>
+              <span className="text-xs font-medium text-slate-500">Join Date</span>
               <input type="date" value={form.join_date} onChange={(e) => set('join_date', e.target.value)} className={inputClass} />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Expiration Date</span>
+              <span className="text-xs font-medium text-slate-500">Expiration Date</span>
               <input type="date" value={form.expiration_date} onChange={(e) => set('expiration_date', e.target.value)} className={inputClass} />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Dues Frequency</span>
+              <span className="text-xs font-medium text-slate-500">Dues Frequency</span>
               <select value={form.dues_frequency} onChange={(e) => set('dues_frequency', e.target.value)} className={inputClass}>
                 <option value="monthly">Monthly</option>
                 <option value="quarterly">Quarterly</option>
@@ -283,31 +283,31 @@ export default function UnionMembershipsPage() {
 
           <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Dues Amount ($)</span>
+              <span className="text-xs font-medium text-slate-500">Dues Amount ($)</span>
               <input type="number" step="0.01" value={form.dues_amount} onChange={(e) => set('dues_amount', e.target.value)} className={inputClass} placeholder="0.00" />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Next Dues Date</span>
+              <span className="text-xs font-medium text-slate-500">Next Dues Date</span>
               <input type="date" value={form.next_dues_date} onChange={(e) => set('next_dues_date', e.target.value)} className={inputClass} />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Initiation Fee ($)</span>
+              <span className="text-xs font-medium text-slate-500">Initiation Fee ($)</span>
               <input type="number" step="0.01" value={form.initiation_fee} onChange={(e) => set('initiation_fee', e.target.value)} className={inputClass} placeholder="0.00" />
             </label>
             <div className="flex flex-col gap-2 justify-end pb-1">
-              <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer">
-                <input type="checkbox" checked={form.auto_pay} onChange={(e) => set('auto_pay', e.target.checked)} className="rounded border-neutral-600 bg-neutral-800 text-amber-500 focus:ring-amber-500" />
+              <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                <input type="checkbox" checked={form.auto_pay} onChange={(e) => set('auto_pay', e.target.checked)} className="rounded border-slate-300 bg-slate-100 text-amber-500 focus:ring-amber-500" />
                 Auto-pay
               </label>
-              <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer">
-                <input type="checkbox" checked={form.initiation_paid} onChange={(e) => set('initiation_paid', e.target.checked)} className="rounded border-neutral-600 bg-neutral-800 text-amber-500 focus:ring-amber-500" />
+              <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                <input type="checkbox" checked={form.initiation_paid} onChange={(e) => set('initiation_paid', e.target.checked)} className="rounded border-slate-300 bg-slate-100 text-amber-500 focus:ring-amber-500" />
                 Initiation paid
               </label>
             </div>
           </div>
 
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Notes</span>
+            <span className="text-xs font-medium text-slate-500">Notes</span>
             <textarea value={form.notes} onChange={(e) => set('notes', e.target.value)} rows={2} className={inputClass} placeholder="Optional notes..." />
           </label>
 
@@ -322,7 +322,7 @@ export default function UnionMembershipsPage() {
             </button>
             <button
               onClick={() => { setShowForm(false); setEditingId(null); }}
-              className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
             >
               Cancel
             </button>
@@ -333,10 +333,10 @@ export default function UnionMembershipsPage() {
       {/* List */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading memberships" />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading memberships" />
         </div>
       ) : memberships.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           No memberships yet. Add your first union membership to start tracking dues.
         </div>
       ) : (
@@ -348,7 +348,7 @@ export default function UnionMembershipsPage() {
             const isExpanded = expandedId === m.id;
 
             return (
-              <article key={m.id} role="listitem" className={`rounded-xl border bg-neutral-900 ${URGENCY_STYLES[urgency]} transition-colors`}>
+              <article key={m.id} role="listitem" className={`rounded-xl border bg-white ${URGENCY_STYLES[urgency]} transition-colors`}>
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-3">
                     <button
@@ -358,8 +358,8 @@ export default function UnionMembershipsPage() {
                       aria-label={`${m.union_name} Local ${m.local_number}, click to ${isExpanded ? 'collapse' : 'expand'}`}
                     >
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-neutral-100">{m.union_name}</span>
-                        <span className="text-neutral-400">Local {m.local_number}</span>
+                        <span className="font-semibold text-slate-900">{m.union_name}</span>
+                        <span className="text-slate-500">Local {m.local_number}</span>
                         <span className={`rounded-full px-2 py-0.5 text-xs font-medium inline-flex items-center gap-1 ${st.color}`}>
                           <StatusIcon size={10} aria-hidden="true" />
                           {m.status}
@@ -375,7 +375,7 @@ export default function UnionMembershipsPage() {
                           </span>
                         )}
                       </div>
-                      <div className="mt-1 flex items-center gap-3 text-xs text-neutral-500 flex-wrap">
+                      <div className="mt-1 flex items-center gap-3 text-xs text-slate-400 flex-wrap">
                         {m.member_id && <span>ID: {m.member_id}</span>}
                         {m.dues_amount != null && (
                           <span>{fmt(m.dues_amount)} {FREQ_LABELS[m.dues_frequency ?? 'quarterly']?.toLowerCase()}</span>
@@ -393,7 +393,7 @@ export default function UnionMembershipsPage() {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => startEdit(m)}
-                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         aria-label={`Edit ${m.union_name} Local ${m.local_number}`}
                       >
                         <Edit2 size={14} aria-hidden="true" />
@@ -401,24 +401,24 @@ export default function UnionMembershipsPage() {
                       <button
                         onClick={() => handleDelete(m.id)}
                         disabled={deletingId === m.id}
-                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
                         aria-label={`Delete ${m.union_name} Local ${m.local_number}`}
                       >
                         {deletingId === m.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} aria-hidden="true" />}
                       </button>
-                      {isExpanded ? <ChevronUp size={16} className="text-neutral-500" aria-hidden="true" /> : <ChevronDown size={16} className="text-neutral-500" aria-hidden="true" />}
+                      {isExpanded ? <ChevronUp size={16} className="text-slate-400" aria-hidden="true" /> : <ChevronDown size={16} className="text-slate-400" aria-hidden="true" />}
                     </div>
                   </div>
                 </div>
 
                 {/* Expanded: payment history */}
                 {isExpanded && (
-                  <div className="border-t border-neutral-800 p-4 space-y-3">
+                  <div className="border-t border-slate-200 p-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-semibold text-neutral-300">Payment History</h3>
+                      <h3 className="text-sm font-semibold text-slate-700">Payment History</h3>
                       <button
                         onClick={() => { setShowPayment(true); setPaymentForm(emptyPayment); }}
-                        className="flex items-center gap-1 rounded-lg bg-neutral-800 px-3 py-2 text-xs font-medium text-neutral-300 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                        className="flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
                         aria-label="Record new dues payment"
                       >
                         <DollarSign size={12} aria-hidden="true" /> Record Payment
@@ -427,32 +427,32 @@ export default function UnionMembershipsPage() {
 
                     {/* Payment form */}
                     {showPayment && (
-                      <div className="rounded-lg border border-neutral-700 bg-neutral-800/50 p-3 space-y-2">
+                      <div className="rounded-lg border border-slate-300 bg-slate-100/50 p-3 space-y-2">
                         <div className="grid gap-2 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                           <label className="block">
-                            <span className="text-xs text-neutral-500">Amount ($) *</span>
+                            <span className="text-xs text-slate-400">Amount ($) *</span>
                             <input type="number" step="0.01" value={paymentForm.amount} onChange={(e) => setP('amount', e.target.value)} className={inputClass} placeholder="0.00" aria-required="true" />
                           </label>
                           <label className="block">
-                            <span className="text-xs text-neutral-500">Payment Date *</span>
+                            <span className="text-xs text-slate-400">Payment Date *</span>
                             <input type="date" value={paymentForm.payment_date} onChange={(e) => setP('payment_date', e.target.value)} className={inputClass} aria-required="true" />
                           </label>
                           <label className="block">
-                            <span className="text-xs text-neutral-500">Method</span>
+                            <span className="text-xs text-slate-400">Method</span>
                             <input type="text" value={paymentForm.payment_method} onChange={(e) => setP('payment_method', e.target.value)} className={inputClass} placeholder="Check, online, cash..." />
                           </label>
                         </div>
                         <div className="grid gap-2 grid-cols-1 sm:grid-cols-3">
                           <label className="block">
-                            <span className="text-xs text-neutral-500">Period Start</span>
+                            <span className="text-xs text-slate-400">Period Start</span>
                             <input type="date" value={paymentForm.period_start} onChange={(e) => setP('period_start', e.target.value)} className={inputClass} />
                           </label>
                           <label className="block">
-                            <span className="text-xs text-neutral-500">Period End</span>
+                            <span className="text-xs text-slate-400">Period End</span>
                             <input type="date" value={paymentForm.period_end} onChange={(e) => setP('period_end', e.target.value)} className={inputClass} />
                           </label>
                           <label className="block">
-                            <span className="text-xs text-neutral-500">Confirmation #</span>
+                            <span className="text-xs text-slate-400">Confirmation #</span>
                             <input type="text" value={paymentForm.confirmation_number} onChange={(e) => setP('confirmation_number', e.target.value)} className={inputClass} placeholder="Optional" />
                           </label>
                         </div>
@@ -467,7 +467,7 @@ export default function UnionMembershipsPage() {
                           </button>
                           <button
                             onClick={() => setShowPayment(false)}
-                            className="rounded-lg border border-neutral-700 px-3 py-2 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                            className="rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
                           >
                             Cancel
                           </button>
@@ -478,27 +478,27 @@ export default function UnionMembershipsPage() {
                     {/* Payment list */}
                     {loadingPayments ? (
                       <div className="flex justify-center py-4">
-                        <Loader2 size={16} className="animate-spin text-neutral-500" aria-label="Loading payments" />
+                        <Loader2 size={16} className="animate-spin text-slate-400" aria-label="Loading payments" />
                       </div>
                     ) : payments.length === 0 ? (
-                      <p className="text-xs text-neutral-500 py-2">No payments recorded yet.</p>
+                      <p className="text-xs text-slate-400 py-2">No payments recorded yet.</p>
                     ) : (
                       <div className="space-y-1.5">
                         {payments.map((p) => (
-                          <div key={p.id} className="flex items-center justify-between rounded-lg bg-neutral-800/50 px-3 py-2 text-sm">
+                          <div key={p.id} className="flex items-center justify-between rounded-lg bg-slate-100/50 px-3 py-2 text-sm">
                             <div className="flex items-center gap-3 flex-wrap min-w-0">
-                              <CreditCard size={12} className="text-neutral-500 shrink-0" aria-hidden="true" />
+                              <CreditCard size={12} className="text-slate-400 shrink-0" aria-hidden="true" />
                               <span className="font-medium text-amber-400">{fmt(p.amount)}</span>
-                              <span className="text-neutral-500">{new Date(p.payment_date).toLocaleDateString()}</span>
+                              <span className="text-slate-400">{new Date(p.payment_date).toLocaleDateString()}</span>
                               {p.period_start && p.period_end && (
-                                <span className="text-xs text-neutral-500">
+                                <span className="text-xs text-slate-400">
                                   ({new Date(p.period_start).toLocaleDateString()} – {new Date(p.period_end).toLocaleDateString()})
                                 </span>
                               )}
-                              {p.payment_method && <span className="text-xs text-neutral-500">{p.payment_method}</span>}
+                              {p.payment_method && <span className="text-xs text-slate-400">{p.payment_method}</span>}
                             </div>
                             {p.confirmation_number && (
-                              <span className="text-xs text-neutral-500">#{p.confirmation_number}</span>
+                              <span className="text-xs text-slate-400">#{p.confirmation_number}</span>
                             )}
                           </div>
                         ))}
@@ -507,9 +507,9 @@ export default function UnionMembershipsPage() {
 
                     {/* Membership details */}
                     {m.notes && (
-                      <p className="text-xs text-neutral-500 pt-2 border-t border-neutral-800">{m.notes}</p>
+                      <p className="text-xs text-slate-400 pt-2 border-t border-slate-200">{m.notes}</p>
                     )}
-                    <div className="flex gap-4 text-xs text-neutral-500 pt-1 flex-wrap">
+                    <div className="flex gap-4 text-xs text-slate-400 pt-1 flex-wrap">
                       {m.join_date && <span>Joined: {new Date(m.join_date).toLocaleDateString()}</span>}
                       {m.expiration_date && <span>Expires: {new Date(m.expiration_date).toLocaleDateString()}</span>}
                       {m.initiation_fee != null && (

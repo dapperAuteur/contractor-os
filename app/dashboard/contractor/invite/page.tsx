@@ -56,11 +56,11 @@ export default function ContractorInvitePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">
+      <h1 className="text-2xl font-bold text-slate-900">
         <UserPlus size={20} className="inline mr-2 text-amber-400" aria-hidden="true" />
         Invite Fellow Contractors
       </h1>
-      <p className="text-sm text-neutral-400">
+      <p className="text-sm text-slate-500">
         Invite colleagues, fellow union members, or anyone who could benefit from Work.WitUS.
         They&apos;ll receive a magic link to get started. You can send up to 10 invites.
       </p>
@@ -75,7 +75,7 @@ export default function ContractorInvitePage() {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="colleague@example.com"
             required
-            className="w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
             aria-label="Email address to invite"
           />
         </label>
@@ -97,20 +97,20 @@ export default function ContractorInvitePage() {
 
       {/* Sent invites */}
       <div>
-        <h2 className="text-lg font-semibold text-neutral-200 mb-3">Sent Invites ({invites.length}/10)</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-3">Sent Invites ({invites.length}/10)</h2>
         {loading ? (
           <div className="flex justify-center py-8">
-            <Loader2 size={20} className="animate-spin text-neutral-500" aria-label="Loading invites" />
+            <Loader2 size={20} className="animate-spin text-slate-400" aria-label="Loading invites" />
           </div>
         ) : invites.length === 0 ? (
-          <p className="text-sm text-neutral-500">No invites sent yet.</p>
+          <p className="text-sm text-slate-400">No invites sent yet.</p>
         ) : (
           <div className="space-y-2" role="list" aria-label="Sent invites">
             {invites.map((inv) => (
-              <div key={inv.id} role="listitem" className="flex items-center justify-between rounded-lg border border-neutral-800 bg-neutral-900 px-4 py-3">
+              <div key={inv.id} role="listitem" className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-4 py-3">
                 <div className="flex items-center gap-2 min-w-0">
-                  <Mail size={14} className="text-neutral-500 shrink-0" aria-hidden="true" />
-                  <span className="text-sm text-neutral-200 truncate">{inv.email}</span>
+                  <Mail size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
+                  <span className="text-sm text-slate-800 truncate">{inv.email}</span>
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   {inv.accepted_at ? (
@@ -118,11 +118,11 @@ export default function ContractorInvitePage() {
                       <CheckCircle size={12} aria-hidden="true" /> Accepted
                     </span>
                   ) : (
-                    <span className="flex items-center gap-1 text-neutral-500">
+                    <span className="flex items-center gap-1 text-slate-400">
                       <Clock size={12} aria-hidden="true" /> Pending
                     </span>
                   )}
-                  <span className="text-neutral-500">{new Date(inv.invited_at).toLocaleDateString()}</span>
+                  <span className="text-slate-400">{new Date(inv.invited_at).toLocaleDateString()}</span>
                 </div>
               </div>
             ))}

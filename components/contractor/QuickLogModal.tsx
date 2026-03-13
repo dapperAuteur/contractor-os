@@ -30,7 +30,7 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
   });
 
   const set = (field: string, value: string) => setForm((p) => ({ ...p, [field]: value }));
-  const inputClass = 'w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none';
+  const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none';
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -109,34 +109,34 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Quick Log">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-slate-500">
           <Zap size={12} className="inline text-amber-400" aria-hidden="true" /> Log hours, expense, and mileage in one shot for <span className="text-amber-400">{jobNumber}</span>.
         </p>
 
         {/* Date */}
         <div>
-          <label htmlFor="ql-work-date" className="block text-sm text-neutral-400 mb-1">Work Date <span aria-hidden="true">*</span></label>
+          <label htmlFor="ql-work-date" className="block text-sm text-slate-500 mb-1">Work Date <span aria-hidden="true">*</span></label>
           <input id="ql-work-date" type="date" className={inputClass} value={form.work_date} onChange={(e) => set('work_date', e.target.value)} required aria-required="true" />
         </div>
 
         {/* Hours */}
-        <fieldset className="space-y-3 rounded-lg border border-neutral-800 p-3">
-          <legend className="px-1 text-sm text-neutral-400">Hours</legend>
+        <fieldset className="space-y-3 rounded-lg border border-slate-200 p-3">
+          <legend className="px-1 text-sm text-slate-500">Hours</legend>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             <div>
-              <label htmlFor="ql-total" className="block text-sm text-neutral-500 mb-0.5">Total</label>
+              <label htmlFor="ql-total" className="block text-sm text-slate-400 mb-0.5">Total</label>
               <input id="ql-total" type="number" step="0.25" className={inputClass} value={form.total_hours} onChange={(e) => set('total_hours', e.target.value)} aria-label="Total hours" />
             </div>
             <div>
-              <label htmlFor="ql-st" className="block text-sm text-neutral-500 mb-0.5">ST</label>
+              <label htmlFor="ql-st" className="block text-sm text-slate-400 mb-0.5">ST</label>
               <input id="ql-st" type="number" step="0.25" className={inputClass} value={form.st_hours} onChange={(e) => set('st_hours', e.target.value)} aria-label="Straight time hours" />
             </div>
             <div>
-              <label htmlFor="ql-ot" className="block text-sm text-neutral-500 mb-0.5">OT</label>
+              <label htmlFor="ql-ot" className="block text-sm text-slate-400 mb-0.5">OT</label>
               <input id="ql-ot" type="number" step="0.25" className={inputClass} value={form.ot_hours} onChange={(e) => set('ot_hours', e.target.value)} aria-label="Overtime hours" />
             </div>
             <div>
-              <label htmlFor="ql-dt" className="block text-sm text-neutral-500 mb-0.5">DT</label>
+              <label htmlFor="ql-dt" className="block text-sm text-slate-400 mb-0.5">DT</label>
               <input id="ql-dt" type="number" step="0.25" className={inputClass} value={form.dt_hours} onChange={(e) => set('dt_hours', e.target.value)} aria-label="Double time hours" />
             </div>
           </div>
@@ -144,8 +144,8 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
         </fieldset>
 
         {/* Expense */}
-        <fieldset className="space-y-2 rounded-lg border border-neutral-800 p-3">
-          <legend className="px-1 text-sm text-neutral-400">Expense (optional)</legend>
+        <fieldset className="space-y-2 rounded-lg border border-slate-200 p-3">
+          <legend className="px-1 text-sm text-slate-500">Expense (optional)</legend>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <input type="number" step="0.01" className={inputClass} placeholder="Amount" value={form.expense_amount} onChange={(e) => set('expense_amount', e.target.value)} aria-label="Expense amount" />
             <input className={inputClass} placeholder="Description" value={form.expense_description} onChange={(e) => set('expense_description', e.target.value)} aria-label="Expense description" />
@@ -153,8 +153,8 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
         </fieldset>
 
         {/* Mileage */}
-        <fieldset className="space-y-2 rounded-lg border border-neutral-800 p-3">
-          <legend className="px-1 text-sm text-neutral-400">Mileage (optional)</legend>
+        <fieldset className="space-y-2 rounded-lg border border-slate-200 p-3">
+          <legend className="px-1 text-sm text-slate-500">Mileage (optional)</legend>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <input type="number" step="0.1" className={inputClass} placeholder="Miles" value={form.mileage_miles} onChange={(e) => set('mileage_miles', e.target.value)} aria-label="Mileage in miles" />
             <input type="number" step="0.01" className={inputClass} placeholder="Cost ($)" value={form.mileage_cost} onChange={(e) => set('mileage_cost', e.target.value)} aria-label="Mileage cost" />

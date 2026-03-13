@@ -1,7 +1,7 @@
 // app/api/help/chat/route.ts
 // POST: RAG-powered help chat.
-//   1. Embed the user's question via Gemini text-embedding-004
-//   2. Find top-5 matching help_articles via pgvector cosine similarity
+//   1. Embed the user's question via Gemini text-embedding-001
+//   2. Find top-5 matching help_articles via pgvector cosine similarity (contractor app)
 //   3. Build a context-grounded prompt and call Gemini Flash
 //   4. Return the answer
 
@@ -77,12 +77,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: e instanceof Error ? e.message : 'Embedding failed' }, { status: 500 });
   }
 
-  // 2. Retrieve top-5 matching articles
+  // 2. Retrieve top-5 matching articles filtered to contractor app
   // pgvector expects the vector as a bracketed string "[0.1,0.2,...]"
   const { data: matches, error: matchError } = await db.rpc('match_help_articles', {
     query_embedding: `[${queryEmbedding.join(',')}]`,
     match_count: 5,
     role_filter: role ?? null,
+    app_filter: 'contractor',
   });
 
   if (matchError) {
@@ -94,9 +95,9 @@ export async function POST(request: NextRequest) {
     .join('\n\n---\n\n');
 
   // 3. Build system prompt
-  const systemPrompt = `You are a helpful assistant for Work.WitUS Academy, a learning platform inside Work.WitUS focused on longevity and healthy living.
+  const systemPrompt = `You are a helpful assistant for Work.WitUS, a professional management platform for contractors in the film, TV, and live entertainment industry.
 
-Answer the user's question using ONLY the documentation context provided below. Be concise, friendly, and specific. If the answer involves a page path (like /academy/my-courses), include it. If the context does not contain enough information to answer the question, say so honestly and suggest they contact support.
+Answer the user's question using ONLY the documentation context provided below. Be concise, friendly, and specific. If the answer involves a page path (like /dashboard/contractor/jobs), include it. If the context does not contain enough information to answer the question, say so honestly and suggest they use the feedback button to contact support.
 
 --- DOCUMENTATION CONTEXT ---
 ${context}

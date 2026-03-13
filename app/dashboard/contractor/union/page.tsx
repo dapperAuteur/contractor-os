@@ -43,7 +43,7 @@ const DOC_TYPE_LABELS: Record<string, string> = {
 const STATUS_STYLES: Record<string, { icon: typeof CheckCircle; color: string }> = {
   ready: { icon: CheckCircle, color: 'text-green-400' },
   processing: { icon: Clock, color: 'text-yellow-400' },
-  pending: { icon: Clock, color: 'text-neutral-500' },
+  pending: { icon: Clock, color: 'text-slate-400' },
   error: { icon: AlertTriangle, color: 'text-red-400' },
 };
 
@@ -148,27 +148,27 @@ export default function UnionDocumentsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
       {/* Disclaimer banner */}
-      <div className="rounded-xl border border-yellow-700/50 bg-yellow-900/20 p-3 flex gap-2" role="alert">
-        <AlertTriangle size={16} className="text-yellow-400 shrink-0 mt-0.5" aria-hidden="true" />
-        <p className="text-xs text-yellow-300">
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 flex gap-2" role="alert">
+        <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+        <p className="text-xs text-amber-700">
           AI-generated summaries are for reference only. They are not legal advice.
           Always consult your union representative or the official contract document for authoritative answers.
         </p>
       </div>
 
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h1 className="text-2xl font-bold text-neutral-100">Union Documents</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Union Documents</h1>
         <div className="flex gap-2">
           <button
             onClick={() => setShowSubmit(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-amber-600 px-4 py-2.5 text-sm font-medium text-amber-400 hover:bg-amber-600/10 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+            className="flex items-center gap-1.5 rounded-lg border border-amber-600 px-4 py-2.5 text-sm font-medium text-amber-600 hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
             aria-label="Submit document to community for review"
           >
             <Send size={14} aria-hidden="true" /> Submit to Community
           </button>
           <button
             onClick={() => setShowUpload(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+            className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
           >
             <Upload size={14} aria-hidden="true" /> Upload
           </button>
@@ -176,7 +176,7 @@ export default function UnionDocumentsPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-neutral-800" role="tablist" aria-label="Document views">
+      <div className="flex gap-1 border-b border-slate-200" role="tablist" aria-label="Document views">
         {[
           { id: 'mine' as const, label: 'My Documents' },
           { id: 'shared' as const, label: `Community (${shared.length})` },
@@ -189,8 +189,8 @@ export default function UnionDocumentsPage() {
             onClick={() => setTab(t.id)}
             className={`whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500 ${
               tab === t.id
-                ? 'border-amber-500 text-amber-400'
-                : 'border-transparent text-neutral-500 hover:text-neutral-300'
+                ? 'border-amber-500 text-amber-600'
+                : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
             {t.label}
@@ -200,12 +200,12 @@ export default function UnionDocumentsPage() {
 
       {/* Upload form */}
       {showUpload && (
-        <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4 space-y-3">
+        <div className="rounded-xl border border-slate-300 bg-white p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-100">Upload Document</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Upload Document</h2>
             <button
               onClick={() => setShowUpload(false)}
-              className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
               aria-label="Close upload form"
             >
               <X size={18} aria-hidden="true" />
@@ -214,22 +214,22 @@ export default function UnionDocumentsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Document Name *</span>
+              <span className="text-xs font-medium text-slate-500">Document Name *</span>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 placeholder="IATSE Local 317 Contract 2025-2028"
               />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Union Local</span>
+              <span className="text-xs font-medium text-slate-500">Union Local</span>
               <input
                 type="text"
                 value={form.union_local}
                 onChange={(e) => setForm({ ...form, union_local: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 placeholder="IATSE 317"
               />
             </label>
@@ -237,11 +237,11 @@ export default function UnionDocumentsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Document Type *</span>
+              <span className="text-xs font-medium text-slate-500">Document Type *</span>
               <select
                 value={form.doc_type}
                 onChange={(e) => setForm({ ...form, doc_type: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               >
                 {Object.entries(DOC_TYPE_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
@@ -249,26 +249,26 @@ export default function UnionDocumentsPage() {
               </select>
             </label>
             <div>
-              <span className="text-xs font-medium text-neutral-400">File (PDF, TXT, MD) *</span>
+              <span className="text-xs font-medium text-slate-500">File (PDF, TXT, MD) *</span>
               <div className="mt-1">
                 <input
                   ref={fileRef}
                   type="file"
                   accept=".pdf,.txt,.md"
                   onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-neutral-400 file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-700 file:px-3 file:py-2 file:text-sm file:text-neutral-200 hover:file:bg-neutral-600 focus:outline-none"
+                  className="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-200 file:px-3 file:py-2 file:text-sm file:text-slate-800 hover:file:bg-slate-300 focus:outline-none"
                   aria-label="Select file to upload"
                 />
               </div>
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-neutral-300 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
             <input
               type="checkbox"
               checked={form.is_shared}
               onChange={(e) => setForm({ ...form, is_shared: e.target.checked })}
-              className="rounded border-neutral-600 bg-neutral-800 text-amber-500 focus:ring-amber-500 focus:ring-offset-neutral-900"
+              className="rounded border-slate-300 bg-slate-100 text-amber-500 focus:ring-amber-500 focus:ring-offset-white"
             />
             Share with community (others in same union can search this document)
           </label>
@@ -277,21 +277,21 @@ export default function UnionDocumentsPage() {
             <button
               onClick={uploadDoc}
               disabled={uploading || !form.name.trim() || !selectedFile}
-              className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
             >
               {uploading ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Upload size={14} aria-hidden="true" />}
               {uploading ? 'Processing...' : 'Upload & Process'}
             </button>
             <button
               onClick={() => { setShowUpload(false); setSelectedFile(null); }}
-              className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
             >
               Cancel
             </button>
           </div>
 
           {uploading && (
-            <p className="text-xs text-neutral-500">
+            <p className="text-xs text-slate-400">
               Extracting text, chunking, and generating embeddings. This may take a moment for large documents.
             </p>
           )}
@@ -300,38 +300,38 @@ export default function UnionDocumentsPage() {
 
       {/* Submit to Community form */}
       {showSubmit && (
-        <div className="rounded-xl border border-neutral-700 bg-neutral-900 p-4 space-y-3">
+        <div className="rounded-xl border border-slate-300 bg-white p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-neutral-100">Submit to Community</h2>
+            <h2 className="text-lg font-semibold text-slate-900">Submit to Community</h2>
             <button
               onClick={() => setShowSubmit(false)}
-              className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
               aria-label="Close submit form"
             >
               <X size={18} aria-hidden="true" />
             </button>
           </div>
-          <p className="text-xs text-neutral-500">
+          <p className="text-xs text-slate-400">
             Submit a union document for admin review. Once approved, it will be processed and available in the community RAG for all users to search.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Union Local</span>
+              <span className="text-xs font-medium text-slate-500">Union Local</span>
               <input
                 type="text"
                 value={submitForm.union_local}
                 onChange={(e) => setSubmitForm({ ...submitForm, union_local: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 placeholder="IATSE 317"
               />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Document Type *</span>
+              <span className="text-xs font-medium text-slate-500">Document Type *</span>
               <select
                 value={submitForm.doc_type}
                 onChange={(e) => setSubmitForm({ ...submitForm, doc_type: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               >
                 {Object.entries(DOC_TYPE_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
@@ -342,24 +342,24 @@ export default function UnionDocumentsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-neutral-400">Coverage Dates</span>
+              <span className="text-xs font-medium text-slate-500">Coverage Dates</span>
               <input
                 type="text"
                 value={submitForm.coverage_dates}
                 onChange={(e) => setSubmitForm({ ...submitForm, coverage_dates: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                 placeholder="2025-2028"
               />
             </label>
             <div>
-              <span className="text-xs font-medium text-neutral-400">File (PDF, TXT, MD) *</span>
+              <span className="text-xs font-medium text-slate-500">File (PDF, TXT, MD) *</span>
               <div className="mt-1">
                 <input
                   ref={submitFileRef}
                   type="file"
                   accept=".pdf,.txt,.md"
                   onChange={(e) => setSubmitFile(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-neutral-400 file:mr-3 file:rounded-lg file:border-0 file:bg-neutral-700 file:px-3 file:py-2 file:text-sm file:text-neutral-200 hover:file:bg-neutral-600 focus:outline-none"
+                  className="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-200 file:px-3 file:py-2 file:text-sm file:text-slate-800 hover:file:bg-slate-300 focus:outline-none"
                   aria-label="Select file to submit"
                 />
               </div>
@@ -367,12 +367,12 @@ export default function UnionDocumentsPage() {
           </div>
 
           <label className="block">
-            <span className="text-xs font-medium text-neutral-400">Description</span>
+            <span className="text-xs font-medium text-slate-500">Description</span>
             <textarea
               value={submitForm.description}
               onChange={(e) => setSubmitForm({ ...submitForm, description: e.target.value })}
               rows={2}
-              className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
               placeholder="Explain what this document covers and how it should be used..."
             />
           </label>
@@ -381,14 +381,14 @@ export default function UnionDocumentsPage() {
             <button
               onClick={submitToCommunity}
               disabled={submitting || !submitFile}
-              className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900 min-h-11"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white min-h-11"
             >
               {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} aria-hidden="true" />}
               {submitting ? 'Submitting...' : 'Submit for Review'}
             </button>
             <button
               onClick={() => { setShowSubmit(false); setSubmitFile(null); }}
-              className="rounded-lg border border-neutral-700 px-4 py-2.5 text-sm text-neutral-400 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
             >
               Cancel
             </button>
@@ -399,49 +399,49 @@ export default function UnionDocumentsPage() {
       {/* Document list */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
         </div>
       ) : tab === 'submissions' ? (
         /* Submissions list */
         submissions.length === 0 ? (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+          <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
             No submissions yet. Submit a document for community review.
           </div>
         ) : (
           <div className="space-y-2" role="list" aria-label="My submissions">
             {submissions.map((sub) => {
               const statusColors: Record<string, string> = {
-                pending: 'text-yellow-400 bg-yellow-500/20',
-                processing: 'text-blue-400 bg-blue-500/20',
-                approved: 'text-cyan-400 bg-cyan-500/20',
-                rejected: 'text-red-400 bg-red-500/20',
-                live: 'text-green-400 bg-green-500/20',
+                pending: 'text-yellow-700 bg-yellow-100',
+                processing: 'text-blue-700 bg-blue-100',
+                approved: 'text-teal-700 bg-teal-100',
+                rejected: 'text-red-700 bg-red-100',
+                live: 'text-green-700 bg-green-100',
               };
               const sc = statusColors[sub.status] ?? statusColors.pending;
               return (
-                <article key={sub.id} role="listitem" className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+                <article key={sub.id} role="listitem" className="rounded-xl border border-slate-200 bg-white p-4">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Send size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
-                        <span className="font-medium text-neutral-100 text-sm">{sub.file_name}</span>
-                        <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-400">
+                        <Send size={14} className="text-amber-600 shrink-0" aria-hidden="true" />
+                        <span className="font-medium text-slate-900 text-sm">{sub.file_name}</span>
+                        <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                           {DOC_TYPE_LABELS[sub.doc_type] ?? sub.doc_type}
                         </span>
                         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${sc}`}>
                           {sub.status}
                         </span>
                       </div>
-                      <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
+                      <div className="mt-1 flex items-center gap-2 text-xs text-slate-400 flex-wrap">
                         {sub.union_local && <span>{sub.union_local}</span>}
                         {sub.coverage_dates && <span>· {sub.coverage_dates}</span>}
                         <span>· {new Date(sub.created_at).toLocaleDateString()}</span>
                       </div>
                       {sub.description && (
-                        <p className="mt-1 text-xs text-neutral-400">{sub.description}</p>
+                        <p className="mt-1 text-xs text-slate-500">{sub.description}</p>
                       )}
                       {sub.admin_notes && (
-                        <p className="mt-1 text-xs text-neutral-500 italic">Admin: {sub.admin_notes}</p>
+                        <p className="mt-1 text-xs text-slate-400 italic">Admin: {sub.admin_notes}</p>
                       )}
                     </div>
                   </div>
@@ -451,7 +451,7 @@ export default function UnionDocumentsPage() {
           </div>
         )
       ) : list.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           {tab === 'mine'
             ? 'No documents yet. Upload a union contract, bylaws, or rate sheet to get started.'
             : 'No shared documents from the community yet.'}
@@ -466,14 +466,14 @@ export default function UnionDocumentsPage() {
               <article
                 key={doc.id}
                 role="listitem"
-                className="rounded-xl border border-neutral-800 bg-neutral-900 p-4"
+                className="rounded-xl border border-slate-200 bg-white p-4"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <FileText size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
-                      <span className="font-medium text-neutral-100 text-sm">{doc.name}</span>
-                      <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-400">
+                      <span className="font-medium text-slate-900 text-sm">{doc.name}</span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                         {DOC_TYPE_LABELS[doc.doc_type] ?? doc.doc_type}
                       </span>
                       <span className={`flex items-center gap-1 text-xs ${statusInfo.color}`}>
@@ -481,7 +481,7 @@ export default function UnionDocumentsPage() {
                         {doc.status}
                       </span>
                     </div>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
+                    <div className="mt-1 flex items-center gap-2 text-xs text-slate-400 flex-wrap">
                       {doc.union_local && <span>{doc.union_local}</span>}
                       {doc.page_count != null && <span>· {doc.page_count} chunks</span>}
                       <span>· {new Date(doc.created_at).toLocaleDateString()}</span>
@@ -505,7 +505,7 @@ export default function UnionDocumentsPage() {
                     <button
                       onClick={() => deleteDoc(doc.id)}
                       disabled={deletingId === doc.id}
-                      className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
                       aria-label={`Delete ${doc.name}`}
                     >
                       {deletingId === doc.id ? (

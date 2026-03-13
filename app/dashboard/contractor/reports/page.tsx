@@ -55,13 +55,13 @@ function StatCard({
   sub?: string;
 }) {
   return (
-    <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-      <div className="flex items-center gap-2 text-neutral-400 text-sm mb-1">
+    <div className="rounded-xl border border-slate-200 bg-white p-4">
+      <div className="flex items-center gap-2 text-slate-500 text-sm mb-1">
         <Icon size={14} aria-hidden="true" />
         <span>{label}</span>
       </div>
-      <div className="text-lg font-bold text-neutral-100 sm:text-xl">{value}</div>
-      {sub && <div className="text-xs text-neutral-500 mt-0.5">{sub}</div>}
+      <div className="text-lg font-bold text-slate-900 sm:text-xl">{value}</div>
+      {sub && <div className="text-xs text-slate-400 mt-0.5">{sub}</div>}
     </div>
   );
 }
@@ -86,21 +86,21 @@ export default function ContractorReportsPage() {
     <div className="mx-auto max-w-5xl space-y-6 p-4">
       {/* Header with year selector */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-neutral-100">Reports</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Reports</h1>
         <div className="flex items-center gap-2" role="group" aria-label="Year selector">
           <button
             onClick={() => setYear((y) => y - 1)}
-            className="rounded-lg border border-neutral-700 bg-neutral-900 p-2.5 text-neutral-300 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11 min-w-11 flex items-center justify-center"
+            className="rounded-lg border border-slate-300 bg-white p-2.5 text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11 min-w-11 flex items-center justify-center"
             aria-label={`Previous year, ${year - 1}`}
           >
             <ChevronLeft size={18} />
           </button>
-          <span className="min-w-[4rem] text-center text-lg font-bold text-neutral-100" aria-live="polite">
+          <span className="min-w-[4rem] text-center text-lg font-bold text-slate-900" aria-live="polite">
             {year}
           </span>
           <button
             onClick={() => setYear((y) => y + 1)}
-            className="rounded-lg border border-neutral-700 bg-neutral-900 p-2.5 text-neutral-300 hover:bg-neutral-800 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11 min-w-11 flex items-center justify-center"
+            className="rounded-lg border border-slate-300 bg-white p-2.5 text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11 min-w-11 flex items-center justify-center"
             aria-label={`Next year, ${year + 1}`}
           >
             <ChevronRight size={18} />
@@ -110,10 +110,10 @@ export default function ContractorReportsPage() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={28} aria-label="Loading reports" />
+          <Loader2 className="animate-spin text-slate-400" size={28} aria-label="Loading reports" />
         </div>
       ) : !s ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           No data available.
         </div>
       ) : (
@@ -130,8 +130,8 @@ export default function ContractorReportsPage() {
 
           {/* Monthly earnings bar chart */}
           <section aria-label="Monthly earnings">
-            <h2 className="text-lg font-semibold text-neutral-200 mb-3">Monthly Earnings</h2>
-            <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+            <h2 className="text-lg font-semibold text-slate-800 mb-3">Monthly Earnings</h2>
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
               <div className="flex items-end gap-1 sm:gap-2 h-40" role="img" aria-label={`Monthly earnings chart for ${year}`}>
                 {data!.monthly_earnings.map((val, i) => {
                   const pct = (val / maxMonthly) * 100;
@@ -139,7 +139,7 @@ export default function ContractorReportsPage() {
                     <div key={i} className="flex-1 flex flex-col items-center gap-1 min-w-0">
                       <div className="w-full flex flex-col items-center justify-end h-28">
                         {val > 0 && (
-                          <span className="text-[10px] text-neutral-400 mb-1 hidden sm:block">
+                          <span className="text-[10px] text-slate-500 mb-1 hidden sm:block">
                             {fmt(val)}
                           </span>
                         )}
@@ -149,7 +149,7 @@ export default function ContractorReportsPage() {
                           role="presentation"
                         />
                       </div>
-                      <span className="text-[10px] text-neutral-500 sm:text-xs">{MONTHS[i]}</span>
+                      <span className="text-[10px] text-slate-400 sm:text-xs">{MONTHS[i]}</span>
                     </div>
                   );
                 })}
@@ -159,12 +159,12 @@ export default function ContractorReportsPage() {
 
           {/* Earnings by client / 1099 tracking */}
           <section aria-label="Earnings by client">
-            <h2 className="text-lg font-semibold text-neutral-200 mb-3">
+            <h2 className="text-lg font-semibold text-slate-800 mb-3">
               Earnings by Client
-              <span className="text-sm font-normal text-neutral-500 ml-2">1099 Threshold: $600</span>
+              <span className="text-sm font-normal text-slate-400 ml-2">1099 Threshold: $600</span>
             </h2>
             {data!.earnings_by_client.length === 0 ? (
-              <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-6 text-center text-neutral-500">
+              <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-slate-400">
                 No client data.
               </div>
             ) : (
@@ -172,12 +172,12 @@ export default function ContractorReportsPage() {
                 {data!.earnings_by_client.map((c) => (
                   <div
                     key={c.client_name}
-                    className="rounded-xl border border-neutral-800 bg-neutral-900 p-4"
+                    className="rounded-xl border border-slate-200 bg-white p-4"
                   >
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-neutral-100 text-sm sm:text-base">{c.client_name}</span>
+                          <span className="font-medium text-slate-900 text-sm sm:text-base">{c.client_name}</span>
                           {c.exceeds_1099 && (
                             <span className="flex items-center gap-1 rounded-full bg-red-500/20 px-2 py-0.5 text-xs font-medium text-red-400">
                               <AlertTriangle size={12} aria-hidden="true" />
@@ -185,17 +185,17 @@ export default function ContractorReportsPage() {
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-neutral-500 mt-0.5">
+                        <div className="text-xs text-slate-400 mt-0.5">
                           {c.job_count} job{c.job_count !== 1 ? 's' : ''} · {c.total_hours.toFixed(1)}h
                         </div>
                       </div>
                       <div className="flex gap-4 text-sm sm:text-right">
                         <div>
-                          <div className="text-neutral-400 text-xs">Invoiced</div>
-                          <div className="font-medium text-neutral-200">{fmt(c.total_invoiced)}</div>
+                          <div className="text-slate-500 text-xs">Invoiced</div>
+                          <div className="font-medium text-slate-800">{fmt(c.total_invoiced)}</div>
                         </div>
                         <div>
-                          <div className="text-neutral-400 text-xs">Paid</div>
+                          <div className="text-slate-500 text-xs">Paid</div>
                           <div className="font-bold text-amber-400">{fmt(c.total_paid)}</div>
                         </div>
                       </div>
@@ -211,30 +211,30 @@ export default function ContractorReportsPage() {
             <section aria-label="Breakdown by union and department">
               <div className="grid gap-4 sm:grid-cols-2">
                 {Object.keys(data!.by_union).length > 0 && (
-                  <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-                    <h3 className="text-sm font-semibold text-neutral-300 mb-2">By Union</h3>
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-2">By Union</h3>
                     <div className="space-y-1.5">
                       {Object.entries(data!.by_union)
                         .sort((a, b) => b[1] - a[1])
                         .map(([name, count]) => (
                           <div key={name} className="flex items-center justify-between text-sm">
-                            <span className="text-neutral-300">{name}</span>
-                            <span className="text-neutral-500">{count} job{count !== 1 ? 's' : ''}</span>
+                            <span className="text-slate-700">{name}</span>
+                            <span className="text-slate-400">{count} job{count !== 1 ? 's' : ''}</span>
                           </div>
                         ))}
                     </div>
                   </div>
                 )}
                 {Object.keys(data!.by_department).length > 0 && (
-                  <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
-                    <h3 className="text-sm font-semibold text-neutral-300 mb-2">By Department</h3>
+                  <div className="rounded-xl border border-slate-200 bg-white p-4">
+                    <h3 className="text-sm font-semibold text-slate-700 mb-2">By Department</h3>
                     <div className="space-y-1.5">
                       {Object.entries(data!.by_department)
                         .sort((a, b) => b[1] - a[1])
                         .map(([name, count]) => (
                           <div key={name} className="flex items-center justify-between text-sm">
-                            <span className="text-neutral-300">{name}</span>
-                            <span className="text-neutral-500">{count} job{count !== 1 ? 's' : ''}</span>
+                            <span className="text-slate-700">{name}</span>
+                            <span className="text-slate-400">{count} job{count !== 1 ? 's' : ''}</span>
                           </div>
                         ))}
                     </div>

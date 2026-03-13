@@ -39,12 +39,12 @@ export default function RateCardSelect({ onSelect }: RateCardSelectProps) {
 
   return (
     <div>
-      <label className="block text-sm font-medium text-neutral-300 mb-1">
+      <label className="block text-sm font-medium text-slate-700 mb-1">
         <CreditCard size={14} className="inline mr-1" aria-hidden="true" />
         Apply Rate Card
       </label>
       <select
-        className="w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none"
+        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none"
         defaultValue=""
         onChange={(e) => {
           const card = cards.find((c) => c.id === e.target.value);

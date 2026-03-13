@@ -53,7 +53,7 @@ export default function ListerDashboardPage() {
   if (loading) {
     return (
       <div className="flex justify-center py-20">
-        <Loader2 className="animate-spin text-neutral-500" size={28} aria-label="Loading..." />
+        <Loader2 className="animate-spin text-slate-400" size={28} aria-label="Loading..." />
       </div>
     );
   }
@@ -72,7 +72,7 @@ export default function ListerDashboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">Lister Dashboard</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Lister Dashboard</h1>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -81,13 +81,13 @@ export default function ListerDashboardPage() {
           const card = (
             <div
               key={key}
-              className={`rounded-xl border border-neutral-800 bg-neutral-900 p-4 ${href ? 'hover:border-indigo-700/50 transition' : ''}`}
+              className={`rounded-xl border border-slate-200 bg-white p-4 ${href ? 'hover:border-indigo-700/50 transition' : ''}`}
             >
-              <div className="flex items-center gap-2 text-neutral-500 mb-1">
+              <div className="flex items-center gap-2 text-slate-400 mb-1">
                 <Icon size={14} className="shrink-0" aria-hidden="true" />
                 <span className="text-xs font-medium">{label}</span>
               </div>
-              <p className="text-2xl font-bold text-neutral-100">
+              <p className="text-2xl font-bold text-slate-900">
                 {typeof value === 'number' ? value : 0}
                 {suffix ?? ''}
               </p>
@@ -114,11 +114,11 @@ export default function ListerDashboardPage() {
           <Link
             key={href}
             href={href}
-            className="flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3.5 text-sm font-medium text-neutral-200 hover:border-indigo-700/50 hover:bg-neutral-800/50 transition"
+            className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-medium text-slate-800 hover:border-indigo-700/50 hover:bg-slate-100/50 transition"
           >
             <Icon size={16} className="text-indigo-400 shrink-0" aria-hidden="true" />
             {label}
-            <ChevronRight size={14} className="ml-auto text-neutral-500" aria-hidden="true" />
+            <ChevronRight size={14} className="ml-auto text-slate-400" aria-hidden="true" />
           </Link>
         ))}
       </div>
@@ -126,14 +126,14 @@ export default function ListerDashboardPage() {
       {/* Upcoming jobs */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-lg font-semibold text-neutral-100">Upcoming Jobs</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Upcoming Jobs</h2>
           <Link href="/dashboard/contractor/jobs" className="text-sm text-indigo-400 hover:underline">
             View all
           </Link>
         </div>
 
         {upcoming.length === 0 ? (
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-6 text-center text-sm text-neutral-500">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-400">
             No upcoming jobs. Create one to get started.
           </div>
         ) : (
@@ -143,18 +143,18 @@ export default function ListerDashboardPage() {
                 key={job.id}
                 href={`/dashboard/contractor/jobs/${job.id}`}
                 role="listitem"
-                className="flex items-center gap-3 rounded-xl border border-neutral-800 bg-neutral-900 px-4 py-3 hover:border-indigo-700/50 transition"
+                className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-indigo-700/50 transition"
               >
                 <Briefcase size={16} className="text-indigo-400 shrink-0" aria-hidden="true" />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-neutral-100 truncate">
+                  <p className="text-sm font-medium text-slate-900 truncate">
                     {job.event_name || job.client_name}
                   </p>
-                  <p className="text-xs text-neutral-500">
+                  <p className="text-xs text-slate-400">
                     {job.client_name}{job.start_date ? ` · ${new Date(job.start_date + 'T00:00:00').toLocaleDateString()}` : ''}
                   </p>
                 </div>
-                <ChevronRight size={14} className="text-neutral-500 shrink-0" aria-hidden="true" />
+                <ChevronRight size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
               </Link>
             ))}
           </div>

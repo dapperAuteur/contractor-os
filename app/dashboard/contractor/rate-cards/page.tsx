@@ -140,18 +140,18 @@ export default function RateCardsPage() {
     load();
   }
 
-  const inputClass = 'w-full rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none';
-  const labelClass = 'block text-xs text-neutral-500 mb-1';
+  const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none';
+  const labelClass = 'block text-xs text-slate-400 mb-1';
   const fmt = (n: number | null) => n != null ? `$${n.toFixed(2)}` : '—';
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
-      <Link href="/dashboard/contractor" className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-200 min-h-11 py-2" aria-label="Back to Jobs">
+      <Link href="/dashboard/contractor" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 min-h-11 py-2" aria-label="Back to Jobs">
         <ArrowLeft size={14} aria-hidden="true" /> Jobs
       </Link>
 
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-neutral-100">Rate Cards</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Rate Cards</h1>
         <button
           onClick={openCreate}
           className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-3 py-2.5 text-sm font-medium text-white hover:bg-amber-500 min-h-11"
@@ -163,10 +163,10 @@ export default function RateCardsPage() {
 
       {loading ? (
         <div className="flex justify-center py-12">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading rate cards" />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading rate cards" />
         </div>
       ) : cards.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           No rate cards yet. Create one to pre-fill rates when creating jobs.
         </div>
       ) : (
@@ -174,30 +174,30 @@ export default function RateCardsPage() {
           {cards.map((card) => (
             <div
               key={card.id}
-              className="flex items-center justify-between rounded-xl border border-neutral-800 bg-neutral-900 p-4"
+              className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4"
             >
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
                   <CreditCard size={14} className="text-amber-400" aria-hidden="true" />
-                  <span className="font-medium text-neutral-100">{card.name}</span>
-                  {card.union_local && <span className="text-xs text-neutral-500">{card.union_local}</span>}
-                  {card.department && <span className="text-xs text-neutral-500">· {card.department}</span>}
+                  <span className="font-medium text-slate-900">{card.name}</span>
+                  {card.union_local && <span className="text-xs text-slate-400">{card.union_local}</span>}
+                  {card.department && <span className="text-xs text-slate-400">· {card.department}</span>}
                 </div>
-                <div className="mt-1 flex gap-4 text-sm text-neutral-400">
+                <div className="mt-1 flex gap-4 text-sm text-slate-500">
                   <span>ST: {fmt(card.st_rate)}</span>
                   <span>OT: {fmt(card.ot_rate)}</span>
                   <span>DT: {fmt(card.dt_rate)}</span>
                   {card.benefits.length > 0 && (
-                    <span className="text-neutral-500">{card.benefits.length} benefit{card.benefits.length > 1 ? 's' : ''}</span>
+                    <span className="text-slate-400">{card.benefits.length} benefit{card.benefits.length > 1 ? 's' : ''}</span>
                   )}
-                  <span className="text-neutral-500">used {card.use_count}×</span>
+                  <span className="text-slate-400">used {card.use_count}×</span>
                 </div>
               </div>
               <div className="flex gap-1">
-                <button onClick={() => openEdit(card)} className="rounded p-2 text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Edit ${card.name}`}>
+                <button onClick={() => openEdit(card)} className="rounded p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Edit ${card.name}`}>
                   <Edit2 size={16} />
                 </button>
-                <button onClick={() => handleDelete(card.id)} className="rounded p-2 text-neutral-500 hover:bg-neutral-800 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete ${card.name}`}>
+                <button onClick={() => handleDelete(card.id)} className="rounded p-2 text-slate-400 hover:bg-slate-100 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete ${card.name}`}>
                   <Trash2 size={16} />
                 </button>
               </div>
@@ -253,16 +253,16 @@ export default function RateCardsPage() {
             <div className="space-y-1.5">
               {form.benefits.map((b, i) => (
                 <div key={i} className="flex items-center gap-2 text-sm">
-                  <span className="flex-1 text-neutral-300">{b.name}</span>
-                  <span className="text-neutral-400">${b.amount.toFixed(2)}</span>
-                  <button type="button" onClick={() => removeBenefit(i)} className="p-2 text-neutral-500 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Remove ${b.name} benefit`}><X size={14} /></button>
+                  <span className="flex-1 text-slate-700">{b.name}</span>
+                  <span className="text-slate-500">${b.amount.toFixed(2)}</span>
+                  <button type="button" onClick={() => removeBenefit(i)} className="p-2 text-slate-400 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Remove ${b.name} benefit`}><X size={14} /></button>
                 </div>
               ))}
             </div>
             <div className="mt-2 flex gap-2">
               <input className={inputClass + ' flex-1'} placeholder="IBEW 1220 CBS 401K" value={benefitName} onChange={(e) => setBenefitName(e.target.value)} aria-label="Benefit name" />
               <input type="number" step="0.01" className={inputClass + ' w-24'} placeholder="20.54" value={benefitAmount} onChange={(e) => setBenefitAmount(e.target.value)} aria-label="Benefit amount" />
-              <button type="button" onClick={addBenefit} className="rounded-lg border border-neutral-700 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11">Add</button>
+              <button type="button" onClick={addBenefit} className="rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 min-h-11">Add</button>
             </div>
           </div>
 

@@ -62,22 +62,22 @@ export default function UnionChatPage() {
           <div>
             <Link
               href="/dashboard/contractor/union"
-              className="mb-1 inline-flex items-center gap-1 min-h-11 py-2 text-sm text-neutral-500 hover:text-neutral-300 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded"
+              className="mb-1 inline-flex items-center gap-1 min-h-11 py-2 text-sm text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded"
               aria-label="Back to documents"
             >
               <ArrowLeft size={14} aria-hidden="true" /> Documents
             </Link>
-            <h1 className="text-2xl font-bold text-neutral-100">Union Contract Chat</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Union Contract Chat</h1>
           </div>
           <div className="flex items-center gap-2">
-            <label className="text-xs text-neutral-500" htmlFor="union-filter">Filter:</label>
+            <label className="text-xs text-slate-400" htmlFor="union-filter">Filter:</label>
             <input
               id="union-filter"
               type="text"
               value={unionFilter}
               onChange={(e) => setUnionFilter(e.target.value)}
               placeholder="Union local..."
-              className="w-36 rounded-lg border border-neutral-700 bg-neutral-800 px-2.5 py-1.5 text-xs text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
+              className="w-36 rounded-lg border border-slate-300 bg-slate-100 px-2.5 py-1.5 text-xs text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
             />
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function UnionChatPage() {
       {/* Messages area */}
       <div
         ref={scrollRef}
-        className="flex-1 space-y-4 overflow-y-auto rounded-xl border border-neutral-800 bg-neutral-950 p-4"
+        className="flex-1 space-y-4 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-4"
         role="log"
         aria-label="Chat messages"
         aria-live="polite"
@@ -100,11 +100,11 @@ export default function UnionChatPage() {
         {messages.length === 0 && (
           <div className="flex h-full items-center justify-center text-center">
             <div className="max-w-sm space-y-3">
-              <FileText size={32} className="mx-auto text-neutral-500" aria-hidden="true" />
-              <p className="text-neutral-500 text-sm">
+              <FileText size={32} className="mx-auto text-slate-400" aria-hidden="true" />
+              <p className="text-slate-400 text-sm">
                 Ask questions about your uploaded union contracts, bylaws, and work rules.
               </p>
-              <div className="space-y-1 text-xs text-neutral-500">
+              <div className="space-y-1 text-xs text-slate-400">
                 <p>&quot;What&apos;s the OT threshold for my local?&quot;</p>
                 <p>&quot;What are my meal penalty rights?&quot;</p>
                 <p>&quot;What&apos;s the turnaround time between shifts?&quot;</p>
@@ -122,20 +122,20 @@ export default function UnionChatPage() {
               className={`max-w-[85%] rounded-xl px-4 py-3 text-sm ${
                 msg.role === 'user'
                   ? 'bg-amber-600 text-white'
-                  : 'bg-neutral-800 text-neutral-200'
+                  : 'bg-slate-100 text-slate-800'
               }`}
             >
               <div className="whitespace-pre-wrap">{msg.content}</div>
               {msg.sources && msg.sources.length > 0 && (
-                <div className="mt-3 border-t border-neutral-700 pt-2">
-                  <p className="text-xs text-neutral-500 mb-1">Sources:</p>
+                <div className="mt-3 border-t border-slate-300 pt-2">
+                  <p className="text-xs text-slate-400 mb-1">Sources:</p>
                   <div className="space-y-0.5">
                     {msg.sources.map((s, j) => (
-                      <p key={j} className="text-xs text-neutral-500">
+                      <p key={j} className="text-xs text-slate-400">
                         {s.document}
                         {s.union_local && ` (${s.union_local})`}
                         {' '}— Section {s.section}
-                        <span className="text-neutral-500"> ({Math.round(s.similarity * 100)}% match)</span>
+                        <span className="text-slate-400"> ({Math.round(s.similarity * 100)}% match)</span>
                       </p>
                     ))}
                   </div>
@@ -147,8 +147,8 @@ export default function UnionChatPage() {
 
         {loading && (
           <div className="flex justify-start">
-            <div className="rounded-xl bg-neutral-800 px-4 py-3">
-              <Loader2 size={16} className="animate-spin text-neutral-500" aria-label="Loading..." />
+            <div className="rounded-xl bg-slate-100 px-4 py-3">
+              <Loader2 size={16} className="animate-spin text-slate-400" aria-label="Loading..." />
             </div>
           </div>
         )}
@@ -163,13 +163,13 @@ export default function UnionChatPage() {
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }}
           placeholder="Ask about your union contract..."
           disabled={loading}
-          className="flex-1 rounded-lg border border-neutral-700 bg-neutral-900 px-4 py-3 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/40 disabled:opacity-50"
+          className="flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 disabled:opacity-50"
           aria-label="Type your question"
         />
         <button
           onClick={sendMessage}
           disabled={loading || !input.trim()}
-          className="min-h-11 min-w-11 flex items-center justify-center rounded-lg bg-amber-600 px-4 py-3 text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="min-h-11 min-w-11 flex items-center justify-center rounded-lg bg-amber-600 px-4 py-3 text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
           aria-label="Send message"
         >
           {loading ? <Loader2 size={18} className="animate-spin" aria-label="Loading..." /> : <Send size={18} aria-hidden="true" />}

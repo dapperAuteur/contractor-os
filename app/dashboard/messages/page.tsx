@@ -127,15 +127,15 @@ export default function MessagesPage() {
     <div className="max-w-2xl mx-auto py-8 px-4">
       <div className="flex items-center gap-3 mb-2">
         <Bell className="w-6 h-6 text-amber-600" />
-        <h1 className="text-3xl font-bold text-gray-900">Messages</h1>
+        <h1 className="text-3xl font-bold text-slate-900">Messages</h1>
         {unread > 0 && (
           <span className="px-2 py-0.5 bg-amber-600 text-white text-xs font-bold rounded-full">{unread} new</span>
         )}
       </div>
-      <p className="text-gray-500 mb-8">Messages from the Work.WitUS team. You can reply to any message.</p>
+      <p className="text-slate-500 mb-8">Messages from the Work.WitUS team. You can reply to any message.</p>
 
       {messages.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-slate-400">
           <Bell className="w-10 h-10 mx-auto mb-3 opacity-30" />
           <p>No messages yet. Check back later!</p>
         </div>
@@ -147,7 +147,7 @@ export default function MessagesPage() {
             return (
               <div
                 key={m.id}
-                className={`rounded-2xl border transition ${m.is_read ? 'bg-white border-gray-200' : 'bg-amber-50 border-amber-200'}`}
+                className={`rounded-2xl border transition ${m.is_read ? 'bg-white border-slate-200' : 'bg-amber-50 border-amber-200'}`}
               >
                 {/* Header — click to toggle */}
                 <button
@@ -159,11 +159,11 @@ export default function MessagesPage() {
                   {m.is_read && <CheckCircle className="w-4 h-4 text-gray-300 mt-0.5 shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-4 mb-0.5">
-                      <p className={`font-semibold truncate ${m.is_read ? 'text-gray-700' : 'text-gray-900'}`}>{m.subject}</p>
-                      <p className="text-xs text-gray-400 shrink-0">{new Date(m.created_at).toLocaleDateString()}</p>
+                      <p className={`font-semibold truncate ${m.is_read ? 'text-slate-700' : 'text-slate-900'}`}>{m.subject}</p>
+                      <p className="text-xs text-slate-400 shrink-0">{new Date(m.created_at).toLocaleDateString()}</p>
                     </div>
                     {!isOpen && (
-                      <p className="text-sm text-gray-500 truncate">
+                      <p className="text-sm text-slate-500 truncate">
                         {m.body.startsWith('<') ? m.body.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : m.body.split('\n')[0]}
                       </p>
                     )}
@@ -172,47 +172,47 @@ export default function MessagesPage() {
 
                 {/* Expanded content */}
                 {isOpen && (
-                  <div className="px-5 pb-5 border-t border-gray-100 pt-4 space-y-4">
+                  <div className="px-5 pb-5 border-t border-slate-100 pt-4 space-y-4">
                     {/* Original message body */}
                     {m.body.startsWith('<') ? (
                       <div
-                        className="prose prose-sm max-w-none text-gray-700"
+                        className="prose prose-sm max-w-none text-slate-700"
                         dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(m.body) }}
                       />
                     ) : (
                       <div>
                         {m.body.split('\n').map((line, i) =>
-                          line.trim() === '' ? <br key={i} /> : <p key={i} className="text-gray-700 text-sm mb-2">{line}</p>
+                          line.trim() === '' ? <br key={i} /> : <p key={i} className="text-slate-700 text-sm mb-2">{line}</p>
                         )}
                       </div>
                     )}
-                    <p className="text-xs text-gray-400">— Work.WitUS Team</p>
+                    <p className="text-xs text-slate-400">— Work.WitUS Team</p>
 
                     {/* Thread */}
                     {!thread?.loaded && (
                       <div className="flex justify-center py-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                        <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
                       </div>
                     )}
 
                     {thread?.loaded && thread.replies.length > 0 && (
-                      <div className="space-y-3 pt-2 border-t border-gray-100">
-                        <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Conversation</p>
+                      <div className="space-y-3 pt-2 border-t border-slate-100">
+                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">Conversation</p>
                         {thread.replies.map((reply) => {
                           const { isMine, label } = getReplyMeta(reply);
                           return (
                             <div key={reply.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
                               <div className={`max-w-[80%] rounded-xl px-4 py-3 ${
                                 isMine
-                                  ? 'bg-amber-50 border border-amber-200 text-gray-800'
-                                  : 'bg-purple-50 border border-purple-100 text-gray-800'
+                                  ? 'bg-amber-50 border border-amber-200 text-slate-800'
+                                  : 'bg-purple-50 border border-purple-100 text-slate-800'
                               }`}>
                                 <p className={`text-xs font-semibold mb-1 ${isMine ? 'text-amber-600' : 'text-purple-600'}`}>
                                   {label}
                                 </p>
                                 <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
                                 {reply.media_url && <ImageLightbox url={reply.media_url} />}
-                                <p className="text-xs text-gray-400 mt-1.5 text-right">
+                                <p className="text-xs text-slate-400 mt-1.5 text-right">
                                   {new Date(reply.created_at).toLocaleString()}
                                 </p>
                               </div>
@@ -223,7 +223,7 @@ export default function MessagesPage() {
                     )}
 
                     {/* Reply form */}
-                    <div className="pt-3 border-t border-gray-100">
+                    <div className="pt-3 border-t border-slate-100">
                       <label htmlFor={`reply-${m.id}`} className="sr-only">Reply to message</label>
                       <textarea
                         id={`reply-${m.id}`}
@@ -231,7 +231,7 @@ export default function MessagesPage() {
                         onChange={(e) => setReplyText((prev) => ({ ...prev, [m.id]: e.target.value }))}
                         rows={3}
                         placeholder={isAdmin ? 'Reply as the Work.WitUS team…' : 'Reply to the team…'}
-                        className="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                        className="w-full border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
                       />
                       <div className="flex items-center justify-between mt-2 gap-3">
                         <MediaUploader

@@ -135,13 +135,13 @@ export default function EquipmentManagePage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manage Equipment</h1>
-          <p className="text-sm text-gray-500 mt-0.5">Add, edit, and organize your gear</p>
+          <h1 className="text-2xl font-bold text-slate-900">Manage Equipment</h1>
+          <p className="text-sm text-slate-500 mt-0.5">Add, edit, and organize your gear</p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setShowCatModal(true)}
-            className="px-3 py-2 text-sm text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition flex items-center gap-1.5"
+            className="px-3 py-2 text-sm text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition flex items-center gap-1.5"
           >
             <Settings2 className="w-4 h-4" />
             Categories
@@ -157,21 +157,21 @@ export default function EquipmentManagePage() {
       </div>
 
       {/* Show retired toggle */}
-      <label className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+      <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
         <input
           type="checkbox"
           checked={showRetired}
           onChange={(e) => setShowRetired(e.target.checked)}
-          className="rounded border-gray-300"
+          className="rounded border-slate-300"
         />
         Show retired items
       </label>
 
       {/* Items list */}
       {loading ? (
-        <div className="text-center py-12 text-gray-400 text-sm">Loading...</div>
+        <div className="text-center py-12 text-slate-400 text-sm">Loading...</div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 text-gray-400 text-sm">No equipment items yet.</div>
+        <div className="text-center py-16 text-slate-400 text-sm">No equipment items yet.</div>
       ) : (
         <div className="space-y-2">
           {items.map((item) => {
@@ -179,15 +179,15 @@ export default function EquipmentManagePage() {
             return (
               <div
                 key={item.id}
-                className={`bg-white border border-gray-200 rounded-xl p-4 flex items-center gap-4 ${
+                className={`bg-white border border-slate-200 rounded-xl p-4 flex items-center gap-4 ${
                   !item.is_active ? 'opacity-60' : ''
                 }`}
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-sm text-gray-900 truncate">{item.name}</span>
+                    <span className="font-medium text-sm text-slate-900 truncate">{item.name}</span>
                     {catName && (
-                      <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded-full">
+                      <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded-full">
                         {catName}
                       </span>
                     )}
@@ -197,7 +197,7 @@ export default function EquipmentManagePage() {
                       </span>
                     )}
                   </div>
-                  <div className="flex gap-4 mt-1 text-xs text-gray-500">
+                  <div className="flex gap-4 mt-1 text-xs text-slate-500">
                     {item.brand && <span>{item.brand} {item.model || ''}</span>}
                     {item.purchase_price != null && <span>Paid ${Number(item.purchase_price).toLocaleString()}</span>}
                     {item.current_value != null && <span>Value ${Number(item.current_value).toLocaleString()}</span>}
@@ -206,21 +206,21 @@ export default function EquipmentManagePage() {
                 <div className="flex gap-1 shrink-0">
                   <button
                     onClick={() => setEditItem(item)}
-                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                    className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition"
                     title="Edit"
                   >
                     <Pencil className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleRetire(item)}
-                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                    className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition"
                     title={item.is_active ? 'Retire' : 'Reactivate'}
                   >
                     {item.is_active ? <Archive className="w-4 h-4" /> : <RotateCcw className="w-4 h-4" />}
                   </button>
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
+                    className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition"
                     title="Delete"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -265,7 +265,7 @@ export default function EquipmentManagePage() {
               onChange={(e) => setNewCatName(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddCategory(); } }}
               placeholder="New category name"
-              className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm"
+              className="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-sm"
             />
             <button
               onClick={handleAddCategory}
@@ -276,11 +276,11 @@ export default function EquipmentManagePage() {
           </div>
           <div className="space-y-1 max-h-64 overflow-y-auto">
             {categories.map((cat) => (
-              <div key={cat.id} className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg">
-                <span className="text-sm text-gray-700">{cat.name}</span>
+              <div key={cat.id} className="flex items-center justify-between px-3 py-2 bg-slate-50 rounded-lg">
+                <span className="text-sm text-slate-700">{cat.name}</span>
                 <button
                   onClick={() => handleDeleteCategory(cat.id)}
-                  className="text-gray-400 hover:text-red-500 transition"
+                  className="text-slate-400 hover:text-red-500 transition"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>

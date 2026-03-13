@@ -52,32 +52,32 @@ export default function ListerAvailabilityPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
-      <h1 className="text-2xl font-bold text-neutral-100">Contractor Availability</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Contractor Availability</h1>
 
       {/* Date range picker */}
       <div className="flex gap-3 items-end flex-wrap">
         <label className="block">
-          <span className="text-xs font-medium text-neutral-400">From</span>
+          <span className="text-xs font-medium text-slate-500">From</span>
           <input
             type="date"
             value={from}
             onChange={(e) => setFrom(e.target.value)}
-            className="mt-1 block rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+            className="mt-1 block rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
           />
         </label>
         <label className="block">
-          <span className="text-xs font-medium text-neutral-400">To</span>
+          <span className="text-xs font-medium text-slate-500">To</span>
           <input
             type="date"
             value={to}
             onChange={(e) => setTo(e.target.value)}
-            className="mt-1 block rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+            className="mt-1 block rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
           />
         </label>
         <button
           onClick={search}
           disabled={loading || !from || !to}
-          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-neutral-900"
+          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white"
         >
           {loading ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Search size={14} aria-hidden="true" />}
           Check
@@ -87,20 +87,20 @@ export default function ListerAvailabilityPage() {
       {/* Results */}
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={24} aria-label="Loading..." />
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading..." />
         </div>
       ) : !searched ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           Select a date range and click Check to see contractor availability.
         </div>
       ) : contractors.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           No contractors in your roster.
         </div>
       ) : (
         <div className="space-y-2" role="list" aria-label="Contractor availability">
           {contractors.map((c) => (
-            <article key={c.contact_id} role="listitem" className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
+            <article key={c.contact_id} role="listitem" className="rounded-xl border border-slate-200 bg-white p-4">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
                   {c.available === true ? (
@@ -108,12 +108,12 @@ export default function ListerAvailabilityPage() {
                   ) : c.available === false ? (
                     <XCircle size={18} className="text-red-400" aria-label="Busy" />
                   ) : (
-                    <Minus size={18} className="text-neutral-500" aria-label="Unknown" />
+                    <Minus size={18} className="text-slate-400" aria-label="Unknown" />
                   )}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-medium text-neutral-100">{c.name}</span>
+                    <span className="text-sm font-medium text-slate-900">{c.name}</span>
                     {c.username && (
                       <span className="rounded-full bg-indigo-500/10 px-2 py-0.5 text-xs text-indigo-400">@{c.username}</span>
                     )}
@@ -124,25 +124,25 @@ export default function ListerAvailabilityPage() {
                       <span className="rounded-full bg-red-400/10 px-2 py-0.5 text-xs text-red-400 font-medium">Busy</span>
                     )}
                     {c.available === null && (
-                      <span className="rounded-full bg-neutral-700/30 px-2 py-0.5 text-xs text-neutral-500 font-medium">No linked account</span>
+                      <span className="rounded-full bg-slate-200/50 px-2 py-0.5 text-xs text-slate-400 font-medium">No linked account</span>
                     )}
                   </div>
 
                   {c.skills && c.skills.length > 0 && (
                     <div className="mt-1.5 flex flex-wrap gap-1">
                       {c.skills.map((s) => (
-                        <span key={s} className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-400">{s}</span>
+                        <span key={s} className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">{s}</span>
                       ))}
                     </div>
                   )}
 
                   {c.availability_notes && (
-                    <p className="mt-1 text-xs text-neutral-500">{c.availability_notes}</p>
+                    <p className="mt-1 text-xs text-slate-400">{c.availability_notes}</p>
                   )}
 
                   {c.busy_dates.length > 0 && (
                     <div className="mt-2 space-y-1">
-                      <p className="text-xs text-neutral-500 font-medium">Conflicting jobs:</p>
+                      <p className="text-xs text-slate-400 font-medium">Conflicting jobs:</p>
                       {c.busy_dates.map((b) => (
                         <div key={b.job_id} className="text-xs text-red-400/80 flex gap-2">
                           <CalendarCheck size={12} className="shrink-0 mt-0.5" aria-hidden="true" />
