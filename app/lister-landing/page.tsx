@@ -1,8 +1,21 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   Users, Calendar, BarChart3, UserPlus, Shield, ClipboardList, MessageCircle,
   ArrowRight, Crown, Play,
 } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'CrewOps — Crew Management for Listers & Production Coordinators',
+  description: 'Post crew calls, manage assignments, and track your production roster. Built for listers and production coordinators.',
+  openGraph: {
+    title: 'CrewOps — Crew Management for Listers',
+    description: 'Post crew calls, manage assignments, and track your production roster.',
+    url: '/lister-landing',
+    type: 'website',
+  },
+  alternates: { canonical: '/lister-landing' },
+};
 
 const FEATURES = [
   { slug: 'dashboard', icon: ClipboardList, title: 'Lister Dashboard', desc: 'Create and publish jobs for your crew. Track assignment status in real time.' },

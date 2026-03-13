@@ -1,8 +1,22 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import {
   HardHat, FileText, CreditCard, BarChart3, Users, Building2,
   MapPin, Scale, Car, DollarSign, ScanLine, Shield, ArrowRight, Play,
 } from 'lucide-react';
+import { organizationSchema } from '@/lib/seo/json-ld';
+
+export const metadata: Metadata = {
+  title: 'Work.WitUS — Job Tracking for Independent Contractors',
+  description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors. Free to start.',
+  openGraph: {
+    title: 'Work.WitUS — Job Tracking for Independent Contractors',
+    description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors.',
+    url: '/',
+    type: 'website',
+  },
+  alternates: { canonical: '/' },
+};
 
 const FEATURES = [
   { slug: 'jobs', icon: HardHat, title: 'Job Management', desc: 'Track assignments, time entries with ST/OT/DT splits, and generate invoices automatically.' },
@@ -21,6 +35,7 @@ const FEATURES = [
 export default function ContractorLandingPage() {
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema()) }} />
       {/* Nav */}
       <nav className="border-b border-neutral-800 px-4 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">

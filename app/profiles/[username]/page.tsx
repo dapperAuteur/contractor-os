@@ -10,6 +10,7 @@ import {
 import SiteFooter from '@/components/ui/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
 import { getPublicProfile } from '@/lib/profiles/getPublicProfile';
+import { personSchema } from '@/lib/seo/json-ld';
 
 type Params = { params: Promise<{ username: string }> };
 
@@ -70,8 +71,17 @@ export default async function PublicProfilePage({ params }: Params) {
 
   const joinYear = new Date(profile.created_at).getFullYear();
 
+  const ldJson = personSchema({
+    username: profile.username,
+    display_name: profile.display_name,
+    bio: profile.bio ?? null,
+    avatar_url: profile.avatar_url ?? null,
+    contractor_role: profile.role ?? null,
+  });
+
   return (
     <div className="min-h-screen bg-neutral-950 flex flex-col">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }} />
       <SiteHeader />
 
       <main className="flex-1">

@@ -1,12 +1,25 @@
 // app/blog/page.tsx
 // Public listing of all blog posts from all authors, sorted by publish date.
 
+import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import PostCard from '@/components/blog/PostCard';
 import Link from 'next/link';
 import type { BlogPost, Profile } from '@/lib/types';
 
 export const revalidate = 60; // ISR: revalidate every 60 s
+
+export const metadata: Metadata = {
+  title: 'Blog — Work.WitUS',
+  description: 'Industry tips, union updates, and contractor resources from the Work.WitUS community.',
+  openGraph: {
+    title: 'Blog — Work.WitUS',
+    description: 'Industry tips, union updates, and contractor resources from the Work.WitUS community.',
+    url: '/blog',
+    type: 'website',
+  },
+  alternates: { canonical: '/blog' },
+};
 
 export default async function BlogIndexPage() {
   const supabase = await createClient();
