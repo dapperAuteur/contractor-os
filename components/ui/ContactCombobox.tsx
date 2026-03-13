@@ -12,7 +12,7 @@
 //  - Creating a contact saves it, fires callbacks, and adds it to the list
 //  - ESC or click-outside closes the dropdown
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useId, useRef, useState, useCallback } from 'react';
 import { Plus, X, ChevronDown, Loader2, Phone } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -56,6 +56,7 @@ export default function ContactCombobox({
   const [addError, setAddError] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listboxId = useId();
 
   // Load contacts on mount
   useEffect(() => {
@@ -152,6 +153,7 @@ export default function ContactCombobox({
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls={listboxId}
       >
         <span className={`flex-1 truncate ${value ? 'text-slate-900' : 'text-slate-400'}`}>
           {value || placeholder}
@@ -187,7 +189,7 @@ export default function ContactCombobox({
           </div>
 
           {/* Contact list */}
-          <ul role="listbox" className="max-h-52 overflow-y-auto py-1">
+          <ul id={listboxId} role="listbox" className="max-h-52 overflow-y-auto py-1">
             {filtered.length === 0 && !showAdd && (
               <li className="px-3 py-2 text-sm text-slate-400 text-center">
                 {filter ? `No matches for "${filter}"` : 'No contacts yet'}

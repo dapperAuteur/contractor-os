@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import {
-  Loader2, MapPin, Save, CheckCircle, AlertTriangle, RotateCcw, Sparkles,
+  Loader2, MapPin, Save, CheckCircle, AlertTriangle, Sparkles,
 } from 'lucide-react';
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
 import { offlineFetch } from '@/lib/offline/offline-fetch';

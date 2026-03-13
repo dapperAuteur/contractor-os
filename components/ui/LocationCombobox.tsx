@@ -5,7 +5,7 @@
 // Sources from the user's saved contact_locations (private).
 // Inline "Add new venue" creates a location under the "My Venues" system contact.
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useId, useRef, useState, useCallback } from 'react';
 import { Plus, X, ChevronDown, Loader2, MapPin } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -42,6 +42,7 @@ export default function LocationCombobox({
   const [addError, setAddError] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listboxId = useId();
 
   useEffect(() => {
     offlineFetch('/api/contractor/locations')
@@ -123,6 +124,7 @@ export default function LocationCombobox({
         role="combobox"
         aria-expanded={open}
         aria-haspopup="listbox"
+        aria-controls={listboxId}
       >
         <MapPin size={14} className="text-slate-400 shrink-0 mr-2" aria-hidden="true" />
         <span className={`flex-1 truncate ${value ? 'text-slate-900' : 'text-slate-400'}`}>
@@ -159,7 +161,7 @@ export default function LocationCombobox({
           </div>
 
           {/* List */}
-          <ul role="listbox" className="max-h-52 overflow-y-auto py-1">
+          <ul id={listboxId} role="listbox" className="max-h-52 overflow-y-auto py-1">
             {filtered.length === 0 && !showAdd && (
               <li className="px-3 py-2 text-sm text-slate-400 text-center">
                 {filter ? `No matches for "${filter}"` : 'No saved venues yet'}

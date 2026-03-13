@@ -177,11 +177,9 @@ export async function GET(request: NextRequest) {
   }
   // Travel benefits aggregate (per_diem and mileage totals)
   let totalPerDiem = 0;
-  let totalMileagePay = 0;
   for (const job of jobs) {
     const tb = job.travel_benefits ?? {};
     if (tb.per_diem) totalPerDiem += Number(tb.per_diem);
-    // Mileage pay = mileage_rate * distance (if available)
   }
 
   // --- Overall totals ---

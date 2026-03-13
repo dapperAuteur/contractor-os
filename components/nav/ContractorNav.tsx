@@ -11,7 +11,7 @@ import {
   Package, ScanLine, Database, Settings, Bell, LogOut,
   UserCircle, ChevronDown, Menu, X, MessageCircle,
   BarChart3, ArrowUpDown, Users, Building2, MapPin, Scale, Inbox, IdCard, UserPlus,
-  Sparkles, RotateCcw, Shield,
+  Sparkles, Shield,
 } from 'lucide-react';
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
 
@@ -76,9 +76,6 @@ const NAV_GROUPS: NavGroup[] = [
     ],
   },
 ];
-
-// Flat list for mobile drawer (grouped with headers)
-const ALL_ITEMS: NavItem[] = NAV_GROUPS.flatMap((g) => g.items);
 
 function isActive(href: string, pathname: string): boolean {
   if (href === '/dashboard/contractor') return pathname === href;
