@@ -36,8 +36,7 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
   // Log this render as a social share signal (fire-and-forget)
   db.from('og_image_requests')
     .insert({ profile_username: username })
-    .then(() => {})
-    .catch(() => {});
+    .then(() => {}, () => {});
 
   return new ImageResponse(
     (
