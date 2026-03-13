@@ -76,7 +76,7 @@ export default async function PublicProfilePage({ params }: Params) {
     display_name: profile.display_name,
     bio: profile.bio ?? null,
     avatar_url: profile.avatar_url ?? null,
-    contractor_role: profile.contractor_role ?? null,
+    contractor_role: profile.role ?? null,
   });
 
   return (
