@@ -27,6 +27,8 @@ interface Summary {
   total_expenses: number;
   net_earnings: number;
   benefits_eligible_jobs: number;
+  total_benefit_deductions: number;
+  total_per_diem: number;
 }
 
 interface ReportData {
@@ -36,6 +38,7 @@ interface ReportData {
   monthly_earnings: number[];
   by_union: Record<string, number>;
   by_department: Record<string, number>;
+  benefit_deductions_by_label: Record<string, number>;
 }
 
 const fmt = (n: number) =>
@@ -205,6 +208,39 @@ export default function ContractorReportsPage() {
               </div>
             )}
           </section>
+
+          {/* Benefits Summary */}
+          {(s.total_benefit_deductions > 0 || s.total_per_diem > 0) && (
+            <section aria-label="Benefits summary">
+              <h2 className="text-lg font-semibold text-slate-800 mb-3">Benefits &amp; Contributions</h2>
+              <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+                {/* Summary row */}
+                <div className="flex items-center justify-between text-sm border-b border-slate-100 pb-3">
+                  <span className="font-semibold text-slate-800">Total Employer Contributions</span>
+                  <span className="font-bold text-slate-900">{fmt(s.total_benefit_deductions)}</span>
+                </div>
+                {/* Breakdown by deduction label */}
+                {Object.entries(data!.benefit_deductions_by_label).length > 0 && (
+                  <div className="space-y-1.5">
+                    {Object.entries(data!.benefit_deductions_by_label)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([label, total]) => (
+                        <div key={label} className="flex items-center justify-between text-sm">
+                          <span className="text-slate-700">{label}</span>
+                          <span className="text-slate-600 font-medium">{fmt(total)}</span>
+                        </div>
+                      ))}
+                  </div>
+                )}
+                {s.total_per_diem > 0 && (
+                  <div className="flex items-center justify-between text-sm border-t border-slate-100 pt-2">
+                    <span className="text-slate-700">Per Diem (total across jobs)</span>
+                    <span className="text-slate-600 font-medium">{fmt(s.total_per_diem)}</span>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
 
           {/* Union & Department breakdown */}
           {(Object.keys(data!.by_union).length > 0 || Object.keys(data!.by_department).length > 0) && (

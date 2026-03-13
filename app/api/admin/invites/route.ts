@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { email, access_type = 'trial', expires_at, allowed_modules, demo_profile, notes, product = 'centos' } = body;
+  const { email, access_type = 'trial', expires_at, allowed_modules, demo_profile, notes, product = 'centos', job_limit } = body;
 
   if (!email) return NextResponse.json({ error: 'email is required' }, { status: 400 });
 
@@ -72,6 +72,7 @@ export async function POST(request: NextRequest) {
       notes: notes || null,
       product,
       invited_by_role: 'admin',
+      job_limit: job_limit ?? null,
     }])
     .select()
     .single();

@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Loader2, Clock, DollarSign, Car,
   FolderOpen, Phone, MessageSquare, Receipt,
   Trash2, Edit2, Check, X, Zap, Globe, Lock,
-  FileText, AlertTriangle, BookOpen, ImageIcon, Plus,
+  FileText, AlertTriangle, BookOpen, ImageIcon, Plus, Copy,
 } from 'lucide-react';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import JobSummaryCards from '@/components/contractor/JobSummaryCards';
@@ -38,8 +38,11 @@ interface Job {
   department: string | null;
   benefits_eligible: boolean;
   travel_benefits: Record<string, number>;
+  benefit_deductions: { label: string; amount: number }[];
   est_pay_date: string | null;
   distance_from_home_miles: number | null;
+  is_multi_day: boolean;
+  scheduled_dates: string[];
   is_public: boolean;
   share_contacts: boolean;
   notes: string | null;
@@ -111,6 +114,7 @@ const DOC_CATEGORIES = [
 
 /* ─── Tabs ──────────────────────────────────────────────── */
 const TABS = [
+  { id: 'details', label: 'Details', icon: FileText },
   { id: 'time', label: 'Time', icon: Clock },
   { id: 'invoices', label: 'Invoices', icon: Receipt },
   { id: 'expenses', label: 'Expenses', icon: DollarSign },
@@ -123,6 +127,7 @@ const STATUS_ORDER = ['assigned', 'confirmed', 'in_progress', 'completed', 'invo
 
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [job, setJob] = useState<Job | null>(null);
   const [summary, setSummary] = useState<Summary | null>(null);
   const [timeEntries, setTimeEntries] = useState<TimeEntry[]>([]);
@@ -162,6 +167,8 @@ export default function JobDetailPage() {
   /* ─── Time Entry Form ───────────────────────────────── */
   const [teForm, setTeForm] = useState({ work_date: '', time_in: '', time_out: '', total_hours: '', st_hours: '', ot_hours: '', notes: '' });
   const [teSaving, setTeSaving] = useState(false);
+  const [bulkTemplate, setBulkTemplate] = useState({ total_hours: '', st_hours: '', ot_hours: '', notes: '' });
+  const [bulkSaving, setBulkSaving] = useState(false);
 
   async function addTimeEntry(e: React.FormEvent) {
     e.preventDefault();
@@ -186,6 +193,29 @@ export default function JobDetailPage() {
 
   async function deleteTimeEntry(entryId: string) {
     await offlineFetch(`/api/contractor/jobs/${id}/time-entries/${entryId}`, { method: 'DELETE' });
+    loadJob();
+  }
+
+  async function bulkFillDates(e: React.FormEvent) {
+    e.preventDefault();
+    if (!job?.scheduled_dates?.length) return;
+    // Only fill dates that don't already have an entry
+    const existingDates = new Set(timeEntries.map((te) => te.work_date));
+    const datesToFill = job.scheduled_dates.filter((d) => !existingDates.has(d));
+    if (datesToFill.length === 0) return;
+    setBulkSaving(true);
+    await offlineFetch(`/api/contractor/jobs/${id}/time-entries`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        dates: datesToFill,
+        total_hours: bulkTemplate.total_hours ? parseFloat(bulkTemplate.total_hours) : null,
+        st_hours: bulkTemplate.st_hours ? parseFloat(bulkTemplate.st_hours) : null,
+        ot_hours: bulkTemplate.ot_hours ? parseFloat(bulkTemplate.ot_hours) : null,
+        notes: bulkTemplate.notes || null,
+      }),
+    });
+    setBulkSaving(false);
     loadJob();
   }
 
@@ -247,6 +277,32 @@ export default function JobDetailPage() {
         url: result.imageUrl || null,
       }),
     }).then(() => loadJob());
+  }
+
+  /* ─── Duplicate Job ────────────────────────────────── */
+  function handleDuplicate() {
+    if (!job) return;
+    const prefill = {
+      client_name: job.client_name,
+      event_name: job.event_name,
+      location_name: job.location_name,
+      poc_name: job.poc_name,
+      poc_phone: job.poc_phone,
+      crew_coordinator_name: job.crew_coordinator_name,
+      crew_coordinator_phone: job.crew_coordinator_phone,
+      pay_rate: job.pay_rate,
+      ot_rate: job.ot_rate,
+      dt_rate: job.dt_rate,
+      rate_type: job.rate_type,
+      union_local: job.union_local,
+      department: job.department,
+      benefits_eligible: job.benefits_eligible,
+      travel_benefits: job.travel_benefits,
+      distance_from_home_miles: job.distance_from_home_miles,
+      notes: job.notes,
+    };
+    sessionStorage.setItem('duplicate_job_prefill', JSON.stringify(prefill));
+    router.push('/dashboard/contractor/jobs/new?from=duplicate');
   }
 
   /* ─── Add Document ─────────────────────────────────── */
@@ -351,6 +407,15 @@ export default function JobDetailPage() {
             <Edit2 size={14} aria-hidden="true" /> Edit
           </Link>
           <button
+            onClick={handleDuplicate}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+            aria-label="Duplicate this job"
+            title="Duplicate job"
+          >
+            <Copy size={14} aria-hidden="true" />
+            <span className="hidden sm:inline">Duplicate</span>
+          </button>
+          <button
             onClick={togglePublic}
             className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 ${
               job.is_public
@@ -407,8 +472,132 @@ export default function JobDetailPage() {
       </div>
 
       {/* Tab Content */}
+
+      {tab === 'details' && (
+        <div className="space-y-4">
+          {/* Pay & Rates */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+            <h3 className="text-sm font-semibold text-slate-800">Pay Rates</h3>
+            <dl className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4 text-sm">
+              <div><dt className="text-slate-500">ST Rate</dt><dd className="font-medium text-slate-900">{job.pay_rate ? fmt(job.pay_rate) : '—'}</dd></div>
+              <div><dt className="text-slate-500">OT Rate</dt><dd className="font-medium text-slate-900">{job.ot_rate ? fmt(job.ot_rate) : '—'}</dd></div>
+              <div><dt className="text-slate-500">DT Rate</dt><dd className="font-medium text-slate-900">{job.dt_rate ? fmt(job.dt_rate) : '—'}</dd></div>
+              <div><dt className="text-slate-500">Rate Type</dt><dd className="font-medium text-slate-900 capitalize">{job.rate_type || '—'}</dd></div>
+              <div><dt className="text-slate-500">Union Local</dt><dd className="font-medium text-slate-900">{job.union_local || '—'}</dd></div>
+              <div><dt className="text-slate-500">Department</dt><dd className="font-medium text-slate-900">{job.department || '—'}</dd></div>
+              <div><dt className="text-slate-500">Est. Pay Date</dt><dd className="font-medium text-slate-900">{job.est_pay_date ? new Date(job.est_pay_date + 'T00:00').toLocaleDateString() : '—'}</dd></div>
+              <div><dt className="text-slate-500">Distance</dt><dd className="font-medium text-slate-900">{job.distance_from_home_miles != null ? `${job.distance_from_home_miles} mi` : '—'}</dd></div>
+            </dl>
+          </div>
+
+          {/* Travel Benefits */}
+          {(Object.keys(job.travel_benefits ?? {}).length > 0 || job.benefits_eligible) && (
+            <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-800">Travel Benefits</h3>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4 text-sm">
+                {job.travel_benefits?.per_diem != null && (
+                  <div><dt className="text-slate-500">Per Diem</dt><dd className="font-medium text-slate-900">{fmt(job.travel_benefits.per_diem)}/day</dd></div>
+                )}
+                {job.travel_benefits?.mileage_rate != null && (
+                  <div><dt className="text-slate-500">Mileage</dt><dd className="font-medium text-slate-900">${job.travel_benefits.mileage_rate}/mi</dd></div>
+                )}
+                {job.travel_benefits?.meal_allowance != null && (
+                  <div><dt className="text-slate-500">Meal Allow.</dt><dd className="font-medium text-slate-900">{fmt(job.travel_benefits.meal_allowance)}</dd></div>
+                )}
+                {job.travel_benefits?.extra_pay != null && (
+                  <div><dt className="text-slate-500">Extra Pay</dt><dd className="font-medium text-slate-900">{fmt(job.travel_benefits.extra_pay)}</dd></div>
+                )}
+              </dl>
+            </div>
+          )}
+
+          {/* Benefit Deductions */}
+          {(job.benefit_deductions?.length ?? 0) > 0 && (
+            <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+              <h3 className="text-sm font-semibold text-slate-800">Employer Benefit Contributions</h3>
+              <div className="space-y-1.5">
+                {job.benefit_deductions.map((ded, i) => (
+                  <div key={i} className="flex justify-between items-center text-sm">
+                    <span className="text-slate-700">{ded.label}</span>
+                    <span className="font-medium text-slate-900">{fmt(ded.amount)}</span>
+                  </div>
+                ))}
+                <div className="flex justify-between items-center text-sm border-t border-slate-100 pt-2 mt-2">
+                  <span className="font-semibold text-slate-800">Est. Benefits Total</span>
+                  <span className="font-bold text-slate-900">
+                    {fmt(job.benefit_deductions.reduce((s, d) => s + (d.amount ?? 0), 0))}
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Contacts */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+            <h3 className="text-sm font-semibold text-slate-800">Contacts</h3>
+            <dl className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 text-sm">
+              <div>
+                <dt className="text-slate-500">Point of Contact</dt>
+                <dd className="font-medium text-slate-900">{job.poc_name || '—'}</dd>
+                {job.poc_phone && <dd className="text-slate-500">{job.poc_phone}</dd>}
+              </div>
+              <div>
+                <dt className="text-slate-500">Crew Coordinator</dt>
+                <dd className="font-medium text-slate-900">{job.crew_coordinator_name || '—'}</dd>
+                {job.crew_coordinator_phone && <dd className="text-slate-500">{job.crew_coordinator_phone}</dd>}
+              </div>
+            </dl>
+          </div>
+
+          {/* Notes */}
+          {job.notes && (
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
+              <h3 className="text-sm font-semibold text-slate-800 mb-2">Notes</h3>
+              <p className="text-sm text-slate-700 whitespace-pre-wrap">{job.notes}</p>
+            </div>
+          )}
+        </div>
+      )}
+
       {tab === 'time' && (
         <div className="space-y-4">
+          {/* Multi-day bulk fill */}
+          {job.is_multi_day && job.scheduled_dates?.length ? (() => {
+            const scheduledDates = job.scheduled_dates;
+            const existingDates = new Set(timeEntries.map((te) => te.work_date));
+            const unfilled = scheduledDates.filter((d) => !existingDates.has(d));
+            return unfilled.length > 0 ? (
+              <form onSubmit={bulkFillDates} className="rounded-xl border border-amber-200 bg-amber-50 p-4 space-y-3" aria-label="Bulk fill all dates">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-amber-800">
+                    Fill {unfilled.length} remaining date{unfilled.length !== 1 ? 's' : ''} at once
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <div>
+                    <label className="block text-xs text-amber-700 mb-1">Total Hrs</label>
+                    <input type="number" step="0.25" className={inputClass} value={bulkTemplate.total_hours} onChange={(e) => setBulkTemplate(p => ({ ...p, total_hours: e.target.value }))} aria-label="Bulk total hours" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-amber-700 mb-1">ST Hrs</label>
+                    <input type="number" step="0.25" className={inputClass} value={bulkTemplate.st_hours} onChange={(e) => setBulkTemplate(p => ({ ...p, st_hours: e.target.value }))} aria-label="Bulk straight time hours" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-amber-700 mb-1">OT Hrs</label>
+                    <input type="number" step="0.25" className={inputClass} value={bulkTemplate.ot_hours} onChange={(e) => setBulkTemplate(p => ({ ...p, ot_hours: e.target.value }))} aria-label="Bulk overtime hours" />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-amber-700 mb-1">Notes</label>
+                    <input className={inputClass} placeholder="Optional" value={bulkTemplate.notes} onChange={(e) => setBulkTemplate(p => ({ ...p, notes: e.target.value }))} aria-label="Bulk notes" />
+                  </div>
+                </div>
+                <button type="submit" disabled={bulkSaving} className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11 w-full sm:w-auto">
+                  {bulkSaving ? <Loader2 size={14} className="animate-spin" aria-label="Saving" /> : `Apply to ${unfilled.length} date${unfilled.length !== 1 ? 's' : ''}`}
+                </button>
+              </form>
+            ) : null;
+          })() : null}
+
           {/* Add Time Entry Form */}
           <form onSubmit={addTimeEntry} className="rounded-xl border border-slate-200 bg-white p-4 space-y-3" aria-label="Add time entry">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:flex lg:flex-wrap lg:items-end lg:gap-3">

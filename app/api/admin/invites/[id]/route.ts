@@ -19,7 +19,7 @@ async function requireAdmin() {
   return user;
 }
 
-const PATCHABLE = ['access_type', 'expires_at', 'is_active', 'allowed_modules', 'notes', 'demo_profile', 'is_paid', 'paid_at', 'subscription_tier'];
+const PATCHABLE = ['access_type', 'expires_at', 'is_active', 'allowed_modules', 'notes', 'demo_profile', 'is_paid', 'paid_at', 'subscription_tier', 'job_limit'];
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await requireAdmin();

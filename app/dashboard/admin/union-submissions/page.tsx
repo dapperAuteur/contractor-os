@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import {
-  Loader2, CheckCircle, XCircle, Clock, FileText, ExternalLink, Send, AlertTriangle,
+  Loader2, CheckCircle, XCircle, FileText, ExternalLink, AlertTriangle,
 } from 'lucide-react';
 
 interface Submission {

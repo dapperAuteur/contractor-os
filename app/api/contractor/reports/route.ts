@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   const [jobsRes, invoicesRes, tripsRes, expensesRes, timeRes] = await Promise.all([
     // All jobs in year
     db.from('contractor_jobs')
-      .select('id, job_number, client_name, client_id, status, start_date, end_date, pay_rate, union_local, department, benefits_eligible')
+      .select('id, job_number, client_name, client_id, status, start_date, end_date, pay_rate, union_local, department, benefits_eligible, benefit_deductions, travel_benefits')
       .eq('user_id', user.id)
       .gte('start_date', startDate)
       .lte('start_date', endDate)
@@ -162,6 +162,26 @@ export async function GET(request: NextRequest) {
   // --- Benefits-eligible job count ---
   const benefitsJobs = jobs.filter((j) => j.benefits_eligible).length;
 
+  // --- Benefit deductions aggregation ---
+  const benefitDeductionMap = new Map<string, number>();
+  let totalBenefitDeductions = 0;
+  for (const job of jobs) {
+    const deductions = Array.isArray(job.benefit_deductions) ? job.benefit_deductions : [];
+    for (const ded of deductions) {
+      const label = String(ded.label ?? '');
+      const amount = Number(ded.amount ?? 0);
+      if (!label) continue;
+      benefitDeductionMap.set(label, (benefitDeductionMap.get(label) ?? 0) + amount);
+      totalBenefitDeductions += amount;
+    }
+  }
+  // Travel benefits aggregate (per_diem and mileage totals)
+  let totalPerDiem = 0;
+  for (const job of jobs) {
+    const tb = job.travel_benefits ?? {};
+    if (tb.per_diem) totalPerDiem += Number(tb.per_diem);
+  }
+
   // --- Overall totals ---
   let totalInvoiced = 0;
   let totalPaid = 0;
@@ -205,7 +225,10 @@ export async function GET(request: NextRequest) {
       total_income: totalIncome,
       net_earnings: totalPaid - totalExpenses,
       benefits_eligible_jobs: benefitsJobs,
+      total_benefit_deductions: totalBenefitDeductions,
+      total_per_diem: totalPerDiem,
     },
+    benefit_deductions_by_label: Object.fromEntries(benefitDeductionMap),
     earnings_by_client: earningsByClient,
     monthly_earnings: monthlyEarnings,
     by_union: Object.fromEntries(unionMap),

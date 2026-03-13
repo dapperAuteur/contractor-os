@@ -65,7 +65,7 @@ const ALLOWED_FIELDS = [
   'status', 'start_date', 'end_date',
   'is_multi_day', 'scheduled_dates',
   'pay_rate', 'ot_rate', 'dt_rate', 'rate_type',
-  'distance_from_home_miles', 'distance_from_home_km', 'benefits_eligible', 'travel_benefits',
+  'distance_from_home_miles', 'distance_from_home_km', 'benefits_eligible', 'travel_benefits', 'benefit_deductions',
   'union_local', 'department', 'brand_id', 'est_pay_date',
   'is_public', 'share_contacts', 'notes', 'metadata',
 ];

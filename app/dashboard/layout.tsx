@@ -43,7 +43,6 @@ export default function DashboardLayout({
 
   const isPaid = subStatus === 'monthly' || subStatus === 'lifetime';
   const [isAdmin, setIsAdmin] = useState(false);
-  const [isTeacher, setIsTeacher] = useState(false);
   const [username, setUsername] = useState<string | null>(null);
   const [contractorRole, setContractorRole] = useState<string | null>(null);
   const [adminLoading, setAdminLoading] = useState(true);
@@ -62,7 +61,6 @@ export default function DashboardLayout({
       .then((r) => r.json())
       .then((d) => {
         setIsAdmin(d.isAdmin ?? false);
-        setIsTeacher(d.isTeacher ?? false);
         setUsername(d.username ?? null);
         setContractorRole(d.contractorRole ?? null);
         setIsInvited(d.isInvited ?? false);
