@@ -22,7 +22,6 @@ export const CLEAR_ORDER = [
   'lister_message_groups',
   'contractor_job_assignments',
   'union_rag_submissions',
-  'union_document_chunks',
   'union_documents',
   'union_dues_payments',
   'union_memberships',

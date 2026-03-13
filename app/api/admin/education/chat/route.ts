@@ -65,9 +65,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Message is required' }, { status: 400 });
   }
 
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
   if (!apiKey) {
-    return NextResponse.json({ error: 'GOOGLE_GEMINI_API_KEY not configured' }, { status: 500 });
+    return NextResponse.json({ error: 'GOOGLE_GEMINI_API_KEY_WORK_WITUS not configured' }, { status: 500 });
   }
 
   const modePrompt = MODE_INSTRUCTIONS[mode ?? 'general'] ?? MODE_INSTRUCTIONS.general;

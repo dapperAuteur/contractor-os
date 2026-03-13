@@ -18,8 +18,8 @@ const CHUNK_OVERLAP = 200;
 const EMBEDDING_MODEL = 'gemini-embedding-001';
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY not set');
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
   const res = await fetch(url, {
@@ -36,7 +36,7 @@ async function getEmbedding(text: string): Promise<number[]> {
 }
 
 async function extractPdfText(base64: string): Promise<string> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY!;
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS!;
   const res = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
     {
@@ -52,7 +52,7 @@ async function extractPdfText(base64: string): Promise<string> {
       }),
     },
   );
-  if (!res.ok) throw new Error('Failed to extract PDF text');
+  if (!res.ok) throw new Error(`Failed to extract PDF text: ${await res.text()}`);
   const data = await res.json();
   return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
 }
@@ -164,17 +164,21 @@ export async function PATCH(
 
     if (docErr) throw new Error(docErr.message);
 
-    // Chunk and embed
+    // Chunk and embed in parallel batches of 5
+    const BATCH_SIZE = 5;
     const chunks = chunkText(fullText);
     const chunkRows = [];
-    for (let i = 0; i < chunks.length; i++) {
-      const embedding = await getEmbedding(chunks[i]);
-      chunkRows.push({
-        document_id: doc.id,
-        chunk_text: chunks[i],
-        chunk_index: i,
-        embedding: `[${embedding.join(',')}]`,
-      });
+    for (let b = 0; b < chunks.length; b += BATCH_SIZE) {
+      const batch = chunks.slice(b, b + BATCH_SIZE);
+      const embeddings = await Promise.all(batch.map((c) => getEmbedding(c)));
+      for (let j = 0; j < batch.length; j++) {
+        chunkRows.push({
+          document_id: doc.id,
+          chunk_text: batch[j],
+          chunk_index: b + j,
+          embedding: `[${embeddings[j].join(',')}]`,
+        });
+      }
     }
 
     const { error: chunkErr } = await db
@@ -190,6 +194,11 @@ export async function PATCH(
       updated_at: new Date().toISOString(),
     }).eq('id', doc.id);
 
+    // If this is a replacement, delete the original document (chunks cascade via FK)
+    if (sub.replaces_document_id) {
+      await db.from('union_documents').delete().eq('id', sub.replaces_document_id);
+    }
+
     // Mark submission as live
     await db.from('union_rag_submissions').update({
       status: 'live',
@@ -197,7 +206,7 @@ export async function PATCH(
       updated_at: new Date().toISOString(),
     }).eq('id', id);
 
-    return NextResponse.json({ status: 'live', document_id: doc.id, chunks: chunks.length });
+    return NextResponse.json({ status: 'live', document_id: doc.id, chunks: chunks.length, replaced: !!sub.replaces_document_id });
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Processing failed';
     await db.from('union_rag_submissions').update({

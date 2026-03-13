@@ -702,4 +702,67 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: 'How to use lister reports',
     content: `The Reports page at /dashboard/contractor/reports works for listers too. View analytics on jobs you have managed, assignment fill rates, contractor response times, and crew utilization. See which contractors accept the most offers and which are most reliable. Reports help you make data-driven decisions about crew management and identify your most dependable team members.`,
   },
+
+  // ─── CONTRACTOR-SPECIFIC OVERRIDES & ADDITIONS ───────────────────────────
+
+  {
+    role: 'contractor',
+    title: 'How to scan a pay stub or check stub with Smart Scan',
+    content: `Go to Dashboard → Scan (/dashboard/scan). Tap the camera icon or upload a photo of your pay stub, check stub, or paycheck. Smart Scan automatically detects it as a pay document and extracts: gross pay, net pay, deductions (federal tax, state tax, FICA, Medicare, union dues, health insurance), pay period dates, employer name, and employee name. Results are displayed in a structured card. You can save the scan and link it to a job or financial transaction. Smart Scan works for physical check stubs, digital PDFs photographed on screen, and electronic pay statements. If the extraction is incomplete, you can manually edit any field before saving.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to create and manage finance accounts',
+    content: `Go to Dashboard → Finance → Accounts (/dashboard/finance/accounts) to manage your chart of accounts. Create accounts for bank accounts, credit cards, cash, and other financial accounts. Each account has a name, type (checking, savings, credit, cash, other), optional institution, and current balance. Accounts are used in invoice and expense tracking — assign transactions to the correct account to keep your books organized. On the Invoices page there is a "Manage accounts" link at the top of the Account selector. You can create, edit, and delete accounts from /dashboard/finance/accounts at any time.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the public venue library',
+    content: `The Venues page (/dashboard/contractor/venues) has two tabs: Public Library and My Venues. The Public Library is a community-shared database of venues anyone on the platform can view and add to. Search by name or city. Click a venue card to expand it and see the knowledge base (parking, load-in, WiFi, power, catering, security). To add a new venue, click Add Venue and fill in the name, type, capacity, address, and knowledge base fields — it's immediately visible to all users. To suggest an edit or request a deletion, click Request Edit or Request Deletion on any venue card. Your change request goes to an admin for review. Once approved, the change is applied. My Venues tab shows venues from your personal job history.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to request an edit or deletion of a public venue',
+    content: `On the Public Library tab of the Venues page, expand any venue card and click Request Edit or Request Deletion. For edits: a form pre-filled with the venue's current data opens — change any fields (name, type, capacity, address, knowledge base) and add an optional reason, then submit. For deletions: confirm the reason and submit. Your request goes to a platform admin who reviews the proposed change and approves or rejects it. You can track your request status in the notification area. Approved edits update the venue immediately; approved deletions remove it from the public library.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use finance invoices and track income',
+    content: `Go to Dashboard → Finance → Invoices (/dashboard/finance/invoices). Invoices can be created manually or auto-generated from a job's time entries (click Generate Invoice on the job detail page). Each invoice has: client (contact), account, issue date, due date, line items (description, quantity, unit price), subtotal, tax rate, and total. Status workflow: draft → sent → paid (or void). To mark an invoice paid, click the invoice and change its status. Invoices are tracked as income in your financial reports. Use the Account dropdown on the invoice to assign it to the correct bank or payment account. Click "Manage accounts" next to the Account label to create new accounts if needed.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the in-app help chat on Work.WitUS',
+    content: `The Help button is in the floating action menu — the amber button in the bottom-right corner of the contractor dashboard. Click it to expand, then select the question mark (Help) option. A chat drawer opens where you can ask anything about using Work.WitUS. The system searches the platform documentation and uses AI to give you a direct, specific answer. Try questions like: How do I scan a pay stub? How do I add a venue? How do I generate an invoice? How do I track my union dues? The help chat is specific to Work.WitUS features — it will not answer general questions outside the platform.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to track union dues and membership payments',
+    content: `Go to Dashboard → Union → Memberships tab (/dashboard/contractor/union). Click Add Membership to add a union (e.g., IATSE 317, IBEW 1220) with your member ID, join date, dues amount, and payment frequency (monthly, quarterly, semi-annual, annual). The system calculates your next_dues_date and color-codes urgency: red = overdue, yellow = due within 30 days, green = current. To record a payment, expand the membership and click Record Payment — this auto-advances the next due date. Link dues payments to a financial transaction for tax tracking (Schedule C deduction). The Documents tab lets you upload rate sheets and union cards.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to submit a union contract to the community knowledge base',
+    content: `On the Union page (/dashboard/contractor/union), go to the Submit tab. Upload a union contract, rate sheet, or bylaws (PDF or text file). Fill in: union local (e.g., "IATSE 317"), document type (contract, rate sheet, bylaws, work rules), description, and coverage dates (from/to). Submit the form. The document goes to admin review. Once approved, it is processed into the shared RAG knowledge base (text extraction + embeddings). Users can then ask the AI chat questions about the contract and get answers grounded in the actual document text. Track your submission status (pending, processing, approved, rejected, live) in the My Submissions tab.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use travel planning for production work',
+    content: `Go to Dashboard → Travel (/dashboard/travel). Create a trip linked to a job — this connects your travel expenses, flights, hotels, and per diem to the specific gig. Trips have arrival/departure dates, destination city, accommodation details, and budget tracking. Add travel expenses (flights, rideshare, meals) as line items and compare them against your per diem allowance from the job's travel benefits. The travel dashboard shows all upcoming and past trips with budget vs. actual comparison. You can also create city guides for destinations you visit frequently — add restaurant, hotel, gym, and coffee recommendations for your crew.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the job board to find or post gigs',
+    content: `Go to Dashboard → Board (/dashboard/contractor/board). The board shows jobs marked public by other contractors who need replacements. Browse available gigs by date, location, or department. Click a job to see the details and rates, then click Apply to send a request to cover it. The original contractor reviews your request and can approve or decline. If you need to find a replacement for a job you cannot work, open the job and toggle Make Public — your job appears on the board for others to apply. This creates a peer-to-peer coverage system within the contractor community.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use rate cards to speed up job creation',
+    content: `Rate cards (/dashboard/contractor/ratecards) store your pay rates by client or union so you do not have to type them every time. Create a card with: name (e.g., "CBS Network — IATSE 317"), standard time rate, overtime rate (1.5x by default), double time rate (2x by default), and travel benefits (meal allowance, per diem, mileage rate, kit fee). When creating a new job, select a rate card from the dropdown and all rates auto-fill. The card also records how many times it has been used. Edit rate cards any time — changes do not retroactively affect existing jobs.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to view earnings reports and 1099 tracking',
+    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099 — any client who paid $600+ in a year), earnings breakdown by month, total hours worked, mileage totals, and travel benefits accrued. Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, mileage cost, and net earnings. This helps you identify your most profitable clients.`,
+  },
 ];

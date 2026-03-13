@@ -151,7 +151,7 @@ export default function ContactAutocomplete({
         onChange={handleChange}
         onBlur={handleBlur}
         placeholder={placeholder}
-        className={inputClassName}
+        className={inputClassName ?? 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30'}
         autoComplete="off"
         aria-autocomplete="list"
         aria-label={placeholder || `Search ${contactType}s`}
@@ -163,18 +163,18 @@ export default function ContactAutocomplete({
       </datalist>
       {showSave && value.trim() && (
         <div className="flex items-center gap-1.5 mt-1">
-          <span className="text-xs text-neutral-400">Save &ldquo;{value.trim()}&rdquo; as a contact?</span>
+          <span className="text-xs text-slate-500">Save &ldquo;{value.trim()}&rdquo; as a contact?</span>
           <button
             type="button"
             onClick={handleSave}
-            className="text-xs text-amber-400 hover:underline font-medium"
+            className="text-xs text-amber-600 hover:underline font-medium"
           >
             Save
           </button>
           <button
             type="button"
             onClick={() => setShowSave(false)}
-            className="text-xs text-neutral-400 hover:text-neutral-200"
+            className="text-xs text-slate-400 hover:text-slate-600"
           >
             Dismiss
           </button>
@@ -183,7 +183,7 @@ export default function ContactAutocomplete({
       {showLocations && locations.length > 0 && (
         <select
           onChange={handleLocationChange}
-          className="w-full border border-neutral-700 bg-neutral-800 rounded-lg px-3 py-1.5 text-sm mt-1 text-neutral-100"
+          className="w-full border border-slate-300 bg-white rounded-lg px-3 py-1.5 text-sm mt-1 text-slate-900 focus:border-amber-500 focus:outline-none"
           defaultValue={locations.find((l) => l.is_default)?.id ?? ''}
           aria-label="Select location"
         >

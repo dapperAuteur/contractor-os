@@ -53,7 +53,7 @@ export default function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
       const res = await offlineFetch('/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category, message: message.trim(), media_url: mediaUrl }),
+        body: JSON.stringify({ category, message: message.trim(), media_url: mediaUrl, source_app: 'Work.WitUS' }),
       });
       if (!res.ok) {
         const data = await res.json();

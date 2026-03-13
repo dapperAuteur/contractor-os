@@ -12,9 +12,10 @@ import HelpDrawer from '@/components/ui/HelpDrawer';
 
 interface Props {
   userRole?: string;
+  isAdmin?: boolean;
 }
 
-export default function FloatingActionsMenu({ userRole }: Props) {
+export default function FloatingActionsMenu({ userRole, isAdmin }: Props) {
   const [open, setOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
@@ -33,24 +34,26 @@ export default function FloatingActionsMenu({ userRole }: Props) {
     <>
       {/* Speed-dial stack */}
       <div className="fixed bottom-22 lg:bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-none">
-        {/* Help action */}
-        <div
-          className={`flex items-center gap-2.5 transition-all duration-200 ${
-            open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
-          }`}
-        >
-          <span className="bg-neutral-900 text-neutral-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-neutral-700">
-            Help
-          </span>
-          <button
-            onClick={openHelp}
-            title="Open help chat"
-            className="bg-neutral-800 text-white rounded-full p-3 shadow-lg hover:bg-neutral-700 border border-neutral-700 transition-colors"
-            aria-label="Open help chat"
+        {/* Help action — admin only until help articles are fully seeded */}
+        {isAdmin && (
+          <div
+            className={`flex items-center gap-2.5 transition-all duration-200 ${
+              open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
+            }`}
           >
-            <HelpCircle className="w-5 h-5 text-amber-400" />
-          </button>
-        </div>
+            <span className="bg-neutral-900 text-neutral-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-neutral-700">
+              Help
+            </span>
+            <button
+              onClick={openHelp}
+              title="Open help chat"
+              className="bg-neutral-800 text-white rounded-full p-3 shadow-lg hover:bg-neutral-700 border border-neutral-700 transition-colors"
+              aria-label="Open help chat"
+            >
+              <HelpCircle className="w-5 h-5 text-amber-400" />
+            </button>
+          </div>
+        )}
 
         {/* Feedback action */}
         <div

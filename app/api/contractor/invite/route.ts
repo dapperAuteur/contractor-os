@@ -21,7 +21,7 @@ function authClient() {
   );
 }
 
-const MAX_INVITES_PER_USER = 10;
+const DEFAULT_MAX_INVITES = 10;
 
 export async function GET() {
   const supabase = await createClient();
@@ -56,15 +56,16 @@ export async function POST(request: NextRequest) {
 
   const db = getDb();
 
-  // Check user's role — listers can invite to both, workers can only invite contractor
+  // Check user's role and invite limit
   const { data: profile } = await db
     .from('profiles')
-    .select('contractor_role')
+    .select('contractor_role, invite_limit')
     .eq('id', user.id)
     .maybeSingle();
 
   const role = profile?.contractor_role ?? 'worker';
   const invitedByRole = ['lister', 'union_leader'].includes(role) ? 'lister' : 'contractor';
+  const maxInvites = profile?.invite_limit ?? DEFAULT_MAX_INVITES;
 
   if (product === 'lister' && !['lister', 'union_leader'].includes(role)) {
     return NextResponse.json({ error: 'Only listers can invite other listers' }, { status: 403 });
@@ -76,8 +77,8 @@ export async function POST(request: NextRequest) {
     .select('id', { count: 'exact', head: true })
     .eq('invited_by', user.id);
 
-  if ((count ?? 0) >= MAX_INVITES_PER_USER) {
-    return NextResponse.json({ error: `Maximum ${MAX_INVITES_PER_USER} invites reached` }, { status: 400 });
+  if ((count ?? 0) >= maxInvites) {
+    return NextResponse.json({ error: `Maximum ${maxInvites} invites reached` }, { status: 400 });
   }
 
   // Create invite
