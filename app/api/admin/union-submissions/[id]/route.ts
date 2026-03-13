@@ -18,8 +18,8 @@ const CHUNK_OVERLAP = 200;
 const EMBEDDING_MODEL = 'gemini-embedding-001';
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY not set');
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
   const res = await fetch(url, {
@@ -36,7 +36,7 @@ async function getEmbedding(text: string): Promise<number[]> {
 }
 
 async function extractPdfText(base64: string): Promise<string> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY!;
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS!;
   const res = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
     {

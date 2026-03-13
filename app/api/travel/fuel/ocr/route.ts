@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  if (!process.env.GOOGLE_GEMINI_API_KEY) {
+  if (!process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS) {
     return NextResponse.json({ error: 'Gemini API key not configured' }, { status: 500 });
   }
 

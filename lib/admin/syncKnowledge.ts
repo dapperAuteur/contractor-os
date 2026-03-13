@@ -15,8 +15,8 @@ function getDb() {
 }
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY not set');
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
   const response = await fetch(url, {

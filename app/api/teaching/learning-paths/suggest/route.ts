@@ -9,8 +9,8 @@ import { createClient } from '@/lib/supabase/server';
 const GEMINI_MODEL = 'gemini-2.5-flash';
 
 async function callGemini(prompt: string): Promise<string> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY not set');
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
   const res = await fetch(url, {

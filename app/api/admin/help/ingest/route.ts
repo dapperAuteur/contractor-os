@@ -18,8 +18,8 @@ function getDb() {
 const EMBEDDING_MODEL = 'gemini-embedding-001';
 
 async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY not set');
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
 
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
   const response = await fetch(url, {
@@ -49,10 +49,10 @@ export async function POST(_req: NextRequest) {
   }
 
   // Preflight: validate API key exists and the Gemini API is reachable
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
   if (!apiKey) {
     return NextResponse.json(
-      { error: 'GOOGLE_GEMINI_API_KEY is not set in environment variables.' },
+      { error: 'GOOGLE_GEMINI_API_KEY_WORK_WITUS is not set in environment variables.' },
       { status: 500 },
     );
   }
@@ -110,8 +110,8 @@ export async function GET(req: NextRequest) {
   // ?diagnose=1 → list models available to this API key
   const diagnose = new URL(req.url).searchParams.get('diagnose');
   if (diagnose) {
-    const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
-    if (!apiKey) return NextResponse.json({ error: 'GOOGLE_GEMINI_API_KEY not set' }, { status: 500 });
+    const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+    if (!apiKey) return NextResponse.json({ error: 'GOOGLE_GEMINI_API_KEY_WORK_WITUS not set' }, { status: 500 });
     const r = await fetch(
       'https://generativelanguage.googleapis.com/v1beta/models',
       { headers: { 'x-goog-api-key': apiKey } },

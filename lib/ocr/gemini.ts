@@ -31,7 +31,7 @@ export async function callGemini<T>(
   prompt: string,
   imageParts: GeminiImagePart[],
 ): Promise<T> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY;
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
   if (!apiKey) throw new Error('Gemini API key not configured');
 
   const payload = {
