@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Loader2, Upload, FileText, Trash2, Globe, Lock, AlertTriangle, CheckCircle, Clock, X, Send,
+  Pencil, RefreshCw, Save,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -17,6 +18,7 @@ interface Submission {
   status: string;
   admin_notes: string | null;
   created_at: string;
+  replaces_document_id: string | null;
 }
 
 interface UnionDoc {
@@ -41,17 +43,21 @@ const DOC_TYPE_LABELS: Record<string, string> = {
 };
 
 const STATUS_STYLES: Record<string, { icon: typeof CheckCircle; color: string }> = {
-  ready: { icon: CheckCircle, color: 'text-green-400' },
-  processing: { icon: Clock, color: 'text-yellow-400' },
-  pending: { icon: Clock, color: 'text-slate-400' },
-  error: { icon: AlertTriangle, color: 'text-red-400' },
+  ready: { icon: CheckCircle, color: 'text-green-600' },
+  processing: { icon: Clock, color: 'text-yellow-600' },
+  pending: { icon: Clock, color: 'text-slate-500' },
+  error: { icon: AlertTriangle, color: 'text-red-500' },
 };
+
+const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
+const labelClass = 'block text-xs font-medium text-slate-500 mb-1';
 
 export default function UnionDocumentsPage() {
   const [docs, setDocs] = useState<UnionDoc[]>([]);
   const [shared, setShared] = useState<UnionDoc[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [showUpload, setShowUpload] = useState(false);
   const [showSubmit, setShowSubmit] = useState(false);
@@ -60,6 +66,18 @@ export default function UnionDocumentsPage() {
   const [tab, setTab] = useState<'mine' | 'shared' | 'submissions'>('mine');
   const fileRef = useRef<HTMLInputElement>(null);
   const submitFileRef = useRef<HTMLInputElement>(null);
+
+  // Edit state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ name: '', union_local: '', doc_type: 'contract', is_shared: false });
+  const [saving, setSaving] = useState(false);
+
+  // Replace state
+  const [replacingId, setReplacingId] = useState<string | null>(null);
+  const [replaceFile, setReplaceFile] = useState<File | null>(null);
+  const [replacing, setReplacing] = useState(false);
+  const [replaceError, setReplaceError] = useState('');
+  const replaceFileRef = useRef<HTMLInputElement>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -96,6 +114,7 @@ export default function UnionDocumentsPage() {
   async function uploadDoc() {
     if (!selectedFile || !form.name.trim()) return;
     setUploading(true);
+    setUploadError('');
 
     const fd = new FormData();
     fd.append('file', selectedFile);
@@ -112,6 +131,9 @@ export default function UnionDocumentsPage() {
       setForm({ name: '', union_local: '', doc_type: 'contract', is_shared: false });
       setSelectedFile(null);
       load();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      setUploadError(data.error ?? 'Upload failed. Please try again.');
     }
   }
 
@@ -120,6 +142,52 @@ export default function UnionDocumentsPage() {
     await offlineFetch(`/api/contractor/union/documents/${id}`, { method: 'DELETE' });
     setDeletingId(null);
     load();
+  }
+
+  function startEdit(doc: UnionDoc) {
+    setEditingId(doc.id);
+    setEditForm({ name: doc.name, union_local: doc.union_local ?? '', doc_type: doc.doc_type, is_shared: doc.is_shared });
+  }
+
+  async function saveEdit(id: string) {
+    setSaving(true);
+    const res = await offlineFetch(`/api/contractor/union/documents/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: editForm.name.trim(),
+        union_local: editForm.union_local.trim() || null,
+        doc_type: editForm.doc_type,
+        is_shared: editForm.is_shared,
+      }),
+    });
+    setSaving(false);
+    if (res.ok) {
+      const updated = await res.json();
+      setDocs((prev) => prev.map((d) => d.id === id ? { ...d, ...updated } : d));
+      setEditingId(null);
+    }
+  }
+
+  async function submitReplacement() {
+    if (!replaceFile || !replacingId) return;
+    setReplacing(true);
+    setReplaceError('');
+
+    const fd = new FormData();
+    fd.append('file', replaceFile);
+
+    const res = await offlineFetch(`/api/contractor/union/documents/${replacingId}/replace`, { method: 'POST', body: fd });
+    setReplacing(false);
+
+    if (res.ok) {
+      setReplacingId(null);
+      setReplaceFile(null);
+      load();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      setReplaceError(data.error ?? 'Replacement failed. Please try again.');
+    }
   }
 
   async function submitToCommunity() {
@@ -143,6 +211,10 @@ export default function UnionDocumentsPage() {
     }
   }
 
+  // Check if there's a pending replacement submission for a doc
+  const pendingReplacementFor = (docId: string) =>
+    submissions.some((s) => s.replaces_document_id === docId && s.status === 'pending');
+
   const list = tab === 'mine' ? docs : tab === 'shared' ? shared : [];
 
   return (
@@ -161,14 +233,14 @@ export default function UnionDocumentsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setShowSubmit(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-amber-600 px-4 py-2.5 text-sm font-medium text-amber-600 hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
+            className="flex items-center gap-1.5 rounded-lg border border-amber-600 px-4 py-2.5 text-sm font-medium text-amber-600 hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white min-h-11"
             aria-label="Submit document to community for review"
           >
             <Send size={14} aria-hidden="true" /> Submit to Community
           </button>
           <button
-            onClick={() => setShowUpload(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
+            onClick={() => { setShowUpload(true); setUploadError(''); }}
+            className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white min-h-11"
           >
             <Upload size={14} aria-hidden="true" /> Upload
           </button>
@@ -204,7 +276,7 @@ export default function UnionDocumentsPage() {
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900">Upload Document</h2>
             <button
-              onClick={() => setShowUpload(false)}
+              onClick={() => { setShowUpload(false); setUploadError(''); setSelectedFile(null); }}
               className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-500"
               aria-label="Close upload form"
             >
@@ -212,24 +284,30 @@ export default function UnionDocumentsPage() {
             </button>
           </div>
 
+          {uploadError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+              {uploadError}
+            </div>
+          )}
+
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-slate-500">Document Name *</span>
+              <span className={labelClass}>Document Name *</span>
               <input
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                className={inputClass}
                 placeholder="IATSE Local 317 Contract 2025-2028"
               />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-slate-500">Union Local</span>
+              <span className={labelClass}>Union Local</span>
               <input
                 type="text"
                 value={form.union_local}
                 onChange={(e) => setForm({ ...form, union_local: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                className={inputClass}
                 placeholder="IATSE 317"
               />
             </label>
@@ -237,11 +315,11 @@ export default function UnionDocumentsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-slate-500">Document Type *</span>
+              <span className={labelClass}>Document Type *</span>
               <select
                 value={form.doc_type}
                 onChange={(e) => setForm({ ...form, doc_type: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                className={inputClass}
               >
                 {Object.entries(DOC_TYPE_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
@@ -249,14 +327,14 @@ export default function UnionDocumentsPage() {
               </select>
             </label>
             <div>
-              <span className="text-xs font-medium text-slate-500">File (PDF, TXT, MD) *</span>
+              <span className={labelClass}>File (PDF, TXT, MD) *</span>
               <div className="mt-1">
                 <input
                   ref={fileRef}
                   type="file"
                   accept=".pdf,.txt,.md"
                   onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-200 file:px-3 file:py-2 file:text-sm file:text-slate-800 hover:file:bg-slate-300 focus:outline-none"
+                  className="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:text-slate-700 hover:file:bg-slate-200 focus:outline-none"
                   aria-label="Select file to upload"
                 />
               </div>
@@ -268,7 +346,7 @@ export default function UnionDocumentsPage() {
               type="checkbox"
               checked={form.is_shared}
               onChange={(e) => setForm({ ...form, is_shared: e.target.checked })}
-              className="rounded border-slate-300 bg-slate-100 text-amber-500 focus:ring-amber-500 focus:ring-offset-white"
+              className="rounded border-slate-300 text-amber-500 focus:ring-amber-500 focus:ring-offset-white"
             />
             Share with community (others in same union can search this document)
           </label>
@@ -277,14 +355,14 @@ export default function UnionDocumentsPage() {
             <button
               onClick={uploadDoc}
               disabled={uploading || !form.name.trim() || !selectedFile}
-              className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
+              className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white min-h-11"
             >
-              {uploading ? <Loader2 size={14} className="animate-spin" aria-label="Loading..." /> : <Upload size={14} aria-hidden="true" />}
+              {uploading ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <Upload size={14} aria-hidden="true" />}
               {uploading ? 'Processing...' : 'Upload & Process'}
             </button>
             <button
-              onClick={() => { setShowUpload(false); setSelectedFile(null); }}
-              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+              onClick={() => { setShowUpload(false); setSelectedFile(null); setUploadError(''); }}
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
             >
               Cancel
             </button>
@@ -311,27 +389,27 @@ export default function UnionDocumentsPage() {
               <X size={18} aria-hidden="true" />
             </button>
           </div>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-500">
             Submit a union document for admin review. Once approved, it will be processed and available in the community RAG for all users to search.
           </p>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-slate-500">Union Local</span>
+              <span className={labelClass}>Union Local</span>
               <input
                 type="text"
                 value={submitForm.union_local}
                 onChange={(e) => setSubmitForm({ ...submitForm, union_local: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                className={inputClass}
                 placeholder="IATSE 317"
               />
             </label>
             <label className="block">
-              <span className="text-xs font-medium text-slate-500">Document Type *</span>
+              <span className={labelClass}>Document Type *</span>
               <select
                 value={submitForm.doc_type}
                 onChange={(e) => setSubmitForm({ ...submitForm, doc_type: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                className={inputClass}
               >
                 {Object.entries(DOC_TYPE_LABELS).map(([k, v]) => (
                   <option key={k} value={k}>{v}</option>
@@ -342,24 +420,24 @@ export default function UnionDocumentsPage() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="text-xs font-medium text-slate-500">Coverage Dates</span>
+              <span className={labelClass}>Coverage Dates</span>
               <input
                 type="text"
                 value={submitForm.coverage_dates}
                 onChange={(e) => setSubmitForm({ ...submitForm, coverage_dates: e.target.value })}
-                className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                className={inputClass}
                 placeholder="2025-2028"
               />
             </label>
             <div>
-              <span className="text-xs font-medium text-slate-500">File (PDF, TXT, MD) *</span>
+              <span className={labelClass}>File (PDF, TXT, MD) *</span>
               <div className="mt-1">
                 <input
                   ref={submitFileRef}
                   type="file"
                   accept=".pdf,.txt,.md"
                   onChange={(e) => setSubmitFile(e.target.files?.[0] ?? null)}
-                  className="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-200 file:px-3 file:py-2 file:text-sm file:text-slate-800 hover:file:bg-slate-300 focus:outline-none"
+                  className="w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:text-slate-700 hover:file:bg-slate-200 focus:outline-none"
                   aria-label="Select file to submit"
                 />
               </div>
@@ -367,12 +445,12 @@ export default function UnionDocumentsPage() {
           </div>
 
           <label className="block">
-            <span className="text-xs font-medium text-slate-500">Description</span>
+            <span className={labelClass}>Description</span>
             <textarea
               value={submitForm.description}
               onChange={(e) => setSubmitForm({ ...submitForm, description: e.target.value })}
               rows={2}
-              className="mt-1 w-full rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+              className={inputClass + ' resize-none'}
               placeholder="Explain what this document covers and how it should be used..."
             />
           </label>
@@ -383,7 +461,7 @@ export default function UnionDocumentsPage() {
               disabled={submitting || !submitFile}
               className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white min-h-11"
             >
-              {submitting ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} aria-hidden="true" />}
+              {submitting ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <Send size={14} aria-hidden="true" />}
               {submitting ? 'Submitting...' : 'Submit for Review'}
             </button>
             <button
@@ -431,6 +509,11 @@ export default function UnionDocumentsPage() {
                         <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${sc}`}>
                           {sub.status}
                         </span>
+                        {sub.replaces_document_id && (
+                          <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
+                            replacement
+                          </span>
+                        )}
                       </div>
                       <div className="mt-1 flex items-center gap-2 text-xs text-slate-400 flex-wrap">
                         {sub.union_local && <span>{sub.union_local}</span>}
@@ -461,17 +544,21 @@ export default function UnionDocumentsPage() {
           {list.map((doc) => {
             const statusInfo = STATUS_STYLES[doc.status] ?? STATUS_STYLES.pending;
             const StatusIcon = statusInfo.icon;
+            const isEditing = editingId === doc.id;
+            const isReplacing = replacingId === doc.id;
+            const hasPendingReplacement = tab === 'mine' && pendingReplacementFor(doc.id);
 
             return (
               <article
                 key={doc.id}
                 role="listitem"
-                className="rounded-xl border border-slate-200 bg-white p-4"
+                className="rounded-xl border border-slate-200 bg-white p-4 space-y-3"
               >
+                {/* Header row */}
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <FileText size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
+                      <FileText size={14} className="text-amber-600 shrink-0" aria-hidden="true" />
                       <span className="font-medium text-slate-900 text-sm">{doc.name}</span>
                       <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                         {DOC_TYPE_LABELS[doc.doc_type] ?? doc.doc_type}
@@ -480,42 +567,175 @@ export default function UnionDocumentsPage() {
                         <StatusIcon size={12} aria-hidden="true" />
                         {doc.status}
                       </span>
+                      {hasPendingReplacement && (
+                        <span className="rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-700">
+                          replacement pending review
+                        </span>
+                      )}
                     </div>
                     <div className="mt-1 flex items-center gap-2 text-xs text-slate-400 flex-wrap">
                       {doc.union_local && <span>{doc.union_local}</span>}
                       {doc.page_count != null && <span>· {doc.page_count} chunks</span>}
                       <span>· {new Date(doc.created_at).toLocaleDateString()}</span>
                       {doc.is_shared ? (
-                        <span className="flex items-center gap-0.5 text-green-400">
+                        <span className="flex items-center gap-0.5 text-green-600">
                           <Globe size={10} aria-hidden="true" /> Shared
                         </span>
                       ) : (
-                        <span className="flex items-center gap-0.5">
+                        <span className="flex items-center gap-0.5 text-slate-400">
                           <Lock size={10} aria-hidden="true" /> Private
                         </span>
                       )}
                       {doc.author && <span>· by {doc.author}</span>}
                     </div>
                     {doc.error_msg && (
-                      <p className="mt-1 text-xs text-red-400">{doc.error_msg}</p>
+                      <p className="mt-1 text-xs text-red-500">{doc.error_msg}</p>
                     )}
                   </div>
 
-                  {tab === 'mine' && (
-                    <button
-                      onClick={() => deleteDoc(doc.id)}
-                      disabled={deletingId === doc.id}
-                      className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-400 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                      aria-label={`Delete ${doc.name}`}
-                    >
-                      {deletingId === doc.id ? (
-                        <Loader2 size={14} className="animate-spin" aria-label="Loading..." />
-                      ) : (
-                        <Trash2 size={14} aria-hidden="true" />
-                      )}
-                    </button>
+                  {tab === 'mine' && !isEditing && !isReplacing && (
+                    <div className="flex items-center gap-1 shrink-0">
+                      <button
+                        onClick={() => { startEdit(doc); setReplacingId(null); }}
+                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        aria-label={`Edit ${doc.name}`}
+                      >
+                        <Pencil size={14} aria-hidden="true" />
+                      </button>
+                      <button
+                        onClick={() => { setReplacingId(doc.id); setReplaceError(''); setReplaceFile(null); setEditingId(null); }}
+                        disabled={hasPendingReplacement}
+                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-600 disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        aria-label={`Replace file for ${doc.name}`}
+                        title={hasPendingReplacement ? 'Replacement already pending review' : 'Replace file'}
+                      >
+                        <RefreshCw size={14} aria-hidden="true" />
+                      </button>
+                      <button
+                        onClick={() => deleteDoc(doc.id)}
+                        disabled={deletingId === doc.id}
+                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-red-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        aria-label={`Delete ${doc.name}`}
+                      >
+                        {deletingId === doc.id ? (
+                          <Loader2 size={14} className="animate-spin" aria-hidden="true" />
+                        ) : (
+                          <Trash2 size={14} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
                   )}
                 </div>
+
+                {/* Inline edit form */}
+                {isEditing && (
+                  <div className="border-t border-slate-100 pt-3 space-y-3">
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <label className="block">
+                        <span className={labelClass}>Document Name *</span>
+                        <input
+                          type="text"
+                          value={editForm.name}
+                          onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                          className={inputClass}
+                        />
+                      </label>
+                      <label className="block">
+                        <span className={labelClass}>Union Local</span>
+                        <input
+                          type="text"
+                          value={editForm.union_local}
+                          onChange={(e) => setEditForm({ ...editForm, union_local: e.target.value })}
+                          className={inputClass}
+                          placeholder="IATSE 317"
+                        />
+                      </label>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2 items-center">
+                      <label className="block">
+                        <span className={labelClass}>Document Type</span>
+                        <select
+                          value={editForm.doc_type}
+                          onChange={(e) => setEditForm({ ...editForm, doc_type: e.target.value })}
+                          className={inputClass}
+                        >
+                          {Object.entries(DOC_TYPE_LABELS).map(([k, v]) => (
+                            <option key={k} value={k}>{v}</option>
+                          ))}
+                        </select>
+                      </label>
+                      <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer pt-4">
+                        <input
+                          type="checkbox"
+                          checked={editForm.is_shared}
+                          onChange={(e) => setEditForm({ ...editForm, is_shared: e.target.checked })}
+                          className="rounded border-slate-300 text-amber-500 focus:ring-amber-500"
+                        />
+                        Share with community
+                      </label>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => saveEdit(doc.id)}
+                        disabled={saving || !editForm.name.trim()}
+                        className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                      >
+                        {saving ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <Save size={14} aria-hidden="true" />}
+                        {saving ? 'Saving...' : 'Save'}
+                      </button>
+                      <button
+                        onClick={() => setEditingId(null)}
+                        className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Replace file form */}
+                {isReplacing && (
+                  <div className="border-t border-slate-100 pt-3 space-y-3">
+                    {doc.is_shared && (
+                      <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                        This is a shared document. Your replacement will be reviewed by an admin before going live.
+                        The current version stays active until approved.
+                      </div>
+                    )}
+                    {replaceError && (
+                      <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+                        {replaceError}
+                      </div>
+                    )}
+                    <div>
+                      <span className={labelClass}>New File (PDF, TXT, MD)</span>
+                      <input
+                        ref={replaceFileRef}
+                        type="file"
+                        accept=".pdf,.txt,.md"
+                        onChange={(e) => setReplaceFile(e.target.files?.[0] ?? null)}
+                        className="mt-1 w-full text-sm text-slate-500 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:text-slate-700 hover:file:bg-slate-200 focus:outline-none"
+                        aria-label="Select replacement file"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={submitReplacement}
+                        disabled={replacing || !replaceFile}
+                        className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                      >
+                        {replacing ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <RefreshCw size={14} aria-hidden="true" />}
+                        {replacing ? (doc.is_shared ? 'Submitting...' : 'Processing...') : (doc.is_shared ? 'Submit for Review' : 'Replace & Reprocess')}
+                      </button>
+                      <button
+                        onClick={() => { setReplacingId(null); setReplaceFile(null); setReplaceError(''); }}
+                        className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </article>
             );
           })}

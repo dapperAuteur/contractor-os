@@ -4,7 +4,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
-import ContactAutocomplete from '@/components/ui/ContactAutocomplete';
+import ContactCombobox from '@/components/ui/ContactCombobox';
+import LocationCombobox from '@/components/ui/LocationCombobox';
+import SuggestionsInput from '@/components/ui/SuggestionsInput';
 import RateCardSelect from '@/components/contractor/RateCardSelect';
 import DateCalendarPicker from '@/components/ui/DateCalendarPicker';
 import ScanButton from '@/components/scan/ScanButton';
@@ -29,6 +31,9 @@ export default function NewJobPage() {
     poc_phone: '',
     crew_coordinator_name: '',
     crew_coordinator_phone: '',
+    poc_contact_id: null as string | null,
+    crew_coordinator_id: null as string | null,
+    location_id: null as string | null,
     status: 'assigned',
     start_date: '',
     end_date: '',
@@ -139,10 +144,13 @@ export default function NewJobPage() {
         client_id: form.client_id,
         event_name: form.event_name || null,
         location_name: form.location_name || null,
+        location_id: form.location_id || null,
         poc_name: form.poc_name || null,
         poc_phone: form.poc_phone || null,
+        poc_contact_id: form.poc_contact_id || null,
         crew_coordinator_name: form.crew_coordinator_name || null,
         crew_coordinator_phone: form.crew_coordinator_phone || null,
+        crew_coordinator_id: form.crew_coordinator_id || null,
         status: form.status,
         start_date: form.start_date || null,
         end_date: form.end_date || null,
@@ -187,7 +195,7 @@ export default function NewJobPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {error && (
-          <div className="rounded-lg border border-red-800 bg-red-900/30 px-4 py-3 text-sm text-red-300">
+          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
             {error}
           </div>
         )}
@@ -199,7 +207,7 @@ export default function NewJobPage() {
             onError={(msg) => setError(msg)}
             moduleHint="call_sheet"
             label="Import from Image"
-            className="flex items-center gap-2 px-4 py-2.5 border border-amber-600/50 text-amber-400 rounded-lg text-sm font-medium hover:bg-amber-600/10 transition cursor-pointer min-h-11"
+            className="flex items-center gap-2 px-4 py-2.5 border border-amber-300 text-amber-600 rounded-lg text-sm font-medium hover:bg-amber-50 transition cursor-pointer min-h-11"
           />
         </div>
         <RateCardSelect
@@ -250,10 +258,12 @@ export default function NewJobPage() {
 
           <div>
             <label className={labelClass}>Client *</label>
-            <ContactAutocomplete
+            <ContactCombobox
               contactType="customer"
               value={form.client_name}
+              contactId={form.client_id}
               onChange={(name, id) => { set('client_name', name); set('client_id', id ?? null); }}
+              placeholder="Search or add client…"
             />
           </div>
 
@@ -264,7 +274,11 @@ export default function NewJobPage() {
             </div>
             <div>
               <label className={labelClass}>Location / Venue</label>
-              <input className={inputClass} placeholder="Gainbridge Fieldhouse" value={form.location_name} onChange={(e) => set('location_name', e.target.value)} />
+              <LocationCombobox
+                value={form.location_name}
+                locationId={form.location_id}
+                onChange={(label, id) => { set('location_name', label); set('location_id', id ?? null); }}
+              />
             </div>
           </div>
 
@@ -306,11 +320,21 @@ export default function NewJobPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className={labelClass}>Union Local</label>
-              <input className={inputClass} placeholder="IBEW 1220, IATSE 317" value={form.union_local} onChange={(e) => set('union_local', e.target.value)} />
+              <SuggestionsInput
+                field="union_local"
+                value={form.union_local}
+                onChange={(v) => set('union_local', v)}
+                placeholder="IBEW 1220, IATSE 317"
+              />
             </div>
             <div>
               <label className={labelClass}>Department</label>
-              <input className={inputClass} placeholder="Camera, Audio, Graphics" value={form.department} onChange={(e) => set('department', e.target.value)} />
+              <SuggestionsInput
+                field="department"
+                value={form.department}
+                onChange={(v) => set('department', v)}
+                placeholder="Camera, Audio, Graphics"
+              />
             </div>
           </div>
         </fieldset>
@@ -319,19 +343,33 @@ export default function NewJobPage() {
         <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
           <legend className="px-2 text-sm font-semibold text-slate-800">Contacts</legend>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <label className={labelClass}>POC Name</label>
-              <input className={inputClass} placeholder="Michael Aagaard" value={form.poc_name} onChange={(e) => set('poc_name', e.target.value)} />
+            <div className="sm:col-span-2">
+              <label className={labelClass}>POC (Point of Contact)</label>
+              <ContactCombobox
+                contactType="vendor"
+                value={form.poc_name}
+                contactId={form.poc_contact_id}
+                onChange={(name, id) => { set('poc_name', name); set('poc_contact_id', id ?? null); }}
+                onPhoneChange={(phone) => { if (phone) set('poc_phone', phone); }}
+                placeholder="Search or add POC…"
+              />
             </div>
-            <div>
+            <div className="sm:col-span-2">
               <label className={labelClass}>POC Phone</label>
               <input className={inputClass} placeholder="555-0123" value={form.poc_phone} onChange={(e) => set('poc_phone', e.target.value)} />
             </div>
-            <div>
+            <div className="sm:col-span-2">
               <label className={labelClass}>Crew Coordinator</label>
-              <input className={inputClass} placeholder="Mike Brennan" value={form.crew_coordinator_name} onChange={(e) => set('crew_coordinator_name', e.target.value)} />
+              <ContactCombobox
+                contactType="vendor"
+                value={form.crew_coordinator_name}
+                contactId={form.crew_coordinator_id}
+                onChange={(name, id) => { set('crew_coordinator_name', name); set('crew_coordinator_id', id ?? null); }}
+                onPhoneChange={(phone) => { if (phone) set('crew_coordinator_phone', phone); }}
+                placeholder="Search or add coordinator…"
+              />
             </div>
-            <div>
+            <div className="sm:col-span-2">
               <label className={labelClass}>Coordinator Phone</label>
               <input className={inputClass} placeholder="555-0456" value={form.crew_coordinator_phone} onChange={(e) => set('crew_coordinator_phone', e.target.value)} />
             </div>

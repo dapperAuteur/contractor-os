@@ -1,125 +1,189 @@
 'use client';
 
 // app/admin/feedback/page.tsx
-// Admin view: feedback submissions with full conversation threads.
+// Admin feedback: one expandable conversation per user, with realtime push.
+// All submissions + replies shown as a unified chronological chat thread.
 
-import { useEffect, useState, useCallback } from 'react';
-import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from 'recharts';
-import { Bug, Lightbulb, MessageSquare, ChevronDown, ChevronUp, Send, Loader2 } from 'lucide-react';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { Bug, Lightbulb, MessageSquare, ChevronDown, ChevronUp, Send, Loader2, Users, Inbox } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 import MediaUploader from '@/components/ui/MediaUploader';
 import ImageLightbox from '@/components/ui/ImageLightbox';
 
-interface FeedbackEntry {
+interface ConversationMessage {
   id: string;
-  category: 'bug' | 'feature' | 'general';
-  message: string;
-  media_url?: string | null;
-  is_read_by_admin: boolean;
-  created_at: string;
-  user_id: string;
-  app?: string | null;
-  email?: string | null;
-  profiles?: { username: string; display_name?: string | null } | null;
-}
-
-interface Reply {
-  id: string;
+  type: 'submission' | 'reply';
   is_admin: boolean;
   body: string;
+  category?: string;
   media_url?: string | null;
   created_at: string;
-  sender_username?: string | null;
-  sender_display_name?: string | null;
+  app?: string | null;
+  feedback_id: string;
 }
 
-interface ThreadState {
-  replies: Reply[];
-  loaded: boolean;
+interface Conversation {
+  user_id: string;
+  username: string | null;
+  display_name: string | null;
+  email: string | null;
+  unread_count: number;
+  last_activity: string;
+  apps: string[];
+  messages: ConversationMessage[];
+  latest_feedback_id: string;
 }
 
-const CATEGORY_CONFIG = {
-  bug:     { label: 'Bug Reports',      color: '#ef4444', icon: Bug,           badgeClass: 'bg-red-900/30 text-red-300' },
-  feature: { label: 'Feature Requests', color: '#a855f7', icon: Lightbulb,     badgeClass: 'bg-purple-900/30 text-purple-300' },
-  general: { label: 'General',          color: '#6b7280', icon: MessageSquare,  badgeClass: 'bg-gray-800 text-gray-400' },
+const CATEGORY_ICONS: Record<string, React.ElementType> = {
+  bug: Bug, feature: Lightbulb, general: MessageSquare,
+};
+const CATEGORY_COLORS: Record<string, string> = {
+  bug: 'text-red-400', feature: 'text-purple-400', general: 'text-gray-400',
 };
 
+function fmtDate(d: string) {
+  const date = new Date(d);
+  const now = new Date();
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / 86400000);
+  if (diffDays === 0) return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7) return date.toLocaleDateString('en-US', { weekday: 'short' });
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function AppBadge({ app }: { app?: string | null }) {
+  if (!app || app === 'centenarian') return null;
+  return (
+    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-900/40 text-amber-300 border border-amber-800/40">
+      {app}
+    </span>
+  );
+}
+
+function MessageBubble({ msg }: { msg: ConversationMessage }) {
+  const isUser = !msg.is_admin;
+  const CatIcon = msg.category ? (CATEGORY_ICONS[msg.category] ?? MessageSquare) : null;
+  return (
+    <div className={`flex ${isUser ? 'justify-start' : 'justify-end'} gap-2`}>
+      <div className={`max-w-[78%] rounded-2xl px-4 py-3 ${
+        isUser
+          ? 'bg-gray-800 border border-gray-700 rounded-tl-sm'
+          : 'bg-amber-900/40 border border-amber-800/50 rounded-tr-sm'
+      }`}>
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+          {isUser && CatIcon && (
+            <CatIcon className={`w-3 h-3 shrink-0 ${CATEGORY_COLORS[msg.category ?? ''] ?? 'text-gray-400'}`} aria-hidden="true" />
+          )}
+          {isUser && msg.category && (
+            <span className={`text-xs font-semibold capitalize ${CATEGORY_COLORS[msg.category] ?? 'text-gray-400'}`}>
+              {msg.category === 'feature' ? 'Feature Request' : msg.category === 'bug' ? 'Bug Report' : 'General'}
+            </span>
+          )}
+          {!isUser && <span className="text-xs font-semibold text-amber-400">You (Admin)</span>}
+          <AppBadge app={msg.app} />
+        </div>
+        <p className="text-sm text-gray-200 whitespace-pre-wrap">{msg.body}</p>
+        {msg.media_url && <ImageLightbox url={msg.media_url} />}
+        <p className="text-xs text-gray-500 mt-1.5 text-right">{fmtDate(msg.created_at)}</p>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminFeedbackPage() {
-  const [items, setItems] = useState<FeedbackEntry[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [threads, setThreads] = useState<Record<string, ThreadState>>({});
   const [replyText, setReplyText] = useState<Record<string, string>>({});
   const [replyMedia, setReplyMedia] = useState<Record<string, string | null>>({});
   const [sending, setSending] = useState<string | null>(null);
   const [sendError, setSendError] = useState<Record<string, string>>({});
+  const threadRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  useEffect(() => {
-    fetch('/api/admin/feedback')
+  const load = useCallback(() => {
+    setLoading(true);
+    fetch('/api/admin/feedback/conversations')
       .then((r) => r.json())
-      .then((d) => { setItems(Array.isArray(d) ? d : []); setLoading(false); })
+      .then((d) => { setConversations(Array.isArray(d) ? d : []); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
-  const toggleExpand = useCallback(async (id: string) => {
-    if (expanded === id) { setExpanded(null); return; }
-    setExpanded(id);
-    if (!threads[id]?.loaded) {
-      const r = await fetch(`/api/admin/feedback/${id}`);
-      const d = await r.json();
-      setThreads((prev) => ({ ...prev, [id]: { replies: d.replies ?? [], loaded: true } }));
-      // Mark as read locally
-      setItems((prev) => prev.map((item) => item.id === id ? { ...item, is_read_by_admin: true } : item));
-    }
-  }, [expanded, threads]);
+  useEffect(() => { load(); }, [load]);
 
-  async function sendReply(id: string) {
-    const body = (replyText[id] ?? '').trim();
+  // Scroll thread to bottom when expanded or new messages arrive
+  useEffect(() => {
+    if (expanded) {
+      const el = threadRefs.current[expanded];
+      if (el) el.scrollTop = el.scrollHeight;
+    }
+  }, [expanded, conversations]);
+
+  // Realtime: new submission or reply → update state immediately
+  useEffect(() => {
+    const supabase = createClient();
+    const channel = supabase
+      .channel('admin-feedback-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'user_feedback' }, () => {
+        // New submission from a user — reload to get full profile info
+        load();
+      })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'feedback_replies' }, (payload) => {
+        const r = payload.new as {
+          id: string; feedback_id: string; is_admin: boolean;
+          body: string; media_url: string | null; created_at: string; sender_id: string;
+        };
+        const newMsg: ConversationMessage = {
+          id: r.id, type: 'reply', is_admin: r.is_admin,
+          body: r.body, media_url: r.media_url,
+          created_at: r.created_at, feedback_id: r.feedback_id,
+        };
+        setConversations((prev) => {
+          // Find which conversation owns this feedback_id
+          const idx = prev.findIndex((conv) =>
+            conv.messages.some((m) => m.id === r.feedback_id || m.feedback_id === r.feedback_id)
+          );
+          if (idx === -1) return prev;
+          const updated = [...prev];
+          const conv = { ...updated[idx] };
+          conv.messages = [...conv.messages, newMsg].sort(
+            (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+          );
+          conv.last_activity = r.created_at;
+          updated[idx] = conv;
+          // Re-sort conversations by last_activity
+          return updated.sort((a, b) =>
+            new Date(b.last_activity).getTime() - new Date(a.last_activity).getTime()
+          );
+        });
+      })
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
+  }, [load]);
+
+  async function sendReply(userId: string) {
+    const body = (replyText[userId] ?? '').trim();
     if (!body) return;
-    setSending(id);
-    setSendError((prev) => ({ ...prev, [id]: '' }));
+    setSending(userId);
+    setSendError((prev) => ({ ...prev, [userId]: '' }));
     try {
-      const r = await fetch(`/api/admin/feedback/${id}`, {
+      const res = await fetch(`/api/admin/feedback/user/${userId}/reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body, media_url: replyMedia[id] || null }),
+        body: JSON.stringify({ body, media_url: replyMedia[userId] || null }),
       });
-      if (!r.ok) { const d = await r.json(); throw new Error(d.error ?? 'Failed'); }
-      const newReply: Reply = {
-        id: (await r.json().catch(() => ({ id: Date.now().toString() }))).id ?? Date.now().toString(),
-        is_admin: true,
-        body,
-        media_url: replyMedia[id] || null,
-        created_at: new Date().toISOString(),
-      };
-      setThreads((prev) => ({
-        ...prev,
-        [id]: { ...prev[id], replies: [...(prev[id]?.replies ?? []), newReply] },
-      }));
-      setReplyText((prev) => ({ ...prev, [id]: '' }));
-      setReplyMedia((prev) => ({ ...prev, [id]: null }));
+      if (!res.ok) { const d = await res.json(); throw new Error(d.error ?? 'Failed'); }
+      setReplyText((prev) => ({ ...prev, [userId]: '' }));
+      setReplyMedia((prev) => ({ ...prev, [userId]: null }));
+      // Reply will appear via realtime subscription
     } catch (e) {
-      setSendError((prev) => ({ ...prev, [id]: e instanceof Error ? e.message : 'Failed to send' }));
+      setSendError((prev) => ({ ...prev, [userId]: e instanceof Error ? e.message : 'Failed to send' }));
     } finally {
       setSending(null);
     }
   }
 
-  const counts = {
-    bug:     items.filter((i) => i.category === 'bug').length,
-    feature: items.filter((i) => i.category === 'feature').length,
-    general: items.filter((i) => i.category === 'general').length,
-  };
-
-  const chartData = Object.entries(CATEGORY_CONFIG).map(([key, cfg]) => ({
-    name: cfg.label,
-    count: counts[key as keyof typeof counts],
-    fill: cfg.color,
-  }));
-
-  const unreadCount = items.filter((i) => !i.is_read_by_admin).length;
+  const totalUnread = conversations.reduce((s, c) => s + c.unread_count, 0);
 
   if (loading) {
     return (
@@ -130,196 +194,125 @@ export default function AdminFeedbackPage() {
   }
 
   return (
-    <div className="p-8 max-w-4xl">
+    <div className="p-8 max-w-3xl">
       <h1 className="text-2xl font-bold text-white mb-1">User Feedback</h1>
-      <p className="text-gray-400 text-sm mb-8">
-        {items.length} total submissions{unreadCount > 0 && ` · ${unreadCount} unread`}
+      <p className="text-gray-400 text-sm mb-6">
+        {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
+        {totalUnread > 0 && ` · ${totalUnread} unread`}
+        {' '}· Live updates on
       </p>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-        {Object.entries(CATEGORY_CONFIG).map(([key, cfg]) => {
-          const Icon = cfg.icon;
-          return (
-            <div key={key} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
-              <Icon className="w-5 h-5 mx-auto mb-2" style={{ color: cfg.color }} />
-              <p className="text-2xl font-bold text-white">{counts[key as keyof typeof counts]}</p>
-              <p className="text-gray-400 text-xs mt-1">{cfg.label}</p>
-            </div>
-          );
-        })}
+      <div className="grid grid-cols-3 gap-4 mb-8">
+        {[
+          { label: 'Conversations', value: conversations.length, icon: Users },
+          { label: 'Unread', value: totalUnread, icon: Inbox },
+          { label: 'Total Messages', value: conversations.reduce((s, c) => s + c.messages.length, 0), icon: MessageSquare },
+        ].map(({ label, value, icon: Icon }) => (
+          <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+            <Icon className="w-5 h-5 mx-auto mb-2 text-amber-500" aria-hidden="true" />
+            <p className="text-2xl font-bold text-white">{value}</p>
+            <p className="text-gray-400 text-xs mt-1">{label}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Bar chart */}
-      {items.length > 0 && (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-8">
-          <h2 className="font-semibold text-white mb-4">By Category</h2>
-          <ResponsiveContainer width="100%" height={200}>
-            <BarChart data={chartData} barSize={48}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis dataKey="name" tick={{ fill: '#9ca3af', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <YAxis allowDecimals={false} tick={{ fill: '#9ca3af', fontSize: 12 }} axisLine={false} tickLine={false} />
-              <Tooltip
-                contentStyle={{ backgroundColor: '#111827', border: '1px solid #374151', borderRadius: '8px' }}
-                labelStyle={{ color: '#f9fafb' }}
-                itemStyle={{ color: '#9ca3af' }}
-              />
-              <Bar dataKey="count" radius={[4, 4, 0, 0]}>
-                {chartData.map((entry, index) => (
-                  <rect key={index} fill={entry.fill} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      )}
-
-      {/* Feedback list */}
-      {items.length === 0 ? (
+      {conversations.length === 0 ? (
         <div className="text-center py-16 text-gray-400">
           <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-40" />
-          <p>No feedback submitted yet.</p>
+          <p>No feedback yet.</p>
         </div>
       ) : (
         <div className="space-y-2">
-          {items.map((item) => {
-            const cfg = CATEGORY_CONFIG[item.category];
-            const isOpen = expanded === item.id;
-            const thread = threads[item.id];
+          {conversations.map((conv) => {
+            const isOpen = expanded === conv.user_id;
+            const lastMsg = conv.messages[conv.messages.length - 1];
+            const displayName = conv.display_name ?? conv.username ?? conv.email ?? conv.user_id.slice(0, 8);
+
             return (
-              <div key={item.id} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-                {/* Row header — click to expand */}
+              <div key={conv.user_id} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+                {/* Row header */}
                 <button
                   type="button"
-                  onClick={() => toggleExpand(item.id)}
+                  onClick={() => setExpanded(isOpen ? null : conv.user_id)}
                   aria-expanded={isOpen}
                   className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition text-left"
                 >
-                  {/* Unread dot */}
-                  {!item.is_read_by_admin && (
-                    <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
-                  )}
-                  {item.is_read_by_admin && (
-                    <span className="w-2 h-2 rounded-full bg-transparent shrink-0" />
-                  )}
-
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${cfg.badgeClass}`}>
-                    <cfg.icon className="w-3 h-3" />
-                    {cfg.label}
-                  </span>
-
-                  {item.app && item.app !== 'centenarian' && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium shrink-0 bg-amber-900/40 text-amber-300">
-                      {item.app}
-                    </span>
-                  )}
+                  <span className={`w-2 h-2 rounded-full shrink-0 ${conv.unread_count > 0 ? 'bg-amber-500' : 'bg-transparent'}`} />
 
                   <div className="flex-1 min-w-0">
-                    <p className="text-gray-300 text-sm truncate">{item.message}</p>
-                    <p className="text-gray-400 text-xs mt-0.5 truncate">
-                      {item.profiles?.username ? `@${item.profiles.username}` : 'Unknown user'}
-                      {item.email && ` · ${item.email}`}
-                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-gray-200 text-sm font-semibold">{displayName}</p>
+                      {conv.username && conv.display_name && (
+                        <span className="text-gray-500 text-xs">@{conv.username}</span>
+                      )}
+                      {conv.apps.filter((a) => a !== 'centenarian').map((app) => (
+                        <AppBadge key={app} app={app} />
+                      ))}
+                    </div>
+                    <p className="text-gray-500 text-xs truncate mt-0.5">{lastMsg?.body ?? '—'}</p>
                   </div>
 
-                  <span className="text-gray-400 text-xs whitespace-nowrap shrink-0">
-                    {new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </span>
-
-                  {thread?.replies?.length > 0 && (
-                    <span className="text-xs text-amber-400 shrink-0">{thread.replies.length} repl{thread.replies.length === 1 ? 'y' : 'ies'}</span>
-                  )}
-
-                  {isOpen
-                    ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
-                    : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />
-                  }
+                  <div className="flex items-center gap-2.5 shrink-0">
+                    {conv.unread_count > 0 && (
+                      <span className="text-xs font-bold bg-amber-600 text-white px-1.5 py-0.5 rounded-full min-w-5 text-center">
+                        {conv.unread_count}
+                      </span>
+                    )}
+                    <span className="text-gray-500 text-xs">{fmtDate(conv.last_activity)}</span>
+                    <span className="text-gray-600 text-xs">{conv.messages.length} msg{conv.messages.length !== 1 ? 's' : ''}</span>
+                    {isOpen
+                      ? <ChevronUp className="w-4 h-4 text-gray-400" />
+                      : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                  </div>
                 </button>
 
-                {/* Expanded thread */}
+                {/* Conversation thread */}
                 {isOpen && (
-                  <div className="border-t border-gray-800 px-5 py-4 space-y-4">
-                    {/* Original message */}
-                    <div>
-                      <div className="flex items-center justify-between mb-2">
-                        <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold">Original Submission</p>
-                        <p className="text-xs text-gray-400">
-                          {item.profiles?.username ? `@${item.profiles.username}` : 'Unknown'}
-                          {item.email && ` (${item.email})`}
-                        </p>
-                      </div>
-                      <p className="text-gray-200 text-sm whitespace-pre-wrap">{item.message}</p>
-                      {item.media_url && <ImageLightbox url={item.media_url} />}
+                  <div className="border-t border-gray-800">
+                    <div
+                      ref={(el) => { threadRefs.current[conv.user_id] = el; }}
+                      className="px-4 py-4 space-y-3 max-h-96 overflow-y-auto"
+                    >
+                      {conv.messages.map((msg) => (
+                        <MessageBubble key={`${msg.type}-${msg.id}`} msg={msg} />
+                      ))}
                     </div>
 
-                    {/* Thread */}
-                    {!thread?.loaded && (
-                      <div className="flex justify-center py-4">
-                        <Loader2 className="w-5 h-5 animate-spin text-gray-400" />
-                      </div>
-                    )}
-
-                    {thread?.loaded && thread.replies.length > 0 && (
-                      <div className="space-y-3">
-                        <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold">Conversation</p>
-                        {thread.replies.map((reply) => (
-                          <div
-                            key={reply.id}
-                            className={`flex ${reply.is_admin ? 'justify-end' : 'justify-start'}`}
-                          >
-                            <div className={`max-w-[80%] rounded-xl px-4 py-3 ${
-                              reply.is_admin
-                                ? 'bg-amber-900/40 border border-amber-800/50 text-amber-500/10'
-                                : 'bg-gray-800 border border-gray-700 text-gray-200'
-                            }`}>
-                              <p className={`text-xs font-semibold mb-1 ${reply.is_admin ? 'text-amber-400' : 'text-gray-400'}`}>
-                                {reply.is_admin ? 'You (Admin)' : (reply.sender_display_name ?? reply.sender_username ?? 'User')}
-                              </p>
-                              <p className="text-sm whitespace-pre-wrap">{reply.body}</p>
-                              {reply.media_url && <ImageLightbox url={reply.media_url} />}
-                              <p className="text-xs opacity-50 mt-1.5 text-right">
-                                {new Date(reply.created_at).toLocaleString()}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Admin reply form */}
-                    <div className="pt-2 border-t border-gray-800 dark-input">
-                      <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">Reply to User</p>
+                    <div className="px-4 pb-4 pt-2 border-t border-gray-800">
                       <textarea
-                        value={replyText[item.id] ?? ''}
-                        onChange={(e) => setReplyText((prev) => ({ ...prev, [item.id]: e.target.value }))}
-                        rows={3}
-                        placeholder="Write your reply… (user will be notified by email)"
-                        aria-label="Reply to feedback"
+                        value={replyText[conv.user_id] ?? ''}
+                        onChange={(e) => setReplyText((prev) => ({ ...prev, [conv.user_id]: e.target.value }))}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) sendReply(conv.user_id);
+                        }}
+                        rows={2}
+                        placeholder="Reply to user… (⌘↵ to send)"
+                        aria-label="Reply to user"
                         className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                       />
-                      <div className="flex items-center justify-between mt-3 gap-3">
+                      <div className="flex items-center justify-between mt-2 gap-3">
                         <MediaUploader
                           dark
-                          onUpload={(url) => setReplyMedia((prev) => ({ ...prev, [item.id]: url }))}
-                          onRemove={() => setReplyMedia((prev) => ({ ...prev, [item.id]: null }))}
-                          currentUrl={replyMedia[item.id]}
-                          label="Attach media"
+                          onUpload={(url) => setReplyMedia((prev) => ({ ...prev, [conv.user_id]: url }))}
+                          onRemove={() => setReplyMedia((prev) => ({ ...prev, [conv.user_id]: null }))}
+                          currentUrl={replyMedia[conv.user_id]}
+                          label="Attach"
                         />
                         <div className="flex items-center gap-3">
-                          {sendError[item.id] && (
-                            <p className="text-xs text-red-400">{sendError[item.id]}</p>
+                          {sendError[conv.user_id] && (
+                            <p className="text-xs text-red-400" role="alert">{sendError[conv.user_id]}</p>
                           )}
                           <button
                             type="button"
-                            onClick={() => sendReply(item.id)}
-                            disabled={sending === item.id || !(replyText[item.id] ?? '').trim()}
-                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50"
+                            onClick={() => sendReply(conv.user_id)}
+                            disabled={sending === conv.user_id || !(replyText[conv.user_id] ?? '').trim()}
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 min-h-10"
                           >
-                            {sending === item.id
+                            {sending === conv.user_id
                               ? <Loader2 className="w-4 h-4 animate-spin" />
-                              : <Send className="w-4 h-4" />
-                            }
-                            {sending === item.id ? 'Sending…' : 'Send Reply'}
+                              : <Send className="w-4 h-4" />}
+                            {sending === conv.user_id ? 'Sending…' : 'Send'}
                           </button>
                         </div>
                       </div>

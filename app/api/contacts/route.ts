@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
 
   const db = getDb();
   const selectCols = includeLocations
-    ? 'id, name, contact_type, default_category_id, notes, use_count, contact_locations(id, label, address, lat, lng, is_default, sort_order)'
-    : 'id, name, contact_type, default_category_id, notes, use_count';
+    ? 'id, name, contact_type, default_category_id, notes, use_count, phone, email, contact_locations(id, label, address, lat, lng, is_default, sort_order)'
+    : 'id, name, contact_type, default_category_id, notes, use_count, phone, email';
 
   let query = db
     .from('user_contacts')
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { name, contact_type, default_category_id, notes } = body;
+  const { name, contact_type, default_category_id, notes, phone, email } = body;
 
   if (!name?.trim()) return NextResponse.json({ error: 'Name is required' }, { status: 400 });
   if (!['vendor', 'customer', 'location'].includes(contact_type)) {
@@ -84,6 +84,8 @@ export async function POST(request: NextRequest) {
       contact_type,
       default_category_id: default_category_id ?? null,
       notes: notes?.trim() ?? null,
+      phone: phone?.trim() ?? null,
+      email: email?.trim() ?? null,
     })
     .select()
     .single();
