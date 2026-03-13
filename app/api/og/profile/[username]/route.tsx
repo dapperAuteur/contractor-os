@@ -1,4 +1,4 @@
-// app/api/og/profile/[username]/route.ts
+// app/api/og/profile/[username]/route.tsx
 // Generates a 1200×630 Open Graph image for a public contractor profile.
 // Called by social platforms (Twitter/X, LinkedIn, etc.) when a profile link is shared.
 // Also logs each render to og_image_requests for admin analytics.
