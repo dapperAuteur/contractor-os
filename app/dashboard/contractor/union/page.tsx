@@ -148,9 +148,9 @@ export default function UnionDocumentsPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-4 p-4">
       {/* Disclaimer banner */}
-      <div className="rounded-xl border border-yellow-700/50 bg-yellow-900/20 p-3 flex gap-2" role="alert">
-        <AlertTriangle size={16} className="text-yellow-400 shrink-0 mt-0.5" aria-hidden="true" />
-        <p className="text-xs text-yellow-300">
+      <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 flex gap-2" role="alert">
+        <AlertTriangle size={16} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+        <p className="text-xs text-amber-700">
           AI-generated summaries are for reference only. They are not legal advice.
           Always consult your union representative or the official contract document for authoritative answers.
         </p>
@@ -161,7 +161,7 @@ export default function UnionDocumentsPage() {
         <div className="flex gap-2">
           <button
             onClick={() => setShowSubmit(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-amber-600 px-4 py-2.5 text-sm font-medium text-amber-400 hover:bg-amber-600/10 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
+            className="flex items-center gap-1.5 rounded-lg border border-amber-600 px-4 py-2.5 text-sm font-medium text-amber-600 hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-white"
             aria-label="Submit document to community for review"
           >
             <Send size={14} aria-hidden="true" /> Submit to Community
@@ -189,7 +189,7 @@ export default function UnionDocumentsPage() {
             onClick={() => setTab(t.id)}
             className={`whitespace-nowrap border-b-2 px-3 py-2.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-inset focus:ring-amber-500 ${
               tab === t.id
-                ? 'border-amber-500 text-amber-400'
+                ? 'border-amber-500 text-amber-600'
                 : 'border-transparent text-slate-400 hover:text-slate-700'
             }`}
           >
@@ -411,11 +411,11 @@ export default function UnionDocumentsPage() {
           <div className="space-y-2" role="list" aria-label="My submissions">
             {submissions.map((sub) => {
               const statusColors: Record<string, string> = {
-                pending: 'text-yellow-400 bg-yellow-500/20',
-                processing: 'text-blue-400 bg-blue-500/20',
-                approved: 'text-cyan-400 bg-cyan-500/20',
-                rejected: 'text-red-400 bg-red-500/20',
-                live: 'text-green-400 bg-green-500/20',
+                pending: 'text-yellow-700 bg-yellow-100',
+                processing: 'text-blue-700 bg-blue-100',
+                approved: 'text-teal-700 bg-teal-100',
+                rejected: 'text-red-700 bg-red-100',
+                live: 'text-green-700 bg-green-100',
               };
               const sc = statusColors[sub.status] ?? statusColors.pending;
               return (
@@ -423,7 +423,7 @@ export default function UnionDocumentsPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <Send size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
+                        <Send size={14} className="text-amber-600 shrink-0" aria-hidden="true" />
                         <span className="font-medium text-slate-900 text-sm">{sub.file_name}</span>
                         <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                           {DOC_TYPE_LABELS[sub.doc_type] ?? sub.doc_type}
