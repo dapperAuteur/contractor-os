@@ -59,7 +59,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .limit(5000);
 
   const blogRoutes: MetadataRoute.Sitemap = (posts ?? []).map((p) => {
-    const username = (p.profiles as { username: string })?.username;
+    const username = (p.profiles as unknown as { username: string })?.username;
     return {
       url: `${SITE_URL}/blog/${username}/${p.slug}`,
       lastModified: p.updated_at ?? p.published_at ?? now,
