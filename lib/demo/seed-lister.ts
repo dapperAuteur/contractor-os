@@ -38,6 +38,7 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
     contractor_role: 'lister',
     lister_company_name: 'Midwest Crew Services',
     lister_union_local: 'IATSE 317',
+    subscription_status: 'lifetime',
   }).eq('id', userId);
 
   // 1. Create roster contacts
@@ -189,7 +190,7 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
   // 8. Vehicle + Fuel Logs + Trips
   const { data: veh, error: vehErr } = await db
     .from('vehicles')
-    .insert([{ user_id: userId, nickname: 'Work Truck', type: 'truck', make: 'Ford', model: 'F-150', year: 2023, ownership_type: 'owned', active: true }])
+    .insert([{ user_id: userId, nickname: 'Work Truck', type: 'car', make: 'Ford', model: 'F-150', year: 2023, ownership_type: 'owned', active: true }])
     .select('id');
   if (vehErr) throw new Error(`Lister vehicle: ${vehErr.message}`);
   const vehicleId = veh?.[0]?.id;
@@ -226,59 +227,7 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
   ]);
   if (eqErr) throw new Error(`Lister equipment: ${eqErr.message}`);
 
-  // 10. Exercise Categories + Exercises
-  const { data: exCats, error: exCatErr } = await db
-    .from('exercise_categories')
-    .insert([
-      { user_id: userId, name: 'Cardio', sort_order: 1 },
-      { user_id: userId, name: 'Strength', sort_order: 2 },
-      { user_id: userId, name: 'Flexibility', sort_order: 3 },
-    ])
-    .select('id, name');
-  if (exCatErr) throw new Error(`Lister exercise categories: ${exCatErr.message}`);
-  const exCatId = (name: string) => exCats?.find(c => c.name === name)?.id ?? null;
-
-  const { data: exerciseData, error: exErr } = await db
-    .from('exercises')
-    .insert([
-      { user_id: userId, name: 'Morning Walk', category_id: exCatId('Cardio'), default_duration_sec: 1800, primary_muscles: ['legs', 'cardio'] },
-      { user_id: userId, name: 'Desk Stretches', category_id: exCatId('Flexibility'), default_sets: 3, default_duration_sec: 60, primary_muscles: ['back', 'shoulders'] },
-      { user_id: userId, name: 'Dumbbell Rows', category_id: exCatId('Strength'), default_sets: 3, default_reps: 12, primary_muscles: ['back', 'biceps'] },
-    ])
-    .select('id, name');
-  if (exErr) throw new Error(`Lister exercises: ${exErr.message}`);
-
-  // 11. Workout Log with 2 exercises
-  const { data: logData, error: logErr } = await db
-    .from('workout_logs')
-    .insert([{ user_id: userId, name: 'Quick Morning Routine', date: daysAgo(1), duration_min: 30, overall_feeling: 4, purpose: ['health', 'energy'] }])
-    .select('id');
-  if (logErr) throw new Error(`Lister workout log: ${logErr.message}`);
-  const logId = logData?.[0]?.id;
-
-  if (logId && exerciseData) {
-    const exId = (name: string) => exerciseData.find(e => e.name === name)?.id ?? null;
-    const { error: logExErr } = await db.from('workout_log_exercises').insert([
-      { log_id: logId, name: 'Morning Walk', exercise_id: exId('Morning Walk'), sets_completed: 1, duration_sec: 1800, sort_order: 1, phase: 'warmup' },
-      { log_id: logId, name: 'Dumbbell Rows', exercise_id: exId('Dumbbell Rows'), sets_completed: 3, reps_completed: 12, weight_lbs: 35, sort_order: 2, phase: 'working', rpe: 7 },
-    ]);
-    if (logExErr) throw new Error(`Lister workout log exercises: ${logExErr.message}`);
-  }
-
-  // 12. Health Metrics (7 days)
-  const healthRows = Array.from({ length: 7 }, (_, i) => ({
-    user_id: userId,
-    logged_date: daysAgo(i),
-    resting_hr: 62 + Math.floor(Math.random() * 6),
-    steps: 5000 + Math.floor(Math.random() * 4000),
-    sleep_hours: +(6 + Math.random() * 2).toFixed(1),
-    activity_min: 15 + Math.floor(Math.random() * 40),
-    source: 'manual' as const,
-  }));
-  const { error: hmErr } = await db.from('user_health_metrics').insert(healthRows);
-  if (hmErr) throw new Error(`Lister health metrics: ${hmErr.message}`);
-
-  // 13. Life Categories
+  // 10. Life Categories
   const { error: lcErr } = await db.from('life_categories').insert([
     { user_id: userId, name: 'Career', icon: 'briefcase', color: '#6366f1', sort_order: 1 },
     { user_id: userId, name: 'Health', icon: 'heart', color: '#ef4444', sort_order: 2 },
