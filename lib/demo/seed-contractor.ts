@@ -150,6 +150,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   await db.from('profiles').update({
     contractor_role: 'worker',
     products: ['contractor'],
+    subscription_status: 'lifetime',
   }).eq('id', userId);
 
   // 1. Create contacts
@@ -447,7 +448,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   // 11. Vehicle + Fuel Logs + Trips
   const { data: veh, error: vehErr } = await db
     .from('vehicles')
-    .insert([{ user_id: userId, nickname: 'Work Truck', type: 'truck', make: 'Ford', model: 'F-150', year: 2021, ownership_type: 'owned', active: true }])
+    .insert([{ user_id: userId, nickname: 'Work Truck', type: 'car', make: 'Ford', model: 'F-150', year: 2021, ownership_type: 'owned', active: true }])
     .select('id');
   if (vehErr) throw new Error(`Contractor vehicle: ${vehErr.message}`);
   const vehicleId = veh?.[0]?.id;
@@ -493,68 +494,7 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   ]);
   if (eqErr) throw new Error(`Contractor equipment: ${eqErr.message}`);
 
-  // 13. Exercise Categories + Exercises
-  const { data: exCats, error: exCatErr } = await db
-    .from('exercise_categories')
-    .insert([
-      { user_id: userId, name: 'Mobility', sort_order: 1 },
-      { user_id: userId, name: 'Strength', sort_order: 2 },
-      { user_id: userId, name: 'Cardio', sort_order: 3 },
-    ])
-    .select('id, name');
-  if (exCatErr) throw new Error(`Contractor exercise categories: ${exCatErr.message}`);
-  const exCatId = (name: string) => exCats?.find(c => c.name === name)?.id ?? null;
-
-  const { data: exerciseData, error: exErr } = await db
-    .from('exercises')
-    .insert([
-      { user_id: userId, name: 'Shoulder Mobility Circles', category_id: exCatId('Mobility'), default_sets: 2, default_reps: 10, primary_muscles: ['shoulders', 'rotator cuff'] },
-      { user_id: userId, name: 'Goblet Squats', category_id: exCatId('Strength'), default_sets: 3, default_reps: 12, primary_muscles: ['quads', 'glutes', 'core'], instructions: 'Hold kettlebell at chest for camera-stability training' },
-      { user_id: userId, name: 'Farmer\'s Walks', category_id: exCatId('Strength'), default_sets: 3, default_duration_sec: 60, primary_muscles: ['forearms', 'traps', 'core'], instructions: 'Grip strength for handheld camera work' },
-      { user_id: userId, name: 'Treadmill Intervals', category_id: exCatId('Cardio'), default_duration_sec: 1200, primary_muscles: ['legs', 'cardio'] },
-      { user_id: userId, name: 'Hip Flexor Stretch', category_id: exCatId('Mobility'), default_sets: 2, default_duration_sec: 30, primary_muscles: ['hip flexors', 'quads'], instructions: 'Essential after standing all day on camera platform' },
-      { user_id: userId, name: 'Dead Hangs', category_id: exCatId('Strength'), default_sets: 3, default_duration_sec: 45, primary_muscles: ['forearms', 'shoulders', 'lats'], instructions: 'Decompresses spine after carrying heavy camera rigs' },
-    ])
-    .select('id, name');
-  if (exErr) throw new Error(`Contractor exercises: ${exErr.message}`);
-
-  // 14. Workout Logs
-  const { data: logData, error: logErr } = await db
-    .from('workout_logs')
-    .insert([
-      { user_id: userId, name: 'Pre-Show Warm-up', date: daysAgo(3), duration_min: 35, overall_feeling: 4, purpose: ['mobility', 'strength'] },
-      { user_id: userId, name: 'Hotel Gym Session', date: daysAgo(8), duration_min: 45, overall_feeling: 3, purpose: ['strength', 'cardio'] },
-      { user_id: userId, name: 'Morning Stretch', date: daysAgo(12), duration_min: 20, overall_feeling: 4, purpose: ['mobility'] },
-      { user_id: userId, name: 'Quick Cardio', date: daysAgo(15), duration_min: 25, overall_feeling: 3, purpose: ['cardio'] },
-      { user_id: userId, name: 'Full Body Workout', date: daysAgo(20), duration_min: 55, overall_feeling: 5, purpose: ['strength', 'mobility', 'cardio'] },
-    ])
-    .select('id');
-  if (logErr) throw new Error(`Contractor workout log: ${logErr.message}`);
-  const logId = logData?.[0]?.id;
-
-  if (logId && exerciseData) {
-    const exId = (name: string) => exerciseData.find(e => e.name === name)?.id ?? null;
-    const { error: logExErr } = await db.from('workout_log_exercises').insert([
-      { log_id: logId, name: 'Shoulder Mobility Circles', exercise_id: exId('Shoulder Mobility Circles'), sets_completed: 2, reps_completed: 10, sort_order: 1, phase: 'warmup', rpe: 4 },
-      { log_id: logId, name: 'Goblet Squats', exercise_id: exId('Goblet Squats'), sets_completed: 3, reps_completed: 12, weight_lbs: 45, sort_order: 2, phase: 'working', rpe: 7 },
-      { log_id: logId, name: 'Farmer\'s Walks', exercise_id: exId('Farmer\'s Walks'), sets_completed: 3, duration_sec: 60, weight_lbs: 70, sort_order: 3, phase: 'working', rpe: 8 },
-    ]);
-    if (logExErr) throw new Error(`Contractor workout log exercises: ${logExErr.message}`);
-  }
-
-  // 15. Health Metrics (7 days)
-  const healthRows = Array.from({ length: 7 }, (_, i) => ({
-    user_id: userId,
-    logged_date: daysAgo(i),
-    resting_hr: 62 + Math.floor(Math.random() * 8),
-    steps: 5000 + Math.floor(Math.random() * 7000),
-    sleep_hours: +(6 + Math.random() * 2.5).toFixed(1),
-    source: 'manual' as const,
-  }));
-  const { error: hmErr } = await db.from('user_health_metrics').insert(healthRows);
-  if (hmErr) throw new Error(`Contractor health metrics: ${hmErr.message}`);
-
-  // 16. Life Categories
+  // 13. Life Categories
   const { error: lcErr } = await db.from('life_categories').insert([
     { user_id: userId, name: 'Career', icon: 'briefcase', color: '#f59e0b', sort_order: 1 },
     { user_id: userId, name: 'Health', icon: 'heart', color: '#ef4444', sort_order: 2 },

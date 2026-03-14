@@ -24,7 +24,7 @@ export async function GET() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role, username')
+    .select('role, username, contractor_role')
     .eq('id', user.id)
     .maybeSingle();
 
@@ -69,6 +69,7 @@ export async function GET() {
     isTeacher,
     role,
     username: profile?.username ?? null,
+    contractorRole: profile?.contractor_role ?? null,
     userId: user.id,
     isInvited,
     inviteModules: isInvited ? (invite?.allowed_modules ?? null) : null,
