@@ -93,7 +93,6 @@ export default function ScanButton({
         type="file"
         multiple
         accept="image/*,.pdf"
-        capture="environment"
         className="hidden"
         onChange={(e) => e.target.files && handleFiles(e.target.files)}
       />
