@@ -87,7 +87,7 @@ export default function TeacherCoursesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
       </div>
     );
@@ -95,7 +95,7 @@ export default function TeacherCoursesPage() {
 
   if (notFound || !profile) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center text-gray-500">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400">
         Teacher not found.
       </div>
     );
@@ -104,10 +104,10 @@ export default function TeacherCoursesPage() {
   const displayName = profile.display_name || profile.username;
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-slate-50 text-white">
       {/* Nav */}
-      <nav className="border-b border-gray-800 px-6 py-4 flex items-center gap-4">
-        <Link href="/academy" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition">
+      <nav className="border-b border-slate-200 px-6 py-4 flex items-center gap-4">
+        <Link href="/academy" className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm transition">
           <ChevronLeft className="w-4 h-4" /> Academy
         </Link>
         <span className="text-gray-700">·</span>
@@ -129,13 +129,13 @@ export default function TeacherCoursesPage() {
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-3xl font-bold text-white">{displayName}</h1>
-            <p className="text-gray-400 text-sm mt-1">@{profile.username}</p>
+            <p className="text-slate-500 text-sm mt-1">@{profile.username}</p>
             {profile.bio && (
-              <p className="text-gray-300 mt-3 leading-relaxed max-w-xl">{profile.bio}</p>
+              <p className="text-slate-700 mt-3 leading-relaxed max-w-xl">{profile.bio}</p>
             )}
             <div className="flex items-center gap-2 mt-4">
               <BookOpen className="w-4 h-4 text-amber-400" />
-              <span className="text-sm text-gray-400">
+              <span className="text-sm text-slate-500">
                 {courses.length} published course{courses.length !== 1 ? 's' : ''}
               </span>
             </div>
@@ -153,10 +153,10 @@ export default function TeacherCoursesPage() {
             {courses.map((course) => (
               <div
                 key={course.id}
-                className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col hover:border-gray-700 transition"
+                className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col hover:border-slate-200 transition"
               >
                 {/* Cover image */}
-                <Link href={`/academy/${course.id}`} className="block aspect-video bg-gray-800 shrink-0 overflow-hidden">
+                <Link href={`/academy/${course.id}`} className="block aspect-video bg-slate-100 shrink-0 overflow-hidden">
                   {course.cover_image_url ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -185,12 +185,12 @@ export default function TeacherCoursesPage() {
                   </div>
 
                   {course.description && (
-                    <p className="text-gray-400 text-sm line-clamp-2 leading-relaxed mb-3">
+                    <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed mb-3">
                       {course.description}
                     </p>
                   )}
 
-                  <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-800">
+                  <div className="mt-auto flex items-center justify-between pt-3 border-t border-slate-200">
                     <span className="text-sm font-medium text-amber-400">
                       {course.price_type === 'free' ? 'Free' : `$${course.price} · ${PRICE_LABEL[course.price_type]}`}
                     </span>
@@ -202,22 +202,22 @@ export default function TeacherCoursesPage() {
                         onClick={() => toggleLike(course.id)}
                         disabled={togglingLike === course.id}
                         title={course.liked ? 'Unlike' : 'Like'}
-                        className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
+                        className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-slate-100 transition disabled:opacity-50"
                       >
                         <Heart
-                          className={`w-4 h-4 transition ${course.liked ? 'fill-red-500 text-red-500' : 'text-gray-500'}`}
+                          className={`w-4 h-4 transition ${course.liked ? 'fill-red-500 text-red-500' : 'text-slate-400'}`}
                         />
-                        <span className="text-xs text-gray-500">{course.like_count}</span>
+                        <span className="text-xs text-slate-400">{course.like_count}</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => toggleSave(course.id)}
                         disabled={togglingSave === course.id}
                         title={course.saved ? 'Remove from saved' : 'Save course'}
-                        className="p-1.5 rounded-lg hover:bg-gray-800 transition disabled:opacity-50"
+                        className="p-1.5 rounded-lg hover:bg-slate-100 transition disabled:opacity-50"
                       >
                         <Bookmark
-                          className={`w-4 h-4 transition ${course.saved ? 'fill-amber-500 text-amber-500' : 'text-gray-500'}`}
+                          className={`w-4 h-4 transition ${course.saved ? 'fill-amber-500 text-amber-500' : 'text-slate-400'}`}
                         />
                       </button>
                     </div>
@@ -225,7 +225,7 @@ export default function TeacherCoursesPage() {
 
                   {course.category && (
                     <div className="mt-2">
-                      <span className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded-full">
+                      <span className="text-xs text-gray-600 bg-slate-100 px-2 py-0.5 rounded-full">
                         {course.category}
                       </span>
                     </div>

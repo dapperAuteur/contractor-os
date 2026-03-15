@@ -292,14 +292,14 @@ export default function CourseEditorPage() {
   }
 
   if (!course) {
-    return <div className="text-center py-20 text-gray-500">Course not found.</div>;
+    return <div className="text-center py-20 text-slate-400">Course not found.</div>;
   }
 
   const modules = [...course.course_modules].sort((a, b) => a.order - b.order);
 
   return (
     <div className="p-8 max-w-3xl">
-      <Link href="/dashboard/teaching/courses" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 transition">
+      <Link href="/dashboard/teaching/courses" className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm mb-6 transition">
         <ChevronLeft className="w-4 h-4" /> My Courses
       </Link>
 
@@ -309,7 +309,7 @@ export default function CourseEditorPage() {
           <h1 className="text-2xl font-bold text-white">{course.title}</h1>
           <div className="flex items-center gap-2 mt-1.5">
             <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-              course.is_published ? 'bg-green-900/30 text-green-400' : 'bg-gray-800 text-gray-500'
+              course.is_published ? 'bg-green-900/30 text-green-400' : 'bg-slate-100 text-slate-400'
             }`}>
               {course.is_published ? 'Published' : 'Draft'}
             </span>
@@ -321,7 +321,7 @@ export default function CourseEditorPage() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
-          {saving && <Loader2 className="w-4 h-4 animate-spin text-gray-500" />}
+          {saving && <Loader2 className="w-4 h-4 animate-spin text-slate-400" />}
           {feedback && <p className="text-sm text-green-400">{feedback}</p>}
           <button
             type="button"
@@ -329,7 +329,7 @@ export default function CourseEditorPage() {
             disabled={publishingToggle}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition disabled:opacity-50 ${
               course.is_published
-                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                ? 'bg-slate-100 text-slate-700 hover:bg-slate-100'
                 : 'bg-amber-600 text-white hover:bg-amber-700'
             }`}
           >
@@ -338,14 +338,14 @@ export default function CourseEditorPage() {
           </button>
           <Link
             href={`/dashboard/teaching/${username}/courses/${courseId}/assignments`}
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-800 text-gray-300 rounded-xl text-sm hover:bg-gray-700 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-xl text-sm hover:bg-slate-100 transition"
           >
             <ClipboardList className="w-3.5 h-3.5" /> Assignments
           </Link>
           <Link
             href={`/academy/${courseId}`}
             target="_blank"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-800 text-gray-300 rounded-xl text-sm hover:bg-gray-700 transition"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-xl text-sm hover:bg-slate-100 transition"
           >
             Preview
           </Link>
@@ -353,7 +353,7 @@ export default function CourseEditorPage() {
             type="button"
             onClick={handleDeleteCourse}
             disabled={deleting}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-gray-800 text-red-400 hover:bg-red-900/30 transition disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold bg-slate-100 text-red-400 hover:bg-red-900/30 transition disabled:opacity-50"
           >
             {deleting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
             Delete
@@ -362,11 +362,11 @@ export default function CourseEditorPage() {
       </div>
 
       {/* Course settings */}
-      <div className="dark-input bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-6">
+      <div className=" bg-white border border-slate-200 rounded-2xl p-6 mb-6">
         <h2 className="font-semibold text-white mb-4">Settings</h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Cover Image</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Cover Image</label>
             <MediaUploader
               dark
               onUpload={(url) => saveCourseField({ cover_image_url: url })}
@@ -376,32 +376,32 @@ export default function CourseEditorPage() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Title</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Title</label>
             <input
               type="text"
               defaultValue={course.title}
               onBlur={(e) => { if (e.target.value !== course.title) saveCourseField({ title: e.target.value }); }}
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Description</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Description</label>
             <textarea
               defaultValue={course.description ?? ''}
               onBlur={(e) => { if (e.target.value !== course.description) saveCourseField({ description: e.target.value }); }}
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Category</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Category</label>
             <input
               type="text"
               list="course-categories"
               defaultValue={course.category ?? ''}
               onBlur={(e) => { if (e.target.value !== course.category) saveCourseField({ category: e.target.value || null }); }}
               placeholder="e.g. Nutrition, Fitness, Longevity…"
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
             />
             <datalist id="course-categories">
               {courseCategories.map((c) => (
@@ -411,11 +411,11 @@ export default function CourseEditorPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm text-gray-200 mb-1.5">Price Type</label>
+              <label className="block text-sm text-slate-800 mb-1.5">Price Type</label>
               <select
                 value={course.price_type}
                 onChange={(e) => saveCourseField({ price_type: e.target.value })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500"
               >
                 <option value="free">Free</option>
                 <option value="one_time">One-time</option>
@@ -424,18 +424,18 @@ export default function CourseEditorPage() {
             </div>
             {course.price_type !== 'free' && (
               <div>
-                <label className="block text-sm text-gray-200 mb-1.5">Price ($)</label>
+                <label className="block text-sm text-slate-800 mb-1.5">Price ($)</label>
                 <input
                   type="number"
                   defaultValue={course.price}
                   onBlur={(e) => saveCourseField({ price: Number(e.target.value) })}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-amber-500"
                 />
               </div>
             )}
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Navigation Mode</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Navigation Mode</label>
             <div className="flex gap-2">
               {(['linear', 'cyoa'] as const).map((mode) => (
                 <button
@@ -445,7 +445,7 @@ export default function CourseEditorPage() {
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                     course.navigation_mode === mode
                       ? 'bg-amber-600 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-100'
                   }`}
                 >
                   {mode === 'linear' ? 'Linear' : 'Adventure (CYOA)'}
@@ -454,7 +454,7 @@ export default function CourseEditorPage() {
             </div>
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Visibility</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Visibility</label>
             <div className="flex gap-2 flex-wrap">
               {(['public', 'members', 'scheduled'] as const).map((v) => (
                 <button
@@ -464,7 +464,7 @@ export default function CourseEditorPage() {
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition ${
                     course.visibility === v
                       ? 'bg-amber-600 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-100'
                   }`}
                 >
                   {v === 'public' ? 'Public (anyone)' : v === 'members' ? 'Members only' : 'Scheduled'}
@@ -473,12 +473,12 @@ export default function CourseEditorPage() {
             </div>
             {course.visibility === 'scheduled' && (
               <div className="mt-2">
-                <label className="block text-xs text-gray-400 mb-1">Publish At</label>
+                <label className="block text-xs text-slate-500 mb-1">Publish At</label>
                 <input
                   type="datetime-local"
                   defaultValue={course.published_at ? course.published_at.slice(0, 16) : ''}
                   onBlur={(e) => saveCourseField({ published_at: e.target.value || null })}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                 />
               </div>
             )}
@@ -493,7 +493,7 @@ export default function CourseEditorPage() {
             <Sparkles className="w-5 h-5 text-amber-400" />
             <h2 className="font-semibold text-white">AI Adventure Paths</h2>
           </div>
-          <p className="text-gray-400 text-sm mb-4">
+          <p className="text-slate-500 text-sm mb-4">
             Generate AI embeddings for all lessons to power semantic &quot;Choose Your Own Adventure&quot; navigation.
             Run this after adding or editing lessons.
           </p>
@@ -518,20 +518,20 @@ export default function CourseEditorPage() {
       )}
 
       {/* Curriculum builder */}
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="font-semibold text-white">Curriculum</h2>
           <button
             type="button"
             onClick={() => setAddingModule(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-sm hover:bg-gray-700 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-100 transition"
           >
             <Plus className="w-3.5 h-3.5" /> Add Module
           </button>
         </div>
 
         {addingModule && (
-          <div className="dark-input flex gap-2 mb-4">
+          <div className=" flex gap-2 mb-4">
             <input
               autoFocus
               type="text"
@@ -539,15 +539,15 @@ export default function CourseEditorPage() {
               onChange={(e) => setNewModuleTitle(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') addModule(); if (e.key === 'Escape') setAddingModule(false); }}
               placeholder="Module title…"
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+              className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
             />
             <button onClick={addModule} className="px-3 py-2 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition">Add</button>
-            <button onClick={() => setAddingModule(false)} className="px-3 py-2 bg-gray-800 text-gray-400 rounded-xl text-sm hover:bg-gray-700 transition">Cancel</button>
+            <button onClick={() => setAddingModule(false)} className="px-3 py-2 bg-slate-100 text-slate-500 rounded-xl text-sm hover:bg-slate-100 transition">Cancel</button>
           </div>
         )}
 
         {modules.length === 0 ? (
-          <div className="text-center py-10 text-gray-600 border border-dashed border-gray-800 rounded-xl">
+          <div className="text-center py-10 text-gray-600 border border-dashed border-slate-200 rounded-xl">
             <p className="text-sm">No modules yet. Add a module to organize your lessons.</p>
           </div>
         ) : (
@@ -555,17 +555,17 @@ export default function CourseEditorPage() {
             {modules.map((mod, modIdx) => {
               const lessons = [...mod.lessons].sort((a, b) => a.order - b.order);
               return (
-                <div key={mod.id} className="border border-gray-800 rounded-xl overflow-hidden">
+                <div key={mod.id} className="border border-slate-200 rounded-xl overflow-hidden">
                   {/* Module header */}
-                  <div className="flex items-center gap-2 px-3 py-3 bg-gray-800/50">
+                  <div className="flex items-center gap-2 px-3 py-3 bg-slate-100/50">
                     {/* Reorder up/down */}
                     <div className="flex flex-col gap-0.5 shrink-0">
                       <button type="button" onClick={() => reorderModule(mod.id, 'up')} disabled={modIdx === 0}
-                        className="p-0.5 text-gray-600 hover:text-gray-300 disabled:opacity-20 transition">
+                        className="p-0.5 text-gray-600 hover:text-slate-700 disabled:opacity-20 transition">
                         <ChevronUp className="w-3 h-3" />
                       </button>
                       <button type="button" onClick={() => reorderModule(mod.id, 'down')} disabled={modIdx === modules.length - 1}
-                        className="p-0.5 text-gray-600 hover:text-gray-300 disabled:opacity-20 transition">
+                        className="p-0.5 text-gray-600 hover:text-slate-700 disabled:opacity-20 transition">
                         <ChevronDown className="w-3 h-3" />
                       </button>
                     </div>
@@ -588,7 +588,7 @@ export default function CourseEditorPage() {
                         <button onClick={() => saveModuleTitle(mod.id)} className="p-1 text-green-400 hover:text-green-300 transition">
                           <CheckCircle className="w-4 h-4" />
                         </button>
-                        <button onClick={() => setEditingModuleId(null)} className="p-1 text-gray-500 hover:text-gray-300 transition">
+                        <button onClick={() => setEditingModuleId(null)} className="p-1 text-slate-400 hover:text-slate-700 transition">
                           <X className="w-4 h-4" />
                         </button>
                       </div>
@@ -605,7 +605,7 @@ export default function CourseEditorPage() {
                           return (
                             <button type="button"
                               onClick={() => bulkSetFreePreview(mod.id, !allFree)}
-                              className={`p-1 transition shrink-0 ${allFree ? 'text-amber-400 hover:text-gray-400' : 'text-gray-600 hover:text-amber-400'}`}
+                              className={`p-1 transition shrink-0 ${allFree ? 'text-amber-400 hover:text-slate-500' : 'text-gray-600 hover:text-amber-400'}`}
                               title={allFree ? 'Remove free preview from all lessons' : 'Mark all lessons as free preview'}
                             >
                               <Eye className="w-3.5 h-3.5" />
@@ -614,7 +614,7 @@ export default function CourseEditorPage() {
                         })()}
                         <button type="button"
                           onClick={() => { setEditingModuleId(mod.id); setEditingModuleTitle(mod.title); }}
-                          className="p-1 text-gray-600 hover:text-gray-300 transition shrink-0" title="Rename module">
+                          className="p-1 text-gray-600 hover:text-slate-700 transition shrink-0" title="Rename module">
                           <Pencil className="w-3.5 h-3.5" />
                         </button>
                         <button type="button" onClick={() => deleteModule(mod.id)}
@@ -630,20 +630,20 @@ export default function CourseEditorPage() {
                     const Icon = LESSON_TYPE_ICON[lesson.lesson_type] ?? Play;
                     const isExpanded = expandedLessonId === lesson.id;
                     return (
-                      <div key={lesson.id} className="border-t border-gray-800">
+                      <div key={lesson.id} className="border-t border-slate-200">
                         {/* Lesson row */}
                         <div className="flex items-center gap-2 px-3 py-2.5 group">
                           <div className="flex flex-col gap-0.5 shrink-0">
                             <button type="button" onClick={() => reorderLesson(mod.id, lesson.id, 'up')} disabled={lessonIdx === 0}
-                              className="p-0.5 text-gray-700 hover:text-gray-400 disabled:opacity-20 transition">
+                              className="p-0.5 text-gray-700 hover:text-slate-500 disabled:opacity-20 transition">
                               <ChevronUp className="w-3 h-3" />
                             </button>
                             <button type="button" onClick={() => reorderLesson(mod.id, lesson.id, 'down')} disabled={lessonIdx === lessons.length - 1}
-                              className="p-0.5 text-gray-700 hover:text-gray-400 disabled:opacity-20 transition">
+                              className="p-0.5 text-gray-700 hover:text-slate-500 disabled:opacity-20 transition">
                               <ChevronDown className="w-3 h-3" />
                             </button>
                           </div>
-                          <Icon className="w-3.5 h-3.5 text-gray-500 shrink-0" />
+                          <Icon className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           {/* Click to expand edit form */}
                           <button type="button"
                             onClick={() => {
@@ -662,7 +662,7 @@ export default function CourseEditorPage() {
                                 });
                               }
                             }}
-                            className="flex-1 text-left text-sm text-gray-300 hover:text-white transition"
+                            className="flex-1 text-left text-sm text-slate-700 hover:text-white transition"
                           >
                             {lesson.title}
                           </button>
@@ -677,26 +677,26 @@ export default function CourseEditorPage() {
 
                         {/* Inline lesson edit form */}
                         {isExpanded && (
-                          <div className="dark-input border-t border-gray-800 bg-gray-800/30 p-4 space-y-3">
+                          <div className=" border-t border-slate-200 bg-slate-100/30 p-4 space-y-3">
                             <input
                               type="text"
                               value={editingLesson.title ?? ''}
                               onChange={(e) => setEditingLesson((l) => ({ ...l, title: e.target.value }))}
                               placeholder="Lesson title…"
-                              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                             />
                             <div className="flex gap-3 flex-wrap items-center">
                               <select
                                 value={editingLesson.lesson_type ?? 'video'}
                                 onChange={(e) => setEditingLesson((l) => ({ ...l, lesson_type: e.target.value }))}
-                                className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
+                                className="bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500"
                               >
                                 <option value="video">Video</option>
                                 <option value="text">Text</option>
                                 <option value="audio">Audio</option>
                                 <option value="slides">Slides</option>
                               </select>
-                              <label className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
+                              <label className="flex items-center gap-2 text-sm text-slate-500 cursor-pointer">
                                 <input type="checkbox"
                                   checked={editingLesson.is_free_preview ?? false}
                                   onChange={(e) => setEditingLesson((l) => ({ ...l, is_free_preview: e.target.checked }))}
@@ -711,7 +711,7 @@ export default function CourseEditorPage() {
                                 value={editingLesson.content_url ?? ''}
                                 onChange={(e) => setEditingLesson((l) => ({ ...l, content_url: e.target.value }))}
                                 placeholder="Content URL (video, audio, or slides embed)…"
-                                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                               />
                             ) : (
                               <div className="space-y-2">
@@ -719,14 +719,14 @@ export default function CourseEditorPage() {
                                   <button
                                     type="button"
                                     onClick={() => setEditingLesson((l) => ({ ...l, content_format: 'markdown' }))}
-                                    className={`px-2.5 py-1 rounded-lg transition ${editingLesson.content_format !== 'tiptap' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-gray-400 hover:text-white'}`}
+                                    className={`px-2.5 py-1 rounded-lg transition ${editingLesson.content_format !== 'tiptap' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-slate-500 hover:text-white'}`}
                                   >
                                     Markdown
                                   </button>
                                   <button
                                     type="button"
                                     onClick={() => setEditingLesson((l) => ({ ...l, content_format: 'tiptap' }))}
-                                    className={`px-2.5 py-1 rounded-lg transition ${editingLesson.content_format === 'tiptap' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-gray-400 hover:text-white'}`}
+                                    className={`px-2.5 py-1 rounded-lg transition ${editingLesson.content_format === 'tiptap' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-slate-500 hover:text-white'}`}
                                   >
                                     Rich Text
                                   </button>
@@ -742,7 +742,7 @@ export default function CourseEditorPage() {
                                     onChange={(e) => setEditingLesson((l) => ({ ...l, text_content: e.target.value }))}
                                     placeholder="Text content (markdown supported)…"
                                     rows={5}
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                                   />
                                 )}
                               </div>
@@ -752,7 +752,7 @@ export default function CourseEditorPage() {
                               value={editingLesson.duration_seconds ?? ''}
                               onChange={(e) => setEditingLesson((l) => ({ ...l, duration_seconds: e.target.value ? Number(e.target.value) : undefined }))}
                               placeholder="Duration in seconds (optional)…"
-                              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                             />
                             <div className="flex gap-2">
                               <button onClick={() => saveLesson(lesson.id)}
@@ -760,7 +760,7 @@ export default function CourseEditorPage() {
                                 Save
                               </button>
                               <button onClick={() => setExpandedLessonId(null)}
-                                className="px-3 py-1.5 bg-gray-800 text-gray-400 rounded-xl text-sm hover:bg-gray-700 transition">
+                                className="px-3 py-1.5 bg-slate-100 text-slate-500 rounded-xl text-sm hover:bg-slate-100 transition">
                                 Cancel
                               </button>
                             </div>
@@ -772,22 +772,22 @@ export default function CourseEditorPage() {
 
                   {/* Add lesson */}
                   {addingLesson === mod.id ? (
-                    <div className="dark-input border-t border-gray-800 p-4 space-y-3">
+                    <div className=" border-t border-slate-200 p-4 space-y-3">
                       <input autoFocus type="text" value={newLesson.title}
                         onChange={(e) => setNewLesson((l) => ({ ...l, title: e.target.value }))}
                         placeholder="Lesson title…"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                        className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                       />
                       <div className="flex gap-2 flex-wrap items-center">
                         <select value={newLesson.lesson_type}
                           onChange={(e) => setNewLesson((l) => ({ ...l, lesson_type: e.target.value }))}
-                          className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
+                          className="bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-amber-500">
                           <option value="video">Video</option>
                           <option value="text">Text</option>
                           <option value="audio">Audio</option>
                           <option value="slides">Slides</option>
                         </select>
-                        <label className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer">
+                        <label className="flex items-center gap-2 text-sm text-slate-500 cursor-pointer">
                           <input type="checkbox" checked={newLesson.is_free_preview}
                             onChange={(e) => setNewLesson((l) => ({ ...l, is_free_preview: e.target.checked }))}
                             className="accent-amber-500" />
@@ -796,7 +796,7 @@ export default function CourseEditorPage() {
                       </div>
                       <div className="flex gap-2">
                         <button onClick={() => addLesson(mod.id)} className="px-3 py-1.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition">Add Lesson</button>
-                        <button onClick={() => setAddingLesson(null)} className="px-3 py-1.5 bg-gray-800 text-gray-400 rounded-xl text-sm hover:bg-gray-700 transition">Cancel</button>
+                        <button onClick={() => setAddingLesson(null)} className="px-3 py-1.5 bg-slate-100 text-slate-500 rounded-xl text-sm hover:bg-slate-100 transition">Cancel</button>
                       </div>
                     </div>
                   ) : (
@@ -805,7 +805,7 @@ export default function CourseEditorPage() {
                       setNewLesson({ title: '', lesson_type: 'video', content_url: '', is_free_preview: course.price_type === 'free' || allFree });
                       setAddingLesson(mod.id);
                     }}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 border-t border-gray-800 text-gray-600 hover:text-amber-400 text-sm hover:bg-gray-800/30 transition">
+                      className="w-full flex items-center gap-2 px-4 py-2.5 border-t border-slate-200 text-gray-600 hover:text-amber-400 text-sm hover:bg-slate-100/30 transition">
                       <Plus className="w-3.5 h-3.5" /> Add Lesson
                     </button>
                   )}

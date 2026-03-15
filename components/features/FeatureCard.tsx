@@ -16,15 +16,15 @@ export default function FeatureCard({ feature, app }: FeatureCardProps) {
   return (
     <Link
       href={`/features/${app}/${feature.slug}`}
-      className="group block rounded-xl border border-neutral-800 bg-neutral-900 p-5 hover:border-neutral-700 hover:bg-neutral-800/80 transition"
+      className="group block rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-300 hover:bg-slate-100 transition"
     >
       <div className={`inline-flex items-center justify-center w-10 h-10 rounded-lg bg-${accent}-500/10 mb-3`}>
         <Icon className={`w-5 h-5 text-${accent}-400`} aria-hidden="true" />
       </div>
-      <h3 className="text-base font-semibold text-neutral-100 mb-1 group-hover:text-white transition">
+      <h3 className="text-base font-semibold text-slate-900 mb-1 group-hover:text-slate-900 transition">
         {feature.title}
       </h3>
-      <p className="text-sm text-neutral-400 leading-relaxed line-clamp-2">
+      <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">
         {feature.tagline}
       </p>
     </Link>

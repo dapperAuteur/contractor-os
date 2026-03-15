@@ -22,8 +22,8 @@ export default async function AuthorsPage() {
   if (!postRows?.length) {
     return (
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h1 className="text-3xl font-bold text-neutral-100 mb-3">Authors</h1>
-        <p className="text-neutral-500">No authors have published yet.</p>
+        <h1 className="text-3xl font-bold text-slate-900 mb-3">Authors</h1>
+        <p className="text-slate-400">No authors have published yet.</p>
         <Link
           href="/dashboard/blog"
           className="mt-4 inline-block text-sm text-amber-400 hover:underline"
@@ -57,8 +57,8 @@ export default async function AuthorsPage() {
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-neutral-100">Authors</h1>
-        <p className="mt-1 text-neutral-400">
+        <h1 className="text-3xl font-bold text-slate-900">Authors</h1>
+        <p className="mt-1 text-slate-500">
           {sorted.length} {sorted.length === 1 ? 'writer' : 'writers'} sharing on Work.WitUS.{' '}
           <Link href="/blog" className="text-amber-400 hover:underline">
             ← All posts
@@ -76,7 +76,7 @@ export default async function AuthorsPage() {
             <li key={p.id}>
               <Link
                 href={`/blog/${p.username}`}
-                className="group flex items-start gap-4 p-5 bg-neutral-900 border border-neutral-800 rounded-2xl hover:border-neutral-700 hover:bg-neutral-800/80 transition"
+                className="group flex items-start gap-4 p-5 bg-white border border-slate-200 rounded-2xl hover:border-slate-200 hover:bg-slate-100/80 transition"
               >
                 {/* Avatar */}
                 <div className="shrink-0">
@@ -86,7 +86,7 @@ export default async function AuthorsPage() {
                       alt={p.display_name || p.username}
                       width={52}
                       height={52}
-                      className="w-13 h-13 rounded-full object-cover border border-neutral-700"
+                      className="w-13 h-13 rounded-full object-cover border border-slate-200"
                     />
                   ) : (
                     <div className="w-13 h-13 rounded-full bg-amber-500/10 flex items-center justify-center">
@@ -97,14 +97,14 @@ export default async function AuthorsPage() {
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-neutral-100 group-hover:text-amber-400 transition truncate">
+                  <p className="font-semibold text-slate-900 group-hover:text-amber-400 transition truncate">
                     {p.display_name || p.username}
                   </p>
-                  <p className="text-xs text-neutral-500 mb-1">@{p.username}</p>
+                  <p className="text-xs text-slate-400 mb-1">@{p.username}</p>
                   {p.bio && (
-                    <p className="text-sm text-neutral-400 line-clamp-2">{p.bio}</p>
+                    <p className="text-sm text-slate-500 line-clamp-2">{p.bio}</p>
                   )}
-                  <div className="flex items-center gap-1 mt-2 text-xs text-neutral-500">
+                  <div className="flex items-center gap-1 mt-2 text-xs text-slate-400">
                     <FileText className="w-3.5 h-3.5" />
                     {postCount} {postCount === 1 ? 'post' : 'posts'}
                   </div>

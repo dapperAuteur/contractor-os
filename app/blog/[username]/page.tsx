@@ -31,8 +31,8 @@ export default async function UserBlogPage({ params }: Props) {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
       {/* Author header */}
-      <header className="mb-10 pb-8 border-b border-neutral-800">
-        <h1 className="text-3xl font-bold text-neutral-100">
+      <header className="mb-10 pb-8 border-b border-slate-200">
+        <h1 className="text-3xl font-bold text-slate-900">
           {p.display_name || p.username}&apos;s blog
         </h1>
         {p.bio && (

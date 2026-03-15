@@ -17,22 +17,22 @@ import ContractorNav from '@/components/nav/ContractorNav';
 
 function PublicHeader() {
   return (
-    <nav className="bg-neutral-950 border-b border-neutral-800 sticky top-0 z-50">
+    <nav className="bg-slate-50 border-b border-slate-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link href="/" className="text-lg font-bold text-neutral-100">
+        <Link href="/" className="text-lg font-bold text-slate-900">
           Work.WitUS
         </Link>
         <div className="flex items-center gap-1">
           <Link
             href="/academy"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"
           >
             <GraduationCap className="w-4 h-4" />
             Academy
           </Link>
           <Link
             href="/blog"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"
           >
             <BookOpen className="w-4 h-4" />
             Blog
@@ -40,7 +40,7 @@ function PublicHeader() {
           <div className="w-px h-5 bg-neutral-700 mx-2" />
           <Link
             href="/login"
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:bg-neutral-800 hover:text-neutral-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"
           >
             <LogIn className="w-4 h-4" />
             Login

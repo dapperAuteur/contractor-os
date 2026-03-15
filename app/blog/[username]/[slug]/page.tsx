@@ -138,7 +138,7 @@ export default async function PublicPostPage({ params }: Props) {
 
         {/* Header */}
         <header className="mb-8">
-          <h1 className="text-4xl font-bold text-neutral-100 mb-4 leading-tight">{bp.title}</h1>
+          <h1 className="text-4xl font-bold text-slate-900 mb-4 leading-tight">{bp.title}</h1>
           <PostMeta
             publishedAt={bp.published_at}
             readingTimeMinutes={bp.reading_time_minutes}
@@ -164,7 +164,7 @@ export default async function PublicPostPage({ params }: Props) {
         <div data-read-depth="100" aria-hidden />
 
         {/* Like / Save / Share bar */}
-        <div className="mt-12 pt-6 border-t border-neutral-800 flex flex-wrap items-center gap-3">
+        <div className="mt-12 pt-6 border-t border-slate-200 flex flex-wrap items-center gap-3">
           <BlogLikeButton
             postId={bp.id}
             initialLiked={!!likeRow}
@@ -241,13 +241,13 @@ export default async function PublicPostPage({ params }: Props) {
     <main className="max-w-3xl mx-auto px-4 py-16">
       {/* Unavailable notice */}
       <div className="text-center mb-12">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-neutral-800 mb-4">
-          <Lock className="w-6 h-6 text-neutral-400" />
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-slate-100 mb-4">
+          <Lock className="w-6 h-6 text-slate-500" />
         </div>
-        <h1 className="text-2xl font-bold text-neutral-100 mb-2">
+        <h1 className="text-2xl font-bold text-slate-900 mb-2">
           This post is unavailable
         </h1>
-        <p className="text-neutral-400 max-w-sm mx-auto">
+        <p className="text-slate-500 max-w-sm mx-auto">
           This post may be private, a draft, or restricted to logged-in members.
           If you think this is a mistake, try{' '}
           <Link href="/login" className="text-amber-400 hover:underline">
@@ -258,8 +258,8 @@ export default async function PublicPostPage({ params }: Props) {
       </div>
 
       {/* Other posts by this author */}
-      <div className="border-t border-neutral-800 pt-10">
-        <h2 className="text-sm font-semibold text-neutral-500 uppercase tracking-wide mb-5">
+      <div className="border-t border-slate-200 pt-10">
+        <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-5">
           More posts by {p.display_name || p.username}
         </h2>
 
@@ -269,16 +269,16 @@ export default async function PublicPostPage({ params }: Props) {
               <li key={op.slug}>
                 <Link
                   href={`/blog/${p.username}/${op.slug}`}
-                  className="group block p-4 rounded-xl border border-neutral-800 hover:border-neutral-700 hover:bg-neutral-900 transition"
+                  className="group block p-4 rounded-xl border border-slate-200 hover:border-slate-200 hover:bg-white transition"
                 >
-                  <p className="font-medium text-neutral-100 group-hover:text-amber-400">
+                  <p className="font-medium text-slate-900 group-hover:text-amber-400">
                     {op.title}
                   </p>
                   {op.excerpt && (
-                    <p className="text-sm text-neutral-400 mt-1 line-clamp-2">{op.excerpt}</p>
+                    <p className="text-sm text-slate-500 mt-1 line-clamp-2">{op.excerpt}</p>
                   )}
                   {op.published_at && (
-                    <p className="text-xs text-neutral-500 mt-2">
+                    <p className="text-xs text-slate-400 mt-2">
                       {new Date(op.published_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -291,7 +291,7 @@ export default async function PublicPostPage({ params }: Props) {
             ))}
           </ul>
         ) : (
-          <p className="text-neutral-500 text-sm">No public posts yet.</p>
+          <p className="text-slate-400 text-sm">No public posts yet.</p>
         )}
 
         <div className="mt-6">

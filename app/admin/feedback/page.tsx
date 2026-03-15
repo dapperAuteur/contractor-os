@@ -38,7 +38,7 @@ const CATEGORY_ICONS: Record<string, React.ElementType> = {
   bug: Bug, feature: Lightbulb, general: MessageSquare,
 };
 const CATEGORY_COLORS: Record<string, string> = {
-  bug: 'text-red-400', feature: 'text-purple-400', general: 'text-gray-400',
+  bug: 'text-red-400', feature: 'text-purple-400', general: 'text-slate-500',
 };
 
 function fmtDate(d: string) {
@@ -54,7 +54,7 @@ function fmtDate(d: string) {
 function AppBadge({ app }: { app?: string | null }) {
   if (!app || app === 'centenarian') return null;
   return (
-    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-900/40 text-amber-300 border border-amber-800/40">
+    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700 border border-amber-200">
       {app}
     </span>
   );
@@ -67,24 +67,24 @@ function MessageBubble({ msg }: { msg: ConversationMessage }) {
     <div className={`flex ${isUser ? 'justify-start' : 'justify-end'} gap-2`}>
       <div className={`max-w-[78%] rounded-2xl px-4 py-3 ${
         isUser
-          ? 'bg-gray-800 border border-gray-700 rounded-tl-sm'
-          : 'bg-amber-900/40 border border-amber-800/50 rounded-tr-sm'
+          ? 'bg-slate-100 border border-slate-200 rounded-tl-sm'
+          : 'bg-amber-50 border border-amber-200 rounded-tr-sm'
       }`}>
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
           {isUser && CatIcon && (
-            <CatIcon className={`w-3 h-3 shrink-0 ${CATEGORY_COLORS[msg.category ?? ''] ?? 'text-gray-400'}`} aria-hidden="true" />
+            <CatIcon className={`w-3 h-3 shrink-0 ${CATEGORY_COLORS[msg.category ?? ''] ?? 'text-slate-500'}`} aria-hidden="true" />
           )}
           {isUser && msg.category && (
-            <span className={`text-xs font-semibold capitalize ${CATEGORY_COLORS[msg.category] ?? 'text-gray-400'}`}>
+            <span className={`text-xs font-semibold capitalize ${CATEGORY_COLORS[msg.category] ?? 'text-slate-500'}`}>
               {msg.category === 'feature' ? 'Feature Request' : msg.category === 'bug' ? 'Bug Report' : 'General'}
             </span>
           )}
-          {!isUser && <span className="text-xs font-semibold text-amber-400">You (Admin)</span>}
+          {!isUser && <span className="text-xs font-semibold text-amber-600">You (Admin)</span>}
           <AppBadge app={msg.app} />
         </div>
-        <p className="text-sm text-gray-200 whitespace-pre-wrap">{msg.body}</p>
+        <p className="text-sm text-slate-800 whitespace-pre-wrap">{msg.body}</p>
         {msg.media_url && <ImageLightbox url={msg.media_url} />}
-        <p className="text-xs text-gray-500 mt-1.5 text-right">{fmtDate(msg.created_at)}</p>
+        <p className="text-xs text-slate-400 mt-1.5 text-right">{fmtDate(msg.created_at)}</p>
       </div>
     </div>
   );
@@ -195,8 +195,8 @@ export default function AdminFeedbackPage() {
 
   return (
     <div className="p-8 max-w-3xl">
-      <h1 className="text-2xl font-bold text-white mb-1">User Feedback</h1>
-      <p className="text-gray-400 text-sm mb-6">
+      <h1 className="text-2xl font-bold text-slate-900 mb-1">User Feedback</h1>
+      <p className="text-slate-500 text-sm mb-6">
         {conversations.length} conversation{conversations.length !== 1 ? 's' : ''}
         {totalUnread > 0 && ` · ${totalUnread} unread`}
         {' '}· Live updates on
@@ -209,16 +209,16 @@ export default function AdminFeedbackPage() {
           { label: 'Unread', value: totalUnread, icon: Inbox },
           { label: 'Total Messages', value: conversations.reduce((s, c) => s + c.messages.length, 0), icon: MessageSquare },
         ].map(({ label, value, icon: Icon }) => (
-          <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+          <div key={label} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
             <Icon className="w-5 h-5 mx-auto mb-2 text-amber-500" aria-hidden="true" />
-            <p className="text-2xl font-bold text-white">{value}</p>
-            <p className="text-gray-400 text-xs mt-1">{label}</p>
+            <p className="text-2xl font-bold text-slate-900">{value}</p>
+            <p className="text-slate-500 text-xs mt-1">{label}</p>
           </div>
         ))}
       </div>
 
       {conversations.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-slate-500">
           <MessageSquare className="w-10 h-10 mx-auto mb-3 opacity-40" />
           <p>No feedback yet.</p>
         </div>
@@ -230,27 +230,27 @@ export default function AdminFeedbackPage() {
             const displayName = conv.display_name ?? conv.username ?? conv.email ?? conv.user_id.slice(0, 8);
 
             return (
-              <div key={conv.user_id} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div key={conv.user_id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                 {/* Row header */}
                 <button
                   type="button"
                   onClick={() => setExpanded(isOpen ? null : conv.user_id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition text-left"
+                  className="w-full flex items-center gap-3 px-5 py-4 hover:bg-slate-100/60 transition text-left"
                 >
                   <span className={`w-2 h-2 rounded-full shrink-0 ${conv.unread_count > 0 ? 'bg-amber-500' : 'bg-transparent'}`} />
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-gray-200 text-sm font-semibold">{displayName}</p>
+                      <p className="text-slate-800 text-sm font-semibold">{displayName}</p>
                       {conv.username && conv.display_name && (
-                        <span className="text-gray-500 text-xs">@{conv.username}</span>
+                        <span className="text-slate-400 text-xs">@{conv.username}</span>
                       )}
                       {conv.apps.filter((a) => a !== 'centenarian').map((app) => (
                         <AppBadge key={app} app={app} />
                       ))}
                     </div>
-                    <p className="text-gray-500 text-xs truncate mt-0.5">{lastMsg?.body ?? '—'}</p>
+                    <p className="text-slate-400 text-xs truncate mt-0.5">{lastMsg?.body ?? '—'}</p>
                   </div>
 
                   <div className="flex items-center gap-2.5 shrink-0">
@@ -259,17 +259,17 @@ export default function AdminFeedbackPage() {
                         {conv.unread_count}
                       </span>
                     )}
-                    <span className="text-gray-500 text-xs">{fmtDate(conv.last_activity)}</span>
-                    <span className="text-gray-600 text-xs">{conv.messages.length} msg{conv.messages.length !== 1 ? 's' : ''}</span>
+                    <span className="text-slate-400 text-xs">{fmtDate(conv.last_activity)}</span>
+                    <span className="text-slate-500 text-xs">{conv.messages.length} msg{conv.messages.length !== 1 ? 's' : ''}</span>
                     {isOpen
-                      ? <ChevronUp className="w-4 h-4 text-gray-400" />
-                      : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                      ? <ChevronUp className="w-4 h-4 text-slate-500" />
+                      : <ChevronDown className="w-4 h-4 text-slate-500" />}
                   </div>
                 </button>
 
                 {/* Conversation thread */}
                 {isOpen && (
-                  <div className="border-t border-gray-800">
+                  <div className="border-t border-slate-200">
                     <div
                       ref={(el) => { threadRefs.current[conv.user_id] = el; }}
                       className="px-4 py-4 space-y-3 max-h-96 overflow-y-auto"
@@ -279,7 +279,7 @@ export default function AdminFeedbackPage() {
                       ))}
                     </div>
 
-                    <div className="px-4 pb-4 pt-2 border-t border-gray-800">
+                    <div className="px-4 pb-4 pt-2 border-t border-slate-200">
                       <textarea
                         value={replyText[conv.user_id] ?? ''}
                         onChange={(e) => setReplyText((prev) => ({ ...prev, [conv.user_id]: e.target.value }))}
@@ -289,11 +289,10 @@ export default function AdminFeedbackPage() {
                         rows={2}
                         placeholder="Reply to user… (⌘↵ to send)"
                         aria-label="Reply to user"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+                        className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 resize-none"
                       />
                       <div className="flex items-center justify-between mt-2 gap-3">
                         <MediaUploader
-                          dark
                           onUpload={(url) => setReplyMedia((prev) => ({ ...prev, [conv.user_id]: url }))}
                           onRemove={() => setReplyMedia((prev) => ({ ...prev, [conv.user_id]: null }))}
                           currentUrl={replyMedia[conv.user_id]}
@@ -307,7 +306,7 @@ export default function AdminFeedbackPage() {
                             type="button"
                             onClick={() => sendReply(conv.user_id)}
                             disabled={sending === conv.user_id || !(replyText[conv.user_id] ?? '').trim()}
-                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-50 min-h-10"
+                            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-50 min-h-11"
                           >
                             {sending === conv.user_id
                               ? <Loader2 className="w-4 h-4 animate-spin" />

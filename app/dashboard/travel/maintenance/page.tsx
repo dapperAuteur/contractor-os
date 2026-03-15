@@ -226,7 +226,7 @@ export default function MaintenancePage() {
 
       {records.length === 0 ? (
         <div className="bg-white border border-slate-200 rounded-2xl py-16 text-center">
-          <Wrench className="w-8 h-8 text-gray-300 mx-auto mb-3" />
+          <Wrench className="w-8 h-8 text-slate-700 mx-auto mb-3" />
           <p className="text-slate-400 text-sm">No maintenance records yet.</p>
           <p className="text-slate-400 text-xs mt-1">Log oil changes, tire rotations, and more.</p>
         </div>

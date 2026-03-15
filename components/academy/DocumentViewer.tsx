@@ -42,13 +42,13 @@ export default function DocumentViewer({ documents }: DocumentViewerProps) {
             key={doc.id}
             type="button"
             onClick={() => setSelectedIdx(idx)}
-            className="flex items-start gap-3 p-3 bg-gray-900 border border-gray-800 rounded-xl hover:border-amber-700/50 transition text-left group"
+            className="flex items-start gap-3 p-3 bg-white border border-slate-200 rounded-xl hover:border-amber-700/50 transition text-left group"
           >
             <FileText className="w-5 h-5 text-gray-600 group-hover:text-amber-400 transition shrink-0 mt-0.5" />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-200 group-hover:text-white transition truncate">{doc.title}</p>
+              <p className="text-sm font-medium text-slate-800 group-hover:text-white transition truncate">{doc.title}</p>
               {doc.description && (
-                <p className="text-xs text-gray-500 mt-0.5 line-clamp-2">{doc.description}</p>
+                <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{doc.description}</p>
               )}
             </div>
           </button>
@@ -59,18 +59,18 @@ export default function DocumentViewer({ documents }: DocumentViewerProps) {
       {selected && selectedIdx !== null && (
         <div className="fixed inset-0 bg-black/80 z-50 flex flex-col">
           {/* Header */}
-          <div className="flex items-center gap-3 px-4 py-3 bg-gray-900 border-b border-gray-800">
+          <div className="flex items-center gap-3 px-4 py-3 bg-white border-b border-slate-200">
             <button
               type="button"
               onClick={() => setSelectedIdx(null)}
-              className="p-1.5 text-gray-400 hover:text-white transition"
+              className="p-1.5 text-slate-500 hover:text-white transition"
             >
               <X className="w-5 h-5" />
             </button>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-white truncate">{selected.title}</p>
               {selected.description && (
-                <p className="text-xs text-gray-500 truncate">{selected.description}</p>
+                <p className="text-xs text-slate-400 truncate">{selected.description}</p>
               )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
@@ -79,7 +79,7 @@ export default function DocumentViewer({ documents }: DocumentViewerProps) {
                   href={selected.source_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 px-3 py-1.5 bg-gray-800 text-gray-300 rounded-lg text-xs hover:bg-gray-700 transition"
+                  className="flex items-center gap-1 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg text-xs hover:bg-slate-100 transition"
                 >
                   <ExternalLink className="w-3 h-3" /> View Original
                 </a>
@@ -90,16 +90,16 @@ export default function DocumentViewer({ documents }: DocumentViewerProps) {
                     type="button"
                     disabled={selectedIdx === 0}
                     onClick={() => setSelectedIdx(selectedIdx - 1)}
-                    className="p-1.5 text-gray-400 hover:text-white transition disabled:opacity-30"
+                    className="p-1.5 text-slate-500 hover:text-white transition disabled:opacity-30"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
-                  <span className="text-xs text-gray-500">{selectedIdx + 1}/{documents.length}</span>
+                  <span className="text-xs text-slate-400">{selectedIdx + 1}/{documents.length}</span>
                   <button
                     type="button"
                     disabled={selectedIdx === documents.length - 1}
                     onClick={() => setSelectedIdx(selectedIdx + 1)}
-                    className="p-1.5 text-gray-400 hover:text-white transition disabled:opacity-30"
+                    className="p-1.5 text-slate-500 hover:text-white transition disabled:opacity-30"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>

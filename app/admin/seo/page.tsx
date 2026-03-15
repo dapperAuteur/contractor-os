@@ -47,7 +47,7 @@ const SOURCE_COLORS: Record<string, string> = {
   linkedin:  'bg-blue-600',
   facebook:  'bg-blue-500',
   instagram: 'bg-pink-500',
-  other:     'bg-gray-500',
+  other:     'bg-slate-400',
 };
 
 const SOURCE_LABELS: Record<string, string> = {
@@ -60,10 +60,10 @@ const SOURCE_LABELS: Record<string, string> = {
 
 function StatCard({ label, value, sub }: { label: string; value: number | string; sub?: string }) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-      <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-1">{label}</p>
-      <p className="text-3xl font-bold text-white">{value}</p>
-      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
+    <div className="bg-white border border-slate-200 rounded-xl p-5">
+      <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">{label}</p>
+      <p className="text-3xl font-bold text-slate-900">{value}</p>
+      {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
     </div>
   );
 }
@@ -106,7 +106,7 @@ export default function AdminSeoPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
-        <Loader2 className="w-6 h-6 animate-spin text-amber-400" />
+        <Loader2 className="w-6 h-6 animate-spin text-amber-600" />
       </div>
     );
   }
@@ -126,27 +126,28 @@ export default function AdminSeoPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Globe className="w-6 h-6 text-amber-400" aria-hidden="true" />
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+            <Globe className="w-6 h-6 text-amber-600" aria-hidden="true" />
             SEO & Social Performance
           </h1>
-          <p className="text-sm text-gray-400 mt-1">Track how your public pages perform on search and social media.</p>
+          <p className="text-sm text-slate-500 mt-1">Track how your public pages perform on search and social media.</p>
         </div>
         <button
           onClick={load}
-          className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-white bg-gray-900 border border-gray-700 rounded-lg transition min-h-11"
+          aria-label="Refresh data"
+          className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-500 hover:text-slate-900 bg-white border border-slate-200 rounded-lg transition min-h-11"
         >
           <RefreshCw className="w-4 h-4" aria-hidden="true" />
           Refresh
         </button>
       </div>
 
-      {/* ── OG Image Renders ───────────────────────────────────────────────── */}
+      {/* OG Image Renders */}
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Share2 className="w-5 h-5 text-amber-400" aria-hidden="true" />
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <Share2 className="w-5 h-5 text-amber-600" aria-hidden="true" />
           OG Image Renders
-          <span className="text-xs font-normal text-gray-500 ml-1">(proxy for social shares — each render = a link preview)</span>
+          <span className="text-xs font-normal text-slate-400 ml-1">(proxy for social shares — each render = a link preview)</span>
         </h2>
 
         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -156,13 +157,13 @@ export default function AdminSeoPage() {
         </div>
 
         {og_renders.top_profiles.length > 0 && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-            <div className="px-5 py-3 border-b border-gray-800">
-              <p className="text-sm font-medium text-gray-300">Top Shared Profiles</p>
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+            <div className="px-5 py-3 border-b border-slate-200">
+              <p className="text-sm font-medium text-slate-700">Top Shared Profiles</p>
             </div>
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <tr className="text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
                   <th className="px-5 py-3">Username</th>
                   <th className="px-5 py-3 text-right">OG Renders</th>
                   <th className="px-5 py-3 text-right">Profile</th>
@@ -170,15 +171,15 @@ export default function AdminSeoPage() {
               </thead>
               <tbody>
                 {og_renders.top_profiles.map((p, i) => (
-                  <tr key={p.username} className={`border-t border-gray-800 ${i % 2 === 0 ? '' : 'bg-gray-900/50'}`}>
-                    <td className="px-5 py-3 font-medium text-white">@{p.username}</td>
-                    <td className="px-5 py-3 text-right text-amber-400 font-bold">{p.og_renders}</td>
+                  <tr key={p.username} className={`border-t border-slate-200 ${i % 2 === 0 ? '' : 'bg-slate-50'}`}>
+                    <td className="px-5 py-3 font-medium text-slate-900">@{p.username}</td>
+                    <td className="px-5 py-3 text-right text-amber-600 font-bold">{p.og_renders}</td>
                     <td className="px-5 py-3 text-right">
                       <a
                         href={`/profiles/${p.username}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-white transition"
+                        className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-slate-900 transition"
                       >
                         View <ExternalLink className="w-3 h-3" aria-hidden="true" />
                       </a>
@@ -191,10 +192,10 @@ export default function AdminSeoPage() {
         )}
       </section>
 
-      {/* ── Social Referrals ───────────────────────────────────────────────── */}
+      {/* Social Referrals */}
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-amber-400" aria-hidden="true" />
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-amber-600" aria-hidden="true" />
           Social Referral Traffic
         </h2>
 
@@ -206,10 +207,10 @@ export default function AdminSeoPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
           {/* By source */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <p className="text-sm font-medium text-gray-300 mb-4">By Platform</p>
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <p className="text-sm font-medium text-slate-700 mb-4">By Platform</p>
             {sourceSorted.length === 0 ? (
-              <p className="text-sm text-gray-500">No social referrals yet</p>
+              <p className="text-sm text-slate-400">No social referrals yet</p>
             ) : (
               <div className="space-y-3">
                 {sourceSorted.map(([source, count]) => {
@@ -218,12 +219,12 @@ export default function AdminSeoPage() {
                   return (
                     <div key={source}>
                       <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-300">{SOURCE_LABELS[source] ?? source}</span>
-                        <span className="text-white font-semibold">{count}</span>
+                        <span className="text-slate-700">{SOURCE_LABELS[source] ?? source}</span>
+                        <span className="text-slate-900 font-semibold">{count}</span>
                       </div>
-                      <div className="w-full bg-gray-800 rounded-full h-2">
+                      <div className="w-full bg-slate-100 rounded-full h-2">
                         <div
-                          className={`h-2 rounded-full ${SOURCE_COLORS[source] ?? 'bg-gray-500'}`}
+                          className={`h-2 rounded-full ${SOURCE_COLORS[source] ?? 'bg-slate-400'}`}
                           style={{ width: `${pct}%` }}
                         />
                       </div>
@@ -235,18 +236,18 @@ export default function AdminSeoPage() {
           </div>
 
           {/* Recent referrals */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <p className="text-sm font-medium text-gray-300 mb-4">Recent Visits</p>
+          <div className="bg-white border border-slate-200 rounded-xl p-5">
+            <p className="text-sm font-medium text-slate-700 mb-4">Recent Visits</p>
             {social_referrals.recent.length === 0 ? (
-              <p className="text-sm text-gray-500">No recent referrals</p>
+              <p className="text-sm text-slate-400">No recent referrals</p>
             ) : (
               <div className="space-y-2 max-h-64 overflow-y-auto">
                 {social_referrals.recent.map((r, i) => (
                   <div key={i} className="flex items-center gap-2 text-sm">
-                    <span className={`w-2 h-2 rounded-full shrink-0 ${SOURCE_COLORS[r.source] ?? 'bg-gray-500'}`} />
-                    <span className="text-gray-400 shrink-0">{SOURCE_LABELS[r.source] ?? r.source}</span>
-                    <span className="text-white truncate flex-1 font-mono text-xs">{r.path}</span>
-                    <span className="text-gray-600 text-xs shrink-0">
+                    <span className={`w-2 h-2 rounded-full shrink-0 ${SOURCE_COLORS[r.source] ?? 'bg-slate-400'}`} />
+                    <span className="text-slate-500 shrink-0">{SOURCE_LABELS[r.source] ?? r.source}</span>
+                    <span className="text-slate-900 truncate flex-1 font-mono text-xs">{r.path}</span>
+                    <span className="text-slate-400 text-xs shrink-0">
                       {new Date(r.created_at).toLocaleDateString()}
                     </span>
                   </div>
@@ -257,16 +258,16 @@ export default function AdminSeoPage() {
         </div>
       </section>
 
-      {/* ── Sitemap Coverage ───────────────────────────────────────────────── */}
+      {/* Sitemap Coverage */}
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <BarChart3 className="w-5 h-5 text-amber-400" aria-hidden="true" />
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <BarChart3 className="w-5 h-5 text-amber-600" aria-hidden="true" />
           Sitemap Coverage
           <a
             href="/sitemap.xml"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs font-normal text-amber-400 hover:text-amber-300 transition flex items-center gap-1 ml-2"
+            className="text-xs font-normal text-amber-600 hover:text-amber-500 transition flex items-center gap-1 ml-2"
           >
             View sitemap.xml <ExternalLink className="w-3 h-3" aria-hidden="true" />
           </a>
@@ -278,26 +279,26 @@ export default function AdminSeoPage() {
           <StatCard label="Blog Posts"    value={sitemap_coverage.blog_posts}    sub="public posts" />
           <StatCard label="Courses"       value={sitemap_coverage.courses}       sub="published" />
         </div>
-        <div className="bg-amber-900/20 border border-amber-700/30 rounded-xl px-5 py-4 text-sm text-amber-300">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 text-sm text-amber-700">
           <strong className="font-semibold">{sitemap_coverage.total.toLocaleString()} total URLs</strong> in your sitemap — all indexed by Google on next crawl.
         </div>
       </section>
 
-      {/* ── OG Tag Coverage ────────────────────────────────────────────────── */}
+      {/* OG Tag Coverage */}
       <section>
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Users className="w-5 h-5 text-amber-400" aria-hidden="true" />
+        <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+          <Users className="w-5 h-5 text-amber-600" aria-hidden="true" />
           OG Tag Coverage
-          <span className="text-xs font-normal text-gray-500 ml-1">({ogCoverage}/{OG_COVERAGE.length} pages)</span>
+          <span className="text-xs font-normal text-slate-400 ml-1">({ogCoverage}/{OG_COVERAGE.length} pages)</span>
         </h2>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-          <div className="divide-y divide-gray-800">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+          <div className="divide-y divide-slate-200">
             {OG_COVERAGE.map((item) => (
               <div key={item.page} className="flex items-center gap-3 px-5 py-3">
-                <span className={`w-2 h-2 rounded-full shrink-0 ${item.done ? 'bg-green-500' : 'bg-gray-600'}`} />
-                <span className={`text-sm ${item.done ? 'text-gray-300' : 'text-gray-500'}`}>{item.page}</span>
+                <span className={`w-2 h-2 rounded-full shrink-0 ${item.done ? 'bg-green-500' : 'bg-slate-300'}`} />
+                <span className={`text-sm ${item.done ? 'text-slate-700' : 'text-slate-400'}`}>{item.page}</span>
                 {item.done && (
-                  <span className="ml-auto text-xs text-green-500 font-medium">OG + Twitter</span>
+                  <span className="ml-auto text-xs text-green-600 font-medium">OG + Twitter</span>
                 )}
               </div>
             ))}

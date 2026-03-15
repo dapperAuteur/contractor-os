@@ -140,7 +140,7 @@ export default function BillingPage() {
               <span className="inline-flex items-center gap-2 text-lg font-bold text-slate-700">
                 Free
               </span>
-              <p className="text-sm text-neutral-400 mt-1">Blog and Academy access only.</p>
+              <p className="text-sm text-slate-500 mt-1">Blog and Academy access only.</p>
             </div>
             <Link
               href="/pricing"
@@ -251,7 +251,7 @@ export default function BillingPage() {
 
       {/* Upgrade to lifetime CTA for monthly members */}
       {status === 'monthly' && (
-        <div className="bg-gray-900 text-white rounded-2xl p-6 mb-6">
+        <div className="bg-white text-white rounded-2xl p-6 mb-6">
           <div className="flex items-start gap-3">
             <Shirt className="w-5 h-5 text-lime-400 shrink-0 mt-0.5" />
             <div>

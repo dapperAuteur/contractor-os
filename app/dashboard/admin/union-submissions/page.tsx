@@ -70,7 +70,7 @@ export default function AdminUnionSubmissionsPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-4 p-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold text-neutral-100">
+        <h1 className="text-2xl font-bold text-slate-900">
           Union Document Submissions
           {pendingCount > 0 && (
             <span className="ml-2 rounded-full bg-yellow-500/20 px-2.5 py-0.5 text-sm font-medium text-yellow-400">
@@ -81,7 +81,7 @@ export default function AdminUnionSubmissionsPage() {
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="rounded-lg border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus:border-amber-500 focus:outline-none"
+          className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-amber-500 focus:outline-none"
           aria-label="Filter by status"
         >
           <option value="all">All ({subs.length})</option>
@@ -94,10 +94,10 @@ export default function AdminUnionSubmissionsPage() {
 
       {loading ? (
         <div className="flex justify-center py-16">
-          <Loader2 className="animate-spin text-neutral-500" size={28} aria-label="Loading submissions" />
+          <Loader2 className="animate-spin text-slate-400" size={28} aria-label="Loading submissions" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-500">
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
           {filter === 'all' ? 'No submissions yet.' : `No ${filter} submissions.`}
         </div>
       ) : (
@@ -108,31 +108,31 @@ export default function AdminUnionSubmissionsPage() {
             const isProcessing = processingId === sub.id;
 
             return (
-              <article key={sub.id} role="listitem" className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 space-y-3">
+              <article key={sub.id} role="listitem" className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
                       <FileText size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
-                      <span className="font-medium text-neutral-100 text-sm">{sub.file_name}</span>
-                      <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-400">
+                      <span className="font-medium text-slate-900 text-sm">{sub.file_name}</span>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                         {DOC_TYPE_LABELS[sub.doc_type] ?? sub.doc_type}
                       </span>
                       <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${st.color}`}>
                         {st.label}
                       </span>
                     </div>
-                    <div className="mt-1 flex items-center gap-2 text-xs text-neutral-500 flex-wrap">
-                      <span>by <strong className="text-neutral-300">{sub.submitter.username}</strong></span>
+                    <div className="mt-1 flex items-center gap-2 text-xs text-slate-400 flex-wrap">
+                      <span>by <strong className="text-slate-700">{sub.submitter.username}</strong></span>
                       {sub.submitter.email && <span>({sub.submitter.email})</span>}
                       {sub.union_local && <span>· {sub.union_local}</span>}
                       {sub.coverage_dates && <span>· {sub.coverage_dates}</span>}
                       <span>· {new Date(sub.created_at).toLocaleDateString()}</span>
                     </div>
                     {sub.description && (
-                      <p className="mt-1 text-xs text-neutral-400">{sub.description}</p>
+                      <p className="mt-1 text-xs text-slate-500">{sub.description}</p>
                     )}
                     {sub.admin_notes && (
-                      <p className="mt-1 text-xs text-neutral-500 italic">
+                      <p className="mt-1 text-xs text-slate-400 italic">
                         <AlertTriangle size={10} className="inline mr-1" aria-hidden="true" />
                         {sub.admin_notes}
                       </p>
@@ -142,7 +142,7 @@ export default function AdminUnionSubmissionsPage() {
                     href={sub.file_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="min-h-11 min-w-11 flex items-center justify-center rounded text-neutral-500 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
                     aria-label={`Download ${sub.file_name}`}
                   >
                     <ExternalLink size={16} aria-hidden="true" />
@@ -150,14 +150,14 @@ export default function AdminUnionSubmissionsPage() {
                 </div>
 
                 {isPending && (
-                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end border-t border-neutral-800 pt-3">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-end border-t border-slate-200 pt-3">
                     <label className="flex-1 block">
-                      <span className="text-xs font-medium text-neutral-500">Admin Notes (optional)</span>
+                      <span className="text-xs font-medium text-slate-400">Admin Notes (optional)</span>
                       <input
                         type="text"
                         value={notes[sub.id] || ''}
                         onChange={(e) => setNotes({ ...notes, [sub.id]: e.target.value })}
-                        className="mt-1 w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2 text-sm text-neutral-100 placeholder-neutral-500 focus:border-amber-500 focus:outline-none"
+                        className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none"
                         placeholder="Reason or feedback..."
                         aria-label="Admin notes for this submission"
                       />
@@ -186,7 +186,7 @@ export default function AdminUnionSubmissionsPage() {
                 )}
 
                 {sub.status === 'live' && sub.document_id && (
-                  <p className="text-xs text-green-400 border-t border-neutral-800 pt-2">
+                  <p className="text-xs text-green-400 border-t border-slate-200 pt-2">
                     <CheckCircle size={12} className="inline mr-1" aria-hidden="true" />
                     Live in community RAG
                   </p>

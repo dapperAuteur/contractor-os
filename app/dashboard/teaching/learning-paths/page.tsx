@@ -211,7 +211,7 @@ export default function TeachingLearningPathsPage() {
           </div>
         ) : paths.length === 0 ? (
           <div className="text-center py-16 text-gray-400 border-2 border-dashed border-gray-200 rounded-2xl">
-            <Layers className="w-10 h-10 mx-auto mb-3 text-gray-300" />
+            <Layers className="w-10 h-10 mx-auto mb-3 text-slate-700" />
             <p className="font-medium text-gray-500 mb-1">No learning paths yet</p>
             <p className="text-sm mb-5">Create your first path or let AI suggest one.</p>
             <Link

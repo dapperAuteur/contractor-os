@@ -12,12 +12,12 @@ export default function SiteFooter({ theme = 'dark' }: SiteFooterProps) {
 
   const isDark = theme === 'dark';
   const containerCls = isDark
-    ? 'border-t border-gray-800 bg-gray-950 py-8 px-6'
-    : 'border-t border-gray-200 bg-white py-8 px-6';
+    ? 'border-t border-slate-200 bg-slate-50 py-8 px-6'
+    : 'border-t border-slate-200 bg-white py-8 px-6';
   const linkCls = isDark
-    ? 'text-gray-500 hover:text-gray-300 transition'
-    : 'text-gray-400 hover:text-gray-700 transition';
-  const copyCls = isDark ? 'text-xs text-gray-600' : 'text-xs text-gray-400';
+    ? 'text-slate-400 hover:text-slate-700 transition'
+    : 'text-slate-500 hover:text-slate-700 transition';
+  const copyCls = isDark ? 'text-xs text-slate-400' : 'text-xs text-slate-500';
 
   return (
     <footer className={containerCls}>

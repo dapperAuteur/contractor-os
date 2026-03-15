@@ -15,20 +15,20 @@ export default function SafetyPage() {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-gray-950 text-gray-200">
+      <main className="min-h-screen bg-slate-50 text-slate-800">
         <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold text-white mb-2">Safety &amp; Resources</h1>
-        <p className="text-gray-400 text-sm mb-10">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Safety &amp; Resources</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Your safety on the job matters. Resources and guidelines for contractors and crew.
         </p>
 
         {/* Workplace Safety */}
-        <div className="bg-amber-900/30 border border-amber-700/50 rounded-xl p-6 mb-8">
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8">
           <div className="flex items-start gap-3">
-            <ShieldCheck className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <ShieldCheck className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div>
-              <h2 className="text-lg font-semibold text-amber-300 mb-2">Workplace Safety</h2>
-              <p className="text-amber-100/80 text-sm leading-relaxed">
+              <h2 className="text-lg font-semibold text-amber-800 mb-2">Workplace Safety</h2>
+              <p className="text-amber-900/80 text-sm leading-relaxed">
                 Work.WitUS is a <strong>job tracking and management tool</strong>. It is{' '}
                 <strong>NOT a safety compliance service or legal advisor</strong>. Always follow
                 your employer&apos;s safety protocols, OSHA guidelines, and local regulations on every
@@ -40,35 +40,35 @@ export default function SafetyPage() {
 
         {/* On-Site Safety Tips */}
         <section className="mb-10">
-          <h2 className="text-xl font-semibold text-white mb-3">On-Site Safety Guidelines</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-3">
+          <h2 className="text-xl font-semibold text-slate-900 mb-3">On-Site Safety Guidelines</h2>
+          <div className="text-slate-700 text-sm leading-relaxed space-y-3">
             <p>
               Whether you&apos;re working events, construction, production, or any other contract
               gig, keep these fundamentals in mind:
             </p>
             <ul className="list-disc pl-5 space-y-2">
               <li>
-                <strong className="text-white">Know your environment.</strong> Familiarize yourself
+                <strong className="text-slate-900">Know your environment.</strong> Familiarize yourself
                 with the job site, emergency exits, first aid kits, and fire extinguishers before
                 starting work.
               </li>
               <li>
-                <strong className="text-white">Wear proper PPE.</strong> Use personal protective
+                <strong className="text-slate-900">Wear proper PPE.</strong> Use personal protective
                 equipment appropriate for your role — hard hats, safety glasses, gloves, ear
                 protection, high-visibility vests, and steel-toed boots as required.
               </li>
               <li>
-                <strong className="text-white">Report hazards immediately.</strong> If you see an
+                <strong className="text-slate-900">Report hazards immediately.</strong> If you see an
                 unsafe condition, report it to your supervisor or crew coordinator right away. Use
                 Work.WitUS&apos;s incident report feature to document it.
               </li>
               <li>
-                <strong className="text-white">Stay hydrated and rested.</strong> Long shifts in
+                <strong className="text-slate-900">Stay hydrated and rested.</strong> Long shifts in
                 demanding conditions require adequate rest and hydration. Know the signs of heat
                 exhaustion and fatigue.
               </li>
               <li>
-                <strong className="text-white">Communicate clearly.</strong> Use radios, hand
+                <strong className="text-slate-900">Communicate clearly.</strong> Use radios, hand
                 signals, or other communication methods established by your crew. Never assume
                 someone else has communicated a hazard.
               </li>
@@ -76,7 +76,7 @@ export default function SafetyPage() {
             <p>
               Work.WitUS, B4C LLC, AwesomeWebStore.com, and Anthony McDonald are held harmless for
               any workplace incidents. See our{' '}
-              <Link href="/terms" className="text-amber-400 hover:underline">Terms of Use</Link> for
+              <Link href="/terms" className="text-amber-600 hover:underline">Terms of Use</Link> for
               full details.
             </p>
           </div>
@@ -84,8 +84,8 @@ export default function SafetyPage() {
 
         {/* Incident Reporting */}
         <section className="mb-10">
-          <h2 className="text-xl font-semibold text-white mb-3">Documenting Incidents</h2>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-3">
+          <h2 className="text-xl font-semibold text-slate-900 mb-3">Documenting Incidents</h2>
+          <div className="text-slate-700 text-sm leading-relaxed space-y-3">
             <p>
               Work.WitUS provides tools to document incidents, best practices, and safety notes on each
               job. We encourage all contractors to:
@@ -97,7 +97,7 @@ export default function SafetyPage() {
               <li>Review past incidents before returning to a job site</li>
             </ul>
             <p>
-              <strong className="text-white">Important:</strong> Work.WitUS&apos;s incident report
+              <strong className="text-slate-900">Important:</strong> Work.WitUS&apos;s incident report
               feature is for personal record-keeping. For workplace injuries, always file official
               reports with your employer, workers&apos; compensation carrier, and OSHA as required
               by law.
@@ -106,24 +106,24 @@ export default function SafetyPage() {
         </section>
 
         {/* Emergency Numbers */}
-        <div className="bg-red-900/30 border border-red-700/50 rounded-xl p-5 mb-10">
-          <h2 className="text-base font-semibold text-red-300 mb-2 flex items-center gap-2">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-5 mb-10">
+          <h2 className="text-base font-semibold text-red-700 mb-2 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" /> Emergency Contacts
           </h2>
-          <ul className="mt-2 space-y-1 text-sm text-red-100/80">
+          <ul className="mt-2 space-y-1 text-sm text-red-800/80">
             <li>
-              <strong className="text-white">Emergency</strong> — Call{' '}
-              <a href="tel:911" className="text-red-300 font-bold hover:underline">911</a> for
+              <strong className="text-slate-900">Emergency</strong> — Call{' '}
+              <a href="tel:911" className="text-red-600 font-bold hover:underline">911</a> for
               immediate danger, injury, or medical emergency
             </li>
             <li>
-              <strong className="text-white">OSHA Safety Hotline</strong> — Call{' '}
-              <a href="tel:18003216742" className="text-red-300 font-bold hover:underline">1-800-321-OSHA (6742)</a> to
+              <strong className="text-slate-900">OSHA Safety Hotline</strong> — Call{' '}
+              <a href="tel:18003216742" className="text-red-600 font-bold hover:underline">1-800-321-OSHA (6742)</a> to
               report unsafe working conditions
             </li>
             <li>
-              <strong className="text-white">988 Suicide &amp; Crisis Lifeline</strong> — Call or text{' '}
-              <a href="tel:988" className="text-red-300 font-bold hover:underline">988</a> (US)
+              <strong className="text-slate-900">988 Suicide &amp; Crisis Lifeline</strong> — Call or text{' '}
+              <a href="tel:988" className="text-red-600 font-bold hover:underline">988</a> (US)
             </li>
           </ul>
         </div>
@@ -131,18 +131,18 @@ export default function SafetyPage() {
         {/* Mental Health Resources */}
         <section className="mb-10">
           <div className="flex items-center gap-2 mb-4">
-            <Heart className="w-5 h-5 text-amber-400" />
-            <h2 className="text-xl font-semibold text-white">Mental Health Support</h2>
+            <Heart className="w-5 h-5 text-amber-600" />
+            <h2 className="text-xl font-semibold text-slate-900">Mental Health Support</h2>
           </div>
-          <div className="text-gray-300 text-sm leading-relaxed space-y-3">
+          <div className="text-slate-700 text-sm leading-relaxed space-y-3">
             <p>
               Contract work can be demanding on your mental health — irregular schedules, physical
               labor, and financial uncertainty take a toll. If you or someone you know is struggling,
               please reach out to a qualified mental health professional.
             </p>
             <p>
-              The <strong className="text-white">988 Suicide &amp; Crisis Lifeline</strong> is available
-              24/7 by calling or texting <a href="tel:988" className="text-amber-400 font-semibold hover:underline">988</a> (US).
+              The <strong className="text-slate-900">988 Suicide &amp; Crisis Lifeline</strong> is available
+              24/7 by calling or texting <a href="tel:988" className="text-amber-600 font-semibold hover:underline">988</a> (US).
             </p>
           </div>
         </section>

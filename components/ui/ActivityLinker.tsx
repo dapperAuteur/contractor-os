@@ -54,7 +54,7 @@ const TYPE_COLORS: Record<EntityType, string> = {
   transaction: 'bg-green-900/20 text-green-400 border-green-800',
   recipe: 'bg-amber-900/20 text-amber-400 border-amber-800',
   fuel_log: 'bg-orange-900/20 text-orange-400 border-orange-800',
-  maintenance: 'bg-neutral-800 text-neutral-300 border-neutral-700',
+  maintenance: 'bg-slate-100 text-slate-700 border-slate-200',
   invoice: 'bg-blue-900/20 text-blue-400 border-blue-800',
   workout: 'bg-rose-900/20 text-rose-400 border-rose-800',
   equipment: 'bg-teal-900/20 text-teal-400 border-teal-800',
@@ -333,14 +333,14 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
 
   if (loading) {
     return (
-      <div className="text-xs text-gray-400 py-2">Loading links...</div>
+      <div className="text-xs text-slate-500 py-2">Loading links...</div>
     );
   }
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
+        <h4 className="text-sm font-medium text-slate-700 flex items-center gap-1.5">
           <Link2 className="w-3.5 h-3.5" />
           Linked Activities
         </h4>
@@ -360,7 +360,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
           {links.map((link) => (
             <span
               key={link.id}
-              className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${TYPE_COLORS[link.linked_type] || 'bg-gray-50 text-gray-700 border-gray-200'}`}
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${TYPE_COLORS[link.linked_type] || 'bg-slate-50 text-slate-700 border-slate-200'}`}
             >
               <span className="font-medium">{TYPE_LABELS[link.linked_type]}:</span>
               <span className="truncate max-w-48">{link.linked_display_name}</span>
@@ -375,12 +375,12 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
           ))}
         </div>
       ) : (
-        <p className="text-xs text-gray-400">No linked activities yet.</p>
+        <p className="text-xs text-slate-500">No linked activities yet.</p>
       )}
 
       {/* Add link UI */}
       {showAdd && (
-        <div className="border border-gray-200 rounded-lg p-3 space-y-2 bg-gray-50/50">
+        <div className="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50/50">
           <div className="flex gap-2">
             <select
               value={addType}
@@ -389,7 +389,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                 setSearchResults([]);
                 setSearchQuery('');
               }}
-              className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs shrink-0"
+              className="border border-slate-200 rounded-lg px-2 py-1.5 text-xs shrink-0"
             >
               <option value="">Select type...</option>
               {LINKABLE_TYPES
@@ -407,7 +407,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearch())}
                   placeholder={`Search ${TYPE_LABELS[addType as EntityType] || ''}...`}
-                  className="flex-1 border border-gray-200 rounded-lg px-2 py-1.5 text-xs"
+                  className="flex-1 border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                 />
                 <button
                   type="button"
@@ -429,19 +429,19 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                   key={r.id}
                   type="button"
                   onClick={() => handleAdd(r.id)}
-                  className="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-amber-500/10 rounded transition truncate"
+                  className="w-full text-left px-2 py-1.5 text-xs text-slate-700 hover:bg-amber-500/10 rounded transition truncate"
                 >
                   {r.display_name}
                 </button>
               ))}
             </div>
           )}
-          {searching && <p className="text-xs text-gray-400">Searching...</p>}
+          {searching && <p className="text-xs text-slate-500">Searching...</p>}
 
           <button
             type="button"
             onClick={() => { setShowAdd(false); setAddType(''); setSearchQuery(''); setSearchResults([]); }}
-            className="text-xs text-gray-400 hover:text-gray-600"
+            className="text-xs text-slate-500 hover:text-slate-600"
           >
             Cancel
           </button>

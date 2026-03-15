@@ -220,7 +220,7 @@ export default function InvoiceTemplateModal({ isOpen, onClose, invoice, onSaved
             <div className="space-y-1 mb-3">
               {selectedFields.map((field) => (
                 <div key={field.key} className="flex items-center gap-2 bg-slate-50 rounded-lg px-3 py-1.5 text-sm">
-                  <GripVertical className="w-3 h-3 text-gray-300" />
+                  <GripVertical className="w-3 h-3 text-slate-700" />
                   <span className="flex-1 text-slate-700">{field.label}</span>
                   <span className="text-xs text-slate-400">{field.type}</span>
                   <button

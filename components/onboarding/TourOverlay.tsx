@@ -120,19 +120,19 @@ export default function TourOverlay({
 
       {/* Tour card — fixed at bottom on mobile, centered on desktop */}
       <div
-        className="fixed bottom-4 left-4 right-4 sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[420px] z-[9999] bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl p-5"
+        className="fixed bottom-4 left-4 right-4 sm:bottom-auto sm:top-1/2 sm:left-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2 sm:w-[420px] z-[9999] bg-white border border-slate-200 rounded-2xl shadow-2xl p-5"
         role="dialog"
         aria-modal="true"
         aria-label={`Tour step ${currentStep + 1} of ${steps.length}`}
       >
         {/* Header */}
         <div className="flex items-start justify-between mb-3">
-          <span className="text-xs font-medium text-neutral-500">
+          <span className="text-xs font-medium text-slate-400">
             Step {currentStep + 1} of {steps.length}
           </span>
           <button
             onClick={handleExit}
-            className="flex items-center justify-center min-h-11 min-w-11 rounded-lg text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800 transition"
+            className="flex items-center justify-center min-h-11 min-w-11 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition"
             aria-label="Exit tour"
           >
             <X className="w-4 h-4" />
@@ -140,15 +140,15 @@ export default function TourOverlay({
         </div>
 
         {/* Content */}
-        <h3 className="text-base font-semibold text-neutral-100 mb-2">
+        <h3 className="text-base font-semibold text-slate-900 mb-2">
           {step.title}
         </h3>
-        <p className="text-sm text-neutral-400 leading-relaxed mb-5">
+        <p className="text-sm text-slate-500 leading-relaxed mb-5">
           {step.description}
         </p>
 
         {/* Progress bar */}
-        <div className="w-full h-1 bg-neutral-800 rounded-full mb-4 overflow-hidden">
+        <div className="w-full h-1 bg-slate-100 rounded-full mb-4 overflow-hidden">
           <div
             className={`h-full bg-${accent}-500 rounded-full transition-all duration-300`}
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
@@ -159,7 +159,7 @@ export default function TourOverlay({
         <div className="flex items-center justify-between">
           <button
             onClick={handleSkipStep}
-            className="flex items-center gap-1.5 text-sm text-neutral-500 hover:text-neutral-300 transition min-h-11 px-2"
+            className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-900 transition min-h-11 px-2"
           >
             <SkipForward className="w-3.5 h-3.5" aria-hidden="true" />
             Skip

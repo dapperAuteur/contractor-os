@@ -44,14 +44,14 @@ export default function BottomSheet({ open, onClose, title, children }: Props) {
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 4rem)' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-          <span className="font-semibold text-gray-900">{title}</span>
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+          <span className="font-semibold text-slate-900">{title}</span>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-gray-100 transition"
+            className="flex items-center justify-center min-h-11 min-w-11 rounded-lg hover:bg-slate-100 transition"
             aria-label="Close"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-slate-500" aria-hidden="true" />
           </button>
         </div>
 

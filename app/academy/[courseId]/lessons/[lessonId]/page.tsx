@@ -183,7 +183,7 @@ export default function LessonPlayerPage() {
   }
 
   if (!lesson) {
-    return <div className="text-center py-20 text-gray-500">Lesson not found.</div>;
+    return <div className="text-center py-20 text-slate-400">Lesson not found.</div>;
   }
 
   const TypeIcon = LESSON_TYPE_ICON[lesson.lesson_type] ?? Play;
@@ -191,12 +191,12 @@ export default function LessonPlayerPage() {
   return (
     <div className="text-white">
       {/* Top nav */}
-      <div className="border-b border-gray-800 px-3 sm:px-6 py-3 flex items-center gap-3">
-        <Link href={`/academy/${courseId}`} className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition shrink-0">
+      <div className="border-b border-slate-200 px-3 sm:px-6 py-3 flex items-center gap-3">
+        <Link href={`/academy/${courseId}`} className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm transition shrink-0">
           <ChevronLeft className="w-4 h-4" /> <span className="hidden sm:inline">Back to course</span><span className="sm:hidden">Back</span>
         </Link>
         <span className="text-gray-700 hidden sm:inline">|</span>
-        <div className="flex items-center gap-1.5 text-gray-400 text-sm">
+        <div className="flex items-center gap-1.5 text-slate-500 text-sm">
           <TypeIcon className="w-3.5 h-3.5" />
           <span className="capitalize hidden sm:inline">{lesson.lesson_type}</span>
         </div>
@@ -235,7 +235,7 @@ export default function LessonPlayerPage() {
         )}
 
         {lesson.lesson_type === 'slides' && lesson.content_url && (
-          <div className="aspect-video bg-gray-900 rounded-xl sm:rounded-2xl overflow-hidden mb-6">
+          <div className="aspect-video bg-white rounded-xl sm:rounded-2xl overflow-hidden mb-6">
             <iframe
               src={lesson.content_url}
               className="w-full h-full"
@@ -255,7 +255,7 @@ export default function LessonPlayerPage() {
         )}
 
         {lesson.text_content && (
-          <div className="prose prose-invert prose-sm max-w-none mb-6 bg-gray-900 border border-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-8">
+          <div className="prose prose-invert prose-sm max-w-none mb-6 bg-white border border-slate-200 rounded-xl sm:rounded-2xl p-4 sm:p-8">
             <div dangerouslySetInnerHTML={{ __html: renderTextContent(lesson.text_content, lesson.content_format) }} />
           </div>
         )}
@@ -270,13 +270,13 @@ export default function LessonPlayerPage() {
 
         {/* Lesson glossary terms */}
         {lessonGlossary.length > 0 && (
-          <div className="mb-6 bg-gray-900 border border-gray-800 rounded-xl sm:rounded-2xl overflow-hidden">
-            <div className="px-4 sm:px-6 py-3 border-b border-gray-800 flex items-center gap-2">
+          <div className="mb-6 bg-white border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden">
+            <div className="px-4 sm:px-6 py-3 border-b border-slate-200 flex items-center gap-2">
               <BookMarked className="w-4 h-4 text-amber-400" />
               <span className="text-sm font-semibold text-white">Key Terms in This Lesson</span>
-              <span className="text-xs text-gray-500 ml-1">({lessonGlossary.length})</span>
+              <span className="text-xs text-slate-400 ml-1">({lessonGlossary.length})</span>
             </div>
-            <div className="divide-y divide-gray-800">
+            <div className="divide-y divide-slate-200">
               {lessonGlossary.map((term) => (
                 <GlossaryTermRow key={term.id} term={term} />
               ))}
@@ -295,12 +295,12 @@ export default function LessonPlayerPage() {
                 <Link
                   key={a.id}
                   href={`/academy/${courseId}/assignments/${a.id}`}
-                  className="flex items-center gap-3 bg-gray-900 border border-gray-800 rounded-xl px-4 py-3 hover:border-amber-700/50 transition group"
+                  className="flex items-center gap-3 bg-white border border-slate-200 rounded-xl px-4 py-3 hover:border-amber-700/50 transition group"
                 >
                   <ClipboardList className="w-4 h-4 text-amber-400 shrink-0" />
-                  <span className="flex-1 text-sm text-gray-200 group-hover:text-white">{a.title}</span>
+                  <span className="flex-1 text-sm text-slate-800 group-hover:text-white">{a.title}</span>
                   {a.due_date && (
-                    <span className="text-xs text-gray-500 shrink-0">
+                    <span className="text-xs text-slate-400 shrink-0">
                       Due {new Date(a.due_date).toLocaleDateString()}
                     </span>
                   )}
@@ -363,7 +363,7 @@ export default function LessonPlayerPage() {
                             ? 'bg-indigo-900/20 border-indigo-700/50 hover:bg-indigo-900/40'
                             : opt.path_type === 'cross_course'
                             ? 'bg-emerald-900/20 border-emerald-700/50 hover:bg-emerald-900/40'
-                            : 'bg-gray-900 border-gray-700 hover:bg-gray-800'
+                            : 'bg-white border-slate-200 hover:bg-slate-100'
                         }`}
                       >
                         <p className="text-xs font-semibold uppercase tracking-wide mb-1 opacity-60">{opt.label}</p>
@@ -376,7 +376,7 @@ export default function LessonPlayerPage() {
                   })}
                   <Link
                     href={`/academy/${courseId}`}
-                    className="p-4 rounded-xl border border-gray-800 bg-gray-900 hover:bg-gray-800 transition text-left min-h-18 flex flex-col justify-center"
+                    className="p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 transition text-left min-h-18 flex flex-col justify-center"
                   >
                     <p className="text-xs font-semibold uppercase tracking-wide mb-1 opacity-60">Course Map</p>
                     <p className="font-semibold text-white text-sm">View All Lessons</p>
@@ -391,7 +391,7 @@ export default function LessonPlayerPage() {
                 {adjacentLessons.prev && (
                   <Link
                     href={`/academy/${courseId}/lessons/${adjacentLessons.prev}`}
-                    className="flex items-center gap-2 px-4 py-3 bg-gray-800 text-gray-300 rounded-xl text-sm hover:bg-gray-700 transition min-h-11"
+                    className="flex items-center gap-2 px-4 py-3 bg-slate-100 text-slate-700 rounded-xl text-sm hover:bg-slate-100 transition min-h-11"
                   >
                     <ChevronLeft className="w-4 h-4" /> Previous
                   </Link>

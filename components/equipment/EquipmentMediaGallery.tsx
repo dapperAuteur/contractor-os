@@ -134,7 +134,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 text-neutral-500 text-sm py-4">
+      <div className="flex items-center gap-2 text-slate-400 text-sm py-4">
         <Loader2 className="w-4 h-4 animate-spin" />
         Loading media...
       </div>
@@ -144,7 +144,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-semibold text-neutral-100">
+        <h2 className="text-sm font-semibold text-slate-900">
           Media ({media.length})
         </h2>
         <button
@@ -174,9 +174,9 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
       )}
 
       {media.length === 0 ? (
-        <div className="text-center py-8 border border-dashed border-neutral-700 rounded-xl">
-          <ImageIcon className="w-8 h-8 text-neutral-600 mx-auto mb-2" aria-hidden="true" />
-          <p className="text-sm text-neutral-500">No media yet</p>
+        <div className="text-center py-8 border border-dashed border-slate-200 rounded-xl">
+          <ImageIcon className="w-8 h-8 text-slate-400 mx-auto mb-2" aria-hidden="true" />
+          <p className="text-sm text-slate-400">No media yet</p>
           <button
             onClick={() => inputRef.current?.click()}
             className="mt-2 text-xs text-amber-400 hover:underline min-h-11 px-2"
@@ -189,7 +189,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
           {media.map((m, idx) => (
             <div
               key={m.id}
-              className="relative group rounded-xl overflow-hidden border border-neutral-800 bg-neutral-800"
+              className="relative group rounded-xl overflow-hidden border border-slate-200 bg-slate-100"
             >
               {/* Thumbnail */}
               <button
@@ -198,7 +198,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
                 aria-label={`View ${m.title || 'media'}`}
               >
                 {m.media_type === 'video' ? (
-                  <div className="w-full h-full bg-neutral-800 flex items-center justify-center relative">
+                  <div className="w-full h-full bg-slate-100 flex items-center justify-center relative">
                     <video
                       src={m.url}
                       className="w-full h-full object-cover"
@@ -275,7 +275,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
         >
           <button
             onClick={() => setLightboxIdx(null)}
-            className="absolute top-4 right-4 w-10 h-10 bg-neutral-800 text-white rounded-full flex items-center justify-center hover:bg-neutral-700 z-10"
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 text-white rounded-full flex items-center justify-center hover:bg-white/30 z-10"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -284,7 +284,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
           {lightboxIdx > 0 && (
             <button
               onClick={(e) => { e.stopPropagation(); setLightboxIdx(lightboxIdx - 1); }}
-              className="absolute left-4 w-10 h-10 bg-neutral-800 text-white rounded-full flex items-center justify-center hover:bg-neutral-700 z-10"
+              className="absolute left-4 w-10 h-10 bg-white/20 text-white rounded-full flex items-center justify-center hover:bg-white/30 z-10"
               aria-label="Previous"
             >
               <ChevronLeft className="w-5 h-5" />
@@ -294,7 +294,7 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
           {lightboxIdx < media.length - 1 && (
             <button
               onClick={(e) => { e.stopPropagation(); setLightboxIdx(lightboxIdx + 1); }}
-              className="absolute right-4 w-10 h-10 bg-neutral-800 text-white rounded-full flex items-center justify-center hover:bg-neutral-700 z-10"
+              className="absolute right-4 w-10 h-10 bg-white/20 text-white rounded-full flex items-center justify-center hover:bg-white/30 z-10"
               aria-label="Next"
             >
               <ChevronRight className="w-5 h-5" />
@@ -318,9 +318,9 @@ export default function EquipmentMediaGallery({ equipmentId }: Props) {
               />
             )}
             {media[lightboxIdx].title && (
-              <p className="text-center text-sm text-neutral-300 mt-3">{media[lightboxIdx].title}</p>
+              <p className="text-center text-sm text-slate-700 mt-3">{media[lightboxIdx].title}</p>
             )}
-            <p className="text-center text-xs text-neutral-500 mt-1">
+            <p className="text-center text-xs text-slate-400 mt-1">
               {lightboxIdx + 1} of {media.length}
             </p>
           </div>

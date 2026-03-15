@@ -26,12 +26,12 @@ export default function TeachingLayout({ children }: { children: React.ReactNode
     pathname !== '/dashboard/teaching/courses';
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] bg-gray-950">
+    <div className="flex min-h-[calc(100vh-4rem)] bg-slate-50">
       {/* Sidebar — hidden on individual course editor pages */}
       {!isCoursePage && (
-        <aside className="w-52 shrink-0 border-r border-gray-800 bg-gray-950 py-6">
+        <aside className="w-52 shrink-0 border-r border-slate-200 bg-white py-6">
           <div className="px-4 mb-6">
-            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Teaching</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Teaching</p>
           </div>
           <nav className="space-y-0.5 px-2">
             {NAV_ITEMS.map(({ href, label, icon: Icon, exact }) => {
@@ -40,13 +40,13 @@ export default function TeachingLayout({ children }: { children: React.ReactNode
                 <Link
                   key={href}
                   href={href}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition ${
+                  className={`flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition min-h-11 ${
                     active
-                      ? 'bg-amber-900/40 text-amber-300'
-                      : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                      ? 'bg-amber-500/10 text-amber-700'
+                      : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
                   }`}
                 >
-                  <Icon className="w-4 h-4 shrink-0" />
+                  <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                   {label}
                 </Link>
               );

@@ -131,7 +131,7 @@ export default function MapViewer({ mapContent }: MapViewerProps) {
     <div className="mb-6">
       <div
         ref={mapRef}
-        className="w-full aspect-video rounded-xl sm:rounded-2xl overflow-hidden border border-gray-800"
+        className="w-full aspect-video rounded-xl sm:rounded-2xl overflow-hidden border border-slate-200"
         style={{ minHeight: 300 }}
       />
     </div>

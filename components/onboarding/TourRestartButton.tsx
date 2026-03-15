@@ -66,7 +66,7 @@ export default function TourRestartButton({
     <button
       onClick={handleReset}
       disabled={loading}
-      className="flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-200 transition min-h-11 px-2 disabled:opacity-60"
+      className="flex items-center gap-2 text-sm text-neutral-400 hover:text-slate-800 transition min-h-11 px-2 disabled:opacity-60"
     >
       {loading ? (
         <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />

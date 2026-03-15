@@ -47,13 +47,13 @@ function StatCard({ label, value, sub, icon: Icon }: {
   icon: typeof BarChart3;
 }) {
   return (
-    <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4">
+    <div className="bg-white border border-slate-200 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-neutral-500" aria-hidden="true" />
-        <span className="text-xs font-medium text-neutral-500 uppercase tracking-wider">{label}</span>
+        <Icon className="w-4 h-4 text-slate-400" aria-hidden="true" />
+        <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-neutral-100">{value}</p>
-      {sub && <p className="text-xs text-neutral-500 mt-1">{sub}</p>}
+      <p className="text-2xl font-bold text-slate-900">{value}</p>
+      {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
     </div>
   );
 }
@@ -86,7 +86,7 @@ export default function TourAnalyticsPage() {
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-10">
-        <p className="text-neutral-500 text-sm">Loading tour analytics…</p>
+        <p className="text-slate-400 text-sm">Loading tour analytics…</p>
       </div>
     );
   }
@@ -105,13 +105,13 @@ export default function TourAnalyticsPage() {
     <div className="max-w-5xl mx-auto px-4 py-8">
       <Link
         href="/dashboard/admin"
-        className="flex items-center gap-2 text-neutral-500 hover:text-neutral-300 text-sm font-medium mb-6 min-h-11"
+        className="flex items-center gap-2 text-slate-400 hover:text-slate-700 text-sm font-medium mb-6 min-h-11"
       >
         <ArrowLeft className="w-4 h-4" aria-hidden="true" />
         Admin Dashboard
       </Link>
 
-      <h1 className="text-2xl font-bold text-neutral-100 mb-6">Tour Analytics</h1>
+      <h1 className="text-2xl font-bold text-slate-900 mb-6">Tour Analytics</h1>
 
       {/* Overview cards */}
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 mb-8">
@@ -130,20 +130,20 @@ export default function TourAnalyticsPage() {
       {/* Top demo sources */}
       {data.top_demo_sources.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-neutral-200 mb-3">Top Demo Sources</h2>
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">
+          <h2 className="text-lg font-semibold text-slate-800 mb-3">Top Demo Sources</h2>
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-neutral-800">
-                  <th className="text-left px-4 py-3 text-neutral-500 font-medium">Module</th>
-                  <th className="text-right px-4 py-3 text-neutral-500 font-medium">Demo Logins</th>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left px-4 py-3 text-slate-400 font-medium">Module</th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">Demo Logins</th>
                 </tr>
               </thead>
               <tbody>
                 {data.top_demo_sources.map((s) => (
-                  <tr key={s.module} className="border-b border-neutral-800/50 last:border-0">
-                    <td className="px-4 py-3 text-neutral-300">{s.module}</td>
-                    <td className="px-4 py-3 text-right text-neutral-200 font-medium">{s.count}</td>
+                  <tr key={s.module} className="border-b border-slate-200/50 last:border-0">
+                    <td className="px-4 py-3 text-slate-700">{s.module}</td>
+                    <td className="px-4 py-3 text-right text-slate-800 font-medium">{s.count}</td>
                   </tr>
                 ))}
               </tbody>
@@ -155,24 +155,24 @@ export default function TourAnalyticsPage() {
       {/* Module completion rates */}
       {Object.keys(data.module_stats).length > 0 && (
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-neutral-200 mb-3">Module Tour Status</h2>
-          <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden">
+          <h2 className="text-lg font-semibold text-slate-800 mb-3">Module Tour Status</h2>
+          <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-neutral-800">
-                  <th className="text-left px-4 py-3 text-neutral-500 font-medium">Module</th>
-                  <th className="text-right px-4 py-3 text-neutral-500 font-medium">In Progress</th>
-                  <th className="text-right px-4 py-3 text-neutral-500 font-medium">Completed</th>
-                  <th className="text-right px-4 py-3 text-neutral-500 font-medium">Skipped</th>
+                <tr className="border-b border-slate-200">
+                  <th className="text-left px-4 py-3 text-slate-400 font-medium">Module</th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">In Progress</th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">Completed</th>
+                  <th className="text-right px-4 py-3 text-slate-400 font-medium">Skipped</th>
                 </tr>
               </thead>
               <tbody>
                 {Object.entries(data.module_stats).map(([key, stats]) => (
-                  <tr key={key} className="border-b border-neutral-800/50 last:border-0">
-                    <td className="px-4 py-3 text-neutral-300">{key}</td>
-                    <td className="px-4 py-3 text-right text-neutral-400">{stats.started}</td>
+                  <tr key={key} className="border-b border-slate-200/50 last:border-0">
+                    <td className="px-4 py-3 text-slate-700">{key}</td>
+                    <td className="px-4 py-3 text-right text-slate-500">{stats.started}</td>
                     <td className="px-4 py-3 text-right text-green-400">{stats.completed}</td>
-                    <td className="px-4 py-3 text-right text-neutral-500">{stats.skipped}</td>
+                    <td className="px-4 py-3 text-right text-slate-400">{stats.skipped}</td>
                   </tr>
                 ))}
               </tbody>
@@ -183,35 +183,35 @@ export default function TourAnalyticsPage() {
 
       {/* Recent activity */}
       <div>
-        <h2 className="text-lg font-semibold text-neutral-200 mb-3">Recent Activity</h2>
-        <div className="bg-neutral-900 border border-neutral-800 rounded-xl overflow-hidden overflow-x-auto">
+        <h2 className="text-lg font-semibold text-slate-800 mb-3">Recent Activity</h2>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden overflow-x-auto">
           <table className="w-full text-sm min-w-[600px]">
             <thead>
-              <tr className="border-b border-neutral-800">
-                <th className="text-left px-4 py-3 text-neutral-500 font-medium">Alias</th>
-                <th className="text-left px-4 py-3 text-neutral-500 font-medium">App</th>
-                <th className="text-left px-4 py-3 text-neutral-500 font-medium">Module</th>
-                <th className="text-left px-4 py-3 text-neutral-500 font-medium">Event</th>
-                <th className="text-left px-4 py-3 text-neutral-500 font-medium">Step</th>
-                <th className="text-right px-4 py-3 text-neutral-500 font-medium">Time</th>
+              <tr className="border-b border-slate-200">
+                <th className="text-left px-4 py-3 text-slate-400 font-medium">Alias</th>
+                <th className="text-left px-4 py-3 text-slate-400 font-medium">App</th>
+                <th className="text-left px-4 py-3 text-slate-400 font-medium">Module</th>
+                <th className="text-left px-4 py-3 text-slate-400 font-medium">Event</th>
+                <th className="text-left px-4 py-3 text-slate-400 font-medium">Step</th>
+                <th className="text-right px-4 py-3 text-slate-400 font-medium">Time</th>
               </tr>
             </thead>
             <tbody>
               {data.recent_activity.map((e, i) => (
-                <tr key={i} className="border-b border-neutral-800/50 last:border-0">
+                <tr key={i} className="border-b border-slate-200/50 last:border-0">
                   <td className="px-4 py-3 text-amber-400 font-mono text-xs">{e.alias}</td>
-                  <td className="px-4 py-3 text-neutral-400">{e.app}</td>
-                  <td className="px-4 py-3 text-neutral-300">{e.module}</td>
-                  <td className="px-4 py-3 text-neutral-300">{EVENT_LABELS[e.event] || e.event}</td>
-                  <td className="px-4 py-3 text-neutral-500">{e.stepTitle || e.step || '—'}</td>
-                  <td className="px-4 py-3 text-right text-neutral-500 text-xs">
+                  <td className="px-4 py-3 text-slate-500">{e.app}</td>
+                  <td className="px-4 py-3 text-slate-700">{e.module}</td>
+                  <td className="px-4 py-3 text-slate-700">{EVENT_LABELS[e.event] || e.event}</td>
+                  <td className="px-4 py-3 text-slate-400">{e.stepTitle || e.step || '—'}</td>
+                  <td className="px-4 py-3 text-right text-slate-400 text-xs">
                     {new Date(e.time).toLocaleString()}
                   </td>
                 </tr>
               ))}
               {data.recent_activity.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="px-4 py-6 text-center text-neutral-500">
+                  <td colSpan={6} className="px-4 py-6 text-center text-slate-400">
                     No tour events yet
                   </td>
                 </tr>

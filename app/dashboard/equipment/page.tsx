@@ -138,7 +138,7 @@ export default function EquipmentHubPage() {
         </div>
       ) : (
         <div className="text-center py-16">
-          <Package className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+          <Package className="w-10 h-10 text-slate-700 mx-auto mb-3" />
           <p className="text-sm text-gray-500">
             {selectedCat ? 'No equipment in this category.' : 'No equipment tracked yet.'}
           </p>

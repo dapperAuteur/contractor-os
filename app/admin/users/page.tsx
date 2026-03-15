@@ -26,16 +26,16 @@ type SortKey = 'email' | 'subscription_status' | 'subscription_expires_at' | 'cr
 type SortDir = 'asc' | 'desc';
 
 const STATUS_BADGE: Record<string, string> = {
-  free: 'bg-gray-800 text-gray-300',
-  monthly: 'bg-amber-900/50 text-amber-300',
-  lifetime: 'bg-lime-900/50 text-lime-300',
+  free: 'bg-slate-100 text-slate-700',
+  monthly: 'bg-amber-100 text-amber-700',
+  lifetime: 'bg-lime-100 text-lime-700',
 };
 
 function SortIcon({ active, dir }: { active: boolean; dir: SortDir }) {
   if (!active) return <ChevronUp className="w-3 h-3 opacity-20" />;
   return dir === 'asc'
-    ? <ChevronUp className="w-3 h-3 text-amber-400" />
-    : <ChevronDown className="w-3 h-3 text-amber-400" />;
+    ? <ChevronUp className="w-3 h-3 text-amber-600" />
+    : <ChevronDown className="w-3 h-3 text-amber-600" />;
 }
 
 // Inner component — uses useSearchParams, must be inside <Suspense>
@@ -95,7 +95,7 @@ function AdminUsersContent() {
     const active = sortKey === col;
     return (
       <th
-        className="text-left px-4 py-3 cursor-pointer select-none hover:text-white transition"
+        className="text-left px-4 py-3 cursor-pointer select-none hover:text-slate-900 transition"
         onClick={() => handleSort(col)}
         aria-sort={active ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
       >
@@ -109,27 +109,27 @@ function AdminUsersContent() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold text-white mb-1">Users</h1>
-      <p className="text-gray-400 text-sm mb-6">{users.length} total accounts</p>
+      <h1 className="text-2xl font-bold text-slate-900 mb-1">Users</h1>
+      <p className="text-slate-500 text-sm mb-6">{users.length} total accounts</p>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
         <div className="relative flex-1 min-w-48">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" aria-hidden="true" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" aria-hidden="true" />
           <input
             type="text"
             placeholder="Search email or username…"
             aria-label="Search users by email or username"
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full bg-gray-900 border border-gray-700 rounded-lg pl-9 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+            className="w-full bg-white border border-slate-300 rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
           />
         </div>
         {(['all', 'free', 'monthly', 'lifetime', 'promo_pending'] as const).map((f) => (
           <button
             key={f}
             onClick={() => { setFilter(f); setPage(1); }}
-            className={`px-3 py-2 rounded-lg text-xs font-semibold transition ${filter === f ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+            className={`px-3 py-2 rounded-lg text-xs font-semibold transition min-h-11 ${filter === f ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
           >
             {f === 'promo_pending' ? '⚠ No promo code' : f.charAt(0).toUpperCase() + f.slice(1)}
           </button>
@@ -141,10 +141,10 @@ function AdminUsersContent() {
           <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
         </div>
       ) : (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden overflow-x-auto">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden overflow-x-auto">
           <table className="w-full text-sm" aria-label="Users table">
             <thead>
-              <tr className="border-b border-gray-800 text-gray-300 text-xs uppercase tracking-wide">
+              <tr className="border-b border-slate-200 text-slate-700 text-xs uppercase tracking-wide">
                 <Th label="Email / Username" col="email" />
                 <Th label="Plan" col="subscription_status" />
                 <th className="text-left px-4 py-3 hidden md:table-cell">Promo Code</th>
@@ -156,14 +156,14 @@ function AdminUsersContent() {
             <tbody>
               {sorted.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="text-center py-12 text-gray-400">No users found</td>
+                  <td colSpan={6} className="text-center py-12 text-slate-500">No users found</td>
                 </tr>
               )}
               {paginated.map((u) => (
-                <tr key={u.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition">
+                <tr key={u.id} className="border-b border-slate-100 hover:bg-slate-50 transition">
                   <td className="px-4 py-3">
-                    <p className="text-white font-medium">{u.email ?? '—'}</p>
-                    <p className="text-gray-400 text-xs">@{u.username}</p>
+                    <p className="text-slate-900 font-medium">{u.email ?? '—'}</p>
+                    <p className="text-slate-500 text-xs">@{u.username}</p>
                   </td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-0.5 rounded text-xs font-semibold ${STATUS_BADGE[u.subscription_status]}`}>
@@ -173,30 +173,30 @@ function AdminUsersContent() {
                   <td className="px-4 py-3 hidden md:table-cell">
                     {u.subscription_status === 'lifetime' ? (
                       u.shirt_promo_code ? (
-                        <code className="text-lime-400 text-xs">{u.shirt_promo_code}</code>
+                        <code className="text-lime-600 text-xs">{u.shirt_promo_code}</code>
                       ) : (
-                        <span className="flex items-center gap-1 text-amber-400 text-xs">
+                        <span className="flex items-center gap-1 text-amber-600 text-xs">
                           <AlertTriangle className="w-3 h-3" aria-hidden="true" /> Pending
                         </span>
                       )
                     ) : (
-                      <span className="text-gray-400 text-xs">N/A</span>
+                      <span className="text-slate-500 text-xs">N/A</span>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">
+                  <td className="px-4 py-3 text-slate-500 text-xs">
                     {u.subscription_status === 'monthly' && u.subscription_expires_at
                       ? new Date(u.subscription_expires_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                      : <span className="text-gray-400">—</span>
+                      : <span className="text-slate-500">—</span>
                     }
                   </td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">
+                  <td className="px-4 py-3 text-slate-500 text-xs">
                     {new Date(u.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Link
                       href={`/admin/users/${u.id}`}
                       aria-label={`View ${u.email ?? u.username}`}
-                      className="text-gray-400 hover:text-white transition"
+                      className="text-slate-500 hover:text-slate-900 transition"
                     >
                       <ChevronRight className="w-4 h-4" aria-hidden="true" />
                     </Link>

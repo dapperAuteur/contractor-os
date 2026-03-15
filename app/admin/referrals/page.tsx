@@ -132,7 +132,7 @@ export default function AdminReferralsPage() {
   return (
     <div className="p-8 max-w-5xl">
       <h1 className="text-2xl font-bold text-white mb-1">Referral Tree</h1>
-      <p className="text-gray-400 text-sm mb-8">
+      <p className="text-slate-500 text-sm mb-8">
         Users ranked by members brought in. Grant extra invites and track paid conversions.
       </p>
 
@@ -145,10 +145,10 @@ export default function AdminReferralsPage() {
             { label: 'Accepted', value: totals.total_accepted, icon: UserCheck, color: '#10b981' },
             { label: 'Converted to Paid', value: totals.total_paid, icon: DollarSign, color: '#3b82f6' },
           ].map(({ label, value, icon: Icon, color }) => (
-            <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
+            <div key={label} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
               <Icon className="w-5 h-5 mx-auto mb-2" style={{ color }} aria-hidden="true" />
               <p className="text-2xl font-bold text-white">{value}</p>
-              <p className="text-gray-400 text-xs mt-1">{label}</p>
+              <p className="text-slate-500 text-xs mt-1">{label}</p>
             </div>
           ))}
         </div>
@@ -159,7 +159,7 @@ export default function AdminReferralsPage() {
           <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
         </div>
       ) : referrers.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-slate-500">
           <Users className="w-10 h-10 mx-auto mb-3 opacity-40" />
           <p>No peer referrals yet.</p>
         </div>
@@ -171,16 +171,16 @@ export default function AdminReferralsPage() {
             const limitVal = editLimit[referrer.user_id] ?? '';
 
             return (
-              <div key={referrer.user_id} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div key={referrer.user_id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                 {/* Row header */}
                 <button
                   type="button"
                   onClick={() => setExpanded(isOpen ? null : referrer.user_id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition text-left"
+                  className="w-full flex items-center gap-3 px-5 py-4 hover:bg-slate-100/60 transition text-left"
                 >
                   {/* Rank */}
-                  <span className={`text-sm font-bold w-6 shrink-0 ${idx === 0 ? 'text-amber-400' : idx === 1 ? 'text-gray-300' : idx === 2 ? 'text-amber-700' : 'text-gray-500'}`}>
+                  <span className={`text-sm font-bold w-6 shrink-0 ${idx === 0 ? 'text-amber-400' : idx === 1 ? 'text-slate-700' : idx === 2 ? 'text-amber-700' : 'text-slate-400'}`}>
                     #{idx + 1}
                   </span>
 
@@ -188,10 +188,10 @@ export default function AdminReferralsPage() {
                   <div className="flex-1 min-w-0">
                     <p className="text-white font-medium text-sm truncate">
                       {referrer.display_name ?? referrer.username ?? referrer.user_id.slice(0, 8)}
-                      {referrer.username && <span className="text-gray-500 font-normal ml-1.5">@{referrer.username}</span>}
+                      {referrer.username && <span className="text-slate-400 font-normal ml-1.5">@{referrer.username}</span>}
                     </p>
                     <div className="flex items-center gap-3 mt-0.5">
-                      <span className="text-gray-400 text-xs">{referrer.total_sent} sent</span>
+                      <span className="text-slate-500 text-xs">{referrer.total_sent} sent</span>
                       <span className="text-green-400 text-xs">{referrer.total_accepted} joined</span>
                       {referrer.downstream_total > 0 && (
                         <span className="text-indigo-400 text-xs flex items-center gap-0.5">
@@ -207,32 +207,32 @@ export default function AdminReferralsPage() {
                   {/* Impact score */}
                   <div className="text-center shrink-0">
                     <p className="text-lg font-bold text-amber-400">{totalImpact}</p>
-                    <p className="text-gray-500 text-xs">impact</p>
+                    <p className="text-slate-400 text-xs">impact</p>
                   </div>
 
                   {/* Invite limit badge */}
                   <div className="text-center shrink-0">
-                    <p className="text-sm font-semibold text-gray-300">{referrer.invite_limit}</p>
-                    <p className="text-gray-500 text-xs">limit</p>
+                    <p className="text-sm font-semibold text-slate-700">{referrer.invite_limit}</p>
+                    <p className="text-slate-400 text-xs">limit</p>
                   </div>
 
                   {isOpen
-                    ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
-                    : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />}
+                    ? <ChevronUp className="w-4 h-4 text-slate-500 shrink-0" />
+                    : <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />}
                 </button>
 
                 {/* Expanded detail */}
                 {isOpen && (
-                  <div className="border-t border-gray-800 px-5 py-5 space-y-5">
+                  <div className="border-t border-slate-200 px-5 py-5 space-y-5">
                     {/* Grant invites */}
                     <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3 flex items-center gap-1.5">
+                      <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-3 flex items-center gap-1.5">
                         <Gift className="w-3.5 h-3.5" aria-hidden="true" />
                         Grant Extra Invites
                       </p>
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-2 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2">
-                          <span className="text-gray-400 text-sm">Current limit:</span>
+                        <div className="flex items-center gap-2 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2">
+                          <span className="text-slate-500 text-sm">Current limit:</span>
                           <span className="text-white font-semibold">{referrer.invite_limit}</span>
                         </div>
                         <input
@@ -243,7 +243,7 @@ export default function AdminReferralsPage() {
                           onChange={(e) => setEditLimit((prev) => ({ ...prev, [referrer.user_id]: e.target.value }))}
                           placeholder="New limit"
                           aria-label="New invite limit"
-                          className="w-28 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                          className="w-28 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                         />
                         <button
                           type="button"
@@ -264,30 +264,30 @@ export default function AdminReferralsPage() {
 
                     {/* Invite list */}
                     <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">
+                      <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-3">
                         Invites Sent ({referrer.invites.length})
                       </p>
                       {referrer.invites.length === 0 ? (
-                        <p className="text-gray-500 text-sm italic">No invites sent yet.</p>
+                        <p className="text-slate-400 text-sm italic">No invites sent yet.</p>
                       ) : (
                         <div className="space-y-1.5">
                           {referrer.invites.map((inv) => (
                             <div
                               key={inv.id}
-                              className="flex items-center gap-3 bg-gray-800/60 rounded-lg px-3 py-2.5"
+                              className="flex items-center gap-3 bg-slate-100/60 rounded-lg px-3 py-2.5"
                             >
                               {/* Status dot */}
                               <span className={`w-2 h-2 rounded-full shrink-0 ${inv.accepted_at ? 'bg-green-500' : 'bg-gray-600'}`} />
 
                               <div className="flex-1 min-w-0">
-                                <p className="text-gray-200 text-sm truncate">{inv.email}</p>
+                                <p className="text-slate-800 text-sm truncate">{inv.email}</p>
                                 <div className="flex items-center gap-2 mt-0.5">
-                                  <span className="text-gray-500 text-xs capitalize">{inv.product}</span>
+                                  <span className="text-slate-400 text-xs capitalize">{inv.product}</span>
                                   {inv.accepted_at && (
                                     <span className="text-green-400 text-xs">joined {fmtDate(inv.accepted_at)}</span>
                                   )}
                                   {!inv.accepted_at && (
-                                    <span className="text-gray-500 text-xs">invited {fmtDate(inv.invited_at)}</span>
+                                    <span className="text-slate-400 text-xs">invited {fmtDate(inv.invited_at)}</span>
                                   )}
                                   {inv.downstream > 0 && (
                                     <span className="text-indigo-400 text-xs">+{inv.downstream} they invited</span>
@@ -310,8 +310,8 @@ export default function AdminReferralsPage() {
                                     aria-label={inv.is_paid ? 'Mark as not paid' : 'Mark as paid'}
                                     className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium transition min-h-8 ${
                                       inv.is_paid
-                                        ? 'bg-gray-700 text-gray-400 hover:bg-red-900/40 hover:text-red-300'
-                                        : 'bg-gray-700 text-gray-400 hover:bg-blue-900/40 hover:text-blue-300'
+                                        ? 'bg-gray-700 text-slate-500 hover:bg-red-900/40 hover:text-red-300'
+                                        : 'bg-gray-700 text-slate-500 hover:bg-blue-900/40 hover:text-blue-300'
                                     }`}
                                   >
                                     {markingPaid === inv.id

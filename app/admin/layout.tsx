@@ -13,17 +13,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white flex dark-input">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex">
       {/* Mobile header */}
-      <div className="fixed top-0 left-0 right-0 z-40 flex items-center gap-3 bg-gray-950 border-b border-gray-800 px-4 py-3 lg:hidden">
+      <div className="fixed top-0 left-0 right-0 z-40 flex items-center gap-3 bg-white border-b border-slate-200 px-4 py-3 lg:hidden">
         <button
           onClick={() => setSidebarOpen(true)}
           aria-label="Open admin menu"
-          className="p-2 rounded-lg hover:bg-gray-800 transition"
+          className="flex items-center justify-center min-h-11 min-w-11 p-2 rounded-lg hover:bg-slate-100 transition"
         >
-          <Menu className="w-5 h-5" />
+          <Menu className="w-5 h-5" aria-hidden="true" />
         </button>
-        <p className="text-xs font-bold uppercase tracking-widest text-amber-400">Admin</p>
+        <p className="text-xs font-bold uppercase tracking-widest text-amber-600">Admin</p>
       </div>
 
       {/* Mobile overlay */}
@@ -37,30 +37,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-56 shrink-0 border-r border-gray-800 bg-gray-950 flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 w-56 shrink-0 border-r border-slate-200 bg-white flex flex-col transition-transform duration-200 lg:static lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
         role="navigation"
         aria-label="Admin navigation"
       >
-        <div className="p-5 border-b border-gray-800 flex items-center justify-between">
+        <div className="p-5 border-b border-slate-200 flex items-center justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest text-amber-400 mb-1">Admin</p>
-            <p className="text-lg font-bold text-white">Work.WitUS</p>
+            <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">Admin</p>
+            <p className="text-lg font-bold text-slate-900">Work.WitUS</p>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
             aria-label="Close admin menu"
-            className="p-1.5 rounded-lg hover:bg-gray-800 transition lg:hidden"
+            className="flex items-center justify-center min-h-11 min-w-11 p-1.5 rounded-lg hover:bg-slate-100 transition lg:hidden"
           >
-            <X className="w-4 h-4" />
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
         <AdminSidebar onNavigate={() => setSidebarOpen(false)} />
-        <div className="p-3 border-t border-gray-800">
+        <div className="p-3 border-t border-slate-200">
           <Link
             href="/dashboard/contractor"
-            className="flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-white transition"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-slate-500 hover:text-slate-900 transition min-h-11"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             Back to App

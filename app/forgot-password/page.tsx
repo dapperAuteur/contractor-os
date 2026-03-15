@@ -36,30 +36,30 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-950 text-neutral-100">
-      <nav className="border-b border-neutral-800 px-4 py-4">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      <nav className="border-b border-slate-200 px-4 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <HardHat size={24} className="text-amber-400" aria-hidden="true" />
+            <HardHat size={24} className="text-amber-600" aria-hidden="true" />
             <span className="text-lg font-bold">Work.WitUS</span>
           </Link>
-          <Link href="/login" className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center">
+          <Link href="/login" className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 min-h-11 flex items-center">
             Log In
           </Link>
         </div>
       </nav>
 
       <main className="flex-1 flex items-center justify-center p-4">
-        <div className="max-w-md w-full rounded-2xl p-8 border border-neutral-800 bg-neutral-900">
+        <div className="max-w-md w-full rounded-2xl p-8 border border-slate-200 bg-white">
           {sent ? (
             <>
               <header className="mb-6">
-                <h1 className="text-2xl font-bold text-neutral-100">Check your email</h1>
-                <p className="text-neutral-400 mt-2">
-                  We sent a password reset link to <span className="text-neutral-100 font-medium">{email}</span>.
+                <h1 className="text-2xl font-bold text-slate-900">Check your email</h1>
+                <p className="text-slate-500 mt-2">
+                  We sent a password reset link to <span className="text-slate-900 font-medium">{email}</span>.
                 </p>
               </header>
-              <p className="text-sm text-neutral-500 mb-6">
+              <p className="text-sm text-slate-400 mb-6">
                 The link expires in 1 hour. If you don&apos;t see it, check your spam folder.
               </p>
               <Link
@@ -72,21 +72,21 @@ export default function ForgotPasswordPage() {
           ) : (
             <>
               <header className="mb-6">
-                <h1 className="text-2xl font-bold text-neutral-100">Reset your password</h1>
-                <p className="text-neutral-400 mt-2">
+                <h1 className="text-2xl font-bold text-slate-900">Reset your password</h1>
+                <p className="text-slate-500 mt-2">
                   Enter your email and we&apos;ll send you a reset link.
                 </p>
               </header>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                  <div className="bg-red-900/30 border border-red-700 text-red-300 p-3 rounded-lg text-sm" role="alert">
+                  <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm" role="alert">
                     {error}
                   </div>
                 )}
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-neutral-300">
+                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-slate-700">
                     Email address
                   </label>
                   <input
@@ -96,7 +96,7 @@ export default function ForgotPasswordPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     autoFocus
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     placeholder="you@example.com"
                     autoComplete="email"
                   />
@@ -110,9 +110,9 @@ export default function ForgotPasswordPage() {
                   {loading ? 'Sending…' : 'Send Reset Link'}
                 </button>
 
-                <p className="text-center text-sm text-neutral-400">
+                <p className="text-center text-sm text-slate-500">
                   Remembered it?{' '}
-                  <Link href="/login" className="font-medium text-amber-400 hover:underline">
+                  <Link href="/login" className="font-medium text-amber-600 hover:underline">
                     Back to Login
                   </Link>
                 </p>
@@ -122,7 +122,7 @@ export default function ForgotPasswordPage() {
         </div>
       </main>
 
-      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+      <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
         <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
       </footer>
     </div>

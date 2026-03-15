@@ -57,39 +57,39 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-950 text-neutral-100">
-      <nav className="border-b border-neutral-800 px-4 py-4">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      <nav className="border-b border-slate-200 px-4 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <HardHat size={24} className="text-amber-400" aria-hidden="true" />
+            <HardHat size={24} className="text-amber-600" aria-hidden="true" />
             <span className="text-lg font-bold">Work.WitUS</span>
           </Link>
         </div>
       </nav>
 
       <main className="flex-1 flex items-center justify-center p-4">
-        <div className="max-w-md w-full rounded-2xl p-8 border border-neutral-800 bg-neutral-900">
+        <div className="max-w-md w-full rounded-2xl p-8 border border-slate-200 bg-white">
           {done ? (
             <>
-              <h1 className="text-2xl font-bold text-neutral-100 mb-3">Password updated!</h1>
-              <p className="text-neutral-400 text-sm">Taking you to your dashboard…</p>
+              <h1 className="text-2xl font-bold text-slate-900 mb-3">Password updated!</h1>
+              <p className="text-slate-500 text-sm">Taking you to your dashboard…</p>
             </>
           ) : (
             <>
               <header className="mb-6">
-                <h1 className="text-2xl font-bold text-neutral-100">Set a new password</h1>
-                <p className="text-neutral-400 mt-2">Choose a strong password for your account.</p>
+                <h1 className="text-2xl font-bold text-slate-900">Set a new password</h1>
+                <p className="text-slate-500 mt-2">Choose a strong password for your account.</p>
               </header>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
-                  <div className="bg-red-900/30 border border-red-700 text-red-300 p-3 rounded-lg text-sm" role="alert">
+                  <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm" role="alert">
                     {error}
                   </div>
                 )}
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium mb-1 text-neutral-300">
+                  <label htmlFor="password" className="block text-sm font-medium mb-1 text-slate-700">
                     New password
                   </label>
                   <input
@@ -99,7 +99,7 @@ export default function ResetPasswordPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     autoFocus
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     placeholder="••••••••••"
                     autoComplete="new-password"
                   />
@@ -112,7 +112,7 @@ export default function ResetPasswordPage() {
                         ['digit', 'Number'],
                         ['symbol', 'Symbol (!@#$…)'],
                       ] as const).map(([key, label]) => (
-                        <li key={key} className={pwChecks[key] ? 'text-green-400' : 'text-red-400'}>
+                        <li key={key} className={pwChecks[key] ? 'text-green-600' : 'text-red-500'}>
                           {pwChecks[key] ? '✓' : '✗'} {label}
                         </li>
                       ))}
@@ -121,7 +121,7 @@ export default function ResetPasswordPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="confirm" className="block text-sm font-medium mb-1 text-neutral-300">
+                  <label htmlFor="confirm" className="block text-sm font-medium mb-1 text-slate-700">
                     Confirm new password
                   </label>
                   <input
@@ -130,12 +130,12 @@ export default function ResetPasswordPage() {
                     value={confirm}
                     onChange={(e) => setConfirm(e.target.value)}
                     required
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     placeholder="••••••••••"
                     autoComplete="new-password"
                   />
                   {confirm.length > 0 && (
-                    <p className={`text-xs mt-1 ${matches ? 'text-green-400' : 'text-red-400'}`}>
+                    <p className={`text-xs mt-1 ${matches ? 'text-green-600' : 'text-red-500'}`}>
                       {matches ? '✓ Passwords match' : '✗ Passwords do not match'}
                     </p>
                   )}
@@ -154,7 +154,7 @@ export default function ResetPasswordPage() {
         </div>
       </main>
 
-      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+      <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
         <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
       </footer>
     </div>

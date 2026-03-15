@@ -168,12 +168,12 @@ export default function ComponentWearPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/travel" className="p-2 text-gray-400 hover:text-gray-600 transition">
+          <Link href="/dashboard/travel" className="p-2 text-slate-500 hover:text-gray-600 transition">
             <ArrowLeft className="w-5 h-5" />
           </Link>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Component Wear</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Track tires, shoes, chains & more</p>
+            <p className="text-sm text-slate-400 mt-0.5">Track tires, shoes, chains & more</p>
           </div>
         </div>
         <button
@@ -208,14 +208,14 @@ export default function ComponentWearPage() {
       {/* Active Components */}
       {vehicles.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-sm text-gray-500">Add a vehicle first to start tracking components.</p>
+          <p className="text-sm text-slate-400">Add a vehicle first to start tracking components.</p>
           <Link href="/dashboard/travel" className="mt-2 inline-block text-sm text-amber-600 font-medium hover:text-amber-700">
             Go to Travel
           </Link>
         </div>
       ) : active.length === 0 && retired.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-sm text-gray-500">No components tracked yet.</p>
+          <p className="text-sm text-slate-400">No components tracked yet.</p>
           <button onClick={() => { setForm((f) => ({ ...f, vehicle_id: vehicles[0]?.id ?? '' })); setShowForm(true); }}
             className="mt-2 text-sm text-amber-600 font-medium hover:text-amber-700">
             Add your first component
@@ -233,7 +233,7 @@ export default function ComponentWearPage() {
                       <p className="text-sm font-semibold text-gray-900">
                         {COMPONENT_TYPES.find((t) => t.value === c.component_type)?.label ?? c.component_type}
                       </p>
-                      <p className="text-xs text-gray-500">{c.vehicles?.nickname ?? 'Vehicle'}</p>
+                      <p className="text-xs text-slate-400">{c.vehicles?.nickname ?? 'Vehicle'}</p>
                     </div>
                   </div>
                   <span className={`text-xs font-bold px-2 py-0.5 rounded-full text-white ${wearColor(c.wear_pct)}`}>
@@ -241,12 +241,12 @@ export default function ComponentWearPage() {
                   </span>
                 </div>
 
-                {c.brand && <p className="text-xs text-gray-500 mb-2">{[c.brand, c.model].filter(Boolean).join(' ')}</p>}
+                {c.brand && <p className="text-xs text-slate-400 mb-2">{[c.brand, c.model].filter(Boolean).join(' ')}</p>}
 
                 {/* Wear bar */}
                 {c.expected_life_miles && (
                   <div className="mb-2">
-                    <div className="flex items-center justify-between text-xs text-gray-500 mb-1">
+                    <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
                       <span>{c.current_miles?.toLocaleString() ?? '?'} mi</span>
                       <span>{c.expected_life_miles.toLocaleString()} mi expected</span>
                     </div>
@@ -259,8 +259,8 @@ export default function ComponentWearPage() {
                   </div>
                 )}
 
-                <p className="text-xs text-gray-400">Installed {c.installed_date} at {c.installed_miles.toLocaleString()} mi</p>
-                {c.notes && <p className="text-xs text-gray-400 mt-1">{c.notes}</p>}
+                <p className="text-xs text-slate-500">Installed {c.installed_date} at {c.installed_miles.toLocaleString()} mi</p>
+                {c.notes && <p className="text-xs text-slate-500 mt-1">{c.notes}</p>}
 
                 <div className="flex gap-3 mt-3 pt-2 border-t border-gray-100">
                   <button onClick={() => handleRetire(c)} className="text-xs text-amber-600 hover:text-amber-700 flex items-center gap-1">
@@ -277,7 +277,7 @@ export default function ComponentWearPage() {
           {/* Retired */}
           {retired.length > 0 && (
             <div>
-              <button onClick={() => setShowRetired((s) => !s)} className="text-xs text-gray-400 hover:text-gray-600 font-medium">
+              <button onClick={() => setShowRetired((s) => !s)} className="text-xs text-slate-500 hover:text-gray-600 font-medium">
                 {showRetired ? 'Hide' : 'Show'} retired components ({retired.length})
               </button>
               {showRetired && (
@@ -292,11 +292,11 @@ export default function ComponentWearPage() {
                             <p className="text-sm font-medium text-gray-600">
                               {COMPONENT_TYPES.find((t) => t.value === c.component_type)?.label ?? c.component_type}
                             </p>
-                            <p className="text-xs text-gray-400">{c.vehicles?.nickname}</p>
+                            <p className="text-xs text-slate-500">{c.vehicles?.nickname}</p>
                           </div>
                           <CheckCircle2 className="w-4 h-4 text-green-500 ml-auto" />
                         </div>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-slate-500">
                           {c.brand ? `${c.brand} · ` : ''}
                           {totalMiles != null ? `${totalMiles.toLocaleString()} mi total` : ''}
                           {c.retired_date ? ` · Retired ${c.retired_date}` : ''}

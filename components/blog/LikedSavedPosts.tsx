@@ -108,10 +108,10 @@ export default function LikedSavedPosts({ userId, mode }: Props) {
 
   if (posts.length === 0) {
     return (
-      <div className="py-16 text-center text-gray-400 space-y-2">
-        <Icon className="w-10 h-10 mx-auto text-gray-300" />
+      <div className="py-16 text-center text-slate-500 space-y-2">
+        <Icon className="w-10 h-10 mx-auto text-slate-400" />
         <p className="text-sm">No {emptyLabel} yet.</p>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-slate-500">
           Visit a blog post and click the{' '}
           {mode === 'liked' ? '♥ like' : '🔖 save'} button to add it here.
         </p>
@@ -124,14 +124,14 @@ export default function LikedSavedPosts({ userId, mode }: Props) {
       {posts.map((post) => (
         <div
           key={post.post_id}
-          className="flex items-start justify-between gap-4 p-4 bg-neutral-900 border border-neutral-800 rounded-xl hover:border-amber-700 hover:bg-amber-500/10 transition"
+          className="flex items-start justify-between gap-4 p-4 bg-white border border-slate-200 rounded-xl hover:border-amber-600 hover:bg-amber-500/10 transition"
         >
           <div className="min-w-0 flex-1">
-            <p className="font-medium text-gray-900 truncate">{post.title}</p>
+            <p className="font-medium text-slate-900 truncate">{post.title}</p>
             {post.excerpt && (
-              <p className="text-sm text-gray-500 mt-0.5 line-clamp-1">{post.excerpt}</p>
+              <p className="text-sm text-slate-500 mt-0.5 line-clamp-1">{post.excerpt}</p>
             )}
-            <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
+            <div className="flex items-center gap-2 mt-1 text-xs text-slate-500">
               <span>by {post.author_display_name || `@${post.author_username}`}</span>
               {post.published_at && (
                 <>
@@ -145,7 +145,7 @@ export default function LikedSavedPosts({ userId, mode }: Props) {
             href={`/blog/${post.author_username}/${post.slug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 text-gray-400 hover:text-amber-400 transition"
+            className="shrink-0 text-slate-500 hover:text-amber-600 transition"
             title="Open post"
           >
             <ExternalLink className="w-4 h-4" />

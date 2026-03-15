@@ -78,7 +78,7 @@ export default function LearningPathDetailPage() {
   if (notFound || !path) {
     return (
       <div className="max-w-xl mx-auto px-4 py-24 text-center">
-        <Layers className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+        <Layers className="w-12 h-12 text-slate-700 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Path not found</h1>
         <p className="text-gray-500 mb-6">This learning path may have been removed or is not yet published.</p>
         <Link href="/academy/paths" className="text-amber-600 hover:underline text-sm font-medium">
@@ -251,7 +251,7 @@ export default function LearningPathDetailPage() {
                   </div>
                 </div>
 
-                <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-amber-400 transition shrink-0" />
+                <ChevronRight className="w-4 h-4 text-slate-700 group-hover:text-amber-400 transition shrink-0" />
               </Link>
             );
           })}

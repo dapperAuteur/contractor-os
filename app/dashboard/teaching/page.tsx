@@ -57,7 +57,7 @@ export default function TeachingDashboard() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Teaching Dashboard</h1>
-          <p className="text-gray-400 text-sm mt-1">Manage your courses, students, and payouts.</p>
+          <p className="text-slate-500 text-sm mt-1">Manage your courses, students, and payouts.</p>
         </div>
         <Link
           href="/dashboard/teaching/courses/new"
@@ -94,10 +94,10 @@ export default function TeachingDashboard() {
           { label: 'Published', value: publishedCount, icon: BookOpen },
           { label: 'Enrollments', value: stats?.total_enrollments ?? 0, icon: Users },
         ].map(({ label, value, icon: Icon }) => (
-          <div key={label} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+          <div key={label} className="bg-white border border-slate-200 rounded-xl p-5">
             <Icon className="w-5 h-5 text-amber-400 mb-3" />
             <p className="text-3xl font-bold text-white">{value}</p>
-            <p className="text-gray-500 text-sm mt-1">{label}</p>
+            <p className="text-slate-400 text-sm mt-1">{label}</p>
           </div>
         ))}
       </div>
@@ -106,21 +106,21 @@ export default function TeachingDashboard() {
       <div className="flex flex-wrap gap-2 mb-8">
         <Link
           href="/dashboard/teaching/learning-paths"
-          className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-800 hover:border-amber-700 text-gray-300 hover:text-amber-300 rounded-xl text-sm font-medium transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:border-amber-700 text-slate-700 hover:text-amber-300 rounded-xl text-sm font-medium transition"
         >
           <Layers className="w-4 h-4" />
           Learning Paths
         </Link>
         <Link
           href="/dashboard/teaching/students"
-          className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-800 hover:border-amber-700 text-gray-300 hover:text-amber-300 rounded-xl text-sm font-medium transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:border-amber-700 text-slate-700 hover:text-amber-300 rounded-xl text-sm font-medium transition"
         >
           <Users className="w-4 h-4" />
           Students
         </Link>
         <Link
           href="/dashboard/teaching/live"
-          className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-800 hover:border-amber-700 text-gray-300 hover:text-amber-300 rounded-xl text-sm font-medium transition"
+          className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 hover:border-amber-700 text-slate-700 hover:text-amber-300 rounded-xl text-sm font-medium transition"
         >
           Live Sessions
         </Link>
@@ -136,9 +136,9 @@ export default function TeachingDashboard() {
         </div>
 
         {courses.length === 0 ? (
-          <div className="bg-gray-900 border border-gray-800 border-dashed rounded-xl p-12 text-center">
+          <div className="bg-white border border-slate-200 border-dashed rounded-xl p-12 text-center">
             <BookOpen className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-            <p className="text-gray-500 mb-4">No courses yet.</p>
+            <p className="text-slate-400 mb-4">No courses yet.</p>
             <Link
               href="/dashboard/teaching/courses/new"
               className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition"
@@ -152,18 +152,18 @@ export default function TeachingDashboard() {
               <Link
                 key={course.id}
                 href={`/dashboard/teaching/courses/${course.id}`}
-                className="flex items-center gap-4 bg-gray-900 border border-gray-800 rounded-xl px-5 py-4 hover:bg-gray-800/60 transition"
+                className="flex items-center gap-4 bg-white border border-slate-200 rounded-xl px-5 py-4 hover:bg-slate-100/60 transition"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-white font-medium truncate">{course.title}</p>
-                  <p className="text-gray-500 text-sm mt-0.5">
+                  <p className="text-slate-400 text-sm mt-0.5">
                     {course.price_type === 'free' ? 'Free' : `$${course.price} · ${course.price_type}`}
                   </p>
                 </div>
                 <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                   course.is_published
                     ? 'bg-green-900/30 text-green-400'
-                    : 'bg-gray-800 text-gray-500'
+                    : 'bg-slate-100 text-slate-400'
                 }`}>
                   {course.is_published ? 'Published' : 'Draft'}
                 </span>

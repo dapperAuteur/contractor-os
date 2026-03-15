@@ -108,20 +108,6 @@ table {
   outline: none;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
@@ -202,22 +188,22 @@ body {
   padding-left: 1rem;
   margin-left: 0;
   margin-bottom: 1.25rem;
-  color: #a3a3a3; /* neutral-400 */
+  color: #64748b; /* slate-500 */
   font-style: italic;
 }
 
 .blog-content code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.875em;
-  background: #262626; /* neutral-800 */
-  color: #e5e5e5; /* neutral-200 */
+  background: #f1f5f9; /* slate-100 */
+  color: #334155; /* slate-700 */
   padding: 0.15em 0.4em;
   border-radius: 0.25rem;
 }
 
 .blog-content pre {
-  background: #1f2937; /* gray-800 */
-  color: #f9fafb; /* gray-50 */
+  background: #f8fafc; /* slate-50 */
+  color: #334155; /* slate-700 */
   padding: 1rem 1.25rem;
   border-radius: 0.75rem;
   overflow-x: auto;
@@ -241,7 +227,7 @@ body {
 
 .blog-content hr {
   border: none;
-  border-top: 2px solid #404040; /* neutral-700 */
+  border-top: 2px solid #e2e8f0; /* slate-200 */
   margin: 2rem 0;
 }
 
@@ -269,16 +255,8 @@ body {
 /* Custom global class for form inputs */
 .form-input {
   @apply w-full px-4 py-2 rounded-lg border transition-colors;
-  @apply bg-white border-gray-300 text-gray-900;
+  @apply bg-white border-slate-300 text-slate-900;
   @apply focus:ring-2 focus:ring-amber-500 focus:border-transparent focus:outline-none;
-}
-
-@media (prefers-color-scheme: dark) {
-  .form-input {
-    /* Keep background white and text dark for high contrast in dark mode */
-    @apply bg-white border-gray-600 text-gray-900;
-    @apply focus:ring-amber-500;
-  }
 }
 
 /* Remove browser-default autofill background color */
@@ -286,17 +264,7 @@ body {
 .form-input:-webkit-autofill:hover,
 .form-input:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px theme('colors.white') inset;
-  -webkit-text-fill-color: theme('colors.gray.900');
-}
-
-@media (prefers-color-scheme: dark) {
-  .form-input:-webkit-autofill,
-  .form-input:-webkit-autofill:hover,
-  .form-input:-webkit-autofill:focus {
-    /* Match the explicit input styles for autofill in dark mode */
-    -webkit-box-shadow: 0 0 0px 1000px theme('colors.white') inset;
-    -webkit-text-fill-color: theme('colors.gray.900');
-  }
+  -webkit-text-fill-color: theme('colors.slate.900');
 }
 
 /* ─── Global input accessibility ──────────────────────────────────────────── */
@@ -305,7 +273,7 @@ body {
 input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
 textarea,
 select {
-  color: #111827; /* gray-900 */
+  color: #0f172a; /* slate-900 */
 }
 
 input::placeholder,
@@ -315,16 +283,3 @@ textarea::placeholder {
 }
 /* ─── End global input accessibility ──────────────────────────────────────── */
 
-/* ─── Dark-background form controls (admin dark UI) ──────────────────────── */
-/* Overrides the light-mode textarea/input color rule above for dark contexts  */
-.dark-input textarea,
-.dark-input select,
-.dark-input input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
-  color: #e5e7eb; /* gray-200 — readable on dark backgrounds (admin pages) */
-  color-scheme: dark; /* ensures browser-native icons (date picker, spinners) render light */
-}
-.dark-input textarea::placeholder,
-.dark-input input::placeholder {
-  color: #6b7280; /* gray-500 */
-}
-/* ─── End dark-background form controls ──────────────────────────────────── */

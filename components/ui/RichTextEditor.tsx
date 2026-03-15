@@ -32,7 +32,7 @@ function ToolbarButton({
       type="button"
       title={title}
       onClick={onClick}
-      className={`p-1.5 rounded transition text-sm ${active ? 'bg-amber-600 text-white' : 'text-gray-400 hover:bg-gray-700 hover:text-white'}`}
+      className={`p-1.5 rounded transition text-sm ${active ? 'bg-amber-600 text-white' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'}`}
     >
       {children}
     </button>
@@ -50,7 +50,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
     content: value,
     editorProps: {
       attributes: {
-        class: 'min-h-[180px] px-4 py-3 text-sm text-white focus:outline-none prose prose-invert prose-sm max-w-none',
+        class: 'min-h-[180px] px-4 py-3 text-sm text-slate-900 focus:outline-none prose prose-sm max-w-none',
       },
     },
     onUpdate({ editor }) {
@@ -87,16 +87,16 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
   if (!editor) return null;
 
   return (
-    <div className="border border-gray-700 rounded-lg overflow-hidden focus-within:border-amber-500 transition">
+    <div className="border border-slate-200 rounded-lg overflow-hidden focus-within:border-amber-500 transition">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-gray-700 bg-gray-900">
+      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-slate-200 bg-white">
         <ToolbarButton title="Bold" active={editor.isActive('bold')} onClick={() => editor.chain().focus().toggleBold().run()}>
           <Bold className="w-3.5 h-3.5" />
         </ToolbarButton>
         <ToolbarButton title="Italic" active={editor.isActive('italic')} onClick={() => editor.chain().focus().toggleItalic().run()}>
           <Italic className="w-3.5 h-3.5" />
         </ToolbarButton>
-        <div className="w-px h-4 bg-gray-700 mx-1" />
+        <div className="w-px h-4 bg-slate-200 mx-1" />
         <ToolbarButton title="Heading" active={editor.isActive('heading', { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
           <Heading2 className="w-3.5 h-3.5" />
         </ToolbarButton>
@@ -106,7 +106,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
         <ToolbarButton title="Bullet list" active={editor.isActive('bulletList')} onClick={() => editor.chain().focus().toggleBulletList().run()}>
           <List className="w-3.5 h-3.5" />
         </ToolbarButton>
-        <div className="w-px h-4 bg-gray-700 mx-1" />
+        <div className="w-px h-4 bg-slate-200 mx-1" />
         <ToolbarButton title="Insert link" active={editor.isActive('link')} onClick={addLink}>
           <Link2 className="w-3.5 h-3.5" />
         </ToolbarButton>
@@ -123,9 +123,9 @@ export default function RichTextEditor({ value, onChange, placeholder }: Props) 
       </div>
 
       {/* Editor area */}
-      <div className="relative bg-gray-800">
+      <div className="relative bg-slate-100">
         {editor.isEmpty && placeholder && (
-          <p className="absolute top-3 left-4 text-gray-500 text-sm pointer-events-none">{placeholder}</p>
+          <p className="absolute top-3 left-4 text-slate-400 text-sm pointer-events-none">{placeholder}</p>
         )}
         <EditorContent editor={editor} />
       </div>

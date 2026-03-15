@@ -156,7 +156,7 @@ export default function MessagesPage() {
                   onClick={() => openMessage(m.id)}
                 >
                   {!m.is_read && <div className="w-2 h-2 rounded-full bg-amber-600 mt-1.5 shrink-0" />}
-                  {m.is_read && <CheckCircle className="w-4 h-4 text-gray-300 mt-0.5 shrink-0" />}
+                  {m.is_read && <CheckCircle className="w-4 h-4 text-slate-700 mt-0.5 shrink-0" />}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-4 mb-0.5">
                       <p className={`font-semibold truncate ${m.is_read ? 'text-slate-700' : 'text-slate-900'}`}>{m.subject}</p>

@@ -121,7 +121,7 @@ export default function MarkdownImporter() {
             <span className={step === s ? 'text-gray-900 font-medium' : 'text-gray-400'}>
               {s === 'paste' ? 'Paste markdown' : s === 'preview' ? 'Preview & metadata' : 'Fine-tune in editor'}
             </span>
-            {i < 2 && <span className="text-gray-300 mx-1">›</span>}
+            {i < 2 && <span className="text-slate-700 mx-1">›</span>}
           </div>
         ))}
       </div>

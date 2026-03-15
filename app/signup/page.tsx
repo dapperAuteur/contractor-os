@@ -70,7 +70,7 @@ export default function SignupPage() {
       callback: (token: string) => setTurnstileToken(token),
       'expired-callback': () => setTurnstileToken(null),
       'error-callback': () => setTurnstileToken(null),
-      theme: 'dark',
+      theme: 'light',
     });
   }
 
@@ -187,17 +187,17 @@ export default function SignupPage() {
         />
       )}
 
-      <div className="min-h-screen flex flex-col bg-neutral-950 text-neutral-100 dark-input">
+      <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
         {/* Header */}
-        <nav className="border-b border-neutral-800 px-4 py-4">
+        <nav className="border-b border-slate-200 px-4 py-4">
           <div className="mx-auto flex max-w-6xl items-center justify-between">
             <Link href="/" className="flex items-center gap-2">
-              <HardHat size={24} className="text-amber-400" aria-hidden="true" />
+              <HardHat size={24} className="text-amber-600" aria-hidden="true" />
               <span className="text-lg font-bold">Work.WitUS</span>
             </Link>
             <div className="flex items-center gap-3">
-              <Link href="/pricing" className="text-sm text-neutral-400 hover:text-neutral-200">Pricing</Link>
-              <Link href="/login" className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center">
+              <Link href="/pricing" className="text-sm text-slate-500 hover:text-slate-900">Pricing</Link>
+              <Link href="/login" className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 min-h-11 flex items-center">
                 Log In
               </Link>
             </div>
@@ -206,21 +206,21 @@ export default function SignupPage() {
 
         {/* Signup Form */}
         <main className="flex-1 flex items-center justify-center p-4">
-          <div className="max-w-md w-full rounded-2xl p-8 border border-neutral-800 bg-neutral-900">
+          <div className="max-w-md w-full rounded-2xl p-8 border border-slate-200 bg-white">
             <header className="mb-6">
-              <h1 className="text-3xl font-bold text-neutral-100">Create your account</h1>
-              <p className="text-neutral-400 mt-2">Get started with Work.WitUS</p>
+              <h1 className="text-3xl font-bold text-slate-900">Create your account</h1>
+              <p className="text-slate-500 mt-2">Get started with Work.WitUS</p>
             </header>
 
             {/* Tabs */}
-            <div className="flex mb-6 border rounded-lg overflow-hidden border-neutral-700">
+            <div className="flex mb-6 border rounded-lg overflow-hidden border-slate-200">
               <button
                 type="button"
                 onClick={() => switchTab('password')}
                 className={`flex-1 py-2 text-sm font-medium transition ${
                   tab === 'password'
                     ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                    : 'text-neutral-400 hover:bg-neutral-800'
+                    : 'text-slate-500 hover:bg-slate-100'
                 }`}
               >
                 Password
@@ -231,7 +231,7 @@ export default function SignupPage() {
                 className={`flex-1 py-2 text-sm font-medium transition ${
                   tab === 'otp'
                     ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                    : 'text-neutral-400 hover:bg-neutral-800'
+                    : 'text-slate-500 hover:bg-slate-100'
                 }`}
               >
                 Email Code
@@ -242,27 +242,27 @@ export default function SignupPage() {
             {tab === 'password' && (
               <form onSubmit={handleSignup} className="space-y-5">
                 {error && (
-                  <div className="bg-red-900/30 border border-red-700 text-red-300 p-3 rounded-lg text-sm" role="alert">
+                  <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm" role="alert">
                     {error}
                   </div>
                 )}
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-neutral-300">Email</label>
+                  <label htmlFor="email" className="block text-sm font-medium mb-1 text-slate-700">Email</label>
                   <input
                     id="email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     placeholder="you@example.com"
                     autoComplete="email"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-sm font-medium mb-1 text-neutral-300">Password</label>
+                  <label htmlFor="password" className="block text-sm font-medium mb-1 text-slate-700">Password</label>
                   <input
                     id="password"
                     type="password"
@@ -270,7 +270,7 @@ export default function SignupPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={10}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     placeholder="••••••••"
                     autoComplete="new-password"
                   />
@@ -283,13 +283,13 @@ export default function SignupPage() {
                         ['digit', 'Number'],
                         ['symbol', 'Symbol (!@#$…)'],
                       ] as const).map(([key, label]) => (
-                        <li key={key} className={pwChecks[key] ? 'text-green-400' : 'text-red-400'}>
+                        <li key={key} className={pwChecks[key] ? 'text-green-600' : 'text-red-500'}>
                           {pwChecks[key] ? '✓' : '✗'} {label}
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-xs mt-1 text-neutral-500">Minimum 10 characters with upper, lower, digit, and symbol</p>
+                    <p className="text-xs mt-1 text-slate-400">Minimum 10 characters with upper, lower, digit, and symbol</p>
                   )}
                 </div>
 
@@ -299,13 +299,13 @@ export default function SignupPage() {
                     type="checkbox"
                     checked={agreedToTerms}
                     onChange={(e) => setAgreedToTerms(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 rounded shrink-0 border-neutral-600 bg-neutral-800 focus:ring-amber-500"
+                    className="mt-0.5 h-4 w-4 rounded shrink-0 border-slate-300 bg-white focus:ring-amber-500"
                   />
-                  <label htmlFor="agree-terms" className="text-sm cursor-pointer text-neutral-400">
+                  <label htmlFor="agree-terms" className="text-sm cursor-pointer text-slate-500">
                     I agree to the{' '}
-                    <Link href="/terms" className="font-medium text-amber-400 hover:underline" target="_blank">Terms of Use</Link>
+                    <Link href="/terms" className="font-medium text-amber-600 hover:underline" target="_blank">Terms of Use</Link>
                     {' '}and{' '}
-                    <Link href="/privacy" className="font-medium text-amber-400 hover:underline" target="_blank">Privacy Policy</Link>
+                    <Link href="/privacy" className="font-medium text-amber-600 hover:underline" target="_blank">Privacy Policy</Link>
                   </label>
                 </div>
 
@@ -319,9 +319,9 @@ export default function SignupPage() {
                   {loading ? 'Creating account…' : 'Sign Up'}
                 </button>
 
-                <p className="text-center text-sm text-neutral-400">
+                <p className="text-center text-sm text-slate-500">
                   Already have an account?{' '}
-                  <Link href="/login" className="font-medium text-amber-400 hover:underline">Log In</Link>
+                  <Link href="/login" className="font-medium text-amber-600 hover:underline">Log In</Link>
                 </p>
               </form>
             )}
@@ -330,7 +330,7 @@ export default function SignupPage() {
             {tab === 'otp' && (
               <div className="space-y-5">
                 {otpError && (
-                  <div className="bg-red-900/30 border border-red-700 text-red-300 p-3 rounded-lg text-sm" role="alert">
+                  <div className="bg-red-50 border border-red-200 text-red-600 p-3 rounded-lg text-sm" role="alert">
                     {otpError}
                   </div>
                 )}
@@ -338,7 +338,7 @@ export default function SignupPage() {
                 {otpStep === 'email' ? (
                   <form onSubmit={handleSendOtp} className="space-y-5">
                     <div>
-                      <label htmlFor="otp-email" className="block text-sm font-medium mb-1 text-neutral-300">Email address</label>
+                      <label htmlFor="otp-email" className="block text-sm font-medium mb-1 text-slate-700">Email address</label>
                       <input
                         id="otp-email"
                         type="email"
@@ -346,10 +346,10 @@ export default function SignupPage() {
                         onChange={(e) => setOtpEmail(e.target.value)}
                         required
                         autoFocus
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                         placeholder="you@example.com"
                       />
-                      <p className="text-xs mt-1.5 text-neutral-500">
+                      <p className="text-xs mt-1.5 text-slate-400">
                         We&apos;ll send a 6-digit code to this address. A new account will be created if you&apos;re new.
                       </p>
                     </div>
@@ -360,13 +360,13 @@ export default function SignupPage() {
                         type="checkbox"
                         checked={otpAgreed}
                         onChange={(e) => setOtpAgreed(e.target.checked)}
-                        className="mt-0.5 h-4 w-4 rounded shrink-0 border-neutral-600 bg-neutral-800 focus:ring-amber-500"
+                        className="mt-0.5 h-4 w-4 rounded shrink-0 border-slate-300 bg-white focus:ring-amber-500"
                       />
-                      <label htmlFor="otp-agree-terms" className="text-sm cursor-pointer text-neutral-400">
+                      <label htmlFor="otp-agree-terms" className="text-sm cursor-pointer text-slate-500">
                         I agree to the{' '}
-                        <Link href="/terms" className="font-medium text-amber-400 hover:underline" target="_blank">Terms of Use</Link>
+                        <Link href="/terms" className="font-medium text-amber-600 hover:underline" target="_blank">Terms of Use</Link>
                         {' '}and{' '}
-                        <Link href="/privacy" className="font-medium text-amber-400 hover:underline" target="_blank">Privacy Policy</Link>
+                        <Link href="/privacy" className="font-medium text-amber-600 hover:underline" target="_blank">Privacy Policy</Link>
                       </label>
                     </div>
 
@@ -378,19 +378,19 @@ export default function SignupPage() {
                       {otpLoading ? 'Sending…' : 'Send Code'}
                     </button>
 
-                    <p className="text-center text-sm text-neutral-400">
+                    <p className="text-center text-sm text-slate-500">
                       Already have an account?{' '}
-                      <Link href="/login" className="font-medium text-amber-400 hover:underline">Log In</Link>
+                      <Link href="/login" className="font-medium text-amber-600 hover:underline">Log In</Link>
                     </p>
                   </form>
                 ) : (
                   <form onSubmit={handleVerifyOtp} className="space-y-5">
-                    <p className="text-sm text-neutral-400">
-                      Enter the 6-digit code sent to <span className="font-medium text-neutral-100">{otpEmail}</span>.
+                    <p className="text-sm text-slate-500">
+                      Enter the 6-digit code sent to <span className="font-medium text-slate-900">{otpEmail}</span>.
                     </p>
 
                     <div>
-                      <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-neutral-300">6-digit code</label>
+                      <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-slate-700">6-digit code</label>
                       <input
                         id="otp-code"
                         type="text"
@@ -401,7 +401,7 @@ export default function SignupPage() {
                         onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                         required
                         autoFocus
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500 text-center text-2xl tracking-widest font-mono"
+                        className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-center text-2xl tracking-widest font-mono"
                         placeholder="000000"
                       />
                     </div>
@@ -417,7 +417,7 @@ export default function SignupPage() {
                     <button
                       type="button"
                       onClick={() => { setOtpStep('email'); setOtpCode(''); setOtpError(''); }}
-                      className="w-full text-sm text-neutral-500 hover:text-neutral-300 transition"
+                      className="w-full text-sm text-slate-400 hover:text-slate-700 transition"
                     >
                       Use a different email
                     </button>
@@ -428,9 +428,9 @@ export default function SignupPage() {
           </div>
         </main>
 
-        <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+        <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
           <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-          <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
+          <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
         </footer>
       </div>
     </>

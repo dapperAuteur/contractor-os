@@ -13,10 +13,10 @@ export default function TermsPage() {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-gray-950 text-gray-200">
+      <main className="min-h-screen bg-slate-50 text-slate-800">
         <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold text-white mb-2">Terms of Use</h1>
-        <p className="text-gray-400 text-sm mb-10">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Terms of Use</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Last updated: March 11, 2026 &nbsp;&middot;&nbsp; Operated by B4C LLC / AwesomeWebStore.com
         </p>
 
@@ -24,8 +24,8 @@ export default function TermsPage() {
           <p>
             By creating an account or using Work.WitUS (&quot;the Platform,&quot; &quot;we,&quot; &quot;us&quot;), you agree to
             these Terms of Use, our{' '}
-            <Link href="/privacy" className="text-amber-400 hover:underline">Privacy Policy</Link>, and our{' '}
-            <Link href="/community" className="text-amber-400 hover:underline">Community Code of Conduct</Link>.
+            <Link href="/privacy" className="text-amber-600 hover:underline">Privacy Policy</Link>, and our{' '}
+            <Link href="/community" className="text-amber-600 hover:underline">Community Code of Conduct</Link>.
             If you do not agree, do not use the Platform.
           </p>
           <p className="mt-3">
@@ -73,7 +73,7 @@ export default function TermsPage() {
         </Section>
 
         <Section title="5. Financial Data — Your Responsibility">
-          <p className="font-semibold text-yellow-400">
+          <p className="font-semibold text-amber-700">
             IMPORTANT: Work.WitUS is a record-keeping and productivity tool. It is NOT an accounting
             firm, tax advisor, or financial services provider.
           </p>
@@ -122,7 +122,7 @@ export default function TermsPage() {
             You agree not to post content that is: unlawful, defamatory, harassing, sexually explicit,
             or that infringes on the intellectual property rights of others. We reserve the right to
             remove content that violates these standards or our{' '}
-            <Link href="/community" className="text-amber-400 hover:underline">Community Code of Conduct</Link>.
+            <Link href="/community" className="text-amber-600 hover:underline">Community Code of Conduct</Link>.
           </p>
         </Section>
 
@@ -203,7 +203,7 @@ export default function TermsPage() {
         <Section title="15. Contact">
           <p>
             Questions about these Terms? Contact us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
               hello@centenarianos.com
             </a>
             .
@@ -220,8 +220,8 @@ export default function TermsPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-semibold text-white mb-3">{title}</h2>
-      <div className="text-gray-300 text-sm leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-lg font-semibold text-slate-900 mb-3">{title}</h2>
+      <div className="text-slate-700 text-sm leading-relaxed space-y-2">{children}</div>
     </section>
   );
 }

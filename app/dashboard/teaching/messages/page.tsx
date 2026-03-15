@@ -107,9 +107,9 @@ export default function TeacherMessagesPage() {
         {/* Conversation list */}
         <div className={`w-full lg:w-72 shrink-0 ${activeConv ? 'hidden lg:block' : ''}`}>
           {conversations.length === 0 ? (
-            <div className="text-center py-12 bg-gray-900 border border-dashed border-gray-800 rounded-xl">
+            <div className="text-center py-12 bg-white border border-dashed border-slate-200 rounded-xl">
               <MessageCircle className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-              <p className="text-gray-500 text-sm">No messages yet.</p>
+              <p className="text-slate-400 text-sm">No messages yet.</p>
               <p className="text-gray-600 text-xs mt-1">Students will message you from course pages.</p>
             </div>
           ) : (
@@ -122,14 +122,14 @@ export default function TeacherMessagesPage() {
                     type="button"
                     onClick={() => setActiveConv({ courseId: conv.course_id, partnerId: conv.partner_id, partnerName: conv.partner_name })}
                     className={`w-full text-left p-3 rounded-xl transition ${
-                      isActive ? 'bg-amber-900/30 border border-amber-700/50' : 'bg-gray-900 border border-gray-800 hover:border-gray-700'
+                      isActive ? 'bg-amber-900/30 border border-amber-700/50' : 'bg-white border border-slate-200 hover:border-slate-200'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       {conv.partner_avatar ? (
                         <Image src={conv.partner_avatar} alt="" width={36} height={36} className="w-9 h-9 rounded-full object-cover shrink-0" />
                       ) : (
-                        <div className="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center text-gray-500 text-xs font-bold shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold shrink-0">
                           {conv.partner_name[0]?.toUpperCase()}
                         </div>
                       )}
@@ -142,7 +142,7 @@ export default function TeacherMessagesPage() {
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 truncate">{conv.course_title}</p>
+                        <p className="text-xs text-slate-400 truncate">{conv.course_title}</p>
                         <p className="text-xs text-gray-600 truncate mt-0.5">{conv.last_message}</p>
                       </div>
                     </div>
@@ -154,14 +154,14 @@ export default function TeacherMessagesPage() {
         </div>
 
         {/* Thread */}
-        <div className={`flex-1 flex flex-col bg-gray-900 border border-gray-800 rounded-xl overflow-hidden ${!activeConv ? 'hidden lg:flex' : ''}`}>
+        <div className={`flex-1 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden ${!activeConv ? 'hidden lg:flex' : ''}`}>
           {activeConv ? (
             <>
-              <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-800">
+              <div className="flex items-center gap-3 px-4 py-3 border-b border-slate-200">
                 <button
                   type="button"
                   onClick={() => setActiveConv(null)}
-                  className="lg:hidden p-1 text-gray-400 hover:text-white transition"
+                  className="lg:hidden p-1 text-slate-500 hover:text-white transition"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
@@ -185,10 +185,10 @@ export default function TeacherMessagesPage() {
                         <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
                           isMine
                             ? 'bg-amber-600 text-white rounded-br-md'
-                            : 'bg-gray-800 text-gray-200 rounded-bl-md'
+                            : 'bg-slate-100 text-slate-800 rounded-bl-md'
                         }`}>
                           <p className="text-sm whitespace-pre-wrap break-words">{msg.body}</p>
-                          <p className={`text-[10px] mt-1 ${isMine ? 'text-amber-200' : 'text-gray-500'}`}>
+                          <p className={`text-[10px] mt-1 ${isMine ? 'text-amber-200' : 'text-slate-400'}`}>
                             {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
@@ -199,7 +199,7 @@ export default function TeacherMessagesPage() {
                 <div ref={messagesEndRef} />
               </div>
 
-              <div className="border-t border-gray-800 p-3">
+              <div className="border-t border-slate-200 p-3">
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -207,7 +207,7 @@ export default function TeacherMessagesPage() {
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
                     placeholder="Type a message..."
-                    className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
+                    className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
                   />
                   <button
                     type="button"

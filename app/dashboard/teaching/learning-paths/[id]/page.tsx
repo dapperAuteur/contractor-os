@@ -258,19 +258,19 @@ export default function EditLearningPathPage() {
                 key={c.course_id}
                 className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3"
               >
-                <GripVertical className="w-4 h-4 text-gray-300 shrink-0" />
+                <GripVertical className="w-4 h-4 text-slate-700 shrink-0" />
                 <div className="flex flex-col gap-0.5 shrink-0">
                   <button
                     onClick={() => moveUp(i)}
                     disabled={i === 0}
-                    className="text-gray-300 hover:text-gray-500 disabled:opacity-20 text-xs leading-none"
+                    className="text-slate-700 hover:text-gray-500 disabled:opacity-20 text-xs leading-none"
                   >
                     ▲
                   </button>
                   <button
                     onClick={() => moveDown(i)}
                     disabled={i === courses.length - 1}
-                    className="text-gray-300 hover:text-gray-500 disabled:opacity-20 text-xs leading-none"
+                    className="text-slate-700 hover:text-gray-500 disabled:opacity-20 text-xs leading-none"
                   >
                     ▼
                   </button>
@@ -296,7 +296,7 @@ export default function EditLearningPathPage() {
                 </button>
                 <button
                   onClick={() => removeCourse(c.course_id)}
-                  className="text-gray-300 hover:text-red-400 transition"
+                  className="text-slate-700 hover:text-red-400 transition"
                   title="Remove from path"
                 >
                   <Trash2 className="w-4 h-4" />

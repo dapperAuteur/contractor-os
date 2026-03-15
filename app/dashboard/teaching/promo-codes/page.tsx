@@ -75,7 +75,7 @@ export default function PromoCodesPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Promo Codes</h1>
-          <p className="text-gray-400 text-sm mt-1">Discount codes applied at checkout via Stripe.</p>
+          <p className="text-slate-500 text-sm mt-1">Discount codes applied at checkout via Stripe.</p>
         </div>
         {!creating && (
           <button
@@ -88,22 +88,22 @@ export default function PromoCodesPage() {
       </div>
 
       {creating && (
-        <form onSubmit={handleCreate} className="bg-gray-900 border border-gray-800 rounded-xl p-6 mb-6 space-y-4">
+        <form onSubmit={handleCreate} className="bg-white border border-slate-200 rounded-xl p-6 mb-6 space-y-4">
           <h2 className="font-semibold text-white mb-2">Create Promo Code</h2>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs text-gray-300 mb-1">Code *</label>
+              <label className="block text-xs text-slate-700 mb-1">Code *</label>
               <input
                 required
                 value={form.code}
                 onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })}
                 placeholder="SUMMER20"
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm font-mono tracking-wide focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-white text-sm font-mono tracking-wide focus:outline-none focus:border-amber-500"
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-300 mb-1">Discount % *</label>
+              <label className="block text-xs text-slate-700 mb-1">Discount % *</label>
               <input
                 required
                 type="number"
@@ -111,30 +111,30 @@ export default function PromoCodesPage() {
                 max={100}
                 value={form.discount_percent}
                 onChange={(e) => setForm({ ...form, discount_percent: Number(e.target.value) })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs text-gray-300 mb-1">Max Uses (leave blank for unlimited)</label>
+              <label className="block text-xs text-slate-700 mb-1">Max Uses (leave blank for unlimited)</label>
               <input
                 type="number"
                 min={1}
                 value={form.max_uses}
                 onChange={(e) => setForm({ ...form, max_uses: e.target.value })}
                 placeholder="Unlimited"
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-300 mb-1">Expires At (optional)</label>
+              <label className="block text-xs text-slate-700 mb-1">Expires At (optional)</label>
               <input
                 type="datetime-local"
                 value={form.expires_at}
                 onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
               />
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function PromoCodesPage() {
             <button
               type="button"
               onClick={() => { setCreating(false); setForm(EMPTY_FORM); setError(''); }}
-              className="px-5 py-2 bg-gray-800 text-gray-300 rounded-lg text-sm hover:bg-gray-700 transition"
+              className="px-5 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-100 transition"
             >
               Cancel
             </button>
@@ -161,31 +161,31 @@ export default function PromoCodesPage() {
       )}
 
       {codes.length === 0 ? (
-        <div className="bg-gray-900 border border-gray-800 border-dashed rounded-xl p-16 text-center">
+        <div className="bg-white border border-slate-200 border-dashed rounded-xl p-16 text-center">
           <Tag className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-          <p className="text-gray-500">No promo codes yet.</p>
+          <p className="text-slate-400">No promo codes yet.</p>
         </div>
       ) : (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-800">
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Code</th>
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Discount</th>
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Uses</th>
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Expires</th>
+              <tr className="border-b border-slate-200">
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Code</th>
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Discount</th>
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Uses</th>
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Expires</th>
                 <th />
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-slate-200">
               {codes.map((c) => (
-                <tr key={c.id} className="hover:bg-gray-800/40 transition">
+                <tr key={c.id} className="hover:bg-slate-100/40 transition">
                   <td className="px-5 py-3 font-mono text-amber-300 font-medium">{c.code}</td>
                   <td className="px-5 py-3 text-white">{c.discount_percent}% off</td>
-                  <td className="px-5 py-3 text-gray-400">
+                  <td className="px-5 py-3 text-slate-500">
                     {c.uses_count}{c.max_uses ? ` / ${c.max_uses}` : ''}
                   </td>
-                  <td className="px-5 py-3 text-gray-500">
+                  <td className="px-5 py-3 text-slate-400">
                     {c.expires_at ? new Date(c.expires_at).toLocaleDateString() : '—'}
                   </td>
                   <td className="px-5 py-3">

@@ -35,7 +35,7 @@ export default function GlossaryTermRow({ term }: { term: GlossaryTerm }) {
       </button>
       {expanded && term.definition && (
         <div
-          className="mt-2 prose prose-invert prose-sm max-w-none text-gray-300"
+          className="mt-2 prose prose-invert prose-sm max-w-none text-slate-700"
           dangerouslySetInnerHTML={{ __html: renderTextContent(term.definition, term.definition_format) }}
         />
       )}

@@ -75,52 +75,52 @@ export default function AdminCoursesPage() {
 
   return (
     <div className="p-8 max-w-5xl">
-      <Link href="/admin/academy" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 transition">
+      <Link href="/admin/academy" className="flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-sm mb-6 transition min-h-11">
         <ChevronLeft className="w-4 h-4" /> Academy Settings
       </Link>
 
       <div className="flex items-center gap-3 mb-1">
-        <BookOpen className="w-6 h-6 text-amber-400" />
-        <h1 className="text-2xl font-bold text-white">Course Management</h1>
+        <BookOpen className="w-6 h-6 text-amber-600" />
+        <h1 className="text-2xl font-bold text-slate-900">Course Management</h1>
       </div>
-      <p className="text-gray-400 text-sm mb-8">
+      <p className="text-slate-500 text-sm mb-8">
         {courses.length} course{courses.length !== 1 ? 's' : ''} total. Unpublish or delete courses that violate guidelines, and contact teachers directly.
       </p>
 
       {courses.length === 0 ? (
-        <div className="bg-gray-900 border border-gray-800 border-dashed rounded-xl p-16 text-center">
-          <BookOpen className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-          <p className="text-gray-400">No courses yet.</p>
+        <div className="bg-white border border-slate-200 border-dashed rounded-xl p-16 text-center">
+          <BookOpen className="w-10 h-10 mx-auto mb-3 text-slate-300" />
+          <p className="text-slate-500">No courses yet.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {courses.map((course) => (
             <div
               key={course.id}
-              className="bg-gray-900 border border-gray-800 rounded-xl px-5 py-4"
+              className="bg-white border border-slate-200 rounded-xl px-5 py-4"
             >
               <div className="flex items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-white font-medium truncate">{course.title}</p>
+                    <p className="text-slate-900 font-medium truncate">{course.title}</p>
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      course.is_published ? 'bg-green-900/30 text-green-400' : 'bg-gray-800 text-gray-400'
+                      course.is_published ? 'bg-green-100 text-green-700' : 'bg-slate-100 text-slate-500'
                     }`}>
                       {course.is_published ? 'Published' : 'Draft'}
                     </span>
                     {course.category && (
-                      <span className="px-2 py-0.5 rounded-full text-xs bg-gray-800 text-gray-400">
+                      <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-500">
                         {course.category}
                       </span>
                     )}
                   </div>
-                  <p className="text-gray-400 text-sm mt-1">
-                    by <span className="text-gray-300">{course.teacher_name}</span>
+                  <p className="text-slate-500 text-sm mt-1">
+                    by <span className="text-slate-700">{course.teacher_name}</span>
                     {course.teacher_email && (
-                      <span className="text-gray-400"> ({course.teacher_email})</span>
+                      <span className="text-slate-500"> ({course.teacher_email})</span>
                     )}
                   </p>
-                  <p className="text-gray-400 text-xs mt-1">
+                  <p className="text-slate-500 text-xs mt-1">
                     {course.price_type === 'free'
                       ? 'Free'
                       : `$${course.price} · ${course.price_type === 'one_time' ? 'one-time' : 'subscription'}`}
@@ -138,10 +138,11 @@ export default function AdminCoursesPage() {
                     onClick={() => togglePublish(course)}
                     disabled={actionId === course.id}
                     title={course.is_published ? 'Unpublish' : 'Publish'}
-                    className={`w-9 h-9 flex items-center justify-center rounded-lg transition disabled:opacity-50 ${
+                    aria-label={course.is_published ? 'Unpublish course' : 'Publish course'}
+                    className={`min-w-11 min-h-11 flex items-center justify-center rounded-lg transition disabled:opacity-50 ${
                       course.is_published
-                        ? 'bg-green-900/30 text-green-400 hover:bg-green-900/50'
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
+                        : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                     }`}
                   >
                     {actionId === course.id
@@ -155,7 +156,8 @@ export default function AdminCoursesPage() {
                     href={`/academy/${course.id}`}
                     target="_blank"
                     title="Preview course"
-                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition"
+                    aria-label="Preview course"
+                    className="min-w-11 min-h-11 flex items-center justify-center rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
@@ -164,7 +166,8 @@ export default function AdminCoursesPage() {
                   <Link
                     href={`/admin/messages?email=${encodeURIComponent(course.teacher_email)}&subject=${encodeURIComponent(`Re: ${course.title}`)}`}
                     title="Contact teacher"
-                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-800 text-gray-500 hover:bg-blue-900/30 hover:text-blue-400 transition"
+                    aria-label="Contact teacher"
+                    className="min-w-11 min-h-11 flex items-center justify-center rounded-lg bg-slate-100 text-slate-400 hover:bg-blue-50 hover:text-blue-600 transition"
                   >
                     <Mail className="w-3.5 h-3.5" />
                   </Link>
@@ -175,7 +178,8 @@ export default function AdminCoursesPage() {
                     onClick={() => handleDelete(course.id, course.title)}
                     disabled={actionId === course.id}
                     title="Delete course"
-                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-gray-800 text-gray-500 hover:bg-red-900/30 hover:text-red-400 transition disabled:opacity-50"
+                    aria-label="Delete course"
+                    className="min-w-11 min-h-11 flex items-center justify-center rounded-lg bg-slate-100 text-slate-400 hover:bg-red-50 hover:text-red-500 transition disabled:opacity-50"
                   >
                     {actionId === course.id
                       ? <Loader2 className="w-3.5 h-3.5 animate-spin" />

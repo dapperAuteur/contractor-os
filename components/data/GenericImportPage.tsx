@@ -64,7 +64,7 @@ export default function GenericImportPage({
 
   return (
     <div className="p-4 sm:p-8 max-w-4xl">
-      <Link href={backHref} className="flex items-center gap-1.5 text-gray-500 hover:text-gray-900 text-sm mb-6 transition">
+      <Link href={backHref} className="flex items-center gap-1.5 text-slate-400 hover:text-gray-900 text-sm mb-6 transition">
         <ArrowLeft className="w-4 h-4" /> Back
       </Link>
 
@@ -91,7 +91,7 @@ export default function GenericImportPage({
       </div>
 
       {/* DataImporter */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 mb-6">
+      <div className="bg-white border border-slate-200 rounded-xl p-4 mb-6">
         <DataImporter
           label={`Upload ${moduleName} CSV`}
           columns={columns}
@@ -120,16 +120,16 @@ export default function GenericImportPage({
             <table className="w-full text-xs">
               <thead>
                 <tr className="bg-gray-50">
-                  <th className="px-3 py-2 text-left text-gray-500 font-medium">#</th>
+                  <th className="px-3 py-2 text-left text-slate-400 font-medium">#</th>
                   {displayCols.map((col) => (
-                    <th key={col} className="px-3 py-2 text-left text-gray-500 font-medium">{col}</th>
+                    <th key={col} className="px-3 py-2 text-left text-slate-400 font-medium">{col}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {rows.slice(0, 50).map((row, i) => (
                   <tr key={i} className="border-t border-gray-100">
-                    <td className="px-3 py-1.5 text-gray-400">{i + 1}</td>
+                    <td className="px-3 py-1.5 text-slate-500">{i + 1}</td>
                     {displayCols.map((col) => (
                       <td key={col} className="px-3 py-1.5 text-gray-700 max-w-[200px] truncate">{row[col] || ''}</td>
                     ))}
@@ -138,7 +138,7 @@ export default function GenericImportPage({
               </tbody>
             </table>
             {rows.length > 50 && (
-              <p className="px-4 py-2 text-xs text-gray-400 bg-gray-50 border-t border-gray-100">
+              <p className="px-4 py-2 text-xs text-slate-500 bg-gray-50 border-t border-gray-100">
                 Showing first 50 of {rows.length} rows
               </p>
             )}

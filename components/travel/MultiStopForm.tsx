@@ -213,26 +213,26 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
         onSubmit={handleSubmit}
         className="bg-white rounded-2xl p-6 pb-0 w-full max-w-lg space-y-4 shadow-xl max-h-[90vh] overflow-y-auto"
       >
-        <h2 className="text-lg font-bold text-gray-900">{isEdit ? 'Edit Multi-Stop Route' : 'Multi-Stop Route'}</h2>
+        <h2 className="text-lg font-bold text-slate-900">{isEdit ? 'Edit Multi-Stop Route' : 'Multi-Stop Route'}</h2>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Route Name</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Route Name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g., Morning Errands"
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Date</label>
+            <label className="block text-xs font-medium text-slate-600 mb-1">Date</label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
               required
             />
           </div>
@@ -240,17 +240,17 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
 
         {/* Stops */}
         <div className="space-y-2">
-          <label className="block text-xs font-medium text-gray-600">Stops</label>
+          <label className="block text-xs font-medium text-slate-600">Stops</label>
           {stops.map((stop, idx) => (
             <div key={idx}>
               {idx > 0 && (
                 <div className="flex items-center gap-2 py-1">
-                  <ArrowDown className="w-3 h-3 text-gray-400 mx-auto" />
+                  <ArrowDown className="w-3 h-3 text-slate-500 mx-auto" />
                 </div>
               )}
-              <div className="border border-gray-200 rounded-lg p-3 space-y-2 bg-gray-50/50">
+              <div className="border border-slate-200 rounded-lg p-3 space-y-2 bg-slate-50/50">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-gray-500">
+                  <span className="text-xs font-medium text-slate-400">
                     {idx === 0 ? 'Start' : `Stop ${idx}`}
                   </span>
                   {idx > 0 && stops.length > 2 && (
@@ -268,7 +268,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                   contactType="location"
                   placeholder={idx === 0 ? 'Starting location' : 'Destination'}
                   onChange={(name) => updateStop(idx, 'location', name)}
-                  inputClassName="w-full border border-gray-200 rounded-lg px-3 py-1.5 text-sm"
+                  inputClassName="w-full border border-slate-200 rounded-lg px-3 py-1.5 text-sm"
                   showLocations
                 />
                 {idx > 0 && (
@@ -276,7 +276,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                     <select
                       value={stop.mode}
                       onChange={(e) => updateStop(idx, 'mode', e.target.value)}
-                      className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs"
+                      className="border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                     >
                       {MODE_OPTIONS.map((m) => (
                         <option key={m} value={m}>{MODE_ICONS[m]} {m}</option>
@@ -288,14 +288,14 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                       value={stop.distance_miles}
                       onChange={(e) => updateStop(idx, 'distance_miles', e.target.value)}
                       placeholder="Miles"
-                      className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs"
+                      className="border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                     />
                     <input
                       type="number"
                       value={stop.duration_min}
                       onChange={(e) => updateStop(idx, 'duration_min', e.target.value)}
                       placeholder="Min"
-                      className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs"
+                      className="border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                     />
                     <input
                       type="number"
@@ -303,7 +303,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                       value={stop.cost}
                       onChange={(e) => updateStop(idx, 'cost', e.target.value)}
                       placeholder="$ Cost"
-                      className="border border-gray-200 rounded-lg px-2 py-1.5 text-xs"
+                      className="border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                     />
                   </div>
                 )}
@@ -319,7 +319,7 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                         : st
                       ));
                     }}
-                    className="w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs"
+                    className="w-full border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                   >
                     <option value="">No vehicle</option>
                     {vehicles.map((v) => (
@@ -349,9 +349,9 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                 type="checkbox"
                 checked={isRoundTrip}
                 onChange={(e) => setIsRoundTrip(e.target.checked)}
-                className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                className="rounded border-slate-300 text-amber-600 focus:ring-amber-500"
               />
-              <span className="text-xs font-medium text-gray-600">Round trip (return to start)</span>
+              <span className="text-xs font-medium text-slate-600">Round trip (return to start)</span>
             </label>
             {isRoundTrip && stops.length >= 2 && (() => {
               let d = 0, t = 0, c = 0;
@@ -379,29 +379,29 @@ export default function MultiStopForm({ vehicles, onClose, onSaved, editRouteId,
                 type="checkbox"
                 checked={saveTemplate}
                 onChange={(e) => setSaveTemplate(e.target.checked)}
-                className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                className="rounded border-slate-300 text-amber-600 focus:ring-amber-500"
               />
-              <span className="text-xs font-medium text-gray-600">Save as reusable template</span>
+              <span className="text-xs font-medium text-slate-600">Save as reusable template</span>
             </label>
           )}
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Notes</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">Notes</label>
           <input
             type="text"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Optional route notes"
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
 
-        <div className="sticky bottom-0 bg-white pt-3 pb-3 -mx-6 px-6 border-t border-gray-100 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <div className="sticky bottom-0 bg-white pt-3 pb-3 -mx-6 px-6 border-t border-slate-100 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 border border-gray-200 rounded-xl py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="flex-1 border border-slate-200 rounded-xl py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
           >
             Cancel
           </button>
