@@ -71,30 +71,30 @@ export default function AdminUsagePage() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Usage Analytics</h1>
-        <p className="text-sm text-gray-400 mt-1">Module usage, feature adoption, and user segmentation</p>
+        <p className="text-sm text-slate-500 mt-1">Module usage, feature adoption, and user segmentation</p>
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-gray-900 rounded-xl p-4">
+      <div className="bg-white rounded-xl p-4">
         <div className="flex flex-wrap items-center gap-3">
           <input
             type="date"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
-            className="bg-gray-800 text-sm text-white rounded-lg px-2 py-1.5 border border-gray-700 scheme-dark"
+            className="bg-slate-100 text-sm text-white rounded-lg px-2 py-1.5 border border-slate-200 scheme-dark"
           />
-          <span className="text-gray-400 text-sm">to</span>
+          <span className="text-slate-500 text-sm">to</span>
           <input
             type="date"
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
-            className="bg-gray-800 text-sm text-white rounded-lg px-2 py-1.5 border border-gray-700 scheme-dark"
+            className="bg-slate-100 text-sm text-white rounded-lg px-2 py-1.5 border border-slate-200 scheme-dark"
           />
 
           <select
             value={moduleFilter}
             onChange={(e) => setModuleFilter(e.target.value)}
-            className="bg-gray-800 text-sm text-white rounded-lg px-3 py-1.5 border border-gray-700 scheme-dark"
+            className="bg-slate-100 text-sm text-white rounded-lg px-3 py-1.5 border border-slate-200 scheme-dark"
           >
             {MODULE_OPTIONS.map((m) => (
               <option key={m} value={m}>{m === 'all' ? 'All Modules' : m.replace(/_/g, ' ')}</option>
@@ -104,24 +104,24 @@ export default function AdminUsagePage() {
           <select
             value={subFilter}
             onChange={(e) => setSubFilter(e.target.value)}
-            className="bg-gray-800 text-sm text-white rounded-lg px-3 py-1.5 border border-gray-700 scheme-dark"
+            className="bg-slate-100 text-sm text-white rounded-lg px-3 py-1.5 border border-slate-200 scheme-dark"
           >
             {SUB_OPTIONS.map((s) => (
               <option key={s} value={s}>{s === 'all' ? 'All Plans' : s.charAt(0).toUpperCase() + s.slice(1)}</option>
             ))}
           </select>
 
-          <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
             <input type="checkbox" checked={excludeAdmin} onChange={(e) => setExcludeAdmin(e.target.checked)} className="rounded" />
             Exclude admin
           </label>
-          <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
+          <label className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
             <input type="checkbox" checked={excludeDemo} onChange={(e) => setExcludeDemo(e.target.checked)} className="rounded" />
             Exclude demo
           </label>
 
-          <button onClick={fetchData} className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 transition ml-auto">
-            <RefreshCw className={`w-4 h-4 text-gray-400 ${loading ? 'animate-spin' : ''}`} />
+          <button onClick={fetchData} className="p-2 rounded-lg bg-slate-100 hover:bg-slate-100 transition ml-auto">
+            <RefreshCw className={`w-4 h-4 text-slate-500 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
@@ -129,26 +129,26 @@ export default function AdminUsagePage() {
       {/* Summary Cards */}
       {s && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-            <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider">
+          <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <Activity className="w-3.5 h-3.5" /> Total Events
             </div>
             <p className="text-2xl font-bold text-white mt-1">{s.totalEvents.toLocaleString()}</p>
           </div>
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-            <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider">
+          <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <Users className="w-3.5 h-3.5" /> Unique Users
             </div>
             <p className="text-2xl font-bold text-white mt-1">{s.uniqueUsers}</p>
           </div>
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-            <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider">
+          <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <TrendingUp className="w-3.5 h-3.5" /> Avg/Day
             </div>
             <p className="text-2xl font-bold text-white mt-1">{s.avgPerDay}</p>
           </div>
-          <div className="bg-gray-800 border border-gray-700 rounded-xl p-4">
-            <div className="flex items-center gap-2 text-xs text-gray-400 uppercase tracking-wider">
+          <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
+            <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <Star className="w-3.5 h-3.5" /> Top Module
             </div>
             <p className="text-2xl font-bold text-amber-400 mt-1">{s.topModule ?? '—'}</p>
@@ -160,8 +160,8 @@ export default function AdminUsagePage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Module Usage Bar Chart */}
           {data.byModule.length > 0 && (
-            <div className="bg-gray-900 rounded-xl p-5">
-              <h2 className="text-sm font-semibold text-gray-300 mb-4">Events by Module</h2>
+            <div className="bg-white rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-slate-700 mb-4">Events by Module</h2>
               <ResponsiveContainer width="100%" height={Math.max(200, data.byModule.length * 36)}>
                 <BarChart data={data.byModule} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" horizontal={false} />
@@ -176,8 +176,8 @@ export default function AdminUsagePage() {
 
           {/* Subscription Breakdown Pie Chart */}
           {data.bySubscription.length > 0 && (
-            <div className="bg-gray-900 rounded-xl p-5">
-              <h2 className="text-sm font-semibold text-gray-300 mb-4">Events by Plan Type</h2>
+            <div className="bg-white rounded-xl p-5">
+              <h2 className="text-sm font-semibold text-slate-700 mb-4">Events by Plan Type</h2>
               <ResponsiveContainer width="100%" height={280}>
                 <PieChart>
                   <Pie
@@ -202,8 +202,8 @@ export default function AdminUsagePage() {
 
           {/* Daily Activity Line Chart */}
           {data.byDay.length > 0 && (
-            <div className="bg-gray-900 rounded-xl p-5 lg:col-span-2">
-              <h2 className="text-sm font-semibold text-gray-300 mb-4">Daily Activity</h2>
+            <div className="bg-white rounded-xl p-5 lg:col-span-2">
+              <h2 className="text-sm font-semibold text-slate-700 mb-4">Daily Activity</h2>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={data.byDay} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
@@ -221,12 +221,12 @@ export default function AdminUsagePage() {
 
       {/* Top Features Table */}
       {data?.topFeatures && data.topFeatures.length > 0 && (
-        <div className="bg-gray-900 rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-gray-300 mb-4">Top Features</h2>
+        <div className="bg-white rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-slate-700 mb-4">Top Features</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-xs text-gray-300 uppercase border-b border-gray-800">
+                <tr className="text-xs text-slate-700 uppercase border-b border-slate-200">
                   <th className="text-left py-2 px-3">Module</th>
                   <th className="text-left py-2 px-3">Action</th>
                   <th className="text-left py-2 px-3">Detail</th>
@@ -235,11 +235,11 @@ export default function AdminUsagePage() {
               </thead>
               <tbody>
                 {data.topFeatures.map((f, i) => (
-                  <tr key={i} className="border-b border-gray-800/50 hover:bg-gray-800/30">
+                  <tr key={i} className="border-b border-slate-200/50 hover:bg-slate-100/30">
                     <td className="py-2 px-3 text-amber-400">{f.module}</td>
-                    <td className="py-2 px-3 text-gray-300">{f.action}</td>
-                    <td className="py-2 px-3 text-gray-400 truncate max-w-xs">{f.detail || '—'}</td>
-                    <td className="py-2 px-3 text-right text-gray-200 font-medium">{f.count}</td>
+                    <td className="py-2 px-3 text-slate-700">{f.action}</td>
+                    <td className="py-2 px-3 text-slate-500 truncate max-w-xs">{f.detail || '—'}</td>
+                    <td className="py-2 px-3 text-right text-slate-800 font-medium">{f.count}</td>
                   </tr>
                 ))}
               </tbody>
@@ -250,13 +250,13 @@ export default function AdminUsagePage() {
 
       {/* Actions by Type */}
       {data?.byAction && data.byAction.length > 0 && (
-        <div className="bg-gray-900 rounded-xl p-5">
-          <h2 className="text-sm font-semibold text-gray-300 mb-4">Events by Action Type</h2>
+        <div className="bg-white rounded-xl p-5">
+          <h2 className="text-sm font-semibold text-slate-700 mb-4">Events by Action Type</h2>
           <div className="flex flex-wrap gap-3">
             {data.byAction.map((a) => (
-              <div key={a.action} className="bg-gray-800 rounded-lg px-4 py-2">
-                <p className="text-xs text-gray-400">{a.action}</p>
-                <p className="text-lg font-bold text-gray-200">{a.count}</p>
+              <div key={a.action} className="bg-slate-100 rounded-lg px-4 py-2">
+                <p className="text-xs text-slate-500">{a.action}</p>
+                <p className="text-lg font-bold text-slate-800">{a.count}</p>
               </div>
             ))}
           </div>
@@ -264,7 +264,7 @@ export default function AdminUsagePage() {
       )}
 
       {!loading && !data?.summary?.totalEvents && (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-slate-400">
           <Activity className="w-8 h-8 mx-auto mb-2" />
           <p>No usage events recorded yet</p>
           <p className="text-xs mt-1">Events will appear as users interact with the app</p>

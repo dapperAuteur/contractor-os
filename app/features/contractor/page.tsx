@@ -14,20 +14,20 @@ export const metadata = {
 
 export default function ContractorFeaturesPage() {
   return (
-    <div className="min-h-screen bg-neutral-950">
+    <div className="min-h-screen bg-slate-50">
       {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-neutral-950/90 backdrop-blur border-b border-neutral-800">
+      <nav className="sticky top-0 z-50 bg-slate-50/90 backdrop-blur border-b border-slate-200">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-14">
           <Link
             href="/"
-            className="flex items-center gap-2 text-neutral-400 hover:text-neutral-200 transition text-sm font-medium min-h-11"
+            className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition text-sm font-medium min-h-11"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             Home
           </Link>
           <Link
             href="/features/lister"
-            className="text-indigo-400 hover:text-indigo-300 text-sm font-medium transition min-h-11 flex items-center"
+            className="text-indigo-600 hover:text-indigo-500 text-sm font-medium transition min-h-11 flex items-center"
           >
             CrewOps Features →
           </Link>
@@ -38,12 +38,12 @@ export default function ContractorFeaturesPage() {
         {/* Hero */}
         <div className="mb-12">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-500/10 mb-5">
-            <HardHat className="w-7 h-7 text-amber-400" aria-hidden="true" />
+            <HardHat className="w-7 h-7 text-amber-600" aria-hidden="true" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-neutral-100 mb-3">
+          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">
             Work.WitUS Features
           </h1>
-          <p className="text-lg text-neutral-400 max-w-2xl">
+          <p className="text-lg text-slate-500 max-w-2xl">
             Everything a contractor needs to manage gigs, track earnings, and run their business — from assignment through payment.
           </p>
         </div>
@@ -56,7 +56,7 @@ export default function ContractorFeaturesPage() {
 
           return (
             <div key={group.label} className="mb-10">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-4">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">
                 {group.label}
               </h2>
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -78,7 +78,7 @@ export default function ContractorFeaturesPage() {
           </Link>
           <Link
             href="/features/lister"
-            className="flex items-center justify-center px-6 py-3 border border-neutral-700 text-neutral-200 hover:bg-neutral-800 rounded-xl text-sm font-semibold transition min-h-11"
+            className="flex items-center justify-center px-6 py-3 border border-slate-200 text-slate-800 hover:bg-slate-100 rounded-xl text-sm font-semibold transition min-h-11"
           >
             Explore CrewOps (Lister) Features
           </Link>

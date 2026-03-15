@@ -114,7 +114,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
 
   return (
     <div className="space-y-2">
-      {label && <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">{label}</p>}
+      {label && <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{label}</p>}
 
       {/* Mode tabs */}
       <div className="flex gap-1">
@@ -122,7 +122,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
           type="button"
           onClick={() => setMode('file')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-            mode === 'file' ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            mode === 'file' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
           }`}
         >
           <Upload className="w-3 h-3" /> CSV File
@@ -131,7 +131,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
           type="button"
           onClick={() => setMode('sheets')}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition ${
-            mode === 'sheets' ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+            mode === 'sheets' ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
           }`}
         >
           <FileSpreadsheet className="w-3 h-3" /> Google Sheets
@@ -140,7 +140,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
           <a
             href={templateCsvUrl}
             download
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition ml-auto"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition ml-auto"
           >
             <Download className="w-3 h-3" /> Template
           </a>
@@ -155,7 +155,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
             type="file"
             accept=".csv,text/csv"
             onChange={handleFileUpload}
-            className="block w-full text-sm text-gray-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-gray-800 file:text-gray-300 hover:file:bg-gray-700 file:cursor-pointer file:transition"
+            className="block w-full text-sm text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 file:cursor-pointer file:transition"
           />
         </div>
       )}
@@ -168,7 +168,7 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
             value={sheetsUrl}
             onChange={(e) => setSheetsUrl(e.target.value)}
             placeholder="https://docs.google.com/spreadsheets/d/..."
-            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+            className="flex-1 bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500"
           />
           <button
             type="button"
@@ -182,12 +182,12 @@ export default function DataImporter({ columns, onImport, templateCsvUrl, label 
       )}
 
       {/* Expected columns hint */}
-      <p className="text-[10px] text-gray-600">
+      <p className="text-[10px] text-slate-400">
         Columns: {columns.map((c) => `${c.label}${c.required ? '*' : ''}`).join(', ')}
       </p>
 
       {/* Status */}
-      {loading && <p className="text-xs text-gray-500 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Importing...</p>}
+      {loading && <p className="text-xs text-slate-400 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Importing...</p>}
       {error && <p className="text-xs text-red-400 flex items-center gap-1"><AlertCircle className="w-3 h-3" /> {error}</p>}
       {rowCount !== null && !error && <p className="text-xs text-green-400">Imported {rowCount} rows</p>}
     </div>

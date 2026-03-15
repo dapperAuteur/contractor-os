@@ -42,8 +42,8 @@ const TYPE_LABEL: Record<string, string> = {
 };
 
 const TYPE_COLOR: Record<string, string> = {
-  blog_like:   'bg-amber-900/40 text-amber-300',
-  blog_save:   'bg-amber-900/40 text-amber-300',
+  blog_like:   'bg-amber-100 text-amber-700',
+  blog_save:   'bg-amber-100 text-amber-700',
 };
 
 function timeAgo(iso: string): string {
@@ -70,27 +70,27 @@ function TopContentTable({
   urlBase: (item: TopPost) => string;
 }) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-      <div className="flex items-center gap-2 px-5 py-3 border-b border-gray-800">
-        <Icon className="w-4 h-4 text-gray-400" />
-        <h3 className="text-sm font-semibold text-gray-300">{title}</h3>
+    <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
+      <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-200">
+        <Icon className="w-4 h-4 text-slate-500" />
+        <h3 className="text-sm font-semibold text-slate-700">{title}</h3>
       </div>
       {posts.length === 0 ? (
-        <p className="px-5 py-8 text-center text-gray-400 text-sm">No data yet</p>
+        <p className="px-5 py-8 text-center text-slate-500 text-sm">No data yet</p>
       ) : (
         <table className="w-full text-sm" aria-label={title}>
           <tbody>
             {posts.map((item, i) => {
               const name = ('name' in item ? item.name : item.title) as string;
               return (
-                <tr key={item.id} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition">
-                  <td className="px-4 py-2.5 text-gray-400 text-xs w-7">{i + 1}</td>
+                <tr key={item.id} className="border-b border-slate-100 hover:bg-slate-50 transition">
+                  <td className="px-4 py-2.5 text-slate-500 text-xs w-7">{i + 1}</td>
                   <td className="px-2 py-2.5 min-w-0">
-                    <p className="text-white text-sm truncate max-w-xs">{name}</p>
-                    <p className="text-gray-400 text-xs">@{item.username}</p>
+                    <p className="text-slate-900 text-sm truncate max-w-xs">{name}</p>
+                    <p className="text-slate-500 text-xs">@{item.username}</p>
                   </td>
                   <td className="px-4 py-2.5 text-right">
-                    <span className="text-amber-400 font-semibold text-sm">{item[countKey]}</span>
+                    <span className="text-amber-600 font-semibold text-sm">{item[countKey]}</span>
                   </td>
                   <td className="px-3 py-2.5 w-8">
                     <a
@@ -98,7 +98,7 @@ function TopContentTable({
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Open ${name}`}
-                      className="text-gray-400 hover:text-white transition"
+                      className="text-slate-500 hover:text-slate-900 transition"
                     >
                       <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
                     </a>
@@ -141,33 +141,33 @@ export default function AdminEngagementPage() {
   return (
     <div className="p-8 space-y-10">
       <div>
-        <h1 className="text-2xl font-bold text-white mb-1">Engagement</h1>
-        <p className="text-gray-400 text-sm">Likes, saves, and activity across all content — last 30 days.</p>
+        <h1 className="text-2xl font-bold text-slate-900 mb-1">Engagement</h1>
+        <p className="text-slate-500 text-sm">Likes, saves, and activity across all content — last 30 days.</p>
       </div>
 
-      {/* ── Activity Timeline ────────────────────────────────────────────────── */}
+      {/* Activity Timeline */}
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">Activity Timeline</h2>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-4">Activity Timeline</h2>
+        <div className="bg-white border border-slate-200 rounded-xl p-5">
           {data.activityByDay.every((d) => d.blog_likes + d.blog_saves === 0) ? (
-            <p className="text-center text-gray-400 py-10 text-sm">No activity in the last 30 days.</p>
+            <p className="text-center text-slate-500 py-10 text-sm">No activity in the last 30 days.</p>
           ) : (
             <ResponsiveContainer width="100%" height={280}>
               <LineChart data={data.activityByDay} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                 <XAxis
                   dataKey="date"
-                  tick={{ fontSize: 11, fill: '#6b7280' }}
-                  tickFormatter={(v: string) => v.slice(5)} // MM-DD
+                  tick={{ fontSize: 11, fill: '#64748b' }}
+                  tickFormatter={(v: string) => v.slice(5)}
                   interval={4}
                 />
-                <YAxis tick={{ fontSize: 11, fill: '#6b7280' }} allowDecimals={false} />
+                <YAxis tick={{ fontSize: 11, fill: '#64748b' }} allowDecimals={false} />
                 <Tooltip
-                  contentStyle={{ background: '#111827', border: '1px solid #374151', borderRadius: 8 }}
-                  labelStyle={{ color: '#9ca3af', fontSize: 12 }}
+                  contentStyle={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 8 }}
+                  labelStyle={{ color: '#64748b', fontSize: 12 }}
                   itemStyle={{ fontSize: 12 }}
                 />
-                <Legend wrapperStyle={{ fontSize: 12, color: '#9ca3af' }} />
+                <Legend wrapperStyle={{ fontSize: 12, color: '#64748b' }} />
                 <Line type="monotone" dataKey="blog_likes"   name="Blog Likes"    stroke="#f59e0b" strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey="blog_saves"   name="Blog Saves"    stroke="#d97706" strokeWidth={2} dot={false} />
               </LineChart>
@@ -176,9 +176,9 @@ export default function AdminEngagementPage() {
         </div>
       </section>
 
-      {/* ── Top Liked Content ────────────────────────────────────────────────── */}
+      {/* Most Liked */}
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">Most Liked</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-4">Most Liked</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <TopContentTable
             title="Blog Posts"
@@ -190,9 +190,9 @@ export default function AdminEngagementPage() {
         </div>
       </section>
 
-      {/* ── Top Saved Content ────────────────────────────────────────────────── */}
+      {/* Most Saved */}
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">Most Saved</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-4">Most Saved</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <TopContentTable
             title="Blog Posts"
@@ -204,16 +204,16 @@ export default function AdminEngagementPage() {
         </div>
       </section>
 
-      {/* ── Recent Activity Feed ─────────────────────────────────────────────── */}
+      {/* Recent Activity Feed */}
       <section>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-4">Recent Activity</h2>
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-4">Recent Activity</h2>
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           {data.recentActivity.length === 0 ? (
-            <p className="px-5 py-10 text-center text-gray-400 text-sm">No activity yet.</p>
+            <p className="px-5 py-10 text-center text-slate-500 text-sm">No activity yet.</p>
           ) : (
             <table className="w-full text-sm" aria-label="Recent activity">
               <thead>
-                <tr className="border-b border-gray-800 text-gray-300 text-xs uppercase tracking-wide">
+                <tr className="border-b border-slate-200 text-slate-700 text-xs uppercase tracking-wide">
                   <th className="text-left px-4 py-3">Type</th>
                   <th className="text-left px-4 py-3 hidden sm:table-cell">User</th>
                   <th className="text-left px-4 py-3">Content</th>
@@ -222,7 +222,7 @@ export default function AdminEngagementPage() {
               </thead>
               <tbody>
                 {data.recentActivity.map((entry, i) => (
-                  <tr key={i} className="border-b border-gray-800/50 hover:bg-gray-800/30 transition">
+                  <tr key={i} className="border-b border-slate-100 hover:bg-slate-50 transition">
                     <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded text-xs font-semibold ${TYPE_COLOR[entry.type]}`}>
                         {entry.type === 'blog_like' || entry.type === 'blog_save'
@@ -232,8 +232,8 @@ export default function AdminEngagementPage() {
                         {TYPE_LABEL[entry.type]}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-gray-300 hidden sm:table-cell">
-                      <Link href={`/admin/users`} className="hover:text-white transition">
+                    <td className="px-4 py-3 text-slate-700 hidden sm:table-cell">
+                      <Link href={`/admin/users`} className="hover:text-slate-900 transition">
                         @{entry.actor_username}
                       </Link>
                     </td>
@@ -242,13 +242,13 @@ export default function AdminEngagementPage() {
                         href={entry.content_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-300 hover:text-white flex items-center gap-1.5 transition"
+                        className="text-slate-700 hover:text-slate-900 flex items-center gap-1.5 transition"
                       >
                         <span className="truncate max-w-xs">{entry.content_title}</span>
-                        <ExternalLink className="w-3 h-3 shrink-0 text-gray-400" aria-hidden="true" />
+                        <ExternalLink className="w-3 h-3 shrink-0 text-slate-500" aria-hidden="true" />
                       </a>
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-400 text-xs whitespace-nowrap">
+                    <td className="px-4 py-3 text-right text-slate-500 text-xs whitespace-nowrap">
                       {timeAgo(entry.created_at)}
                     </td>
                   </tr>

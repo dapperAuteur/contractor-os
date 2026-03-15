@@ -92,59 +92,59 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
   return (
     <div className="p-8 max-w-2xl">
-      <Link href="/admin/users" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm mb-6 transition">
+      <Link href="/admin/users" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 text-sm mb-6 transition min-h-11">
         <ArrowLeft className="w-4 h-4" /> Back to Users
       </Link>
 
-      <h1 className="text-2xl font-bold text-white mb-1">{email ?? profile.username}</h1>
-      <p className="text-gray-400 text-sm mb-8">@{profile.username} · joined {new Date(profile.created_at).toLocaleDateString()}</p>
+      <h1 className="text-2xl font-bold text-slate-900 mb-1">{email ?? profile.username}</h1>
+      <p className="text-slate-500 text-sm mb-8">@{profile.username} · joined {new Date(profile.created_at).toLocaleDateString()}</p>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
         {[['Focus Sessions', stats.focusSessions], ['Blog Posts', stats.blogPosts]].map(([label, val]) => (
-          <div key={label as string} className="bg-gray-900 border border-gray-800 rounded-xl p-4 text-center">
-            <p className="text-2xl font-bold text-white">{val}</p>
-            <p className="text-gray-400 text-xs mt-1">{label}</p>
+          <div key={label as string} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
+            <p className="text-2xl font-bold text-slate-900">{val}</p>
+            <p className="text-slate-500 text-xs mt-1">{label}</p>
           </div>
         ))}
       </div>
 
       {/* Subscription Override */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-4">
-        <h2 className="font-semibold text-white mb-3">Subscription</h2>
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-4">
+        <h2 className="font-semibold text-slate-900 mb-3">Subscription</h2>
         <div className="flex gap-2 flex-wrap">
           {SUBSCRIPTION_OPTIONS.map((s) => (
             <button
               key={s}
               onClick={() => setSubStatus(s)}
-              className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${subStatus === s ? 'bg-amber-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-semibold transition min-h-11 ${subStatus === s ? 'bg-amber-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
             >
               {s}
             </button>
           ))}
         </div>
         {profile.stripe_customer_id && (
-          <p className="mt-3 text-xs text-gray-400">Stripe customer: {profile.stripe_customer_id}</p>
+          <p className="mt-3 text-xs text-slate-500">Stripe customer: {profile.stripe_customer_id}</p>
         )}
       </div>
 
       {/* Cancellation details — only shown when present */}
       {(profile.cancel_at_period_end || profile.cancellation_feedback || profile.cancellation_comment) && (
-        <div className="bg-amber-900/20 border border-amber-700/40 rounded-xl p-5 mb-4">
-          <h2 className="font-semibold text-amber-300 mb-3">Cancellation Details</h2>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-4">
+          <h2 className="font-semibold text-amber-700 mb-3">Cancellation Details</h2>
           {profile.cancel_at_period_end && profile.cancel_at && (
-            <p className="text-sm text-amber-200 mb-2">
+            <p className="text-sm text-amber-800 mb-2">
               <span className="font-medium">Cancels on:</span>{' '}
               {new Date(profile.cancel_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
             </p>
           )}
           {profile.cancellation_feedback && (
-            <p className="text-sm text-amber-200 mb-1">
+            <p className="text-sm text-amber-800 mb-1">
               <span className="font-medium">Reason:</span> {profile.cancellation_feedback}
             </p>
           )}
           {profile.cancellation_comment && (
-            <p className="text-sm text-amber-200">
+            <p className="text-sm text-amber-800">
               <span className="font-medium">Comment:</span> {profile.cancellation_comment}
             </p>
           )}
@@ -152,10 +152,10 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       )}
 
       {/* Promo Code */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-6">
-        <h2 className="font-semibold text-white mb-3">Shirt Promo Code</h2>
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6">
+        <h2 className="font-semibold text-slate-900 mb-3">Shirt Promo Code</h2>
         {profile.subscription_status !== 'lifetime' && subStatus !== 'lifetime' && (
-          <p className="text-sm text-gray-400 mb-3">Only applies to lifetime members.</p>
+          <p className="text-sm text-slate-500 mb-3">Only applies to lifetime members.</p>
         )}
         <div className="flex gap-2">
           <input
@@ -163,13 +163,14 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
             value={promoInput}
             onChange={(e) => setPromoInput(e.target.value.toUpperCase())}
             placeholder="CENT-XXXXXX"
-            className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2.5 text-sm text-white font-mono placeholder-gray-600 focus:outline-none focus:border-amber-500"
+            className="flex-1 bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-sm text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
           />
           <button
             onClick={retryPromo}
             disabled={retrying}
             title="Auto-generate via Shopify API"
-            className="flex items-center gap-1.5 px-3 py-2 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition text-xs font-semibold disabled:opacity-50"
+            aria-label="Auto-generate promo code via Shopify API"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition text-xs font-semibold disabled:opacity-50 min-h-11"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${retrying ? 'animate-spin' : ''}`} />
             Retry Shopify
@@ -179,7 +180,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
       {/* Feedback */}
       {message && (
-        <div className={`flex items-center gap-2 rounded-lg px-4 py-3 mb-4 text-sm ${message.type === 'ok' ? 'bg-green-900/30 text-green-300' : 'bg-red-900/30 text-red-300'}`}>
+        <div className={`flex items-center gap-2 rounded-lg px-4 py-3 mb-4 text-sm ${message.type === 'ok' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
           {message.type === 'ok' ? <CheckCircle className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
           {message.text}
         </div>
@@ -188,7 +189,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
       <button
         onClick={saveChanges}
         disabled={saving}
-        className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition font-semibold text-sm disabled:opacity-60"
+        className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg hover:bg-amber-500 transition font-semibold text-sm disabled:opacity-60 min-h-11"
       >
         <Save className="w-4 h-4" />
         {saving ? 'Saving…' : 'Save Changes'}

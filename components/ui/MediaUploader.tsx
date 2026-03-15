@@ -67,7 +67,7 @@ export default function MediaUploader({
   const isVideo = currentUrl ? /\.(mp4|webm|mov|avi)/.test(currentUrl) || currentUrl.includes('/video/') : false;
 
   const btnBase = dark
-    ? 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-700 text-gray-300 hover:bg-gray-600 transition disabled:opacity-50'
+    ? 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-700 text-slate-700 hover:bg-gray-600 transition disabled:opacity-50'
     : 'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition disabled:opacity-50';
 
   return (

@@ -42,16 +42,16 @@ function getTheme(mode: 'main' | 'contractor' | 'lister') {
       pageBg: '',
       heading: 'text-gray-900',
       body: 'text-gray-600',
-      secondary: 'text-gray-500',
-      tertiary: 'text-gray-500',
+      secondary: 'text-slate-400',
+      tertiary: 'text-slate-400',
       accent: 'text-amber-600',
       accentLight: 'text-amber-500',
       accentHover: 'hover:text-amber-700',
       cardBg: 'bg-white border-gray-200 hover:border-amber-300 hover:shadow-md',
       cardHeadingHover: 'group-hover:text-amber-700',
       coverBg: 'bg-gray-100',
-      iconPlaceholder: 'text-gray-400',
-      numberBg: 'bg-gray-100 text-gray-500',
+      iconPlaceholder: 'text-slate-500',
+      numberBg: 'bg-gray-100 text-slate-400',
       reasonBg: 'text-amber-600 bg-amber-500/10 border-amber-500/10',
       ctaBg: 'bg-amber-500/10 border-amber-500/10 text-amber-700',
       spinnerBorder: 'border-amber-500',
@@ -61,21 +61,21 @@ function getTheme(mode: 'main' | 'contractor' | 'lister') {
   }
   const isContractor = mode === 'contractor';
   return {
-    pageBg: 'bg-neutral-950 text-neutral-100',
-    heading: 'text-neutral-100',
-    body: 'text-neutral-300',
-    secondary: 'text-neutral-400',
-    tertiary: 'text-neutral-500',
+    pageBg: 'bg-slate-50 text-slate-900',
+    heading: 'text-slate-900',
+    body: 'text-slate-700',
+    secondary: 'text-slate-500',
+    tertiary: 'text-slate-400',
     accent: isContractor ? 'text-amber-400' : 'text-indigo-400',
     accentLight: isContractor ? 'text-amber-400' : 'text-indigo-400',
     accentHover: isContractor ? 'hover:text-amber-300' : 'hover:text-indigo-300',
     cardBg: isContractor
-      ? 'bg-neutral-900 border-neutral-700 hover:border-amber-500 hover:shadow-md'
-      : 'bg-neutral-900 border-neutral-700 hover:border-indigo-500 hover:shadow-md',
+      ? 'bg-white border-slate-200 hover:border-amber-500 hover:shadow-md'
+      : 'bg-white border-slate-200 hover:border-indigo-500 hover:shadow-md',
     cardHeadingHover: isContractor ? 'group-hover:text-amber-400' : 'group-hover:text-indigo-400',
-    coverBg: 'bg-neutral-800',
-    iconPlaceholder: 'text-neutral-500',
-    numberBg: 'bg-neutral-800 text-neutral-400',
+    coverBg: 'bg-slate-100',
+    iconPlaceholder: 'text-slate-400',
+    numberBg: 'bg-slate-100 text-slate-500',
     reasonBg: isContractor
       ? 'text-amber-300 bg-amber-950 border-amber-800'
       : 'text-indigo-300 bg-indigo-950 border-indigo-800',

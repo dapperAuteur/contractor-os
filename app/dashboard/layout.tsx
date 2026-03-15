@@ -138,7 +138,7 @@ export default function DashboardLayout({
   if (loading) {
     const accent = appMode === 'lister' ? 'border-indigo-500' : 'border-amber-500';
     return (
-      <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className={`animate-spin h-8 w-8 border-4 ${accent} border-t-transparent rounded-full`} />
       </div>
     );

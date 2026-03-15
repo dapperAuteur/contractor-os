@@ -62,16 +62,16 @@ export default function NewCoursePage() {
 
   return (
     <div className="p-8 pb-24 lg:pb-8 max-w-2xl">
-      <Link href="/dashboard/teaching" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 transition">
+      <Link href="/dashboard/teaching" className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm mb-6 transition">
         <ChevronLeft className="w-4 h-4" /> Teaching Dashboard
       </Link>
 
       <h1 className="text-2xl font-bold text-white mb-8">New Course</h1>
 
-      <div className="space-y-6 dark-input">
+      <div className="space-y-6">
         {/* Title */}
         <div>
-          <label htmlFor="course-title" className="block text-sm text-gray-300 mb-2">Course Title *</label>
+          <label htmlFor="course-title" className="block text-sm text-slate-700 mb-2">Course Title *</label>
           <input
             id="course-title"
             type="text"
@@ -80,31 +80,31 @@ export default function NewCoursePage() {
             value={form.title}
             onChange={(e) => set('title', e.target.value)}
             placeholder="e.g. Longevity Movement Fundamentals"
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label htmlFor="course-description" className="block text-sm text-gray-300 mb-2">Description</label>
+          <label htmlFor="course-description" className="block text-sm text-slate-700 mb-2">Description</label>
           <textarea
             id="course-description"
             value={form.description}
             onChange={(e) => set('description', e.target.value)}
             rows={4}
             placeholder="What will students learn? Who is this for?"
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm resize-none"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm resize-none"
           />
         </div>
 
         {/* Category */}
         <div>
-          <label htmlFor="course-category" className="block text-sm text-gray-300 mb-2">Category</label>
+          <label htmlFor="course-category" className="block text-sm text-slate-700 mb-2">Category</label>
           <select
             id="course-category"
             value={form.category}
             onChange={(e) => set('category', e.target.value)}
-            className="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 text-sm"
+            className="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 text-sm"
           >
             <option value="">Select a category…</option>
             {categories.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -113,7 +113,7 @@ export default function NewCoursePage() {
 
         {/* Pricing */}
         <fieldset>
-          <legend className="block text-sm text-gray-300 mb-2">Pricing</legend>
+          <legend className="block text-sm text-slate-700 mb-2">Pricing</legend>
           <div className="grid grid-cols-3 gap-2 mb-3" role="radiogroup" aria-label="Pricing type">
             {(['free', 'one_time', 'subscription'] as const).map((pt) => (
               <button
@@ -125,7 +125,7 @@ export default function NewCoursePage() {
                 className={`px-3 py-2.5 rounded-xl border text-sm font-medium transition ${
                   form.price_type === pt
                     ? 'bg-amber-900/40 border-amber-600 text-amber-300'
-                    : 'bg-gray-900 border-gray-700 text-gray-400 hover:border-gray-600'
+                    : 'bg-white border-slate-200 text-slate-500 hover:border-gray-600'
                 }`}
               >
                 {pt === 'free' ? 'Free' : pt === 'one_time' ? 'One-time' : 'Subscription'}
@@ -134,7 +134,7 @@ export default function NewCoursePage() {
           </div>
           {form.price_type !== 'free' && (
             <div className="flex items-center gap-2">
-              <span className="text-gray-500 text-sm">$</span>
+              <span className="text-slate-400 text-sm">$</span>
               <input
                 id="course-price"
                 type="number"
@@ -144,16 +144,16 @@ export default function NewCoursePage() {
                 onChange={(e) => set('price', e.target.value)}
                 placeholder="0.00"
                 aria-label={`Price in dollars${form.price_type === 'subscription' ? ' per month' : ''}`}
-                className="w-32 bg-gray-900 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500 text-sm"
+                className="w-32 bg-white border border-slate-200 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-amber-500 text-sm"
               />
-              {form.price_type === 'subscription' && <span className="text-gray-500 text-sm">/ month</span>}
+              {form.price_type === 'subscription' && <span className="text-slate-400 text-sm">/ month</span>}
             </div>
           )}
         </fieldset>
 
         {/* Navigation mode */}
         <fieldset>
-          <legend className="block text-sm text-gray-300 mb-2">Learning Path Style</legend>
+          <legend className="block text-sm text-slate-700 mb-2">Learning Path Style</legend>
           <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="Navigation mode">
             <button
               type="button"
@@ -163,12 +163,12 @@ export default function NewCoursePage() {
               className={`p-4 rounded-xl border text-left transition ${
                 form.navigation_mode === 'linear'
                   ? 'bg-amber-900/20 border-amber-600'
-                  : 'bg-gray-900 border-gray-700 hover:border-gray-600'
+                  : 'bg-white border-slate-200 hover:border-gray-600'
               }`}
             >
               <ArrowRight className="w-5 h-5 text-amber-400 mb-2" aria-hidden="true" />
               <p className="font-semibold text-white text-sm">Linear</p>
-              <p className="text-gray-400 text-xs mt-1">Students follow lessons in order, step by step.</p>
+              <p className="text-slate-500 text-xs mt-1">Students follow lessons in order, step by step.</p>
             </button>
             <button
               type="button"
@@ -178,12 +178,12 @@ export default function NewCoursePage() {
               className={`p-4 rounded-xl border text-left transition ${
                 form.navigation_mode === 'cyoa'
                   ? 'bg-amber-900/20 border-amber-600'
-                  : 'bg-gray-900 border-gray-700 hover:border-gray-600'
+                  : 'bg-white border-slate-200 hover:border-gray-600'
               }`}
             >
               <GitBranch className="w-5 h-5 text-amber-400 mb-2" aria-hidden="true" />
               <p className="font-semibold text-white text-sm">Adventure (CYOA)</p>
-              <p className="text-gray-400 text-xs mt-1">AI recommends branching paths after each lesson.</p>
+              <p className="text-slate-500 text-xs mt-1">AI recommends branching paths after each lesson.</p>
             </button>
           </div>
         </fieldset>
@@ -200,7 +200,7 @@ export default function NewCoursePage() {
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {saving ? 'Creating…' : 'Create Course'}
           </button>
-          <Link href="/dashboard/teaching" className="text-gray-500 hover:text-gray-300 text-sm">Cancel</Link>
+          <Link href="/dashboard/teaching" className="text-slate-400 hover:text-slate-700 text-sm">Cancel</Link>
         </div>
       </div>
     </div>

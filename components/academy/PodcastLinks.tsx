@@ -27,9 +27,9 @@ export default function PodcastLinks({ podcastLinks }: PodcastLinksProps) {
   if (validLinks.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-3 mb-6 p-3 bg-gray-900 border border-gray-800 rounded-xl">
-      <Headphones className="w-4 h-4 text-gray-400 shrink-0" />
-      <span className="text-sm text-gray-400">Also available as a podcast:</span>
+    <div className="flex flex-wrap items-center gap-3 mb-6 p-3 bg-white border border-slate-200 rounded-xl">
+      <Headphones className="w-4 h-4 text-slate-500 shrink-0" />
+      <span className="text-sm text-slate-500">Also available as a podcast:</span>
       {validLinks.map((link, i) => {
         const platform = detectPlatform(link.url);
         const displayLabel = link.label?.trim() || platform.name;

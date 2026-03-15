@@ -41,7 +41,7 @@ export default function TeachLandingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
+    <main className="min-h-screen bg-slate-50 text-white">
       {/* Hero */}
       <section className="max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
         <span className="inline-block px-3 py-1 mb-6 rounded-full bg-amber-900/50 text-amber-300 text-sm font-medium">
@@ -51,7 +51,7 @@ export default function TeachLandingPage() {
           Share your knowledge.<br />
           Build a sustainable income.
         </h1>
-        <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+        <p className="text-xl text-slate-500 max-w-2xl mx-auto">
           Host free or paid courses on Work.WitUS. Reach an audience obsessed with living
           healthier, longer lives — and get paid directly through Stripe.
         </p>
@@ -60,19 +60,19 @@ export default function TeachLandingPage() {
       {/* Benefits */}
       <section className="max-w-4xl mx-auto px-6 pb-16 grid grid-cols-1 sm:grid-cols-2 gap-5">
         {BENEFITS.map(({ icon: Icon, title, desc }) => (
-          <div key={title} className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          <div key={title} className="bg-white border border-slate-200 rounded-xl p-6">
             <Icon className="w-6 h-6 text-amber-400 mb-4" />
             <h3 className="font-semibold text-white mb-2">{title}</h3>
-            <p className="text-gray-400 text-sm">{desc}</p>
+            <p className="text-slate-500 text-sm">{desc}</p>
           </div>
         ))}
       </section>
 
       {/* Pricing */}
       <section className="max-w-xl mx-auto px-6 pb-24">
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 text-center">
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 text-center">
           <h2 className="text-2xl font-bold mb-2">Become a Teacher</h2>
-          <p className="text-gray-400 text-sm mb-8">
+          <p className="text-slate-500 text-sm mb-8">
             Your teaching subscription is separate from your member plan. Cancel any time.
           </p>
 
@@ -83,7 +83,7 @@ export default function TeachLandingPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 plan === 'teacher'
                   ? 'bg-amber-600 text-white'
-                  : 'bg-gray-800 text-gray-400 hover:text-white'
+                  : 'bg-slate-100 text-slate-500 hover:text-white'
               }`}
             >
               Monthly
@@ -93,7 +93,7 @@ export default function TeachLandingPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                 plan === 'teacher-annual'
                   ? 'bg-amber-600 text-white'
-                  : 'bg-gray-800 text-gray-400 hover:text-white'
+                  : 'bg-slate-100 text-slate-500 hover:text-white'
               }`}
             >
               Annual
@@ -111,7 +111,7 @@ export default function TeachLandingPage() {
               'Promo codes & discounts',
               'Stripe Connect payouts',
             ].map((feat) => (
-              <div key={feat} className="flex items-center gap-3 text-sm text-gray-300">
+              <div key={feat} className="flex items-center gap-3 text-sm text-slate-700">
                 <CheckCircle className="w-4 h-4 text-amber-400 shrink-0" />
                 {feat}
               </div>
@@ -131,7 +131,7 @@ export default function TeachLandingPage() {
           </button>
 
           {!user && (
-            <p className="mt-4 text-gray-500 text-xs">
+            <p className="mt-4 text-slate-400 text-xs">
               You&apos;ll be asked to log in or create an account before checkout.
             </p>
           )}

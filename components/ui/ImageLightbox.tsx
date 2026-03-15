@@ -60,7 +60,7 @@ export default function ImageLightbox({ url, thumbnailClass = '' }: Props) {
     return (
       <video
         src={url}
-        className={`rounded-lg border border-gray-200 mt-2 max-h-40 ${thumbnailClass}`}
+        className={`rounded-lg border border-slate-200 mt-2 max-h-40 ${thumbnailClass}`}
         controls
       />
     );
@@ -81,7 +81,7 @@ export default function ImageLightbox({ url, thumbnailClass = '' }: Props) {
         <img
           src={url}
           alt="attachment"
-          className="max-h-40 rounded-lg border border-gray-200 object-contain block"
+          className="max-h-40 rounded-lg border border-slate-200 object-contain block"
         />
         {/* Hover overlay */}
         <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/0 group-hover:bg-black/40 transition-all duration-150 pointer-events-none">

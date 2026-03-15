@@ -147,34 +147,34 @@ export default function AdminAcademyPage() {
   return (
     <div className="p-8 max-w-2xl">
       <div className="flex items-center gap-3 mb-1">
-        <GraduationCap className="w-6 h-6 text-amber-400" />
-        <h1 className="text-2xl font-bold text-white">Academy Settings</h1>
+        <GraduationCap className="w-6 h-6 text-amber-600" />
+        <h1 className="text-2xl font-bold text-slate-900">Academy Settings</h1>
       </div>
-      <p className="text-gray-400 text-sm mb-8">Configure teacher plans and platform fees.</p>
+      <p className="text-slate-500 text-sm mb-8">Configure teacher plans and platform fees.</p>
 
       {/* Manage Courses link */}
       <Link
         href="/admin/academy/courses"
-        className="flex items-center justify-between bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 mb-6 hover:border-gray-700 transition group"
+        className="flex items-center justify-between bg-white border border-slate-200 rounded-xl px-6 py-4 mb-6 hover:border-slate-300 transition group min-h-11"
       >
         <div className="flex items-center gap-3">
-          <BookOpen className="w-5 h-5 text-amber-400" />
+          <BookOpen className="w-5 h-5 text-amber-600" />
           <div>
-            <p className="font-semibold text-white text-sm">Manage Courses</p>
-            <p className="text-gray-400 text-xs">Unpublish, delete, or contact teachers about their courses</p>
+            <p className="font-semibold text-slate-900 text-sm">Manage Courses</p>
+            <p className="text-slate-500 text-xs">Unpublish, delete, or contact teachers about their courses</p>
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-gray-200 transition" />
+        <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-slate-900 transition" />
       </Link>
 
-      <div className="space-y-6 dark-input">
+      <div className="space-y-6">
         {/* Teacher fee */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Percent className="w-4 h-4 text-amber-400" />
-            <h2 className="font-semibold text-white">Platform Fee</h2>
+            <Percent className="w-4 h-4 text-amber-600" />
+            <h2 className="font-semibold text-slate-900">Platform Fee</h2>
           </div>
-          <label className="block text-sm text-gray-200 mb-2">
+          <label className="block text-sm text-slate-700 mb-2">
             Work.WitUS fee on each course sale (%)
           </label>
           <div className="flex items-center gap-2">
@@ -184,76 +184,76 @@ export default function AdminAcademyPage() {
               max="100"
               value={settings.teacher_fee_percent}
               onChange={(e) => setSettings((s) => ({ ...s, teacher_fee_percent: e.target.value }))}
-              className="w-24 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-amber-500"
+              className="w-24 bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
             />
-            <span className="text-gray-400 text-sm">%</span>
+            <span className="text-slate-500 text-sm">%</span>
           </div>
-          <p className="text-gray-400 text-xs mt-2">
+          <p className="text-slate-500 text-xs mt-2">
             Applied via Stripe Connect application_fee_amount on course enrollments.
           </p>
         </div>
 
         {/* Teacher subscription plan */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <CreditCard className="w-4 h-4 text-amber-400" />
-            <h2 className="font-semibold text-white">Teacher Subscription</h2>
+            <CreditCard className="w-4 h-4 text-amber-600" />
+            <h2 className="font-semibold text-slate-900">Teacher Subscription</h2>
           </div>
-          <p className="text-gray-400 text-xs mb-4">
+          <p className="text-slate-500 text-xs mb-4">
             Create prices in your Stripe dashboard, then paste the Price IDs here.
-            The env var <code className="bg-gray-700 px-1 rounded text-gray-200">TEACHER_MONTHLY_PRICE_ID</code> is used
+            The env var <code className="bg-slate-100 px-1 rounded text-slate-700">TEACHER_MONTHLY_PRICE_ID</code> is used
             as a fallback if these fields are empty.
           </p>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-200 mb-2">Monthly Plan — Stripe Price ID</label>
+              <label className="block text-sm text-slate-700 mb-2">Monthly Plan — Stripe Price ID</label>
               <input
                 type="text"
                 placeholder="price_xxxxxxxxxxxxxxxxxxxxxxxx"
                 value={settings.teacher_monthly_price_id}
                 onChange={(e) => setSettings((s) => ({ ...s, teacher_monthly_price_id: e.target.value }))}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-amber-500 font-mono"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 font-mono"
               />
             </div>
             <div>
-              <label className="block text-sm text-gray-200 mb-2">Annual Plan — Stripe Price ID</label>
+              <label className="block text-sm text-slate-700 mb-2">Annual Plan — Stripe Price ID</label>
               <input
                 type="text"
                 placeholder="price_xxxxxxxxxxxxxxxxxxxxxxxx"
                 value={settings.teacher_annual_price_id}
                 onChange={(e) => setSettings((s) => ({ ...s, teacher_annual_price_id: e.target.value }))}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-amber-500 font-mono"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 font-mono"
               />
             </div>
           </div>
         </div>
 
         {/* Course Categories */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Tags className="w-4 h-4 text-amber-400" />
-            <h2 className="font-semibold text-white">Course Categories</h2>
+            <Tags className="w-4 h-4 text-amber-600" />
+            <h2 className="font-semibold text-slate-900">Course Categories</h2>
           </div>
-          <p className="text-gray-400 text-xs mb-4">
+          <p className="text-slate-500 text-xs mb-4">
             Manage the category options available when creating or editing a course.
             Deleting a category here does not change existing courses.
           </p>
           <div className="space-y-2 mb-4">
             {courseCategories.map((cat) => (
-              <div key={cat.id} className="flex items-center justify-between bg-gray-800 rounded-lg px-3 py-2">
-                <span className="text-sm text-gray-200">{cat.name}</span>
+              <div key={cat.id} className="flex items-center justify-between bg-slate-100 rounded-lg px-3 py-2">
+                <span className="text-sm text-slate-800">{cat.name}</span>
                 <button
                   type="button"
                   onClick={() => handleDeleteCategory(cat.id)}
-                  className="p-1 text-gray-400 hover:text-red-400 transition"
-                  title="Delete category"
+                  className="p-1 text-slate-500 hover:text-red-400 transition min-h-11 min-w-11 flex items-center justify-center"
+                  aria-label={`Delete ${cat.name} category`}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>
               </div>
             ))}
             {courseCategories.length === 0 && (
-              <p className="text-gray-400 text-xs">No categories yet.</p>
+              <p className="text-slate-500 text-xs">No categories yet.</p>
             )}
           </div>
           <div className="flex gap-2">
@@ -263,13 +263,13 @@ export default function AdminAcademyPage() {
               onChange={(e) => setNewCatName(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleAddCategory(); }}
               placeholder="New category name..."
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-amber-500"
+              className="flex-1 bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30"
             />
             <button
               type="button"
               onClick={handleAddCategory}
               disabled={addingCat || !newCatName.trim()}
-              className="flex items-center gap-1.5 px-3 py-2 bg-gray-700 text-gray-200 rounded-lg text-sm font-medium hover:bg-gray-600 transition disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-800 rounded-lg text-sm font-medium hover:bg-slate-200 transition disabled:opacity-50 min-h-11"
             >
               {addingCat ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
               Add
@@ -278,18 +278,18 @@ export default function AdminAcademyPage() {
         </div>
 
         {/* Knowledge Sync — help articles + course embeddings */}
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+        <div className="bg-white border border-slate-200 rounded-xl p-6">
           <div className="flex items-center gap-2 mb-3">
-            <RefreshCw className="w-4 h-4 text-amber-400" />
-            <h2 className="font-semibold text-white">Knowledge Sync</h2>
+            <RefreshCw className="w-4 h-4 text-amber-600" />
+            <h2 className="font-semibold text-slate-900">Knowledge Sync</h2>
           </div>
-          <p className="text-gray-400 text-xs mb-2">
+          <p className="text-slate-500 text-xs mb-2">
             Re-embeds all help articles and regenerates CYOA course embeddings.
             Runs automatically at midnight UTC via cron. Use the button below for on-demand refresh.
           </p>
           {lastSyncedAt && (
-            <p className="text-gray-400 text-xs mb-4">
-              Last synced: <span className="text-gray-200">{new Date(lastSyncedAt).toLocaleString()}</span>
+            <p className="text-slate-500 text-xs mb-4">
+              Last synced: <span className="text-slate-800">{new Date(lastSyncedAt).toLocaleString()}</span>
             </p>
           )}
           <div className="flex items-center gap-3">
@@ -297,17 +297,17 @@ export default function AdminAcademyPage() {
               type="button"
               onClick={handleSyncAll}
               disabled={syncStatus === 'loading'}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-gray-200 rounded-lg text-sm font-medium hover:bg-gray-600 transition disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-800 rounded-lg text-sm font-medium hover:bg-slate-200 transition disabled:opacity-50 min-h-11"
             >
               {syncStatus === 'loading'
                 ? <Loader2 className="w-4 h-4 animate-spin" />
                 : syncStatus === 'done'
-                ? <CheckCircle className="w-4 h-4 text-green-400" />
+                ? <CheckCircle className="w-4 h-4 text-green-500" />
                 : <RefreshCw className="w-4 h-4" />}
               {syncStatus === 'loading' ? 'Syncing…' : 'Refresh All Knowledge'}
             </button>
             {syncResult && (
-              <p className={`text-xs ${syncStatus === 'error' ? 'text-red-400' : 'text-green-400'}`}>
+              <p className={`text-xs ${syncStatus === 'error' ? 'text-red-400' : 'text-green-500'}`}>
                 {syncResult}
               </p>
             )}
@@ -320,12 +320,12 @@ export default function AdminAcademyPage() {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg font-semibold text-sm hover:bg-amber-500 transition disabled:opacity-50"
+            className="flex items-center gap-2 px-5 py-2.5 bg-amber-600 text-white rounded-lg font-semibold text-sm hover:bg-amber-500 transition disabled:opacity-50 min-h-11"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {saving ? 'Saving…' : 'Save Settings'}
           </button>
-          {saved && <p className="text-green-400 text-sm">Settings saved.</p>}
+          {saved && <p className="text-green-500 text-sm">Settings saved.</p>}
           {error && <p className="text-red-400 text-sm">{error}</p>}
         </div>
       </div>

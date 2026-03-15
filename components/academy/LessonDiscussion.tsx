@@ -183,7 +183,7 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
             /* eslint-disable-next-line @next/next/no-img-element */
             <img src={post.author.avatar_url} alt="" className="w-8 h-8 rounded-full shrink-0 object-cover" />
           ) : (
-            <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-300 shrink-0">
+            <div className="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs font-bold text-slate-700 shrink-0">
               {initial}
             </div>
           )}
@@ -213,7 +213,7 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
                   value={editBody}
                   onChange={(e) => setEditBody(e.target.value)}
                   rows={2}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
                 />
                 <div className="flex gap-2">
                   <button
@@ -225,14 +225,14 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
                   </button>
                   <button
                     onClick={() => { setEditingId(null); setEditBody(''); }}
-                    className="px-3 py-1.5 bg-gray-800 text-gray-400 rounded-lg text-xs hover:bg-gray-700 transition"
+                    className="px-3 py-1.5 bg-slate-100 text-slate-500 rounded-lg text-xs hover:bg-slate-100 transition"
                   >
                     Cancel
                   </button>
                 </div>
               </div>
             ) : (
-              <p className="text-sm text-gray-300 mt-0.5 whitespace-pre-wrap break-words">{post.body}</p>
+              <p className="text-sm text-slate-700 mt-0.5 whitespace-pre-wrap break-words">{post.body}</p>
             )}
 
             {/* Actions */}
@@ -286,7 +286,7 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitReply(post.id); } }}
                 placeholder="Write a reply…"
                 rows={2}
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+                className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
               />
               <button
                 onClick={() => submitReply(post.id)}
@@ -308,11 +308,11 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
   const postCount = posts.reduce((acc, p) => acc + 1 + (p.replies?.length ?? 0), 0);
 
   return (
-    <div className="border border-gray-800 rounded-xl sm:rounded-2xl bg-gray-900 p-4 sm:p-6">
+    <div className="border border-slate-200 rounded-xl sm:rounded-2xl bg-white p-4 sm:p-6">
       <h2 className="text-base font-bold mb-4 flex items-center gap-2">
         <MessageSquare className="w-4 h-4 text-amber-400" />
         Discussion
-        {postCount > 0 && <span className="text-xs text-gray-500 font-normal">({postCount})</span>}
+        {postCount > 0 && <span className="text-xs text-slate-400 font-normal">({postCount})</span>}
       </h2>
 
       {loading ? (
@@ -330,7 +330,7 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitPost(); } }}
                 placeholder="Join the discussion…"
                 rows={2}
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+                className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
               />
               <button
                 onClick={submitPost}
@@ -345,7 +345,7 @@ export default function LessonDiscussion({ courseId, lessonId, currentUserId, is
           {posts.length === 0 ? (
             <p className="text-center text-gray-600 text-sm py-6">No discussion yet. Be the first to post!</p>
           ) : (
-            <div className="divide-y divide-gray-800">
+            <div className="divide-y divide-slate-200">
               {posts.map((post) => renderPost(post))}
             </div>
           )}

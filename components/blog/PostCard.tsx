@@ -15,9 +15,9 @@ export default function PostCard({ post, author }: PostCardProps) {
   const href = `/blog/${author.username}/${post.slug}`;
 
   return (
-    <article className="group flex flex-col bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden hover:border-neutral-700 transition">
+    <article className="group flex flex-col bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-slate-300 transition">
       {post.cover_image_url && (
-        <Link href={href} className="block aspect-video overflow-hidden bg-neutral-800">
+        <Link href={href} className="block aspect-video overflow-hidden bg-slate-100">
           <Image
             src={post.cover_image_url}
             alt={post.title}
@@ -38,18 +38,18 @@ export default function PostCard({ post, author }: PostCardProps) {
         />
 
         <Link href={href}>
-          <h2 className="text-lg font-semibold text-neutral-100 group-hover:text-amber-400 transition-colors line-clamp-2">
+          <h2 className="text-lg font-semibold text-slate-900 group-hover:text-amber-600 transition-colors line-clamp-2">
             {post.title}
           </h2>
         </Link>
 
         {post.excerpt && (
-          <p className="text-sm text-neutral-400 line-clamp-3 flex-1">{post.excerpt}</p>
+          <p className="text-sm text-slate-500 line-clamp-3 flex-1">{post.excerpt}</p>
         )}
 
         <Link
           href={href}
-          className="text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors mt-auto"
+          className="text-sm font-medium text-amber-600 hover:text-amber-500 transition-colors mt-auto"
         >
           Read more →
         </Link>

@@ -49,7 +49,7 @@ export default async function BlogIndexPage() {
     <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-neutral-100">Blog</h1>
+        <h1 className="text-3xl font-bold text-slate-900">Blog</h1>
         <p className="mt-1 text-neutral-400">
           Latest posts from the Work.WitUS community.{' '}
           <Link href="/blog/authors" className="text-amber-400 hover:underline">

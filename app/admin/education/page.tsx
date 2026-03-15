@@ -297,10 +297,10 @@ export default function AdminEducationPage() {
       <div
         className={`${
           sidebarOpen ? 'w-72' : 'w-0'
-        } shrink-0 border-r border-gray-800 bg-gray-950 flex flex-col transition-all duration-200 overflow-hidden`}
+        } shrink-0 border-r border-slate-200 bg-slate-50 flex flex-col transition-all duration-200 overflow-hidden`}
       >
         {/* Sidebar header */}
-        <div className="p-3 border-b border-gray-800 space-y-2">
+        <div className="p-3 border-b border-slate-200 space-y-2">
           <button
             onClick={startNewChat}
             className="w-full flex items-center gap-2 px-3 py-2 bg-amber-600 hover:bg-amber-500 text-white text-sm font-medium rounded-lg transition"
@@ -311,12 +311,12 @@ export default function AdminEducationPage() {
 
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-500" />
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
             <input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search chats..."
-              className="w-full pl-8 pr-3 py-1.5 bg-gray-800 border border-gray-700 rounded-lg text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+              className="w-full pl-8 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500"
             />
           </div>
 
@@ -326,7 +326,7 @@ export default function AdminEducationPage() {
               {filterTag && (
                 <button
                   onClick={() => setFilterTag('')}
-                  className="flex items-center gap-1 px-2 py-0.5 bg-amber-600/30 text-amber-300 text-xs rounded-full"
+                  className="flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 text-xs rounded-full"
                 >
                   {filterTag} <X className="w-3 h-3" />
                 </button>
@@ -335,7 +335,7 @@ export default function AdminEducationPage() {
                 <button
                   key={t}
                   onClick={() => setFilterTag(t)}
-                  className="px-2 py-0.5 bg-gray-800 text-gray-400 text-xs rounded-full hover:bg-gray-700 hover:text-gray-200 transition"
+                  className="px-2 py-0.5 bg-slate-100 text-slate-500 text-xs rounded-full hover:bg-slate-100 hover:text-slate-800 transition"
                 >
                   {t}
                 </button>
@@ -347,27 +347,27 @@ export default function AdminEducationPage() {
         {/* Chat list */}
         <div className="flex-1 overflow-y-auto">
           {chatList.length === 0 && (
-            <p className="text-xs text-gray-500 p-4 text-center">No chats yet</p>
+            <p className="text-xs text-slate-400 p-4 text-center">No chats yet</p>
           )}
           {chatList.map((chat) => (
             <div
               key={chat.id}
               onClick={() => loadChat(chat.id)}
-              className={`group flex items-start gap-2 px-3 py-2.5 cursor-pointer border-b border-gray-800/50 hover:bg-gray-800/50 transition ${
-                activeChat?.id === chat.id ? 'bg-gray-800' : ''
+              className={`group flex items-start gap-2 px-3 py-2.5 cursor-pointer border-b border-slate-200/50 hover:bg-slate-100/50 transition ${
+                activeChat?.id === chat.id ? 'bg-slate-100' : ''
               }`}
             >
-              <MessageSquare className="w-3.5 h-3.5 text-gray-500 mt-0.5 shrink-0" />
+              <MessageSquare className="w-3.5 h-3.5 text-slate-400 mt-0.5 shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs text-gray-200 truncate">{chat.title}</p>
+                <p className="text-xs text-slate-800 truncate">{chat.title}</p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[10px] text-gray-500">{chat.mode}</span>
-                  <span className="text-[10px] text-gray-600">{relativeTime(chat.updated_at)}</span>
+                  <span className="text-[10px] text-slate-400">{chat.mode}</span>
+                  <span className="text-[10px] text-slate-400">{relativeTime(chat.updated_at)}</span>
                 </div>
                 {chat.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
                     {chat.tags.map((t) => (
-                      <span key={t} className="px-1.5 py-0 text-[10px] bg-gray-700/60 text-gray-400 rounded-full">
+                      <span key={t} className="px-1.5 py-0 text-[10px] bg-slate-100 text-slate-500 rounded-full">
                         {t}
                       </span>
                     ))}
@@ -376,7 +376,7 @@ export default function AdminEducationPage() {
               </div>
               <button
                 onClick={(e) => { e.stopPropagation(); deleteChat(chat.id); }}
-                className="opacity-0 group-hover:opacity-100 p-1 text-gray-500 hover:text-red-400 transition"
+                className="opacity-0 group-hover:opacity-100 p-1 text-slate-400 hover:text-red-400 transition"
                 title="Delete chat"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -389,17 +389,17 @@ export default function AdminEducationPage() {
       {/* ── Main chat area ─────────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <div className="shrink-0 px-4 py-3 sm:px-6 border-b border-gray-800">
+        <div className="shrink-0 px-4 py-3 sm:px-6 border-b border-slate-200">
           <div className="flex items-center gap-2 mb-2">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1.5 rounded-lg hover:bg-gray-800 transition text-gray-400"
+              className="p-1.5 rounded-lg hover:bg-slate-100 transition text-slate-500"
               title={sidebarOpen ? 'Hide sidebar' : 'Show sidebar'}
             >
               <ChevronLeft className={`w-4 h-4 transition-transform ${sidebarOpen ? '' : 'rotate-180'}`} />
             </button>
             <Sparkles className="w-5 h-5 text-amber-400" />
-            <h1 className="text-lg font-bold text-white">Education Prep</h1>
+            <h1 className="text-lg font-bold text-slate-900">Education Prep</h1>
             {(() => {
               const b = staleBadge(lastSynced);
               return <span className={`text-xs ${b.color}`}>{b.text}</span>;
@@ -409,7 +409,7 @@ export default function AdminEducationPage() {
             {activeChat && (
               <button
                 onClick={openMetaEditor}
-                className="ml-auto flex items-center gap-1.5 px-2.5 py-1 text-xs text-gray-400 hover:text-amber-300 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
+                className="ml-auto flex items-center gap-1.5 px-2.5 py-1 text-xs text-slate-500 hover:text-amber-300 bg-slate-100 rounded-lg hover:bg-slate-100 transition"
               >
                 <Tag className="w-3.5 h-3.5" />
                 <StickyNote className="w-3.5 h-3.5" />
@@ -426,7 +426,7 @@ export default function AdminEducationPage() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition ${
                   mode === m.key
                     ? 'bg-amber-600 text-white'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-100'
                 }`}
               >
                 {m.label}
@@ -438,12 +438,12 @@ export default function AdminEducationPage() {
           {activeChat && activeChat.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mt-2">
               {activeChat.tags.map((t) => (
-                <span key={t} className="px-2 py-0.5 text-[11px] bg-amber-600/20 text-amber-300 rounded-full">
+                <span key={t} className="px-2 py-0.5 text-[11px] bg-amber-100 text-amber-700 rounded-full">
                   {t}
                 </span>
               ))}
               {activeChat.notes && (
-                <span className="text-[11px] text-gray-500 ml-2 truncate max-w-xs" title={activeChat.notes}>
+                <span className="text-[11px] text-slate-500 ml-2 truncate max-w-xs" title={activeChat.notes}>
                   {activeChat.notes}
                 </span>
               )}
@@ -459,18 +459,18 @@ export default function AdminEducationPage() {
                 <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0 mt-0.5">
                   <Sparkles className="w-4 h-4 text-white" />
                 </div>
-                <div className="bg-gray-800 rounded-xl rounded-tl-none px-4 py-3 text-sm text-gray-200 leading-relaxed">
+                <div className="bg-slate-100 rounded-xl rounded-tl-none px-4 py-3 text-sm text-slate-800 leading-relaxed">
                   I know your entire codebase. Ask me anything to prepare for interviews, investor meetings, team onboarding, or feature demos. Pick a mode above to get tailored guidance.
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs text-gray-400 px-1">Suggested questions</p>
+                <p className="text-xs text-slate-500 px-1">Suggested questions</p>
                 {SUGGESTIONS[mode].map((s) => (
                   <button
                     key={s}
                     onClick={() => sendMessage(s)}
-                    className="w-full text-left px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-sm text-gray-300 hover:border-amber-600 hover:text-white transition"
+                    className="w-full text-left px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 hover:border-amber-500 hover:text-slate-900 transition"
                   >
                     {s}
                   </button>
@@ -487,12 +487,12 @@ export default function AdminEducationPage() {
                 </div>
               )}
               {msg.role === 'user' ? (
-                <div className="max-w-[85%] px-4 py-3 rounded-xl rounded-tr-none text-sm leading-relaxed whitespace-pre-wrap bg-amber-700/80 text-white ml-auto">
+                <div className="max-w-[85%] px-4 py-3 rounded-xl rounded-tr-none text-sm leading-relaxed whitespace-pre-wrap bg-amber-600 text-white ml-auto">
                   {msg.text}
                 </div>
               ) : (
                 <div
-                  className="max-w-[85%] px-4 py-3 rounded-xl rounded-tl-none text-sm leading-relaxed bg-gray-800 text-gray-200 prose prose-sm prose-invert [&_pre]:bg-gray-900 [&_pre]:rounded-lg [&_pre]:p-3 [&_code]:text-amber-300 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_p]:my-1.5"
+                  className="max-w-[85%] px-4 py-3 rounded-xl rounded-tl-none text-sm leading-relaxed bg-slate-100 text-slate-800 prose prose-sm [&_pre]:bg-white [&_pre]:rounded-lg [&_pre]:p-3 [&_code]:text-amber-600 [&_h1]:text-base [&_h2]:text-sm [&_h3]:text-sm [&_ul]:my-1 [&_ol]:my-1 [&_li]:my-0.5 [&_p]:my-1.5"
                   dangerouslySetInnerHTML={renderMarkdown(msg.text)}
                 />
               )}
@@ -504,11 +504,11 @@ export default function AdminEducationPage() {
               <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0">
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
-              <div className="bg-gray-800 rounded-xl rounded-tl-none px-4 py-3">
+              <div className="bg-slate-100 rounded-xl rounded-tl-none px-4 py-3">
                 <div className="flex gap-1">
-                  <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:300ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
@@ -518,7 +518,7 @@ export default function AdminEducationPage() {
         </div>
 
         {/* Input */}
-        <div className="shrink-0 px-4 py-3 sm:px-6 border-t border-gray-800">
+        <div className="shrink-0 px-4 py-3 sm:px-6 border-t border-slate-200">
           <div className="flex gap-2">
             <textarea
               value={input}
@@ -527,7 +527,7 @@ export default function AdminEducationPage() {
               placeholder="Ask about your codebase..."
               disabled={loading}
               rows={1}
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-amber-500 disabled:opacity-50 resize-none"
+              className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 disabled:opacity-50 resize-none"
             />
             <button
               type="button"
@@ -538,9 +538,9 @@ export default function AdminEducationPage() {
               <Send className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-2 text-center">
+          <p className="text-xs text-slate-400 mt-2 text-center">
             Responses are generated from a static codebase reference.
-            {activeChat && <span className="text-gray-600"> &middot; Chat saved</span>}
+            {activeChat && <span className="text-slate-500"> &middot; Chat saved</span>}
           </p>
         </div>
       </div>
@@ -549,30 +549,30 @@ export default function AdminEducationPage() {
       {editingMeta && activeChat && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setEditingMeta(false)}>
           <div
-            className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-md mx-4 p-5 space-y-4"
+            className="bg-white border border-slate-200 rounded-xl w-full max-w-md mx-4 p-5 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-sm font-bold text-white">Edit Chat</h2>
-              <button onClick={() => setEditingMeta(false)} className="text-gray-400 hover:text-white">
+              <h2 className="text-sm font-bold text-slate-900">Edit Chat</h2>
+              <button onClick={() => setEditingMeta(false)} className="text-slate-500 hover:text-slate-900">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Title */}
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Title</label>
+              <label className="block text-xs text-slate-500 mb-1">Title</label>
               <input
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
                 placeholder="Chat title..."
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-gray-200 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500"
               />
             </div>
 
             {/* Tags */}
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Tags</label>
+              <label className="block text-xs text-slate-500 mb-1">Tags</label>
               <div className="flex flex-wrap gap-1 mb-2">
                 {editTags
                   .split(',')
@@ -581,7 +581,7 @@ export default function AdminEducationPage() {
                   .map((t) => (
                     <span
                       key={t}
-                      className="flex items-center gap-1 px-2 py-0.5 text-xs bg-amber-600/20 text-amber-300 rounded-full"
+                      className="flex items-center gap-1 px-2 py-0.5 text-xs bg-amber-100 text-amber-700 rounded-full"
                     >
                       {t}
                       <button
@@ -589,7 +589,7 @@ export default function AdminEducationPage() {
                           const tags = editTags.split(',').map((x) => x.trim()).filter((x) => x && x !== t);
                           setEditTags(tags.join(', '));
                         }}
-                        className="hover:text-white"
+                        className="hover:text-amber-900"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -602,9 +602,9 @@ export default function AdminEducationPage() {
                   onChange={(e) => setTagInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addTag(); } }}
                   placeholder="Add tag..."
-                  className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                  className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500"
                 />
-                <button onClick={addTag} className="px-3 py-1.5 bg-gray-800 text-gray-300 text-xs rounded-lg hover:bg-gray-700 transition">
+                <button onClick={addTag} className="px-3 py-1.5 bg-slate-100 text-slate-700 text-xs rounded-lg hover:bg-slate-100 transition">
                   Add
                 </button>
               </div>
@@ -612,20 +612,20 @@ export default function AdminEducationPage() {
 
             {/* Notes */}
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Notes</label>
+              <label className="block text-xs text-slate-500 mb-1">Notes</label>
               <textarea
                 value={editNotes}
                 onChange={(e) => setEditNotes(e.target.value)}
                 placeholder="Add notes to help find this chat later..."
                 rows={3}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-xs text-gray-200 placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-amber-500 resize-none"
               />
             </div>
 
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setEditingMeta(false)}
-                className="px-4 py-2 text-xs text-gray-400 hover:text-white transition"
+                className="px-4 py-2 text-xs text-slate-500 hover:text-slate-900 transition"
               >
                 Cancel
               </button>

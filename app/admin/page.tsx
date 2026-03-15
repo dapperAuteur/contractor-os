@@ -17,20 +17,20 @@ interface Stats {
 
 function StatCard({ label, value, sub, icon: Icon, color = 'amber' }: { label: string; value: string | number; sub?: string; icon: React.ElementType; color?: string }) {
   const colors: Record<string, string> = {
-    amber: 'bg-amber-900/30 text-amber-400',
-    sky: 'bg-amber-900/30 text-amber-400',
-    lime: 'bg-lime-900/30 text-lime-400',
+    amber: 'bg-amber-100 text-amber-600',
+    sky: 'bg-amber-100 text-amber-600',
+    lime: 'bg-lime-100 text-lime-600',
   };
   return (
-    <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
+    <div className="bg-white rounded-xl p-5 border border-slate-200">
       <div className="flex items-center gap-3 mb-3">
         <div className={`p-2 rounded-lg ${colors[color]}`}>
           <Icon className="w-4 h-4" aria-hidden="true" />
         </div>
-        <span className="text-sm text-gray-400">{label}</span>
+        <span className="text-sm text-slate-500">{label}</span>
       </div>
-      <p className="text-3xl font-bold text-white">{value}</p>
-      {sub && <p className="text-xs text-gray-400 mt-1">{sub}</p>}
+      <p className="text-3xl font-bold text-slate-900">{value}</p>
+      {sub && <p className="text-xs text-slate-500 mt-1">{sub}</p>}
     </div>
   );
 }
@@ -60,14 +60,14 @@ export default function AdminOverviewPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold text-white mb-1">Overview</h1>
-      <p className="text-gray-400 text-sm mb-8">Your app at a glance.</p>
+      <h1 className="text-2xl font-bold text-slate-900 mb-1">Overview</h1>
+      <p className="text-slate-500 text-sm mb-8">Your app at a glance.</p>
 
       {/* Promo code alert */}
       {stats.promoCodesPending > 0 && (
-        <div className="mb-6 flex items-center gap-3 bg-amber-900/30 border border-amber-700 rounded-xl px-5 py-4">
-          <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" aria-hidden="true" />
-          <p className="text-amber-300 text-sm">
+        <div className="mb-6 flex items-center gap-3 bg-amber-50 border border-amber-300 rounded-xl px-5 py-4">
+          <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0" aria-hidden="true" />
+          <p className="text-amber-700 text-sm">
             <strong>{stats.promoCodesPending}</strong> lifetime member{stats.promoCodesPending > 1 ? 's have' : ' has'} no promo code yet.{' '}
             <Link href="/admin/users?filter=promo_pending" className="underline font-semibold">View them →</Link>
           </p>
@@ -75,7 +75,7 @@ export default function AdminOverviewPage() {
       )}
 
       {/* Users */}
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">Users</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-3">Users</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard label="Total Users" value={stats.users.total} icon={Users} />
         <StatCard label="Free" value={stats.users.free} sub={`${Math.round(stats.users.free / Math.max(stats.users.total, 1) * 100)}% of users`} icon={Users} color="sky" />
@@ -84,14 +84,14 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* Content */}
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">Content</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-3">Content</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard label="Blog Posts" value={stats.content.blogPosts} sub={`${stats.content.publicPosts} public`} icon={BookOpen} color="amber" />
         <StatCard label="New Posts" value={stats.content.newBlogThisWeek} sub="this week" icon={BookOpen} color="amber" />
       </div>
 
       {/* Feature usage */}
-      <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">Feature Usage (all-time)</h2>
+      <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-3">Feature Usage (all-time)</h2>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <StatCard label="Focus Sessions" value={stats.featureUsage.focusSessions} icon={Timer} color="amber" />
         <StatCard label="Meal Logs" value={stats.featureUsage.mealLogs} icon={Utensils} color="sky" />
@@ -101,9 +101,9 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* New users this week */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-        <p className="text-gray-400 text-sm mb-1">New users this week</p>
-        <p className="text-4xl font-bold text-white">{stats.users.newThisWeek}</p>
+      <div className="bg-white border border-slate-200 rounded-xl p-5">
+        <p className="text-slate-500 text-sm mb-1">New users this week</p>
+        <p className="text-4xl font-bold text-slate-900">{stats.users.newThisWeek}</p>
       </div>
     </div>
   );

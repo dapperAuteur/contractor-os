@@ -131,9 +131,9 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
       const userAnswer = answers.find((a) => a.questionId === q.id);
 
       return (
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 sm:p-8">
+        <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-8">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm text-gray-400 font-medium">
+            <h3 className="text-sm text-slate-500 font-medium">
               Review: Question {reviewIndex + 1} of {questions.length}
             </h3>
             <button
@@ -148,8 +148,8 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
             {q.options.map((opt) => {
               const isCorrect = opt.id === q.correctOptionId;
               const isSelected = opt.id === userAnswer?.selectedOptionId;
-              let border = 'border-gray-700';
-              let bg = 'bg-gray-800';
+              let border = 'border-slate-200';
+              let bg = 'bg-slate-100';
               if (isCorrect) { border = 'border-green-600'; bg = 'bg-green-900/20'; }
               else if (isSelected && !isCorrect) { border = 'border-red-600'; bg = 'bg-red-900/20'; }
               return (
@@ -157,22 +157,22 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
                   {isCorrect && <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />}
                   {isSelected && !isCorrect && <XCircle className="w-4 h-4 text-red-400 shrink-0" />}
                   {!isCorrect && !isSelected && <div className="w-4 h-4 shrink-0" />}
-                  <span className={isCorrect ? 'text-green-300' : isSelected ? 'text-red-300' : 'text-gray-400'}>{opt.text}</span>
+                  <span className={isCorrect ? 'text-green-300' : isSelected ? 'text-red-300' : 'text-slate-500'}>{opt.text}</span>
                 </div>
               );
             })}
           </div>
           {expl && (
-            <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-4 mb-4">
-              <p className="text-sm text-gray-300">{expl.explanation}</p>
+            <div className="bg-slate-100/50 border border-slate-200 rounded-xl p-4 mb-4">
+              <p className="text-sm text-slate-700">{expl.explanation}</p>
               {expl.citation && (
-                <p className="text-xs text-gray-500 mt-2 italic">{expl.citation}</p>
+                <p className="text-xs text-slate-400 mt-2 italic">{expl.citation}</p>
               )}
             </div>
           )}
           <div className="flex gap-2">
             {reviewIndex > 0 && (
-              <button onClick={() => setReviewIndex((i) => i - 1)} className="px-4 py-2.5 bg-gray-800 text-gray-300 rounded-xl text-sm hover:bg-gray-700 transition min-h-11">
+              <button onClick={() => setReviewIndex((i) => i - 1)} className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-sm hover:bg-slate-100 transition min-h-11">
                 Previous
               </button>
             )}
@@ -187,7 +187,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
     }
 
     return (
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 sm:p-8 text-center">
+      <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-8 text-center">
         <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 ${
           result.passed ? 'bg-green-900/30' : 'bg-amber-900/30'
         }`}>
@@ -202,17 +202,17 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
         <p className="text-3xl font-bold mb-1">
           <span className={result.passed ? 'text-green-400' : 'text-amber-400'}>{result.score}%</span>
         </p>
-        <p className="text-sm text-gray-400 mb-1">
+        <p className="text-sm text-slate-500 mb-1">
           {result.explanations.filter((e) => e.correct).length} of {questions.length} correct
         </p>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-slate-400 mb-6">
           Passing score: {passingScore}% &middot; Attempt {result.attempts}
           {attemptsAllowed > 0 ? ` of ${attemptsAllowed}` : ''}
         </p>
         <div className="flex flex-wrap justify-center gap-3">
           <button
             onClick={() => { setReviewMode(true); setReviewIndex(0); }}
-            className="flex items-center gap-2 px-5 py-3 bg-gray-800 text-gray-200 rounded-xl text-sm font-semibold hover:bg-gray-700 transition min-h-11"
+            className="flex items-center gap-2 px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-sm font-semibold hover:bg-slate-100 transition min-h-11"
           >
             <BookOpen className="w-4 h-4" /> Review Answers
           </button>
@@ -225,7 +225,7 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
             </button>
           )}
           {!result.passed && !canRetry && (
-            <p className="text-sm text-gray-500 self-center">No attempts remaining.</p>
+            <p className="text-sm text-slate-400 self-center">No attempts remaining.</p>
           )}
         </div>
       </div>
@@ -236,13 +236,13 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
   const isCorrect = answered && selectedOptionId === currentQuestion.correctOptionId;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5 sm:p-8">
+    <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-8">
       {/* Progress bar */}
       <div className="flex items-center gap-3 mb-6">
-        <span className="text-sm text-gray-400 shrink-0">
+        <span className="text-sm text-slate-500 shrink-0">
           Question {currentIndex + 1} of {questions.length}
         </span>
-        <div className="flex-1 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+        <div className="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div
             className="h-full bg-amber-500 rounded-full transition-all duration-300"
             style={{ width: `${((currentIndex + (answered ? 1 : 0)) / questions.length) * 100}%` }}
@@ -256,9 +256,9 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
       {/* Options */}
       <div className="space-y-2 mb-5">
         {currentQuestion.options.map((opt) => {
-          let border = 'border-gray-700 hover:border-gray-600';
-          let bg = 'bg-gray-800 hover:bg-gray-750';
-          let textColor = 'text-gray-200';
+          let border = 'border-slate-200 hover:border-gray-600';
+          let bg = 'bg-slate-100 hover:bg-slate-100';
+          let textColor = 'text-slate-800';
 
           if (selectedOptionId === opt.id && !answered) {
             border = 'border-amber-500';
@@ -276,9 +276,9 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
               bg = 'bg-red-900/20';
               textColor = 'text-red-300';
             } else {
-              border = 'border-gray-800';
-              bg = 'bg-gray-800/50';
-              textColor = 'text-gray-500';
+              border = 'border-slate-200';
+              bg = 'bg-slate-100/50';
+              textColor = 'text-slate-400';
             }
           }
 
@@ -308,9 +308,9 @@ export default function QuizPlayer({ quizContent, courseId, lessonId, onComplete
           <p className={`text-sm font-semibold mb-1 ${isCorrect ? 'text-green-400' : 'text-amber-400'}`}>
             {isCorrect ? 'Correct!' : 'Not quite.'}
           </p>
-          <p className="text-sm text-gray-300">{currentQuestion.explanation}</p>
+          <p className="text-sm text-slate-700">{currentQuestion.explanation}</p>
           {currentQuestion.citation && (
-            <p className="text-xs text-gray-500 mt-2 italic">{currentQuestion.citation}</p>
+            <p className="text-xs text-slate-400 mt-2 italic">{currentQuestion.citation}</p>
           )}
         </div>
       )}

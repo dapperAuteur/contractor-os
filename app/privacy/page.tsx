@@ -13,10 +13,10 @@ export default function PrivacyPage() {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-gray-950 text-gray-200">
+      <main className="min-h-screen bg-slate-50 text-slate-800">
         <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold text-white mb-2">Privacy Policy</h1>
-        <p className="text-gray-400 text-sm mb-10">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Privacy Policy</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Last updated: March 11, 2026 &nbsp;&middot;&nbsp; Operated by B4C LLC / AwesomeWebStore.com
         </p>
 
@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section title="2. Information We Collect">
-          <h3 className="font-medium text-gray-100 mb-1">Account Information</h3>
+          <h3 className="font-medium text-slate-900 mb-1">Account Information</h3>
           <ul className="list-disc pl-5 space-y-1">
             <li>Email address</li>
             <li>Display name and username</li>
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
             <li>Billing information (processed by Stripe — we do not store card numbers)</li>
           </ul>
 
-          <h3 className="font-medium text-gray-100 mt-4 mb-1">Job & Financial Data</h3>
+          <h3 className="font-medium text-slate-900 mt-4 mb-1">Job & Financial Data</h3>
           <p>
             When you use Work.WitUS to track your work, we store the data you enter, including:
             job details, client names, time entries, pay rates, invoices, expenses, mileage logs,
@@ -48,14 +48,14 @@ export default function PrivacyPage() {
             financial data unless you explicitly choose to post a job on the public board.
           </p>
 
-          <h3 className="font-medium text-gray-100 mt-4 mb-1">Scanned Documents</h3>
+          <h3 className="font-medium text-slate-900 mt-4 mb-1">Scanned Documents</h3>
           <p>
             When you use the document scanner, images are sent to our server for AI processing.
             Based on your settings, scanned images may or may not be saved to your account. Extracted
             data (text fields, amounts, dates) is stored as part of your job records.
           </p>
 
-          <h3 className="font-medium text-gray-100 mt-4 mb-1">Content You Create</h3>
+          <h3 className="font-medium text-slate-900 mt-4 mb-1">Content You Create</h3>
           <ul className="list-disc pl-5 space-y-1">
             <li>Blog posts and comments</li>
             <li>Job documents (incident reports, best practices, notes)</li>
@@ -63,14 +63,14 @@ export default function PrivacyPage() {
             <li>Feedback you submit to the platform</li>
           </ul>
 
-          <h3 className="font-medium text-gray-100 mt-4 mb-1">Push Notification Data</h3>
+          <h3 className="font-medium text-slate-900 mt-4 mb-1">Push Notification Data</h3>
           <p>
             If you enable push notifications, we store your browser push subscription endpoint
             and device user agent to deliver notifications. You can disable notifications at any
             time in Settings.
           </p>
 
-          <h3 className="font-medium text-gray-100 mt-4 mb-1">Usage Data</h3>
+          <h3 className="font-medium text-slate-900 mt-4 mb-1">Usage Data</h3>
           <ul className="list-disc pl-5 space-y-1">
             <li>Page views and feature usage (collected by Vercel Analytics, anonymized)</li>
             <li>Device type and browser</li>
@@ -105,7 +105,7 @@ export default function PrivacyPage() {
                 href="https://policies.google.com/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-amber-400 hover:underline"
+                className="text-amber-600 hover:underline"
               >
                 Google Privacy Policy
               </a>
@@ -176,7 +176,7 @@ export default function PrivacyPage() {
           </ul>
           <p className="mt-3">
             To exercise these rights, email us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
               hello@centenarianos.com
             </a>
             .
@@ -202,14 +202,14 @@ export default function PrivacyPage() {
         <Section title="13. Contact">
           <p>
             Privacy questions or requests:{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
               hello@centenarianos.com
             </a>
             <br />
             B4C LLC / AwesomeWebStore.com — Indianapolis, Indiana, USA
           </p>
           <p className="mt-3">
-            See also: <Link href="/terms" className="text-amber-400 hover:underline">Terms of Use</Link> | <Link href="/community" className="text-amber-400 hover:underline">Community Code of Conduct</Link>
+            See also: <Link href="/terms" className="text-amber-600 hover:underline">Terms of Use</Link> | <Link href="/community" className="text-amber-600 hover:underline">Community Code of Conduct</Link>
           </p>
         </Section>
 
@@ -223,8 +223,8 @@ export default function PrivacyPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-semibold text-white mb-3">{title}</h2>
-      <div className="text-gray-300 text-sm leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-lg font-semibold text-slate-900 mb-3">{title}</h2>
+      <div className="text-slate-700 text-sm leading-relaxed space-y-2">{children}</div>
     </section>
   );
 }
@@ -232,8 +232,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function Provider({ name, purpose }: { name: string; purpose: string }) {
   return (
     <div className="flex gap-3">
-      <span className="text-gray-100 font-medium w-28 shrink-0">{name}</span>
-      <span className="text-gray-400">{purpose}</span>
+      <span className="text-slate-900 font-medium w-28 shrink-0">{name}</span>
+      <span className="text-slate-500">{purpose}</span>
     </div>
   );
 }

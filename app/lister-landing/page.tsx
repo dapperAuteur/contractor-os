@@ -28,24 +28,24 @@ const FEATURES = [
 
 export default function ListerLandingPage() {
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Nav */}
-      <nav className="border-b border-neutral-800 px-4 py-4">
+      <nav className="border-b border-slate-200 px-4 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-2">
-            <Users size={24} className="text-indigo-400" aria-hidden="true" />
+            <Users size={24} className="text-indigo-600" aria-hidden="true" />
             <span className="text-lg font-bold">CrewOps</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/lister-pricing" className="text-sm text-neutral-400 hover:text-neutral-200 min-h-11 flex items-center">
+            <Link href="/lister-pricing" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
               Pricing
             </Link>
-            <Link href="/features/lister" className="text-sm text-neutral-400 hover:text-neutral-200 min-h-11 flex items-center">
+            <Link href="/features/lister" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
               Features
             </Link>
             <Link
               href="/login"
-              className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center"
+              className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 min-h-11 flex items-center"
             >
               Log In
             </Link>
@@ -63,9 +63,9 @@ export default function ListerLandingPage() {
       <section className="mx-auto max-w-4xl px-4 py-20 text-center">
         <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
           Staff Your Crews.
-          <span className="block text-indigo-400">Dispatch with Confidence.</span>
+          <span className="block text-indigo-600">Dispatch with Confidence.</span>
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-neutral-400">
+        <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-500">
           Create jobs, manage rosters, assign contractors, and communicate with your entire crew —
           built for coordinators, agencies, and union leaders.
         </p>
@@ -78,13 +78,13 @@ export default function ListerLandingPage() {
           </Link>
           <Link
             href="/demo"
-            className="flex items-center gap-2 rounded-lg border border-indigo-600/50 px-6 py-3 text-base text-indigo-400 hover:bg-indigo-600/10 min-h-11"
+            className="flex items-center gap-2 rounded-lg border border-indigo-600/50 px-6 py-3 text-base text-indigo-600 hover:bg-indigo-600/10 min-h-11"
           >
             <Play size={16} aria-hidden="true" /> Try the Demo
           </Link>
           <Link
             href="/lister-pricing"
-            className="flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 text-base text-neutral-300 hover:bg-neutral-800 min-h-11"
+            className="flex items-center gap-2 rounded-lg border border-slate-200 px-6 py-3 text-base text-slate-700 hover:bg-slate-100 min-h-11"
           >
             View Pricing
           </Link>
@@ -94,44 +94,44 @@ export default function ListerLandingPage() {
       {/* Features — each card links to detail page */}
       <section className="mx-auto max-w-6xl px-4 py-16" aria-label="Features">
         <h2 className="mb-4 text-center text-2xl font-bold sm:text-3xl">Everything You Need to Run Crews</h2>
-        <p className="mb-10 text-center text-neutral-400 text-sm">Click any feature to learn more and try the demo</p>
+        <p className="mb-10 text-center text-slate-500 text-sm">Click any feature to learn more and try the demo</p>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
             <Link
               key={f.slug}
               href={`/features/lister/${f.slug}`}
-              className="group rounded-xl border border-neutral-800 bg-neutral-900 p-5 hover:border-neutral-700 hover:bg-neutral-800/80 transition"
+              className="group rounded-xl border border-slate-200 bg-white p-5 hover:border-slate-300 hover:bg-slate-50 transition"
             >
-              <f.icon size={20} className="text-indigo-400 mb-3" aria-hidden="true" />
-              <h3 className="text-base font-semibold text-neutral-100 group-hover:text-white transition">{f.title}</h3>
-              <p className="mt-1 text-sm text-neutral-400">{f.desc}</p>
-              <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-indigo-400 group-hover:text-indigo-300 transition">
+              <f.icon size={20} className="text-indigo-600 mb-3" aria-hidden="true" />
+              <h3 className="text-base font-semibold text-slate-900 group-hover:text-slate-900 transition">{f.title}</h3>
+              <p className="mt-1 text-sm text-slate-500">{f.desc}</p>
+              <span className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-indigo-600 group-hover:text-indigo-500 transition">
                 Learn more <ArrowRight size={12} aria-hidden="true" />
               </span>
             </Link>
           ))}
           {/* Non-linkable features */}
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
-            <Crown size={20} className="text-indigo-400 mb-3" aria-hidden="true" />
-            <h3 className="text-base font-semibold text-neutral-100">Union Leader Tools</h3>
-            <p className="mt-1 text-sm text-neutral-400">Seniority tracking, rate enforcement, dispatch queues for union dispatchers.</p>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <Crown size={20} className="text-indigo-600 mb-3" aria-hidden="true" />
+            <h3 className="text-base font-semibold text-slate-900">Union Leader Tools</h3>
+            <p className="mt-1 text-sm text-slate-500">Seniority tracking, rate enforcement, dispatch queues for union dispatchers.</p>
           </div>
-          <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
-            <Shield size={20} className="text-indigo-400 mb-3" aria-hidden="true" />
-            <h3 className="text-base font-semibold text-neutral-100">Privacy + Control</h3>
-            <p className="mt-1 text-sm text-neutral-400">Your roster, your data. Full control over who sees what.</p>
+          <div className="rounded-xl border border-slate-200 bg-white p-5">
+            <Shield size={20} className="text-indigo-600 mb-3" aria-hidden="true" />
+            <h3 className="text-base font-semibold text-slate-900">Privacy + Control</h3>
+            <p className="mt-1 text-sm text-slate-500">Your roster, your data. Full control over who sees what.</p>
           </div>
         </div>
       </section>
 
       {/* Demo Section */}
-      <section className="border-t border-neutral-800 py-16">
+      <section className="border-t border-slate-200 py-16">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <h2 className="text-2xl font-bold sm:text-3xl mb-3">Try Before You Buy</h2>
-          <p className="text-neutral-400 mb-2">
+          <p className="text-slate-500 mb-2">
             Explore CrewOps with a pre-loaded demo account. Real data, real features — no signup required.
           </p>
-          <p className="text-sm text-neutral-500 mb-8">
+          <p className="text-sm text-slate-400 mb-8">
             Shared account. Data resets daily. Do not enter personal information.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -143,42 +143,42 @@ export default function ListerLandingPage() {
             </Link>
             <Link
               href="/features/lister"
-              className="flex items-center gap-2 rounded-xl border border-neutral-700 px-8 py-3.5 text-base text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 px-8 py-3.5 text-base text-slate-700 hover:bg-slate-100 transition min-h-11"
             >
               Explore All Features
             </Link>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-3 text-left">
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
-              <p className="text-sm font-medium text-indigo-400 mb-1">Pre-loaded Data</p>
-              <p className="text-xs text-neutral-500">Jobs, rosters, assignments, messages, availability — ready to explore.</p>
+            <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <p className="text-sm font-medium text-indigo-600 mb-1">Pre-loaded Data</p>
+              <p className="text-xs text-slate-400">Jobs, rosters, assignments, messages, availability — ready to explore.</p>
             </div>
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
-              <p className="text-sm font-medium text-indigo-400 mb-1">Interactive Tours</p>
-              <p className="text-xs text-neutral-500">Guided walkthroughs for every module. Start from any feature page.</p>
+            <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <p className="text-sm font-medium text-indigo-600 mb-1">Interactive Tours</p>
+              <p className="text-xs text-slate-400">Guided walkthroughs for every module. Start from any feature page.</p>
             </div>
-            <div className="rounded-lg border border-neutral-800 bg-neutral-900/50 p-4">
-              <p className="text-sm font-medium text-indigo-400 mb-1">Full Access</p>
-              <p className="text-xs text-neutral-500">Every feature unlocked. Try roster management, dispatch, messaging, and more.</p>
+            <div className="rounded-lg border border-slate-200 bg-white p-4">
+              <p className="text-sm font-medium text-indigo-600 mb-1">Full Access</p>
+              <p className="text-xs text-slate-400">Every feature unlocked. Try roster management, dispatch, messaging, and more.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Academy Link */}
-      <section className="border-t border-neutral-800 py-12 text-center">
-        <p className="text-sm text-neutral-400">New to CrewOps?</p>
-        <p className="mt-1 text-lg font-semibold text-neutral-200">Take the free Lister & Crew Coordinator Guide</p>
-        <p className="mt-2 text-sm text-neutral-500">12 lessons covering everything from roster setup to union leader tools. No account required.</p>
-        <Link href="/academy" className="mt-3 inline-block text-sm font-medium text-indigo-400 hover:text-indigo-300 min-h-11">
+      <section className="border-t border-slate-200 py-12 text-center">
+        <p className="text-sm text-slate-500">New to CrewOps?</p>
+        <p className="mt-1 text-lg font-semibold text-slate-800">Take the free Lister & Crew Coordinator Guide</p>
+        <p className="mt-2 text-sm text-slate-400">12 lessons covering everything from roster setup to union leader tools. No account required.</p>
+        <Link href="/academy" className="mt-3 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-500 min-h-11">
           Browse Academy courses &rarr;
         </Link>
       </section>
 
       {/* CTA */}
-      <section className="border-t border-neutral-800 py-16 text-center">
+      <section className="border-t border-slate-200 py-16 text-center">
         <h2 className="text-2xl font-bold">Ready to streamline crew management?</h2>
-        <p className="mt-2 text-neutral-400">Intro pricing: $10/month (regularly $50). Limited time.</p>
+        <p className="mt-2 text-slate-500">Intro pricing: $10/month (regularly $50). Limited time.</p>
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/signup"
@@ -188,21 +188,21 @@ export default function ListerLandingPage() {
           </Link>
           <Link
             href="/login"
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-6 py-3 text-sm text-neutral-300 hover:border-neutral-500 min-h-11"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-6 py-3 text-sm text-slate-700 hover:border-slate-300 min-h-11"
           >
             Already have an account? Log in
           </Link>
         </div>
       </section>
 
-      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+      <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
         <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
         <div className="mt-2 flex justify-center gap-4">
-          <Link href="/terms" className="hover:text-neutral-400">Terms</Link>
-          <Link href="/privacy" className="hover:text-neutral-400">Privacy</Link>
-          <a href="https://CentenarianOS.com" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-400">CentenarianOS</a>
-          <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="hover:text-neutral-400">WitUS.Online</a>
+          <Link href="/terms" className="hover:text-slate-500">Terms</Link>
+          <Link href="/privacy" className="hover:text-slate-500">Privacy</Link>
+          <a href="https://CentenarianOS.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">CentenarianOS</a>
+          <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">WitUS.Online</a>
         </div>
       </footer>
     </div>

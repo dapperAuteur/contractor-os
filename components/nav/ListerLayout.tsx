@@ -20,7 +20,7 @@ interface Props {
 
 export default function ListerLayout({ username, unreadMessages, onLogout, untoured, onToursChanged, children }: Props) {
   return (
-    <div className="min-h-screen bg-neutral-950 dark-input">
+    <div className="min-h-screen bg-slate-50">
       <ListerNav username={username} unreadMessages={unreadMessages} onLogout={onLogout} untoured={untoured} />
       <MfaBanner />
       <OfflineIndicator />

@@ -119,7 +119,7 @@ export default function TravelImportPage() {
               <p className="text-sm font-medium text-blue-700">{garminFile.name}</p>
             ) : (
               <>
-                <Upload className="w-6 h-6 text-gray-300 mx-auto mb-2" />
+                <Upload className="w-6 h-6 text-slate-700 mx-auto mb-2" />
                 <p className="text-sm text-gray-400">Click to select Activities.csv</p>
               </>
             )}
@@ -211,7 +211,7 @@ export default function TravelImportPage() {
               </div>
             ) : (
               <>
-                <Camera className="w-6 h-6 text-gray-300 mx-auto mb-2" />
+                <Camera className="w-6 h-6 text-slate-700 mx-auto mb-2" />
                 <p className="text-sm text-gray-400">Click to select fuel photos</p>
                 <p className="text-xs text-gray-400 mt-0.5">Select in groups of 4 per fill-up</p>
               </>

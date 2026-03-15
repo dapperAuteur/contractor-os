@@ -75,16 +75,16 @@ export default function AcademyPage() {
   const categories = Array.from(new Set(courses.map((c) => c.category).filter(Boolean))) as string[];
 
   return (
-    <div className="text-white">
+    <div className="text-slate-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-16">
         <div className="mb-8 sm:mb-12 text-center">
           <h1 className="text-2xl sm:text-4xl font-bold mb-3">Work.WitUS Academy</h1>
-          <p className="text-gray-400 text-base sm:text-lg">Expert-led courses to help you live longer, stronger.</p>
+          <p className="text-slate-500 text-base sm:text-lg">Expert-led courses to help you live longer, stronger.</p>
           <div className="flex items-center justify-center gap-2 mt-6">
             <span className="px-4 py-1.5 bg-amber-600 text-white rounded-full text-sm font-medium">Courses</span>
             <Link
               href="/academy/paths"
-              className="flex items-center gap-1.5 px-4 py-1.5 border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 rounded-full text-sm font-medium transition"
+              className="flex items-center gap-1.5 px-4 py-1.5 border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-400 rounded-full text-sm font-medium transition"
             >
               <Layers className="w-4 h-4" />
               Learning Paths
@@ -93,22 +93,22 @@ export default function AcademyPage() {
         </div>
 
         {/* Search + filter */}
-        <div className="dark-input flex flex-col sm:flex-row gap-3 mb-10">
+        <div className="flex flex-col sm:flex-row gap-3 mb-10">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search courses…"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:border-amber-500 min-h-11"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 min-h-11"
             />
           </div>
           {categories.length > 0 && (
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full sm:w-auto px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+              className="w-full sm:w-auto px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 min-h-11"
             >
               <option value="">All Categories</option>
               {categories.map((c) => <option key={c} value={c}>{c}</option>)}
@@ -117,7 +117,7 @@ export default function AcademyPage() {
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value as SortKey)}
-            className="w-full sm:w-auto px-4 py-3 bg-gray-900 border border-gray-800 rounded-xl text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+            className="w-full sm:w-auto px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 min-h-11"
           >
             {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -128,7 +128,7 @@ export default function AcademyPage() {
             <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
           </div>
         ) : courses.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
+          <div className="text-center py-20 text-slate-500">
             <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-40" />
             <p>No courses found.</p>
           </div>
@@ -138,10 +138,10 @@ export default function AcademyPage() {
               <Link
                 key={course.id}
                 href={`/academy/${course.id}`}
-                className="group bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden hover:border-amber-700/50 transition"
+                className="group bg-white border border-slate-200 rounded-2xl overflow-hidden hover:border-amber-700/50 transition"
               >
                 {/* Cover image */}
-                <div className="aspect-video bg-gray-800 relative overflow-hidden">
+                <div className="aspect-video bg-slate-100 relative overflow-hidden">
                   {course.cover_image_url ? (
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img
@@ -151,7 +151,7 @@ export default function AcademyPage() {
                     />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <BookOpen className="w-10 h-10 text-gray-700" />
+                      <BookOpen className="w-10 h-10 text-slate-400" />
                     </div>
                   )}
                   {course.navigation_mode === 'cyoa' && (
@@ -165,11 +165,11 @@ export default function AcademyPage() {
                   {course.category && (
                     <p className="text-amber-400 text-xs font-semibold uppercase tracking-wide mb-2">{course.category}</p>
                   )}
-                  <h2 className="font-bold text-white mb-1 line-clamp-2">{course.title}</h2>
+                  <h2 className="font-bold text-slate-900 mb-1 line-clamp-2">{course.title}</h2>
                   {course.description && (
-                    <p className="text-gray-500 text-sm line-clamp-2 mb-3">{course.description}</p>
+                    <p className="text-slate-400 text-sm line-clamp-2 mb-3">{course.description}</p>
                   )}
-                  <p className="text-xs text-gray-500 mb-3">
+                  <p className="text-xs text-slate-400 mb-3">
                     by {course.profiles?.display_name ?? course.profiles?.username ?? 'Instructor'}
                   </p>
 
@@ -180,10 +180,10 @@ export default function AcademyPage() {
                           <Play className="w-3 h-3" /> Free
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 text-white font-semibold text-sm">
-                          <Lock className="w-3 h-3 text-gray-400" />
+                        <span className="flex items-center gap-1 text-slate-900 font-semibold text-sm">
+                          <Lock className="w-3 h-3 text-slate-500" />
                           ${course.price}
-                          <span className="text-gray-500 font-normal">· {PRICE_LABEL[course.price_type]}</span>
+                          <span className="text-slate-400 font-normal">· {PRICE_LABEL[course.price_type]}</span>
                         </span>
                       )}
                     </div>

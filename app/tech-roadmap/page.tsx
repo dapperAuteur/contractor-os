@@ -315,12 +315,12 @@ const STATUS_CONFIG = {
     checkColor: 'text-amber-500',
   },
   planned: {
-    border: 'border-gray-300',
-    dot: 'bg-gray-300',
-    badge: 'bg-gray-100 text-gray-700',
+    border: 'border-slate-300',
+    dot: 'bg-slate-300',
+    badge: 'bg-slate-100 text-slate-700',
     label: 'Planned',
     icon: Circle,
-    checkColor: 'text-gray-400',
+    checkColor: 'text-slate-500',
   },
 };
 
@@ -334,18 +334,18 @@ export default function RoadmapPage() {
   const pct = Math.round((doneItems / totalItems) * 100);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
       <header className="border-b bg-white sticky top-0 z-50">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2 text-gray-600 hover:text-gray-900">
+          <Link href="/" className="flex items-center space-x-2 text-slate-600 hover:text-slate-900">
             <ArrowLeft className="w-5 h-5" />
             <span className="font-medium">Back to Home</span>
           </Link>
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-linear-to-br from-amber-500 to-amber-600 rounded-lg" />
             <Link href="/dashboard/roadmap">
-              <span className="text-xl font-bold text-gray-900">Work.WitUS</span>
+              <span className="text-xl font-bold text-slate-900">Work.WitUS</span>
             </Link>
           </div>
         </nav>
@@ -353,43 +353,43 @@ export default function RoadmapPage() {
 
       {/* Hero */}
       <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10">
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-3">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-3">
           Product Roadmap
         </h1>
-        <p className="text-xl text-gray-600 mb-2">
+        <p className="text-xl text-slate-600 mb-2">
           Our journey from MVP to a comprehensive contractor operating system.
         </p>
-        <p className="text-sm text-gray-400 mb-8">Updated March 2026</p>
+        <p className="text-sm text-slate-500 mb-8">Updated March 2026</p>
 
         {/* Overall progress bar */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
           <div className="flex items-end justify-between mb-3">
             <div>
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Overall Progress</p>
-              <p className="text-3xl font-extrabold text-gray-900">{pct}%</p>
+              <p className="text-sm font-medium text-slate-400 uppercase tracking-wide">Overall Progress</p>
+              <p className="text-3xl font-extrabold text-slate-900">{pct}%</p>
             </div>
             <div className="flex gap-6 text-sm text-right">
               <div>
                 <p className="font-bold text-lime-600 text-lg">{completed}</p>
-                <p className="text-gray-500">Phases complete</p>
+                <p className="text-slate-400">Phases complete</p>
               </div>
               <div>
                 <p className="font-bold text-amber-600 text-lg">{inProgress}</p>
-                <p className="text-gray-500">In progress</p>
+                <p className="text-slate-400">In progress</p>
               </div>
               <div>
-                <p className="font-bold text-gray-400 text-lg">{planned}</p>
-                <p className="text-gray-500">Planned</p>
+                <p className="font-bold text-slate-500 text-lg">{planned}</p>
+                <p className="text-slate-400">Planned</p>
               </div>
             </div>
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-3">
+          <div className="w-full bg-slate-100 rounded-full h-3">
             <div
               className="bg-linear-to-r from-amber-500 to-lime-500 h-3 rounded-full transition-all"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <p className="text-xs text-gray-400 mt-2">{doneItems} of {totalItems} features shipped</p>
+          <p className="text-xs text-slate-500 mt-2">{doneItems} of {totalItems} features shipped</p>
         </div>
 
         {/* CTA buttons */}
@@ -398,7 +398,7 @@ export default function RoadmapPage() {
             href="https://github.com/dapperAuteur/work-witus-app"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
+            className="px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-colors font-medium"
           >
             View on GitHub
           </a>
@@ -416,7 +416,7 @@ export default function RoadmapPage() {
           </Link>
           <Link
             href="/demo"
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
           >
             Try the Demo
           </Link>
@@ -441,22 +441,22 @@ export default function RoadmapPage() {
                 <div className="bg-white rounded-xl shadow-md p-6">
                   {/* Phase header */}
                   <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
-                    <h2 className="text-xl font-bold text-gray-900">{phase.title}</h2>
+                    <h2 className="text-xl font-bold text-slate-900">{phase.title}</h2>
                     <span className={`px-3 py-1 rounded-full text-sm font-semibold shrink-0 ${cfg.badge}`}>
                       {cfg.label}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-500 mb-1">{phase.quarter}</p>
-                  <p className="text-gray-600 mb-4">{phase.description}</p>
+                  <p className="text-sm text-slate-400 mb-1">{phase.quarter}</p>
+                  <p className="text-slate-600 mb-4">{phase.description}</p>
 
                   {/* Phase mini progress */}
                   {phase.status !== 'planned' && (
                     <div className="mb-4">
-                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                      <div className="flex justify-between text-xs text-slate-500 mb-1">
                         <span>{phaseDone}/{phaseTotal} features</span>
                         <span>{Math.round((phaseDone / phaseTotal) * 100)}%</span>
                       </div>
-                      <div className="w-full bg-gray-100 rounded-full h-1.5">
+                      <div className="w-full bg-slate-100 rounded-full h-1.5">
                         <div
                           className={`h-1.5 rounded-full ${phase.status === 'completed' ? 'bg-lime-500' : 'bg-amber-500'}`}
                           style={{ width: `${(phaseDone / phaseTotal) * 100}%` }}
@@ -472,9 +472,9 @@ export default function RoadmapPage() {
                         {item.done ? (
                           <CheckCircle2 className={`w-5 h-5 shrink-0 mt-0.5 ${cfg.checkColor}`} />
                         ) : (
-                          <Circle className="w-5 h-5 shrink-0 mt-0.5 text-gray-300" />
+                          <Circle className="w-5 h-5 shrink-0 mt-0.5 text-slate-300" />
                         )}
-                        <span className={item.done ? 'text-gray-700' : 'text-gray-500'}>{item.text}</span>
+                        <span className={item.done ? 'text-slate-700' : 'text-slate-500'}>{item.text}</span>
                       </li>
                     ))}
                   </ul>
@@ -486,10 +486,10 @@ export default function RoadmapPage() {
       </section>
 
       {/* CTA footer band */}
-      <section className="bg-gray-900 py-16">
+      <section className="bg-slate-900 py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Help Build the Future</h2>
-          <p className="text-gray-400 mb-8 text-lg">
+          <p className="text-slate-400 mb-8 text-lg">
             Work.WitUS is open source. Contribute code, suggest features, or report bugs.
           </p>
           <div className="flex justify-center flex-wrap gap-4">
@@ -497,7 +497,7 @@ export default function RoadmapPage() {
               href="https://github.com/dapperAuteur/work-witus-app"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-8 py-3 bg-white text-gray-900 rounded-lg hover:bg-gray-100 transition-colors font-semibold"
+              className="px-8 py-3 bg-white text-slate-900 rounded-lg hover:bg-slate-100 transition-colors font-semibold"
             >
               View Repository
             </a>

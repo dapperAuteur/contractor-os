@@ -39,7 +39,7 @@ function ToolbarBtn({
       className={`p-1.5 rounded transition text-sm ${
         active
           ? 'bg-amber-600 text-white'
-          : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+          : 'text-slate-500 hover:bg-slate-100 hover:text-white'
       }`}
     >
       {children}
@@ -91,9 +91,9 @@ export default function LessonTextEditor({ content, onChange, placeholder }: Les
   };
 
   return (
-    <div className="border border-gray-700 rounded-xl overflow-hidden bg-gray-800">
+    <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-100">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-gray-700 bg-gray-800/80">
+      <div className="flex flex-wrap items-center gap-0.5 px-3 py-2 border-b border-slate-200 bg-slate-100/80">
         <ToolbarBtn onClick={() => editor.chain().focus().toggleBold().run()} active={editor.isActive('bold')} title="Bold">
           <Bold className="w-3.5 h-3.5" />
         </ToolbarBtn>

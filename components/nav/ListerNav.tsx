@@ -74,7 +74,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
     <>
       <nav
         ref={navRef}
-        className="bg-neutral-950 border-b border-neutral-800 sticky top-0 z-50"
+        className="bg-white border-b border-slate-200 sticky top-0 z-50"
         aria-label="Lister navigation"
       >
         <a
@@ -87,7 +87,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Desktop (lg+) */}
           <div className="hidden lg:flex items-center justify-between h-14">
-            <Link href="/dashboard/contractor/lister" className="flex items-center gap-2 text-lg font-bold text-indigo-400 shrink-0 mr-6">
+            <Link href="/dashboard/contractor/lister" className="flex items-center gap-2 text-lg font-bold text-indigo-600 shrink-0 mr-6">
               <ClipboardList className="w-5 h-5" aria-hidden="true" />
               CrewOps
             </Link>
@@ -104,15 +104,15 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                     href={item.href}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition min-h-11 ${
                       active
-                        ? 'text-indigo-400 bg-indigo-400/10'
-                        : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800'
+                        ? 'text-indigo-600 bg-indigo-500/10'
+                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                     aria-current={active ? 'page' : undefined}
                   >
                     <Icon className="w-4 h-4 shrink-0" aria-hidden="true" />
                     {item.label}
                     {showSparkle && (
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse shrink-0" aria-hidden="true" />
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse shrink-0" aria-hidden="true" />
                     )}
                   </Link>
                 );
@@ -120,10 +120,10 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
             </div>
 
             {/* Right actions */}
-            <div className="flex items-center gap-1 pl-4 border-l border-neutral-800 ml-auto">
+            <div className="flex items-center gap-1 pl-4 border-l border-slate-200 ml-auto">
               <Link
                 href="/dashboard/messages"
-                className="relative flex items-center justify-center min-h-11 min-w-11 rounded-lg text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition"
+                className="relative flex items-center justify-center min-h-11 min-w-11 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
                 aria-label={`Messages${unreadMessages > 0 ? `, ${unreadMessages} unread` : ''}`}
               >
                 <Bell className="w-5 h-5" aria-hidden="true" />
@@ -137,7 +137,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 transition min-h-11"
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition min-h-11"
                   aria-expanded={userMenuOpen}
                   aria-haspopup="true"
                   aria-label="User menu"
@@ -147,11 +147,11 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-48 bg-neutral-900 rounded-xl shadow-lg border border-neutral-700 py-1 z-50" role="menu">
+                  <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50" role="menu">
                     {username && (
                       <Link
                         href={`/profiles/${username}`}
-                        className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                        className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                         role="menuitem"
                         onClick={() => setUserMenuOpen(false)}
                       >
@@ -161,7 +161,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                     )}
                     <Link
                       href="/dashboard/settings"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -170,7 +170,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                     </Link>
                     <Link
                       href="/dashboard/billing"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
@@ -179,21 +179,21 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                     </Link>
                     <Link
                       href="/dashboard/feedback"
-                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition min-h-11"
+                      className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition min-h-11"
                       role="menuitem"
                       onClick={() => setUserMenuOpen(false)}
                     >
                       <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
                       Feedback
                     </Link>
-                    <div className="my-1 border-t border-neutral-700" />
+                    <div className="my-1 border-t border-slate-200" />
                     <div className="px-1" role="menuitem">
                       <TourRestartButton app="lister" />
                     </div>
-                    <div className="my-1 border-t border-neutral-700" />
+                    <div className="my-1 border-t border-slate-200" />
                     <button
                       onClick={() => { setUserMenuOpen(false); onLogout(); }}
-                      className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition min-h-11"
+                      className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
                       role="menuitem"
                     >
                       <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -210,19 +210,19 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setDrawerOpen(true)}
-                className="flex items-center justify-center min-h-11 min-w-11 text-neutral-400 hover:bg-neutral-800 rounded-lg transition"
+                className="flex items-center justify-center min-h-11 min-w-11 text-slate-500 hover:bg-slate-100 rounded-lg transition"
                 aria-label="Open menu"
               >
                 <Menu className="w-5 h-5" aria-hidden="true" />
               </button>
-              <Link href="/dashboard/contractor/lister" className="flex items-center gap-2 text-lg font-bold text-indigo-400">
+              <Link href="/dashboard/contractor/lister" className="flex items-center gap-2 text-lg font-bold text-indigo-600">
                 <ClipboardList className="w-5 h-5" aria-hidden="true" />
                 CrewOps
               </Link>
             </div>
             <Link
               href="/dashboard/messages"
-              className="relative flex items-center justify-center min-h-11 min-w-11 text-neutral-400 hover:bg-neutral-800 rounded-lg transition"
+              className="relative flex items-center justify-center min-h-11 min-w-11 text-slate-500 hover:bg-slate-100 rounded-lg transition"
               aria-label={`Messages${unreadMessages > 0 ? `, ${unreadMessages} unread` : ''}`}
             >
               <Bell className="w-5 h-5" aria-hidden="true" />
@@ -244,15 +244,15 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
             role="dialog"
             aria-modal="true"
             aria-label="Navigation"
-            className="fixed inset-y-0 left-0 z-50 w-72 bg-neutral-950 shadow-xl overflow-y-auto lg:hidden"
+            className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl overflow-y-auto lg:hidden"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 4rem)' }}
           >
-            <div className="flex items-center justify-between px-4 py-4 border-b border-neutral-800">
-              <span className="text-lg font-bold text-indigo-400 flex items-center gap-2">
+            <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200">
+              <span className="text-lg font-bold text-indigo-600 flex items-center gap-2">
                 <ClipboardList className="w-5 h-5" aria-hidden="true" /> CrewOps
               </span>
-              <button onClick={() => setDrawerOpen(false)} className="flex items-center justify-center min-h-11 min-w-11 rounded-lg hover:bg-neutral-800 transition" aria-label="Close menu">
-                <X className="w-5 h-5 text-neutral-500" aria-hidden="true" />
+              <button onClick={() => setDrawerOpen(false)} className="flex items-center justify-center min-h-11 min-w-11 rounded-lg hover:bg-slate-100 transition" aria-label="Close menu">
+                <X className="w-5 h-5 text-slate-400" aria-hidden="true" />
               </button>
             </div>
 
@@ -267,35 +267,35 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                     key={item.href}
                     href={item.href}
                     className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
-                      active ? 'text-indigo-400 bg-indigo-400/10' : 'text-neutral-300 hover:bg-neutral-800'
+                      active ? 'text-indigo-600 bg-indigo-500/10' : 'text-slate-700 hover:bg-slate-100'
                     }`}
                     aria-current={active ? 'page' : undefined}
                   >
                     <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
                     {item.label}
                     {showSparkle && (
-                      <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse ml-auto shrink-0" aria-hidden="true" />
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-600 animate-pulse ml-auto shrink-0" aria-hidden="true" />
                     )}
                   </Link>
                 );
               })}
             </div>
 
-            <div className="border-t border-neutral-800 my-1" />
+            <div className="border-t border-slate-200 my-1" />
 
             <div className="py-1">
               {username && (
-                <Link href={`/profiles/${username}`} className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+                <Link href={`/profiles/${username}`} className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                   <UserCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> My Profile
                 </Link>
               )}
-              <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Settings
               </Link>
-              <Link href="/dashboard/billing" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/billing" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <CreditCard className="w-4 h-4 shrink-0" aria-hidden="true" /> Billing
               </Link>
-              <Link href="/dashboard/messages" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/messages" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <Bell className="w-4 h-4 shrink-0" aria-hidden="true" /> Messages
                 {unreadMessages > 0 && (
                   <span className="ml-auto w-5 h-5 bg-indigo-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
@@ -303,16 +303,16 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                   </span>
                 )}
               </Link>
-              <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-neutral-300 hover:bg-neutral-800 transition">
+              <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
                 <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> Feedback
               </Link>
             </div>
 
-            <div className="border-t border-neutral-800 my-1" />
+            <div className="border-t border-slate-200 my-1" />
             <div className="py-1 pb-4">
               <button
                 onClick={() => { setDrawerOpen(false); onLogout(); }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition min-h-11"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> Logout
               </button>
@@ -323,7 +323,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
 
       {/* Mobile bottom bar */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-50 bg-neutral-950 border-t border-neutral-800 lg:hidden"
+        className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 lg:hidden"
         role="tablist"
         aria-label="Lister navigation"
         style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
@@ -344,7 +344,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                 role="tab"
                 aria-selected={active}
                 className={`flex-1 flex flex-col items-center justify-center gap-0.5 min-h-11 transition-colors ${
-                  active ? 'text-indigo-400' : 'text-neutral-500 hover:text-neutral-300'
+                  active ? 'text-indigo-600' : 'text-slate-400 hover:text-slate-700'
                 }`}
               >
                 <Icon className="w-5 h-5" aria-hidden="true" />

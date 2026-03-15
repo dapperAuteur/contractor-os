@@ -18,7 +18,7 @@ export default function PaginationBar({ page, totalPages, onPageChange, variant 
   const dark = variant === 'dark';
 
   return (
-    <nav className={`flex items-center justify-between px-5 py-3 border-t ${dark ? 'border-gray-800' : 'border-gray-200'}`} aria-label="Pagination">
+    <nav className={`flex items-center justify-between px-5 py-3 border-t ${dark ? 'border-slate-200' : 'border-gray-200'}`} aria-label="Pagination">
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}

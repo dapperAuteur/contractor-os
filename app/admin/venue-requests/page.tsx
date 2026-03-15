@@ -40,9 +40,9 @@ function ProposedChangesDiff({ current, proposed }: {
   current: Record<string, unknown> | null;
   proposed: Record<string, unknown> | null;
 }) {
-  if (!proposed) return <p className="text-gray-400 text-sm italic">No changes provided.</p>;
+  if (!proposed) return <p className="text-slate-500 text-sm italic">No changes provided.</p>;
   const keys = Object.keys(proposed);
-  if (keys.length === 0) return <p className="text-gray-400 text-sm italic">No changes specified.</p>;
+  if (keys.length === 0) return <p className="text-slate-500 text-sm italic">No changes specified.</p>;
 
   return (
     <div className="space-y-2">
@@ -52,15 +52,15 @@ function ProposedChangesDiff({ current, proposed }: {
         const oldVal = current?.[key];
         const changed = JSON.stringify(oldVal) !== JSON.stringify(newVal);
         return (
-          <div key={key} className={`rounded-lg px-3 py-2 text-xs ${changed ? 'bg-amber-950/40 border border-amber-800/40' : 'bg-gray-800/40'}`}>
-            <p className="font-semibold text-gray-300 capitalize mb-1">{label}</p>
+          <div key={key} className={`rounded-lg px-3 py-2 text-xs ${changed ? 'bg-amber-50 border border-amber-200' : 'bg-slate-50'}`}>
+            <p className="font-semibold text-slate-700 capitalize mb-1">{label}</p>
             {changed ? (
               <div className="space-y-0.5">
-                <p className="text-red-400 line-through">{formatValue(oldVal)}</p>
-                <p className="text-green-400">{formatValue(newVal)}</p>
+                <p className="text-red-600 line-through">{formatValue(oldVal)}</p>
+                <p className="text-green-600">{formatValue(newVal)}</p>
               </div>
             ) : (
-              <p className="text-gray-500">Unchanged — {formatValue(newVal)}</p>
+              <p className="text-slate-400">Unchanged — {formatValue(newVal)}</p>
             )}
           </div>
         );
@@ -116,8 +116,8 @@ export default function AdminVenueRequestsPage() {
 
   return (
     <div className="p-8 max-w-4xl">
-      <h1 className="text-2xl font-bold text-white mb-1">Venue Change Requests</h1>
-      <p className="text-gray-400 text-sm mb-6">
+      <h1 className="text-2xl font-bold text-slate-900 mb-1">Venue Change Requests</h1>
+      <p className="text-slate-500 text-sm mb-6">
         Review edit and deletion requests submitted by users for public venue listings.
       </p>
 
@@ -131,7 +131,7 @@ export default function AdminVenueRequestsPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition capitalize ${
               filter === s
                 ? 'bg-amber-600 text-white'
-                : 'bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-gray-200'
+                : 'bg-slate-100 text-slate-500 hover:bg-slate-100 hover:text-slate-800'
             }`}
           >
             {s}
@@ -149,7 +149,7 @@ export default function AdminVenueRequestsPage() {
           <div className="animate-spin h-8 w-8 border-4 border-amber-500 border-t-transparent rounded-full" />
         </div>
       ) : items.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-slate-500">
           <Clock className="w-10 h-10 mx-auto mb-3 opacity-40" />
           <p>No {filter} requests.</p>
         </div>
@@ -159,19 +159,19 @@ export default function AdminVenueRequestsPage() {
             const isOpen = expanded === item.id;
             const isEdit = item.request_type === 'edit';
             return (
-              <div key={item.id} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div key={item.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                 {/* Row header */}
                 <button
                   type="button"
                   onClick={() => setExpanded(isOpen ? null : item.id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-800/60 transition text-left"
+                  className="w-full flex items-center gap-3 px-5 py-4 hover:bg-slate-100/60 transition text-left"
                 >
                   {/* Request type badge */}
                   <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium shrink-0 ${
                     isEdit
-                      ? 'bg-blue-900/40 text-blue-300'
-                      : 'bg-red-900/40 text-red-300'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-red-100 text-red-700'
                   }`}>
                     {isEdit ? <Edit2 className="w-3 h-3" /> : <Trash2 className="w-3 h-3" />}
                     {isEdit ? 'Edit' : 'Delete'}
@@ -180,47 +180,47 @@ export default function AdminVenueRequestsPage() {
                   {/* Venue info */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-                      <p className="text-gray-200 text-sm font-medium truncate">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <p className="text-slate-800 text-sm font-medium truncate">
                         {item.venue?.name ?? 'Unknown Venue'}
                       </p>
                       {item.venue?.city && (
-                        <span className="text-gray-500 text-xs shrink-0">
+                        <span className="text-slate-400 text-xs shrink-0">
                           · {item.venue.city}{item.venue.state ? `, ${item.venue.state}` : ''}
                         </span>
                       )}
                     </div>
-                    <p className="text-gray-500 text-xs mt-0.5 truncate">
+                    <p className="text-slate-400 text-xs mt-0.5 truncate">
                       by {item.requester?.display_name ?? item.requester?.username ?? 'Unknown user'}
                       {item.reason && ` · "${item.reason}"`}
                     </p>
                   </div>
 
-                  <span className="text-gray-500 text-xs whitespace-nowrap shrink-0">
+                  <span className="text-slate-400 text-xs whitespace-nowrap shrink-0">
                     {new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
 
                   {item.status !== 'pending' && (
                     <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${
                       item.status === 'approved'
-                        ? 'bg-green-900/40 text-green-400'
-                        : 'bg-red-900/40 text-red-400'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-red-100 text-red-700'
                     }`}>
                       {item.status}
                     </span>
                   )}
 
                   {isOpen
-                    ? <ChevronUp className="w-4 h-4 text-gray-400 shrink-0" />
-                    : <ChevronDown className="w-4 h-4 text-gray-400 shrink-0" />}
+                    ? <ChevronUp className="w-4 h-4 text-slate-500 shrink-0" />
+                    : <ChevronDown className="w-4 h-4 text-slate-500 shrink-0" />}
                 </button>
 
                 {/* Expanded detail */}
                 {isOpen && (
-                  <div className="border-t border-gray-800 px-5 py-5 space-y-5">
+                  <div className="border-t border-slate-200 px-5 py-5 space-y-5">
                     {/* Request details */}
                     <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-3">
+                      <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-3">
                         {isEdit ? 'Proposed Changes' : 'Deletion Request'}
                       </p>
                       {isEdit ? (
@@ -229,12 +229,12 @@ export default function AdminVenueRequestsPage() {
                           proposed={item.proposed_changes}
                         />
                       ) : (
-                        <div className="bg-red-950/30 border border-red-900/40 rounded-lg px-4 py-3">
-                          <p className="text-red-300 text-sm font-medium">
+                        <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+                          <p className="text-red-700 text-sm font-medium">
                             User is requesting this venue be removed from the public library.
                           </p>
                           {item.reason && (
-                            <p className="text-red-400/80 text-xs mt-1">Reason: {item.reason}</p>
+                            <p className="text-red-600 text-xs mt-1">Reason: {item.reason}</p>
                           )}
                         </div>
                       )}
@@ -242,22 +242,22 @@ export default function AdminVenueRequestsPage() {
 
                     {item.admin_note && (
                       <div>
-                        <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold mb-1">Admin Note</p>
-                        <p className="text-gray-300 text-sm bg-gray-800 rounded-lg px-3 py-2">{item.admin_note}</p>
+                        <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold mb-1">Admin Note</p>
+                        <p className="text-slate-700 text-sm bg-slate-100 rounded-lg px-3 py-2">{item.admin_note}</p>
                       </div>
                     )}
 
                     {/* Approve / Reject (pending only) */}
                     {item.status === 'pending' && (
-                      <div className="pt-2 border-t border-gray-800 space-y-3">
-                        <p className="text-xs text-gray-400 uppercase tracking-wide font-semibold">Admin Note (optional)</p>
+                      <div className="pt-2 border-t border-slate-200 space-y-3">
+                        <p className="text-xs text-slate-500 uppercase tracking-wide font-semibold">Admin Note (optional)</p>
                         <textarea
                           value={noteText[item.id] ?? ''}
                           onChange={(e) => setNoteText((prev) => ({ ...prev, [item.id]: e.target.value }))}
                           rows={2}
                           placeholder="Leave a note for internal records or to communicate reason to requester…"
                           aria-label="Admin note"
-                          className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-gray-200 placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+                          className="w-full bg-white border border-slate-300 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/30 resize-none"
                         />
 
                         {actionError[item.id] && (
@@ -280,7 +280,7 @@ export default function AdminVenueRequestsPage() {
                             type="button"
                             onClick={() => handleAction(item.id, 'reject')}
                             disabled={acting === item.id}
-                            className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-red-900/60 text-red-300 hover:text-red-200 border border-gray-600 hover:border-red-800 rounded-lg text-sm font-semibold transition disabled:opacity-50 min-h-11"
+                            className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-red-50 text-red-600 hover:text-red-700 border border-slate-200 hover:border-red-200 rounded-lg text-sm font-semibold transition disabled:opacity-50 min-h-11"
                           >
                             {acting === item.id
                               ? <Loader2 className="w-4 h-4 animate-spin" />

@@ -104,9 +104,9 @@ export default function ModulePickerModal({
         aria-modal="true"
         aria-label="Choose your first feature to explore"
       >
-        <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-neutral-900 border border-neutral-700 rounded-2xl shadow-2xl">
+        <div className="w-full max-w-2xl max-h-[85vh] overflow-y-auto bg-white border border-slate-200 rounded-2xl shadow-2xl">
           {/* Header */}
-          <div className="sticky top-0 bg-neutral-900 border-b border-neutral-800 px-6 py-5 rounded-t-2xl flex items-start justify-between">
+          <div className="sticky top-0 bg-white border-b border-slate-200 px-6 py-5 rounded-t-2xl flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Sparkles className={`w-5 h-5 text-${accent}-400`} aria-hidden="true" />
@@ -114,16 +114,16 @@ export default function ModulePickerModal({
                   Welcome to {appName}
                 </span>
               </div>
-              <h2 className="text-xl font-bold text-neutral-100">
+              <h2 className="text-xl font-bold text-slate-900">
                 Which feature would you like to explore first?
               </h2>
-              <p className="text-sm text-neutral-400 mt-1">
+              <p className="text-sm text-slate-500 mt-1">
                 We&apos;ll give you a quick guided tour. You can explore the rest anytime.
               </p>
             </div>
             <button
               onClick={handleSkip}
-              className="flex items-center justify-center min-h-11 min-w-11 rounded-lg text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800 transition shrink-0 ml-4"
+              className="flex items-center justify-center min-h-11 min-w-11 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition shrink-0 ml-4"
               aria-label="Skip onboarding"
             >
               <X className="w-4 h-4" />
@@ -140,16 +140,16 @@ export default function ModulePickerModal({
                   onClick={() => handlePickModule(tour)}
                   disabled={loading}
                   aria-label={`Start ${tour.name} tour`}
-                  className={`text-left rounded-xl border border-neutral-800 bg-neutral-950 p-4 hover:border-${accent}-500/50 hover:bg-neutral-800/80 transition disabled:opacity-60 min-h-11`}
+                  className={`text-left rounded-xl border border-slate-200 bg-slate-50 p-4 hover:border-${accent}-500/50 hover:bg-slate-100 transition disabled:opacity-60 min-h-11`}
                 >
                   <div className="flex items-start gap-3">
                     <div className={`inline-flex items-center justify-center w-9 h-9 rounded-lg bg-${accent}-500/10 shrink-0`}>
                       <Icon className={`w-4 h-4 text-${accent}-400`} aria-hidden="true" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-neutral-200">{tour.name}</p>
-                      <p className="text-xs text-neutral-500 mt-0.5">{tour.description}</p>
-                      <p className="text-xs text-neutral-500 mt-1">{tour.steps.length} steps</p>
+                      <p className="text-sm font-semibold text-slate-800">{tour.name}</p>
+                      <p className="text-xs text-slate-400 mt-0.5">{tour.description}</p>
+                      <p className="text-xs text-slate-400 mt-1">{tour.steps.length} steps</p>
                     </div>
                   </div>
                 </button>
@@ -158,14 +158,14 @@ export default function ModulePickerModal({
           </div>
 
           {/* Footer */}
-          <div className="px-6 py-4 border-t border-neutral-800 flex items-center justify-between">
-            <p className="text-xs text-neutral-500">
+          <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+            <p className="text-xs text-slate-400">
               You can restart tours anytime from Settings
             </p>
             <button
               onClick={handleSkip}
               disabled={loading}
-              className="text-sm text-neutral-500 hover:text-neutral-300 transition min-h-11 px-3"
+              className="text-sm text-slate-400 hover:text-slate-900 transition min-h-11 px-3"
             >
               Skip for now
             </button>

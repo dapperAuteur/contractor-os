@@ -13,10 +13,10 @@ export default function CommunityPage() {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-gray-950 text-gray-200">
+      <main className="min-h-screen bg-slate-50 text-slate-800">
         <div className="max-w-3xl mx-auto px-6 py-16">
-        <h1 className="text-3xl font-bold text-white mb-2">Community Code of Conduct</h1>
-        <p className="text-gray-400 text-sm mb-10">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Community Code of Conduct</h1>
+        <p className="text-slate-500 text-sm mb-10">
           Last updated: March 11, 2026 &nbsp;&middot;&nbsp; Operated by B4C LLC / AwesomeWebStore.com
         </p>
 
@@ -107,7 +107,7 @@ export default function CommunityPage() {
           <p className="mt-3">
             We reserve the right to take action at our discretion. Decisions may be appealed by
             contacting us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
               hello@centenarianos.com
             </a>.
           </p>
@@ -116,7 +116,7 @@ export default function CommunityPage() {
         <Section title="8. Reporting Violations">
           <p>
             If you witness or experience a violation of this Code of Conduct, please report it to{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
               hello@centenarianos.com
             </a>{' '}
             with as much detail as possible. All reports are reviewed confidentially.
@@ -126,9 +126,9 @@ export default function CommunityPage() {
         <Section title="9. Relationship to Other Policies">
           <p>
             This Code of Conduct works alongside our{' '}
-            <Link href="/terms" className="text-amber-400 hover:underline">Terms of Use</Link>{' '}
+            <Link href="/terms" className="text-amber-600 hover:underline">Terms of Use</Link>{' '}
             and{' '}
-            <Link href="/privacy" className="text-amber-400 hover:underline">Privacy Policy</Link>.
+            <Link href="/privacy" className="text-amber-600 hover:underline">Privacy Policy</Link>.
             In the event of a conflict, the Terms of Use take precedence.
           </p>
         </Section>
@@ -143,7 +143,7 @@ export default function CommunityPage() {
         <Section title="11. Contact">
           <p>
             Questions or concerns? Reach us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-400 hover:underline">
+            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
               hello@centenarianos.com
             </a>.
           </p>
@@ -159,8 +159,8 @@ export default function CommunityPage() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-semibold text-white mb-3">{title}</h2>
-      <div className="text-gray-300 text-sm leading-relaxed space-y-2">{children}</div>
+      <h2 className="text-lg font-semibold text-slate-900 mb-3">{title}</h2>
+      <div className="text-slate-700 text-sm leading-relaxed space-y-2">{children}</div>
     </section>
   );
 }

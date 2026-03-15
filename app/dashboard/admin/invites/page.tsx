@@ -290,14 +290,14 @@ export default function AdminInvitesPage() {
                             </span>
                           </div>
                         ) : (
-                          <span className="text-gray-300 text-xs">—</span>
+                          <span className="text-slate-700 text-xs">—</span>
                         )}
                       </td>
                       <td className="px-4 py-3 hidden xl:table-cell text-gray-600 text-xs">
                         {inv.job_limit != null ? (
                           <span className="font-medium text-amber-700">{inv.job_limit} jobs</span>
                         ) : (
-                          <span className="text-gray-300">∞</span>
+                          <span className="text-slate-700">∞</span>
                         )}
                       </td>
                       <td className="px-4 py-3">

@@ -609,14 +609,14 @@ export default function CourseEditorPage() {
   }
 
   if (!course) {
-    return <div className="text-center py-20 text-gray-500">Course not found.</div>;
+    return <div className="text-center py-20 text-slate-400">Course not found.</div>;
   }
 
   const modules = [...course.course_modules].sort((a, b) => a.order - b.order);
 
   return (
     <div className="p-4 sm:p-8 max-w-3xl">
-      <Link href="/dashboard/teaching" className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 transition">
+      <Link href="/dashboard/teaching" className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm mb-6 transition">
         <ChevronLeft className="w-4 h-4" /> Teaching Dashboard
       </Link>
 
@@ -626,7 +626,7 @@ export default function CourseEditorPage() {
           <h1 className="text-xl sm:text-2xl font-bold text-white">{course.title}</h1>
           <div className="flex items-center gap-2 mt-1.5">
             <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-              course.is_published ? 'bg-green-900/30 text-green-400' : 'bg-gray-800 text-gray-500'
+              course.is_published ? 'bg-green-900/30 text-green-400' : 'bg-slate-100 text-slate-400'
             }`}>
               {course.is_published ? 'Published' : 'Draft'}
             </span>
@@ -638,7 +638,7 @@ export default function CourseEditorPage() {
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {saving && <Loader2 className="w-4 h-4 animate-spin text-gray-500" />}
+          {saving && <Loader2 className="w-4 h-4 animate-spin text-slate-400" />}
           {feedback && <p className="text-sm text-green-400">{feedback}</p>}
           <button
             type="button"
@@ -646,7 +646,7 @@ export default function CourseEditorPage() {
             disabled={publishingToggle}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition disabled:opacity-50 min-h-11 ${
               course.is_published
-                ? 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                ? 'bg-slate-100 text-slate-700 hover:bg-slate-100'
                 : 'bg-amber-600 text-white hover:bg-amber-700'
             }`}
           >
@@ -655,14 +655,14 @@ export default function CourseEditorPage() {
           </button>
           <Link
             href={`/dashboard/teaching/courses/${courseId}/assignments`}
-            className="flex items-center gap-1.5 px-3 py-2.5 bg-gray-800 text-gray-300 rounded-xl text-sm hover:bg-gray-700 transition min-h-11"
+            className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-sm hover:bg-slate-100 transition min-h-11"
           >
             <ClipboardList className="w-3.5 h-3.5" /> Assignments
           </Link>
           <Link
             href={`/academy/${courseId}`}
             target="_blank"
-            className="flex items-center gap-1.5 px-3 py-2.5 bg-gray-800 text-gray-300 rounded-xl text-sm hover:bg-gray-700 transition min-h-11"
+            className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-sm hover:bg-slate-100 transition min-h-11"
           >
             Preview
           </Link>
@@ -670,11 +670,11 @@ export default function CourseEditorPage() {
       </div>
 
       {/* Course settings */}
-      <div className="dark-input bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-6 mb-6">
+      <div className=" bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 mb-6">
         <h2 className="font-semibold text-white mb-4">Settings</h2>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Cover Image</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Cover Image</label>
             <MediaUploader
               dark
               onUpload={(url) => saveCourseField({ cover_image_url: url })}
@@ -684,22 +684,22 @@ export default function CourseEditorPage() {
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Description</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Description</label>
             <textarea
               defaultValue={course.description ?? ''}
               onBlur={(e) => { if (e.target.value !== course.description) saveCourseField({ description: e.target.value }); }}
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
+              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
           {/* Price — stacks on mobile */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm text-gray-200 mb-1.5">Price Type</label>
+              <label className="block text-sm text-slate-800 mb-1.5">Price Type</label>
               <select
                 value={course.price_type}
                 onChange={(e) => saveCourseField({ price_type: e.target.value })}
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
               >
                 <option value="free">Free</option>
                 <option value="one_time">One-time</option>
@@ -708,19 +708,19 @@ export default function CourseEditorPage() {
             </div>
             {course.price_type !== 'free' && (
               <div>
-                <label className="block text-sm text-gray-200 mb-1.5">Price ($)</label>
+                <label className="block text-sm text-slate-800 mb-1.5">Price ($)</label>
                 <input
                   type="number"
                   defaultValue={course.price}
                   onBlur={(e) => saveCourseField({ price: Number(e.target.value) })}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                 />
               </div>
             )}
           </div>
           {course.price_type === 'subscription' && (
             <div>
-              <label className="block text-sm text-gray-200 mb-1.5">Free Trial (days)</label>
+              <label className="block text-sm text-slate-800 mb-1.5">Free Trial (days)</label>
               <input
                 type="number"
                 min={0}
@@ -730,14 +730,14 @@ export default function CourseEditorPage() {
                   const val = Number(e.target.value);
                   if (val !== (course.trial_period_days ?? 0)) saveCourseField({ trial_period_days: val } as Partial<Course>);
                 }}
-                className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                 placeholder="0 = no trial"
               />
               <p className="text-gray-600 text-xs mt-1">0 = no trial. Max 30 days.</p>
             </div>
           )}
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Navigation Mode</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Navigation Mode</label>
             <div className="flex flex-wrap gap-2">
               {(['linear', 'cyoa'] as const).map((mode) => (
                 <button
@@ -747,7 +747,7 @@ export default function CourseEditorPage() {
                   className={`px-4 py-2.5 rounded-lg text-sm font-medium transition min-h-11 ${
                     course.navigation_mode === mode
                       ? 'bg-amber-600 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-100'
                   }`}
                 >
                   {mode === 'linear' ? 'Linear' : 'Adventure (CYOA)'}
@@ -764,13 +764,13 @@ export default function CourseEditorPage() {
                 className="accent-amber-500 w-4 h-4"
               />
               <div>
-                <span className="text-sm text-gray-200">Sequential Modules</span>
-                <p className="text-xs text-gray-500">Students must complete all lessons in a module before unlocking the next.</p>
+                <span className="text-sm text-slate-800">Sequential Modules</span>
+                <p className="text-xs text-slate-400">Students must complete all lessons in a module before unlocking the next.</p>
               </div>
             </label>
           </div>
           <div>
-            <label className="block text-sm text-gray-200 mb-1.5">Visibility</label>
+            <label className="block text-sm text-slate-800 mb-1.5">Visibility</label>
             <div className="flex flex-wrap gap-2">
               {(['public', 'members', 'scheduled'] as const).map((v) => (
                 <button
@@ -780,7 +780,7 @@ export default function CourseEditorPage() {
                   className={`px-4 py-2.5 rounded-lg text-sm font-medium transition min-h-11 ${
                     course.visibility === v
                       ? 'bg-amber-600 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-100'
                   }`}
                 >
                   {v === 'public' ? 'Public (anyone)' : v === 'members' ? 'Members only' : 'Scheduled'}
@@ -789,12 +789,12 @@ export default function CourseEditorPage() {
             </div>
             {course.visibility === 'scheduled' && (
               <div className="mt-2">
-                <label className="block text-xs text-gray-400 mb-1">Publish At</label>
+                <label className="block text-xs text-slate-500 mb-1">Publish At</label>
                 <input
                   type="datetime-local"
                   defaultValue={course.published_at ? course.published_at.slice(0, 16) : ''}
                   onBlur={(e) => saveCourseField({ published_at: e.target.value || null })}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                 />
               </div>
             )}
@@ -803,7 +803,7 @@ export default function CourseEditorPage() {
       </div>
 
       {/* Prerequisites & Recommendations */}
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-6 mb-6">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 mb-6">
         <div className="flex items-center gap-3 mb-4">
           <Link2 className="w-5 h-5 text-amber-400" />
           <h2 className="font-semibold text-white">Prerequisites & Recommendations</h2>
@@ -812,11 +812,11 @@ export default function CourseEditorPage() {
         {/* Existing prerequisites */}
         {prereqs.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Prerequisites</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Prerequisites</p>
             <div className="space-y-2">
               {prereqs.map((p) => (
-                <div key={p.id} className="flex items-center gap-2 bg-gray-800 rounded-xl px-3 py-2.5">
-                  <span className="text-sm text-gray-200 flex-1 truncate">{p.title}</span>
+                <div key={p.id} className="flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2.5">
+                  <span className="text-sm text-slate-800 flex-1 truncate">{p.title}</span>
                   <button
                     type="button"
                     onClick={() => toggleEnforcement(p.id, p.enforcement)}
@@ -844,11 +844,11 @@ export default function CourseEditorPage() {
         {/* Existing recommendations */}
         {recs.length > 0 && (
           <div className="mb-4">
-            <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Recommendations</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Recommendations</p>
             <div className="space-y-2">
               {recs.map((r) => (
-                <div key={r.id} className="flex items-center gap-2 bg-gray-800 rounded-xl px-3 py-2.5">
-                  <span className="text-sm text-gray-200 flex-1 truncate">{r.title}</span>
+                <div key={r.id} className="flex items-center gap-2 bg-slate-100 rounded-xl px-3 py-2.5">
+                  <span className="text-sm text-slate-800 flex-1 truncate">{r.title}</span>
                   <span className={`px-2 py-1 rounded text-xs font-medium ${
                     r.direction === 'before'
                       ? 'bg-amber-900/40 text-amber-400 border border-amber-800'
@@ -856,7 +856,7 @@ export default function CourseEditorPage() {
                   }`}>
                     {r.direction === 'before' ? 'Before' : 'After'}
                   </span>
-                  {r.notes && <span className="text-xs text-gray-500 truncate max-w-32">{r.notes}</span>}
+                  {r.notes && <span className="text-xs text-slate-400 truncate max-w-32">{r.notes}</span>}
                   <button
                     type="button"
                     onClick={() => removePrereqOrRec(r.id, 'recommendation')}
@@ -871,12 +871,12 @@ export default function CourseEditorPage() {
         )}
 
         {/* Add prerequisite / recommendation */}
-        <div className="border border-gray-700 rounded-xl p-3 space-y-2 bg-gray-800/30">
+        <div className="border border-slate-200 rounded-xl p-3 space-y-2 bg-slate-100/30">
           <div className="flex flex-wrap gap-2 items-center">
             <select
               value={prereqAddType}
               onChange={(e) => setPrereqAddType(e.target.value as 'prerequisite' | 'recommendation')}
-              className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white"
+              className="bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-white"
             >
               <option value="prerequisite">Add Prerequisite</option>
               <option value="recommendation">Add Recommendation</option>
@@ -888,7 +888,7 @@ export default function CourseEditorPage() {
                 onChange={(e) => setPrereqSearch(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); searchCoursesForPrereq(); } }}
                 placeholder="Search courses by title..."
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
               />
               <button
                 type="button"
@@ -907,14 +907,14 @@ export default function CourseEditorPage() {
                   key={c.id}
                   type="button"
                   onClick={() => addPrereqOrRec(c.id)}
-                  className="w-full text-left px-2 py-1.5 text-xs text-gray-300 hover:bg-amber-900/30 rounded transition truncate"
+                  className="w-full text-left px-2 py-1.5 text-xs text-slate-700 hover:bg-amber-900/30 rounded transition truncate"
                 >
                   {c.title}
                 </button>
               ))}
             </div>
           )}
-          {prereqSearching && <p className="text-xs text-gray-500">Searching...</p>}
+          {prereqSearching && <p className="text-xs text-slate-400">Searching...</p>}
           <p className="text-xs text-gray-600">
             Required = blocks enrollment. Recommended = shown as suggestion. Click badge to toggle.
           </p>
@@ -922,17 +922,17 @@ export default function CourseEditorPage() {
 
         {/* Overrides */}
         {prereqs.some((p) => p.enforcement === 'required') && (
-          <div className="mt-4 border-t border-gray-800 pt-4">
+          <div className="mt-4 border-t border-slate-200 pt-4">
             <div className="flex items-center gap-2 mb-3">
               <Shield className="w-4 h-4 text-amber-400" />
-              <p className="text-sm text-gray-300 font-medium">Prerequisite Overrides</p>
+              <p className="text-sm text-slate-700 font-medium">Prerequisite Overrides</p>
             </div>
             {overrides.length > 0 && (
               <div className="space-y-1.5 mb-3">
                 {overrides.map((o) => (
-                  <div key={o.id} className="flex items-center gap-2 bg-gray-800 rounded-lg px-3 py-2">
-                    <span className="text-xs text-gray-300 flex-1">{o.student_name}</span>
-                    {o.notes && <span className="text-xs text-gray-500 truncate max-w-32">{o.notes}</span>}
+                  <div key={o.id} className="flex items-center gap-2 bg-slate-100 rounded-lg px-3 py-2">
+                    <span className="text-xs text-slate-700 flex-1">{o.student_name}</span>
+                    {o.notes && <span className="text-xs text-slate-400 truncate max-w-32">{o.notes}</span>}
                     <button
                       type="button"
                       onClick={() => revokeOverride(o.id)}
@@ -950,14 +950,14 @@ export default function CourseEditorPage() {
                 value={overrideEmail}
                 onChange={(e) => setOverrideEmail(e.target.value)}
                 placeholder="Student email..."
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-w-40"
+                className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-w-40"
               />
               <input
                 type="text"
                 value={overrideNotes}
                 onChange={(e) => setOverrideNotes(e.target.value)}
                 placeholder="Notes (optional)..."
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-w-40"
+                className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-w-40"
               />
               <button
                 type="button"
@@ -971,20 +971,20 @@ export default function CourseEditorPage() {
 
             {/* Pending Override Requests */}
             {overrideRequests.length > 0 && (
-              <div className="mt-4 border-t border-gray-700 pt-3">
+              <div className="mt-4 border-t border-slate-200 pt-3">
                 <p className="text-xs text-amber-400 font-medium mb-2">{overrideRequests.length} Pending Request{overrideRequests.length > 1 ? 's' : ''}</p>
                 <div className="space-y-2">
                   {overrideRequests.map((req) => (
-                    <div key={req.id} className="bg-gray-800/80 rounded-lg p-3 space-y-2">
+                    <div key={req.id} className="bg-slate-100/80 rounded-lg p-3 space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-300 font-medium">{req.student_name}</span>
-                        <span className="text-xs text-gray-500">{new Date(req.created_at).toLocaleDateString()}</span>
+                        <span className="text-xs text-slate-700 font-medium">{req.student_name}</span>
+                        <span className="text-xs text-slate-400">{new Date(req.created_at).toLocaleDateString()}</span>
                       </div>
-                      {req.reason && <p className="text-xs text-gray-400 italic">&quot;{req.reason}&quot;</p>}
+                      {req.reason && <p className="text-xs text-slate-500 italic">&quot;{req.reason}&quot;</p>}
                       {Object.keys(req.answers).length > 0 && (
-                        <div className="text-xs text-gray-400 space-y-1">
+                        <div className="text-xs text-slate-500 space-y-1">
                           {Object.entries(req.answers).map(([q, a]) => (
-                            <div key={q}><span className="text-gray-500">{q}:</span> {a}</div>
+                            <div key={q}><span className="text-slate-400">{q}:</span> {a}</div>
                           ))}
                         </div>
                       )}
@@ -1005,9 +1005,9 @@ export default function CourseEditorPage() {
             )}
 
             {/* Override Questions Editor */}
-            <div className="mt-4 border-t border-gray-700 pt-3">
+            <div className="mt-4 border-t border-slate-200 pt-3">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-gray-500 font-medium">Override Request Questions</p>
+                <p className="text-xs text-slate-400 font-medium">Override Request Questions</p>
                 <button type="button" onClick={addOverrideQuestion}
                   className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1">
                   <Plus className="w-3 h-3" /> Add Question
@@ -1018,19 +1018,19 @@ export default function CourseEditorPage() {
               ) : (
                 <div className="space-y-2">
                   {overrideQuestions.map((q) => (
-                    <div key={q.id} className="flex items-start gap-2 bg-gray-800/60 rounded-lg p-2">
+                    <div key={q.id} className="flex items-start gap-2 bg-slate-100/60 rounded-lg p-2">
                       <input
                         type="text"
                         value={q.question}
                         onChange={(e) => updateOverrideQuestion(q.id, 'question', e.target.value)}
                         onBlur={saveOverrideQuestions}
                         placeholder="Question text..."
-                        className="flex-1 bg-gray-800 border border-gray-700 rounded px-2 py-1 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                        className="flex-1 bg-slate-100 border border-slate-200 rounded px-2 py-1 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                       />
                       <select
                         value={q.type}
                         onChange={(e) => { updateOverrideQuestion(q.id, 'type', e.target.value); setTimeout(saveOverrideQuestions, 50); }}
-                        className="bg-gray-800 border border-gray-700 rounded px-1.5 py-1 text-xs text-white"
+                        className="bg-slate-100 border border-slate-200 rounded px-1.5 py-1 text-xs text-white"
                       >
                         <option value="text">Text</option>
                         <option value="rating">Rating (1-5)</option>
@@ -1049,9 +1049,9 @@ export default function CourseEditorPage() {
         )}
 
         {/* AI Recommendations */}
-        <div className="mt-4 border-t border-gray-800 pt-4">
+        <div className="mt-4 border-t border-slate-200 pt-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
+            <p className="text-xs text-slate-400 font-medium flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" /> AI Course Suggestions
             </p>
             <button type="button" onClick={fetchAiRecommendations} disabled={aiRecsLoading}
@@ -1063,19 +1063,19 @@ export default function CourseEditorPage() {
           {aiRecs && (
             <div className="space-y-2">
               {(aiRecs.before ?? []).map((r) => (
-                <div key={r.course_id} className="flex items-center gap-2 bg-gray-800/60 rounded-lg p-2">
+                <div key={r.course_id} className="flex items-center gap-2 bg-slate-100/60 rounded-lg p-2">
                   <span className="text-xs text-amber-400 shrink-0">Before:</span>
-                  <span className="text-xs text-gray-300 flex-1 truncate">{r.title}</span>
-                  <span className="text-xs text-gray-500 truncate max-w-40">{r.reason}</span>
+                  <span className="text-xs text-slate-700 flex-1 truncate">{r.title}</span>
+                  <span className="text-xs text-slate-400 truncate max-w-40">{r.reason}</span>
                   <button type="button" onClick={() => addAiRecAsManual(r.course_id, 'recommendation', 'before')}
                     className="text-xs text-amber-400 hover:text-amber-300 shrink-0">Add</button>
                 </div>
               ))}
               {(aiRecs.after ?? []).map((r) => (
-                <div key={r.course_id} className="flex items-center gap-2 bg-gray-800/60 rounded-lg p-2">
+                <div key={r.course_id} className="flex items-center gap-2 bg-slate-100/60 rounded-lg p-2">
                   <span className="text-xs text-green-400 shrink-0">After:</span>
-                  <span className="text-xs text-gray-300 flex-1 truncate">{r.title}</span>
-                  <span className="text-xs text-gray-500 truncate max-w-40">{r.reason}</span>
+                  <span className="text-xs text-slate-700 flex-1 truncate">{r.title}</span>
+                  <span className="text-xs text-slate-400 truncate max-w-40">{r.reason}</span>
                   <button type="button" onClick={() => addAiRecAsManual(r.course_id, 'recommendation', 'after')}
                     className="text-xs text-amber-400 hover:text-amber-300 shrink-0">Add</button>
                 </div>
@@ -1089,7 +1089,7 @@ export default function CourseEditorPage() {
 
         {/* Cross-Course CYOA Toggle */}
         {course.navigation_mode === 'cyoa' && (
-          <div className="mt-4 border-t border-gray-800 pt-4">
+          <div className="mt-4 border-t border-slate-200 pt-4">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
@@ -1098,8 +1098,8 @@ export default function CourseEditorPage() {
                 className="accent-amber-500 w-4 h-4"
               />
               <div>
-                <span className="text-sm text-gray-200">Cross-Course Adventure Paths</span>
-                <p className="text-xs text-gray-500">Allow this course&apos;s lessons to appear in other courses&apos; CYOA crossroads, and show lessons from other courses in yours.</p>
+                <span className="text-sm text-slate-800">Cross-Course Adventure Paths</span>
+                <p className="text-xs text-slate-400">Allow this course&apos;s lessons to appear in other courses&apos; CYOA crossroads, and show lessons from other courses in yours.</p>
               </div>
             </label>
           </div>
@@ -1113,7 +1113,7 @@ export default function CourseEditorPage() {
             <Sparkles className="w-5 h-5 text-amber-400" />
             <h2 className="font-semibold text-white">AI Adventure Paths</h2>
           </div>
-          <p className="text-gray-400 text-sm mb-4">
+          <p className="text-slate-500 text-sm mb-4">
             Generate AI embeddings for all lessons to power semantic &quot;Choose Your Own Adventure&quot; navigation.
             Run this after adding or editing lessons.
           </p>
@@ -1138,20 +1138,20 @@ export default function CourseEditorPage() {
       )}
 
       {/* Curriculum builder */}
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-6">
+      <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="font-semibold text-white">Curriculum</h2>
           <button
             type="button"
             onClick={() => setAddingModule(true)}
-            className="flex items-center gap-1.5 px-3 py-2.5 bg-gray-800 text-gray-300 rounded-lg text-sm hover:bg-gray-700 transition min-h-11"
+            className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-100 transition min-h-11"
           >
             <Plus className="w-3.5 h-3.5" /> Add Module
           </button>
         </div>
 
         {addingModule && (
-          <div className="dark-input flex gap-2 mb-4">
+          <div className=" flex gap-2 mb-4">
             <input
               autoFocus
               type="text"
@@ -1159,10 +1159,10 @@ export default function CourseEditorPage() {
               onChange={(e) => setNewModuleTitle(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') addModule(); if (e.key === 'Escape') setAddingModule(false); }}
               placeholder="Module title…"
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
+              className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
             />
             <button onClick={addModule} className="px-4 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition min-h-11">Add</button>
-            <button onClick={() => setAddingModule(false)} className="px-3 py-2.5 bg-gray-800 text-gray-400 rounded-xl text-sm hover:bg-gray-700 transition min-h-11">Cancel</button>
+            <button onClick={() => setAddingModule(false)} className="px-3 py-2.5 bg-slate-100 text-slate-500 rounded-xl text-sm hover:bg-slate-100 transition min-h-11">Cancel</button>
           </div>
         )}
 
@@ -1171,30 +1171,30 @@ export default function CourseEditorPage() {
           <button
             type="button"
             onClick={() => setShowBulkImport(!showBulkImport)}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-amber-400 transition"
+            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-amber-400 transition"
           >
             <Upload className="w-3 h-3" />
             {showBulkImport ? 'Hide' : 'Bulk Import from CSV'}
             <ChevronDown className={`w-3 h-3 transition-transform ${showBulkImport ? 'rotate-180' : ''}`} />
           </button>
           {showBulkImport && (
-            <div className="mt-3 p-4 bg-gray-800/40 border border-gray-700 rounded-xl space-y-3">
-              <p className="text-xs text-gray-400">
+            <div className="mt-3 p-4 bg-slate-100/40 border border-slate-200 rounded-xl space-y-3">
+              <p className="text-xs text-slate-500">
                 Import modules and lessons from a CSV file. Each row creates a lesson; modules are auto-created from the <code className="text-amber-400">module_title</code> column.
               </p>
               <div className="flex items-center gap-3">
-                <label className="text-xs text-gray-500">Mode:</label>
+                <label className="text-xs text-slate-400">Mode:</label>
                 <button
                   type="button"
                   onClick={() => setBulkImportMode('create')}
-                  className={`px-2 py-1 rounded text-xs font-medium transition ${bulkImportMode === 'create' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'}`}
+                  className={`px-2 py-1 rounded text-xs font-medium transition ${bulkImportMode === 'create' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-slate-500 hover:bg-gray-600'}`}
                 >
                   Create only
                 </button>
                 <button
                   type="button"
                   onClick={() => setBulkImportMode('upsert')}
-                  className={`px-2 py-1 rounded text-xs font-medium transition ${bulkImportMode === 'upsert' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-gray-400 hover:bg-gray-600'}`}
+                  className={`px-2 py-1 rounded text-xs font-medium transition ${bulkImportMode === 'upsert' ? 'bg-amber-600 text-white' : 'bg-gray-700 text-slate-500 hover:bg-gray-600'}`}
                 >
                   Create + Update
                 </button>
@@ -1223,7 +1223,7 @@ export default function CourseEditorPage() {
                 templateCsvUrl="/templates/course-import.csv"
               />
               {bulkImporting && (
-                <p className="text-xs text-gray-500 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Importing...</p>
+                <p className="text-xs text-slate-400 flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Importing...</p>
               )}
               {bulkImportResult && (
                 <div className="space-y-1">
@@ -1242,7 +1242,7 @@ export default function CourseEditorPage() {
         </div>
 
         {modules.length === 0 ? (
-          <div className="text-center py-10 text-gray-600 border border-dashed border-gray-800 rounded-xl">
+          <div className="text-center py-10 text-gray-600 border border-dashed border-slate-200 rounded-xl">
             <p className="text-sm">No modules yet. Add a module to organize your lessons.</p>
           </div>
         ) : (
@@ -1250,8 +1250,8 @@ export default function CourseEditorPage() {
             {modules.map((mod) => {
               const lessons = [...mod.lessons].sort((a, b) => a.order - b.order);
               return (
-                <div key={mod.id} className="border border-gray-800 rounded-xl overflow-hidden">
-                  <div className="flex items-center gap-3 px-4 py-3 bg-gray-800/50">
+                <div key={mod.id} className="border border-slate-200 rounded-xl overflow-hidden">
+                  <div className="flex items-center gap-3 px-4 py-3 bg-slate-100/50">
                     <GripVertical className="w-4 h-4 text-gray-600 shrink-0" />
                     <p className="flex-1 font-medium text-white text-sm">{mod.title}</p>
                     <span className="text-gray-600 text-xs">{lessons.length} lesson{lessons.length !== 1 ? 's' : ''}</span>
@@ -1260,10 +1260,10 @@ export default function CourseEditorPage() {
                   {lessons.map((lesson) => {
                     const Icon = LESSON_TYPE_ICON[lesson.lesson_type] ?? Play;
                     return (
-                      <div key={lesson.id} className="flex items-center gap-3 px-4 py-3 border-t border-gray-800">
+                      <div key={lesson.id} className="flex items-center gap-3 px-4 py-3 border-t border-slate-200">
                         <GripVertical className="w-3.5 h-3.5 text-gray-700 shrink-0" />
-                        <Icon className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-                        <span className="flex-1 text-sm text-gray-300 min-w-0 truncate">{lesson.title}</span>
+                        <Icon className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                        <span className="flex-1 text-sm text-slate-700 min-w-0 truncate">{lesson.title}</span>
                         {lesson.is_free_preview && (
                           <span className="text-xs text-amber-400 px-1.5 py-0.5 bg-amber-900/30 rounded shrink-0">Preview</span>
                         )}
@@ -1282,20 +1282,20 @@ export default function CourseEditorPage() {
 
                   {/* Add lesson */}
                   {addingLesson === mod.id ? (
-                    <div className="dark-input border-t border-gray-800 p-4 space-y-3">
+                    <div className=" border-t border-slate-200 p-4 space-y-3">
                       <input
                         autoFocus
                         type="text"
                         value={newLesson.title}
                         onChange={(e) => setNewLesson((l) => ({ ...l, title: e.target.value }))}
                         placeholder="Lesson title…"
-                        className="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
+                        className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
                       />
                       <div className="flex flex-wrap gap-3 items-center">
                         <select
                           value={newLesson.lesson_type}
                           onChange={(e) => setNewLesson((l) => ({ ...l, lesson_type: e.target.value }))}
-                          className="bg-gray-800 border border-gray-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                          className="bg-slate-100 border border-slate-200 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                         >
                           <option value="video">Video</option>
                           <option value="text">Text</option>
@@ -1303,7 +1303,7 @@ export default function CourseEditorPage() {
                           <option value="slides">Slides</option>
                           <option value="quiz">Quiz</option>
                         </select>
-                        <label className="flex items-center gap-2 text-sm text-gray-400 cursor-pointer min-h-11">
+                        <label className="flex items-center gap-2 text-sm text-slate-500 cursor-pointer min-h-11">
                           <input
                             type="checkbox"
                             checked={newLesson.is_free_preview}
@@ -1316,11 +1316,11 @@ export default function CourseEditorPage() {
                       {/* Quiz editor — shown when lesson_type is quiz */}
                       {/* Chapter/transcript editor — audio & video */}
                       {(newLesson.lesson_type === 'audio' || newLesson.lesson_type === 'video') && (
-                        <div className="space-y-4 border border-gray-700 rounded-xl p-3 bg-gray-800/30">
+                        <div className="space-y-4 border border-slate-200 rounded-xl p-3 bg-slate-100/30">
                           {/* Chapter markers */}
                           <div>
                             <div className="flex items-center justify-between mb-2">
-                              <h4 className="text-sm font-semibold text-gray-200">Chapter Markers</h4>
+                              <h4 className="text-sm font-semibold text-slate-800">Chapter Markers</h4>
                               <button type="button" onClick={addAudioChapter} className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 transition">
                                 <Plus className="w-3 h-3" /> Add Chapter
                               </button>
@@ -1331,13 +1331,13 @@ export default function CourseEditorPage() {
                             <div className="space-y-2">
                               {audioChapters.map((ch, ci) => (
                                 <div key={ch.id} className="flex items-center gap-2">
-                                  <span className="text-xs text-gray-500 shrink-0 w-5">{ci + 1}</span>
+                                  <span className="text-xs text-slate-400 shrink-0 w-5">{ci + 1}</span>
                                   <input
                                     type="text"
                                     value={ch.title}
                                     onChange={(e) => updateAudioChapter(ch.id, { title: e.target.value })}
                                     placeholder="Chapter title…"
-                                    className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                    className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                   />
                                   <input
                                     type="number"
@@ -1345,7 +1345,7 @@ export default function CourseEditorPage() {
                                     step={1}
                                     value={ch.startTime}
                                     onChange={(e) => updateAudioChapter(ch.id, { startTime: Number(e.target.value) })}
-                                    className="w-20 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                    className="w-20 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                                     title="Start time (seconds)"
                                     placeholder="Start (s)"
                                   />
@@ -1355,7 +1355,7 @@ export default function CourseEditorPage() {
                                     step={1}
                                     value={ch.endTime}
                                     onChange={(e) => updateAudioChapter(ch.id, { endTime: Number(e.target.value) })}
-                                    className="w-20 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                    className="w-20 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                                     title="End time (seconds)"
                                     placeholder="End (s)"
                                   />
@@ -1368,22 +1368,22 @@ export default function CourseEditorPage() {
                           </div>
                           {/* Transcript */}
                           <div>
-                            <label className="block text-sm font-semibold text-gray-200 mb-1.5">Transcript</label>
-                            <p className="text-xs text-gray-500 mb-2">Paste timestamped transcript. Format: <code className="text-gray-400">MM:SS text</code> (one per line). e.g. <code className="text-gray-400">01:30 Welcome back to the show</code></p>
+                            <label className="block text-sm font-semibold text-slate-800 mb-1.5">Transcript</label>
+                            <p className="text-xs text-slate-400 mb-2">Paste timestamped transcript. Format: <code className="text-slate-500">MM:SS text</code> (one per line). e.g. <code className="text-slate-500">01:30 Welcome back to the show</code></p>
                             <textarea
                               value={transcriptText}
                               onChange={(e) => setTranscriptText(e.target.value)}
                               rows={6}
                               placeholder={"00:00 Introduction\n00:45 Today's topic\n03:20 First segment…"}
-                              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none font-mono"
+                              className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 resize-none font-mono"
                             />
                           </div>
                         </div>
                       )}
                       {newLesson.lesson_type === 'quiz' && (
-                        <div className="space-y-3 border border-gray-700 rounded-xl p-3 bg-gray-800/30">
+                        <div className="space-y-3 border border-slate-200 rounded-xl p-3 bg-slate-100/30">
                           <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-semibold text-gray-200">Quiz Questions</h4>
+                            <h4 className="text-sm font-semibold text-slate-800">Quiz Questions</h4>
                             <button type="button" onClick={addQuizQuestion} className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 transition">
                               <Plus className="w-3 h-3" /> Add Question
                             </button>
@@ -1392,16 +1392,16 @@ export default function CourseEditorPage() {
                             <p className="text-xs text-gray-600 text-center py-3">No questions yet. Add your first question above.</p>
                           )}
                           {quizQuestions.map((q, qi) => (
-                            <div key={q.id} className="border border-gray-700 rounded-lg p-3 space-y-2">
+                            <div key={q.id} className="border border-slate-200 rounded-lg p-3 space-y-2">
                               <div className="flex items-start gap-2">
-                                <span className="text-xs text-gray-500 mt-3 shrink-0">Q{qi + 1}</span>
+                                <span className="text-xs text-slate-400 mt-3 shrink-0">Q{qi + 1}</span>
                                 <div className="flex-1 space-y-2">
                                   <input
                                     type="text"
                                     value={q.questionText}
                                     onChange={(e) => updateQuizQuestion(q.id, { questionText: e.target.value })}
                                     placeholder="Question text…"
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                   />
                                   <div className="space-y-1.5">
                                     {q.options.map((opt) => (
@@ -1419,7 +1419,7 @@ export default function CourseEditorPage() {
                                           value={opt.text}
                                           onChange={(e) => updateQuizOption(q.id, opt.id, e.target.value)}
                                           placeholder="Option text…"
-                                          className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                          className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                         />
                                         {q.options.length > 2 && (
                                           <button type="button" onClick={() => removeQuizOption(q.id, opt.id)} className="text-gray-600 hover:text-red-400 transition p-1">
@@ -1429,7 +1429,7 @@ export default function CourseEditorPage() {
                                       </div>
                                     ))}
                                     {q.options.length < 6 && (
-                                      <button type="button" onClick={() => addQuizOption(q.id)} className="text-xs text-gray-500 hover:text-amber-400 transition ml-6">
+                                      <button type="button" onClick={() => addQuizOption(q.id)} className="text-xs text-slate-400 hover:text-amber-400 transition ml-6">
                                         + Add option
                                       </button>
                                     )}
@@ -1439,14 +1439,14 @@ export default function CourseEditorPage() {
                                     value={q.explanation}
                                     onChange={(e) => updateQuizQuestion(q.id, { explanation: e.target.value })}
                                     placeholder="Explanation (shown after answering)…"
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                   />
                                   <input
                                     type="text"
                                     value={q.citation}
                                     onChange={(e) => updateQuizQuestion(q.id, { citation: e.target.value })}
                                     placeholder="Citation (optional, APA format)…"
-                                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 text-xs text-gray-400 placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-500 placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                   />
                                 </div>
                                 <button type="button" onClick={() => removeQuizQuestion(q.id)} className="text-gray-600 hover:text-red-400 transition p-1 mt-2 shrink-0">
@@ -1457,24 +1457,24 @@ export default function CourseEditorPage() {
                           ))}
                           <div className="flex flex-wrap gap-3 pt-1">
                             <div>
-                              <label className="block text-xs text-gray-500 mb-1">Passing Score (%)</label>
+                              <label className="block text-xs text-slate-400 mb-1">Passing Score (%)</label>
                               <input
                                 type="number"
                                 min={0}
                                 max={100}
                                 value={quizPassingScore}
                                 onChange={(e) => setQuizPassingScore(Number(e.target.value))}
-                                className="w-20 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                className="w-20 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                               />
                             </div>
                             <div>
-                              <label className="block text-xs text-gray-500 mb-1">Attempts (-1 = unlimited)</label>
+                              <label className="block text-xs text-slate-400 mb-1">Attempts (-1 = unlimited)</label>
                               <input
                                 type="number"
                                 min={-1}
                                 value={quizAttemptsAllowed}
                                 onChange={(e) => setQuizAttemptsAllowed(Number(e.target.value))}
-                                className="w-20 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                className="w-20 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                               />
                             </div>
                           </div>
@@ -1483,9 +1483,9 @@ export default function CourseEditorPage() {
 
                       {/* Podcast links — audio lessons only */}
                       {newLesson.lesson_type === 'audio' && (
-                        <div className="space-y-2 border border-gray-700 rounded-xl p-3 bg-gray-800/30">
+                        <div className="space-y-2 border border-slate-200 rounded-xl p-3 bg-slate-100/30">
                           <div className="flex items-center justify-between">
-                            <h4 className="text-sm font-semibold text-gray-200">Podcast Links</h4>
+                            <h4 className="text-sm font-semibold text-slate-800">Podcast Links</h4>
                             <button type="button" onClick={addPodcastLink} className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 transition">
                               <Plus className="w-3 h-3" /> Add Platform
                             </button>
@@ -1496,20 +1496,20 @@ export default function CourseEditorPage() {
                           <div className="space-y-2">
                             {podcastLinks.map((link, li) => (
                               <div key={link.id} className="flex items-center gap-2">
-                                <span className="text-xs text-gray-500 shrink-0 w-5">{li + 1}</span>
+                                <span className="text-xs text-slate-400 shrink-0 w-5">{li + 1}</span>
                                 <input
                                   type="url"
                                   value={link.url}
                                   onChange={(e) => updatePodcastLink(link.id, { url: e.target.value })}
                                   placeholder="https://open.spotify.com/episode/..."
-                                  className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                  className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                 />
                                 <input
                                   type="text"
                                   value={link.label}
                                   onChange={(e) => updatePodcastLink(link.id, { label: e.target.value })}
                                   placeholder="Label (auto-detected)"
-                                  className="w-36 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                  className="w-36 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                 />
                                 <button type="button" onClick={() => removePodcastLink(link.id)} className="text-gray-600 hover:text-red-400 transition p-1 shrink-0">
                                   <X className="w-3.5 h-3.5" />
@@ -1522,11 +1522,11 @@ export default function CourseEditorPage() {
                       )}
 
                       {/* Interactive Map — any lesson type */}
-                      <div className="border border-gray-700 rounded-xl overflow-hidden">
+                      <div className="border border-slate-200 rounded-xl overflow-hidden">
                         <button
                           type="button"
                           onClick={() => setShowMapSection((v) => !v)}
-                          className="w-full flex items-center gap-2 px-3 py-2.5 bg-gray-800/50 text-sm font-semibold text-gray-300 hover:bg-gray-800 transition"
+                          className="w-full flex items-center gap-2 px-3 py-2.5 bg-slate-100/50 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
                         >
                           <Map className="w-3.5 h-3.5 text-amber-400" />
                           Interactive Map
@@ -1538,37 +1538,37 @@ export default function CourseEditorPage() {
                           <ChevronDown className={`w-3.5 h-3.5 ml-auto text-gray-600 transition-transform ${showMapSection ? 'rotate-180' : ''}`} />
                         </button>
                         {showMapSection && (
-                          <div className="p-3 space-y-3 bg-gray-800/20">
+                          <div className="p-3 space-y-3 bg-slate-100/20">
                             <div className="grid grid-cols-3 gap-2">
                               <div>
-                                <label className="block text-xs text-gray-500 mb-1">Center Lat</label>
+                                <label className="block text-xs text-slate-400 mb-1">Center Lat</label>
                                 <input
                                   type="number"
                                   step="any"
                                   value={mapCenter.lat}
                                   onChange={(e) => setMapCenter((c) => ({ ...c, lat: parseFloat(e.target.value) || 0 }))}
-                                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                                 />
                               </div>
                               <div>
-                                <label className="block text-xs text-gray-500 mb-1">Center Lng</label>
+                                <label className="block text-xs text-slate-400 mb-1">Center Lng</label>
                                 <input
                                   type="number"
                                   step="any"
                                   value={mapCenter.lng}
                                   onChange={(e) => setMapCenter((c) => ({ ...c, lng: parseFloat(e.target.value) || 0 }))}
-                                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                                 />
                               </div>
                               <div>
-                                <label className="block text-xs text-gray-500 mb-1">Zoom (1-18)</label>
+                                <label className="block text-xs text-slate-400 mb-1">Zoom (1-18)</label>
                                 <input
                                   type="number"
                                   min={1}
                                   max={18}
                                   value={mapZoom}
                                   onChange={(e) => setMapZoom(Number(e.target.value) || 3)}
-                                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
+                                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white focus:outline-none focus:border-amber-500"
                                 />
                               </div>
                             </div>
@@ -1630,11 +1630,11 @@ export default function CourseEditorPage() {
                       </div>
 
                       {/* Documents — any lesson type */}
-                      <div className="border border-gray-700 rounded-xl overflow-hidden">
+                      <div className="border border-slate-200 rounded-xl overflow-hidden">
                         <button
                           type="button"
                           onClick={() => setShowDocSection((v) => !v)}
-                          className="w-full flex items-center gap-2 px-3 py-2.5 bg-gray-800/50 text-sm font-semibold text-gray-300 hover:bg-gray-800 transition"
+                          className="w-full flex items-center gap-2 px-3 py-2.5 bg-slate-100/50 text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
                         >
                           <Paperclip className="w-3.5 h-3.5 text-amber-400" />
                           Documents
@@ -1644,7 +1644,7 @@ export default function CourseEditorPage() {
                           <ChevronDown className={`w-3.5 h-3.5 ml-auto text-gray-600 transition-transform ${showDocSection ? 'rotate-180' : ''}`} />
                         </button>
                         {showDocSection && (
-                          <div className="p-3 space-y-3 bg-gray-800/20">
+                          <div className="p-3 space-y-3 bg-slate-100/20">
                             <DataImporter
                               label="Batch import from CSV"
                               columns={[
@@ -1656,9 +1656,9 @@ export default function CourseEditorPage() {
                               onImport={handleDocumentImport}
                               templateCsvUrl="/templates/documents.csv"
                             />
-                            <div className="border-t border-gray-700 pt-3">
+                            <div className="border-t border-slate-200 pt-3">
                               <div className="flex items-center justify-between mb-2">
-                                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Manual entry</p>
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Manual entry</p>
                                 <button type="button" onClick={addDocument} className="flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 transition">
                                   <Plus className="w-3 h-3" /> Add Document
                                 </button>
@@ -1668,15 +1668,15 @@ export default function CourseEditorPage() {
                               )}
                               <div className="space-y-2">
                                 {lessonDocuments.map((doc, di) => (
-                                  <div key={doc.id} className="border border-gray-700 rounded-lg p-2 space-y-1.5">
+                                  <div key={doc.id} className="border border-slate-200 rounded-lg p-2 space-y-1.5">
                                     <div className="flex items-center gap-2">
-                                      <span className="text-xs text-gray-500 shrink-0 w-5">{di + 1}</span>
+                                      <span className="text-xs text-slate-400 shrink-0 w-5">{di + 1}</span>
                                       <input
                                         type="text"
                                         value={doc.title}
                                         onChange={(e) => updateDocument(doc.id, { title: e.target.value })}
                                         placeholder="Document title…"
-                                        className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                        className="flex-1 bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                       />
                                       <button type="button" onClick={() => removeDocument(doc.id)} className="text-gray-600 hover:text-red-400 transition p-1 shrink-0">
                                         <X className="w-3.5 h-3.5" />
@@ -1697,14 +1697,14 @@ export default function CourseEditorPage() {
                                         value={doc.description}
                                         onChange={(e) => updateDocument(doc.id, { description: e.target.value })}
                                         placeholder="Description…"
-                                        className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                        className="bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                       />
                                       <input
                                         type="url"
                                         value={doc.source_url}
                                         onChange={(e) => updateDocument(doc.id, { source_url: e.target.value })}
                                         placeholder="Original source URL…"
-                                        className="bg-gray-800 border border-gray-700 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
+                                        className="bg-slate-100 border border-slate-200 rounded-lg px-2 py-1.5 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-amber-500"
                                       />
                                     </div>
                                   </div>
@@ -1717,14 +1717,14 @@ export default function CourseEditorPage() {
 
                       <div className="flex flex-wrap gap-2">
                         <button onClick={() => addLesson(mod.id)} className="px-4 py-2.5 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition min-h-11">Add Lesson</button>
-                        <button onClick={() => setAddingLesson(null)} className="px-4 py-2.5 bg-gray-800 text-gray-400 rounded-xl text-sm hover:bg-gray-700 transition min-h-11">Cancel</button>
+                        <button onClick={() => setAddingLesson(null)} className="px-4 py-2.5 bg-slate-100 text-slate-500 rounded-xl text-sm hover:bg-slate-100 transition min-h-11">Cancel</button>
                       </div>
                     </div>
                   ) : (
                     <button
                       type="button"
                       onClick={() => setAddingLesson(mod.id)}
-                      className="w-full flex items-center gap-2 px-4 py-3 border-t border-gray-800 text-gray-600 hover:text-amber-400 text-sm hover:bg-gray-800/30 transition min-h-11"
+                      className="w-full flex items-center gap-2 px-4 py-3 border-t border-slate-200 text-gray-600 hover:text-amber-400 text-sm hover:bg-slate-100/30 transition min-h-11"
                     >
                       <Plus className="w-3.5 h-3.5" /> Add Lesson
                     </button>
@@ -1737,11 +1737,11 @@ export default function CourseEditorPage() {
       </div>
 
       {/* Glossary */}
-      <div className="mt-8 border border-gray-800 rounded-2xl overflow-hidden">
+      <div className="mt-8 border border-slate-200 rounded-2xl overflow-hidden">
         <button
           type="button"
           onClick={() => setShowGlossary((v) => !v)}
-          className="w-full flex items-center gap-2 px-5 py-4 bg-gray-900 text-sm font-semibold text-gray-300 hover:bg-gray-800 transition"
+          className="w-full flex items-center gap-2 px-5 py-4 bg-white text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
         >
           <BookMarked className="w-4 h-4 text-amber-400" />
           Glossary &amp; Phonetic Spelling

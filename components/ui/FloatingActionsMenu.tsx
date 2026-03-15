@@ -41,13 +41,13 @@ export default function FloatingActionsMenu({ userRole, isAdmin }: Props) {
               open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
             }`}
           >
-            <span className="bg-neutral-900 text-neutral-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-neutral-700">
+            <span className="bg-white text-slate-800 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-slate-200">
               Help
             </span>
             <button
               onClick={openHelp}
               title="Open help chat"
-              className="bg-neutral-800 text-white rounded-full p-3 shadow-lg hover:bg-neutral-700 border border-neutral-700 transition-colors"
+              className="bg-slate-100 text-white rounded-full p-3 shadow-lg hover:bg-slate-100 border border-slate-200 transition-colors"
               aria-label="Open help chat"
             >
               <HelpCircle className="w-5 h-5 text-amber-400" />
@@ -61,13 +61,13 @@ export default function FloatingActionsMenu({ userRole, isAdmin }: Props) {
             open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
           }`}
         >
-          <span className="bg-neutral-900 text-neutral-200 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-neutral-700">
+          <span className="bg-white text-slate-800 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-slate-200">
             Feedback
           </span>
           <button
             onClick={openFeedback}
             title="Share feedback"
-            className="bg-neutral-800 text-white rounded-full p-3 shadow-lg hover:bg-neutral-700 border border-neutral-700 transition-colors"
+            className="bg-slate-100 text-white rounded-full p-3 shadow-lg hover:bg-slate-100 border border-slate-200 transition-colors"
             aria-label="Share feedback"
           >
             <MessageCircle className="w-5 h-5 text-amber-400" />

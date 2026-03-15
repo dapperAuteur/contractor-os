@@ -172,20 +172,20 @@ export default function DashboardSettingsPage() {
     <div className="max-w-2xl mx-auto py-8 px-4 space-y-6">
       <div className="flex items-center gap-3 mb-6">
         <Settings className="w-6 h-6 text-amber-400" />
-        <h1 className="text-2xl font-bold text-neutral-100">Settings</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
       </div>
 
       {/* Home Page */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-        <h2 className="text-base font-semibold text-neutral-100 mb-1">Home Page</h2>
-        <p className="text-sm text-neutral-400 mb-5">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-base font-semibold text-slate-900 mb-1">Home Page</h2>
+        <p className="text-sm text-slate-500 mb-5">
           Choose which page you land on when you log in.
         </p>
 
         <div className="space-y-4">
           {Object.entries(grouped).map(([groupLabel, items]) => (
             <div key={groupLabel}>
-              <p className="text-xs font-semibold text-neutral-500 uppercase tracking-wider mb-2">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
                 {groupLabel}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -199,7 +199,7 @@ export default function DashboardSettingsPage() {
                       className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 text-sm font-medium transition text-left min-h-11 ${
                         isSelected
                           ? 'border-amber-500 bg-amber-900/20 text-amber-300'
-                          : 'border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-amber-700 hover:bg-neutral-800/80'
+                          : 'border-slate-200 bg-slate-100 text-slate-700 hover:border-amber-700 hover:bg-slate-100/80'
                       }`}
                     >
                       <ItemIcon className="w-4 h-4 shrink-0" />
@@ -236,12 +236,12 @@ export default function DashboardSettingsPage() {
       </div>
 
       {/* Clock Format */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
         <div className="flex items-center gap-2 mb-1">
           <Clock className="w-5 h-5 text-amber-400" aria-hidden="true" />
-          <h2 className="text-base font-semibold text-neutral-100">Clock Format</h2>
+          <h2 className="text-base font-semibold text-slate-900">Clock Format</h2>
         </div>
-        <p className="text-sm text-neutral-400 mb-5">
+        <p className="text-sm text-slate-500 mb-5">
           Choose how times are displayed throughout the app.
         </p>
 
@@ -267,7 +267,7 @@ export default function DashboardSettingsPage() {
               className={`px-5 py-2.5 rounded-lg text-sm font-medium transition min-h-11 ${
                 clockFormat === fmt
                   ? 'bg-amber-600 text-white'
-                  : 'border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-amber-700'
+                  : 'border border-slate-200 bg-slate-100 text-slate-700 hover:border-amber-700'
               } ${clockSaving ? 'opacity-50' : ''}`}
             >
               {fmt === '12h' ? '12-hour (2:30 PM)' : '24-hour (14:30)'}
@@ -277,16 +277,16 @@ export default function DashboardSettingsPage() {
       </div>
 
       {/* Scan Preferences */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
-        <h2 className="text-base font-semibold text-neutral-100 mb-1">Smart Scan</h2>
-        <p className="text-sm text-neutral-400 mb-5">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h2 className="text-base font-semibold text-slate-900 mb-1">Smart Scan</h2>
+        <p className="text-sm text-slate-500 mb-5">
           Configure how scanned documents are handled.
         </p>
 
         <label className="flex items-center justify-between cursor-pointer">
           <div>
-            <p className="text-sm font-medium text-neutral-200">Auto-save scanned images</p>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <p className="text-sm font-medium text-slate-800">Auto-save scanned images</p>
+            <p className="text-xs text-slate-400 mt-0.5">
               Automatically upload receipt/document images to your account when scanning
             </p>
           </div>
@@ -299,20 +299,20 @@ export default function DashboardSettingsPage() {
       </div>
 
       {/* Notifications */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6 space-y-5">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-5">
         <div className="flex items-center gap-2 mb-1">
           <Bell className="w-5 h-5 text-amber-400" aria-hidden="true" />
-          <h2 className="text-base font-semibold text-neutral-100">Notifications</h2>
+          <h2 className="text-base font-semibold text-slate-900">Notifications</h2>
         </div>
-        <p className="text-sm text-neutral-400">
+        <p className="text-sm text-slate-500">
           Get push notifications for job reminders. Requires browser permission.
         </p>
 
         {/* Push enable/disable */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-neutral-200">Push notifications</p>
-            <p className="text-xs text-neutral-500 mt-0.5">
+            <p className="text-sm font-medium text-slate-800">Push notifications</p>
+            <p className="text-xs text-slate-400 mt-0.5">
               {pushEnabled ? 'Enabled on this device' : 'Enable to receive alerts'}
             </p>
           </div>
@@ -336,7 +336,7 @@ export default function DashboardSettingsPage() {
             disabled={pushLoading}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition min-h-11 ${
               pushEnabled
-                ? 'border border-neutral-700 bg-neutral-800 text-neutral-300 hover:border-red-700 hover:text-red-400'
+                ? 'border border-slate-200 bg-slate-100 text-slate-700 hover:border-red-700 hover:text-red-400'
                 : 'bg-amber-600 text-white hover:bg-amber-500'
             } ${pushLoading ? 'opacity-50' : ''}`}
           >
@@ -351,11 +351,11 @@ export default function DashboardSettingsPage() {
         </div>
 
         {pushEnabled && (
-          <div className="space-y-4 pt-2 border-t border-neutral-800">
+          <div className="space-y-4 pt-2 border-t border-slate-200">
             <label className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-neutral-200">Clock-in reminder</p>
-                <p className="text-xs text-neutral-500">Reminder before your job start time</p>
+                <p className="text-sm text-slate-800">Clock-in reminder</p>
+                <p className="text-xs text-slate-400">Reminder before your job start time</p>
               </div>
               <Toggle
                 on={clockInReminder}
@@ -377,7 +377,7 @@ export default function DashboardSettingsPage() {
 
             {clockInReminder && (
               <div className="flex items-center gap-3 pl-4">
-                <label htmlFor="clock-in-minutes" className="text-xs text-neutral-400">Minutes before:</label>
+                <label htmlFor="clock-in-minutes" className="text-xs text-slate-500">Minutes before:</label>
                 <select
                   id="clock-in-minutes"
                   value={clockInMinutes}
@@ -390,7 +390,7 @@ export default function DashboardSettingsPage() {
                       body: JSON.stringify({ clock_in_minutes_before: val }),
                     });
                   }}
-                  className="border border-neutral-700 bg-neutral-800 text-neutral-100 rounded-lg px-3 py-1.5 text-sm focus:ring-amber-500 focus:border-amber-500"
+                  className="border border-slate-200 bg-slate-100 text-slate-900 rounded-lg px-3 py-1.5 text-sm focus:ring-amber-500 focus:border-amber-500"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -403,8 +403,8 @@ export default function DashboardSettingsPage() {
 
             <label className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-neutral-200">Clock-out reminder</p>
-                <p className="text-xs text-neutral-500">Alert when your expected end time arrives</p>
+                <p className="text-sm text-slate-800">Clock-out reminder</p>
+                <p className="text-xs text-slate-400">Alert when your expected end time arrives</p>
               </div>
               <Toggle
                 on={clockOutReminder}
@@ -426,8 +426,8 @@ export default function DashboardSettingsPage() {
 
             <label className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-neutral-200">Pay day reminder</p>
-                <p className="text-xs text-neutral-500">Check if payment received for completed jobs</p>
+                <p className="text-sm text-slate-800">Pay day reminder</p>
+                <p className="text-xs text-slate-400">Check if payment received for completed jobs</p>
               </div>
               <Toggle
                 on={payDayReminder}
@@ -449,8 +449,8 @@ export default function DashboardSettingsPage() {
 
             <label className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-neutral-200">Job start reminder</p>
-                <p className="text-xs text-neutral-500">Morning notification on work days</p>
+                <p className="text-sm text-slate-800">Job start reminder</p>
+                <p className="text-xs text-slate-400">Morning notification on work days</p>
               </div>
               <Toggle
                 on={jobStartReminder}
@@ -474,14 +474,14 @@ export default function DashboardSettingsPage() {
       </div>
 
       {/* Social & Privacy */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6 space-y-4">
-        <h2 className="text-base font-semibold text-neutral-100">Social & Privacy</h2>
-        <p className="text-xs text-neutral-400">Your profile is private by default. These settings control what others can see.</p>
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 space-y-4">
+        <h2 className="text-base font-semibold text-slate-900">Social & Privacy</h2>
+        <p className="text-xs text-slate-500">Your profile is private by default. These settings control what others can see.</p>
 
         <label className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-neutral-200">Show my likes publicly</p>
-            <p className="text-xs text-neutral-500">Others can see content you&apos;ve liked</p>
+            <p className="text-sm text-slate-800">Show my likes publicly</p>
+            <p className="text-xs text-slate-400">Others can see content you&apos;ve liked</p>
           </div>
           <Toggle
             on={likesPublic}
@@ -492,8 +492,8 @@ export default function DashboardSettingsPage() {
 
         <label className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-neutral-200">Show activity counts on profile</p>
-            <p className="text-xs text-neutral-500">Others can see your activity stats</p>
+            <p className="text-sm text-slate-800">Show activity counts on profile</p>
+            <p className="text-xs text-slate-400">Others can see your activity stats</p>
           </div>
           <Toggle
             on={showDoneCounts}
@@ -504,12 +504,12 @@ export default function DashboardSettingsPage() {
       </div>
 
       {/* Module Tours */}
-      <div className="rounded-2xl border border-neutral-800 bg-neutral-900 p-6">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
         <div className="flex items-center gap-2 mb-1">
           <Sparkles className="w-5 h-5 text-amber-400" aria-hidden="true" />
-          <h2 className="text-base font-semibold text-neutral-100">Module Tours</h2>
+          <h2 className="text-base font-semibold text-slate-900">Module Tours</h2>
         </div>
-        <p className="text-sm text-neutral-400 mb-5">
+        <p className="text-sm text-slate-500 mb-5">
           Re-take any feature walkthrough to refresh your memory.
         </p>
 
@@ -518,11 +518,11 @@ export default function DashboardSettingsPage() {
             {tours.map((t) => (
               <div
                 key={`${t.app}-${t.module_slug}`}
-                className="flex items-center justify-between rounded-lg bg-neutral-800 border border-neutral-700 px-4 py-3"
+                className="flex items-center justify-between rounded-lg bg-slate-100 border border-slate-200 px-4 py-3"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-neutral-500 uppercase">{t.app}</span>
-                  <span className="text-sm text-neutral-200 capitalize">
+                  <span className="text-xs font-medium text-slate-400 uppercase">{t.app}</span>
+                  <span className="text-sm text-slate-800 capitalize">
                     {t.module_slug.replace(/-/g, ' ')}
                   </span>
                   <span className={`text-xs px-2 py-0.5 rounded-full ${
@@ -531,8 +531,8 @@ export default function DashboardSettingsPage() {
                       : t.status === 'in_progress'
                         ? 'bg-amber-900/40 text-amber-400'
                         : t.status === 'skipped'
-                          ? 'bg-neutral-700 text-neutral-400'
-                          : 'bg-neutral-700 text-neutral-500'
+                          ? 'bg-neutral-700 text-slate-500'
+                          : 'bg-neutral-700 text-slate-400'
                   }`}>
                     {t.status === 'in_progress' ? 'in progress' : t.status}
                   </span>
@@ -546,7 +546,7 @@ export default function DashboardSettingsPage() {
                     });
                     loadTours();
                   }}
-                  className="flex items-center gap-1.5 text-sm text-neutral-400 hover:text-amber-400 transition min-h-11 px-2"
+                  className="flex items-center gap-1.5 text-sm text-slate-500 hover:text-amber-400 transition min-h-11 px-2"
                 >
                   <RotateCcw className="w-3.5 h-3.5" aria-hidden="true" />
                   Restart
@@ -555,7 +555,7 @@ export default function DashboardSettingsPage() {
             ))}
           </div>
         ) : (
-          <p className="text-sm text-neutral-500">No tours started yet. Explore features to begin.</p>
+          <p className="text-sm text-slate-400">No tours started yet. Explore features to begin.</p>
         )}
 
         {tours.length > 0 && (
@@ -570,7 +570,7 @@ export default function DashboardSettingsPage() {
                 });
                 loadTours();
               }}
-              className="flex items-center gap-2 text-sm text-neutral-400 hover:text-amber-400 transition min-h-11 px-2"
+              className="flex items-center gap-2 text-sm text-slate-500 hover:text-amber-400 transition min-h-11 px-2"
             >
               <RotateCcw className="w-4 h-4" aria-hidden="true" />
               Restart All Tours

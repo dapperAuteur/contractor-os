@@ -165,7 +165,7 @@ export default function AssignmentPage() {
     );
   }
   if (!assignment) {
-    return <div className="text-center py-20 text-gray-500">Assignment not found.</div>;
+    return <div className="text-center py-20 text-slate-400">Assignment not found.</div>;
   }
 
   const isSubmitted = submission?.status === 'submitted';
@@ -177,10 +177,10 @@ export default function AssignmentPage() {
   return (
     <div className="text-white">
       {/* Top nav */}
-      <div className="border-b border-gray-800 px-4 sm:px-6 py-3 flex items-center gap-3 sm:gap-4">
+      <div className="border-b border-slate-200 px-4 sm:px-6 py-3 flex items-center gap-3 sm:gap-4">
         <Link
           href={`/academy/${courseId}`}
-          className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm transition"
+          className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm transition"
         >
           <ChevronLeft className="w-4 h-4" /> Back to course
         </Link>
@@ -202,7 +202,7 @@ export default function AssignmentPage() {
           <h1 className="text-2xl font-bold">{assignment.title}</h1>
         </div>
         {assignment.due_date && (
-          <p className="text-gray-400 text-sm flex items-center gap-1.5 mb-5">
+          <p className="text-slate-500 text-sm flex items-center gap-1.5 mb-5">
             <Clock className="w-3.5 h-3.5" />
             Due {new Date(assignment.due_date).toLocaleDateString('en-US', {
               weekday: 'long', month: 'long', day: 'numeric',
@@ -210,7 +210,7 @@ export default function AssignmentPage() {
           </p>
         )}
         {assignment.description && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-8 text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+          <div className="bg-white border border-slate-200 rounded-xl p-5 mb-8 text-slate-700 text-sm leading-relaxed whitespace-pre-wrap">
             {assignment.description}
           </div>
         )}
@@ -220,18 +220,18 @@ export default function AssignmentPage() {
           <div className="bg-amber-900/20 border border-amber-700/50 rounded-xl p-5 mb-6">
             <p className="font-semibold text-amber-300 mb-1">Grade: {submission.grade}</p>
             {submission.teacher_feedback && (
-              <p className="text-gray-300 text-sm leading-relaxed">{submission.teacher_feedback}</p>
+              <p className="text-slate-700 text-sm leading-relaxed">{submission.teacher_feedback}</p>
             )}
           </div>
         )}
 
         {/* Metric slot picker */}
         {metricSlots > 0 && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-5 mb-6">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 mb-6">
             <h2 className="font-semibold text-white mb-3 flex items-center gap-2 text-sm">
               <Activity className="w-4 h-4 text-amber-400" />
               Track Health Metrics
-              <span className="text-gray-500 font-normal">({selectedMetrics.length}/{metricSlots} slots)</span>
+              <span className="text-slate-400 font-normal">({selectedMetrics.length}/{metricSlots} slots)</span>
             </h2>
             <div className="flex flex-wrap gap-2">
               {CORE_METRICS.map((m) => {
@@ -247,8 +247,8 @@ export default function AssignmentPage() {
                       isSelected
                         ? 'bg-amber-600 text-white'
                         : isDisabled
-                        ? 'bg-gray-800 text-gray-600 cursor-not-allowed'
-                        : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                        ? 'bg-slate-100 text-gray-600 cursor-not-allowed'
+                        : 'bg-slate-100 text-slate-500 hover:bg-slate-100'
                     }`}
                   >
                     {m.label}
@@ -265,7 +265,7 @@ export default function AssignmentPage() {
         )}
 
         {/* Submission form */}
-        <div className="dark-input bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-6 mb-6">
+        <div className=" bg-white border border-slate-200 rounded-xl p-4 sm:p-6 mb-6">
           <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
             <FileEdit className="w-4 h-4 text-amber-400" />
             {isSubmitted ? 'Your Submission' : isDraft ? 'Draft' : 'Your Work'}
@@ -276,11 +276,11 @@ export default function AssignmentPage() {
             onChange={(e) => setContent(e.target.value)}
             rows={6}
             placeholder="Write your response here…"
-            className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500 resize-none mb-4"
+            className="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500 resize-none mb-4"
           />
 
           <div className="mb-5">
-            <p className="text-xs text-gray-400 mb-2">Attachments (up to 5 files)</p>
+            <p className="text-xs text-slate-500 mb-2">Attachments (up to 5 files)</p>
             <SubmissionUploader files={mediaFiles} onChange={setMediaFiles} />
           </div>
 
@@ -293,7 +293,7 @@ export default function AssignmentPage() {
                 type="button"
                 onClick={() => handleSave('draft')}
                 disabled={saving || (!content.trim() && mediaFiles.length === 0)}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-gray-200 rounded-xl text-sm font-medium hover:bg-gray-600 transition disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-slate-800 rounded-xl text-sm font-medium hover:bg-gray-600 transition disabled:opacity-50"
               >
                 {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileEdit className="w-4 h-4" />}
                 Save Draft
@@ -321,7 +321,7 @@ export default function AssignmentPage() {
 
         {/* Message thread — visible once a submission (draft or submitted) exists */}
         {submission && (
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+          <div className="bg-white border border-slate-200 rounded-xl p-6">
             <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
               <MessageCircle className="w-4 h-4 text-amber-400" /> Feedback Thread
             </h2>
@@ -339,7 +339,7 @@ export default function AssignmentPage() {
                     <div className={`max-w-sm ${msg.is_teacher ? '' : 'ml-auto'}`}>
                       <div className={`inline-block px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
                         msg.is_teacher
-                          ? 'bg-gray-800 text-gray-200 rounded-tl-none'
+                          ? 'bg-slate-100 text-slate-800 rounded-tl-none'
                           : 'bg-amber-700/80 text-white rounded-tr-none'
                       }`}>
                         {msg.body}
@@ -356,14 +356,14 @@ export default function AssignmentPage() {
                 <div ref={messagesEndRef} />
               </div>
             )}
-            <div className="dark-input flex gap-2 mt-2">
+            <div className=" flex gap-2 mt-2">
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) handleSendMessage(); }}
                 placeholder="Message your teacher…"
-                className="flex-1 bg-gray-800 border border-gray-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-500"
+                className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
               />
               <button
                 type="button"

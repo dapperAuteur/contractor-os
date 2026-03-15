@@ -56,7 +56,7 @@ export default function TeachingStudentsPage() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Students</h1>
-          <p className="text-gray-400 text-sm mt-1">{students.length} active enrollment{students.length !== 1 ? 's' : ''}</p>
+          <p className="text-slate-500 text-sm mt-1">{students.length} active enrollment{students.length !== 1 ? 's' : ''}</p>
         </div>
       </div>
 
@@ -65,48 +65,48 @@ export default function TeachingStudentsPage() {
         placeholder="Search by name, email, or course…"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
-        className="w-full mb-6 bg-gray-900 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 text-sm focus:outline-none focus:border-amber-500"
+        className="w-full mb-6 bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-amber-500"
       />
 
       {filtered.length === 0 ? (
-        <div className="bg-gray-900 border border-gray-800 border-dashed rounded-xl p-16 text-center">
+        <div className="bg-white border border-slate-200 border-dashed rounded-xl p-16 text-center">
           <Users className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-          <p className="text-gray-500">
+          <p className="text-slate-400">
             {students.length === 0 ? 'No students enrolled yet.' : 'No results match your search.'}
           </p>
         </div>
       ) : (
-        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-800">
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Student</th>
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Course</th>
-                <th className="text-left px-5 py-3 text-gray-500 font-medium">Enrolled</th>
+              <tr className="border-b border-slate-200">
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Student</th>
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Course</th>
+                <th className="text-left px-5 py-3 text-slate-400 font-medium">Enrolled</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800">
+            <tbody className="divide-y divide-slate-200">
               {filtered.map((s) => (
-                <tr key={s.id} className="hover:bg-gray-800/40 transition">
+                <tr key={s.id} className="hover:bg-slate-100/40 transition">
                   <td className="px-5 py-3">
                     <p className="text-white font-medium">
                       {s.profiles?.display_name ?? s.profiles?.username ?? 'Unknown'}
                       {s.profiles?.username && (
-                        <span className="text-gray-500 font-normal ml-1.5">@{s.profiles.username}</span>
+                        <span className="text-slate-400 font-normal ml-1.5">@{s.profiles.username}</span>
                       )}
                     </p>
                     {s.email && (
                       <a
                         href={`mailto:${s.email}`}
-                        className="flex items-center gap-1 text-gray-500 hover:text-amber-400 text-xs mt-0.5 transition"
+                        className="flex items-center gap-1 text-slate-400 hover:text-amber-400 text-xs mt-0.5 transition"
                       >
                         <Mail className="w-3 h-3" />
                         {s.email}
                       </a>
                     )}
                   </td>
-                  <td className="px-5 py-3 text-gray-300">{s.course_title}</td>
-                  <td className="px-5 py-3 text-gray-500">
+                  <td className="px-5 py-3 text-slate-700">{s.course_title}</td>
+                  <td className="px-5 py-3 text-slate-400">
                     {new Date(s.enrolled_at).toLocaleDateString()}
                   </td>
                 </tr>

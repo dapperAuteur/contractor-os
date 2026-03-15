@@ -84,19 +84,19 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
 
       {/* Drawer */}
       <div
-        className={`fixed right-0 top-0 h-full w-full max-w-sm z-50 bg-neutral-950 border-l border-neutral-800 flex flex-col transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 h-full w-full max-w-sm z-50 bg-slate-50 border-l border-slate-200 flex flex-col transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-800 shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 shrink-0">
           <div className="flex items-center gap-2">
             <HelpCircle className="w-5 h-5 text-amber-400" />
-            <span className="font-semibold text-white text-sm">Work.WitUS Help</span>
+            <span className="font-semibold text-slate-900 text-sm">Work.WitUS Help</span>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition"
+            className="p-1.5 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition"
           >
             <X className="w-4 h-4" />
           </button>
@@ -110,18 +110,18 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
                 <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0 mt-0.5">
                   <BookOpen className="w-4 h-4 text-white" />
                 </div>
-                <div className="bg-neutral-800 rounded-xl rounded-tl-none px-4 py-3 text-sm text-neutral-200 leading-relaxed">
+                <div className="bg-slate-100 rounded-xl rounded-tl-none px-4 py-3 text-sm text-slate-800 leading-relaxed">
                   Hi! I can help with anything in Work.WitUS — jobs, invoices, time entries, scanning, travel, equipment, union memberships, and more. What do you need help with?
                 </div>
               </div>
 
               <div className="space-y-2">
-                <p className="text-xs text-neutral-500 px-1">Suggested questions</p>
+                <p className="text-xs text-slate-400 px-1">Suggested questions</p>
                 {SUGGESTIONS.map((s) => (
                   <button
                     key={s}
                     onClick={() => sendMessage(s)}
-                    className="w-full text-left px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-lg text-sm text-neutral-300 hover:border-amber-600 hover:text-white transition"
+                    className="w-full text-left px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 hover:border-amber-600 hover:text-slate-900 transition"
                   >
                     {s}
                   </button>
@@ -141,7 +141,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
                 className={`max-w-[85%] px-4 py-3 rounded-xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'user'
                     ? 'bg-amber-700/80 text-white rounded-tr-none ml-auto'
-                    : 'bg-neutral-800 text-neutral-200 rounded-tl-none'
+                    : 'bg-slate-100 text-slate-800 rounded-tl-none'
                 }`}
               >
                 {msg.text}
@@ -154,11 +154,11 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
               <div className="w-7 h-7 rounded-full bg-amber-600 flex items-center justify-center shrink-0">
                 <Loader2 className="w-4 h-4 text-white animate-spin" />
               </div>
-              <div className="bg-neutral-800 rounded-xl rounded-tl-none px-4 py-3">
+              <div className="bg-slate-100 rounded-xl rounded-tl-none px-4 py-3">
                 <div className="flex gap-1">
-                  <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce [animation-delay:300ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]" />
+                  <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
@@ -168,7 +168,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
         </div>
 
         {/* Input */}
-        <div className="px-4 py-3 border-t border-neutral-800 shrink-0">
+        <div className="px-4 py-3 border-t border-slate-200 shrink-0">
           <div className="flex gap-2">
             <input
               type="text"
@@ -177,7 +177,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) sendMessage(input); }}
               placeholder="Ask anything about Work.WitUS…"
               disabled={loading}
-              className="flex-1 bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-amber-500 disabled:opacity-50"
+              className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 disabled:opacity-50"
             />
             <button
               type="button"
@@ -188,7 +188,7 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
               <Send className="w-4 h-4" />
             </button>
           </div>
-          <p className="text-xs text-neutral-500 mt-2 text-center">
+          <p className="text-xs text-slate-400 mt-2 text-center">
             Answers are generated from Work.WitUS documentation.
           </p>
         </div>

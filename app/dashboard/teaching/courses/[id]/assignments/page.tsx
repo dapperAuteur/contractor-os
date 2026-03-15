@@ -153,7 +153,7 @@ export default function CourseAssignmentsPage() {
         <div>
           <Link
             href={`/dashboard/teaching/courses/${courseId}`}
-            className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-2 transition"
+            className="flex items-center gap-1.5 text-slate-500 hover:text-white text-sm mb-2 transition"
           >
             <ChevronLeft className="w-4 h-4" /> Course Editor
           </Link>
@@ -174,37 +174,37 @@ export default function CourseAssignmentsPage() {
 
       {/* Create form */}
       {creating && (
-        <div className="dark-input bg-gray-900 border border-gray-800 rounded-xl p-4 sm:p-6 mb-6 space-y-4">
+        <div className=" bg-white border border-slate-200 rounded-xl p-4 sm:p-6 mb-6 space-y-4">
           <h2 className="font-semibold text-white">Create Assignment</h2>
           <div>
-            <label className="block text-xs text-gray-300 mb-1">Title *</label>
+            <label className="block text-xs text-slate-700 mb-1">Title *</label>
             <input
               type="text"
               value={newForm.title}
               onChange={(e) => setNewForm((f) => ({ ...f, title: e.target.value }))}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+              className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-300 mb-1">Instructions</label>
+            <label className="block text-xs text-slate-700 mb-1">Instructions</label>
             <textarea
               value={newForm.description}
               onChange={(e) => setNewForm((f) => ({ ...f, description: e.target.value }))}
               rows={3}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 resize-none"
+              className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 resize-none"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-300 mb-1">Due Date</label>
+            <label className="block text-xs text-slate-700 mb-1">Due Date</label>
             <input
               type="datetime-local"
               value={newForm.due_date}
               onChange={(e) => setNewForm((f) => ({ ...f, due_date: e.target.value }))}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+              className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-300 mb-1">Scope</label>
+            <label className="block text-xs text-slate-700 mb-1">Scope</label>
             <div className="flex flex-wrap gap-2">
               {(['course', 'module', 'lesson'] as const).map((s) => (
                 <button
@@ -214,7 +214,7 @@ export default function CourseAssignmentsPage() {
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition min-h-9 ${
                     newForm.scope === s
                       ? 'bg-amber-600 text-white'
-                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                      : 'bg-slate-100 text-slate-500 hover:bg-slate-100'
                   }`}
                 >
                   {s === 'course' ? 'Course-wide' : s === 'module' ? 'Module' : 'Lesson'}
@@ -224,11 +224,11 @@ export default function CourseAssignmentsPage() {
           </div>
           {newForm.scope === 'module' && (
             <div>
-              <label className="block text-xs text-gray-300 mb-1">Module *</label>
+              <label className="block text-xs text-slate-700 mb-1">Module *</label>
               <select
                 value={newForm.module_id}
                 onChange={(e) => setNewForm((f) => ({ ...f, module_id: e.target.value }))}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
               >
                 <option value="">Select module...</option>
                 {modules.map((m) => (
@@ -240,11 +240,11 @@ export default function CourseAssignmentsPage() {
           {newForm.scope === 'lesson' && (
             <>
               <div>
-                <label className="block text-xs text-gray-300 mb-1">Module</label>
+                <label className="block text-xs text-slate-700 mb-1">Module</label>
                 <select
                   value={newForm.module_id}
                   onChange={(e) => setNewForm((f) => ({ ...f, module_id: e.target.value, lesson_id: '' }))}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                  className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                 >
                   <option value="">Select module...</option>
                   {modules.map((m) => (
@@ -254,11 +254,11 @@ export default function CourseAssignmentsPage() {
               </div>
               {newForm.module_id && (
                 <div>
-                  <label className="block text-xs text-gray-300 mb-1">Lesson *</label>
+                  <label className="block text-xs text-slate-700 mb-1">Lesson *</label>
                   <select
                     value={newForm.lesson_id}
                     onChange={(e) => setNewForm((f) => ({ ...f, lesson_id: e.target.value }))}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                    className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                   >
                     <option value="">Select lesson...</option>
                     {modules
@@ -286,7 +286,7 @@ export default function CourseAssignmentsPage() {
             <button
               type="button"
               onClick={() => { setCreating(false); setCreateError(''); }}
-              className="px-4 py-3 bg-gray-800 text-gray-300 rounded-lg text-sm hover:bg-gray-700 transition min-h-11"
+              className="px-4 py-3 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-100 transition min-h-11"
             >
               Cancel
             </button>
@@ -296,9 +296,9 @@ export default function CourseAssignmentsPage() {
 
       {/* Assignment list */}
       {assignments.length === 0 ? (
-        <div className="text-center py-16 bg-gray-900 border border-dashed border-gray-800 rounded-xl">
+        <div className="text-center py-16 bg-white border border-dashed border-slate-200 rounded-xl">
           <ClipboardList className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-          <p className="text-gray-500 text-sm">No assignments yet. Create one to get started.</p>
+          <p className="text-slate-400 text-sm">No assignments yet. Create one to get started.</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -306,12 +306,12 @@ export default function CourseAssignmentsPage() {
             const subs = submissions[a.id] ?? [];
             const isExpanded = expanded === a.id;
             return (
-              <div key={a.id} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+              <div key={a.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                 {/* Header row */}
                 <button
                   type="button"
                   onClick={() => toggleExpand(a.id)}
-                  className="w-full flex items-center gap-3 px-4 py-4 text-left hover:bg-gray-800/50 transition min-h-14"
+                  className="w-full flex items-center gap-3 px-4 py-4 text-left hover:bg-slate-100/50 transition min-h-14"
                 >
                   <ClipboardList className="w-4 h-4 text-amber-400 shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -328,41 +328,41 @@ export default function CourseAssignmentsPage() {
                       </span>
                     </div>
                     {a.due_date && (
-                      <p className="text-gray-500 text-xs flex items-center gap-1 mt-0.5">
+                      <p className="text-slate-400 text-xs flex items-center gap-1 mt-0.5">
                         <Clock className="w-3 h-3" />
                         Due {new Date(a.due_date).toLocaleDateString()}
                       </p>
                     )}
                   </div>
                   {isExpanded && subs.length > 0 && (
-                    <span className="text-xs text-gray-500 shrink-0">
+                    <span className="text-xs text-slate-400 shrink-0">
                       {subs.length} submission{subs.length !== 1 ? 's' : ''}
                     </span>
                   )}
                   {isExpanded
-                    ? <ChevronUp className="w-4 h-4 text-gray-500 shrink-0" />
-                    : <ChevronDown className="w-4 h-4 text-gray-500 shrink-0" />}
+                    ? <ChevronUp className="w-4 h-4 text-slate-400 shrink-0" />
+                    : <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />}
                 </button>
 
                 {/* Expanded: submissions */}
                 {isExpanded && (
-                  <div className="border-t border-gray-800 p-4">
+                  <div className="border-t border-slate-200 p-4">
                     {a.description && (
-                      <p className="text-gray-400 text-sm mb-4 leading-relaxed">{a.description}</p>
+                      <p className="text-slate-500 text-sm mb-4 leading-relaxed">{a.description}</p>
                     )}
                     {subs.length === 0 ? (
                       <p className="text-gray-600 text-sm">No submissions yet.</p>
                     ) : (
                       <div className="space-y-4">
                         {subs.map((sub) => (
-                          <div key={sub.id} className="bg-gray-800 rounded-xl p-4">
+                          <div key={sub.id} className="bg-slate-100 rounded-xl p-4">
                             {/* Submission header — stacks on mobile */}
                             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                               <div>
                                 <p className="font-medium text-white text-sm">
                                   {sub.profiles?.display_name ?? sub.profiles?.username ?? 'Student'}
                                 </p>
-                                <p className="text-gray-500 text-xs">
+                                <p className="text-slate-400 text-xs">
                                   {new Date(sub.submitted_at).toLocaleString()}
                                 </p>
                               </div>
@@ -379,7 +379,7 @@ export default function CourseAssignmentsPage() {
 
                             {/* Submission content */}
                             {sub.content && (
-                              <p className="text-gray-300 text-sm mb-3 bg-gray-900 rounded-lg p-3 leading-relaxed">
+                              <p className="text-slate-700 text-sm mb-3 bg-white rounded-lg p-3 leading-relaxed">
                                 {sub.content}
                               </p>
                             )}
@@ -396,27 +396,27 @@ export default function CourseAssignmentsPage() {
 
                             {/* Existing feedback display */}
                             {sub.teacher_feedback && gradingId !== sub.id && (
-                              <p className="text-gray-400 text-xs italic mb-2">
+                              <p className="text-slate-500 text-xs italic mb-2">
                                 Feedback: {sub.teacher_feedback}
                               </p>
                             )}
 
                             {/* Grade form */}
                             {gradingId === sub.id ? (
-                              <div className="dark-input space-y-2 mt-3">
+                              <div className=" space-y-2 mt-3">
                                 <input
                                   type="text"
                                   placeholder="Grade (e.g. A, 90/100, Pass)"
                                   value={gradeForm.grade}
                                   onChange={(e) => setGradeForm((f) => ({ ...f, grade: e.target.value }))}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
+                                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 min-h-11"
                                 />
                                 <textarea
                                   placeholder="Feedback for student…"
                                   value={gradeForm.teacher_feedback}
                                   onChange={(e) => setGradeForm((f) => ({ ...f, teacher_feedback: e.target.value }))}
                                   rows={3}
-                                  className="w-full bg-gray-900 border border-gray-700 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 resize-none"
+                                  className="w-full bg-white border border-slate-200 rounded-lg px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500 resize-none"
                                 />
                                 <div className="flex flex-wrap gap-2">
                                   <button
@@ -429,7 +429,7 @@ export default function CourseAssignmentsPage() {
                                   <button
                                     type="button"
                                     onClick={() => setGradingId(null)}
-                                    className="px-4 py-2.5 bg-gray-700 text-gray-300 rounded-lg text-sm hover:bg-gray-600 transition min-h-11"
+                                    className="px-4 py-2.5 bg-gray-700 text-slate-700 rounded-lg text-sm hover:bg-gray-600 transition min-h-11"
                                   >
                                     Cancel
                                   </button>

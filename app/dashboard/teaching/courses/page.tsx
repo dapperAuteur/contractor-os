@@ -75,7 +75,7 @@ export default function TeachingCoursesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-white">My Courses</h1>
-          <p className="text-gray-400 text-sm mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''}</p>
+          <p className="text-slate-500 text-sm mt-1">{courses.length} course{courses.length !== 1 ? 's' : ''}</p>
         </div>
         <Link
           href="/dashboard/teaching/courses/new"
@@ -87,9 +87,9 @@ export default function TeachingCoursesPage() {
       </div>
 
       {courses.length === 0 ? (
-        <div className="bg-gray-900 border border-gray-800 border-dashed rounded-xl p-16 text-center">
+        <div className="bg-white border border-slate-200 border-dashed rounded-xl p-16 text-center">
           <BookOpen className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-          <p className="text-gray-500 mb-4">No courses yet. Create your first one!</p>
+          <p className="text-slate-400 mb-4">No courses yet. Create your first one!</p>
           <Link
             href="/dashboard/teaching/courses/new"
             className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition"
@@ -102,7 +102,7 @@ export default function TeachingCoursesPage() {
           {courses.map((course) => (
             <div
               key={course.id}
-              className="flex items-center gap-4 bg-gray-900 border border-gray-800 rounded-xl px-5 py-4"
+              className="flex items-center gap-4 bg-white border border-slate-200 rounded-xl px-5 py-4"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export default function TeachingCoursesPage() {
                     </span>
                   )}
                 </div>
-                <p className="text-gray-500 text-sm mt-0.5 line-clamp-1">{course.description}</p>
+                <p className="text-slate-400 text-sm mt-0.5 line-clamp-1">{course.description}</p>
                 <p className="text-gray-600 text-xs mt-1">
                   {course.price_type === 'free'
                     ? 'Free'
@@ -130,14 +130,14 @@ export default function TeachingCoursesPage() {
                   className={`w-11 h-11 flex items-center justify-center rounded-lg transition ${
                     course.is_published
                       ? 'bg-green-900/30 text-green-400 hover:bg-green-900/50'
-                      : 'bg-gray-800 text-gray-500 hover:bg-gray-700'
+                      : 'bg-slate-100 text-slate-400 hover:bg-slate-100'
                   }`}
                 >
                   {course.is_published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
                 </button>
                 <Link
                   href={username ? `/dashboard/teaching/${username}/courses/${course.id}` : '#'}
-                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white transition"
+                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-slate-100 text-slate-500 hover:bg-slate-100 hover:text-white transition"
                   title="Edit course"
                 >
                   <Pencil className="w-4 h-4" />
@@ -146,7 +146,7 @@ export default function TeachingCoursesPage() {
                   onClick={() => handleDelete(course.id)}
                   disabled={deletingId === course.id}
                   title="Delete course"
-                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-gray-800 text-gray-500 hover:bg-red-900/30 hover:text-red-400 transition disabled:opacity-50"
+                  className="w-11 h-11 flex items-center justify-center rounded-lg bg-slate-100 text-slate-400 hover:bg-red-900/30 hover:text-red-400 transition disabled:opacity-50"
                 >
                   {deletingId === course.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
                 </button>

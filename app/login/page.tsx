@@ -143,16 +143,16 @@ function LoginContent() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-950 text-neutral-100 dark-input">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
       {/* Header */}
-      <nav className="border-b border-neutral-800 px-4 py-4">
+      <nav className="border-b border-slate-200 px-4 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <HardHat size={24} className="text-amber-400" aria-hidden="true" />
+            <HardHat size={24} className="text-amber-600" aria-hidden="true" />
             <span className="text-lg font-bold">Work.WitUS</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/pricing" className="text-sm text-neutral-400 hover:text-neutral-200">Pricing</Link>
+            <Link href="/pricing" className="text-sm text-slate-500 hover:text-slate-900">Pricing</Link>
             <Link href="/signup" className="rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-500 min-h-11 flex items-center">
               Sign Up
             </Link>
@@ -162,12 +162,12 @@ function LoginContent() {
 
       {/* Login Form */}
       <main className="flex-1 flex items-center justify-center p-4">
-        <div className="max-w-md w-full rounded-2xl p-8 border border-neutral-800 bg-neutral-900">
+        <div className="max-w-md w-full rounded-2xl p-8 border border-slate-200 bg-white">
           {mfaRequired ? (
             <>
               <header className="mb-6">
-                <h1 className="text-3xl font-bold text-neutral-100">Welcome back</h1>
-                <p className="text-neutral-400 mt-2">Verify your identity to continue</p>
+                <h1 className="text-3xl font-bold text-slate-900">Welcome back</h1>
+                <p className="text-slate-500 mt-2">Verify your identity to continue</p>
               </header>
               <MfaVerifyStep
                 onVerified={() => {
@@ -183,19 +183,19 @@ function LoginContent() {
           ) : (
           <>
           <header className="mb-6">
-            <h1 className="text-3xl font-bold text-neutral-100">Welcome back</h1>
-            <p className="text-neutral-400 mt-2">Log in to Work.WitUS</p>
+            <h1 className="text-3xl font-bold text-slate-900">Welcome back</h1>
+            <p className="text-slate-500 mt-2">Log in to Work.WitUS</p>
           </header>
 
           {/* Tabs */}
-          <div className="flex mb-6 border rounded-lg overflow-hidden border-neutral-700">
+          <div className="flex mb-6 border rounded-lg overflow-hidden border-slate-200">
             <button
               type="button"
               onClick={() => switchTab('password')}
               className={`flex-1 py-2 text-sm font-medium transition ${
                 tab === 'password'
                   ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                  : 'text-neutral-400 hover:bg-neutral-800'
+                  : 'text-slate-500 hover:bg-slate-100'
               }`}
             >
               Password
@@ -206,7 +206,7 @@ function LoginContent() {
               className={`flex-1 py-2 text-sm font-medium transition ${
                 tab === 'otp'
                   ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                  : 'text-neutral-400 hover:bg-neutral-800'
+                  : 'text-slate-500 hover:bg-slate-100'
               }`}
             >
               Email Link
@@ -223,7 +223,7 @@ function LoginContent() {
               )}
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-1 text-neutral-300">
+                <label htmlFor="email" className="block text-sm font-medium mb-1 text-slate-700">
                   Email
                 </label>
                 <input
@@ -232,17 +232,17 @@ function LoginContent() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                   placeholder="you@example.com"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label htmlFor="password" className="block text-sm font-medium text-neutral-300">
+                  <label htmlFor="password" className="block text-sm font-medium text-slate-700">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-xs text-amber-400 hover:underline">
+                  <Link href="/forgot-password" className="text-xs text-amber-600 hover:underline">
                     Forgot password?
                   </Link>
                 </div>
@@ -252,7 +252,7 @@ function LoginContent() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                   placeholder="••••••••"
                 />
               </div>
@@ -265,9 +265,9 @@ function LoginContent() {
                 {loading ? 'Logging in...' : 'Login'}
               </button>
 
-              <p className="text-center text-sm text-neutral-400">
+              <p className="text-center text-sm text-slate-500">
                 Don&apos;t have an account?{' '}
-                <Link href="/signup" className="font-medium text-amber-400 hover:underline">
+                <Link href="/signup" className="font-medium text-amber-600 hover:underline">
                   Sign up
                 </Link>
               </p>
@@ -286,7 +286,7 @@ function LoginContent() {
               {otpStep === 'email' ? (
                 <form onSubmit={handleSendCode} className="space-y-6">
                   <div>
-                    <label htmlFor="otp-email" className="block text-sm font-medium mb-1 text-neutral-300">
+                    <label htmlFor="otp-email" className="block text-sm font-medium mb-1 text-slate-700">
                       Email
                     </label>
                     <input
@@ -295,10 +295,10 @@ function LoginContent() {
                       value={otpEmail}
                       onChange={(e) => setOtpEmail(e.target.value)}
                       required
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                       placeholder="you@example.com"
                     />
-                    <p className="text-xs mt-1.5 text-neutral-500">
+                    <p className="text-xs mt-1.5 text-slate-400">
                       We&apos;ll send a login link or 6-digit code to this address. Only existing accounts can use this method.
                     </p>
                   </div>
@@ -314,19 +314,19 @@ function LoginContent() {
               ) : (
                 <form onSubmit={handleVerifyCode} className="space-y-6">
                   <div>
-                    <p className="text-sm mb-4 text-neutral-400">
-                      Check your email at <span className="font-medium text-neutral-100">{otpEmail}</span>. You&apos;ll receive either a login link (click to sign in) or a 6-digit code to enter below.
+                    <p className="text-sm mb-4 text-slate-500">
+                      Check your email at <span className="font-medium text-slate-900">{otpEmail}</span>. You&apos;ll receive either a login link (click to sign in) or a 6-digit code to enter below.
                     </p>
-                    <div className="rounded-lg border border-neutral-700 bg-neutral-800 p-3 mb-4 text-xs text-neutral-400">
+                    <div className="rounded-lg border border-slate-200 bg-slate-100 p-3 mb-4 text-xs text-slate-500">
                       <p>
                         Your login link will come from{' '}
-                        <span className="font-medium text-amber-400">CentenarianOS.com</span>
+                        <span className="font-medium text-amber-600">CentenarianOS.com</span>
                         {' '}&mdash;{' '}
-                        <span className="text-neutral-300">Work.WitUS</span> and CentenarianOS share a unified account system powered by{' '}
-                        <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="font-medium text-amber-400 hover:underline">WitUS.online</a>.
+                        <span className="text-slate-700">Work.WitUS</span> and CentenarianOS share a unified account system powered by{' '}
+                        <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="font-medium text-amber-600 hover:underline">WitUS.online</a>.
                       </p>
                     </div>
-                    <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-neutral-300">
+                    <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-slate-700">
                       6-digit code
                     </label>
                     <input
@@ -339,7 +339,7 @@ function LoginContent() {
                       onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                       required
                       autoFocus
-                      className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent form-input text-center text-2xl tracking-widest font-mono border-neutral-700 bg-neutral-800 text-neutral-100 focus:ring-amber-500"
+                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-center text-2xl tracking-widest font-mono"
                       placeholder="000000"
                     />
                   </div>
@@ -355,7 +355,7 @@ function LoginContent() {
                   <button
                     type="button"
                     onClick={() => { setOtpStep('email'); setOtpCode(''); setOtpError(''); }}
-                    className="w-full text-sm transition text-neutral-500 hover:text-neutral-300"
+                    className="w-full text-sm transition text-slate-400 hover:text-slate-700"
                   >
                     Use a different email
                   </button>
@@ -368,9 +368,9 @@ function LoginContent() {
         </div>
       </main>
 
-      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+      <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
         <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
       </footer>
     </div>
   );

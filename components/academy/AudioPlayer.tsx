@@ -140,7 +140,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl sm:rounded-2xl overflow-hidden mb-6">
+    <div className="bg-white border border-slate-200 rounded-xl sm:rounded-2xl overflow-hidden mb-6">
       <audio ref={audioRef} src={src} preload="metadata" />
 
       {/* Player controls */}
@@ -153,7 +153,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
         {/* Progress bar */}
         <div
           ref={progressRef}
-          className="relative h-2 bg-gray-800 rounded-full cursor-pointer mb-3 group"
+          className="relative h-2 bg-slate-100 rounded-full cursor-pointer mb-3 group"
           onClick={handleProgressClick}
         >
           <div
@@ -181,9 +181,9 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
 
         {/* Time + controls row */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="text-xs text-gray-500 tabular-nums w-12 shrink-0">{formatTime(currentTime)}</span>
+          <span className="text-xs text-slate-400 tabular-nums w-12 shrink-0">{formatTime(currentTime)}</span>
 
-          <button onClick={() => skipBy(-15)} className="p-2 text-gray-400 hover:text-white transition" title="Back 15s">
+          <button onClick={() => skipBy(-15)} className="p-2 text-slate-500 hover:text-white transition" title="Back 15s">
             <SkipBack className="w-4 h-4" />
           </button>
 
@@ -194,25 +194,25 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
             {playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
           </button>
 
-          <button onClick={() => skipBy(30)} className="p-2 text-gray-400 hover:text-white transition" title="Forward 30s">
+          <button onClick={() => skipBy(30)} className="p-2 text-slate-500 hover:text-white transition" title="Forward 30s">
             <SkipForward className="w-4 h-4" />
           </button>
 
-          <span className="text-xs text-gray-500 tabular-nums w-12 shrink-0 text-right">{formatTime(duration)}</span>
+          <span className="text-xs text-slate-400 tabular-nums w-12 shrink-0 text-right">{formatTime(duration)}</span>
 
           <div className="flex-1" />
 
           {/* Speed */}
           <button
             onClick={cycleSpeed}
-            className="px-2 py-1 text-xs font-semibold text-gray-400 bg-gray-800 rounded-lg hover:text-white hover:bg-gray-700 transition tabular-nums min-w-[42px]"
+            className="px-2 py-1 text-xs font-semibold text-slate-500 bg-slate-100 rounded-lg hover:text-white hover:bg-slate-100 transition tabular-nums min-w-[42px]"
             title="Playback speed"
           >
             {speed}x
           </button>
 
           {/* Mute */}
-          <button onClick={toggleMute} className="p-2 text-gray-400 hover:text-white transition" title={muted ? 'Unmute' : 'Mute'}>
+          <button onClick={toggleMute} className="p-2 text-slate-500 hover:text-white transition" title={muted ? 'Unmute' : 'Mute'}>
             {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
 
@@ -220,7 +220,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
           {hasChapters && (
             <button
               onClick={() => setShowChapters((s) => !s)}
-              className={`p-2 rounded-lg transition ${showChapters ? 'text-amber-400 bg-amber-900/30' : 'text-gray-500 hover:text-white'}`}
+              className={`p-2 rounded-lg transition ${showChapters ? 'text-amber-400 bg-amber-900/30' : 'text-slate-400 hover:text-white'}`}
               title="Chapters"
             >
               <ListMusic className="w-4 h-4" />
@@ -229,7 +229,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
           {hasTranscript && (
             <button
               onClick={() => setShowTranscript((s) => !s)}
-              className={`p-2 rounded-lg transition ${showTranscript ? 'text-amber-400 bg-amber-900/30' : 'text-gray-500 hover:text-white'}`}
+              className={`p-2 rounded-lg transition ${showTranscript ? 'text-amber-400 bg-amber-900/30' : 'text-slate-400 hover:text-white'}`}
               title="Transcript"
             >
               <FileText className="w-4 h-4" />
@@ -240,10 +240,10 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
 
       {/* Chapters panel */}
       {hasChapters && showChapters && (
-        <div className="border-t border-gray-800">
+        <div className="border-t border-slate-200">
           <button
             onClick={() => setShowChapters(false)}
-            className="w-full flex items-center justify-between px-4 sm:px-6 py-2.5 text-xs text-gray-400 hover:text-white transition"
+            className="w-full flex items-center justify-between px-4 sm:px-6 py-2.5 text-xs text-slate-500 hover:text-white transition"
           >
             <span className="font-semibold uppercase tracking-wide">Chapters ({sortedChapters.length})</span>
             <ChevronUp className="w-3.5 h-3.5" />
@@ -258,7 +258,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
                   className={`w-full text-left flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition ${
                     isCurrent
                       ? 'bg-amber-900/30 text-amber-300'
-                      : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                      : 'text-slate-500 hover:text-white hover:bg-slate-100'
                   }`}
                 >
                   <span className="tabular-nums text-xs shrink-0 w-10 text-right">{formatTime(ch.startTime)}</span>
@@ -275,7 +275,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
       {hasChapters && !showChapters && (
         <button
           onClick={() => setShowChapters(true)}
-          className="w-full border-t border-gray-800 flex items-center justify-between px-4 sm:px-6 py-2 text-xs text-gray-500 hover:text-gray-300 transition"
+          className="w-full border-t border-slate-200 flex items-center justify-between px-4 sm:px-6 py-2 text-xs text-slate-400 hover:text-slate-700 transition"
         >
           <span>{sortedChapters.length} chapters</span>
           <ChevronDown className="w-3.5 h-3.5" />
@@ -284,10 +284,10 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
 
       {/* Transcript panel */}
       {hasTranscript && showTranscript && (
-        <div className="border-t border-gray-800">
+        <div className="border-t border-slate-200">
           <button
             onClick={() => setShowTranscript(false)}
-            className="w-full flex items-center justify-between px-4 sm:px-6 py-2.5 text-xs text-gray-400 hover:text-white transition"
+            className="w-full flex items-center justify-between px-4 sm:px-6 py-2.5 text-xs text-slate-500 hover:text-white transition"
           >
             <span className="font-semibold uppercase tracking-wide">Transcript</span>
             <ChevronUp className="w-3.5 h-3.5" />
@@ -301,7 +301,7 @@ export default function AudioPlayer({ src, chapters, transcript, onEnded }: Audi
                 className={`w-full text-left flex gap-3 px-2 py-1.5 rounded-lg text-sm transition ${
                   i === activeSegmentIndex
                     ? 'bg-amber-900/20 text-white'
-                    : 'text-gray-500 hover:text-gray-300 hover:bg-gray-800/50'
+                    : 'text-slate-400 hover:text-slate-700 hover:bg-slate-100/50'
                 }`}
               >
                 <span className="tabular-nums text-xs shrink-0 w-10 text-right mt-0.5 opacity-60">{formatTime(seg.startTime)}</span>

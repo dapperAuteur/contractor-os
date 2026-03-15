@@ -29,7 +29,7 @@ export default function PostMeta({
   return (
     <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-400">
       {(authorDisplayName || authorUsername) && (
-        <span className="font-medium text-neutral-200">
+        <span className="font-medium text-slate-800">
           {authorDisplayName || authorUsername}
         </span>
       )}

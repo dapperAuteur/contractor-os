@@ -20,8 +20,8 @@ export default function CategoryFilter({ categories, selected, onSelect }: Categ
         onClick={() => onSelect(null)}
         className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
           selected === null
-            ? 'bg-gray-900 text-white'
-            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            ? 'bg-slate-900 text-white'
+            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
         }`}
       >
         All
@@ -33,8 +33,8 @@ export default function CategoryFilter({ categories, selected, onSelect }: Categ
           onClick={() => onSelect(cat.id)}
           className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
             selected === cat.id
-              ? 'bg-gray-900 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              ? 'bg-slate-900 text-white'
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
           style={selected === cat.id && cat.color ? {
             backgroundColor: cat.color,

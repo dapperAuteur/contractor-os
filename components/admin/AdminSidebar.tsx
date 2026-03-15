@@ -60,8 +60,8 @@ export default function AdminSidebar({ onNavigate }: { onNavigate?: () => void }
             href={href}
             onClick={onNavigate}
             aria-current={active ? 'page' : undefined}
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:outline-none ${
-              active ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition min-h-11 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:outline-none ${
+              active ? 'bg-slate-100 text-slate-900' : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
             }`}
           >
             <Icon className="w-4 h-4" aria-hidden="true" />

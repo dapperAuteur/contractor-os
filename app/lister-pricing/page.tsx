@@ -16,7 +16,7 @@ const FEATURES = [
   'Union contract search and dues tracking',
   'Invite contractors to the platform',
   'Cross-reference job schedules',
-  'Mobile-first dark theme',
+  'Mobile-first responsive design',
 ];
 
 export default function ListerPricingPage() {
@@ -52,16 +52,16 @@ export default function ListerPricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       {/* Nav */}
-      <nav className="border-b border-neutral-800 px-4 py-4">
+      <nav className="border-b border-slate-200 px-4 py-4">
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link href="/lister-landing" className="flex items-center gap-2">
-            <Users size={24} className="text-indigo-400" aria-hidden="true" />
+            <Users size={24} className="text-indigo-600" aria-hidden="true" />
             <span className="text-lg font-bold">CrewOps</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="rounded-lg border border-neutral-700 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-800 min-h-11 flex items-center">
+            <Link href="/login" className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 min-h-11 flex items-center">
               Log In
             </Link>
             <Link href="/signup" className="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 min-h-11 flex items-center">
@@ -73,27 +73,27 @@ export default function ListerPricingPage() {
 
       <section className="mx-auto max-w-4xl px-4 py-16">
         <h1 className="text-center text-3xl font-extrabold sm:text-4xl">Lister Pricing</h1>
-        <p className="mt-3 text-center text-neutral-400">Introductory pricing available for a limited time.</p>
+        <p className="mt-3 text-center text-slate-500">Introductory pricing available for a limited time.</p>
 
         {error && (
-          <div role="alert" className="mt-6 rounded-lg border border-red-800 bg-red-900/30 px-4 py-3 text-center text-sm text-red-300">
+          <div role="alert" className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-600">
             {error}
           </div>
         )}
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           {/* Monthly */}
-          <div className="rounded-2xl border-2 border-indigo-600 bg-neutral-900 p-6 relative">
+          <div className="rounded-2xl border-2 border-indigo-600 bg-white p-6 relative">
             <span className="absolute -top-3 left-4 rounded-full bg-indigo-600 px-3 py-0.5 text-xs font-bold text-white">
               Intro Promo
             </span>
-            <h2 className="text-lg font-semibold text-neutral-200">Monthly</h2>
+            <h2 className="text-lg font-semibold text-slate-800">Monthly</h2>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-4xl font-extrabold text-indigo-400">$10</span>
-              <span className="text-neutral-500">/month</span>
+              <span className="text-4xl font-extrabold text-indigo-600">$10</span>
+              <span className="text-slate-400">/month</span>
             </div>
-            <p className="mt-1 text-sm text-neutral-500 line-through">$50/month regular price</p>
-            <p className="mt-1 text-sm text-neutral-500">Cancel anytime.</p>
+            <p className="mt-1 text-sm text-slate-400 line-through">$50/month regular price</p>
+            <p className="mt-1 text-sm text-slate-400">Cancel anytime.</p>
             <button
               onClick={() => handleCheckout('lister-monthly')}
               disabled={loading !== null}
@@ -108,17 +108,17 @@ export default function ListerPricingPage() {
           </div>
 
           {/* Annual */}
-          <div className="rounded-2xl border-2 border-indigo-600 bg-neutral-900 p-6 relative">
+          <div className="rounded-2xl border-2 border-indigo-600 bg-white p-6 relative">
             <span className="absolute -top-3 left-4 rounded-full bg-indigo-600 px-3 py-0.5 text-xs font-bold text-white">
               Best Value
             </span>
-            <h2 className="text-lg font-semibold text-neutral-200">Annual</h2>
+            <h2 className="text-lg font-semibold text-slate-800">Annual</h2>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-4xl font-extrabold text-indigo-400">$100</span>
-              <span className="text-neutral-500">/year</span>
+              <span className="text-4xl font-extrabold text-indigo-600">$100</span>
+              <span className="text-slate-400">/year</span>
             </div>
-            <p className="mt-1 text-sm text-neutral-500 line-through">$500/year regular price</p>
-            <p className="mt-1 text-sm text-neutral-500">$8.33/month, billed annually.</p>
+            <p className="mt-1 text-sm text-slate-400 line-through">$500/year regular price</p>
+            <p className="mt-1 text-sm text-slate-400">$8.33/month, billed annually.</p>
             <button
               onClick={() => handleCheckout('lister-annual')}
               disabled={loading !== null}
@@ -139,8 +139,8 @@ export default function ListerPricingPage() {
           <div className="grid gap-2 sm:grid-cols-2">
             {FEATURES.map((f) => (
               <div key={f} className="flex items-start gap-2 py-1">
-                <Check size={16} className="mt-0.5 text-indigo-400 shrink-0" aria-hidden="true" />
-                <span className="text-sm text-neutral-300">{f}</span>
+                <Check size={16} className="mt-0.5 text-indigo-600 shrink-0" aria-hidden="true" />
+                <span className="text-sm text-slate-700">{f}</span>
               </div>
             ))}
           </div>
@@ -156,17 +156,17 @@ export default function ListerPricingPage() {
             { q: 'What union features are included?', a: 'Union contract search (AI-powered), membership management, and dues tracking. All included at the same price.' },
             { q: 'How do I get help if I have a problem?', a: 'Customer support is managed by a real human — not AI. Reach out through the in-app feedback form or email and a team member will respond personally.' },
           ].map((faq) => (
-            <details key={faq.q} className="rounded-xl border border-neutral-800 bg-neutral-900 p-4 group">
-              <summary className="cursor-pointer font-medium text-neutral-200 text-sm">{faq.q}</summary>
-              <p className="mt-2 text-sm text-neutral-400">{faq.a}</p>
+            <details key={faq.q} className="rounded-xl border border-slate-200 bg-white p-4 group">
+              <summary className="cursor-pointer font-medium text-slate-800 text-sm">{faq.q}</summary>
+              <p className="mt-2 text-sm text-slate-500">{faq.a}</p>
             </details>
           ))}
         </div>
       </section>
 
-      <footer className="border-t border-neutral-800 px-4 py-8 text-center text-xs text-neutral-500">
+      <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
         <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
+        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
       </footer>
     </div>
   );

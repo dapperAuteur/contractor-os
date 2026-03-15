@@ -176,7 +176,7 @@ export default function ScanResultRouter({
             <Icon className="w-5 h-5 text-amber-400" />
           </div>
           <div>
-            <h3 className="font-semibold text-neutral-100">
+            <h3 className="font-semibold text-slate-900">
               {DOC_TYPE_LABELS[documentType]}
             </h3>
             <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full ${confidenceColor}`}>
@@ -193,13 +193,13 @@ export default function ScanResultRouter({
             Change type <ChevronDown className="w-3 h-3" />
           </button>
           {showOverride && (
-            <div className="absolute right-0 top-12 bg-neutral-800 border border-neutral-700 rounded-xl shadow-lg z-10 w-56">
+            <div className="absolute right-0 top-12 bg-slate-100 border border-slate-200 rounded-xl shadow-lg z-10 w-56">
               {OVERRIDE_OPTIONS.map((type) => (
                 <button
                   key={type}
                   onClick={() => handleOverride(type)}
-                  className={`w-full text-left px-4 py-2 text-sm hover:bg-neutral-700 first:rounded-t-xl last:rounded-b-xl ${
-                    type === documentType ? 'bg-amber-900/30 text-amber-400 font-medium' : 'text-neutral-300'
+                  className={`w-full text-left px-4 py-2 text-sm hover:bg-slate-100 first:rounded-t-xl last:rounded-b-xl ${
+                    type === documentType ? 'bg-amber-900/30 text-amber-400 font-medium' : 'text-slate-700'
                   }`}
                 >
                   {DOC_TYPE_LABELS[type]}
@@ -219,7 +219,7 @@ export default function ScanResultRouter({
 
       {/* Contact attachment */}
       <div>
-        <label className="block text-sm font-medium text-neutral-300 mb-1">
+        <label className="block text-sm font-medium text-slate-700 mb-1">
           {documentType === 'recipe' ? 'Author / Source' : 'Vendor / Client'}
         </label>
         <ContactAutocomplete
@@ -331,7 +331,7 @@ export default function ScanResultRouter({
         )}
         <button
           onClick={onDismiss}
-          className="px-4 py-3 text-neutral-400 hover:text-neutral-200 hover:bg-neutral-800 rounded-xl transition min-h-11"
+          className="px-4 py-3 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-xl transition min-h-11"
         >
           Cancel
         </button>
@@ -365,53 +365,53 @@ function PayStubPreview({ data }: { data: PayStubExtraction }) {
 
       {data.earnings?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">Earnings</h5>
-          <div className="border border-neutral-700 rounded-xl overflow-hidden">
+          <h5 className="text-sm font-medium text-slate-700 mb-2">Earnings</h5>
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-800">
+              <thead className="bg-slate-100">
                 <tr>
-                  <th className="text-left px-3 py-2 text-neutral-400 font-medium">Type</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Rate</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Hours</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Amount</th>
+                  <th className="text-left px-3 py-2 text-slate-500 font-medium">Type</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Rate</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Hours</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className="divide-y divide-slate-200">
                 {data.earnings.map((e, i) => (
                   <tr key={i}>
-                    <td className="px-3 py-2 text-neutral-100">{e.type}</td>
-                    <td className="px-3 py-2 text-right text-neutral-300">{e.rate != null ? `$${e.rate.toFixed(2)}` : '—'}</td>
-                    <td className="px-3 py-2 text-right text-neutral-300">{e.hours ?? '—'}</td>
-                    <td className="px-3 py-2 text-right text-neutral-100">${e.amount.toFixed(2)}</td>
+                    <td className="px-3 py-2 text-slate-900">{e.type}</td>
+                    <td className="px-3 py-2 text-right text-slate-700">{e.rate != null ? `$${e.rate.toFixed(2)}` : '—'}</td>
+                    <td className="px-3 py-2 text-right text-slate-700">{e.hours ?? '—'}</td>
+                    <td className="px-3 py-2 text-right text-slate-900">${e.amount.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="mt-2 text-sm text-neutral-400 text-right">
-            Total Earnings: <span className="text-neutral-100 font-medium">${totalEarnings.toFixed(2)}</span>
+          <div className="mt-2 text-sm text-slate-500 text-right">
+            Total Earnings: <span className="text-slate-900 font-medium">${totalEarnings.toFixed(2)}</span>
           </div>
         </div>
       )}
 
       {data.benefits?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">Benefits</h5>
+          <h5 className="text-sm font-medium text-slate-700 mb-2">Benefits</h5>
           <ul className="space-y-1 text-sm">
             {data.benefits.map((b, i) => (
-              <li key={i} className="flex justify-between text-neutral-300">
+              <li key={i} className="flex justify-between text-slate-700">
                 <span>{b.name}</span>
-                <span className="text-neutral-100">${b.amount.toFixed(2)}</span>
+                <span className="text-slate-900">${b.amount.toFixed(2)}</span>
               </li>
             ))}
           </ul>
-          <div className="mt-2 text-sm text-neutral-400 text-right">
-            Total Benefits: <span className="text-neutral-100 font-medium">${totalBenefits.toFixed(2)}</span>
+          <div className="mt-2 text-sm text-slate-500 text-right">
+            Total Benefits: <span className="text-slate-900 font-medium">${totalBenefits.toFixed(2)}</span>
           </div>
         </div>
       )}
 
-      <div className="flex gap-4 text-sm text-neutral-400">
+      <div className="flex gap-4 text-sm text-slate-500">
         {data.time_in && <span>In: {data.time_in}</span>}
         {data.time_out && <span>Out: {data.time_out}</span>}
         {data.est_pay_date && <span>Pay Date: {data.est_pay_date}</span>}
@@ -434,24 +434,24 @@ function InvoicePreview({ data }: { data: InvoiceExtraction }) {
 
       {data.line_items?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">Line Items ({data.line_items.length})</h5>
-          <div className="border border-neutral-700 rounded-xl overflow-hidden">
+          <h5 className="text-sm font-medium text-slate-700 mb-2">Line Items ({data.line_items.length})</h5>
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-800">
+              <thead className="bg-slate-100">
                 <tr>
-                  <th className="text-left px-3 py-2 text-neutral-400 font-medium">Description</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Qty</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Price</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Amount</th>
+                  <th className="text-left px-3 py-2 text-slate-500 font-medium">Description</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Qty</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Price</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className="divide-y divide-slate-200">
                 {data.line_items.map((item, i) => (
                   <tr key={i}>
-                    <td className="px-3 py-2 text-neutral-100">{item.description}</td>
-                    <td className="px-3 py-2 text-right text-neutral-300">{item.quantity}</td>
-                    <td className="px-3 py-2 text-right text-neutral-300">${item.unit_price.toFixed(2)}</td>
-                    <td className="px-3 py-2 text-right text-neutral-100">${item.amount.toFixed(2)}</td>
+                    <td className="px-3 py-2 text-slate-900">{item.description}</td>
+                    <td className="px-3 py-2 text-right text-slate-700">{item.quantity}</td>
+                    <td className="px-3 py-2 text-right text-slate-700">${item.unit_price.toFixed(2)}</td>
+                    <td className="px-3 py-2 text-right text-slate-900">${item.amount.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -460,7 +460,7 @@ function InvoicePreview({ data }: { data: InvoiceExtraction }) {
         </div>
       )}
 
-      <div className="flex gap-4 text-sm text-neutral-400">
+      <div className="flex gap-4 text-sm text-slate-500">
         {data.subtotal != null && <span>Subtotal: ${data.subtotal.toFixed(2)}</span>}
         {data.tax != null && <span>Tax: ${data.tax.toFixed(2)}</span>}
         {data.due_date && <span>Due: {data.due_date}</span>}
@@ -486,7 +486,7 @@ function CallSheetPreview({ data }: { data: CallSheetExtraction }) {
 
       {data.work_dates?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">
+          <h5 className="text-sm font-medium text-slate-700 mb-2">
             Work Dates ({data.work_dates.length})
           </h5>
           <div className="flex flex-wrap gap-2">
@@ -499,18 +499,18 @@ function CallSheetPreview({ data }: { data: CallSheetExtraction }) {
         </div>
       )}
 
-      <div className="flex gap-4 text-sm text-neutral-400">
+      <div className="flex gap-4 text-sm text-slate-500">
         {data.call_time && <span>Call: {data.call_time}</span>}
         {data.wrap_time && <span>Wrap: {data.wrap_time}</span>}
       </div>
 
-      <div className="flex gap-4 text-sm text-neutral-400">
+      <div className="flex gap-4 text-sm text-slate-500">
         {data.poc_name && <span>POC: {data.poc_name} {data.poc_phone && `(${data.poc_phone})`}</span>}
         {data.crew_coordinator_name && <span>Coord: {data.crew_coordinator_name} {data.crew_coordinator_phone && `(${data.crew_coordinator_phone})`}</span>}
       </div>
 
       {data.notes && (
-        <p className="text-sm text-neutral-400 whitespace-pre-wrap">{data.notes}</p>
+        <p className="text-sm text-slate-500 whitespace-pre-wrap">{data.notes}</p>
       )}
     </div>
   );
@@ -538,30 +538,30 @@ function ReceiptPreview({
 
       {data.line_items?.length > 0 && (
         <div>
-          <h4 className="text-sm font-medium text-neutral-300 mb-2">Line Items ({data.line_items.length})</h4>
-          <div className="border border-neutral-700 rounded-xl overflow-hidden">
+          <h4 className="text-sm font-medium text-slate-700 mb-2">Line Items ({data.line_items.length})</h4>
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-neutral-800">
+              <thead className="bg-slate-100">
                 <tr>
-                  <th className="text-left px-3 py-2 text-neutral-400 font-medium">Item</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Qty</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Price</th>
-                  <th className="text-right px-3 py-2 text-neutral-400 font-medium">Status</th>
+                  <th className="text-left px-3 py-2 text-slate-500 font-medium">Item</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Qty</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Price</th>
+                  <th className="text-right px-3 py-2 text-slate-500 font-medium">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-800">
+              <tbody className="divide-y divide-slate-200">
                 {data.line_items.map((item, i) => {
                   const match = itemMatches.find(
                     (m) => m.original_name.toLowerCase() === item.description.toLowerCase(),
                   );
                   return (
                     <tr key={i}>
-                      <td className="px-3 py-2 text-neutral-100">{item.description}</td>
-                      <td className="px-3 py-2 text-right text-neutral-300">{item.quantity}</td>
-                      <td className="px-3 py-2 text-right text-neutral-100">${item.total.toFixed(2)}</td>
+                      <td className="px-3 py-2 text-slate-900">{item.description}</td>
+                      <td className="px-3 py-2 text-right text-slate-700">{item.quantity}</td>
+                      <td className="px-3 py-2 text-right text-slate-900">${item.total.toFixed(2)}</td>
                       <td className="px-3 py-2 text-right">
                         {matchLoading ? (
-                          <span className="text-xs text-neutral-500">...</span>
+                          <span className="text-xs text-slate-400">...</span>
                         ) : match && !match.is_new ? (
                           <span className="inline-flex items-center gap-1 text-xs text-green-400 bg-green-900/30 px-2 py-0.5 rounded-full">
                             <Check className="w-3 h-3" />
@@ -583,7 +583,7 @@ function ReceiptPreview({
         </div>
       )}
 
-      <div className="flex gap-4 text-sm text-neutral-400">
+      <div className="flex gap-4 text-sm text-slate-500">
         {data.subtotal != null && <span>Subtotal: ${data.subtotal.toFixed(2)}</span>}
         {data.tax != null && <span>Tax: ${data.tax.toFixed(2)}</span>}
         {data.tip != null && <span>Tip: ${data.tip.toFixed(2)}</span>}
@@ -598,19 +598,19 @@ function ReceiptPreview({
 function RecipePreview({ data }: { data: RecipeExtraction }) {
   return (
     <div className="space-y-4">
-      {data.title && <h4 className="text-lg font-semibold text-neutral-100">{data.title}</h4>}
-      <div className="flex gap-4 text-sm text-neutral-400">
+      {data.title && <h4 className="text-lg font-semibold text-slate-900">{data.title}</h4>}
+      <div className="flex gap-4 text-sm text-slate-500">
         {data.servings && <span>Serves {data.servings}</span>}
         {data.prep_time_minutes && <span>Prep: {data.prep_time_minutes}m</span>}
         {data.cook_time_minutes && <span>Cook: {data.cook_time_minutes}m</span>}
       </div>
       {data.ingredients?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">Ingredients ({data.ingredients.length})</h5>
-          <ul className="space-y-1 text-sm text-neutral-300">
+          <h5 className="text-sm font-medium text-slate-700 mb-2">Ingredients ({data.ingredients.length})</h5>
+          <ul className="space-y-1 text-sm text-slate-700">
             {data.ingredients.map((ing, i) => (
               <li key={i} className="flex gap-2">
-                <span className="text-neutral-500 min-w-[4rem] text-right">
+                <span className="text-slate-400 min-w-[4rem] text-right">
                   {ing.quantity != null ? `${ing.quantity} ${ing.unit || ''}` : ''}
                 </span>
                 <span>{ing.name}</span>
@@ -621,8 +621,8 @@ function RecipePreview({ data }: { data: RecipeExtraction }) {
       )}
       {data.instructions && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-1">Instructions</h5>
-          <p className="text-sm text-neutral-400 line-clamp-4 whitespace-pre-wrap">{data.instructions}</p>
+          <h5 className="text-sm font-medium text-slate-700 mb-1">Instructions</h5>
+          <p className="text-sm text-slate-500 line-clamp-4 whitespace-pre-wrap">{data.instructions}</p>
         </div>
       )}
     </div>
@@ -642,12 +642,12 @@ function MaintenancePreview({ data }: { data: MaintenanceExtraction }) {
       </div>
       {data.services?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">Services</h5>
+          <h5 className="text-sm font-medium text-slate-700 mb-2">Services</h5>
           <ul className="space-y-1 text-sm">
             {data.services.map((s, i) => (
-              <li key={i} className="flex justify-between text-neutral-300">
+              <li key={i} className="flex justify-between text-slate-700">
                 <span>{s.description}</span>
-                <span className="text-neutral-100">${s.cost.toFixed(2)}</span>
+                <span className="text-slate-900">${s.cost.toFixed(2)}</span>
               </li>
             ))}
           </ul>
@@ -655,12 +655,12 @@ function MaintenancePreview({ data }: { data: MaintenanceExtraction }) {
       )}
       {data.parts?.length > 0 && (
         <div>
-          <h5 className="text-sm font-medium text-neutral-300 mb-2">Parts</h5>
+          <h5 className="text-sm font-medium text-slate-700 mb-2">Parts</h5>
           <ul className="space-y-1 text-sm">
             {data.parts.map((p, i) => (
-              <li key={i} className="flex justify-between text-neutral-300">
+              <li key={i} className="flex justify-between text-slate-700">
                 <span>{p.name} {p.quantity > 1 ? `x${p.quantity}` : ''}</span>
-                <span className="text-neutral-100">${p.cost.toFixed(2)}</span>
+                <span className="text-slate-900">${p.cost.toFixed(2)}</span>
               </li>
             ))}
           </ul>
@@ -674,9 +674,9 @@ function MaintenancePreview({ data }: { data: MaintenanceExtraction }) {
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-neutral-800 rounded-lg p-3">
-      <div className="text-xs text-neutral-500">{label}</div>
-      <div className="font-medium text-neutral-100 truncate">{value}</div>
+    <div className="bg-slate-100 rounded-lg p-3">
+      <div className="text-xs text-slate-400">{label}</div>
+      <div className="font-medium text-slate-900 truncate">{value}</div>
     </div>
   );
 }

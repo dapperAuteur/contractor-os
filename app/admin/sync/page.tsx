@@ -34,14 +34,14 @@ function ActionCard({
   loading: boolean;
 }) {
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
+    <div className="bg-white border border-slate-200 rounded-xl p-6">
       <div className="flex items-start gap-4">
         <div className="p-2.5 rounded-lg bg-amber-900/30 text-amber-400 shrink-0">
           <Icon className="w-5 h-5" aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
-          <p className="text-sm text-gray-400 mb-4">{description}</p>
+          <p className="text-sm text-slate-500 mb-4">{description}</p>
 
           <button
             onClick={onAction}
@@ -66,7 +66,7 @@ function ActionCard({
               <div>
                 <p>{result.message}</p>
                 {result.details && (
-                  <pre className="mt-1 text-xs text-gray-500 whitespace-pre-wrap">
+                  <pre className="mt-1 text-xs text-slate-400 whitespace-pre-wrap">
                     {JSON.stringify(result.details, null, 2)}
                   </pre>
                 )}
@@ -178,13 +178,13 @@ export default function AdminSyncPage() {
   return (
     <div className="p-8 max-w-3xl">
       <h1 className="text-2xl font-bold text-white mb-1">Sync & Data</h1>
-      <p className="text-gray-400 text-sm mb-6">Manually trigger knowledge sync, demo reset, and data operations. These also run automatically via daily cron jobs.</p>
+      <p className="text-slate-500 text-sm mb-6">Manually trigger knowledge sync, demo reset, and data operations. These also run automatically via daily cron jobs.</p>
 
       {/* Last sync status */}
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 mb-6 flex items-center gap-3">
-        <Clock className="w-5 h-5 text-gray-500 shrink-0" aria-hidden="true" />
+      <div className="bg-white border border-slate-200 rounded-xl p-5 mb-6 flex items-center gap-3">
+        <Clock className="w-5 h-5 text-slate-400 shrink-0" aria-hidden="true" />
         <div>
-          <p className="text-sm text-gray-400">Last knowledge sync</p>
+          <p className="text-sm text-slate-500">Last knowledge sync</p>
           {statusLoading ? (
             <p className="text-white text-sm">Loading...</p>
           ) : status?.lastSynced ? (
@@ -227,18 +227,18 @@ export default function AdminSyncPage() {
         />
       </div>
 
-      <div className="mt-8 bg-gray-900/50 border border-gray-800 rounded-xl p-5">
-        <h3 className="text-sm font-semibold text-gray-300 mb-2">Cron Schedule</h3>
+      <div className="mt-8 bg-white/50 border border-slate-200 rounded-xl p-5">
+        <h3 className="text-sm font-semibold text-slate-700 mb-2">Cron Schedule</h3>
         <div className="space-y-2 text-sm">
-          <div className="flex justify-between text-gray-400">
+          <div className="flex justify-between text-slate-500">
             <span>Demo Reset</span>
-            <code className="text-gray-500">0 0 * * *</code>
-            <span className="text-gray-500">Daily at midnight UTC</span>
+            <code className="text-slate-400">0 0 * * *</code>
+            <span className="text-slate-400">Daily at midnight UTC</span>
           </div>
-          <div className="flex justify-between text-gray-400">
+          <div className="flex justify-between text-slate-500">
             <span>Knowledge Sync</span>
-            <code className="text-gray-500">0 3 * * *</code>
-            <span className="text-gray-500">Daily at 3:00 AM UTC</span>
+            <code className="text-slate-400">0 3 * * *</code>
+            <span className="text-slate-400">Daily at 3:00 AM UTC</span>
           </div>
         </div>
       </div>
