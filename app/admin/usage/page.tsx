@@ -81,20 +81,20 @@ export default function AdminUsagePage() {
             type="date"
             value={fromDate}
             onChange={(e) => setFromDate(e.target.value)}
-            className="bg-slate-100 text-sm text-white rounded-lg px-2 py-1.5 border border-slate-200 scheme-dark"
+            className="bg-white text-sm text-slate-900 rounded-lg px-2 py-1.5 border border-slate-300 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
           />
           <span className="text-slate-500 text-sm">to</span>
           <input
             type="date"
             value={toDate}
             onChange={(e) => setToDate(e.target.value)}
-            className="bg-slate-100 text-sm text-white rounded-lg px-2 py-1.5 border border-slate-200 scheme-dark"
+            className="bg-white text-sm text-slate-900 rounded-lg px-2 py-1.5 border border-slate-300 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
           />
 
           <select
             value={moduleFilter}
             onChange={(e) => setModuleFilter(e.target.value)}
-            className="bg-slate-100 text-sm text-white rounded-lg px-3 py-1.5 border border-slate-200 scheme-dark"
+            className="bg-white text-sm text-slate-900 rounded-lg px-3 py-1.5 border border-slate-300 focus:border-amber-500 focus:outline-none"
           >
             {MODULE_OPTIONS.map((m) => (
               <option key={m} value={m}>{m === 'all' ? 'All Modules' : m.replace(/_/g, ' ')}</option>
@@ -104,7 +104,7 @@ export default function AdminUsagePage() {
           <select
             value={subFilter}
             onChange={(e) => setSubFilter(e.target.value)}
-            className="bg-slate-100 text-sm text-white rounded-lg px-3 py-1.5 border border-slate-200 scheme-dark"
+            className="bg-white text-sm text-slate-900 rounded-lg px-3 py-1.5 border border-slate-300 focus:border-amber-500 focus:outline-none"
           >
             {SUB_OPTIONS.map((s) => (
               <option key={s} value={s}>{s === 'all' ? 'All Plans' : s.charAt(0).toUpperCase() + s.slice(1)}</option>
@@ -133,19 +133,19 @@ export default function AdminUsagePage() {
             <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <Activity className="w-3.5 h-3.5" /> Total Events
             </div>
-            <p className="text-2xl font-bold text-white mt-1">{s.totalEvents.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-slate-900 mt-1">{s.totalEvents.toLocaleString()}</p>
           </div>
           <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
             <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <Users className="w-3.5 h-3.5" /> Unique Users
             </div>
-            <p className="text-2xl font-bold text-white mt-1">{s.uniqueUsers}</p>
+            <p className="text-2xl font-bold text-slate-900 mt-1">{s.uniqueUsers}</p>
           </div>
           <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
             <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
               <TrendingUp className="w-3.5 h-3.5" /> Avg/Day
             </div>
-            <p className="text-2xl font-bold text-white mt-1">{s.avgPerDay}</p>
+            <p className="text-2xl font-bold text-slate-900 mt-1">{s.avgPerDay}</p>
           </div>
           <div className="bg-slate-100 border border-slate-200 rounded-xl p-4">
             <div className="flex items-center gap-2 text-xs text-slate-500 uppercase tracking-wider">
@@ -164,7 +164,7 @@ export default function AdminUsagePage() {
               <h2 className="text-sm font-semibold text-slate-700 mb-4">Events by Module</h2>
               <ResponsiveContainer width="100%" height={Math.max(200, data.byModule.length * 36)}>
                 <BarChart data={data.byModule} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" horizontal={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" horizontal={false} />
                   <XAxis type="number" tick={{ fontSize: 11, fill: '#6b7280' }} />
                   <YAxis type="category" dataKey="module" tick={{ fontSize: 11, fill: '#9ca3af' }} width={120} />
                   <Tooltip contentStyle={{ background: '#111827', border: '1px solid #374151', fontSize: 12 }} />
@@ -206,7 +206,7 @@ export default function AdminUsagePage() {
               <h2 className="text-sm font-semibold text-slate-700 mb-4">Daily Activity</h2>
               <ResponsiveContainer width="100%" height={280}>
                 <LineChart data={data.byDay} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                   <XAxis dataKey="date" tick={{ fontSize: 11, fill: '#6b7280' }} interval={Math.max(0, Math.floor(data.byDay.length / 10))} />
                   <YAxis tick={{ fontSize: 11, fill: '#6b7280' }} allowDecimals={false} />
                   <Tooltip contentStyle={{ background: '#111827', border: '1px solid #374151', fontSize: 12 }} />
