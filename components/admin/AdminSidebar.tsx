@@ -15,7 +15,7 @@ const NAV_ITEMS = [
   { href: '/admin',            label: 'Overview',    icon: LayoutDashboard, exact: true,  badgeKey: null },
   { href: '/admin/users',      label: 'Users',       icon: Users,           exact: false, badgeKey: null },
   { href: '/admin/messages',   label: 'Messages',    icon: MessageSquare,   exact: false, badgeKey: 'messages' as const },
-  { href: '/admin/content',    label: 'Content',     icon: FileText,        exact: false, badgeKey: null },
+  { href: '/dashboard/admin/content-library', label: 'Content', icon: FileText, exact: false, badgeKey: null },
   { href: '/admin/engagement', label: 'Engagement',  icon: Heart,           exact: false, badgeKey: null },
   { href: '/admin/feedback',   label: 'Feedback',    icon: MessageCircle,   exact: false, badgeKey: 'feedback' as const },
   { href: '/admin/academy',    label: 'Academy',     icon: GraduationCap,   exact: false, badgeKey: null },
