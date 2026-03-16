@@ -123,14 +123,17 @@ export default function AdminUnionSubmissionsPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-4 p-4">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h1 className="text-2xl font-bold text-slate-900">
-          Union Documents
-          {pendingCount > 0 && (
-            <span className="ml-2 rounded-full bg-yellow-500/20 px-2.5 py-0.5 text-sm font-medium text-yellow-400">
-              {pendingCount} pending
-            </span>
-          )}
-        </h1>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">
+            Union Documents
+            {pendingCount > 0 && (
+              <span className="ml-2 rounded-full bg-yellow-500/20 px-2.5 py-0.5 text-sm font-medium text-yellow-600">
+                {pendingCount} pending
+              </span>
+            )}
+          </h1>
+          <p className="text-sm text-slate-500 mt-0.5">Review community submissions and reset stuck documents</p>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -204,7 +207,7 @@ export default function AdminUnionSubmissionsPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <FileText size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
+                          <FileText size={14} className="text-amber-500 shrink-0" aria-hidden="true" />
                           <span className="font-medium text-slate-900 text-sm">{sub.file_name}</span>
                           <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                             {DOC_TYPE_LABELS[sub.doc_type] ?? sub.doc_type}
@@ -234,22 +237,22 @@ export default function AdminUnionSubmissionsPage() {
                         href={sub.file_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        aria-label={`Download ${sub.file_name}`}
+                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        aria-label={`View ${sub.file_name}`}
                       >
                         <ExternalLink size={16} aria-hidden="true" />
                       </a>
                     </div>
 
                     {isPending && (
-                      <div className="flex flex-col gap-2 sm:flex-row sm:items-end border-t border-slate-200 pt-3">
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-end border-t border-slate-100 pt-3">
                         <label className="flex-1 block">
-                          <span className="text-xs font-medium text-slate-400">Admin Notes (optional)</span>
+                          <span className="text-xs font-medium text-slate-500">Admin Notes (optional)</span>
                           <input
                             type="text"
                             value={notes[sub.id] || ''}
                             onChange={(e) => setNotes({ ...notes, [sub.id]: e.target.value })}
-                            className="mt-1 w-full rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none"
+                            className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                             placeholder="Reason or feedback..."
                             aria-label="Admin notes for this submission"
                           />
@@ -278,7 +281,7 @@ export default function AdminUnionSubmissionsPage() {
                     )}
 
                     {sub.status === 'live' && sub.document_id && (
-                      <p className="text-xs text-green-400 border-t border-slate-200 pt-2">
+                      <p className="text-xs text-green-600 border-t border-slate-100 pt-2">
                         <CheckCircle size={12} className="inline mr-1" aria-hidden="true" />
                         Live in community RAG
                       </p>
@@ -295,8 +298,8 @@ export default function AdminUnionSubmissionsPage() {
       {adminTab === 'documents' && (
         <>
           <p className="text-sm text-slate-500">
-            Documents stuck in <strong>processing</strong> status — likely caused by a timed-out request.
-            Resetting to <strong>error</strong> lets the user see the failure and re-upload the file.
+            Documents stuck in <strong>processing</strong> — caused by a timed-out request.
+            Resetting to <strong>error</strong> lets the user see the failure and re-upload.
           </p>
 
           {stuckLoading ? (
@@ -316,12 +319,12 @@ export default function AdminUnionSubmissionsPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <FileText size={14} className="text-amber-400 shrink-0" aria-hidden="true" />
+                          <FileText size={14} className="text-amber-500 shrink-0" aria-hidden="true" />
                           <span className="font-medium text-slate-900 text-sm">{doc.name}</span>
                           <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                             {DOC_TYPE_LABELS[doc.doc_type] ?? doc.doc_type}
                           </span>
-                          <span className="rounded-full bg-blue-500/20 px-2 py-0.5 text-xs font-medium text-blue-400">
+                          <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
                             processing
                           </span>
                           {doc.is_shared ? (

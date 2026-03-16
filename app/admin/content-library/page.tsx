@@ -1,6 +1,6 @@
 'use client';
 
-// app/dashboard/admin/content-library/page.tsx
+// app/admin/content-library/page.tsx
 // Admin content library: view available tutorial series, import into Academy, manage status.
 
 import { useState, useEffect, useCallback } from 'react';
@@ -33,7 +33,7 @@ interface ContentItem {
 }
 
 function statusBadge(item: ContentItem) {
-  if (!item.hasFiles) return { label: 'No Files', cls: 'bg-gray-100 text-gray-500' };
+  if (!item.hasFiles) return { label: 'No Files', cls: 'bg-slate-100 text-slate-500' };
   if (item.imported && item.isPublished) return { label: 'Published', cls: 'bg-green-100 text-green-700' };
   if (item.imported) return { label: 'Imported (Draft)', cls: 'bg-blue-100 text-blue-700' };
   return { label: 'Available', cls: 'bg-amber-100 text-amber-700' };
@@ -106,14 +106,14 @@ export default function ContentLibraryPage() {
             <Library className="w-5 h-5 text-amber-600" aria-hidden="true" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Content Library</h1>
-            <p className="text-sm text-gray-500">Import tutorial courses into the Academy</p>
+            <h1 className="text-2xl font-bold text-slate-900">Content Library</h1>
+            <p className="text-sm text-slate-500">Import tutorial courses into the Academy</p>
           </div>
         </div>
         <button
           onClick={loadItems}
           disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition min-h-11"
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition min-h-11 focus:outline-none focus:ring-2 focus:ring-amber-500"
           aria-label="Refresh content list"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} aria-hidden="true" />
@@ -142,14 +142,14 @@ export default function ContentLibraryPage() {
 
       {loading && items.length === 0 ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-6 h-6 animate-spin text-gray-400" aria-label="Loading..." />
+          <Loader2 className="w-6 h-6 animate-spin text-slate-400" aria-label="Loading..." />
         </div>
       ) : (
         <>
           {/* Available for import */}
           {available.length > 0 && (
             <section className="mb-10">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <Upload className="w-5 h-5 text-amber-500" aria-hidden="true" />
                 Available to Import ({available.length})
               </h2>
@@ -169,7 +169,7 @@ export default function ContentLibraryPage() {
           {/* Already imported */}
           {imported.length > 0 && (
             <section className="mb-10">
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
                 <CheckCircle2 className="w-5 h-5 text-green-500" aria-hidden="true" />
                 Imported ({imported.length})
               </h2>
@@ -184,13 +184,13 @@ export default function ContentLibraryPage() {
           {/* No files yet */}
           {noFiles.length > 0 && (
             <section>
-              <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                <FileText className="w-5 h-5 text-gray-400" aria-hidden="true" />
+              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
+                <FileText className="w-5 h-5 text-slate-400" aria-hidden="true" />
                 No Content Files ({noFiles.length})
               </h2>
               <div className="grid gap-3">
                 {noFiles.map((item) => (
-                  <div key={item.slug} className="bg-gray-50 rounded-lg px-4 py-3 text-sm text-gray-500">
+                  <div key={item.slug} className="bg-slate-50 rounded-lg px-4 py-3 text-sm text-slate-500">
                     {item.title} — <span className="italic">no markdown files in content/tutorials/{item.slug}/</span>
                   </div>
                 ))}
@@ -224,16 +224,16 @@ function ContentCard({
   const badge = statusBadge(item);
 
   return (
-    <div className="bg-white border border-gray-200 rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
+    <div className="bg-white border border-slate-200 rounded-xl px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-4">
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <h3 className="font-semibold text-gray-900 truncate">{item.title}</h3>
+          <h3 className="font-semibold text-slate-900 truncate">{item.title}</h3>
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full shrink-0 ${badge.cls}`}>
             {badge.label}
           </span>
         </div>
-        <p className="text-sm text-gray-500 line-clamp-1 mb-2">{item.description}</p>
-        <div className="flex items-center gap-4 text-xs text-gray-400">
+        <p className="text-sm text-slate-500 line-clamp-1 mb-2">{item.description}</p>
+        <div className="flex items-center gap-4 text-xs text-slate-400">
           <span className="flex items-center gap-1">
             <Layers className="w-3.5 h-3.5" aria-hidden="true" />
             {item.moduleCount} modules
@@ -254,7 +254,7 @@ function ContentCard({
         {imported && item.courseId && (
           <a
             href={`/dashboard/teaching/courses/${item.courseId}`}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-amber-600 bg-amber-500/10 border border-amber-200 rounded-lg hover:bg-amber-500/10 transition min-h-11"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-amber-600 bg-amber-500/10 border border-amber-200 rounded-lg hover:bg-amber-100 transition min-h-11 focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
             Edit Course
@@ -264,7 +264,7 @@ function ContentCard({
           <button
             onClick={onImport}
             disabled={importing}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-amber-600 rounded-lg hover:bg-amber-700 transition disabled:opacity-60 disabled:cursor-not-allowed min-h-11"
+            className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-amber-600 rounded-lg hover:bg-amber-500 transition disabled:opacity-60 disabled:cursor-not-allowed min-h-11 focus:outline-none focus:ring-2 focus:ring-amber-500"
           >
             {importing ? (
               <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
@@ -317,7 +317,7 @@ function ImportAllButton({
     <button
       onClick={handleImportAll}
       disabled={!!importing}
-      className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-700 transition disabled:opacity-60 min-h-11"
+      className="inline-flex items-center gap-2 px-6 py-3 bg-amber-600 text-white rounded-xl text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-60 min-h-11 focus:outline-none focus:ring-2 focus:ring-amber-500"
     >
       <Upload className="w-4 h-4" aria-hidden="true" />
       Import All ({items.length} courses)
