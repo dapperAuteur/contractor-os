@@ -83,9 +83,9 @@ export default function UnionChatPage() {
         </div>
 
         {/* Disclaimer banner */}
-        <div className="rounded-lg border border-yellow-700/50 bg-yellow-900/20 p-2.5 flex gap-2" role="alert">
-          <AlertTriangle size={14} className="text-yellow-400 shrink-0 mt-0.5" aria-hidden="true" />
-          <p className="text-xs text-yellow-300">{DISCLAIMER}</p>
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-2.5 flex gap-2" role="alert">
+          <AlertTriangle size={14} className="text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+          <p className="text-xs text-amber-800">{DISCLAIMER}</p>
         </div>
       </div>
 
