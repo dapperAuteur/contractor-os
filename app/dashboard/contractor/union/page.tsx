@@ -591,10 +591,25 @@ export default function UnionDocumentsPage() {
                     {doc.error_msg && (
                       <p className="mt-1 text-xs text-red-500">{doc.error_msg}</p>
                     )}
+                    {doc.status === 'processing' && !doc.error_msg && (
+                      <p className="mt-1 text-xs text-slate-400">
+                        Taking longer than expected? Use <strong>Retry</strong> to re-upload the file.
+                      </p>
+                    )}
                   </div>
 
                   {tab === 'mine' && !isEditing && !isReplacing && (
                     <div className="flex items-center gap-1 shrink-0">
+                      {(doc.status === 'error' || doc.status === 'processing') && (
+                        <button
+                          onClick={() => { setReplacingId(doc.id); setReplaceError(''); setReplaceFile(null); setEditingId(null); }}
+                          className="flex items-center gap-1 min-h-11 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1.5 text-xs font-medium text-amber-700 hover:bg-amber-100 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          aria-label={`Retry processing ${doc.name}`}
+                        >
+                          <RefreshCw size={12} aria-hidden="true" />
+                          Retry
+                        </button>
+                      )}
                       <button
                         onClick={() => { startEdit(doc); setReplacingId(null); }}
                         className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500"
@@ -602,15 +617,17 @@ export default function UnionDocumentsPage() {
                       >
                         <Pencil size={14} aria-hidden="true" />
                       </button>
-                      <button
-                        onClick={() => { setReplacingId(doc.id); setReplaceError(''); setReplaceFile(null); setEditingId(null); }}
-                        disabled={hasPendingReplacement}
-                        className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-600 disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-amber-500"
-                        aria-label={`Replace file for ${doc.name}`}
-                        title={hasPendingReplacement ? 'Replacement already pending review' : 'Replace file'}
-                      >
-                        <RefreshCw size={14} aria-hidden="true" />
-                      </button>
+                      {doc.status === 'ready' && (
+                        <button
+                          onClick={() => { setReplacingId(doc.id); setReplaceError(''); setReplaceFile(null); setEditingId(null); }}
+                          disabled={hasPendingReplacement}
+                          className="min-h-11 min-w-11 flex items-center justify-center rounded text-slate-400 hover:text-amber-600 disabled:opacity-40 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          aria-label={`Replace file for ${doc.name}`}
+                          title={hasPendingReplacement ? 'Replacement already pending review' : 'Replace file'}
+                        >
+                          <RefreshCw size={14} aria-hidden="true" />
+                        </button>
+                      )}
                       <button
                         onClick={() => deleteDoc(doc.id)}
                         disabled={deletingId === doc.id}
