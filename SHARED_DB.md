@@ -14,6 +14,8 @@ Both **Work.WitUS** (contractor-os) and **CentenarianOS** (centenarian-os) share
 | Table | Column | Type | Default | Migration | Notes |
 |-------|--------|------|---------|-----------|-------|
 | `profiles` | `clock_format` | `text` | `'12h'` | `120_add_clock_format.sql` | 12h/24h clock preference. CentOS can safely ignore. |
+| `tasks` | `source_type` | `text` | `NULL` | `147_task_source_tracking.sql` | Origin of auto-synced tasks (e.g., `invoice_due`). CentOS reads this to style synced tasks. |
+| `tasks` | `source_id` | `uuid` | `NULL` | `147_task_source_tracking.sql` | ID of the source record (e.g., invoice ID). Used with `source_type`. |
 
 ## Columns added by CentenarianOS (not used by Work.WitUS)
 
@@ -24,6 +26,18 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | Table | Migration | Notes |
 |-------|-----------|-------|
 | `equipment_media` | `119_equipment_media.sql` | Multi-media gallery for equipment items. Used by both apps. |
+
+## Triggers (cross-app)
+
+| Trigger | Table | Migration | Notes |
+|---------|-------|-----------|-------|
+| `trg_invoice_due_to_task` | `invoices` | `148_invoice_task_sync_trigger.sql` | When a receivable invoice is sent, creates a CentOS planner task on the due date. Marks task completed on payment, archives on cancellation. Auto-creates "Work.WitUS Sync > Finances > Invoice Due Dates" milestone hierarchy. |
+
+## Edge Functions (shared)
+
+| Function | Location | Notes |
+|----------|----------|-------|
+| `unified-schedule` | `supabase/functions/unified-schedule/` | Merges CentOS tasks + Work.WitUS jobs + invoice due dates into a single feed. Supports `feed`, `availability`, and `ics` actions. Both apps can call this. |
 
 ## Shared columns (used by both)
 
