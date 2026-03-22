@@ -1,13 +1,14 @@
 // app/api/contractor/jobs/[id]/route.ts
-// GET: job detail with linked counts
-// PATCH: update job fields
-// DELETE: delete job
+// GET: job detail with linked counts (owner, lister, or assigned worker)
+// PATCH: update job fields (owner or lister only)
+// DELETE: delete job (owner only)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
+import { getJobWithRole } from '@/lib/contractor/job-access';
 
 function getDb() {
   return createServiceClient(
@@ -26,15 +27,10 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const db = getDb();
 
-  const { data: job, error } = await db
-    .from('contractor_jobs')
-    .select('*')
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .maybeSingle();
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  if (!job) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  const { job, role } = result;
 
   // Fetch linked counts in parallel
   const [timeEntries, invoices, trips, expenses, documents] = await Promise.all([
@@ -47,6 +43,8 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
 
   return NextResponse.json({
     ...job,
+    _role: role,
+    _current_user_id: user.id,
     _counts: {
       time_entries: timeEntries.count ?? 0,
       invoices: invoices.count ?? 0,
@@ -58,7 +56,7 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
 }
 
 const ALLOWED_FIELDS = [
-  'job_number', 'client_id', 'client_name', 'event_name',
+  'job_number', 'client_id', 'client_name', 'event_name', 'event_id',
   'location_id', 'location_name',
   'poc_contact_id', 'poc_name', 'poc_phone',
   'crew_coordinator_id', 'crew_coordinator_name', 'crew_coordinator_phone',
@@ -78,17 +76,22 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const body = await request.json();
 
+  const db = getDb();
+
+  // Only owner or lister can update
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  if (result.role === 'worker') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
   const updates: Record<string, unknown> = { updated_at: new Date().toISOString() };
   for (const key of ALLOWED_FIELDS) {
     if (key in body) updates[key] = body[key];
   }
 
-  const db = getDb();
   const { data, error } = await db
     .from('contractor_jobs')
     .update(updates)
     .eq('id', id)
-    .eq('user_id', user.id)
     .select()
     .single();
 
@@ -153,6 +156,7 @@ export async function DELETE(_request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const db = getDb();
 
+  // Only owner can delete
   const { error } = await db
     .from('contractor_jobs')
     .delete()

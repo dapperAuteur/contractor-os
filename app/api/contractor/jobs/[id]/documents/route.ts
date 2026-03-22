@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getJobWithRole } from '@/lib/contractor/job-access';
 
 function getDb() {
   return createServiceClient(
@@ -24,12 +25,21 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const db = getDb();
 
-  const { data, error } = await db
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  // Workers see shared docs + their own; owners/listers see all
+  let query = db
     .from('job_documents')
     .select('*')
     .eq('job_id', id)
-    .eq('user_id', user.id)
     .order('created_at', { ascending: false });
+
+  if (result.role === 'worker') {
+    query = query.or(`user_id.eq.${user.id},is_shared.eq.true`);
+  }
+
+  const { data, error } = await query;
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
@@ -51,16 +61,10 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     return NextResponse.json({ error: 'title or name is required' }, { status: 400 });
   }
 
-  // Verify job ownership
+  // Verify job access (owner, lister, or accepted worker)
   const db = getDb();
-  const { data: job } = await db
-    .from('contractor_jobs')
-    .select('id')
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
 
   const { data, error } = await db
     .from('job_documents')

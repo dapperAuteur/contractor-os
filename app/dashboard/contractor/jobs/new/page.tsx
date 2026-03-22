@@ -52,6 +52,7 @@ export default function NewJobPage() {
     department: '',
     est_pay_date: '',
     notes: '',
+    event_id: null as string | null,
     // Travel benefits
     meal_allowance: '',
     per_diem: '',
@@ -63,6 +64,45 @@ export default function NewJobPage() {
 
   const set = (field: string, value: string | boolean | null) =>
     setForm((prev) => ({ ...prev, [field]: value }));
+
+  // Load prefill data from event
+  useEffect(() => {
+    const eventId = searchParams.get('event_id');
+    if (!eventId) return;
+    offlineFetch(`/api/contractor/events/${eventId}`).then(async (res) => {
+      if (!res.ok) return;
+      const event = await res.json();
+      setForm((prev) => ({
+        ...prev,
+        event_id: eventId,
+        event_name: event.name ?? prev.event_name,
+        client_name: event.client_name ?? prev.client_name,
+        client_id: event.client_id ?? prev.client_id,
+        location_name: event.location_name ?? prev.location_name,
+        location_id: event.location_id ?? prev.location_id,
+        poc_name: event.poc_name ?? prev.poc_name,
+        poc_phone: event.poc_phone ?? prev.poc_phone,
+        poc_contact_id: event.poc_contact_id ?? prev.poc_contact_id,
+        crew_coordinator_name: event.crew_coordinator_name ?? prev.crew_coordinator_name,
+        crew_coordinator_phone: event.crew_coordinator_phone ?? prev.crew_coordinator_phone,
+        crew_coordinator_id: event.crew_coordinator_id ?? prev.crew_coordinator_id,
+        start_date: event.start_date ?? prev.start_date,
+        end_date: event.end_date ?? prev.end_date,
+        pay_rate: event.pay_rate != null ? String(event.pay_rate) : prev.pay_rate,
+        ot_rate: event.ot_rate != null ? String(event.ot_rate) : prev.ot_rate,
+        dt_rate: event.dt_rate != null ? String(event.dt_rate) : prev.dt_rate,
+        rate_type: event.rate_type ?? prev.rate_type,
+        union_local: event.union_local ?? prev.union_local,
+        department: event.department ?? prev.department,
+        benefits_eligible: event.benefits_eligible ?? prev.benefits_eligible,
+        meal_allowance: event.travel_benefits?.meal_allowance != null ? String(event.travel_benefits.meal_allowance) : prev.meal_allowance,
+        per_diem: event.travel_benefits?.per_diem != null ? String(event.travel_benefits.per_diem) : prev.per_diem,
+        mileage_rate: event.travel_benefits?.mileage_rate != null ? String(event.travel_benefits.mileage_rate) : prev.mileage_rate,
+        extra_pay: event.travel_benefits?.extra_pay != null ? String(event.travel_benefits.extra_pay) : prev.extra_pay,
+        notes: event.notes ?? prev.notes,
+      }));
+    });
+  }, [searchParams]);
 
   // Load prefill data from duplicate
   useEffect(() => {
@@ -182,6 +222,7 @@ export default function NewJobPage() {
         client_name: form.client_name,
         client_id: form.client_id,
         event_name: form.event_name || null,
+        event_id: form.event_id || null,
         location_name: form.location_name || null,
         location_id: form.location_id || null,
         poc_name: form.poc_name || null,

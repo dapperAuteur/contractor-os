@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
   const {
-    job_number, client_id, client_name, event_name,
+    job_number, client_id, client_name, event_name, event_id,
     location_id, location_name,
     poc_contact_id, poc_name, poc_phone,
     crew_coordinator_id, crew_coordinator_name, crew_coordinator_phone,
@@ -156,6 +156,7 @@ export async function POST(request: NextRequest) {
       client_id: client_id ?? null,
       client_name: client_name.trim(),
       event_name: event_name ?? null,
+      event_id: event_id ?? null,
       location_id: location_id ?? null,
       location_name: location_name ?? null,
       poc_contact_id: poc_contact_id ?? null,
