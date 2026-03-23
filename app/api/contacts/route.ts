@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
       user_id: user.id,
       name: name.trim(),
       contact_type,
+      contact_subtype: contact_type === 'location' ? null : 'person',
       default_category_id: default_category_id ?? null,
       notes: notes?.trim() ?? null,
       phone: phone?.trim() ?? null,
