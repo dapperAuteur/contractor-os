@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
   // Fetch job counts for each event
   const eventIds = (events ?? []).map((e) => e.id);
-  let jobCounts: Record<string, number> = {};
+  const jobCounts: Record<string, number> = {};
   if (eventIds.length > 0) {
     const { data: counts } = await db
       .from('contractor_jobs')

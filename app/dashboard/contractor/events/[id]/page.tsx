@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Loader2, MapPin, Clock, DollarSign, Plus,
-  Trash2, Calendar, Users, RefreshCw,
+  Trash2, Calendar, Users,
 } from 'lucide-react';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
