@@ -260,15 +260,15 @@ export default function ContactDetailPage() {
             <label className={labelClass}>Phones</label>
             {editPhones.map((p, i) => (
               <div key={i} className="flex gap-2 mb-2">
-                <input type="tel" value={p.phone} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], phone: e.target.value }; setEditPhones(n); }} className={`${inputClass} flex-1`} placeholder="Phone" aria-label={`Phone ${i + 1}`} />
-                <select value={p.label} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], label: e.target.value }; setEditPhones(n); }} className={`${inputClass} w-28`} aria-label={`Phone ${i + 1} type`}>
-                  <option value="mobile">Mobile</option>
+                <input type="tel" value={p.phone} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], phone: e.target.value }; setEditPhones(n); }} className={`${inputClass} min-w-0 flex-1`} placeholder="Phone" aria-label={`Phone ${i + 1}`} />
+                <select value={p.label} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], label: e.target.value }; setEditPhones(n); }} className={`${inputClass} w-20 shrink-0`} aria-label={`Phone ${i + 1} type`}>
+                  <option value="mobile">Cell</option>
                   <option value="work">Work</option>
                   <option value="office">Office</option>
                   <option value="other">Other</option>
                 </select>
                 {editPhones.length > 1 && (
-                  <button type="button" onClick={() => setEditPhones(editPhones.filter((_, j) => j !== i))} className="min-h-11 min-w-11 flex items-center justify-center text-slate-400 hover:text-red-500" aria-label="Remove phone">
+                  <button type="button" onClick={() => setEditPhones(editPhones.filter((_, j) => j !== i))} className="min-h-11 min-w-11 shrink-0 flex items-center justify-center text-slate-400 hover:text-red-500" aria-label="Remove phone">
                     <X size={16} aria-hidden="true" />
                   </button>
                 )}
@@ -282,14 +282,14 @@ export default function ContactDetailPage() {
             <label className={labelClass}>Emails</label>
             {editEmails.map((e, i) => (
               <div key={i} className="flex gap-2 mb-2">
-                <input type="email" value={e.email} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], email: ev.target.value }; setEditEmails(n); }} className={`${inputClass} flex-1`} placeholder="Email" aria-label={`Email ${i + 1}`} />
-                <select value={e.label} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], label: ev.target.value }; setEditEmails(n); }} className={`${inputClass} w-28`} aria-label={`Email ${i + 1} type`}>
+                <input type="email" value={e.email} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], email: ev.target.value }; setEditEmails(n); }} className={`${inputClass} min-w-0 flex-1`} placeholder="Email" aria-label={`Email ${i + 1}`} />
+                <select value={e.label} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], label: ev.target.value }; setEditEmails(n); }} className={`${inputClass} w-20 shrink-0`} aria-label={`Email ${i + 1} type`}>
                   <option value="work">Work</option>
-                  <option value="personal">Personal</option>
+                  <option value="personal">Prsnl</option>
                   <option value="other">Other</option>
                 </select>
                 {editEmails.length > 1 && (
-                  <button type="button" onClick={() => setEditEmails(editEmails.filter((_, j) => j !== i))} className="min-h-11 min-w-11 flex items-center justify-center text-slate-400 hover:text-red-500" aria-label="Remove email">
+                  <button type="button" onClick={() => setEditEmails(editEmails.filter((_, j) => j !== i))} className="min-h-11 min-w-11 shrink-0 flex items-center justify-center text-slate-400 hover:text-red-500" aria-label="Remove email">
                     <X size={16} aria-hidden="true" />
                   </button>
                 )}

@@ -378,44 +378,46 @@ export default function ContactsPage() {
           <div>
             <label className={labelClass}>Phone Numbers</label>
             {formPhones.map((p, i) => (
-              <div key={i} className="flex gap-2 mb-2">
-                <input
-                  type="tel"
-                  value={p.phone}
-                  onChange={(e) => {
-                    const next = [...formPhones];
-                    next[i] = { ...next[i], phone: e.target.value };
-                    setFormPhones(next);
-                  }}
-                  className={`${inputClass} flex-1`}
-                  placeholder="Phone number"
-                  aria-label={`Phone ${i + 1}`}
-                />
-                <select
-                  value={p.label}
-                  onChange={(e) => {
-                    const next = [...formPhones];
-                    next[i] = { ...next[i], label: e.target.value };
-                    setFormPhones(next);
-                  }}
-                  className={`${inputClass} w-28`}
-                  aria-label={`Phone ${i + 1} type`}
-                >
-                  <option value="mobile">Mobile</option>
-                  <option value="work">Work</option>
-                  <option value="office">Office</option>
-                  <option value="other">Other</option>
-                </select>
-                {formPhones.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setFormPhones(formPhones.filter((_, j) => j !== i))}
-                    className="flex items-center justify-center min-h-11 min-w-11 text-slate-400 hover:text-red-500"
-                    aria-label="Remove phone"
+              <div key={i} className="mb-2">
+                <div className="flex gap-2">
+                  <input
+                    type="tel"
+                    value={p.phone}
+                    onChange={(e) => {
+                      const next = [...formPhones];
+                      next[i] = { ...next[i], phone: e.target.value };
+                      setFormPhones(next);
+                    }}
+                    className={`${inputClass} min-w-0 flex-1`}
+                    placeholder="Phone number"
+                    aria-label={`Phone ${i + 1}`}
+                  />
+                  <select
+                    value={p.label}
+                    onChange={(e) => {
+                      const next = [...formPhones];
+                      next[i] = { ...next[i], label: e.target.value };
+                      setFormPhones(next);
+                    }}
+                    className={`${inputClass} w-20 shrink-0`}
+                    aria-label={`Phone ${i + 1} type`}
                   >
-                    <X size={16} aria-hidden="true" />
-                  </button>
-                )}
+                    <option value="mobile">Cell</option>
+                    <option value="work">Work</option>
+                    <option value="office">Office</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {formPhones.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setFormPhones(formPhones.filter((_, j) => j !== i))}
+                      className="flex items-center justify-center min-h-11 min-w-11 shrink-0 text-slate-400 hover:text-red-500"
+                      aria-label="Remove phone"
+                    >
+                      <X size={16} aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
             <button
@@ -431,43 +433,45 @@ export default function ContactsPage() {
           <div>
             <label className={labelClass}>Email Addresses</label>
             {formEmails.map((e, i) => (
-              <div key={i} className="flex gap-2 mb-2">
-                <input
-                  type="email"
-                  value={e.email}
-                  onChange={(ev) => {
-                    const next = [...formEmails];
-                    next[i] = { ...next[i], email: ev.target.value };
-                    setFormEmails(next);
-                  }}
-                  className={`${inputClass} flex-1`}
-                  placeholder="Email address"
-                  aria-label={`Email ${i + 1}`}
-                />
-                <select
-                  value={e.label}
-                  onChange={(ev) => {
-                    const next = [...formEmails];
-                    next[i] = { ...next[i], label: ev.target.value };
-                    setFormEmails(next);
-                  }}
-                  className={`${inputClass} w-28`}
-                  aria-label={`Email ${i + 1} type`}
-                >
-                  <option value="work">Work</option>
-                  <option value="personal">Personal</option>
-                  <option value="other">Other</option>
-                </select>
-                {formEmails.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setFormEmails(formEmails.filter((_, j) => j !== i))}
-                    className="flex items-center justify-center min-h-11 min-w-11 text-slate-400 hover:text-red-500"
-                    aria-label="Remove email"
+              <div key={i} className="mb-2">
+                <div className="flex gap-2">
+                  <input
+                    type="email"
+                    value={e.email}
+                    onChange={(ev) => {
+                      const next = [...formEmails];
+                      next[i] = { ...next[i], email: ev.target.value };
+                      setFormEmails(next);
+                    }}
+                    className={`${inputClass} min-w-0 flex-1`}
+                    placeholder="Email address"
+                    aria-label={`Email ${i + 1}`}
+                  />
+                  <select
+                    value={e.label}
+                    onChange={(ev) => {
+                      const next = [...formEmails];
+                      next[i] = { ...next[i], label: ev.target.value };
+                      setFormEmails(next);
+                    }}
+                    className={`${inputClass} w-20 shrink-0`}
+                    aria-label={`Email ${i + 1} type`}
                   >
-                    <X size={16} aria-hidden="true" />
-                  </button>
-                )}
+                    <option value="work">Work</option>
+                    <option value="personal">Prsnl</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {formEmails.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => setFormEmails(formEmails.filter((_, j) => j !== i))}
+                      className="flex items-center justify-center min-h-11 min-w-11 shrink-0 text-slate-400 hover:text-red-500"
+                      aria-label="Remove email"
+                    >
+                      <X size={16} aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
             <button
