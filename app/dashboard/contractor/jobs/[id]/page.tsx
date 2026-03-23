@@ -7,8 +7,9 @@ import {
   ArrowLeft, Loader2, Clock, DollarSign, Car,
   FolderOpen, Phone, MessageSquare, Receipt,
   Trash2, Edit2, Check, X, Zap, Globe, Lock,
-  FileText, AlertTriangle, BookOpen, ImageIcon, Plus, Copy,
+  FileText, AlertTriangle, BookOpen, ImageIcon, Plus, Copy, Users,
 } from 'lucide-react';
+import Modal from '@/components/ui/Modal';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import JobSummaryCards from '@/components/contractor/JobSummaryCards';
 import QuickLogModal from '@/components/contractor/QuickLogModal';
@@ -118,6 +119,50 @@ interface Document {
   created_at: string;
 }
 
+interface CrewMember {
+  id: string;
+  role: string;
+  role_label: string | null;
+  notes: string | null;
+  created_at: string;
+  user_contacts: {
+    id: string;
+    name: string;
+    job_title: string | null;
+    company_name: string | null;
+    phone: string | null;
+    email: string | null;
+    contact_phones: Array<{ id: string; phone: string; label: string; is_primary: boolean }>;
+    contact_emails: Array<{ id: string; email: string; label: string; is_primary: boolean }>;
+  } | null;
+}
+
+interface SearchContact {
+  id: string;
+  name: string;
+  company_name: string | null;
+  job_title: string | null;
+  phone: string | null;
+}
+
+const CREW_ROLE_OPTIONS = [
+  { value: 'poc', label: 'Point of Contact' },
+  { value: 'crew_coordinator', label: 'Crew Coordinator' },
+  { value: 'tech_lead', label: 'Tech Lead' },
+  { value: 'producer', label: 'Producer' },
+  { value: 'eic', label: 'Engineer in Charge' },
+  { value: 'a1', label: 'A1 (Audio)' },
+  { value: 'a2', label: 'A2 (Audio)' },
+  { value: 'v1', label: 'V1 (Video)' },
+  { value: 'v2', label: 'V2 (Video)' },
+  { value: 'graphics', label: 'Graphics' },
+  { value: 'replay', label: 'Replay' },
+  { value: 'utility', label: 'Utility' },
+  { value: 'other', label: 'Other' },
+];
+
+const CREW_ROLE_LABELS: Record<string, string> = Object.fromEntries(CREW_ROLE_OPTIONS.map((r) => [r.value, r.label]));
+
 const DOC_CATEGORIES = [
   { value: 'scan', label: 'Scan', icon: FileText },
   { value: 'incident_report', label: 'Incident Report', icon: AlertTriangle },
@@ -161,17 +206,29 @@ export default function JobDetailPage() {
   const [docSaving, setDocSaving] = useState(false);
   const [showDocForm, setShowDocForm] = useState(false);
 
+  // Crew sheet state
+  const [crewMembers, setCrewMembers] = useState<CrewMember[]>([]);
+  const [showAddCrew, setShowAddCrew] = useState(false);
+  const [crewSearch, setCrewSearch] = useState('');
+  const [crewSearchResults, setCrewSearchResults] = useState<SearchContact[]>([]);
+  const [crewSelectedContact, setCrewSelectedContact] = useState<string | null>(null);
+  const [crewSelectedName, setCrewSelectedName] = useState('');
+  const [crewRole, setCrewRole] = useState('poc');
+  const [crewRoleLabel, setCrewRoleLabel] = useState('');
+  const [crewSaving, setCrewSaving] = useState(false);
+
   const loadJob = useCallback(async () => {
-    const [jobRes, summaryRes, timeRes, invoiceRes, docRes, notesRes] = await Promise.all([
+    const [jobRes, summaryRes, timeRes, invoiceRes, docRes, notesRes, crewRes] = await Promise.all([
       offlineFetch(`/api/contractor/jobs/${id}`),
       offlineFetch(`/api/contractor/jobs/${id}/summary`),
       offlineFetch(`/api/contractor/jobs/${id}/time-entries`),
       offlineFetch(`/api/finance/invoices?job_id=${id}`),
       offlineFetch(`/api/contractor/jobs/${id}/documents`),
       offlineFetch(`/api/contractor/jobs/${id}/notes`),
+      offlineFetch(`/api/contractor/jobs/${id}/crew`),
     ]);
-    const [jobData, summaryData, timeData, invoiceData, docData, notesData] = await Promise.all([
-      jobRes.json(), summaryRes.json(), timeRes.json(), invoiceRes.json(), docRes.json(), notesRes.json(),
+    const [jobData, summaryData, timeData, invoiceData, docData, notesData, crewData] = await Promise.all([
+      jobRes.json(), summaryRes.json(), timeRes.json(), invoiceRes.json(), docRes.json(), notesRes.json(), crewRes.json(),
     ]);
     setJob(jobData);
     setSummary(summaryData);
@@ -179,6 +236,7 @@ export default function JobDetailPage() {
     setInvoices(invoiceData.invoices ?? []);
     setDocuments(docData.documents ?? []);
     setJobNotes(notesData.notes ?? []);
+    setCrewMembers(crewData.crew ?? []);
     if (jobData._current_user_id) setCurrentUserId(jobData._current_user_id);
     setLoading(false);
   }, [id]);
@@ -914,46 +972,265 @@ export default function JobDetailPage() {
       )}
 
       {tab === 'contacts' && (
-        <div className="space-y-3">
-          {job.poc_name && (
-            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
-              <div>
-                <div className="text-xs text-slate-400">Point of Contact</div>
-                <div className="text-slate-900 font-medium">{job.poc_name}</div>
-              </div>
-              {job.poc_phone && (
-                <div className="flex gap-2">
-                  <a href={`tel:${job.poc_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.poc_name}`}>
-                    <Phone size={16} aria-hidden="true" />
-                  </a>
-                  <a href={`sms:${job.poc_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.poc_name}`}>
-                    <MessageSquare size={16} aria-hidden="true" />
-                  </a>
+        <div className="space-y-4">
+          {/* Legacy POC & Coordinator from job fields */}
+          {(job.poc_name || job.crew_coordinator_name) && (
+            <div className="space-y-2">
+              {job.poc_name && (
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
+                  <div>
+                    <div className="text-xs text-slate-400">Point of Contact</div>
+                    <div className="text-slate-900 font-medium">{job.poc_name}</div>
+                  </div>
+                  {job.poc_phone && (
+                    <div className="flex gap-2">
+                      <a href={`tel:${job.poc_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.poc_name}`}>
+                        <Phone size={16} aria-hidden="true" />
+                      </a>
+                      <a href={`sms:${job.poc_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.poc_name}`}>
+                        <MessageSquare size={16} aria-hidden="true" />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              )}
+              {job.crew_coordinator_name && (
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
+                  <div>
+                    <div className="text-xs text-slate-400">Crew Coordinator</div>
+                    <div className="text-slate-900 font-medium">{job.crew_coordinator_name}</div>
+                  </div>
+                  {job.crew_coordinator_phone && (
+                    <div className="flex gap-2">
+                      <a href={`tel:${job.crew_coordinator_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.crew_coordinator_name}`}>
+                        <Phone size={16} aria-hidden="true" />
+                      </a>
+                      <a href={`sms:${job.crew_coordinator_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.crew_coordinator_name}`}>
+                        <MessageSquare size={16} aria-hidden="true" />
+                      </a>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           )}
-          {job.crew_coordinator_name && (
-            <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
-              <div>
-                <div className="text-xs text-slate-400">Crew Coordinator</div>
-                <div className="text-slate-900 font-medium">{job.crew_coordinator_name}</div>
+
+          {/* Crew Sheet */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
+                <Users size={14} className="text-slate-400" aria-hidden="true" /> Crew & Contacts
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowAddCrew(true)}
+                className="flex items-center gap-1 rounded-lg bg-amber-600 px-3 py-2 text-xs font-medium text-white hover:bg-amber-500 min-h-11"
+                aria-label="Add crew member"
+              >
+                <Plus size={14} aria-hidden="true" /> Add
+              </button>
+            </div>
+
+            {crewMembers.length === 0 && !job.poc_name && !job.crew_coordinator_name ? (
+              <p className="text-sm text-slate-400 text-center py-6">No contacts or crew members for this job.</p>
+            ) : crewMembers.length === 0 ? null : (
+              <div className="space-y-2">
+                {crewMembers.map((cm) => {
+                  const contact = cm.user_contacts;
+                  const name = contact?.name ?? 'Unknown';
+                  const phone = contact?.contact_phones?.find((p) => p.is_primary)?.phone
+                    ?? contact?.contact_phones?.[0]?.phone ?? contact?.phone;
+                  return (
+                    <div key={cm.id} className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700">
+                            {cm.role_label ?? CREW_ROLE_LABELS[cm.role] ?? cm.role}
+                          </span>
+                        </div>
+                        <Link
+                          href={`/dashboard/contractor/contacts/${contact?.id}`}
+                          className="mt-0.5 text-slate-900 font-medium hover:text-amber-600 transition-colors"
+                        >
+                          {name}
+                        </Link>
+                        {contact?.company_name && (
+                          <div className="text-xs text-slate-400">{contact.company_name}</div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0 ml-2">
+                        {phone && (
+                          <>
+                            <a href={`tel:${phone}`} className="rounded-full bg-slate-100 p-2.5 text-slate-500 hover:text-green-500 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${name}`}>
+                              <Phone size={14} aria-hidden="true" />
+                            </a>
+                            <a href={`sms:${phone}`} className="rounded-full bg-slate-100 p-2.5 text-slate-500 hover:text-blue-500 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${name}`}>
+                              <MessageSquare size={14} aria-hidden="true" />
+                            </a>
+                          </>
+                        )}
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            await offlineFetch(`/api/contractor/jobs/${id}/crew?role_id=${cm.id}`, { method: 'DELETE' });
+                            loadJob();
+                          }}
+                          className="rounded-full p-2.5 text-slate-300 hover:text-red-500 min-h-11 min-w-11 flex items-center justify-center"
+                          aria-label={`Remove ${name} from crew`}
+                        >
+                          <X size={14} aria-hidden="true" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              {job.crew_coordinator_phone && (
-                <div className="flex gap-2">
-                  <a href={`tel:${job.crew_coordinator_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-green-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Call ${job.crew_coordinator_name}`}>
-                    <Phone size={16} aria-hidden="true" />
-                  </a>
-                  <a href={`sms:${job.crew_coordinator_phone}`} className="rounded-full bg-slate-100 p-3 text-slate-500 hover:text-blue-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Text ${job.crew_coordinator_name}`}>
-                    <MessageSquare size={16} aria-hidden="true" />
-                  </a>
+            )}
+          </div>
+
+          {/* Add Crew Member Modal */}
+          <Modal
+            isOpen={showAddCrew}
+            onClose={() => {
+              setShowAddCrew(false);
+              setCrewSearch('');
+              setCrewSearchResults([]);
+              setCrewSelectedContact(null);
+              setCrewSelectedName('');
+              setCrewRole('poc');
+              setCrewRoleLabel('');
+            }}
+            title="Add Crew Member"
+            size="sm"
+          >
+            <div className="space-y-4 p-4">
+              {/* Contact search */}
+              <div>
+                <label htmlFor="crew-search" className="block text-sm font-medium text-slate-700 mb-1">Search Contacts</label>
+                <input
+                  id="crew-search"
+                  type="text"
+                  value={crewSearch}
+                  onChange={async (e) => {
+                    setCrewSearch(e.target.value);
+                    if (e.target.value.trim().length >= 2) {
+                      const res = await offlineFetch(`/api/contractor/contacts?search=${encodeURIComponent(e.target.value.trim())}&limit=10`);
+                      const data = await res.json();
+                      setCrewSearchResults(data.contacts ?? []);
+                    } else {
+                      setCrewSearchResults([]);
+                    }
+                  }}
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                  placeholder="Type to search..."
+                />
+                {crewSearchResults.length > 0 && !crewSelectedContact && (
+                  <div className="mt-1 rounded-lg border border-slate-200 bg-white shadow-lg max-h-40 overflow-y-auto">
+                    {crewSearchResults.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => {
+                          setCrewSelectedContact(c.id);
+                          setCrewSelectedName(c.name);
+                          setCrewSearch(c.name);
+                          setCrewSearchResults([]);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50 min-h-11"
+                      >
+                        <div className="font-medium text-slate-900">{c.name}</div>
+                        {c.company_name && <div className="text-xs text-slate-400">{c.company_name}</div>}
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {crewSelectedContact && (
+                  <div className="mt-1 flex items-center gap-2">
+                    <span className="text-sm text-amber-600 font-medium">{crewSelectedName}</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCrewSelectedContact(null);
+                        setCrewSelectedName('');
+                        setCrewSearch('');
+                      }}
+                      className="text-slate-400 hover:text-red-500"
+                      aria-label="Clear selection"
+                    >
+                      <X size={14} aria-hidden="true" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Role select */}
+              <div>
+                <label htmlFor="crew-role" className="block text-sm font-medium text-slate-700 mb-1">Role</label>
+                <select
+                  id="crew-role"
+                  value={crewRole}
+                  onChange={(e) => setCrewRole(e.target.value)}
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                >
+                  {CREW_ROLE_OPTIONS.map((r) => (
+                    <option key={r.value} value={r.value}>{r.label}</option>
+                  ))}
+                </select>
+              </div>
+
+              {crewRole === 'other' && (
+                <div>
+                  <label htmlFor="crew-role-label" className="block text-sm font-medium text-slate-700 mb-1">Custom Role Name</label>
+                  <input
+                    id="crew-role-label"
+                    type="text"
+                    value={crewRoleLabel}
+                    onChange={(e) => setCrewRoleLabel(e.target.value)}
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                    placeholder="Role name"
+                  />
                 </div>
               )}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddCrew(false)}
+                  className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 min-h-11"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={!crewSelectedContact || crewSaving}
+                  onClick={async () => {
+                    if (!crewSelectedContact) return;
+                    setCrewSaving(true);
+                    await offlineFetch(`/api/contractor/jobs/${id}/crew`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        contact_id: crewSelectedContact,
+                        role: crewRole,
+                        role_label: crewRole === 'other' ? crewRoleLabel.trim() || null : null,
+                      }),
+                    });
+                    setCrewSaving(false);
+                    setShowAddCrew(false);
+                    setCrewSearch('');
+                    setCrewSelectedContact(null);
+                    setCrewSelectedName('');
+                    setCrewRole('poc');
+                    setCrewRoleLabel('');
+                    loadJob();
+                  }}
+                  className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11"
+                >
+                  {crewSaving ? 'Adding...' : 'Add to Crew'}
+                </button>
+              </div>
             </div>
-          )}
-          {!job.poc_name && !job.crew_coordinator_name && (
-            <p className="text-sm text-slate-400 text-center py-6">No contacts set for this job.</p>
-          )}
+          </Modal>
         </div>
       )}
 

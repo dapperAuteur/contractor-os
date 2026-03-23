@@ -22,6 +22,7 @@ interface Contact {
   contact_type: string;
   phone: string | null;
   email: string | null;
+  company_name?: string | null;
 }
 
 interface ContactComboboxProps {
@@ -204,7 +205,10 @@ export default function ContactCombobox({
                   onClick={() => select(c)}
                   className={`w-full text-left flex items-center justify-between px-3 py-2 text-sm hover:bg-amber-50 transition ${c.id === contactId ? 'bg-amber-50 text-amber-700 font-medium' : 'text-slate-800'}`}
                 >
-                  <span className="truncate">{c.name}</span>
+                  <span className="truncate">
+                    {c.name}
+                    {c.company_name && <span className="text-slate-400 font-normal"> · {c.company_name}</span>}
+                  </span>
                   {c.phone && (
                     <span className="flex items-center gap-1 text-xs text-slate-400 shrink-0 ml-2">
                       <Phone size={11} aria-hidden="true" /> {c.phone}
