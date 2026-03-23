@@ -55,7 +55,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       home_city, home_state, home_country, website, phone, email, notes,
       contact_phones(phone, label, is_primary, sort_order),
       contact_emails(email, label, is_primary, sort_order),
-      contact_tags(tag_type, value)
+      contact_tags(tag_type, value),
+      contact_addresses(label, street, city, state, postal_code, country, is_primary, sort_order)
     `)
     .eq('id', share.contact_id)
     .single();
@@ -108,6 +109,14 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   if (tags?.length > 0) {
     await db.from('contact_tags').insert(
       tags.map((t) => ({ contact_id: newContact.id, tag_type: t.tag_type, value: t.value })),
+    );
+  }
+
+  // Copy addresses
+  const addrs = source.contact_addresses as Array<{ label: string; street: string | null; city: string | null; state: string | null; postal_code: string | null; country: string | null; is_primary: boolean; sort_order: number }>;
+  if (addrs?.length > 0) {
+    await db.from('contact_addresses').insert(
+      addrs.map((a) => ({ contact_id: newContact.id, label: a.label, street: a.street, city: a.city, state: a.state, postal_code: a.postal_code, country: a.country, is_primary: a.is_primary, sort_order: a.sort_order })),
     );
   }
 

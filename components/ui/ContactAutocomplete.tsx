@@ -117,13 +117,13 @@ export default function ContactAutocomplete({
 
   const handleSave = async () => {
     if (!value.trim()) return;
-    const res = await offlineFetch('/api/contacts', {
+    const res = await offlineFetch('/api/contractor/contacts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: value.trim(), contact_type: contactType }),
+      body: JSON.stringify({ name: value.trim() }),
     });
     if (res.ok) {
-      const newContact = await res.json();
+      const { contact: newContact } = await res.json();
       setContacts((prev) => [newContact, ...prev.filter((c) => c.id !== newContact.id)]);
       setSelectedContactId(newContact.id);
     }

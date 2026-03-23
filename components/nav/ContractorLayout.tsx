@@ -25,7 +25,7 @@ export default function ContractorLayout({ username, unreadMessages, onLogout, i
       <ContractorNav username={username} unreadMessages={unreadMessages} onLogout={onLogout} isAdmin={isAdmin} untoured={untoured} />
       <MfaBanner />
       <OfflineIndicator />
-      <main id="main-content" className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 pb-20 lg:pb-6">
+      <main id="main-content" className="px-4 sm:px-6 lg:px-8 py-4 sm:py-6 pb-28 lg:pb-6">
         {children}
       </main>
       <FloatingActionsMenu isAdmin={isAdmin} />

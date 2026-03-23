@@ -14,6 +14,11 @@ import Modal from '@/components/ui/Modal';
 interface ContactPhone { id: string; phone: string; label: string; is_primary: boolean; }
 interface ContactEmail { id: string; email: string; label: string; is_primary: boolean; }
 interface ContactTag { id: string; tag_type: string; value: string; }
+interface ContactAddress {
+  id: string; label: string; street: string | null; city: string | null;
+  state: string | null; postal_code: string | null; country: string | null;
+  is_primary: boolean; sort_order: number;
+}
 
 interface ContactDetail {
   id: string;
@@ -32,6 +37,7 @@ interface ContactDetail {
   contact_phones: ContactPhone[];
   contact_emails: ContactEmail[];
   contact_tags: ContactTag[];
+  contact_addresses: ContactAddress[];
 }
 
 interface JobRole {
@@ -58,6 +64,12 @@ const ROLE_LABELS: Record<string, string> = {
   graphics: 'Graphics', replay: 'Replay', utility: 'Utility', other: 'Other',
 };
 
+interface EditAddr { label: string; street: string; city: string; state: string; postal_code: string; country: string; }
+
+function formatAddress(a: ContactAddress | EditAddr): string {
+  return [a.street, a.city, a.state, a.postal_code, a.country].filter(Boolean).join(', ');
+}
+
 export default function ContactDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -75,13 +87,11 @@ export default function ContactDetailPage() {
   const [editName, setEditName] = useState('');
   const [editTitle, setEditTitle] = useState('');
   const [editCompany, setEditCompany] = useState('');
-  const [editCity, setEditCity] = useState('');
-  const [editState, setEditState] = useState('');
-  const [editCountry, setEditCountry] = useState('');
   const [editWebsite, setEditWebsite] = useState('');
   const [editNotes, setEditNotes] = useState('');
   const [editPhones, setEditPhones] = useState<Array<{ phone: string; label: string; is_primary: boolean }>>([]);
   const [editEmails, setEditEmails] = useState<Array<{ email: string; label: string; is_primary: boolean }>>([]);
+  const [editAddresses, setEditAddresses] = useState<EditAddr[]>([]);
 
   const fetchContact = useCallback(async () => {
     setLoading(true);
@@ -101,9 +111,6 @@ export default function ContactDetailPage() {
     setEditName(contact.name);
     setEditTitle(contact.job_title ?? '');
     setEditCompany(contact.company_name ?? '');
-    setEditCity(contact.home_city ?? '');
-    setEditState(contact.home_state ?? '');
-    setEditCountry(contact.home_country ?? '');
     setEditWebsite(contact.website ?? '');
     setEditNotes(contact.notes ?? '');
     setEditPhones(
@@ -115,6 +122,14 @@ export default function ContactDetailPage() {
       contact.contact_emails?.length > 0
         ? contact.contact_emails.map((e) => ({ email: e.email, label: e.label, is_primary: e.is_primary }))
         : [{ email: contact.email ?? '', label: 'work', is_primary: true }],
+    );
+    setEditAddresses(
+      contact.contact_addresses?.length > 0
+        ? contact.contact_addresses.map((a) => ({
+            label: a.label, street: a.street ?? '', city: a.city ?? '',
+            state: a.state ?? '', postal_code: a.postal_code ?? '', country: a.country ?? '',
+          }))
+        : [{ label: 'home', street: '', city: contact.home_city ?? '', state: contact.home_state ?? '', postal_code: '', country: contact.home_country ?? '' }],
     );
     setEditing(true);
   };
@@ -129,6 +144,13 @@ export default function ContactDetailPage() {
     const emails = editEmails.filter((e) => e.email.trim()).map((e, i) => ({
       email: e.email.trim(), label: e.label, is_primary: i === 0,
     }));
+    const addresses = editAddresses
+      .filter((a) => a.street.trim() || a.city.trim() || a.state.trim())
+      .map((a, i) => ({
+        label: a.label, street: a.street.trim() || null, city: a.city.trim() || null,
+        state: a.state.trim() || null, postal_code: a.postal_code.trim() || null,
+        country: a.country.trim() || null, is_primary: i === 0,
+      }));
 
     // Build tags from company
     const tags: Array<{ tag_type: string; value: string }> = [];
@@ -145,14 +167,9 @@ export default function ContactDetailPage() {
         name: editName.trim(),
         job_title: editTitle.trim() || null,
         company_name: editCompany.trim() || null,
-        home_city: editCity.trim() || null,
-        home_state: editState.trim() || null,
-        home_country: editCountry.trim() || null,
         website: editWebsite.trim() || null,
         notes: editNotes.trim() || null,
-        phones,
-        emails,
-        tags,
+        phones, emails, tags, addresses,
       }),
     });
 
@@ -195,8 +212,9 @@ export default function ContactDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-24">
-        <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading contact" />
+      <div className="flex justify-center py-24" role="status">
+        <Loader2 className="animate-spin text-slate-400" size={24} aria-hidden="true" />
+        <span className="sr-only">Loading contact</span>
       </div>
     );
   }
@@ -211,7 +229,7 @@ export default function ContactDetailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 p-4">
+    <div className="mx-auto max-w-5xl space-y-4 sm:space-y-6 p-4 pb-8">
       {/* Back + Actions */}
       <div className="flex items-center justify-between">
         <Link
@@ -227,7 +245,8 @@ export default function ContactDetailPage() {
             className="flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-50 min-h-11"
             aria-label="Share contact"
           >
-            <Share2 size={14} aria-hidden="true" /> Share
+            <Share2 size={14} aria-hidden="true" />
+            <span className="hidden sm:inline">Share</span>
           </button>
           {!editing && (
             <button
@@ -236,7 +255,8 @@ export default function ContactDetailPage() {
               className="flex items-center gap-1 rounded-lg bg-amber-600 px-3 py-2.5 text-sm font-medium text-white hover:bg-amber-500 min-h-11"
               aria-label="Edit contact"
             >
-              <Pencil size={14} aria-hidden="true" /> Edit
+              <Pencil size={14} aria-hidden="true" />
+              <span className="hidden sm:inline">Edit</span>
             </button>
           )}
         </div>
@@ -244,7 +264,7 @@ export default function ContactDetailPage() {
 
       {editing ? (
         /* ──── Edit Mode ──── */
-        <div className="rounded-xl border border-slate-200 bg-white p-6 space-y-4">
+        <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6 space-y-4">
           <div>
             <label htmlFor="edit-name" className={labelClass}>Name *</label>
             <input id="edit-name" type="text" value={editName} onChange={(e) => setEditName(e.target.value)} className={inputClass} />
@@ -279,7 +299,7 @@ export default function ContactDetailPage() {
                 )}
               </div>
             ))}
-            <button type="button" onClick={() => setEditPhones([...editPhones, { phone: '', label: 'mobile', is_primary: false }])} className="text-xs text-amber-600 hover:underline">+ Add phone</button>
+            <button type="button" onClick={() => setEditPhones([...editPhones, { phone: '', label: 'mobile', is_primary: false }])} className="text-xs text-amber-600 hover:underline min-h-11 inline-flex items-center">+ Add phone</button>
           </div>
 
           {/* Emails */}
@@ -300,23 +320,42 @@ export default function ContactDetailPage() {
                 )}
               </div>
             ))}
-            <button type="button" onClick={() => setEditEmails([...editEmails, { email: '', label: 'work', is_primary: false }])} className="text-xs text-amber-600 hover:underline">+ Add email</button>
+            <button type="button" onClick={() => setEditEmails([...editEmails, { email: '', label: 'work', is_primary: false }])} className="text-xs text-amber-600 hover:underline min-h-11 inline-flex items-center">+ Add email</button>
           </div>
 
-          {/* Location */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="edit-city" className={labelClass}>City</label>
-              <input id="edit-city" type="text" value={editCity} onChange={(e) => setEditCity(e.target.value)} className={inputClass} />
-            </div>
-            <div>
-              <label htmlFor="edit-state" className={labelClass}>State</label>
-              <input id="edit-state" type="text" value={editState} onChange={(e) => setEditState(e.target.value)} className={inputClass} />
-            </div>
-            <div>
-              <label htmlFor="edit-country" className={labelClass}>Country</label>
-              <input id="edit-country" type="text" value={editCountry} onChange={(e) => setEditCountry(e.target.value)} className={inputClass} />
-            </div>
+          {/* Addresses */}
+          <div>
+            <label className={labelClass}>Addresses</label>
+            {editAddresses.map((a, i) => (
+              <div key={i} className="mb-3 rounded-lg border border-slate-200 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <select
+                    value={a.label}
+                    onChange={(e) => { const n = [...editAddresses]; n[i] = { ...n[i], label: e.target.value }; setEditAddresses(n); }}
+                    className={`${selectClass} w-28`}
+                    aria-label={`Address ${i + 1} type`}
+                  >
+                    <option value="home">Home</option>
+                    <option value="work">Work</option>
+                    <option value="venue">Venue</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {editAddresses.length > 1 && (
+                    <button type="button" onClick={() => setEditAddresses(editAddresses.filter((_, j) => j !== i))} className="min-h-11 min-w-11 shrink-0 flex items-center justify-center text-slate-400 hover:text-red-500" aria-label="Remove address">
+                      <X size={16} aria-hidden="true" />
+                    </button>
+                  )}
+                </div>
+                <input type="text" value={a.street} onChange={(e) => { const n = [...editAddresses]; n[i] = { ...n[i], street: e.target.value }; setEditAddresses(n); }} className={inputClass} placeholder="Street address" aria-label={`Address ${i + 1} street`} />
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <input type="text" value={a.city} onChange={(e) => { const n = [...editAddresses]; n[i] = { ...n[i], city: e.target.value }; setEditAddresses(n); }} className={inputClass} placeholder="City" aria-label={`Address ${i + 1} city`} />
+                  <input type="text" value={a.state} onChange={(e) => { const n = [...editAddresses]; n[i] = { ...n[i], state: e.target.value }; setEditAddresses(n); }} className={inputClass} placeholder="State" aria-label={`Address ${i + 1} state`} />
+                  <input type="text" value={a.postal_code} onChange={(e) => { const n = [...editAddresses]; n[i] = { ...n[i], postal_code: e.target.value }; setEditAddresses(n); }} className={inputClass} placeholder="Zip" aria-label={`Address ${i + 1} zip`} />
+                  <input type="text" value={a.country} onChange={(e) => { const n = [...editAddresses]; n[i] = { ...n[i], country: e.target.value }; setEditAddresses(n); }} className={inputClass} placeholder="Country" aria-label={`Address ${i + 1} country`} />
+                </div>
+              </div>
+            ))}
+            <button type="button" onClick={() => setEditAddresses([...editAddresses, { label: 'work', street: '', city: '', state: '', postal_code: '', country: '' }])} className="text-xs text-amber-600 hover:underline min-h-11 inline-flex items-center">+ Add address</button>
           </div>
 
           <div>
@@ -329,13 +368,13 @@ export default function ContactDetailPage() {
             <textarea id="edit-notes" value={editNotes} onChange={(e) => setEditNotes(e.target.value)} className={inputClass} rows={3} />
           </div>
 
-          <div className="flex justify-between pt-2">
-            <button type="button" onClick={handleDelete} className="flex items-center gap-1 rounded-lg border border-red-200 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 min-h-11" aria-label="Delete contact">
+          <div className="flex flex-col-reverse sm:flex-row justify-between pt-2 gap-3">
+            <button type="button" onClick={handleDelete} className="flex items-center justify-center gap-1 rounded-lg border border-red-200 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 min-h-11" aria-label="Delete contact">
               <Trash2 size={14} aria-hidden="true" /> Delete
             </button>
-            <div className="flex gap-2">
+            <div className="flex flex-col-reverse sm:flex-row gap-2">
               <button type="button" onClick={() => setEditing(false)} className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 min-h-11">Cancel</button>
-              <button type="button" onClick={handleSave} disabled={!editName.trim() || saving} className="flex items-center gap-1 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
+              <button type="button" onClick={handleSave} disabled={!editName.trim() || saving} className="flex items-center justify-center gap-1 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
                 <Save size={14} aria-hidden="true" /> {saving ? 'Saving...' : 'Save'}
               </button>
             </div>
@@ -345,32 +384,34 @@ export default function ContactDetailPage() {
         /* ──── View Mode ──── */
         <>
           {/* Header card */}
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-slate-900">{contact.name}</h1>
-                <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-slate-500">
+          <div className="rounded-xl border border-slate-200 bg-white p-4 sm:p-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-900 break-words">{contact.name}</h1>
+                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
                   {contact.job_title && (
                     <span className="flex items-center gap-1">
-                      <Briefcase size={14} className="text-slate-400" aria-hidden="true" />
+                      <Briefcase size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
                       {contact.job_title}
                     </span>
                   )}
                   {contact.company_name && (
                     <span className="flex items-center gap-1">
-                      <Building2 size={14} className="text-slate-400" aria-hidden="true" />
+                      <Building2 size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
                       {contact.company_name}
                     </span>
                   )}
-                  {(contact.home_city || contact.home_state) && (
+                  {(contact.contact_addresses?.[0] || contact.home_city || contact.home_state) && (
                     <span className="flex items-center gap-1">
-                      <MapPin size={14} className="text-slate-400" aria-hidden="true" />
-                      {[contact.home_city, contact.home_state, contact.home_country].filter(Boolean).join(', ')}
+                      <MapPin size={14} className="text-slate-400 shrink-0" aria-hidden="true" />
+                      {contact.contact_addresses?.[0]
+                        ? [contact.contact_addresses[0].city, contact.contact_addresses[0].state, contact.contact_addresses[0].country].filter(Boolean).join(', ')
+                        : [contact.home_city, contact.home_state, contact.home_country].filter(Boolean).join(', ')}
                     </span>
                   )}
                 </div>
               </div>
-              <div className="text-right text-xs text-slate-400">
+              <div className="text-right text-xs text-slate-400 shrink-0">
                 {contact.total_jobs_together > 0 && <div>{contact.total_jobs_together} job{contact.total_jobs_together !== 1 ? 's' : ''} together</div>}
                 {contact.last_worked_with && <div>Last: {new Date(contact.last_worked_with + 'T00:00').toLocaleDateString()}</div>}
               </div>
@@ -410,12 +451,12 @@ export default function ContactDetailPage() {
                 <div className="space-y-2">
                   {(contact.contact_phones?.length > 0 ? contact.contact_phones : [{ phone: contact.phone!, label: 'mobile', is_primary: true, id: 'legacy' }]).map((p) => (
                     <div key={p.id} className="flex items-center justify-between">
-                      <div>
-                        <a href={`tel:${p.phone}`} className="text-sm text-amber-600 hover:underline">{p.phone}</a>
+                      <div className="min-w-0">
+                        <a href={`tel:${p.phone}`} className="text-sm text-amber-600 hover:underline break-all">{p.phone}</a>
                         <span className="ml-2 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">{p.label}</span>
                         {p.is_primary && <span className="ml-1 text-xs text-amber-500">Primary</span>}
                       </div>
-                      <a href={`sms:${p.phone}`} className="min-h-11 min-w-11 flex items-center justify-center text-slate-400 hover:text-amber-600" aria-label={`Text ${p.phone}`}>
+                      <a href={`sms:${p.phone}`} className="min-h-11 min-w-11 flex items-center justify-center text-slate-400 hover:text-amber-600 shrink-0" aria-label={`Text ${p.phone}`}>
                         <MessageSquare size={14} aria-hidden="true" />
                       </a>
                     </div>
@@ -431,7 +472,7 @@ export default function ContactDetailPage() {
                 <div className="space-y-2">
                   {(contact.contact_emails?.length > 0 ? contact.contact_emails : [{ email: contact.email!, label: 'work', is_primary: true, id: 'legacy' }]).map((e) => (
                     <div key={e.id}>
-                      <a href={`mailto:${e.email}`} className="text-sm text-amber-600 hover:underline">{e.email}</a>
+                      <a href={`mailto:${e.email}`} className="text-sm text-amber-600 hover:underline break-all">{e.email}</a>
                       <span className="ml-2 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">{e.label}</span>
                       {e.is_primary && <span className="ml-1 text-xs text-amber-500">Primary</span>}
                     </div>
@@ -440,6 +481,25 @@ export default function ContactDetailPage() {
               </div>
             )}
           </div>
+
+          {/* Addresses */}
+          {contact.contact_addresses?.length > 0 && (
+            <div className="rounded-xl border border-slate-200 bg-white p-4">
+              <h3 className="text-sm font-semibold text-slate-700 mb-2">Addresses</h3>
+              <div className="space-y-2">
+                {contact.contact_addresses.map((a) => (
+                  <div key={a.id} className="flex items-start gap-2">
+                    <MapPin size={14} className="text-slate-400 mt-0.5 shrink-0" aria-hidden="true" />
+                    <div>
+                      <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500 mr-1">{a.label}</span>
+                      {a.is_primary && <span className="text-xs text-amber-500 mr-1">Primary</span>}
+                      <p className="text-sm text-slate-600">{formatAddress(a)}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Tags */}
           {contact.contact_tags?.length > 0 && (
@@ -470,7 +530,7 @@ export default function ContactDetailPage() {
             {jobRoles.length === 0 ? (
               <p className="text-sm text-slate-400">No jobs linked to this contact yet.</p>
             ) : (
-              <div className="space-y-2">
+              <div className="space-y-2" role="list" aria-label="Jobs with this contact">
                 {jobRoles.map((jr) => {
                   const job = jr.contractor_jobs;
                   if (!job) return null;
@@ -479,10 +539,11 @@ export default function ContactDetailPage() {
                       key={jr.id}
                       href={`/dashboard/contractor/jobs/${job.id}`}
                       className="flex items-center justify-between rounded-lg border border-slate-100 p-3 hover:border-slate-200 transition-colors"
+                      role="listitem"
                     >
                       <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-xs text-amber-400">{job.job_number}</span>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-mono text-xs text-amber-600">{job.job_number}</span>
                           <JobStatusBadge status={job.status} />
                           <span className="inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500">
                             {jr.role_label ?? ROLE_LABELS[jr.role] ?? jr.role}
@@ -525,10 +586,10 @@ export default function ContactDetailPage() {
               {shareStatus}
             </p>
           )}
-          <div className="flex justify-end gap-2">
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
             <button type="button" onClick={() => setShowShare(false)} className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 min-h-11">Cancel</button>
-            <button type="button" onClick={handleShare} disabled={!shareUsername.trim()} className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
-              <Share2 size={14} className="inline mr-1" aria-hidden="true" /> Share
+            <button type="button" onClick={handleShare} disabled={!shareUsername.trim()} className="flex items-center justify-center gap-1 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
+              <Share2 size={14} aria-hidden="true" /> Share
             </button>
           </div>
         </div>
