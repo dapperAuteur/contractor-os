@@ -186,6 +186,7 @@ export default function ContactDetailPage() {
   const primaryEmail = contact?.contact_emails?.find((e) => e.is_primary)?.email ?? contact?.contact_emails?.[0]?.email ?? contact?.email;
 
   const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
+  const selectClass = 'w-20 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
   const labelClass = 'block text-sm font-medium text-slate-700 mb-1';
 
   if (loading) {
@@ -261,7 +262,7 @@ export default function ContactDetailPage() {
             {editPhones.map((p, i) => (
               <div key={i} className="flex gap-2 mb-2">
                 <input type="tel" value={p.phone} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], phone: e.target.value }; setEditPhones(n); }} className={`${inputClass} min-w-0 flex-1`} placeholder="Phone" aria-label={`Phone ${i + 1}`} />
-                <select value={p.label} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], label: e.target.value }; setEditPhones(n); }} className={`${inputClass} w-20 shrink-0`} aria-label={`Phone ${i + 1} type`}>
+                <select value={p.label} onChange={(e) => { const n = [...editPhones]; n[i] = { ...n[i], label: e.target.value }; setEditPhones(n); }} className={selectClass} aria-label={`Phone ${i + 1} type`}>
                   <option value="mobile">Cell</option>
                   <option value="work">Work</option>
                   <option value="office">Office</option>
@@ -283,7 +284,7 @@ export default function ContactDetailPage() {
             {editEmails.map((e, i) => (
               <div key={i} className="flex gap-2 mb-2">
                 <input type="email" value={e.email} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], email: ev.target.value }; setEditEmails(n); }} className={`${inputClass} min-w-0 flex-1`} placeholder="Email" aria-label={`Email ${i + 1}`} />
-                <select value={e.label} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], label: ev.target.value }; setEditEmails(n); }} className={`${inputClass} w-20 shrink-0`} aria-label={`Email ${i + 1} type`}>
+                <select value={e.label} onChange={(ev) => { const n = [...editEmails]; n[i] = { ...n[i], label: ev.target.value }; setEditEmails(n); }} className={selectClass} aria-label={`Email ${i + 1} type`}>
                   <option value="work">Work</option>
                   <option value="personal">Prsnl</option>
                   <option value="other">Other</option>
