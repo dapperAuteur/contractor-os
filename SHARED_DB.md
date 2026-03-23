@@ -16,10 +16,18 @@ Both **Work.WitUS** (contractor-os) and **CentenarianOS** (centenarian-os) share
 | `profiles` | `clock_format` | `text` | `'12h'` | `120_add_clock_format.sql` | 12h/24h clock preference. CentOS can safely ignore. |
 | `tasks` | `source_type` | `text` | `NULL` | `147_task_source_tracking.sql` | Origin of auto-synced tasks (e.g., `invoice_due`). CentOS reads this to style synced tasks. |
 | `tasks` | `source_id` | `uuid` | `NULL` | `147_task_source_tracking.sql` | ID of the source record (e.g., invoice ID). Used with `source_type`. |
+| `contractor_jobs` | `event_id` | `uuid` | `NULL` | `149_job_notes_events_multiuser.sql` | FK to `contractor_events`. Groups jobs under a shared event. CentOS can safely ignore. |
 
 ## Columns added by CentenarianOS (not used by Work.WitUS)
 
 _None currently tracked. Add entries here when CentOS adds columns that Work.WitUS doesn't use._
+
+## Tables added by Work.WitUS (not used by CentenarianOS)
+
+| Table | Migration | Notes |
+|-------|-----------|-------|
+| `job_notes` | `149_job_notes_events_multiuser.sql` | Per-user private/public notes on contractor jobs. |
+| `contractor_events` | `149_job_notes_events_multiuser.sql` | Event grouping for contractor jobs. Reduces field duplication when creating many jobs for the same event. |
 
 ## Tables added by CentenarianOS (used by both)
 

@@ -1,10 +1,11 @@
 // app/api/contractor/jobs/[id]/time-entries/route.ts
-// GET: list time entries for a job
-// POST: create a time entry (one per work-day)
+// GET: list time entries for a job (scoped to user)
+// POST: create a time entry (one per work-day per user)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getJobWithRole } from '@/lib/contractor/job-access';
 
 function getDb() {
   return createServiceClient(
@@ -23,6 +24,10 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const db = getDb();
 
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  // Each user sees their own time entries
   const { data, error } = await db
     .from('job_time_entries')
     .select('*')
@@ -52,16 +57,11 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     return NextResponse.json({ error: 'work_date or dates array is required' }, { status: 400 });
   }
 
-  // Verify job ownership
   const db = getDb();
-  const { data: job } = await db
-    .from('contractor_jobs')
-    .select('id')
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .maybeSingle();
 
-  if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  // Verify job access (owner, lister, or accepted worker)
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
 
   const entryBase = {
     job_id: id,

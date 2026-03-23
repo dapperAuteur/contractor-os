@@ -11,7 +11,7 @@ import {
   Package, ScanLine, Database, Settings, Bell, LogOut,
   UserCircle, ChevronDown, Menu, X, MessageCircle,
   BarChart3, ArrowUpDown, Users, Building2, MapPin, Scale, Inbox, IdCard, UserPlus,
-  Sparkles, Shield,
+  Sparkles, Shield, Calendar,
 } from 'lucide-react';
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
 
@@ -33,6 +33,7 @@ const NAV_GROUPS: NavGroup[] = [
     icon: HardHat,
     items: [
       { label: 'Jobs', href: '/dashboard/contractor/jobs', icon: HardHat },
+      { label: 'Events', href: '/dashboard/contractor/events', icon: Calendar },
       { label: 'Offers', href: '/dashboard/contractor/assignments', icon: Inbox },
       { label: 'Board', href: '/dashboard/contractor/board', icon: Users },
       { label: 'Rate Cards', href: '/dashboard/contractor/rate-cards', icon: CreditCard },

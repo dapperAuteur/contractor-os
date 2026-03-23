@@ -12,6 +12,8 @@ import {
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import JobSummaryCards from '@/components/contractor/JobSummaryCards';
 import QuickLogModal from '@/components/contractor/QuickLogModal';
+import JobNoteForm from '@/components/contractor/JobNoteForm';
+import JobNoteCard from '@/components/contractor/JobNoteCard';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import ScanButton from '@/components/scan/ScanButton';
 import type { ScanResult } from '@/components/scan/ScanButton';
@@ -46,6 +48,8 @@ interface Job {
   is_public: boolean;
   share_contacts: boolean;
   notes: string | null;
+  event_id: string | null;
+  _role: 'owner' | 'lister' | 'worker';
   _counts: {
     time_entries: number;
     invoices: number;
@@ -91,6 +95,17 @@ interface Summary {
   net_earnings: number;
 }
 
+interface JobNote {
+  id: string;
+  job_id: string;
+  user_id: string;
+  content: string;
+  is_public: boolean;
+  created_at: string;
+  updated_at: string;
+  profiles: { display_name: string | null; username: string | null } | null;
+}
+
 interface Document {
   id: string;
   name: string;
@@ -115,6 +130,7 @@ const DOC_CATEGORIES = [
 /* ─── Tabs ──────────────────────────────────────────────── */
 const TABS = [
   { id: 'details', label: 'Details', icon: FileText },
+  { id: 'notes', label: 'Notes', icon: MessageSquare },
   { id: 'time', label: 'Time', icon: Clock },
   { id: 'invoices', label: 'Invoices', icon: Receipt },
   { id: 'expenses', label: 'Expenses', icon: DollarSign },
@@ -133,6 +149,8 @@ export default function JobDetailPage() {
   const [timeEntries, setTimeEntries] = useState<TimeEntry[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
+  const [jobNotes, setJobNotes] = useState<JobNote[]>([]);
+  const [currentUserId, setCurrentUserId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('time');
   const [generating, setGenerating] = useState(false);
@@ -144,21 +162,24 @@ export default function JobDetailPage() {
   const [showDocForm, setShowDocForm] = useState(false);
 
   const loadJob = useCallback(async () => {
-    const [jobRes, summaryRes, timeRes, invoiceRes, docRes] = await Promise.all([
+    const [jobRes, summaryRes, timeRes, invoiceRes, docRes, notesRes] = await Promise.all([
       offlineFetch(`/api/contractor/jobs/${id}`),
       offlineFetch(`/api/contractor/jobs/${id}/summary`),
       offlineFetch(`/api/contractor/jobs/${id}/time-entries`),
       offlineFetch(`/api/finance/invoices?job_id=${id}`),
       offlineFetch(`/api/contractor/jobs/${id}/documents`),
+      offlineFetch(`/api/contractor/jobs/${id}/notes`),
     ]);
-    const [jobData, summaryData, timeData, invoiceData, docData] = await Promise.all([
-      jobRes.json(), summaryRes.json(), timeRes.json(), invoiceRes.json(), docRes.json(),
+    const [jobData, summaryData, timeData, invoiceData, docData, notesData] = await Promise.all([
+      jobRes.json(), summaryRes.json(), timeRes.json(), invoiceRes.json(), docRes.json(), notesRes.json(),
     ]);
     setJob(jobData);
     setSummary(summaryData);
     setTimeEntries(timeData.time_entries ?? []);
     setInvoices(invoiceData.invoices ?? []);
     setDocuments(docData.documents ?? []);
+    setJobNotes(notesData.notes ?? []);
+    if (jobData._current_user_id) setCurrentUserId(jobData._current_user_id);
     setLoading(false);
   }, [id]);
 
@@ -357,7 +378,7 @@ export default function JobDetailPage() {
         <div>
           <div className="flex items-center gap-3">
             <span className="font-mono text-lg text-amber-400">{job.job_number}</span>
-            {statusEditing ? (
+            {job._role !== 'worker' && statusEditing ? (
               <div className="flex items-center gap-1">
                 <select
                   className="rounded border border-slate-300 bg-white px-2 py-2 text-sm text-slate-900"
@@ -372,10 +393,12 @@ export default function JobDetailPage() {
                 <button onClick={updateStatus} className="p-2 text-green-400 hover:text-green-300 min-h-11 min-w-11 flex items-center justify-center" aria-label="Confirm status change"><Check size={16} /></button>
                 <button onClick={() => setStatusEditing(false)} className="p-2 text-slate-400 hover:text-slate-700 min-h-11 min-w-11 flex items-center justify-center" aria-label="Cancel status change"><X size={16} /></button>
               </div>
-            ) : (
+            ) : job._role !== 'worker' ? (
               <button onClick={() => { setNewStatus(job.status); setStatusEditing(true); }} aria-label={`Change job status, currently ${job.status.replace('_', ' ')}`} className="min-h-11 flex items-center">
                 <JobStatusBadge status={job.status} />
               </button>
+            ) : (
+              <JobStatusBadge status={job.status} />
             )}
           </div>
           <h1 className="text-xl font-bold text-slate-900 mt-1">
@@ -399,39 +422,48 @@ export default function JobDetailPage() {
           >
             <Zap size={14} aria-hidden="true" /> Quick Log
           </button>
-          <Link
-            href={`/dashboard/contractor/jobs/${id}/edit`}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
-            aria-label="Edit job details"
-          >
-            <Edit2 size={14} aria-hidden="true" /> Edit
-          </Link>
-          <button
-            onClick={handleDuplicate}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
-            aria-label="Duplicate this job"
-            title="Duplicate job"
-          >
-            <Copy size={14} aria-hidden="true" />
-            <span className="hidden sm:inline">Duplicate</span>
-          </button>
-          <button
-            onClick={togglePublic}
-            className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 ${
-              job.is_public
-                ? 'border-green-600/50 text-green-400 hover:bg-green-600/10'
-                : 'border-slate-300 text-slate-500 hover:bg-slate-100'
-            }`}
-            aria-label={job.is_public ? 'Job is public — click to make private' : 'Job is private — click to post on board'}
-            title={job.is_public ? 'Posted on board — click to make private' : 'Click to post on job board'}
-          >
-            {job.is_public ? <Globe size={14} aria-hidden="true" /> : <Lock size={14} aria-hidden="true" />}
-            <span className="hidden sm:inline">{job.is_public ? 'Public' : 'Private'}</span>
-          </button>
+          {job._role !== 'worker' && (
+            <>
+              <Link
+                href={`/dashboard/contractor/jobs/${id}/edit`}
+                className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                aria-label="Edit job details"
+              >
+                <Edit2 size={14} aria-hidden="true" /> Edit
+              </Link>
+              <button
+                onClick={handleDuplicate}
+                className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2.5 text-sm text-slate-700 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-500 min-h-11"
+                aria-label="Duplicate this job"
+                title="Duplicate job"
+              >
+                <Copy size={14} aria-hidden="true" />
+                <span className="hidden sm:inline">Duplicate</span>
+              </button>
+              <button
+                onClick={togglePublic}
+                className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 ${
+                  job.is_public
+                    ? 'border-green-600/50 text-green-400 hover:bg-green-600/10'
+                    : 'border-slate-300 text-slate-500 hover:bg-slate-100'
+                }`}
+                aria-label={job.is_public ? 'Job is public — click to make private' : 'Job is private — click to post on board'}
+                title={job.is_public ? 'Posted on board — click to make private' : 'Click to post on job board'}
+              >
+                {job.is_public ? <Globe size={14} aria-hidden="true" /> : <Lock size={14} aria-hidden="true" />}
+                <span className="hidden sm:inline">{job.is_public ? 'Public' : 'Private'}</span>
+              </button>
+            </>
+          )}
+          {job._role === 'worker' && (
+            <span className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-500">
+              Assigned Worker
+            </span>
+          )}
         </div>
 
-        {/* Share controls — shown when job is public */}
-        {job.is_public && (
+        {/* Share controls — shown when job is public (owner/lister only) */}
+        {job.is_public && job._role !== 'worker' && (
           <div className="flex items-center gap-3 text-xs text-slate-400">
             <span>This job is visible on the board.</span>
             <label className="flex items-center gap-1.5 cursor-pointer">
@@ -554,6 +586,23 @@ export default function JobDetailPage() {
             <div className="rounded-xl border border-slate-200 bg-white p-4">
               <h3 className="text-sm font-semibold text-slate-800 mb-2">Notes</h3>
               <p className="text-sm text-slate-700 whitespace-pre-wrap">{job.notes}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {tab === 'notes' && (
+        <div className="space-y-4">
+          <JobNoteForm jobId={id} onNoteCreated={loadJob} />
+          {jobNotes.length === 0 ? (
+            <p className="text-sm text-slate-400 text-center py-6">No notes yet. Add the first note above.</p>
+          ) : (
+            <div className="space-y-3" role="list" aria-label="Job notes">
+              {jobNotes.map((note) => (
+                <div key={note.id} role="listitem">
+                  <JobNoteCard note={note} currentUserId={currentUserId} jobId={id} onUpdated={loadJob} />
+                </div>
+              ))}
             </div>
           )}
         </div>

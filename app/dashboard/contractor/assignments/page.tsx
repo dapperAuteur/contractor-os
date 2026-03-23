@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import Link from 'next/link';
 import {
-  Loader2, Briefcase, Check, X as XIcon, MessageCircle,
+  Loader2, Briefcase, Check, X as XIcon, MessageCircle, ArrowRight,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -136,6 +137,18 @@ export default function WorkerAssignmentsPage() {
                     )}
                   </div>
                 </div>
+
+                {/* Link to job detail for accepted assignments */}
+                {a.status === 'accepted' && a.job_id && (
+                  <div className="mt-3">
+                    <Link
+                      href={`/dashboard/contractor/jobs/${a.job_id}`}
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 min-h-11"
+                    >
+                      View Job <ArrowRight size={14} aria-hidden="true" />
+                    </Link>
+                  </div>
+                )}
 
                 {/* Actions for pending offers */}
                 {isOffer && (

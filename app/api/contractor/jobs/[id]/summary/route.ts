@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getJobWithRole } from '@/lib/contractor/job-access';
 
 function getDb() {
   return createServiceClient(
@@ -22,30 +23,36 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const db = getDb();
 
-  // Verify ownership
-  const { data: job } = await db
-    .from('contractor_jobs')
-    .select('id, status')
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .maybeSingle();
+  // Verify access (owner, lister, or accepted worker)
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
 
-  if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  // Workers see only their own data; owners/listers see all
+  const scopeToUser = result.role === 'worker';
 
-  // Fetch all related data in parallel
+  // Fetch all related data in parallel (scoped to user for workers)
+  let timeQuery = db.from('job_time_entries')
+    .select('total_hours, st_hours, ot_hours, dt_hours')
+    .eq('job_id', id);
+  let invoiceQuery = db.from('invoices')
+    .select('total, amount_paid, status, invoice_items(amount, item_type)')
+    .eq('job_id', id);
+  let tripQuery = db.from('trips')
+    .select('distance_miles, cost, is_round_trip')
+    .eq('job_id', id);
+  let expenseQuery = db.from('financial_transactions')
+    .select('amount, type')
+    .eq('job_id', id);
+
+  if (scopeToUser) {
+    timeQuery = timeQuery.eq('user_id', user.id);
+    invoiceQuery = invoiceQuery.eq('user_id', user.id);
+    tripQuery = tripQuery.eq('user_id', user.id);
+    expenseQuery = expenseQuery.eq('user_id', user.id);
+  }
+
   const [timeRes, invoiceRes, tripRes, expenseRes] = await Promise.all([
-    db.from('job_time_entries')
-      .select('total_hours, st_hours, ot_hours, dt_hours')
-      .eq('job_id', id),
-    db.from('invoices')
-      .select('total, amount_paid, status, invoice_items(amount, item_type)')
-      .eq('job_id', id),
-    db.from('trips')
-      .select('distance_miles, cost, is_round_trip')
-      .eq('job_id', id),
-    db.from('financial_transactions')
-      .select('amount, type')
-      .eq('job_id', id),
+    timeQuery, invoiceQuery, tripQuery, expenseQuery,
   ]);
 
   // Time totals

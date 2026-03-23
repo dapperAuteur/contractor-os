@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getJobWithRole } from '@/lib/contractor/job-access';
 
 function getDb() {
   return createServiceClient(
@@ -63,16 +64,10 @@ export async function POST(request: NextRequest, ctx: Ctx) {
 
   const db = getDb();
 
-  // Fetch the job
-  const { data: job, error: jobError } = await db
-    .from('contractor_jobs')
-    .select('*')
-    .eq('id', id)
-    .eq('user_id', user.id)
-    .maybeSingle();
-
-  if (jobError) return NextResponse.json({ error: jobError.message }, { status: 500 });
-  if (!job) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  // Verify job access (owner, lister, or accepted worker)
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  const job = result.job;
 
   // Fetch time entries to invoice
   let entryQuery = db
@@ -93,7 +88,7 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     return NextResponse.json({ error: 'No uninvoiced time entries found' }, { status: 400 });
   }
 
-  const typedJob = job as Job;
+  const typedJob = job as unknown as Job;
   const invoices = [];
 
   // Generate one invoice per time entry (matches the CBS Sports pattern — one pay stub per work day)
