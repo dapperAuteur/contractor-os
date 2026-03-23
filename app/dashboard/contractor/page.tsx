@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Plus, HardHat, ArrowRight, Loader2 } from 'lucide-react';
+import { Plus, HardHat, ArrowRight, Loader2, X } from 'lucide-react';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -23,27 +23,42 @@ interface StatCard {
   label: string;
   value: number;
   status: string;
+  statuses: string[];
 }
+
+const STATUS_GROUPS: Record<string, { label: string; statuses: string[] }> = {
+  assigned:    { label: 'Assigned',    statuses: ['assigned', 'confirmed'] },
+  in_progress: { label: 'In Progress', statuses: ['in_progress'] },
+  completed:   { label: 'Completed',   statuses: ['completed', 'invoiced'] },
+  paid:        { label: 'Paid',        statuses: ['paid'] },
+};
 
 export default function ContractorHubPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
   useEffect(() => {
-    offlineFetch('/api/contractor/jobs?limit=20')
+    offlineFetch('/api/contractor/jobs?limit=100')
       .then((r) => r.json())
       .then((d) => setJobs(d.jobs ?? []))
       .finally(() => setLoading(false));
   }, []);
 
-  const stats: StatCard[] = [
-    { label: 'Assigned', value: jobs.filter((j) => j.status === 'assigned' || j.status === 'confirmed').length, status: 'assigned' },
-    { label: 'In Progress', value: jobs.filter((j) => j.status === 'in_progress').length, status: 'in_progress' },
-    { label: 'Completed', value: jobs.filter((j) => j.status === 'completed' || j.status === 'invoiced').length, status: 'completed' },
-    { label: 'Paid', value: jobs.filter((j) => j.status === 'paid').length, status: 'paid' },
-  ];
+  const stats: StatCard[] = Object.entries(STATUS_GROUPS).map(([key, { label, statuses }]) => ({
+    label,
+    value: jobs.filter((j) => statuses.includes(j.status)).length,
+    status: key,
+    statuses,
+  }));
 
-  const upcoming = jobs.filter((j) => ['assigned', 'confirmed', 'in_progress'].includes(j.status));
+  const filteredJobs = activeFilter
+    ? jobs.filter((j) => STATUS_GROUPS[activeFilter].statuses.includes(j.status))
+    : jobs;
+
+  const sectionTitle = activeFilter
+    ? `${STATUS_GROUPS[activeFilter].label} Jobs`
+    : 'All Jobs';
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4">
@@ -71,35 +86,60 @@ export default function ContractorHubPage() {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {stats.map((s) => (
-          <div key={s.status} className="rounded-xl border border-slate-200 bg-white p-4 text-center">
-            <div className="text-3xl font-bold text-slate-900">{s.value}</div>
-            <div className="mt-1">
-              <JobStatusBadge status={s.status} />
-            </div>
-          </div>
-        ))}
+      {/* Stats — clickable filter cards */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Filter jobs by status">
+        {stats.map((s) => {
+          const isActive = activeFilter === s.status;
+          return (
+            <button
+              key={s.status}
+              type="button"
+              onClick={() => setActiveFilter(isActive ? null : s.status)}
+              aria-pressed={isActive}
+              className={`rounded-xl border p-4 text-center transition-all min-h-11 ${
+                isActive
+                  ? 'border-amber-500 bg-white ring-2 ring-amber-500/30'
+                  : 'border-slate-200 bg-white hover:border-slate-300'
+              }`}
+            >
+              <div className="text-3xl font-bold text-slate-900">{s.value}</div>
+              <div className="mt-1">
+                <JobStatusBadge status={s.status} />
+              </div>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Upcoming / Active Jobs */}
+      {/* Filtered Jobs */}
       <div>
-        <h2 className="mb-3 text-lg font-semibold text-slate-800">Upcoming & Active</h2>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-slate-800">{sectionTitle}</h2>
+          {activeFilter && (
+            <button
+              type="button"
+              onClick={() => setActiveFilter(null)}
+              className="flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 min-h-11"
+              aria-label="Clear filter and show all jobs"
+            >
+              <X size={14} aria-hidden="true" /> Show All
+            </button>
+          )}
+        </div>
         {loading ? (
           <div className="flex justify-center py-12">
             <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading jobs" />
           </div>
-        ) : upcoming.length === 0 ? (
+        ) : filteredJobs.length === 0 ? (
           <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
-            No upcoming jobs.{' '}
+            {activeFilter ? 'No jobs match this filter.' : 'No jobs yet.'}{' '}
             <Link href="/dashboard/contractor/jobs/new" className="text-amber-400 hover:underline">
               Create one
             </Link>
           </div>
         ) : (
           <div className="space-y-2">
-            {upcoming.map((job) => (
+            {filteredJobs.map((job) => (
               <Link
                 key={job.id}
                 href={`/dashboard/contractor/jobs/${job.id}`}

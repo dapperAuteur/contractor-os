@@ -17,6 +17,14 @@ Both **Work.WitUS** (contractor-os) and **CentenarianOS** (centenarian-os) share
 | `tasks` | `source_type` | `text` | `NULL` | `147_task_source_tracking.sql` | Origin of auto-synced tasks (e.g., `invoice_due`). CentOS reads this to style synced tasks. |
 | `tasks` | `source_id` | `uuid` | `NULL` | `147_task_source_tracking.sql` | ID of the source record (e.g., invoice ID). Used with `source_type`. |
 | `contractor_jobs` | `event_id` | `uuid` | `NULL` | `149_job_notes_events_multiuser.sql` | FK to `contractor_events`. Groups jobs under a shared event. CentOS can safely ignore. |
+| `user_contacts` | `contact_subtype` | `text` | `NULL` | `150_contacts_system.sql` | `'person'` or `'company'`. CentOS can safely ignore. |
+| `user_contacts` | `job_title` | `text` | `NULL` | `150_contacts_system.sql` | Contact's job title. CentOS can safely ignore. |
+| `user_contacts` | `company_name` | `text` | `NULL` | `150_contacts_system.sql` | Denormalized company name from tags. CentOS can safely ignore. |
+| `user_contacts` | `home_city` | `text` | `NULL` | `150_contacts_system.sql` | Contact home city. CentOS can safely ignore. |
+| `user_contacts` | `home_state` | `text` | `NULL` | `150_contacts_system.sql` | Contact home state. CentOS can safely ignore. |
+| `user_contacts` | `home_country` | `text` | `NULL` | `150_contacts_system.sql` | Contact home country. CentOS can safely ignore. |
+| `user_contacts` | `last_worked_with` | `date` | `NULL` | `150_contacts_system.sql` | Last job start_date where contact was on crew. CentOS can safely ignore. |
+| `user_contacts` | `total_jobs_together` | `int` | `0` | `150_contacts_system.sql` | Count of jobs worked together. CentOS can safely ignore. |
 
 ## Columns added by CentenarianOS (not used by Work.WitUS)
 
@@ -28,6 +36,11 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 |-------|-----------|-------|
 | `job_notes` | `149_job_notes_events_multiuser.sql` | Per-user private/public notes on contractor jobs. |
 | `contractor_events` | `149_job_notes_events_multiuser.sql` | Event grouping for contractor jobs. Reduces field duplication when creating many jobs for the same event. |
+| `contact_phones` | `150_contacts_system.sql` | Multiple phone numbers per contact (label, is_primary). |
+| `contact_emails` | `150_contacts_system.sql` | Multiple email addresses per contact (label, is_primary). |
+| `contact_tags` | `150_contacts_system.sql` | Flexible tagging for contacts (company, role, skill, group, custom). |
+| `contact_job_roles` | `150_contacts_system.sql` | Many-to-many linking contacts to jobs with crew roles (POC, coordinator, tech lead, etc.). |
+| `contact_shares` | `150_contacts_system.sql` | Contact sharing between users with pending/accepted/declined status. |
 
 ## Tables added by CentenarianOS (used by both)
 

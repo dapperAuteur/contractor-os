@@ -1,0 +1,526 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import Link from 'next/link';
+import {
+  Plus, Search, Users, Phone, MessageSquare,
+  ArrowRight, Loader2, X, List, Building2, ChevronDown,
+} from 'lucide-react';
+import { offlineFetch } from '@/lib/offline/offline-fetch';
+import Modal from '@/components/ui/Modal';
+
+interface ContactPhone {
+  id: string;
+  phone: string;
+  label: string;
+  is_primary: boolean;
+}
+
+interface ContactEmail {
+  id: string;
+  email: string;
+  label: string;
+  is_primary: boolean;
+}
+
+interface ContactTag {
+  id: string;
+  tag_type: string;
+  value: string;
+}
+
+interface Contact {
+  id: string;
+  name: string;
+  job_title: string | null;
+  company_name: string | null;
+  home_city: string | null;
+  home_state: string | null;
+  phone: string | null;
+  email: string | null;
+  total_jobs_together: number;
+  last_worked_with: string | null;
+  contact_phones: ContactPhone[];
+  contact_emails: ContactEmail[];
+  contact_tags: ContactTag[];
+}
+
+interface Company {
+  name: string;
+  contact_count: number;
+}
+
+export default function ContactsPage() {
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [companyFilter, setCompanyFilter] = useState('');
+  const [viewMode, setViewMode] = useState<'list' | 'company'>('list');
+  const [showAdd, setShowAdd] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // New contact form state
+  const [formName, setFormName] = useState('');
+  const [formTitle, setFormTitle] = useState('');
+  const [formCompany, setFormCompany] = useState('');
+  const [formCity, setFormCity] = useState('');
+  const [formState, setFormState] = useState('');
+  const [formCountry, setFormCountry] = useState('');
+  const [formPhones, setFormPhones] = useState([{ phone: '', label: 'mobile' }]);
+  const [formEmails, setFormEmails] = useState([{ email: '', label: 'work' }]);
+  const [formNotes, setFormNotes] = useState('');
+
+  const fetchContacts = useCallback(async () => {
+    setLoading(true);
+    const params = new URLSearchParams({ limit: '200' });
+    if (search) params.set('search', search);
+    if (companyFilter) params.set('company', companyFilter);
+
+    const [contactsRes, companiesRes] = await Promise.all([
+      offlineFetch(`/api/contractor/contacts?${params}`),
+      offlineFetch('/api/contractor/contacts/companies'),
+    ]);
+
+    const cData = await contactsRes.json();
+    const compData = await companiesRes.json();
+    setContacts(cData.contacts ?? []);
+    setCompanies(compData.companies ?? []);
+    setLoading(false);
+  }, [search, companyFilter]);
+
+  useEffect(() => {
+    fetchContacts();
+  }, [fetchContacts]);
+
+  const resetForm = () => {
+    setFormName('');
+    setFormTitle('');
+    setFormCompany('');
+    setFormCity('');
+    setFormState('');
+    setFormCountry('');
+    setFormPhones([{ phone: '', label: 'mobile' }]);
+    setFormEmails([{ email: '', label: 'work' }]);
+    setFormNotes('');
+  };
+
+  const handleAdd = async () => {
+    if (!formName.trim()) return;
+    setSaving(true);
+
+    const phones = formPhones.filter((p) => p.phone.trim()).map((p, i) => ({
+      phone: p.phone.trim(),
+      label: p.label,
+      is_primary: i === 0,
+    }));
+
+    const emails = formEmails.filter((e) => e.email.trim()).map((e, i) => ({
+      email: e.email.trim(),
+      label: e.label,
+      is_primary: i === 0,
+    }));
+
+    await offlineFetch('/api/contractor/contacts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: formName.trim(),
+        job_title: formTitle.trim() || null,
+        company_name: formCompany.trim() || null,
+        home_city: formCity.trim() || null,
+        home_state: formState.trim() || null,
+        home_country: formCountry.trim() || null,
+        notes: formNotes.trim() || null,
+        phones,
+        emails,
+      }),
+    });
+
+    setSaving(false);
+    setShowAdd(false);
+    resetForm();
+    fetchContacts();
+  };
+
+  const getPrimaryPhone = (c: Contact) => {
+    const primary = c.contact_phones?.find((p) => p.is_primary);
+    return primary?.phone ?? c.contact_phones?.[0]?.phone ?? c.phone;
+  };
+
+  // Group by company for company view
+  const groupedByCompany = contacts.reduce<Record<string, Contact[]>>((acc, c) => {
+    const companyTags = c.contact_tags?.filter((t) => t.tag_type === 'company') ?? [];
+    if (companyTags.length === 0) {
+      const key = 'No Company';
+      (acc[key] ??= []).push(c);
+    } else {
+      for (const tag of companyTags) {
+        (acc[tag.value] ??= []).push(c);
+      }
+    }
+    return acc;
+  }, {});
+
+  const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
+  const labelClass = 'block text-sm font-medium text-slate-700 mb-1';
+
+  return (
+    <div className="mx-auto max-w-5xl space-y-6 p-4">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Users className="text-amber-400" size={28} aria-hidden="true" />
+          <h1 className="text-2xl font-bold text-slate-900">Contacts</h1>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowAdd(true)}
+          className="flex items-center gap-1.5 rounded-lg bg-amber-600 px-3 py-2.5 text-sm font-medium text-white hover:bg-amber-500 min-h-11"
+          aria-label="Add new contact"
+        >
+          <Plus size={16} aria-hidden="true" /> Add Contact
+        </button>
+      </div>
+
+      {/* Search + Filters */}
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="relative flex-1">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
+          <input
+            type="text"
+            placeholder="Search contacts..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={`${inputClass} pl-9`}
+            aria-label="Search contacts"
+          />
+        </div>
+
+        <div className="relative">
+          <select
+            value={companyFilter}
+            onChange={(e) => setCompanyFilter(e.target.value)}
+            className={`${inputClass} min-w-[160px] appearance-none pr-8`}
+            aria-label="Filter by company"
+          >
+            <option value="">All Companies</option>
+            {companies.map((c) => (
+              <option key={c.name} value={c.name}>{c.name} ({c.contact_count})</option>
+            ))}
+          </select>
+          <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" aria-hidden="true" />
+        </div>
+
+        {/* View toggle */}
+        <div className="flex rounded-lg border border-slate-300 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setViewMode('list')}
+            className={`flex items-center gap-1 px-3 py-2.5 text-sm min-h-11 ${
+              viewMode === 'list' ? 'bg-amber-50 text-amber-700' : 'bg-white text-slate-600 hover:bg-slate-50'
+            }`}
+            aria-label="List view"
+            aria-pressed={viewMode === 'list'}
+          >
+            <List size={16} aria-hidden="true" />
+            <span className="hidden sm:inline">List</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setViewMode('company')}
+            className={`flex items-center gap-1 px-3 py-2.5 text-sm min-h-11 border-l border-slate-300 ${
+              viewMode === 'company' ? 'bg-amber-50 text-amber-700' : 'bg-white text-slate-600 hover:bg-slate-50'
+            }`}
+            aria-label="Company view"
+            aria-pressed={viewMode === 'company'}
+          >
+            <Building2 size={16} aria-hidden="true" />
+            <span className="hidden sm:inline">By Company</span>
+          </button>
+        </div>
+      </div>
+
+      {companyFilter && (
+        <button
+          type="button"
+          onClick={() => setCompanyFilter('')}
+          className="flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700 hover:bg-amber-100 min-h-11"
+          aria-label={`Clear ${companyFilter} filter`}
+        >
+          {companyFilter} <X size={12} aria-hidden="true" />
+        </button>
+      )}
+
+      {/* Contact List */}
+      {loading ? (
+        <div className="flex justify-center py-12">
+          <Loader2 className="animate-spin text-slate-400" size={24} aria-label="Loading contacts" />
+        </div>
+      ) : contacts.length === 0 ? (
+        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-400">
+          {search || companyFilter ? 'No contacts match your search.' : 'No contacts yet.'}{' '}
+          <button type="button" onClick={() => setShowAdd(true)} className="text-amber-400 hover:underline">
+            Add one
+          </button>
+        </div>
+      ) : viewMode === 'list' ? (
+        <div className="space-y-2" role="list">
+          {contacts.map((c) => {
+            const primaryPhone = getPrimaryPhone(c);
+            return (
+              <Link
+                key={c.id}
+                href={`/dashboard/contractor/contacts/${c.id}`}
+                className="flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 hover:border-slate-300 transition-colors"
+                role="listitem"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="font-medium text-slate-900">{c.name}</div>
+                  <div className="mt-0.5 text-sm text-slate-500 truncate">
+                    {c.job_title && <span>{c.job_title}</span>}
+                    {c.job_title && c.company_name && <span> · </span>}
+                    {c.company_name && <span>{c.company_name}</span>}
+                  </div>
+                  <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-slate-400">
+                    {c.total_jobs_together > 0 && <span>{c.total_jobs_together} job{c.total_jobs_together !== 1 ? 's' : ''}</span>}
+                    {primaryPhone && <span>{primaryPhone}</span>}
+                    {c.home_city && c.home_state && <span>{c.home_city}, {c.home_state}</span>}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 shrink-0 ml-2">
+                  {primaryPhone && (
+                    <a
+                      href={`tel:${primaryPhone}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center justify-center min-h-11 min-w-11 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50"
+                      aria-label={`Call ${c.name}`}
+                    >
+                      <Phone size={16} aria-hidden="true" />
+                    </a>
+                  )}
+                  {primaryPhone && (
+                    <a
+                      href={`sms:${primaryPhone}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center justify-center min-h-11 min-w-11 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50"
+                      aria-label={`Text ${c.name}`}
+                    >
+                      <MessageSquare size={16} aria-hidden="true" />
+                    </a>
+                  )}
+                  <ArrowRight size={16} className="text-slate-400" aria-hidden="true" />
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+      ) : (
+        /* Company grouped view */
+        <div className="space-y-6">
+          {Object.entries(groupedByCompany)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .map(([companyName, companyContacts]) => (
+              <div key={companyName}>
+                <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
+                  <Building2 size={14} className="text-slate-400" aria-hidden="true" />
+                  {companyName}
+                  <span className="text-slate-400 font-normal">({companyContacts.length})</span>
+                </h3>
+                <div className="space-y-1.5 pl-5">
+                  {companyContacts.map((c) => (
+                    <Link
+                      key={`${companyName}-${c.id}`}
+                      href={`/dashboard/contractor/contacts/${c.id}`}
+                      className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2.5 hover:border-slate-300 transition-colors"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-slate-900">{c.name}</div>
+                        {c.job_title && <div className="text-xs text-slate-500">{c.job_title}</div>}
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0 ml-2">
+                        {c.total_jobs_together > 0 && (
+                          <span className="text-xs text-slate-400">{c.total_jobs_together} job{c.total_jobs_together !== 1 ? 's' : ''}</span>
+                        )}
+                        <ArrowRight size={14} className="text-slate-400" aria-hidden="true" />
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+
+      {/* Add Contact Modal */}
+      <Modal isOpen={showAdd} onClose={() => { setShowAdd(false); resetForm(); }} title="Add Contact" size="md">
+        <div className="space-y-4 p-4">
+          <div>
+            <label htmlFor="contact-name" className={labelClass}>Name *</label>
+            <input id="contact-name" type="text" value={formName} onChange={(e) => setFormName(e.target.value)} className={inputClass} placeholder="Full name" />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="contact-title" className={labelClass}>Job Title</label>
+              <input id="contact-title" type="text" value={formTitle} onChange={(e) => setFormTitle(e.target.value)} className={inputClass} placeholder="e.g. Crew Coordinator" />
+            </div>
+            <div>
+              <label htmlFor="contact-company" className={labelClass}>Company</label>
+              <input id="contact-company" type="text" value={formCompany} onChange={(e) => setFormCompany(e.target.value)} className={inputClass} placeholder="e.g. ESPN" list="company-suggestions" />
+              <datalist id="company-suggestions">
+                {companies.map((c) => <option key={c.name} value={c.name} />)}
+              </datalist>
+            </div>
+          </div>
+
+          {/* Phones */}
+          <div>
+            <label className={labelClass}>Phone Numbers</label>
+            {formPhones.map((p, i) => (
+              <div key={i} className="flex gap-2 mb-2">
+                <input
+                  type="tel"
+                  value={p.phone}
+                  onChange={(e) => {
+                    const next = [...formPhones];
+                    next[i] = { ...next[i], phone: e.target.value };
+                    setFormPhones(next);
+                  }}
+                  className={`${inputClass} flex-1`}
+                  placeholder="Phone number"
+                  aria-label={`Phone ${i + 1}`}
+                />
+                <select
+                  value={p.label}
+                  onChange={(e) => {
+                    const next = [...formPhones];
+                    next[i] = { ...next[i], label: e.target.value };
+                    setFormPhones(next);
+                  }}
+                  className={`${inputClass} w-28`}
+                  aria-label={`Phone ${i + 1} type`}
+                >
+                  <option value="mobile">Mobile</option>
+                  <option value="work">Work</option>
+                  <option value="office">Office</option>
+                  <option value="other">Other</option>
+                </select>
+                {formPhones.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setFormPhones(formPhones.filter((_, j) => j !== i))}
+                    className="flex items-center justify-center min-h-11 min-w-11 text-slate-400 hover:text-red-500"
+                    aria-label="Remove phone"
+                  >
+                    <X size={16} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setFormPhones([...formPhones, { phone: '', label: 'mobile' }])}
+              className="text-xs text-amber-600 hover:underline"
+            >
+              + Add phone
+            </button>
+          </div>
+
+          {/* Emails */}
+          <div>
+            <label className={labelClass}>Email Addresses</label>
+            {formEmails.map((e, i) => (
+              <div key={i} className="flex gap-2 mb-2">
+                <input
+                  type="email"
+                  value={e.email}
+                  onChange={(ev) => {
+                    const next = [...formEmails];
+                    next[i] = { ...next[i], email: ev.target.value };
+                    setFormEmails(next);
+                  }}
+                  className={`${inputClass} flex-1`}
+                  placeholder="Email address"
+                  aria-label={`Email ${i + 1}`}
+                />
+                <select
+                  value={e.label}
+                  onChange={(ev) => {
+                    const next = [...formEmails];
+                    next[i] = { ...next[i], label: ev.target.value };
+                    setFormEmails(next);
+                  }}
+                  className={`${inputClass} w-28`}
+                  aria-label={`Email ${i + 1} type`}
+                >
+                  <option value="work">Work</option>
+                  <option value="personal">Personal</option>
+                  <option value="other">Other</option>
+                </select>
+                {formEmails.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => setFormEmails(formEmails.filter((_, j) => j !== i))}
+                    className="flex items-center justify-center min-h-11 min-w-11 text-slate-400 hover:text-red-500"
+                    aria-label="Remove email"
+                  >
+                    <X size={16} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => setFormEmails([...formEmails, { email: '', label: 'work' }])}
+              className="text-xs text-amber-600 hover:underline"
+            >
+              + Add email
+            </button>
+          </div>
+
+          {/* Location */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label htmlFor="contact-city" className={labelClass}>City</label>
+              <input id="contact-city" type="text" value={formCity} onChange={(e) => setFormCity(e.target.value)} className={inputClass} placeholder="City" />
+            </div>
+            <div>
+              <label htmlFor="contact-state" className={labelClass}>State</label>
+              <input id="contact-state" type="text" value={formState} onChange={(e) => setFormState(e.target.value)} className={inputClass} placeholder="State" />
+            </div>
+            <div>
+              <label htmlFor="contact-country" className={labelClass}>Country</label>
+              <input id="contact-country" type="text" value={formCountry} onChange={(e) => setFormCountry(e.target.value)} className={inputClass} placeholder="Country" />
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label htmlFor="contact-notes" className={labelClass}>Notes</label>
+            <textarea id="contact-notes" value={formNotes} onChange={(e) => setFormNotes(e.target.value)} className={inputClass} rows={2} placeholder="Any notes about this contact..." />
+          </div>
+
+          {/* Actions */}
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => { setShowAdd(false); resetForm(); }}
+              className="rounded-lg border border-slate-300 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 min-h-11"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleAdd}
+              disabled={!formName.trim() || saving}
+              className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11"
+            >
+              {saving ? 'Saving...' : 'Save Contact'}
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}

@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
 
   const db = getDb();
   const selectCols = includeLocations
-    ? 'id, name, contact_type, default_category_id, notes, use_count, phone, email, contact_locations(id, label, address, lat, lng, is_default, sort_order)'
-    : 'id, name, contact_type, default_category_id, notes, use_count, phone, email';
+    ? 'id, name, contact_type, default_category_id, notes, use_count, phone, email, company_name, contact_locations(id, label, address, lat, lng, is_default, sort_order)'
+    : 'id, name, contact_type, default_category_id, notes, use_count, phone, email, company_name';
 
   let query = db
     .from('user_contacts')
