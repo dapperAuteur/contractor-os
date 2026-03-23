@@ -61,11 +61,11 @@ export default function ContactCombobox({
 
   // Load contacts on mount
   useEffect(() => {
-    offlineFetch(`/api/contacts?type=${contactType}`)
+    offlineFetch('/api/contacts')
       .then((r) => r.json())
       .then((d) => setContacts(Array.isArray(d) ? d : []))
       .catch(() => {});
-  }, [contactType]);
+  }, []);
 
   // Close on outside click
   useEffect(() => {

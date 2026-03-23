@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
   let query = db
     .from('user_contacts')
     .select(`
-      id, name, contact_type, contact_subtype, email, phone,
+      id, name, contact_type, contact_subtype, email, phone, website,
       job_title, company_name, home_city, home_state, home_country,
       last_worked_with, total_jobs_together, notes, use_count, created_at,
       contact_phones(id, phone, label, is_primary, sort_order),
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
   const {
     name, job_title, company_name,
     home_city, home_state, home_country,
-    notes, phones, emails, tags,
+    website, notes, phones, emails, tags,
   } = body;
 
   if (!name?.trim()) return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -113,6 +113,7 @@ export async function POST(request: NextRequest) {
       home_city: home_city?.trim() ?? null,
       home_state: home_state?.trim() ?? null,
       home_country: home_country?.trim() ?? null,
+      website: website?.trim() ?? null,
       notes: notes?.trim() ?? null,
       // Set legacy single phone/email from primary values
       phone: (phones as Array<{ phone: string; is_primary?: boolean }>)?.find((p) => p.is_primary)?.phone
@@ -173,7 +174,7 @@ export async function POST(request: NextRequest) {
   const { data: full } = await db
     .from('user_contacts')
     .select(`
-      id, name, contact_type, contact_subtype, email, phone,
+      id, name, contact_type, contact_subtype, email, phone, website,
       job_title, company_name, home_city, home_state, home_country,
       last_worked_with, total_jobs_together, notes, use_count, created_at,
       contact_phones(id, phone, label, is_primary, sort_order),

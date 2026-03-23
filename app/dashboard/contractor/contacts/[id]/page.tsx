@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Phone, MessageSquare, Mail, Share2, Pencil, Trash2,
-  MapPin, Briefcase, Building2, Tag, Loader2, Save, X,
+  MapPin, Briefcase, Building2, Tag, Loader2, Save, X, Globe,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
@@ -23,6 +23,7 @@ interface ContactDetail {
   home_city: string | null;
   home_state: string | null;
   home_country: string | null;
+  website: string | null;
   total_jobs_together: number;
   last_worked_with: string | null;
   notes: string | null;
@@ -77,6 +78,7 @@ export default function ContactDetailPage() {
   const [editCity, setEditCity] = useState('');
   const [editState, setEditState] = useState('');
   const [editCountry, setEditCountry] = useState('');
+  const [editWebsite, setEditWebsite] = useState('');
   const [editNotes, setEditNotes] = useState('');
   const [editPhones, setEditPhones] = useState<Array<{ phone: string; label: string; is_primary: boolean }>>([]);
   const [editEmails, setEditEmails] = useState<Array<{ email: string; label: string; is_primary: boolean }>>([]);
@@ -102,6 +104,7 @@ export default function ContactDetailPage() {
     setEditCity(contact.home_city ?? '');
     setEditState(contact.home_state ?? '');
     setEditCountry(contact.home_country ?? '');
+    setEditWebsite(contact.website ?? '');
     setEditNotes(contact.notes ?? '');
     setEditPhones(
       contact.contact_phones?.length > 0
@@ -145,6 +148,7 @@ export default function ContactDetailPage() {
         home_city: editCity.trim() || null,
         home_state: editState.trim() || null,
         home_country: editCountry.trim() || null,
+        website: editWebsite.trim() || null,
         notes: editNotes.trim() || null,
         phones,
         emails,
@@ -316,6 +320,11 @@ export default function ContactDetailPage() {
           </div>
 
           <div>
+            <label htmlFor="edit-website" className={labelClass}>Website</label>
+            <input id="edit-website" type="url" value={editWebsite} onChange={(e) => setEditWebsite(e.target.value)} className={inputClass} placeholder="https://example.com" />
+          </div>
+
+          <div>
             <label htmlFor="edit-notes" className={labelClass}>Notes</label>
             <textarea id="edit-notes" value={editNotes} onChange={(e) => setEditNotes(e.target.value)} className={inputClass} rows={3} />
           </div>
@@ -382,6 +391,11 @@ export default function ContactDetailPage() {
               {primaryEmail && (
                 <a href={`mailto:${primaryEmail}`} className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-100 min-h-11">
                   <Mail size={16} aria-hidden="true" /> Email
+                </a>
+              )}
+              {contact.website && (
+                <a href={contact.website.startsWith('http') ? contact.website : `https://${contact.website}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-100 min-h-11">
+                  <Globe size={16} aria-hidden="true" /> Website
                 </a>
               )}
             </div>

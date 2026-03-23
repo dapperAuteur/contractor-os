@@ -56,11 +56,11 @@ export default function ContactAutocomplete({
   const listIdRef = useRef(listId);
 
   useEffect(() => {
-    offlineFetch(`/api/contacts?type=${contactType}`)
+    offlineFetch('/api/contacts')
       .then((r) => r.json())
       .then((d) => setContacts(Array.isArray(d) ? d : []))
       .catch(() => {});
-  }, [contactType]);
+  }, []);
 
   // Fetch locations when a contact is selected and showLocations is enabled
   useEffect(() => {

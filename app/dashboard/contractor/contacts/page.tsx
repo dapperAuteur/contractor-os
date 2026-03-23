@@ -69,6 +69,7 @@ export default function ContactsPage() {
   const [formCountry, setFormCountry] = useState('');
   const [formPhones, setFormPhones] = useState([{ phone: '', label: 'mobile' }]);
   const [formEmails, setFormEmails] = useState([{ email: '', label: 'work' }]);
+  const [formWebsite, setFormWebsite] = useState('');
   const [formNotes, setFormNotes] = useState('');
 
   const fetchContacts = useCallback(async () => {
@@ -102,6 +103,7 @@ export default function ContactsPage() {
     setFormCountry('');
     setFormPhones([{ phone: '', label: 'mobile' }]);
     setFormEmails([{ email: '', label: 'work' }]);
+    setFormWebsite('');
     setFormNotes('');
   };
 
@@ -131,6 +133,7 @@ export default function ContactsPage() {
         home_city: formCity.trim() || null,
         home_state: formState.trim() || null,
         home_country: formCountry.trim() || null,
+        website: formWebsite.trim() || null,
         notes: formNotes.trim() || null,
         phones,
         emails,
@@ -498,6 +501,12 @@ export default function ContactsPage() {
               <label htmlFor="contact-country" className={labelClass}>Country</label>
               <input id="contact-country" type="text" value={formCountry} onChange={(e) => setFormCountry(e.target.value)} className={inputClass} placeholder="Country" />
             </div>
+          </div>
+
+          {/* Website */}
+          <div>
+            <label htmlFor="contact-website" className={labelClass}>Website</label>
+            <input id="contact-website" type="url" value={formWebsite} onChange={(e) => setFormWebsite(e.target.value)} className={inputClass} placeholder="https://example.com" />
           </div>
 
           {/* Notes */}
