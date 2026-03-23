@@ -52,7 +52,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     .from('user_contacts')
     .select(`
       name, contact_type, contact_subtype, job_title, company_name,
-      home_city, home_state, home_country, phone, email, notes,
+      home_city, home_state, home_country, website, phone, email, notes,
       contact_phones(phone, label, is_primary, sort_order),
       contact_emails(email, label, is_primary, sort_order),
       contact_tags(tag_type, value)
@@ -77,6 +77,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       home_city: source.home_city,
       home_state: source.home_state,
       home_country: source.home_country,
+      website: source.website,
       phone: source.phone,
       email: source.email,
       notes: source.notes,

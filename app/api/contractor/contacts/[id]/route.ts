@@ -40,7 +40,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
   const { data: contact, error } = await db
     .from('user_contacts')
     .select(`
-      id, name, contact_type, contact_subtype, email, phone,
+      id, name, contact_type, contact_subtype, email, phone, website,
       job_title, company_name, home_city, home_state, home_country,
       last_worked_with, total_jobs_together, notes, use_count, created_at,
       contact_phones(id, phone, label, is_primary, sort_order),
@@ -84,7 +84,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 
   // Update main contact fields
   const allowedFields = [
-    'name', 'job_title', 'company_name', 'home_city', 'home_state', 'home_country', 'notes',
+    'name', 'job_title', 'company_name', 'home_city', 'home_state', 'home_country', 'website', 'notes',
   ];
   const updates: Record<string, unknown> = {};
   for (const key of allowedFields) {
@@ -158,7 +158,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   const { data: updated } = await db
     .from('user_contacts')
     .select(`
-      id, name, contact_type, contact_subtype, email, phone,
+      id, name, contact_type, contact_subtype, email, phone, website,
       job_title, company_name, home_city, home_state, home_country,
       last_worked_with, total_jobs_together, notes, use_count, created_at,
       contact_phones(id, phone, label, is_primary, sort_order),
