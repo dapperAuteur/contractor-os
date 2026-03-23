@@ -120,18 +120,15 @@ export default function ContactCombobox({
     setSaving(true);
     setAddError('');
     try {
-      const res = await offlineFetch('/api/contacts', {
+      const phones = addPhone.trim() ? [{ phone: addPhone.trim(), label: 'mobile', is_primary: true }] : [];
+      const emails = addEmail.trim() ? [{ email: addEmail.trim(), label: 'work', is_primary: true }] : [];
+      const res = await offlineFetch('/api/contractor/contacts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: addName.trim(),
-          contact_type: contactType,
-          phone: addPhone.trim() || null,
-          email: addEmail.trim() || null,
-        }),
+        body: JSON.stringify({ name: addName.trim(), phones, emails }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error ?? 'Failed'); }
-      const newContact: Contact = await res.json();
+      const { contact: newContact } = await res.json();
       setContacts((prev) => [newContact, ...prev.filter((c) => c.id !== newContact.id)]);
       onChange(newContact.name, newContact.id);
       if (onPhoneChange) onPhoneChange(newContact.phone ?? null);

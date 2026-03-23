@@ -154,6 +154,25 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     }
   }
 
+  // Replace addresses if provided
+  if (Array.isArray(body.addresses)) {
+    await db.from('contact_addresses').delete().eq('contact_id', id);
+    if (body.addresses.length > 0) {
+      const addrRows = body.addresses.map((a: { label?: string; street?: string; city?: string; state?: string; postal_code?: string; country?: string; is_primary?: boolean }, i: number) => ({
+        contact_id: id,
+        label: a.label ?? 'home',
+        street: a.street?.trim() ?? null,
+        city: a.city?.trim() ?? null,
+        state: a.state?.trim() ?? null,
+        postal_code: a.postal_code?.trim() ?? null,
+        country: a.country?.trim() ?? null,
+        is_primary: a.is_primary ?? i === 0,
+        sort_order: i,
+      }));
+      await db.from('contact_addresses').insert(addrRows);
+    }
+  }
+
   // Re-fetch
   const { data: updated } = await db
     .from('user_contacts')
@@ -163,7 +182,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       last_worked_with, total_jobs_together, notes, use_count, created_at,
       contact_phones(id, phone, label, is_primary, sort_order),
       contact_emails(id, email, label, is_primary, sort_order),
-      contact_tags(id, tag_type, value)
+      contact_tags(id, tag_type, value),
+      contact_addresses(id, label, street, city, state, postal_code, country, is_primary, sort_order)
     `)
     .eq('id', id)
     .single();
