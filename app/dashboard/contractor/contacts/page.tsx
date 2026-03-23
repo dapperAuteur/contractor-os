@@ -163,6 +163,7 @@ export default function ContactsPage() {
   }, {});
 
   const inputClass = 'w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
+  const selectClass = 'w-20 shrink-0 rounded-lg border border-slate-300 bg-white px-2 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30';
   const labelClass = 'block text-sm font-medium text-slate-700 mb-1';
 
   return (
@@ -399,7 +400,7 @@ export default function ContactsPage() {
                       next[i] = { ...next[i], label: e.target.value };
                       setFormPhones(next);
                     }}
-                    className={`${inputClass} w-20 shrink-0`}
+                    className={selectClass}
                     aria-label={`Phone ${i + 1} type`}
                   >
                     <option value="mobile">Cell</option>
@@ -454,7 +455,7 @@ export default function ContactsPage() {
                       next[i] = { ...next[i], label: ev.target.value };
                       setFormEmails(next);
                     }}
-                    className={`${inputClass} w-20 shrink-0`}
+                    className={selectClass}
                     aria-label={`Email ${i + 1} type`}
                   >
                     <option value="work">Work</option>
