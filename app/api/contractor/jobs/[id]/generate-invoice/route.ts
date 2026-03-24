@@ -54,117 +54,125 @@ interface Job {
 }
 
 export async function POST(request: NextRequest, ctx: Ctx) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { id } = await ctx.params;
-  const body = await request.json().catch(() => ({}));
-  const { entry_id } = body;
+    const { id } = await ctx.params;
+    const body = await request.json().catch(() => ({}));
+    const { entry_id } = body;
 
-  const db = getDb();
+    const db = getDb();
 
-  // Verify job access (owner, lister, or accepted worker)
-  const result = await getJobWithRole(db, id, user.id);
-  if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
-  const job = result.job;
+    // Verify job access (owner, lister, or accepted worker)
+    const result = await getJobWithRole(db, id, user.id);
+    if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+    const job = result.job;
 
-  // Fetch time entries to invoice
-  let entryQuery = db
-    .from('job_time_entries')
-    .select('*')
-    .eq('job_id', id)
-    .eq('user_id', user.id)
-    .is('invoice_id', null)
-    .order('work_date', { ascending: true });
-
-  if (entry_id) {
-    entryQuery = entryQuery.eq('id', entry_id);
-  }
-
-  const { data: entries, error: entryError } = await entryQuery;
-  if (entryError) return NextResponse.json({ error: entryError.message }, { status: 500 });
-  if (!entries || entries.length === 0) {
-    return NextResponse.json({ error: 'No uninvoiced time entries found' }, { status: 400 });
-  }
-
-  const typedJob = job as unknown as Job;
-  const invoices = [];
-
-  // Generate one invoice per time entry (matches the CBS Sports pattern — one pay stub per work day)
-  for (const entry of entries as TimeEntry[]) {
-    const items = buildLineItems(typedJob, entry);
-    const benefitItems = typedJob.benefits_eligible ? buildBenefitItems(typedJob, entry) : [];
-
-    const lineItemTotal = items.reduce((sum, i) => sum + i.amount, 0);
-    const subtotal = Math.round(lineItemTotal * 100) / 100;
-
-    // Determine invoice number
-    const prefix = typedJob.job_number;
-    const dateStr = entry.work_date.replace(/-/g, '');
-    const invoiceNumber = `${prefix}-${dateStr}`;
-
-    const customFields: Record<string, string> = {};
-    if (typedJob.poc_name) customFields.poc_name = typedJob.poc_name;
-    if (typedJob.location_name) customFields.location = typedJob.location_name;
-    if (typedJob.crew_coordinator_name) customFields.crew_coordinator = typedJob.crew_coordinator_name;
-    customFields.job_reference = typedJob.job_number;
-    customFields.work_date = entry.work_date;
-    if (entry.adjusted_in || entry.time_in) {
-      customFields.time_in = formatTime(entry.adjusted_in || entry.time_in);
-    }
-    if (entry.adjusted_out || entry.time_out) {
-      customFields.time_out = formatTime(entry.adjusted_out || entry.time_out);
-    }
-
-    const { data: invoice, error: invError } = await db
-      .from('invoices')
-      .insert({
-        user_id: user.id,
-        direction: 'receivable',
-        status: 'draft',
-        contact_name: typedJob.client_name,
-        contact_id: typedJob.client_id,
-        subtotal,
-        tax_amount: 0,
-        total: subtotal,
-        invoice_date: entry.work_date,
-        due_date: typedJob.est_pay_date ?? null,
-        invoice_number: invoiceNumber,
-        brand_id: typedJob.brand_id ?? null,
-        job_id: typedJob.id,
-        custom_fields: customFields,
-        notes: typedJob.event_name
-          ? `${typedJob.event_name} — ${entry.work_date}`
-          : `${typedJob.job_number} — ${entry.work_date}`,
-      })
-      .select()
-      .single();
-
-    if (invError) return NextResponse.json({ error: invError.message }, { status: 500 });
-
-    // Insert all line items (earnings + benefits)
-    const allItems = [...items, ...benefitItems].map((item, idx) => ({
-      ...item,
-      invoice_id: invoice.id,
-      sort_order: idx,
-    }));
-
-    if (allItems.length > 0) {
-      const { error: itemError } = await db.from('invoice_items').insert(allItems);
-      if (itemError) return NextResponse.json({ error: itemError.message }, { status: 500 });
-    }
-
-    // Link time entry to invoice
-    await db
+    // Fetch time entries to invoice
+    let entryQuery = db
       .from('job_time_entries')
-      .update({ invoice_id: invoice.id })
-      .eq('id', entry.id);
+      .select('*')
+      .eq('job_id', id)
+      .eq('user_id', user.id)
+      .is('invoice_id', null)
+      .order('work_date', { ascending: true });
 
-    invoices.push(invoice);
+    if (entry_id) {
+      entryQuery = entryQuery.eq('id', entry_id);
+    }
+
+    const { data: entries, error: entryError } = await entryQuery;
+    if (entryError) return NextResponse.json({ error: entryError.message }, { status: 500 });
+    if (!entries || entries.length === 0) {
+      return NextResponse.json({ error: 'No uninvoiced time entries found' }, { status: 400 });
+    }
+
+    const typedJob = job as unknown as Job;
+    const invoices = [];
+
+    // Generate one invoice per time entry (matches the CBS Sports pattern — one pay stub per work day)
+    for (const entry of entries as TimeEntry[]) {
+      const items = buildLineItems(typedJob, entry);
+      const benefitItems = typedJob.benefits_eligible ? buildBenefitItems(typedJob, entry) : [];
+
+      const lineItemTotal = items.reduce((sum, i) => sum + i.amount, 0);
+      const subtotal = Math.round(lineItemTotal * 100) / 100;
+
+      // Determine invoice number
+      const prefix = typedJob.job_number;
+      const dateStr = entry.work_date.replace(/-/g, '');
+      const invoiceNumber = `${prefix}-${dateStr}`;
+
+      const customFields: Record<string, string> = {};
+      if (typedJob.poc_name) customFields.poc_name = typedJob.poc_name;
+      if (typedJob.location_name) customFields.location = typedJob.location_name;
+      if (typedJob.crew_coordinator_name) customFields.crew_coordinator = typedJob.crew_coordinator_name;
+      customFields.job_reference = typedJob.job_number;
+      customFields.work_date = entry.work_date;
+      if (entry.adjusted_in || entry.time_in) {
+        customFields.time_in = formatTime(entry.adjusted_in || entry.time_in);
+      }
+      if (entry.adjusted_out || entry.time_out) {
+        customFields.time_out = formatTime(entry.adjusted_out || entry.time_out);
+      }
+
+      const { data: invoice, error: invError } = await db
+        .from('invoices')
+        .insert({
+          user_id: user.id,
+          direction: 'receivable',
+          status: 'draft',
+          contact_name: typedJob.client_name,
+          contact_id: typedJob.client_id,
+          subtotal,
+          tax_amount: 0,
+          total: subtotal,
+          invoice_date: entry.work_date,
+          due_date: typedJob.est_pay_date ?? null,
+          invoice_number: invoiceNumber,
+          brand_id: typedJob.brand_id ?? null,
+          job_id: typedJob.id,
+          custom_fields: customFields,
+          notes: typedJob.event_name
+            ? `${typedJob.event_name} — ${entry.work_date}`
+            : `${typedJob.job_number} — ${entry.work_date}`,
+        })
+        .select()
+        .single();
+
+      if (invError) return NextResponse.json({ error: invError.message, step: 'invoice_insert' }, { status: 500 });
+
+      // Insert all line items (earnings + benefits)
+      const allItems = [...items, ...benefitItems].map((item, idx) => ({
+        ...item,
+        invoice_id: invoice.id,
+        sort_order: idx,
+      }));
+
+      if (allItems.length > 0) {
+        const { error: itemError } = await db.from('invoice_items').insert(allItems);
+        if (itemError) return NextResponse.json({ error: itemError.message, step: 'items_insert' }, { status: 500 });
+      }
+
+      // Link time entry to invoice
+      await db
+        .from('job_time_entries')
+        .update({ invoice_id: invoice.id })
+        .eq('id', entry.id);
+
+      invoices.push(invoice);
+    }
+
+    return NextResponse.json({ invoices, count: invoices.length }, { status: 201 });
+  } catch (err) {
+    console.error('[generate-invoice] unhandled error:', err);
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : 'Unknown error', step: 'unhandled' },
+      { status: 500 },
+    );
   }
-
-  return NextResponse.json({ invoices, count: invoices.length }, { status: 201 });
 }
 
 function buildLineItems(job: Job, entry: TimeEntry) {
