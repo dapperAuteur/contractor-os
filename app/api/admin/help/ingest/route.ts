@@ -69,12 +69,16 @@ export async function POST(_req: NextRequest) {
 
   const db = getDb();
 
-  // Clear existing articles before re-ingesting
-  await db.from('help_articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  // Only manage contractor-app articles — never touch centenarian articles
+  await db.from('help_articles').delete().eq('app', 'contractor');
+
+  const contractorArticles = HELP_ARTICLES.filter((a) =>
+    ['contractor', 'lister', 'all', 'admin'].includes(a.role),
+  );
 
   const results: { title: string; ok: boolean; error?: string }[] = [];
 
-  for (const article of HELP_ARTICLES) {
+  for (const article of contractorArticles) {
     const text = `${article.title}\n\n${article.content}`;
     try {
       const embedding = await getEmbedding(text);
