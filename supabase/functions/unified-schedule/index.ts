@@ -63,7 +63,7 @@ serve(async (req) => {
     const to = url.searchParams.get('to');
     if (!from || !to) return jsonResponse({ error: 'from and to params required' }, 400);
 
-    const [tasksRes, ownJobsRes, assignedJobsRes, invoicesRes] = await Promise.all([
+    const [tasksRes, ownJobsRes, assignedJobsRes, invoicesRes, paymentsRes] = await Promise.all([
       // CentOS tasks
       supabase
         .from('tasks')
@@ -100,6 +100,15 @@ serve(async (req) => {
         .gte('due_date', from)
         .lte('due_date', to)
         .order('due_date'),
+
+      // Expected payments (from the VIEW)
+      supabase
+        .from('expected_payments')
+        .select('source_type, source_id, expected_date, label, reference_number, expected_amount, status')
+        .eq('user_id', userId)
+        .gte('expected_date', from)
+        .lte('expected_date', to)
+        .order('expected_date'),
     ]);
 
     // Merge into unified feed
@@ -174,6 +183,19 @@ serve(async (req) => {
         amount_paid: inv.amount_paid,
         status: inv.status,
         job_id: inv.job_id,
+      });
+    }
+
+    for (const p of paymentsRes.data ?? []) {
+      items.push({
+        type: 'expected_payment',
+        id: p.source_id,
+        date: p.expected_date,
+        title: `Expected: $${p.expected_amount} — ${p.label}`,
+        reference_number: p.reference_number,
+        expected_amount: p.expected_amount,
+        source_type: p.source_type,
+        status: p.status,
       });
     }
 
@@ -254,7 +276,7 @@ serve(async (req) => {
     futureDate.setDate(futureDate.getDate() + 90);
     const to = futureDate.toISOString().split('T')[0];
 
-    const [jobsRes, tasksRes, invoicesRes] = await Promise.all([
+    const [jobsRes, tasksRes, invoicesRes, icsPaymentsRes] = await Promise.all([
       supabase
         .from('contractor_jobs')
         .select('id, client_name, event_name, location_name, status, start_date, end_date, pay_rate, rate_type, notes')
@@ -280,6 +302,14 @@ serve(async (req) => {
         .in('status', ['sent', 'overdue'])
         .gte('due_date', from)
         .lte('due_date', to),
+
+      // Expected payments for .ics
+      supabase
+        .from('expected_payments')
+        .select('source_type, source_id, expected_date, label, reference_number, expected_amount, status')
+        .eq('user_id', userId)
+        .gte('expected_date', from)
+        .lte('expected_date', to),
     ]);
 
     const lines: string[] = [
@@ -336,6 +366,24 @@ serve(async (req) => {
       lines.push('TRIGGER:-P1D');
       lines.push('ACTION:DISPLAY');
       lines.push(`DESCRIPTION:Invoice ${inv.invoice_number ?? ''} due tomorrow`);
+      lines.push('END:VALARM');
+      lines.push('END:VEVENT');
+    }
+
+    // Expected payments → VEVENT
+    for (const p of icsPaymentsRes.data ?? []) {
+      const dtStart = (p.expected_date ?? '').replace(/-/g, '');
+      lines.push('BEGIN:VEVENT');
+      lines.push(`UID:payment-${p.source_type}-${p.source_id}@work.witus`);
+      lines.push(`DTSTART;VALUE=DATE:${dtStart}`);
+      lines.push(`SUMMARY:Expected Payment: $${p.expected_amount} — ${escapeIcs(p.label)}`);
+      const pDesc = [`Source: ${p.source_type === 'job' ? 'Job' : 'Invoice'} ${p.reference_number ?? ''}`, `Status: ${p.status}`];
+      lines.push(`DESCRIPTION:${escapeIcs(pDesc.join('\\n'))}`);
+      // Alarm 1 day before — check your account
+      lines.push('BEGIN:VALARM');
+      lines.push('TRIGGER:-P1D');
+      lines.push('ACTION:DISPLAY');
+      lines.push(`DESCRIPTION:Expected payment of $${p.expected_amount} from ${escapeIcs(p.label)} tomorrow`);
       lines.push('END:VALARM');
       lines.push('END:VEVENT');
     }
