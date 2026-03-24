@@ -51,12 +51,19 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
     .from('job_notes')
     .update(updates)
     .eq('id', noteId)
-    .select('*, profiles:user_id(display_name, username)')
+    .select('*')
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json(updated);
+  // Attach profile info
+  const { data: profile } = await db
+    .from('profiles')
+    .select('display_name, username')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  return NextResponse.json({ ...updated, profiles: profile });
 }
 
 export async function DELETE(_request: NextRequest, ctx: Ctx) {
