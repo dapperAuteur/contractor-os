@@ -48,17 +48,24 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 |-------|-----------|-------|
 | `equipment_media` | `119_equipment_media.sql` | Multi-media gallery for equipment items. Used by both apps. |
 
+## Views (cross-app)
+
+| View | Migration | Notes |
+|------|-----------|-------|
+| `expected_payments` | `153_expected_payments_view.sql` | Unions expected incoming money from `contractor_jobs.est_pay_date` (completed/invoiced jobs) and `invoices.due_date` (sent/overdue receivables). Returns `user_id, source_type, source_id, expected_date, label, reference_number, expected_amount, status, start_date, end_date, brand_id, created_at`. Both apps can `SELECT * FROM expected_payments WHERE user_id = ?`. |
+
 ## Triggers (cross-app)
 
 | Trigger | Table | Migration | Notes |
 |---------|-------|-----------|-------|
 | `trg_invoice_due_to_task` | `invoices` | `148_invoice_task_sync_trigger.sql` | When a receivable invoice is sent, creates a CentOS planner task on the due date. Marks task completed on payment, archives on cancellation. Auto-creates "Work.WitUS Sync > Finances > Invoice Due Dates" milestone hierarchy. |
+| `trg_pay_date_to_task` | `contractor_jobs` | `154_pay_date_task_sync_trigger.sql` | When a completed/invoiced job has `est_pay_date`, creates a CentOS planner task on that date. Marks task completed when job status → paid, archives on cancellation. Uses `source_type = 'expected_payment'`. Auto-creates "Work.WitUS Sync > Finances > Expected Payments" milestone. |
 
 ## Edge Functions (shared)
 
 | Function | Location | Notes |
 |----------|----------|-------|
-| `unified-schedule` | `supabase/functions/unified-schedule/` | Merges CentOS tasks + Work.WitUS jobs + invoice due dates into a single feed. Supports `feed`, `availability`, and `ics` actions. Both apps can call this. |
+| `unified-schedule` | `supabase/functions/unified-schedule/` | Merges CentOS tasks + Work.WitUS jobs + invoice due dates + expected payments into a single feed. Supports `feed`, `availability`, and `ics` actions. The `feed` and `ics` actions include `expected_payment` items from the `expected_payments` VIEW. Both apps can call this. |
 
 ## Shared columns (used by both)
 
