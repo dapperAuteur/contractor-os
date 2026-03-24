@@ -63,6 +63,7 @@ export async function syncHelpArticles(): Promise<{ succeeded: number; failed: n
         title: article.title,
         content: article.content,
         role: article.role,
+        app: 'contractor',
         embedding: `[${embedding.join(',')}]`,
       });
       if (error) throw new Error(error.message);
