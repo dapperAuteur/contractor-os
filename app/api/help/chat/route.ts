@@ -33,7 +33,10 @@ async function getEmbedding(text: string): Promise<number[]> {
       outputDimensionality: 768,
     }),
   });
-  if (!res.ok) throw new Error(`Embedding error: ${await res.text()}`);
+  if (!res.ok) {
+    if (res.status === 429) throw new Error('RATE_LIMITED');
+    throw new Error(`Embedding failed (${res.status})`);
+  }
   const data = await res.json();
   return data.embedding?.values ?? [];
 }
@@ -79,7 +82,14 @@ export async function POST(request: NextRequest) {
   try {
     queryEmbedding = await getEmbedding(question.trim());
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : 'Embedding failed' }, { status: 500 });
+    const msg = e instanceof Error ? e.message : '';
+    if (msg === 'RATE_LIMITED') {
+      return NextResponse.json(
+        { error: 'The help assistant is busy right now. Please wait a moment and try again.' },
+        { status: 503 },
+      );
+    }
+    return NextResponse.json({ error: 'Could not process your question. Please try again.' }, { status: 500 });
   }
 
   // 2. Retrieve top-5 matching articles filtered to contractor app

@@ -3,10 +3,10 @@
 // components/ui/FloatingActionsMenu.tsx
 // Speed-dial FAB that consolidates Help (RAG chat) + Feedback into one corner button.
 // Replaces the standalone feedback bubble in dashboard/layout.tsx and adds Help to academy pages.
-// Opens upward: main button (Plus) → Help (HelpCircle) → Feedback (MessageCircle)
+// Opens upward: main button (LifeBuoy) → Help (HelpCircle) → Feedback (MessageCircle)
 
 import { useState } from 'react';
-import { Plus, X, HelpCircle, MessageCircle } from 'lucide-react';
+import { LifeBuoy, X, HelpCircle, MessageCircle } from 'lucide-react';
 import FeedbackModal from '@/components/FeedbackModal';
 import HelpDrawer from '@/components/ui/HelpDrawer';
 
@@ -83,7 +83,7 @@ export default function FloatingActionsMenu({ userRole, isAdmin }: Props) {
         >
           {open
             ? <X className="w-5 h-5" />
-            : <Plus className="w-5 h-5" />
+            : <LifeBuoy className="w-5 h-5" />
           }
         </button>
       </div>
