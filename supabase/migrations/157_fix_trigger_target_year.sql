@@ -1,8 +1,8 @@
--- Migration 156: Fix trigger functions that insert into goals without target_year
--- Both sync_invoice_due_to_task and sync_pay_date_to_task were missing the
--- required NOT NULL target_year column when creating the "Finances" goal,
--- causing invoice generation and pay-date syncs to fail with:
---   "null value in column 'target_year' violates not-null constraint"
+-- Migration 157: Fix trigger functions missing NOT NULL columns
+-- Both sync_invoice_due_to_task and sync_pay_date_to_task were missing:
+--   - roadmaps: start_date, end_date (both NOT NULL, no default)
+--   - goals: target_year (NOT NULL, no default)
+-- This caused invoice generation to fail with constraint violations.
 -- Copy this migration to both repos (contractor-os + centenarian-os)
 
 -- ═══════════════════════════════════════════════════════════════════
@@ -41,8 +41,8 @@ BEGIN
     LIMIT 1;
 
     IF v_roadmap_id IS NULL THEN
-      INSERT INTO roadmaps (user_id, title, status)
-      VALUES (NEW.user_id, 'Work.WitUS Sync', 'active')
+      INSERT INTO roadmaps (user_id, title, status, start_date, end_date)
+      VALUES (NEW.user_id, 'Work.WitUS Sync', 'active', CURRENT_DATE, (CURRENT_DATE + INTERVAL '1 year')::date)
       RETURNING id INTO v_roadmap_id;
     END IF;
 
@@ -182,8 +182,8 @@ BEGIN
     LIMIT 1;
 
     IF v_roadmap_id IS NULL THEN
-      INSERT INTO roadmaps (user_id, title, status)
-      VALUES (NEW.user_id, 'Work.WitUS Sync', 'active')
+      INSERT INTO roadmaps (user_id, title, status, start_date, end_date)
+      VALUES (NEW.user_id, 'Work.WitUS Sync', 'active', CURRENT_DATE, (CURRENT_DATE + INTERVAL '1 year')::date)
       RETURNING id INTO v_roadmap_id;
     END IF;
 
