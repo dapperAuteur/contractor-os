@@ -59,8 +59,8 @@ BEGIN
     END IF;
 
     -- Create "Invoice Due Dates" milestone
-    INSERT INTO milestones (goal_id, title, status)
-    VALUES (v_goal_id, 'Invoice Due Dates', 'in_progress')
+    INSERT INTO milestones (goal_id, title, status, target_date)
+    VALUES (v_goal_id, 'Invoice Due Dates', 'in_progress', (CURRENT_DATE + INTERVAL '1 year')::date)
     RETURNING id INTO v_milestone_id;
   END IF;
 
@@ -199,8 +199,8 @@ BEGIN
       RETURNING id INTO v_goal_id;
     END IF;
 
-    INSERT INTO milestones (goal_id, title, status)
-    VALUES (v_goal_id, 'Expected Payments', 'in_progress')
+    INSERT INTO milestones (goal_id, title, status, target_date)
+    VALUES (v_goal_id, 'Expected Payments', 'in_progress', (CURRENT_DATE + INTERVAL '1 year')::date)
     RETURNING id INTO v_milestone_id;
   END IF;
 
