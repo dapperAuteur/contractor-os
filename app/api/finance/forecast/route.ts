@@ -227,7 +227,7 @@ export async function GET(request: NextRequest) {
   });
 
   // ── Timeline of individual confirmed items ──────────────────────────────
-  const timeline = confirmed.map((p) => ({
+  const timeline: { date: string; type: 'confirmed' | 'unscheduled'; source_type: string; label: string; reference_number: string | null; amount: number }[] = confirmed.map((p) => ({
     date: p.expected_date,
     type: 'confirmed' as const,
     source_type: p.source_type,
