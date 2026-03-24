@@ -30,14 +30,32 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   // Fetch own notes (public + private) and other users' public notes
   const { data: notes, error } = await db
     .from('job_notes')
-    .select('*, profiles:user_id(display_name, username)')
+    .select('*')
     .eq('job_id', id)
     .or(`user_id.eq.${user.id},is_public.eq.true`)
     .order('created_at', { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ notes: notes ?? [] });
+  // Attach profile info (separate query avoids fragile PostgREST embed through auth.users)
+  const userIds = [...new Set((notes ?? []).map((n: { user_id: string }) => n.user_id))];
+  const profileMap: Record<string, { display_name: string | null; username: string }> = {};
+  if (userIds.length > 0) {
+    const { data: profiles } = await db
+      .from('profiles')
+      .select('id, display_name, username')
+      .in('id', userIds);
+    for (const p of profiles ?? []) {
+      profileMap[p.id] = { display_name: p.display_name, username: p.username };
+    }
+  }
+
+  const notesWithProfiles = (notes ?? []).map((n: { user_id: string }) => ({
+    ...n,
+    profiles: profileMap[n.user_id] ?? null,
+  }));
+
+  return NextResponse.json({ notes: notesWithProfiles });
 }
 
 export async function POST(request: NextRequest, ctx: Ctx) {
@@ -66,10 +84,17 @@ export async function POST(request: NextRequest, ctx: Ctx) {
       content: content.trim(),
       is_public: false,
     })
-    .select('*, profiles:user_id(display_name, username)')
+    .select('*')
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json(note, { status: 201 });
+  // Attach profile info
+  const { data: profile } = await db
+    .from('profiles')
+    .select('display_name, username')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  return NextResponse.json({ ...note, profiles: profile }, { status: 201 });
 }
