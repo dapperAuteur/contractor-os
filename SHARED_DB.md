@@ -73,3 +73,5 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 - `profiles.scan_auto_save_images` — scan preference
 - `profiles.likes_public` — social privacy setting
 - `profiles.show_done_counts` — activity count visibility
+- `profiles.fiscal_year_start_month` — fiscal year start month (INT, 1-12, default 1). Migration `155_fiscal_calendar.sql`.
+- `profiles.fiscal_year_start_day` — fiscal year start day (INT, 1-28, default 1). Migration `155_fiscal_calendar.sql`.
