@@ -13,6 +13,9 @@ import {
 } from 'recharts';
 import ContactAutocomplete from '@/components/ui/ContactAutocomplete';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import ExpectedPaymentsSection from '@/components/finance/ExpectedPaymentsSection';
+import IncomeForecastSection from '@/components/finance/IncomeForecastSection';
+// fiscal helpers used by child components; dashboard reads fiscal from summary API response
 import CategorySelect from '@/components/finance/CategorySelect';
 import { useTrackPageView } from '@/lib/hooks/useTrackPageView';
 import TransferModal from '@/components/finance/TransferModal';
@@ -61,12 +64,33 @@ interface ProjectionToggles {
 const PROJECTIONS_KEY = 'witus_work_finance_projections';
 const DEFAULT_TOGGLES: ProjectionToggles = { showCard: true, showTimeline: true, showChart: true };
 
+interface ExpectedPaymentItem {
+  total: number;
+  count: number;
+  items: { source_type: string; expected_date: string; label: string; reference_number: string; expected_amount: number }[];
+}
+
 interface Summary {
   currentMonth: { expenses: number; income: number; net: number };
   categoryBreakdown: CategoryBreakdown[];
   monthlyTrend: MonthlyTrend[];
-  projections?: Projections | null;
+  projections?: (Projections & { expectedPayments?: ExpectedPaymentItem }) | null;
+  fiscal?: { label: string; isCalendarYear: boolean; startMonth: number; startDay: number };
 }
+
+interface ExpectedPayment {
+  source_type: 'job' | 'invoice';
+  source_id: string;
+  expected_date: string;
+  label: string;
+  reference_number: string | null;
+  expected_amount: number;
+  status: string;
+  brand_id: string | null;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ForecastData = any;
 
 interface Category {
   id: string;
@@ -100,6 +124,11 @@ export default function FinanceDashboardPage() {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [brands, setBrands] = useState<{ id: string; name: string; color: string }[]>([]);
   const [reminders, setReminders] = useState<{ overdue_count: number; due_soon_count: number; invoices: { id: string; direction: string; contact_name: string; balance_due: number; due_date: string; urgency: string }[]; accounts: { id: string; name: string; due_day: number; urgency: string }[] }>({ overdue_count: 0, due_soon_count: 0, invoices: [], accounts: [] });
+  const [expectedPayments, setExpectedPayments] = useState<ExpectedPayment[]>([]);
+  const [expectedTotal, setExpectedTotal] = useState(0);
+  const [forecast, setForecast] = useState<ForecastData | null>(null);
+  const [forecastPeriod, setForecastPeriod] = useState(90);
+  const [forecastLoading, setForecastLoading] = useState(false);
   const [loading, setLoading] = useState(true);
 
   // Add transaction modal
@@ -139,12 +168,14 @@ export default function FinanceDashboardPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [sumRes, catRes, acctRes, brandsRes, remRes] = await Promise.all([
+      const [sumRes, catRes, acctRes, brandsRes, remRes, epRes, fcRes] = await Promise.all([
         offlineFetch('/api/finance/summary?months=6'),
         offlineFetch('/api/finance/categories'),
         offlineFetch('/api/finance/accounts'),
         offlineFetch('/api/brands'),
         offlineFetch('/api/finance/reminders'),
+        offlineFetch('/api/finance/expected-payments?range=90'),
+        offlineFetch(`/api/finance/forecast?days=${forecastPeriod}`),
       ]);
       if (sumRes.ok) setSummary(await sumRes.json());
       if (catRes.ok) {
@@ -157,9 +188,16 @@ export default function FinanceDashboardPage() {
         setBrands(Array.isArray(d) ? d.filter((b: { is_active: boolean }) => b.is_active) : []);
       }
       if (remRes.ok) setReminders(await remRes.json());
+      if (epRes.ok) {
+        const ep = await epRes.json();
+        setExpectedPayments(ep.payments ?? []);
+        setExpectedTotal(ep.totals?.total_amount ?? 0);
+      }
+      if (fcRes.ok) setForecast(await fcRes.json());
     } finally {
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -248,6 +286,17 @@ export default function FinanceDashboardPage() {
     });
   }, [summary, projectionToggles.showChart]);
 
+  const handleForecastPeriodChange = useCallback(async (days: number) => {
+    setForecastPeriod(days);
+    setForecastLoading(true);
+    try {
+      const res = await offlineFetch(`/api/finance/forecast?days=${days}`);
+      if (res.ok) setForecast(await res.json());
+    } finally {
+      setForecastLoading(false);
+    }
+  }, []);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -268,6 +317,11 @@ export default function FinanceDashboardPage() {
           <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-2">
             <DollarSign className="w-7 h-7 text-amber-600" />
             Finance Dashboard
+            {summary?.fiscal && !summary.fiscal.isCalendarYear && (
+              <span className="text-xs bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full font-medium">
+                {summary.fiscal.label}
+              </span>
+            )}
           </h1>
           <p className="text-slate-500 mt-1">Track spending, budgets, and income</p>
         </div>
@@ -512,6 +566,21 @@ export default function FinanceDashboardPage() {
           )}
         </>
       )}
+
+      {/* Expected Payments */}
+      <ExpectedPaymentsSection
+        payments={expectedPayments}
+        totalAmount={expectedTotal}
+        loading={loading}
+      />
+
+      {/* Income Forecast */}
+      <IncomeForecastSection
+        forecast={forecast}
+        period={forecastPeriod}
+        onPeriodChange={handleForecastPeriodChange}
+        loading={forecastLoading}
+      />
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

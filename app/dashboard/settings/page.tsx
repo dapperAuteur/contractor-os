@@ -5,7 +5,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { NAV_GROUPS } from '@/components/nav/NavConfig';
-import { Settings, Check, Loader2, Sparkles, RotateCcw, Clock, Bell } from 'lucide-react';
+import { Settings, Check, Loader2, Sparkles, RotateCcw, Clock, Bell, Calendar } from 'lucide-react';
+import { getFiscalYear, isCalendarYear, type FiscalConfig } from '@/lib/fiscal';
 import { subscribeToPush, unsubscribeFromPush, isPushSubscribed } from '@/lib/push/subscribe';
 import MfaSetupSection from '@/components/settings/MfaSetupSection';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
@@ -54,6 +55,10 @@ export default function DashboardSettingsPage() {
   const [scanAutoSaveSaving, setScanAutoSaveSaving] = useState(false);
   const [clockFormat, setClockFormat] = useState<'12h' | '24h'>('12h');
   const [clockSaving, setClockSaving] = useState(false);
+  const [fiscalMonth, setFiscalMonth] = useState(1);
+  const [fiscalDay, setFiscalDay] = useState(1);
+  const [fiscalSaving, setFiscalSaving] = useState(false);
+  const [fiscalSaved, setFiscalSaved] = useState(false);
   const [likesPublic, setLikesPublic] = useState(false);
   const [showDoneCounts, setShowDoneCounts] = useState(false);
   const [socialSaving, setSocialSaving] = useState(false);
@@ -88,6 +93,8 @@ export default function DashboardSettingsPage() {
         setSelected(home);
         setScanAutoSave(d.scan_auto_save_images ?? false);
         setClockFormat(d.clock_format ?? '12h');
+        setFiscalMonth(d.fiscal_year_start_month ?? 1);
+        setFiscalDay(d.fiscal_year_start_day ?? 1);
         setLikesPublic(d.likes_public ?? false);
         setShowDoneCounts(d.show_done_counts ?? false);
         setLoading(false);
@@ -273,6 +280,127 @@ export default function DashboardSettingsPage() {
               {fmt === '12h' ? '12-hour (2:30 PM)' : '24-hour (14:30)'}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* Fiscal Year */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <Calendar className="w-5 h-5 text-amber-400" aria-hidden="true" />
+          <h2 className="text-base font-semibold text-slate-900">Fiscal Year</h2>
+        </div>
+        <p className="text-sm text-slate-500 mb-5">
+          Set when your fiscal year begins. This aligns financial reports, forecasts, and quarterly breakdowns.
+        </p>
+
+        <div className="flex flex-wrap gap-2 mb-4">
+          {([
+            { label: 'Calendar Year', month: 1, day: 1 },
+            { label: 'US Federal', month: 10, day: 1 },
+            { label: 'UK Tax Year', month: 4, day: 6 },
+            { label: 'Australian', month: 7, day: 1 },
+          ] as const).map((preset) => {
+            const isActive = fiscalMonth === preset.month && fiscalDay === preset.day;
+            return (
+              <button
+                key={preset.label}
+                onClick={() => {
+                  setFiscalMonth(preset.month);
+                  setFiscalDay(preset.day);
+                  setFiscalSaved(false);
+                }}
+                className={`px-4 py-2.5 rounded-lg text-sm font-medium transition min-h-11 ${
+                  isActive
+                    ? 'bg-amber-600 text-white'
+                    : 'border border-slate-200 bg-slate-100 text-slate-700 hover:border-amber-700'
+                }`}
+              >
+                {preset.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center gap-3 mb-4">
+          <div>
+            <label htmlFor="fiscal-month" className="block text-xs font-medium text-slate-500 mb-1">Month</label>
+            <select
+              id="fiscal-month"
+              value={fiscalMonth}
+              onChange={(e) => { setFiscalMonth(Number(e.target.value)); setFiscalSaved(false); }}
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+            >
+              {Array.from({ length: 12 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {new Date(2026, i).toLocaleDateString('en-US', { month: 'long' })}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="fiscal-day" className="block text-xs font-medium text-slate-500 mb-1">Day</label>
+            <select
+              id="fiscal-day"
+              value={fiscalDay}
+              onChange={(e) => { setFiscalDay(Number(e.target.value)); setFiscalSaved(false); }}
+              className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+            >
+              {Array.from({ length: 28 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>{i + 1}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {(() => {
+          const config: FiscalConfig = { startMonth: fiscalMonth, startDay: fiscalDay };
+          const fy = getFiscalYear(new Date().toISOString().split('T')[0], config);
+          const isDefault = isCalendarYear(config);
+          return (
+            <p className="text-sm text-slate-500 mb-4">
+              Your fiscal year: <span className="font-medium text-slate-800">{fy.label}</span>
+              {!isDefault && (
+                <span className="text-xs text-slate-400 ml-1">
+                  ({new Date(fy.start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – {new Date(fy.end + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})
+                </span>
+              )}
+            </p>
+          );
+        })()}
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={async () => {
+              setFiscalSaving(true);
+              try {
+                const res = await offlineFetch('/api/user/preferences', {
+                  method: 'PATCH',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    fiscal_year_start_month: fiscalMonth,
+                    fiscal_year_start_day: fiscalDay,
+                  }),
+                });
+                if (res.ok) {
+                  setFiscalSaved(true);
+                  setTimeout(() => setFiscalSaved(false), 5000);
+                }
+              } finally {
+                setFiscalSaving(false);
+              }
+            }}
+            disabled={fiscalSaving}
+            className="px-6 py-2.5 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-500 transition disabled:opacity-50 flex items-center gap-2 min-h-11"
+          >
+            {fiscalSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+            {fiscalSaving ? 'Saving…' : 'Save Fiscal Year'}
+          </button>
+          {fiscalSaved && (
+            <span className="text-sm text-slate-500">
+              <Check className="w-4 h-4 inline mr-1 text-green-500" />
+              Saved. Financial reports now use your new fiscal year.
+            </span>
+          )}
         </div>
       </div>
 

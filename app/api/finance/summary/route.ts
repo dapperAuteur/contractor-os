@@ -3,6 +3,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getFiscalYear, isCalendarYear, type FiscalConfig } from '@/lib/fiscal';
+
+function getDb() {
+  return createServiceClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  );
+}
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
@@ -100,12 +109,37 @@ export async function GET(request: NextRequest) {
       : null,
   }));
 
-  // ── Projections from unpaid invoices ──────────────────────────────────────
-  const { data: unpaidInvoices } = await supabase
-    .from('invoices')
-    .select('id, direction, status, total, amount_paid, due_date')
-    .eq('user_id', user.id)
-    .in('status', ['sent', 'overdue']);
+  // ── Projections from unpaid invoices + expected payments ─────────────────
+  const db = getDb();
+
+  const [unpaidInvoicesRes, expectedJobPaymentsRes, profileRes] = await Promise.all([
+    supabase
+      .from('invoices')
+      .select('id, direction, status, total, amount_paid, due_date')
+      .eq('user_id', user.id)
+      .in('status', ['sent', 'overdue']),
+    // Job-sourced expected payments only (invoices already covered above)
+    db
+      .from('expected_payments')
+      .select('source_type, source_id, expected_date, label, reference_number, expected_amount, status')
+      .eq('user_id', user.id)
+      .eq('source_type', 'job')
+      .gte('expected_date', currentMonthStart),
+    db
+      .from('profiles')
+      .select('fiscal_year_start_month, fiscal_year_start_day')
+      .eq('id', user.id)
+      .maybeSingle(),
+  ]);
+
+  const unpaidInvoices = unpaidInvoicesRes.data;
+  const expectedJobPayments = expectedJobPaymentsRes.data ?? [];
+  const fiscalConfig: FiscalConfig = {
+    startMonth: profileRes.data?.fiscal_year_start_month ?? 1,
+    startDay: profileRes.data?.fiscal_year_start_day ?? 1,
+  };
+  const todayStr = now.toISOString().split('T')[0];
+  const fy = getFiscalYear(todayStr, fiscalConfig);
 
   let projReceivable = 0;
   let projPayable = 0;
@@ -142,7 +176,21 @@ export async function GET(request: NextRequest) {
       ...data,
     }));
 
-  const projections = (receivableCount > 0 || payableCount > 0) ? {
+  // Expected payments from jobs (not invoices — those are already in projections)
+  let expectedTotal = 0;
+  const expectedItems = expectedJobPayments.map((p) => {
+    const amt = Number(p.expected_amount) || 0;
+    expectedTotal += amt;
+    return {
+      source_type: p.source_type,
+      expected_date: p.expected_date,
+      label: p.label,
+      reference_number: p.reference_number,
+      expected_amount: amt,
+    };
+  });
+
+  const projections = (receivableCount > 0 || payableCount > 0 || expectedItems.length > 0) ? {
     currentMonth: {
       receivable: Math.round(projReceivable * 100) / 100,
       payable: Math.round(projPayable * 100) / 100,
@@ -150,6 +198,11 @@ export async function GET(request: NextRequest) {
     },
     invoiceCount: { receivable: receivableCount, payable: payableCount },
     monthlyTimeline,
+    expectedPayments: {
+      total: Math.round(expectedTotal * 100) / 100,
+      count: expectedItems.length,
+      items: expectedItems,
+    },
   } : null;
 
   return NextResponse.json({
@@ -161,5 +214,11 @@ export async function GET(request: NextRequest) {
     categoryBreakdown,
     monthlyTrend,
     projections,
+    fiscal: {
+      label: fy.label,
+      isCalendarYear: isCalendarYear(fiscalConfig),
+      startMonth: fiscalConfig.startMonth,
+      startDay: fiscalConfig.startDay,
+    },
   });
 }
