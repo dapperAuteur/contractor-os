@@ -75,24 +75,24 @@ export default function TravelImportPage() {
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/travel" className="text-gray-400 hover:text-gray-600 transition">
+        <Link href="/dashboard/travel" className="text-slate-400 hover:text-slate-600 transition">
           <ChevronLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Import Data</h1>
-          <p className="text-sm text-gray-500">Bulk-load Garmin activities and historical fuel photos</p>
+          <h1 className="text-2xl font-bold text-slate-900">Import Data</h1>
+          <p className="text-sm text-slate-500">Bulk-load Garmin activities and historical fuel photos</p>
         </div>
       </div>
 
       {/* ── Garmin CSV Import ─────────────────────────────────────── */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center shrink-0">
             <Upload className="w-5 h-5 text-blue-600" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-gray-900">Garmin Activities CSV</h2>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h2 className="text-base font-semibold text-slate-900">Garmin Activities CSV</h2>
+            <p className="text-sm text-slate-500 mt-0.5">
               Import your Garmin activity history. Cycling, walking, running, and hiking will be
               added to your trip log. Pure fitness activities (strength, yoga, HIIT, etc.) are skipped.
               Duplicates are automatically detected.
@@ -100,19 +100,19 @@ export default function TravelImportPage() {
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-500 space-y-1">
-          <p className="font-medium text-gray-700">How to export from Garmin Connect:</p>
+        <div className="bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
+          <p className="font-medium text-slate-700">How to export from Garmin Connect:</p>
           <ol className="list-decimal list-inside space-y-0.5">
             <li>Go to Garmin Connect → Activities → All Activities</li>
             <li>Click the export button (↓) and choose Export to CSV</li>
-            <li>Upload the downloaded <code className="bg-gray-200 px-1 rounded">Activities.csv</code> file below</li>
+            <li>Upload the downloaded <code className="bg-slate-200 px-1 rounded">Activities.csv</code> file below</li>
           </ol>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2">Select CSV file</label>
+          <label className="block text-xs font-medium text-slate-600 mb-2">Select CSV file</label>
           <div
-            className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition"
+            className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition"
             onClick={() => garminRef.current?.click()}
           >
             {garminFile ? (
@@ -120,7 +120,7 @@ export default function TravelImportPage() {
             ) : (
               <>
                 <Upload className="w-6 h-6 text-slate-700 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">Click to select Activities.csv</p>
+                <p className="text-sm text-slate-400">Click to select Activities.csv</p>
               </>
             )}
             <input
@@ -171,14 +171,14 @@ export default function TravelImportPage() {
       </div>
 
       {/* ── Fuel Photo OCR ────────────────────────────────────────── */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 space-y-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
             <Camera className="w-5 h-5 text-purple-600" />
           </div>
           <div>
-            <h2 className="text-base font-semibold text-gray-900">Fuel Photos (Historical)</h2>
-            <p className="text-sm text-gray-500 mt-0.5">
+            <h2 className="text-base font-semibold text-slate-900">Fuel Photos (Historical)</h2>
+            <p className="text-sm text-slate-500 mt-0.5">
               Upload your historical dashboard + pump photos. Each fill-up is typically 4 photos:
               Trip A display, Trip B display, odometer, and pump receipt.
               Select multiple sets at once and AI will extract the data.
@@ -186,8 +186,8 @@ export default function TravelImportPage() {
           </div>
         </div>
 
-        <div className="bg-gray-50 rounded-xl p-4 text-xs text-gray-600 space-y-1">
-          <p className="font-medium text-gray-700">What each photo should show:</p>
+        <div className="bg-slate-50 rounded-xl p-4 text-xs text-slate-600 space-y-1">
+          <p className="font-medium text-slate-700">What each photo should show:</p>
           <ul className="list-disc list-inside space-y-0.5">
             <li><strong>Photo 1:</strong> Dashboard — Trip A (miles since last fill)</li>
             <li><strong>Photo 2:</strong> Dashboard — Trip B (miles this month)</li>
@@ -197,23 +197,23 @@ export default function TravelImportPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-2">
+          <label className="block text-xs font-medium text-slate-600 mb-2">
             Select photos ({fuelFiles.length} selected)
           </label>
           <div
-            className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition"
+            className="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition"
             onClick={() => fuelRef.current?.click()}
           >
             {fuelFiles.length > 0 ? (
               <div className="space-y-1">
                 <p className="text-sm font-medium text-purple-700">{fuelFiles.length} photos selected</p>
-                <p className="text-xs text-gray-500">≈ {Math.ceil(fuelFiles.length / 4)} fill-up set{Math.ceil(fuelFiles.length / 4) !== 1 ? 's' : ''}</p>
+                <p className="text-xs text-slate-500">≈ {Math.ceil(fuelFiles.length / 4)} fill-up set{Math.ceil(fuelFiles.length / 4) !== 1 ? 's' : ''}</p>
               </div>
             ) : (
               <>
                 <Camera className="w-6 h-6 text-slate-700 mx-auto mb-2" />
-                <p className="text-sm text-gray-400">Click to select fuel photos</p>
-                <p className="text-xs text-gray-400 mt-0.5">Select in groups of 4 per fill-up</p>
+                <p className="text-sm text-slate-400">Click to select fuel photos</p>
+                <p className="text-xs text-slate-400 mt-0.5">Select in groups of 4 per fill-up</p>
               </>
             )}
             <input
@@ -264,16 +264,16 @@ export default function TravelImportPage() {
           )}
         </button>
 
-        <p className="text-xs text-gray-400 text-center">
+        <p className="text-xs text-slate-400 text-center">
           For best results, scan one fill-up at a time using the{' '}
           <Link href="/dashboard/travel/fuel" className="text-amber-600 hover:underline">Fuel Log</Link> page.
         </p>
       </div>
 
       {/* Commute Settings */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-6">
-        <h2 className="text-base font-semibold text-gray-900 mb-1">Commute Settings</h2>
-        <p className="text-sm text-gray-500 mb-4">
+      <div className="bg-white border border-slate-200 rounded-2xl p-6">
+        <h2 className="text-base font-semibold text-slate-900 mb-1">Commute Settings</h2>
+        <p className="text-sm text-slate-500 mb-4">
           Set your typical one-way commute distance and duration to enable one-tap commute logging.
         </p>
         <CommuteSettingsForm />
@@ -322,25 +322,25 @@ function CommuteSettingsForm() {
     }
   };
 
-  if (!loaded) return <div className="h-16 animate-pulse bg-gray-100 rounded-xl" />;
+  if (!loaded) return <div className="h-16 animate-pulse bg-slate-100 rounded-xl" />;
 
   return (
     <form onSubmit={handleSave} className="space-y-3">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">One-way distance (miles)</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">One-way distance (miles)</label>
           <input
             type="number" step="0.1" value={distance} placeholder="3.5"
             onChange={(e) => { setDistance(e.target.value); setSaved(false); }}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">Typical duration (minutes)</label>
+          <label className="block text-xs font-medium text-slate-600 mb-1">Typical duration (minutes)</label>
           <input
             type="number" value={duration} placeholder="20"
             onChange={(e) => { setDuration(e.target.value); setSaved(false); }}
-            className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
           />
         </div>
       </div>

@@ -765,4 +765,14 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: 'How to view earnings reports and 1099 tracking',
     content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099 — any client who paid $600+ in a year), earnings breakdown by month, total hours worked, mileage totals, and travel benefits accrued. Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, mileage cost, and net earnings. This helps you identify your most profitable clients.`,
   },
+  {
+    role: 'contractor',
+    title: 'How to accept or decline job offers from listers',
+    content: `When a lister assigns you to a job, a job offer appears in your dashboard at /dashboard/contractor/assignments. The offer shows the event name, client, venue, dates, rates, and any message from the lister. To accept: open the offer and click Accept — the job is added to your jobs list with "confirmed" status. To decline: click Decline and optionally add a reason, which is sent back to the lister. If you decline by mistake, contact the lister directly via messaging to sort it out. Pending offers show a notification badge on the Assignments tab. All offer history (accepted, declined) is stored under your assignments.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to use the Contractor Board',
+    content: `The Contractor Board (/dashboard/contractor/board) is a peer-to-peer directory of contractors using Work.WitUS. Use it to find colleagues who can cover your dates when you are double-booked, or to make yourself discoverable so other contractors can reach out to you. Each profile shows skills, union affiliations, and availability notes. You can browse by name or filter by skill. The board is opt-in — your profile only appears if you have made it visible in your account settings. This is different from the Job Board (which is for posting and finding open gig listings). The Contractor Board is specifically for contractor-to-contractor networking and coverage requests.`,
+  },
 ];
