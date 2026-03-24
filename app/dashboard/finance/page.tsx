@@ -15,7 +15,7 @@ import ContactAutocomplete from '@/components/ui/ContactAutocomplete';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import ExpectedPaymentsSection from '@/components/finance/ExpectedPaymentsSection';
 import IncomeForecastSection from '@/components/finance/IncomeForecastSection';
-import { isCalendarYear, type FiscalConfig } from '@/lib/fiscal';
+// fiscal helpers used by child components; dashboard reads fiscal from summary API response
 import CategorySelect from '@/components/finance/CategorySelect';
 import { useTrackPageView } from '@/lib/hooks/useTrackPageView';
 import TransferModal from '@/components/finance/TransferModal';
@@ -197,6 +197,7 @@ export default function FinanceDashboardPage() {
     } finally {
       setLoading(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -285,14 +286,6 @@ export default function FinanceDashboardPage() {
     });
   }, [summary, projectionToggles.showChart]);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-
   const handleForecastPeriodChange = useCallback(async (days: number) => {
     setForecastPeriod(days);
     setForecastLoading(true);
@@ -303,6 +296,14 @@ export default function FinanceDashboardPage() {
       setForecastLoading(false);
     }
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="animate-spin h-10 w-10 border-4 border-amber-600 border-t-transparent rounded-full" />
+      </div>
+    );
+  }
 
   const cm = summary?.currentMonth || { expenses: 0, income: 0, net: 0 };
   const pieData = (summary?.categoryBreakdown || []).filter((c) => c.spent > 0);
