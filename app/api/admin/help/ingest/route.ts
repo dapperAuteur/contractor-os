@@ -69,30 +69,39 @@ export async function POST(_req: NextRequest) {
 
   const db = getDb();
 
-  // Clear existing articles before re-ingesting
-  await db.from('help_articles').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  // Only touch contractor-app articles — never wipe centenarian articles
+  await db.from('help_articles').delete().eq('app', 'contractor');
+
+  const contractorArticles = HELP_ARTICLES.filter((a) =>
+    ['contractor', 'lister', 'all', 'admin'].includes(a.role),
+  );
 
   const results: { title: string; ok: boolean; error?: string }[] = [];
 
-  for (const article of HELP_ARTICLES) {
+  for (const article of contractorArticles) {
     const text = `${article.title}\n\n${article.content}`;
     try {
       const embedding = await getEmbedding(text);
       if (!embedding.length) throw new Error('Gemini returned an empty embedding vector.');
 
       // pgvector expects the array formatted as a bracketed string e.g. "[0.1,0.2,...]"
-      const { error } = await db.from('help_articles').insert({
-        title: article.title,
-        content: article.content,
-        role: article.role,
-        app: 'contractor',
-        embedding: `[${embedding.join(',')}]`,
-      });
+      const { error } = await db.from('help_articles').upsert(
+        {
+          title: article.title,
+          content: article.content,
+          role: article.role,
+          app: 'contractor',
+          embedding: `[${embedding.join(',')}]`,
+        },
+        { onConflict: 'title,app' },
+      );
       if (error) throw new Error(error.message);
       results.push({ title: article.title, ok: true });
     } catch (e) {
       results.push({ title: article.title, ok: false, error: e instanceof Error ? e.message : 'Unknown' });
     }
+    // Stay under Gemini free-tier limit (100 req/min)
+    await new Promise((r) => setTimeout(r, 700));
   }
 
   const succeeded = results.filter((r) => r.ok).length;
