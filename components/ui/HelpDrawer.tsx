@@ -9,6 +9,7 @@ import { X, Send, Loader2, HelpCircle, BookOpen } from 'lucide-react';
 interface Message {
   role: 'user' | 'assistant';
   text: string;
+  isError?: boolean;
 }
 
 interface Props {
@@ -58,10 +59,18 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
         body: JSON.stringify({ question, role: userRole ?? null }),
       });
       const data = await res.json();
-      const answer = res.ok
-        ? (data.answer ?? 'No response.')
-        : (data.error ?? 'Something went wrong. Please try again.');
-      setMessages((prev) => [...prev, { role: 'assistant', text: answer }]);
+      if (res.ok) {
+        setMessages((prev) => [...prev, { role: 'assistant', text: data.answer ?? 'No response.' }]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: 'assistant',
+            text: data.error ?? 'Something went wrong. Please try again.',
+            isError: true,
+          },
+        ]);
+      }
     } catch {
       setMessages((prev) => [
         ...prev,
@@ -141,7 +150,9 @@ export default function HelpDrawer({ isOpen, onClose, userRole }: Props) {
                 className={`max-w-[85%] px-4 py-3 rounded-xl text-sm leading-relaxed whitespace-pre-wrap ${
                   msg.role === 'user'
                     ? 'bg-amber-700/80 text-white rounded-tr-none ml-auto'
-                    : 'bg-slate-100 text-slate-800 rounded-tl-none'
+                    : msg.isError
+                      ? 'bg-amber-50 border border-amber-200 text-amber-800 rounded-tl-none'
+                      : 'bg-slate-100 text-slate-800 rounded-tl-none'
                 }`}
               >
                 {msg.text}
