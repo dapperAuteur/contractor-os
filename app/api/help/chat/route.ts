@@ -65,11 +65,6 @@ export async function POST(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  // Admin-only while help articles are being built out
-  if (user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Help chat is currently in admin preview.' }, { status: 403 });
-  }
-
   const db = getDb();
 
   const { question, role } = await request.json();

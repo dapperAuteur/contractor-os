@@ -15,7 +15,7 @@ interface Props {
   isAdmin?: boolean;
 }
 
-export default function FloatingActionsMenu({ userRole, isAdmin }: Props) {
+export default function FloatingActionsMenu({ userRole }: Props) {
   const [open, setOpen] = useState(false);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
@@ -34,26 +34,24 @@ export default function FloatingActionsMenu({ userRole, isAdmin }: Props) {
     <>
       {/* Speed-dial stack */}
       <div className="fixed bottom-22 lg:bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-none">
-        {/* Help action — admin only until help articles are fully seeded */}
-        {isAdmin && (
-          <div
-            className={`flex items-center gap-2.5 transition-all duration-200 ${
-              open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
-            }`}
+        {/* Help action */}
+        <div
+          className={`flex items-center gap-2.5 transition-all duration-200 ${
+            open ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          <span className="bg-white text-slate-800 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-slate-200">
+            Help
+          </span>
+          <button
+            onClick={openHelp}
+            title="Open help chat"
+            className="bg-slate-100 text-white rounded-full p-3 shadow-lg hover:bg-slate-100 border border-slate-200 transition-colors"
+            aria-label="Open help chat"
           >
-            <span className="bg-white text-slate-800 text-xs font-medium px-2.5 py-1 rounded-full shadow border border-slate-200">
-              Help
-            </span>
-            <button
-              onClick={openHelp}
-              title="Open help chat"
-              className="bg-slate-100 text-white rounded-full p-3 shadow-lg hover:bg-slate-100 border border-slate-200 transition-colors"
-              aria-label="Open help chat"
-            >
-              <HelpCircle className="w-5 h-5 text-amber-400" />
-            </button>
-          </div>
-        )}
+            <HelpCircle className="w-5 h-5 text-amber-400" />
+          </button>
+        </div>
 
         {/* Feedback action */}
         <div
