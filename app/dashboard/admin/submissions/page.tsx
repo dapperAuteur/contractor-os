@@ -111,11 +111,11 @@ export default function AdminSubmissionsPage() {
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 flex items-center gap-3">
             <Inbox className="w-7 h-7 text-amber-600 shrink-0" />
             Library Submissions
           </h1>
-          <p className="text-gray-600 text-sm mt-1">
+          <p className="text-slate-600 text-sm mt-1">
             {unread > 0
               ? `${unread} unread submission${unread !== 1 ? 's' : ''} — review and promote to shared libraries.`
               : 'All caught up. Items added by users appear here for review.'}
@@ -124,7 +124,7 @@ export default function AdminSubmissionsPage() {
         <div className="flex gap-2">
           <button
             onClick={markAllRead}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50 flex items-center gap-1.5"
+            className="px-3 py-2 border border-slate-300 rounded-lg text-sm text-slate-600 hover:bg-slate-50 flex items-center gap-1.5"
           >
             <CheckCheck className="w-4 h-4" /> Mark All Read
           </button>
@@ -144,7 +144,7 @@ export default function AdminSubmissionsPage() {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
               filter === val
                 ? 'bg-amber-600 text-white border-amber-600'
-                : 'bg-white text-gray-700 border-gray-300 hover:border-gray-400'
+                : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400'
             }`}
           >
             {label}
@@ -158,7 +158,7 @@ export default function AdminSubmissionsPage() {
           <Loader2 className="w-8 h-8 animate-spin text-amber-600" />
         </div>
       ) : visible.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-slate-400">
           <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
           <p className="text-sm">No submissions{filter !== 'all' ? ' for this filter' : ''}.</p>
         </div>
@@ -175,7 +175,7 @@ export default function AdminSubmissionsPage() {
                 key={n.id}
                 className={`bg-white border rounded-xl p-4 transition ${
                   n.is_read || isPromoted
-                    ? 'border-gray-200 opacity-75'
+                    ? 'border-slate-200 opacity-75'
                     : 'border-indigo-200 shadow-sm'
                 }`}
               >
@@ -191,7 +191,7 @@ export default function AdminSubmissionsPage() {
                   {/* Content */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1">
-                      <span className="font-semibold text-gray-900 text-sm">{n.entity_name}</span>
+                      <span className="font-semibold text-slate-900 text-sm">{n.entity_name}</span>
                       {!n.is_read && !isPromoted && (
                         <span className="inline-block w-2 h-2 rounded-full bg-indigo-500 shrink-0" title="Unread" />
                       )}
@@ -201,8 +201,8 @@ export default function AdminSubmissionsPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-gray-500 mb-2">
-                      Added by <span className="text-gray-700">{n.user_email || 'unknown'}</span>
+                    <p className="text-xs text-slate-500 mb-2">
+                      Added by <span className="text-slate-700">{n.user_email || 'unknown'}</span>
                       {' · '}
                       {new Date(n.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </p>
@@ -210,7 +210,7 @@ export default function AdminSubmissionsPage() {
                     {/* Meta chips */}
                     <div className="flex flex-wrap gap-1 mb-3">
                       {n.entity_meta.category && (
-                        <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">
+                        <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded">
                           {n.entity_meta.category}
                         </span>
                       )}
@@ -220,7 +220,7 @@ export default function AdminSubmissionsPage() {
                         </span>
                       )}
                       {n.entity_meta.brand && (
-                        <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">
+                        <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded">
                           {n.entity_meta.brand}
                           {n.entity_meta.model ? ` ${n.entity_meta.model}` : ''}
                         </span>
@@ -246,13 +246,13 @@ export default function AdminSubmissionsPage() {
                             <select
                               value={difficulty[n.id] || 'intermediate'}
                               onChange={(e) => setDifficulty((prev) => ({ ...prev, [n.id]: e.target.value }))}
-                              className="appearance-none pl-2 pr-6 py-1 border border-gray-300 rounded text-xs bg-white text-gray-700 cursor-pointer"
+                              className="appearance-none pl-2 pr-6 py-1 border border-slate-300 rounded text-xs bg-white text-slate-700 cursor-pointer"
                             >
                               {DIFFICULTY_OPTIONS.map((d) => (
                                 <option key={d} value={d}>{d}</option>
                               ))}
                             </select>
-                            <ChevronDown className="absolute right-1.5 top-1.5 w-3 h-3 text-gray-400 pointer-events-none" />
+                            <ChevronDown className="absolute right-1.5 top-1.5 w-3 h-3 text-slate-400 pointer-events-none" />
                           </div>
                         )}
 
@@ -270,7 +270,7 @@ export default function AdminSubmissionsPage() {
                         <button
                           onClick={() => handleDismiss(n.id)}
                           disabled={!!dismissing[n.id]}
-                          className="px-3 py-1.5 border border-gray-300 text-gray-600 rounded-lg text-xs hover:bg-gray-50 flex items-center gap-1.5"
+                          className="px-3 py-1.5 border border-slate-300 text-slate-600 rounded-lg text-xs hover:bg-slate-50 flex items-center gap-1.5"
                         >
                           {dismissing[n.id]
                             ? <Loader2 className="w-3 h-3 animate-spin" />

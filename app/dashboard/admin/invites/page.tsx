@@ -42,7 +42,7 @@ const MODULE_GROUPS = [
 ];
 
 function statusChip(invite: Invite) {
-  if (!invite.is_active) return { label: 'Revoked', cls: 'bg-gray-100 text-gray-500' };
+  if (!invite.is_active) return { label: 'Revoked', cls: 'bg-slate-100 text-slate-500' };
   if (!invite.accepted_at) return { label: 'Pending', cls: 'bg-yellow-100 text-yellow-700' };
   if (invite.expires_at && new Date(invite.expires_at) < new Date()) return { label: 'Expired', cls: 'bg-red-100 text-red-600' };
   return { label: 'Active', cls: 'bg-green-100 text-green-700' };
@@ -202,14 +202,14 @@ export default function AdminInvitesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <UserPlus className="w-6 h-6 text-indigo-600" />
             Invites
           </h1>
-          <p className="text-sm text-gray-500 mt-0.5">Manage trial access for testers and demo users.</p>
+          <p className="text-sm text-slate-500 mt-0.5">Manage trial access for testers and demo users.</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={fetchInvites} className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition" aria-label="Refresh">
+          <button onClick={fetchInvites} className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition" aria-label="Refresh">
             <RefreshCw className="w-4 h-4" />
           </button>
           <button
@@ -224,26 +224,26 @@ export default function AdminInvitesPage() {
 
       {/* Table */}
       {loading ? (
-        <div className="flex items-center justify-center py-16 text-gray-400">
+        <div className="flex items-center justify-center py-16 text-slate-400">
           <Loader2 className="w-6 h-6 animate-spin" />
         </div>
       ) : invites.length === 0 ? (
-        <div className="text-center py-16 text-gray-400 text-sm">No invites yet.</div>
+        <div className="text-center py-16 text-slate-400 text-sm">No invites yet.</div>
       ) : (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm" aria-label="Invites table">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50">
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Email</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Product</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600">Status</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden sm:table-cell">Access</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden md:table-cell">Expiry</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Modules</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden lg:table-cell">Demo</th>
-                  <th className="text-left px-4 py-3 font-semibold text-gray-600 hidden xl:table-cell">Job Limit</th>
-                  <th className="text-right px-4 py-3 font-semibold text-gray-600">Actions</th>
+                <tr className="border-b border-slate-100 bg-slate-50">
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600">Email</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600">Product</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600">Status</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden sm:table-cell">Access</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden md:table-cell">Expiry</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden lg:table-cell">Modules</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden lg:table-cell">Demo</th>
+                  <th className="text-left px-4 py-3 font-semibold text-slate-600 hidden xl:table-cell">Job Limit</th>
+                  <th className="text-right px-4 py-3 font-semibold text-slate-600">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
@@ -253,10 +253,10 @@ export default function AdminInvitesPage() {
                   const canSeed = isAccepted && !inv.demo_seeded && !!inv.demo_profile;
                   const canClear = isAccepted && inv.demo_seeded;
                   return (
-                    <tr key={inv.id} className="hover:bg-gray-50 transition">
+                    <tr key={inv.id} className="hover:bg-slate-50 transition">
                       <td className="px-4 py-3">
-                        <div className="font-medium text-gray-900">{inv.email}</div>
-                        {inv.notes && <div className="text-xs text-gray-400 mt-0.5 truncate max-w-48">{inv.notes}</div>}
+                        <div className="font-medium text-slate-900">{inv.email}</div>
+                        {inv.notes && <div className="text-xs text-slate-400 mt-0.5 truncate max-w-48">{inv.notes}</div>}
                       </td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
@@ -273,9 +273,9 @@ export default function AdminInvitesPage() {
                           {chip.label}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-gray-700 capitalize hidden sm:table-cell">{inv.access_type}</td>
-                      <td className="px-4 py-3 text-gray-600 hidden md:table-cell">{fmtDate(inv.expires_at)}</td>
-                      <td className="px-4 py-3 text-gray-600 hidden lg:table-cell">
+                      <td className="px-4 py-3 text-slate-700 capitalize hidden sm:table-cell">{inv.access_type}</td>
+                      <td className="px-4 py-3 text-slate-600 hidden md:table-cell">{fmtDate(inv.expires_at)}</td>
+                      <td className="px-4 py-3 text-slate-600 hidden lg:table-cell">
                         {inv.allowed_modules === null
                           ? <span className="text-green-600 text-xs font-medium">All</span>
                           : <span className="text-xs">{inv.allowed_modules.length} module{inv.allowed_modules.length !== 1 ? 's' : ''}</span>
@@ -284,7 +284,7 @@ export default function AdminInvitesPage() {
                       <td className="px-4 py-3 hidden lg:table-cell">
                         {inv.demo_profile ? (
                           <div className="flex items-center gap-1.5">
-                            <span className={`text-xs font-medium ${inv.demo_seeded ? 'text-indigo-600' : 'text-gray-500'}`}>
+                            <span className={`text-xs font-medium ${inv.demo_seeded ? 'text-indigo-600' : 'text-slate-500'}`}>
                               {inv.demo_profile.replace('_', ' ')}
                               {inv.demo_seeded && <span className="ml-1 text-green-600">✓</span>}
                             </span>
@@ -293,7 +293,7 @@ export default function AdminInvitesPage() {
                           <span className="text-slate-700 text-xs">—</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 hidden xl:table-cell text-gray-600 text-xs">
+                      <td className="px-4 py-3 hidden xl:table-cell text-slate-600 text-xs">
                         {inv.job_limit != null ? (
                           <span className="font-medium text-amber-700">{inv.job_limit} jobs</span>
                         ) : (
@@ -328,14 +328,14 @@ export default function AdminInvitesPage() {
                             aria-label={inv.is_active ? `Revoke access for ${inv.email}` : `Restore access for ${inv.email}`}
                             role="switch"
                             aria-checked={inv.is_active}
-                            className={`p-1.5 rounded-lg transition disabled:opacity-50 ${inv.is_active ? 'text-green-600 hover:bg-green-50' : 'text-gray-400 hover:bg-gray-100'}`}
+                            className={`p-1.5 rounded-lg transition disabled:opacity-50 ${inv.is_active ? 'text-green-600 hover:bg-green-50' : 'text-slate-400 hover:bg-slate-100'}`}
                           >
                             {actionLoading === `toggle-${inv.id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : inv.is_active ? <ToggleRight className="w-3.5 h-3.5" /> : <ToggleLeft className="w-3.5 h-3.5" />}
                           </button>
                           <button
                             onClick={() => openEdit(inv)}
                             aria-label={`Edit invite for ${inv.email}`}
-                            className="p-1.5 text-gray-500 hover:bg-gray-100 rounded-lg transition"
+                            className="p-1.5 text-slate-500 hover:bg-slate-100 rounded-lg transition"
                           >
                             <Edit2 className="w-3.5 h-3.5" aria-hidden="true" />
                           </button>
@@ -368,7 +368,7 @@ export default function AdminInvitesPage() {
 
             {/* Email -- only editable on create */}
             <div>
-              <label htmlFor="invite-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <label htmlFor="invite-email" className="block text-sm font-medium text-slate-700 mb-1">Email</label>
               <input
                 id="invite-email"
                 type="email"
@@ -377,14 +377,14 @@ export default function AdminInvitesPage() {
                 required
                 aria-required="true"
                 disabled={!!editId}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm disabled:bg-gray-50 disabled:text-gray-400"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm disabled:bg-slate-50 disabled:text-slate-400"
                 placeholder="tester@example.com"
               />
             </div>
 
             {/* Product */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Product</label>
               <div className="flex gap-2">
                 {([
                   { value: 'witus', label: 'Work.WitUS' },
@@ -401,14 +401,14 @@ export default function AdminInvitesPage() {
                         ? p.value === 'contractor' ? 'bg-amber-600 text-white border-amber-600'
                           : p.value === 'lister' ? 'bg-indigo-600 text-white border-indigo-600'
                           : 'bg-amber-600 text-white border-amber-600'
-                        : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                        : 'border-slate-300 text-slate-700 hover:border-slate-400'
                     }`}
                   >
                     {p.label}
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-slate-400 mt-1">
                 {form.product === 'contractor' ? 'Invite link redirects to Work.WitUS.Online'
                   : form.product === 'lister' ? 'Invite link redirects to Work.WitUS.Online'
                   : 'Invite link redirects to Work.WitUS.Online'}
@@ -417,7 +417,7 @@ export default function AdminInvitesPage() {
 
             {/* Access type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Access Type</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Access Type</label>
               <div className="flex gap-2">
                 {(['trial', 'lifetime'] as const).map((t) => (
                   <button
@@ -427,7 +427,7 @@ export default function AdminInvitesPage() {
                     className={`flex-1 py-2 rounded-lg border text-sm font-medium transition capitalize ${
                       form.access_type === t
                         ? 'bg-indigo-600 text-white border-indigo-600'
-                        : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                        : 'border-slate-300 text-slate-700 hover:border-slate-400'
                     }`}
                   >
                     {t}
@@ -439,14 +439,14 @@ export default function AdminInvitesPage() {
             {/* Expiry -- only for trial */}
             {form.access_type === 'trial' && (
               <div>
-                <label htmlFor="invite-expiry" className="block text-sm font-medium text-gray-700 mb-1">Expiry Date <span className="text-gray-400 font-normal">(leave blank for no expiry)</span></label>
+                <label htmlFor="invite-expiry" className="block text-sm font-medium text-slate-700 mb-1">Expiry Date <span className="text-slate-400 font-normal">(leave blank for no expiry)</span></label>
                 <input
                   id="invite-expiry"
                   type="date"
                   value={form.expires_at}
                   min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => setForm((f) => ({ ...f, expires_at: e.target.value }))}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
             )}
@@ -454,14 +454,14 @@ export default function AdminInvitesPage() {
             {/* Module access */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-sm font-medium text-gray-700">Module Access</label>
+                <label className="text-sm font-medium text-slate-700">Module Access</label>
                 <button
                   type="button"
                   onClick={() => setForm((f) => ({ ...f, all_modules: !f.all_modules, allowed_modules: [] }))}
                   className={`flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-lg border transition ${
                     form.all_modules
                       ? 'bg-green-100 text-green-700 border-green-200'
-                      : 'bg-white text-gray-600 border-gray-300 hover:border-gray-400'
+                      : 'bg-white text-slate-600 border-slate-300 hover:border-slate-400'
                   }`}
                 >
                   {form.all_modules ? <Check className="w-3 h-3" /> : null}
@@ -473,7 +473,7 @@ export default function AdminInvitesPage() {
                   {MODULE_GROUPS.map((group) => (
                     <div key={group.label}>
                       <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">{group.label}</span>
+                        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{group.label}</span>
                         <button
                           type="button"
                           onClick={() => {
@@ -502,7 +502,7 @@ export default function AdminInvitesPage() {
                               className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs font-medium transition text-left ${
                                 checked
                                   ? 'bg-indigo-50 text-indigo-700 border-indigo-300'
-                                  : 'border-gray-200 text-gray-600 hover:border-gray-300'
+                                  : 'border-slate-200 text-slate-600 hover:border-slate-300'
                               }`}
                             >
                               {checked && <Check className="w-3 h-3 shrink-0" />}
@@ -519,7 +519,7 @@ export default function AdminInvitesPage() {
 
             {/* Demo profile */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Demo Data</label>
+              <label className="block text-sm font-medium text-slate-700 mb-2">Demo Data</label>
               <div className="flex gap-2">
                 {(['', 'visitor', 'tutorial', 'contractor_demo', 'lister_demo'] as const).map((p) => (
                   <button
@@ -529,7 +529,7 @@ export default function AdminInvitesPage() {
                     className={`flex-1 py-2 rounded-lg border text-xs font-medium transition capitalize ${
                       form.demo_profile === p
                         ? 'bg-indigo-600 text-white border-indigo-600'
-                        : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                        : 'border-slate-300 text-slate-700 hover:border-slate-400'
                     }`}
                   >
                     {p === '' ? 'None' : p.replace('_', ' ')}
@@ -540,8 +540,8 @@ export default function AdminInvitesPage() {
 
             {/* Job Limit */}
             <div>
-              <label htmlFor="invite-job-limit" className="block text-sm font-medium text-gray-700 mb-1">
-                Job Limit <span className="text-gray-400 font-normal">(leave blank for unlimited)</span>
+              <label htmlFor="invite-job-limit" className="block text-sm font-medium text-slate-700 mb-1">
+                Job Limit <span className="text-slate-400 font-normal">(leave blank for unlimited)</span>
               </label>
               <input
                 id="invite-job-limit"
@@ -550,30 +550,30 @@ export default function AdminInvitesPage() {
                 step="1"
                 value={form.job_limit}
                 onChange={(e) => setForm((f) => ({ ...f, job_limit: e.target.value }))}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
                 placeholder="e.g. 5"
               />
-              <p className="text-xs text-gray-400 mt-1">Trial users will be prompted to upgrade after creating this many contractor jobs.</p>
+              <p className="text-xs text-slate-400 mt-1">Trial users will be prompted to upgrade after creating this many contractor jobs.</p>
             </div>
 
             {/* Notes */}
             <div>
-              <label htmlFor="invite-notes" className="block text-sm font-medium text-gray-700 mb-1">Notes <span className="text-gray-400 font-normal">(optional)</span></label>
+              <label htmlFor="invite-notes" className="block text-sm font-medium text-slate-700 mb-1">Notes <span className="text-slate-400 font-normal">(optional)</span></label>
               <textarea
                 id="invite-notes"
                 value={form.notes}
                 onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
                 rows={2}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm resize-none"
+                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm resize-none"
                 placeholder="e.g. Friend testing finance module"
               />
             </div>
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="flex-1 py-2.5 border border-gray-300 text-gray-600 rounded-xl text-sm hover:bg-gray-50 transition"
+              className="flex-1 py-2.5 border border-slate-300 text-slate-600 rounded-xl text-sm hover:bg-slate-50 transition"
             >
               Cancel
             </button>

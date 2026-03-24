@@ -250,12 +250,12 @@ export default function TripsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link href="/dashboard/travel" className="text-gray-400 hover:text-gray-600 transition">
-            <ChevronLeft className="w-5 h-5" />
+          <Link href="/dashboard/travel" className="min-h-11 min-w-11 flex items-center justify-center text-slate-400 hover:text-slate-600 transition rounded-lg" aria-label="Back to Travel">
+            <ChevronLeft className="w-5 h-5" aria-hidden="true" />
           </Link>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Trip History</h1>
-            <p className="text-sm text-gray-500">{total.toLocaleString()} trips</p>
+            <h1 className="text-2xl font-bold text-slate-900">Trip History</h1>
+            <p className="text-sm text-slate-500">{total.toLocaleString()} trips</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -289,7 +289,7 @@ export default function TripsPage() {
                   ? 'bg-amber-600 text-white'
                   : modeFilter === m
                     ? 'bg-amber-500/10 text-amber-400 border border-amber-500'
-                    : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
               }`}
             >
               {m ? `${MODE_ICONS[m] ?? ''} ${m}` : 'All'}
@@ -303,7 +303,7 @@ export default function TripsPage() {
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
               taxFilter === 'business'
                 ? 'bg-indigo-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Business
@@ -313,7 +313,7 @@ export default function TripsPage() {
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
               taxFilter === 'medical'
                 ? 'bg-indigo-600 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Medical
@@ -323,7 +323,7 @@ export default function TripsPage() {
             className={`px-3 py-1.5 rounded-full text-xs font-medium transition ${
               categoryFilter === 'fitness'
                 ? 'bg-orange-500 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
             }`}
           >
             Fitness only
@@ -331,7 +331,7 @@ export default function TripsPage() {
           {hasFilter && (
             <button
               onClick={clearFilters}
-              className="px-3 py-1.5 rounded-full text-xs font-medium text-gray-400 hover:text-gray-600 transition"
+              className="px-3 py-1.5 rounded-full text-xs font-medium text-slate-400 hover:text-slate-600 transition"
             >
               Clear filters
             </button>
@@ -342,7 +342,7 @@ export default function TripsPage() {
       {/* Routes */}
       {routes.length > 0 && (
         <div className="space-y-2">
-          <h2 className="text-sm font-medium text-gray-500">Recent Routes</h2>
+          <h2 className="text-sm font-medium text-slate-500">Recent Routes</h2>
           {routes.map((r) => (
             <RouteCard
               key={r.id}
@@ -368,19 +368,19 @@ export default function TripsPage() {
       )}
 
       {/* Table */}
-      <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden">
         {loading ? (
           <div className="py-16 flex items-center justify-center">
             <div className="animate-spin h-6 w-6 border-4 border-amber-600 border-t-transparent rounded-full" />
           </div>
         ) : trips.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-gray-400 text-sm">No trips found.</p>
+            <p className="text-slate-400 text-sm">No trips found.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 text-xs text-gray-500 uppercase tracking-wide">
+              <thead className="bg-slate-50 text-xs text-slate-500 uppercase tracking-wide">
                 <tr>
                   <th className="px-4 py-3 text-left">Date</th>
                   <th className="px-4 py-3 text-left">Mode</th>
@@ -395,19 +395,19 @@ export default function TripsPage() {
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {trips.map((t) => (
-                  <tr key={t.id} className="hover:bg-gray-50 transition cursor-pointer" onClick={() => router.push(`/dashboard/travel/trips/${t.id}`)}>
-                    <td className="px-4 py-3 text-gray-700 whitespace-nowrap">{t.date}</td>
+                  <tr key={t.id} className="hover:bg-slate-50 transition cursor-pointer" onClick={() => router.push(`/dashboard/travel/trips/${t.id}`)}>
+                    <td className="px-4 py-3 text-slate-700 whitespace-nowrap">{t.date}</td>
                     <td className="px-4 py-3 whitespace-nowrap">
                       <span className="text-base">{MODE_ICONS[t.mode] ?? '🚐'}</span>{' '}
-                      <span className="text-gray-700 capitalize">{t.mode}</span>
+                      <span className="text-slate-700 capitalize">{t.mode}</span>
                     </td>
-                    <td className="px-4 py-3 text-gray-600 max-w-50 truncate">
+                    <td className="px-4 py-3 text-slate-600 max-w-50 truncate">
                       {t.origin && t.destination
                         ? `${t.origin} ${t.is_round_trip ? '↔' : '→'} ${t.destination}`
                         : t.notes?.substring(0, 40) ?? '—'}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-700">{fmt(t.distance_miles) ?? '—'}</td>
-                    <td className="px-4 py-3 text-right text-gray-700">{t.duration_min ?? '—'}</td>
+                    <td className="px-4 py-3 text-right text-slate-700">{fmt(t.distance_miles) ?? '—'}</td>
+                    <td className="px-4 py-3 text-right text-slate-700">{t.duration_min ?? '—'}</td>
                     <td className="px-4 py-3 text-right text-orange-600">{t.calories_burned ?? '—'}</td>
                     <td className="px-4 py-3">
                       <div className="flex flex-wrap gap-1">
@@ -428,7 +428,7 @@ export default function TripsPage() {
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-gray-600 text-xs">
+                    <td className="px-4 py-3 text-slate-600 text-xs">
                       {t.source === 'garmin_import' ? 'Garmin' : t.source === 'csv_import' ? 'CSV' : 'Manual'}
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
@@ -459,17 +459,17 @@ export default function TripsPage() {
           <button
             onClick={() => setPage((p) => Math.max(0, p - 1))}
             disabled={page === 0}
-            className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition"
+            className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-40 transition"
           >
             Previous
           </button>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-slate-500">
             Page {page + 1} of {totalPages}
           </span>
           <button
             onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
             disabled={page >= totalPages - 1}
-            className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 disabled:opacity-40 transition"
+            className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-40 transition"
           >
             Next
           </button>
@@ -479,14 +479,14 @@ export default function TripsPage() {
       {/* Linked transaction confirmation dialog */}
       <Modal isOpen={!!linkedTxDialog} onClose={() => setLinkedTxDialog(null)} title="Delete linked transaction?" size="sm">
         <div className="p-6 space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-slate-600">
             This trip had a linked finance expense. Do you also want to delete it?
           </p>
         </div>
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <button
             onClick={() => setLinkedTxDialog(null)}
-            className="flex-1 border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="flex-1 border border-slate-200 rounded-xl py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
           >
             Keep transaction
           </button>
@@ -526,12 +526,12 @@ export default function TripsPage() {
           <div className="p-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="trip-mode" className="block text-xs font-medium text-gray-600 mb-1">Mode</label>
+                <label htmlFor="trip-mode" className="block text-xs font-medium text-slate-600 mb-1">Mode</label>
                 <select
                   id="trip-mode"
                   value={form.mode}
                   onChange={(e) => setForm((f) => ({ ...f, mode: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 >
                   {['bike','car','bus','train','plane','walk','run','ferry','rideshare','other'].map((m) => (
                     <option key={m} value={m}>{MODE_ICONS[m]} {m}</option>
@@ -539,12 +539,12 @@ export default function TripsPage() {
                 </select>
               </div>
               <div>
-                <label htmlFor="trip-date" className="block text-xs font-medium text-gray-600 mb-1">Date</label>
+                <label htmlFor="trip-date" className="block text-xs font-medium text-slate-600 mb-1">Date</label>
                 <input
                   id="trip-date"
                   type="date" value={form.date}
                   onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                   required
                   aria-required="true"
                 />
@@ -552,24 +552,24 @@ export default function TripsPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="trip-origin" className="block text-xs font-medium text-gray-600 mb-1">From</label>
+                <label htmlFor="trip-origin" className="block text-xs font-medium text-slate-600 mb-1">From</label>
                 <ContactAutocomplete
                   value={form.origin}
                   contactType="location"
                   placeholder="Origin"
                   onChange={(name) => setForm((f) => ({ ...f, origin: name }))}
-                  inputClassName="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  inputClassName="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                   showLocations
                 />
               </div>
               <div>
-                <label htmlFor="trip-destination" className="block text-xs font-medium text-gray-600 mb-1">To</label>
+                <label htmlFor="trip-destination" className="block text-xs font-medium text-slate-600 mb-1">To</label>
                 <ContactAutocomplete
                   value={form.destination}
                   contactType="location"
                   placeholder="Destination"
                   onChange={(name) => setForm((f) => ({ ...f, destination: name }))}
-                  inputClassName="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  inputClassName="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                   showLocations
                 />
               </div>
@@ -580,9 +580,9 @@ export default function TripsPage() {
                   type="checkbox"
                   checked={form.is_round_trip}
                   onChange={(e) => setForm((f) => ({ ...f, is_round_trip: e.target.checked }))}
-                  className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                  className="rounded border-slate-300 text-amber-600 focus:ring-amber-500"
                 />
-                <span className="text-xs font-medium text-gray-600">Round trip (distance counted both ways)</span>
+                <span className="text-xs font-medium text-slate-600">Round trip (distance counted both ways)</span>
               </label>
               {form.is_round_trip && (form.distance_miles || form.duration_min || form.cost) && (
                 <p className="text-xs text-amber-600 mt-1 ml-6">
@@ -597,50 +597,50 @@ export default function TripsPage() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label htmlFor="trip-miles" className="block text-xs font-medium text-gray-600 mb-1">Miles</label>
+                <label htmlFor="trip-miles" className="block text-xs font-medium text-slate-600 mb-1">Miles</label>
                 <input
                   id="trip-miles"
                   type="number" step="0.01" value={form.distance_miles} placeholder="0.0"
                   onChange={(e) => setForm((f) => ({ ...f, distance_miles: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
               <div>
-                <label htmlFor="trip-duration" className="block text-xs font-medium text-gray-600 mb-1">Duration (min)</label>
+                <label htmlFor="trip-duration" className="block text-xs font-medium text-slate-600 mb-1">Duration (min)</label>
                 <input
                   id="trip-duration"
                   type="number" value={form.duration_min} placeholder="0"
                   onChange={(e) => setForm((f) => ({ ...f, duration_min: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
               <div>
-                <label htmlFor="trip-calories" className="block text-xs font-medium text-gray-600 mb-1">Calories</label>
+                <label htmlFor="trip-calories" className="block text-xs font-medium text-slate-600 mb-1">Calories</label>
                 <input
                   id="trip-calories"
                   type="number" value={form.calories_burned} placeholder="0"
                   onChange={(e) => setForm((f) => ({ ...f, calories_burned: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 />
               </div>
             </div>
             <div>
-              <label htmlFor="trip-cost" className="block text-xs font-medium text-gray-600 mb-1">Cost ($)</label>
+              <label htmlFor="trip-cost" className="block text-xs font-medium text-slate-600 mb-1">Cost ($)</label>
               <input
                 id="trip-cost"
                 type="number" step="0.01" value={form.cost} placeholder="0.00"
                 onChange={(e) => setForm((f) => ({ ...f, cost: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label htmlFor="trip-purpose" className="block text-xs font-medium text-gray-600 mb-1">Purpose</label>
+                <label htmlFor="trip-purpose" className="block text-xs font-medium text-slate-600 mb-1">Purpose</label>
                 <select
                   id="trip-purpose"
                   value={form.purpose}
                   onChange={(e) => setForm((f) => ({ ...f, purpose: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 >
                   {['commute','leisure','work','errand','exercise','other'].map((p) => (
                     <option key={p} value={p}>{p}</option>
@@ -648,12 +648,12 @@ export default function TripsPage() {
                 </select>
               </div>
               <div>
-                <label htmlFor="trip-tax" className="block text-xs font-medium text-gray-600 mb-1">Tax purpose</label>
+                <label htmlFor="trip-tax" className="block text-xs font-medium text-slate-600 mb-1">Tax purpose</label>
                 <select
                   id="trip-tax"
                   value={form.tax_category}
                   onChange={(e) => setForm((f) => ({ ...f, tax_category: e.target.value }))}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="personal">Personal</option>
                   <option value="business">Business</option>
@@ -665,29 +665,29 @@ export default function TripsPage() {
             {/* Travel vs Fitness toggle — only for human-powered modes */}
             {HUMAN_POWERED_MODES.includes(form.mode) && (
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Trip type</label>
-                <div className="flex rounded-lg border border-gray-200 overflow-hidden text-sm">
+                <label className="block text-xs font-medium text-slate-600 mb-1">Trip type</label>
+                <div className="flex rounded-lg border border-slate-200 overflow-hidden text-sm">
                   <button
                     type="button"
                     onClick={() => setForm((f) => ({ ...f, trip_category: 'travel' }))}
-                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'travel' ? 'bg-amber-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'travel' ? 'bg-amber-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
                   >
                     Travel
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm((f) => ({ ...f, trip_category: 'fitness' }))}
-                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'fitness' ? 'bg-amber-600 text-white' : 'text-gray-600 hover:bg-gray-50'}`}
+                    className={`flex-1 py-2 font-medium transition ${form.trip_category === 'fitness' ? 'bg-amber-600 text-white' : 'text-slate-600 hover:bg-slate-50'}`}
                   >
                     Fitness
                   </button>
                 </div>
-                <p className="text-xs text-gray-400 mt-1">Travel counts toward commute savings. Fitness is for workouts.</p>
+                <p className="text-xs text-slate-400 mt-1">Travel counts toward commute savings. Fitness is for workouts.</p>
               </div>
             )}
             {vehicles.length > 0 && (
               <div>
-                <label htmlFor="trip-vehicle" className="block text-xs font-medium text-gray-600 mb-1">Vehicle</label>
+                <label htmlFor="trip-vehicle" className="block text-xs font-medium text-slate-600 mb-1">Vehicle</label>
                 <select
                   id="trip-vehicle"
                   value={form.vehicle_id}
@@ -701,7 +701,7 @@ export default function TripsPage() {
                       ...(autoMode ? { mode: autoMode } : {}),
                     }));
                   }}
-                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
                 >
                   <option value="">None</option>
                   {vehicles.map((v) => (
@@ -713,25 +713,25 @@ export default function TripsPage() {
               </div>
             )}
             <div>
-              <label htmlFor="trip-notes" className="block text-xs font-medium text-gray-600 mb-1">Notes</label>
+              <label htmlFor="trip-notes" className="block text-xs font-medium text-slate-600 mb-1">Notes</label>
               <input
                 id="trip-notes"
                 type="text" value={form.notes} placeholder="Optional notes"
                 onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
-                className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
               />
             </div>
             {editingId && (
-              <div className="pt-3 border-t border-gray-200">
+              <div className="pt-3 border-t border-slate-200">
                 <ActivityLinker entityType="trip" entityId={editingId} />
               </div>
             )}
           </div>
-          <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <div className="sticky bottom-0 bg-white border-t border-slate-100 px-6 pt-3 pb-3 flex gap-3" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
             <button
               type="button"
               onClick={() => { setShowForm(false); setEditingId(null); setForm(BLANK_FORM); }}
-              className="flex-1 border border-gray-200 rounded-xl py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              className="flex-1 border border-slate-200 rounded-xl py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
             >
               Cancel
             </button>

@@ -3,12 +3,13 @@ import Link from 'next/link';
 import {
   HardHat, FileText, CreditCard, BarChart3, Users, Building2,
   MapPin, Scale, Car, DollarSign, ScanLine, Shield, ArrowRight, Play,
+  Package, ArrowUpDown,
 } from 'lucide-react';
 import { organizationSchema } from '@/lib/seo/json-ld';
 
 export const metadata: Metadata = {
   title: 'Work.WitUS — Job Tracking for Independent Contractors',
-  description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors. Free to start.',
+  description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors. $10/month or $100/year.',
   openGraph: {
     title: 'Work.WitUS — Job Tracking for Independent Contractors',
     description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors.',
@@ -20,16 +21,18 @@ export const metadata: Metadata = {
 
 const FEATURES = [
   { slug: 'jobs', icon: HardHat, title: 'Job Management', desc: 'Track assignments, time entries with ST/OT/DT splits, and generate invoices automatically.' },
-  { slug: 'rate-cards', icon: CreditCard, title: 'Rate Cards', desc: 'Save rate presets by union and department. Quick-apply to new jobs.' },
-  { slug: 'reports', icon: BarChart3, title: 'Financial Reports', desc: 'Earnings by client, 1099 tracking, job comparison, and tax-ready exports.' },
-  { slug: 'board', icon: Users, title: 'Job Board', desc: 'Find replacement work or share jobs with trusted colleagues.' },
-  { slug: 'venues', icon: Building2, title: 'Venue Knowledge Base', desc: 'Parking, WiFi, load-in details, schematics for every venue you work.' },
-  { slug: 'cities', icon: MapPin, title: 'City Guides', desc: 'Community restaurant, hotel, gym, and coffee recommendations by city.' },
-  { slug: 'union', icon: Scale, title: 'Union Contract Chat', desc: 'Upload contracts, ask questions with AI. RAG-powered with mandatory disclaimers.' },
-  { slug: 'travel', icon: Car, title: 'Mileage + Expenses', desc: 'Automatic distance calculation, trip logging, fuel tracking, expense reports.' },
-  { slug: 'invoices', icon: FileText, title: 'Invoice Generation', desc: 'Auto-generate invoices from time entries with rate-based line items and benefits.' },
-  { slug: 'finance', icon: DollarSign, title: 'Dues Tracking', desc: 'Track union memberships across multiple locals. Dues scheduling and payment history.' },
-  { slug: 'scan', icon: ScanLine, title: 'Pay Stub Scan', desc: 'Upload a photo of your pay stub. AI extracts hours, rates, and benefits.' },
+  { slug: 'rate-cards', icon: CreditCard, title: 'Rate Cards', desc: 'Save rate presets by union and department. Apply rates to new jobs with one click.' },
+  { slug: 'compare', icon: ArrowUpDown, title: 'Rate Comparison', desc: 'Compare earnings across venues, clients, and departments. Know your highest-paying gigs.' },
+  { slug: 'reports', icon: BarChart3, title: 'Reports & Analytics', desc: 'Earnings charts, 1099 tracking, hours breakdown, and tax-ready exports.' },
+  { slug: 'board', icon: Users, title: 'Contractor Board', desc: 'Find colleagues to cover your dates or pick up extra work. Peer-to-peer crew network.' },
+  { slug: 'venues', icon: Building2, title: 'Venue Knowledge Base', desc: 'Parking, WiFi, load-in details, and crew notes for every venue you work.' },
+  { slug: 'cities', icon: MapPin, title: 'City Guides', desc: 'Your personal guide to restaurants, hotels, gyms, and coffee spots in every city.' },
+  { slug: 'union', icon: Scale, title: 'Union Hub', desc: 'Track memberships, dues, documents, and contracts across all your locals.' },
+  { slug: 'travel', icon: Car, title: 'Travel & Mileage', desc: 'Trip logging, fuel tracking, vehicle maintenance, and multi-stop route planning.' },
+  { slug: 'invoices', icon: FileText, title: 'Invoice Generation', desc: 'Auto-generate invoices from time entries with ST/OT/DT line items and payment tracking.' },
+  { slug: 'finance', icon: DollarSign, title: 'Finance Tracking', desc: 'Multi-account income and expense tracking with budgets, categories, and trends.' },
+  { slug: 'equipment', icon: Package, title: 'Equipment Tracker', desc: 'Gear inventory with purchase price, current value, depreciation, and job linking.' },
+  { slug: 'scan', icon: ScanLine, title: 'Document Scanner', desc: 'Capture receipts, call sheets, and pay stubs. AI extracts and categorizes the data.' },
 ];
 
 export default function ContractorLandingPage() {

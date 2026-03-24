@@ -88,7 +88,7 @@ export default function TeachingCoursesPage() {
 
       {courses.length === 0 ? (
         <div className="bg-white border border-slate-200 border-dashed rounded-xl p-16 text-center">
-          <BookOpen className="w-10 h-10 mx-auto mb-3 text-gray-700" />
+          <BookOpen className="w-10 h-10 mx-auto mb-3 text-slate-700" />
           <p className="text-slate-400 mb-4">No courses yet. Create your first one!</p>
           <Link
             href="/dashboard/teaching/courses/new"
@@ -114,7 +114,7 @@ export default function TeachingCoursesPage() {
                   )}
                 </div>
                 <p className="text-slate-400 text-sm mt-0.5 line-clamp-1">{course.description}</p>
-                <p className="text-gray-600 text-xs mt-1">
+                <p className="text-slate-600 text-xs mt-1">
                   {course.price_type === 'free'
                     ? 'Free'
                     : `$${course.price} · ${course.price_type === 'one_time' ? 'one-time' : 'subscription'}`}

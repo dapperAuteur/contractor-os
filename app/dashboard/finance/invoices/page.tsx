@@ -333,7 +333,7 @@ export default function InvoicesPage() {
       </div>
 
       {/* Invoice list */}
-      <div className="space-y-3">
+      <div className="space-y-3" role="list" aria-label="Invoices">
         {filteredInvoices.length === 0 && (
           <div className="text-center py-12 text-slate-400">
             <FileText className="w-10 h-10 mx-auto mb-3" />
