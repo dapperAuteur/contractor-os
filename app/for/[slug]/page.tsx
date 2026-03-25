@@ -85,6 +85,12 @@ export default async function IndustryDetailPage(
             <Link href="/features/contractor" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
               Features
             </Link>
+            <Link href="/for" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
+              Industries
+            </Link>
+            <Link href="/tech-roadmap" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
+              Roadmap
+            </Link>
             <Link
               href="/login"
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 min-h-11 flex items-center"
