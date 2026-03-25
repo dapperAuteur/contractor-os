@@ -199,6 +199,7 @@ export default function JobDetailPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('time');
   const [generating, setGenerating] = useState(false);
+  const [flash, setFlash] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [quickLogOpen, setQuickLogOpen] = useState(false);
   const [statusEditing, setStatusEditing] = useState(false);
   const [newStatus, setNewStatus] = useState('');
@@ -301,11 +302,23 @@ export default function JobDetailPage() {
   /* ─── Generate Invoice ──────────────────────────────── */
   async function generateInvoice(entryId?: string) {
     setGenerating(true);
-    await offlineFetch(`/api/contractor/jobs/${id}/generate-invoice`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(entryId ? { entry_id: entryId } : {}),
-    });
+    setFlash(null);
+    try {
+      const res = await offlineFetch(`/api/contractor/jobs/${id}/generate-invoice`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(entryId ? { entry_id: entryId } : {}),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        setFlash({ type: 'error', message: body?.error || 'Failed to generate invoice' });
+      } else {
+        setFlash({ type: 'success', message: 'Invoice generated successfully' });
+        setTimeout(() => setFlash((f) => f?.type === 'success' ? null : f), 4000);
+      }
+    } catch {
+      setFlash({ type: 'error', message: 'Network error — please try again' });
+    }
     setGenerating(false);
     loadJob();
   }
@@ -663,6 +676,13 @@ export default function JobDetailPage() {
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {flash && (
+        <div role="alert" className={`flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium ${flash.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
+          <span>{flash.message}</span>
+          <button onClick={() => setFlash(null)} className="ml-3 min-h-11 min-w-11 flex items-center justify-center text-current opacity-60 hover:opacity-100" aria-label="Dismiss">✕</button>
         </div>
       )}
 
