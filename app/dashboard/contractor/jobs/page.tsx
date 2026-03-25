@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Plus, Loader2, Search, Filter, GitCompareArrows } from 'lucide-react';
+import { Plus, Loader2, Search, GitCompareArrows } from 'lucide-react';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -116,8 +116,8 @@ export default function JobsListPage() {
       )}
 
       {/* Filters */}
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-3">
+        <div className="relative">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" aria-hidden="true" />
           <input
             type="text"
@@ -128,20 +128,31 @@ export default function JobsListPage() {
             className="w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none"
           />
         </div>
-        <div className="flex items-center gap-1.5">
-          <Filter size={14} className="text-slate-400" aria-hidden="true" />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            aria-label="Filter by job status"
-            className="rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 focus:border-amber-500 focus:outline-none"
-          >
-            {STATUSES.map((s) => (
-              <option key={s} value={s}>
-                {s === 'all' ? 'All Statuses' : s.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
-              </option>
-            ))}
-          </select>
+        <div
+          className="flex gap-1.5 overflow-x-auto pb-1 -mb-1"
+          role="group"
+          aria-label="Filter by job status"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {STATUSES.map((s) => {
+            const label = s === 'all' ? 'All' : s === 'in_progress' ? 'In Progress' : s.charAt(0).toUpperCase() + s.slice(1);
+            const active = statusFilter === s;
+            return (
+              <button
+                key={s}
+                type="button"
+                onClick={() => setStatusFilter(s)}
+                aria-pressed={active}
+                className={`shrink-0 min-h-11 rounded-full px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-colors ${
+                  active
+                    ? 'bg-amber-600 text-white'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
       </div>
 

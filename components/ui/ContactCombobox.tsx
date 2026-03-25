@@ -59,11 +59,12 @@ export default function ContactCombobox({
   const inputRef = useRef<HTMLInputElement>(null);
   const listboxId = useId();
 
-  // Load contacts on mount
+  // Load contacts on mount from the contractor contacts endpoint so the
+  // combobox and the contacts list page share the same data source.
   useEffect(() => {
-    offlineFetch('/api/contacts')
+    offlineFetch('/api/contractor/contacts?limit=200')
       .then((r) => r.json())
-      .then((d) => setContacts(Array.isArray(d) ? d : []))
+      .then((d) => setContacts(Array.isArray(d.contacts) ? d.contacts : []))
       .catch(() => {});
   }, []);
 
@@ -82,7 +83,10 @@ export default function ContactCombobox({
   }, [open]);
 
   const filtered = filter
-    ? contacts.filter((c) => c.name.toLowerCase().includes(filter.toLowerCase()))
+    ? contacts.filter((c) =>
+        c.name.toLowerCase().includes(filter.toLowerCase()) ||
+        (c.company_name ?? '').toLowerCase().includes(filter.toLowerCase()),
+      )
     : contacts;
 
   function openDropdown() {
