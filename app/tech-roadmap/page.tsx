@@ -63,9 +63,17 @@ export default function RoadmapPage() {
             <ArrowLeft className="w-5 h-5" aria-hidden="true" />
             <span className="font-medium">Back to Home</span>
           </Link>
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-linear-to-br from-amber-500 to-amber-600 rounded-lg" aria-hidden="true" />
-            <span className="text-xl font-bold text-slate-900">Work.WitUS</span>
+          <div className="flex items-center gap-4">
+            <Link href="/for" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
+              Industries
+            </Link>
+            <Link href="/pricing" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
+              Pricing
+            </Link>
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-linear-to-br from-amber-500 to-amber-600 rounded-lg" aria-hidden="true" />
+              <span className="text-xl font-bold text-slate-900">Work.WitUS</span>
+            </div>
           </div>
         </nav>
       </header>

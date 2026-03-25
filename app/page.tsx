@@ -53,6 +53,12 @@ export default function ContractorLandingPage() {
             <Link href="/features/contractor" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
               Features
             </Link>
+            <Link href="/for" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
+              Industries
+            </Link>
+            <Link href="/tech-roadmap" className="text-sm text-slate-500 hover:text-slate-900 min-h-11 flex items-center">
+              Roadmap
+            </Link>
             <Link
               href="/login"
               className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 min-h-11 flex items-center"
@@ -170,6 +176,39 @@ export default function ContractorLandingPage() {
         </div>
       </section>
 
+      {/* Industries */}
+      <section className="border-t border-slate-200 py-16">
+        <div className="mx-auto max-w-4xl px-4 text-center">
+          <h2 className="text-2xl font-bold sm:text-3xl mb-2">Built for Your Industry</h2>
+          <p className="text-slate-500 mb-8">Work.WitUS works for independent contractors across every field.</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            {[
+              { label: 'Film & TV', href: '/for/film-production' },
+              { label: 'Live Events', href: '/for/live-events' },
+              { label: 'Corporate AV', href: '/for/corporate-av' },
+              { label: 'Construction', href: '/for/construction' },
+              { label: 'Photo & Video', href: '/for/photography' },
+              { label: 'IT & Tech', href: '/for/it-consulting' },
+              { label: 'Healthcare', href: '/for/healthcare' },
+            ].map((ind) => (
+              <Link
+                key={ind.href}
+                href={ind.href}
+                className="rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-medium text-slate-700 hover:border-amber-300 hover:bg-amber-50 hover:text-amber-700 transition min-h-11 flex items-center"
+              >
+                {ind.label}
+              </Link>
+            ))}
+          </div>
+          <Link
+            href="/for"
+            className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-500 min-h-11"
+          >
+            View all industries <ArrowRight size={14} aria-hidden="true" />
+          </Link>
+        </div>
+      </section>
+
       {/* Academy Link */}
       <section className="border-t border-slate-200 py-12 text-center">
         <p className="text-sm text-slate-500">New to Work.WitUS?</p>
@@ -207,6 +246,8 @@ export default function ContractorLandingPage() {
         <div className="mt-2 flex justify-center gap-4">
           <Link href="/terms" className="hover:text-slate-500">Terms</Link>
           <Link href="/privacy" className="hover:text-slate-500">Privacy</Link>
+          <Link href="/tech-roadmap" className="hover:text-slate-500">Roadmap</Link>
+          <Link href="/for" className="hover:text-slate-500">Industries</Link>
           <a href="https://CentenarianOS.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">CentenarianOS</a>
           <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">WitUS.Online</a>
         </div>
