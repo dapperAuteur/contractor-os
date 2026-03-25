@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/components -name *Footer* -o -name *Header* -o -name *Nav*)"
+    ],
+    "additionalDirectories": [
+      "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/for"
+    ]
+  }
+}
