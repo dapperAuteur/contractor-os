@@ -4,6 +4,7 @@
 
 import { MetadataRoute } from 'next';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { INDUSTRY_CONFIGS } from '@/lib/features/industry-configs';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.com';
 
@@ -31,6 +32,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/privacy`,                     lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${SITE_URL}/terms`,                       lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
     { url: `${SITE_URL}/safety`,                      lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${SITE_URL}/tech-roadmap`,               lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${SITE_URL}/for`,                        lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
+    ...INDUSTRY_CONFIGS.map((c) => ({
+      url: `${SITE_URL}/for/${c.slug}`,
+      lastModified: now,
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    })),
   ];
 
   const supabase = db();
