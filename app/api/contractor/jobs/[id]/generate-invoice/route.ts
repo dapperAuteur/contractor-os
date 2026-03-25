@@ -165,6 +165,12 @@ export async function POST(request: NextRequest, ctx: Ctx) {
       invoices.push(invoice);
     }
 
+    // Update job status to 'invoiced' so it appears in the invoiced filter
+    await db
+      .from('contractor_jobs')
+      .update({ status: 'invoiced' })
+      .eq('id', id);
+
     return NextResponse.json({ invoices, count: invoices.length }, { status: 201 });
   } catch (err) {
     console.error('[generate-invoice] unhandled error:', err);
