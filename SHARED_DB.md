@@ -48,6 +48,16 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | `referral_reward_tiers` | `163_referral_rewards.sql` | Reward tier definitions (Bronze/Silver/Gold). Uses `app` column. Seeded with WitUS defaults — CentOS should insert its own tiers with `app='centenarian'`. |
 | `referral_rewards` | `163_referral_rewards.sql` | Tracks which rewards have been applied to which users. Unique constraint on `(user_id, tier_id)` prevents duplicates. |
 
+## Columns added to shared tables
+
+| Table | Column(s) | Type | Migration | Notes |
+|-------|-----------|------|-----------|-------|
+| `notification_preferences` | `email_marketing` | BOOL | `164_notification_preferences_expand.sql` | Email campaign opt-out. Checked by campaign send API. Default `true`. |
+| `notification_preferences` | `email_weekly_digest` | BOOL | `164_notification_preferences_expand.sql` | Weekly digest opt-out. Default `true`. |
+| `notification_preferences` | `invoice_status_reminder` | BOOL | `164_notification_preferences_expand.sql` | Push notification for invoice status changes. |
+| `notification_preferences` | `assignment_update` | BOOL | `164_notification_preferences_expand.sql` | Push notification for assignment grading/feedback. |
+| `notification_preferences` | `course_update` | BOOL | `164_notification_preferences_expand.sql` | Push notification for new lessons/announcements. |
+
 ## Tables added by CentenarianOS (used by both)
 
 | Table | Migration | Notes |

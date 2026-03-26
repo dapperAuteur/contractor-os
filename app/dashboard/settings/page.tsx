@@ -72,6 +72,11 @@ export default function DashboardSettingsPage() {
   const [clockOutReminder, setClockOutReminder] = useState(true);
   const [payDayReminder, setPayDayReminder] = useState(true);
   const [jobStartReminder, setJobStartReminder] = useState(true);
+  const [invoiceStatusReminder, setInvoiceStatusReminder] = useState(true);
+  const [assignmentUpdate, setAssignmentUpdate] = useState(true);
+  const [courseUpdate, setCourseUpdate] = useState(true);
+  const [emailMarketing, setEmailMarketing] = useState(true);
+  const [emailWeeklyDigest, setEmailWeeklyDigest] = useState(true);
   const [notifSaving, setNotifSaving] = useState(false);
 
   const loadTours = useCallback(async () => {
@@ -111,6 +116,11 @@ export default function DashboardSettingsPage() {
           setClockOutReminder(d.prefs.clock_out_reminder ?? true);
           setPayDayReminder(d.prefs.pay_day_reminder ?? true);
           setJobStartReminder(d.prefs.job_start_reminder ?? true);
+          setInvoiceStatusReminder(d.prefs.invoice_status_reminder ?? true);
+          setAssignmentUpdate(d.prefs.assignment_update ?? true);
+          setCourseUpdate(d.prefs.course_update ?? true);
+          setEmailMarketing(d.prefs.email_marketing ?? true);
+          setEmailWeeklyDigest(d.prefs.email_weekly_digest ?? true);
         }
       })
       .catch(() => {});
@@ -597,8 +607,128 @@ export default function DashboardSettingsPage() {
                 }}
               />
             </label>
+
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-800">Invoice status updates</p>
+                <p className="text-xs text-slate-400">When invoices are paid or overdue</p>
+              </div>
+              <Toggle
+                on={invoiceStatusReminder}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !invoiceStatusReminder;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ invoice_status_reminder: val }),
+                    });
+                    if (res.ok) setInvoiceStatusReminder(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
+
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-800">Assignment updates</p>
+                <p className="text-xs text-slate-400">Grading, feedback, and new assignments</p>
+              </div>
+              <Toggle
+                on={assignmentUpdate}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !assignmentUpdate;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ assignment_update: val }),
+                    });
+                    if (res.ok) setAssignmentUpdate(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
+
+            <label className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-slate-800">Course updates</p>
+                <p className="text-xs text-slate-400">New lessons and course announcements</p>
+              </div>
+              <Toggle
+                on={courseUpdate}
+                saving={notifSaving}
+                onToggle={async () => {
+                  setNotifSaving(true);
+                  const val = !courseUpdate;
+                  try {
+                    const res = await offlineFetch('/api/user/notification-preferences', {
+                      method: 'PATCH',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ course_update: val }),
+                    });
+                    if (res.ok) setCourseUpdate(val);
+                  } finally { setNotifSaving(false); }
+                }}
+              />
+            </label>
           </div>
         )}
+
+        {/* Email Preferences — always visible (not push-dependent) */}
+        <div className="mt-4 space-y-3">
+          <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Email Preferences</p>
+
+          <label className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-800">Marketing emails</p>
+              <p className="text-xs text-slate-400">Feature announcements and promotions</p>
+            </div>
+            <Toggle
+              on={emailMarketing}
+              saving={notifSaving}
+              onToggle={async () => {
+                setNotifSaving(true);
+                const val = !emailMarketing;
+                try {
+                  const res = await offlineFetch('/api/user/notification-preferences', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email_marketing: val }),
+                  });
+                  if (res.ok) setEmailMarketing(val);
+                } finally { setNotifSaving(false); }
+              }}
+            />
+          </label>
+
+          <label className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-800">Weekly digest</p>
+              <p className="text-xs text-slate-400">Summary of your week&apos;s activity</p>
+            </div>
+            <Toggle
+              on={emailWeeklyDigest}
+              saving={notifSaving}
+              onToggle={async () => {
+                setNotifSaving(true);
+                const val = !emailWeeklyDigest;
+                try {
+                  const res = await offlineFetch('/api/user/notification-preferences', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email_weekly_digest: val }),
+                  });
+                  if (res.ok) setEmailWeeklyDigest(val);
+                } finally { setNotifSaving(false); }
+              }}
+            />
+          </label>
+        </div>
       </div>
 
       {/* Social & Privacy */}

@@ -478,6 +478,50 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_rewards_user_tier
 
 ---
 
+## 8. Notification Preferences Expansion
+
+### What It Does
+Adds email marketing opt-out toggles and new push notification categories to the existing notification preferences system. The campaign send route respects `email_marketing = false` — opted-out users are excluded from sends.
+
+### Database Changes
+
+**Migration `164_notification_preferences_expand.sql`** (already run — copy to CentOS repo):
+
+```sql
+ALTER TABLE public.notification_preferences
+  ADD COLUMN IF NOT EXISTS email_marketing BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS email_weekly_digest BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS invoice_status_reminder BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS assignment_update BOOLEAN NOT NULL DEFAULT true,
+  ADD COLUMN IF NOT EXISTS course_update BOOLEAN NOT NULL DEFAULT true;
+```
+
+### CentOS Adaptations
+- `invoice_status_reminder` → may not apply to CentOS (no invoices). Replace with a CentOS-specific category (e.g., `recipe_recommendation`, `workout_reminder`)
+- `assignment_update` and `course_update` → same for both apps (shared Academy)
+- `email_marketing` and `email_weekly_digest` → same for both apps
+
+### Campaign Integration
+The campaign send API now checks `email_marketing` before sending:
+```ts
+const { data: optedOut } = await db
+  .from('notification_preferences')
+  .select('user_id')
+  .in('user_id', recipientIds)
+  .eq('email_marketing', false);
+const optedOutIds = new Set((optedOut ?? []).map((o) => o.user_id));
+filteredRecipients = filteredRecipients.filter((r) => !optedOutIds.has(r.id));
+```
+
+### Files to Update in CentOS
+| File | Change |
+|------|--------|
+| `app/api/user/notification-preferences/route.ts` | Add new columns to allowed list |
+| Settings page | Add toggles for new categories + email preferences |
+| Campaign send route | Add email_marketing opt-out filter |
+
+---
+
 ## Implementation Order (Recommended for CentOS)
 
 1. **Switchy fixes** — 30 min. Just apply 3 fixes to existing `lib/switchy.ts`
@@ -487,6 +531,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_rewards_user_tier
 5. **Upgrade Banners** — 1-2 hours. Component + admin page + dashboard integration
 6. **Feature Gating** — 30 min. Single component, integrate into list pages
 7. **Referral Rewards** — 1 hour. Seed tiers, rewards API, update referrals page
+8. **Notification Preferences** — 30 min. Add columns, update settings, wire into campaign send
 
 ---
 
@@ -515,4 +560,5 @@ CentOS should use the same `offlineFetch` wrapper (already shared).
 | Feature Gate | `components/marketing/FeatureGate.tsx` |
 | Offline | `lib/offline/offline-fetch.ts`, `lib/offline/sync-manager.ts` |
 | Referral Rewards | `app/api/admin/referrals/rewards/route.ts`, `app/admin/referrals/page.tsx` |
-| Migrations | `supabase/migrations/161_email_campaigns.sql`, `162_marketing_banners.sql`, `163_referral_rewards.sql` |
+| Notification Prefs | `app/api/user/notification-preferences/route.ts`, `app/dashboard/settings/page.tsx` |
+| Migrations | `161_email_campaigns.sql`, `162_marketing_banners.sql`, `163_referral_rewards.sql`, `164_notification_preferences_expand.sql` |

@@ -33,6 +33,11 @@ export async function PATCH(request: NextRequest) {
     'pay_day_reminder',
     'job_start_reminder',
     'save_scan_images',
+    'email_marketing',
+    'email_weekly_digest',
+    'invoice_status_reminder',
+    'assignment_update',
+    'course_update',
   ];
   const updates: Record<string, unknown> = {};
   for (const key of allowed) {
