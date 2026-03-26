@@ -170,7 +170,7 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
       { text: 'Tutorial courses: Getting Started, Equipment Tracker, Finance, Academy, Teaching, Data Hub guides', status: 'shipped' },
       { text: 'Free preview lessons — visitor access without account', status: 'shipped' },
       { text: 'Threaded chat on assignment submissions (student ↔ teacher)', status: 'shipped' },
-      { text: 'Course direct messages (student ↔ teacher inbox)', status: 'in-progress' },
+      { text: 'Course direct messages (student ↔ teacher inbox)', status: 'shipped' },
       { text: 'Teacher promo codes (Stripe Coupons API)', status: 'planned' },
       { text: 'Course reviews and star ratings', status: 'planned' },
       { text: 'Re-enrollment flow ("Take Again") for completed courses', status: 'planned' },
