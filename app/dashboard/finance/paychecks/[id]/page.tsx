@@ -8,7 +8,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ChevronLeft, Banknote, Loader2, AlertTriangle, CheckCircle2,
-  DollarSign, Receipt, Building2, Plus, X, Check, Trash2, ScanLine, Upload,
+  DollarSign, Receipt, Building2, Plus, X, Check, Trash2, ScanLine, Upload, Globe,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
@@ -24,7 +24,7 @@ interface Paycheck {
   other_deductions: { label: string; amount: number }[];
   expected_gross: number | null; variance_amount: number | null; variance_notes: string | null;
   status: string; is_reconciled: boolean;
-  contractor_jobs?: { id: string; job_number: string; client_name: string; event_name: string | null } | null;
+  contractor_jobs?: { id: string; job_number: string; client_name: string; event_name: string | null; user_contacts?: { paycheck_portal_url: string | null; paycheck_portal_company_id: string | null } | null } | null;
   paycheck_invoices: InvoiceLink[]; paycheck_taxes: TaxLine[]; paycheck_deposits: DepositLine[];
 }
 
@@ -235,6 +235,23 @@ export default function PaycheckDetailPage() {
             {pc.contractor_jobs?.client_name ?? 'No job'}
             {pc.contractor_jobs?.job_number && ` · #${pc.contractor_jobs.job_number}`}
             {` · ${new Date(pc.pay_date + 'T00:00').toLocaleDateString()}`}
+            {pc.contractor_jobs?.user_contacts?.paycheck_portal_url && (
+              <>
+                {' · '}
+                <a
+                  href={pc.contractor_jobs.user_contacts.paycheck_portal_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber-600 hover:text-amber-500 inline-flex items-center gap-1 transition"
+                  aria-label="Open paycheck portal"
+                >
+                  <Globe className="w-3.5 h-3.5" aria-hidden="true" /> Pay Portal
+                  {pc.contractor_jobs.user_contacts.paycheck_portal_company_id && (
+                    <span className="text-slate-400 ml-1">(ID: {pc.contractor_jobs.user_contacts.paycheck_portal_company_id})</span>
+                  )}
+                </a>
+              </>
+            )}
           </p>
         </div>
         <div className="flex items-center gap-2">

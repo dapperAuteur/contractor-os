@@ -32,6 +32,15 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
 
   const { job, role } = result;
 
+  // Fetch client paycheck portal info if client_id exists
+  let paycheck_portal_url: string | null = null;
+  let paycheck_portal_company_id: string | null = null;
+  if (job.client_id) {
+    const { data: contact } = await db.from('user_contacts').select('paycheck_portal_url, paycheck_portal_company_id').eq('id', job.client_id).maybeSingle();
+    paycheck_portal_url = contact?.paycheck_portal_url ?? null;
+    paycheck_portal_company_id = contact?.paycheck_portal_company_id ?? null;
+  }
+
   // Fetch linked counts in parallel
   const [timeEntries, invoices, trips, expenses, documents] = await Promise.all([
     db.from('job_time_entries').select('id', { count: 'exact', head: true }).eq('job_id', id),
@@ -43,6 +52,8 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
 
   return NextResponse.json({
     ...job,
+    paycheck_portal_url,
+    paycheck_portal_company_id,
     _role: role,
     _current_user_id: user.id,
     _counts: {

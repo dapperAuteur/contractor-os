@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, Phone, MessageSquare, Mail, Share2, Pencil, Trash2,
-  MapPin, Briefcase, Building2, Tag, Loader2, Save, X, Globe,
+  MapPin, Briefcase, Building2, Tag, Loader2, Save, X, Globe, DollarSign,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
@@ -29,6 +29,8 @@ interface ContactDetail {
   home_state: string | null;
   home_country: string | null;
   website: string | null;
+  paycheck_portal_url: string | null;
+  paycheck_portal_company_id: string | null;
   total_jobs_together: number;
   last_worked_with: string | null;
   notes: string | null;
@@ -88,6 +90,8 @@ export default function ContactDetailPage() {
   const [editTitle, setEditTitle] = useState('');
   const [editCompany, setEditCompany] = useState('');
   const [editWebsite, setEditWebsite] = useState('');
+  const [editPortalUrl, setEditPortalUrl] = useState('');
+  const [editPortalCompanyId, setEditPortalCompanyId] = useState('');
   const [editNotes, setEditNotes] = useState('');
   const [editPhones, setEditPhones] = useState<Array<{ phone: string; label: string; is_primary: boolean }>>([]);
   const [editEmails, setEditEmails] = useState<Array<{ email: string; label: string; is_primary: boolean }>>([]);
@@ -112,6 +116,8 @@ export default function ContactDetailPage() {
     setEditTitle(contact.job_title ?? '');
     setEditCompany(contact.company_name ?? '');
     setEditWebsite(contact.website ?? '');
+    setEditPortalUrl(contact.paycheck_portal_url ?? '');
+    setEditPortalCompanyId(contact.paycheck_portal_company_id ?? '');
     setEditNotes(contact.notes ?? '');
     setEditPhones(
       contact.contact_phones?.length > 0
@@ -168,6 +174,8 @@ export default function ContactDetailPage() {
         job_title: editTitle.trim() || null,
         company_name: editCompany.trim() || null,
         website: editWebsite.trim() || null,
+        paycheck_portal_url: editPortalUrl.trim() || null,
+        paycheck_portal_company_id: editPortalCompanyId.trim() || null,
         notes: editNotes.trim() || null,
         phones, emails, tags, addresses,
       }),
@@ -361,6 +369,12 @@ export default function ContactDetailPage() {
           <div>
             <label htmlFor="edit-website" className={labelClass}>Website</label>
             <input id="edit-website" type="url" value={editWebsite} onChange={(e) => setEditWebsite(e.target.value)} className={inputClass} placeholder="https://example.com" />
+
+            <label htmlFor="edit-portal-url" className={labelClass}>Paycheck Portal URL</label>
+            <input id="edit-portal-url" type="url" value={editPortalUrl} onChange={(e) => setEditPortalUrl(e.target.value)} className={inputClass} placeholder="https://portal.adp.com" />
+
+            <label htmlFor="edit-portal-company-id" className={labelClass}>Portal Company ID</label>
+            <input id="edit-portal-company-id" type="text" value={editPortalCompanyId} onChange={(e) => setEditPortalCompanyId(e.target.value)} className={inputClass} placeholder="Company/Employer ID for login" />
           </div>
 
           <div>
@@ -432,6 +446,12 @@ export default function ContactDetailPage() {
               {primaryEmail && (
                 <a href={`mailto:${primaryEmail}`} className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-100 min-h-11">
                   <Mail size={16} aria-hidden="true" /> Email
+                </a>
+              )}
+              {contact.paycheck_portal_url && (
+                <a href={contact.paycheck_portal_url.startsWith('http') ? contact.paycheck_portal_url : `https://${contact.paycheck_portal_url}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-100 min-h-11">
+                  <DollarSign size={16} aria-hidden="true" /> Pay Portal
+                  {contact.paycheck_portal_company_id && <span className="text-xs text-amber-500 ml-1">ID: {contact.paycheck_portal_company_id}</span>}
                 </a>
               )}
               {contact.website && (
