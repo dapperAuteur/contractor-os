@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -60,6 +60,8 @@ interface Job {
   };
 }
 
+interface BenefitLine { label: string; amount: number }
+
 interface TimeEntry {
   id: string;
   work_date: string;
@@ -74,6 +76,7 @@ interface TimeEntry {
   meal_provided: boolean;
   invoice_id: string | null;
   notes: string | null;
+  benefit_deductions: BenefitLine[];
 }
 
 interface Invoice {
@@ -186,6 +189,75 @@ const TABS = [
 
 const STATUS_ORDER = ['assigned', 'confirmed', 'in_progress', 'completed', 'invoiced', 'paid', 'cancelled'];
 
+function EntryBenefitEditor({
+  rows, setRows, saving, onSave, onCancel, onCopyAll, entryCount,
+}: {
+  rows: { id: string; label: string; amount: string }[];
+  setRows: (rows: { id: string; label: string; amount: string }[]) => void;
+  saving: boolean;
+  onSave: () => void;
+  onCancel: () => void;
+  onCopyAll: () => void;
+  entryCount: number;
+}) {
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-slate-500">Benefits for this date</p>
+      {rows.map((row, i) => (
+        <div key={row.id} className="flex items-center gap-2">
+          <input
+            type="text"
+            value={row.label}
+            onChange={(e) => { const u = [...rows]; u[i] = { ...row, label: e.target.value }; setRows(u); }}
+            placeholder="Benefit name"
+            aria-label="Benefit name"
+            className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+          />
+          <input
+            type="number"
+            step="0.01"
+            value={row.amount}
+            onChange={(e) => { const u = [...rows]; u[i] = { ...row, amount: e.target.value }; setRows(u); }}
+            placeholder="0.00"
+            aria-label="Benefit amount"
+            className="w-24 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-right"
+          />
+          <button
+            type="button"
+            onClick={() => setRows(rows.filter((_, j) => j !== i))}
+            className="flex items-center justify-center min-h-11 min-w-11 p-2 text-slate-400 hover:text-red-500 transition rounded-lg"
+            aria-label={`Remove ${row.label || 'benefit'}`}
+          >
+            <X className="w-4 h-4" aria-hidden="true" />
+          </button>
+        </div>
+      ))}
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setRows([...rows, { id: `new-${Date.now()}`, label: '', amount: '' }])}
+          className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-500 transition min-h-11 px-2"
+        >
+          <Plus className="w-3 h-3" aria-hidden="true" /> Add Line
+        </button>
+        <button type="button" onClick={onSave} disabled={saving} className="flex items-center gap-1 px-3 py-2 bg-amber-600 text-white rounded-lg text-xs font-medium hover:bg-amber-500 transition disabled:opacity-50 min-h-11">
+          {saving ? <Loader2 className="w-3 h-3 animate-spin" aria-hidden="true" /> : <Check className="w-3 h-3" aria-hidden="true" />}
+          Save
+        </button>
+        {entryCount > 1 && rows.length > 0 && (
+          <button type="button" onClick={onCopyAll} disabled={saving} className="flex items-center gap-1 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-xs font-medium hover:bg-slate-200 transition disabled:opacity-50 min-h-11">
+            <Copy className="w-3 h-3" aria-hidden="true" />
+            Copy to All Dates
+          </button>
+        )}
+        <button type="button" onClick={onCancel} className="text-xs text-slate-500 hover:text-slate-700 transition min-h-11 px-2">
+          Cancel
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function JobDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -200,10 +272,15 @@ export default function JobDetailPage() {
   const [tab, setTab] = useState('time');
   const [generating, setGenerating] = useState(false);
 
-  // Benefit deductions inline editing
+  // Job-level benefit deductions inline editing
   const [editingBenefits, setEditingBenefits] = useState(false);
   const [editBenefits, setEditBenefits] = useState<{ id: string; label: string; amount: string }[]>([]);
   const [benefitsSaving, setBenefitsSaving] = useState(false);
+
+  // Per-entry benefit editing
+  const [editingEntryBenefits, setEditingEntryBenefits] = useState<string | null>(null); // entry ID
+  const [entryBenefitRows, setEntryBenefitRows] = useState<{ id: string; label: string; amount: string }[]>([]);
+  const [entryBenefitSaving, setEntryBenefitSaving] = useState(false);
   const [flash, setFlash] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [quickLogOpen, setQuickLogOpen] = useState(false);
   const [statusEditing, setStatusEditing] = useState(false);
@@ -322,6 +399,58 @@ export default function JobDetailPage() {
       loadJob();
     }
     setBenefitsSaving(false);
+  }
+
+  /* ─── Per-Entry Benefit Deductions ────────────────────── */
+  function openEntryBenefits(te: TimeEntry) {
+    const existing = te.benefit_deductions?.length
+      ? te.benefit_deductions
+      : job?.benefit_deductions?.length
+        ? job.benefit_deductions
+        : [];
+    setEntryBenefitRows(
+      existing.map((d: BenefitLine, i: number) => ({
+        id: `${i}`,
+        label: d.label ?? '',
+        amount: d.amount != null ? String(d.amount) : '',
+      }))
+    );
+    setEditingEntryBenefits(te.id);
+  }
+
+  async function saveEntryBenefits(entryId: string) {
+    setEntryBenefitSaving(true);
+    const deductions = entryBenefitRows
+      .filter((d) => d.label.trim())
+      .map((d) => ({ label: d.label.trim(), amount: parseFloat(d.amount) || 0 }));
+
+    await offlineFetch(`/api/contractor/jobs/${id}/time-entries/${entryId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ benefit_deductions: deductions }),
+    });
+
+    setEditingEntryBenefits(null);
+    setEntryBenefitSaving(false);
+    loadJob();
+  }
+
+  async function copyBenefitsToAllDates(sourceBenefits: BenefitLine[]) {
+    if (!timeEntries.length) return;
+    const confirmed = confirm(`Copy these benefits to all ${timeEntries.length} work dates?`);
+    if (!confirmed) return;
+
+    setEntryBenefitSaving(true);
+    for (const te of timeEntries) {
+      await offlineFetch(`/api/contractor/jobs/${id}/time-entries/${te.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ benefit_deductions: sourceBenefits }),
+      });
+    }
+    setEditingEntryBenefits(null);
+    setEntryBenefitSaving(false);
+    loadJob();
   }
 
   /* ─── Generate Invoice ──────────────────────────────── */
@@ -905,6 +1034,48 @@ export default function JobDetailPage() {
                       {fmtTime(te.adjusted_in || te.time_in)} – {fmtTime(te.adjusted_out || te.time_out)}
                     </div>
                   )}
+
+                  {/* Per-entry benefits */}
+                  {(te.benefit_deductions?.length > 0 || editingEntryBenefits === te.id) && (
+                    <div className="border-t border-slate-100 pt-2 mt-2">
+                      {editingEntryBenefits === te.id ? (
+                        <EntryBenefitEditor
+                          rows={entryBenefitRows}
+                          setRows={setEntryBenefitRows}
+                          saving={entryBenefitSaving}
+                          onSave={() => saveEntryBenefits(te.id)}
+                          onCancel={() => setEditingEntryBenefits(null)}
+                          onCopyAll={() => {
+                            const deductions = entryBenefitRows
+                              .filter((d) => d.label.trim())
+                              .map((d) => ({ label: d.label.trim(), amount: parseFloat(d.amount) || 0 }));
+                            copyBenefitsToAllDates(deductions);
+                          }}
+                          entryCount={timeEntries.length}
+                        />
+                      ) : (
+                        <div className="space-y-1">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-500 font-medium">Benefits</span>
+                            <button onClick={() => openEntryBenefits(te)} className="text-xs text-amber-600 hover:text-amber-500 min-h-11 px-1" aria-label="Edit benefits for this date">
+                              <Edit2 className="w-3 h-3 inline" aria-hidden="true" /> Edit
+                            </button>
+                          </div>
+                          {te.benefit_deductions.map((b, i) => (
+                            <div key={i} className="flex justify-between text-xs">
+                              <span className="text-slate-600">{b.label}</span>
+                              <span className="text-slate-900">{fmt(b.amount)}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {!(te.benefit_deductions?.length > 0) && editingEntryBenefits !== te.id && (
+                    <button onClick={() => openEntryBenefits(te)} className="text-xs text-amber-600 hover:text-amber-500 mt-2 min-h-11 flex items-center gap-1" aria-label="Add benefits for this date">
+                      <Plus size={12} aria-hidden="true" /> Add Benefits
+                    </button>
+                  )}
                 </div>
               ))}
             </div>
@@ -925,7 +1096,8 @@ export default function JobDetailPage() {
                 </thead>
                 <tbody>
                   {timeEntries.map((te) => (
-                    <tr key={te.id} className="border-b border-slate-200/50 hover:bg-slate-100/30">
+                    <React.Fragment key={te.id}>
+                    <tr className="border-b border-slate-200/50 hover:bg-slate-100/30">
                       <td className="px-3 py-2 text-slate-900">{new Date(te.work_date + 'T00:00').toLocaleDateString()}</td>
                       <td className="px-3 py-2 text-right text-slate-500">{fmtTime(te.adjusted_in || te.time_in)}</td>
                       <td className="px-3 py-2 text-right text-slate-500">{fmtTime(te.adjusted_out || te.time_out)}</td>
@@ -947,11 +1119,49 @@ export default function JobDetailPage() {
                         )}
                       </td>
                       <td className="px-3 py-2">
-                        <button onClick={() => deleteTimeEntry(te.id)} className="p-2 text-slate-400 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete time entry for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
-                          <Trash2 size={16} />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button onClick={() => openEntryBenefits(te)} className="p-2 text-slate-400 hover:text-amber-500 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Edit benefits for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
+                            <DollarSign size={14} />
+                          </button>
+                          <button onClick={() => deleteTimeEntry(te.id)} className="p-2 text-slate-400 hover:text-red-400 min-h-11 min-w-11 flex items-center justify-center" aria-label={`Delete time entry for ${new Date(te.work_date + 'T00:00').toLocaleDateString()}`}>
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
+                    {/* Per-entry benefits expandable row */}
+                    {editingEntryBenefits === te.id && (
+                      <tr>
+                        <td colSpan={8} className="px-3 py-3 bg-slate-50">
+                          <EntryBenefitEditor
+                            rows={entryBenefitRows}
+                            setRows={setEntryBenefitRows}
+                            saving={entryBenefitSaving}
+                            onSave={() => saveEntryBenefits(te.id)}
+                            onCancel={() => setEditingEntryBenefits(null)}
+                            onCopyAll={() => {
+                              const deductions = entryBenefitRows
+                                .filter((d) => d.label.trim())
+                                .map((d) => ({ label: d.label.trim(), amount: parseFloat(d.amount) || 0 }));
+                              copyBenefitsToAllDates(deductions);
+                            }}
+                            entryCount={timeEntries.length}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                    {editingEntryBenefits !== te.id && te.benefit_deductions?.length > 0 && (
+                      <tr>
+                        <td colSpan={8} className="px-3 pb-2">
+                          <div className="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-slate-500">
+                            {te.benefit_deductions.map((b, i) => (
+                              <span key={i}>{b.label}: <span className="text-slate-700 font-medium">{fmt(b.amount)}</span></span>
+                            ))}
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                    </React.Fragment>
                   ))}
                 </tbody>
               </table>

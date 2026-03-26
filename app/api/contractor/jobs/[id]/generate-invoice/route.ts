@@ -29,6 +29,7 @@ interface TimeEntry {
   dt_hours: number | null;
   meal_provided: boolean;
   invoice_id: string | null;
+  benefit_deductions: { label: string; amount: number }[];
 }
 
 interface Job {
@@ -95,7 +96,17 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     // Generate one invoice per time entry (matches the CBS Sports pattern — one pay stub per work day)
     for (const entry of entries as TimeEntry[]) {
       const items = buildLineItems(typedJob, entry);
-      const benefitItems = typedJob.benefits_eligible ? buildBenefitItems(typedJob, entry) : [];
+      // Use per-entry benefits when present, fall back to job-level
+      const entryBenefits = (entry.benefit_deductions?.length ?? 0) > 0
+        ? entry.benefit_deductions.map((b) => ({
+            description: b.label,
+            quantity: 1,
+            unit_price: b.amount,
+            amount: Math.round(b.amount * 100) / 100,
+            item_type: 'benefit' as const,
+          }))
+        : typedJob.benefits_eligible ? buildBenefitItems(typedJob, entry) : [];
+      const benefitItems = entryBenefits;
 
       const lineItemTotal = items.reduce((sum, i) => sum + i.amount, 0);
       const subtotal = Math.round(lineItemTotal * 100) / 100;
