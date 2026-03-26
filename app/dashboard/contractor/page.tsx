@@ -35,27 +35,50 @@ const STATUS_GROUPS: Record<string, { label: string; statuses: string[] }> = {
 };
 
 export default function ContractorHubPage() {
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [allJobs, setAllJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
+  // Fetch all jobs once for stat counts
   useEffect(() => {
-    offlineFetch('/api/contractor/jobs?limit=100')
+    offlineFetch('/api/contractor/jobs?limit=500')
       .then((r) => r.json())
-      .then((d) => setJobs(d.jobs ?? []))
+      .then((d) => {
+        setAllJobs(d.jobs ?? []);
+        setFilteredJobs(d.jobs ?? []);
+      })
       .finally(() => setLoading(false));
   }, []);
 
+  // Re-fetch when filter changes — use server-side filtering for accuracy
+  useEffect(() => {
+    if (!activeFilter) {
+      setFilteredJobs(allJobs);
+      return;
+    }
+    const statuses = STATUS_GROUPS[activeFilter]?.statuses ?? [];
+    if (statuses.length === 1) {
+      // Single status — use API filter for accuracy
+      offlineFetch(`/api/contractor/jobs?limit=500&status=${statuses[0]}`)
+        .then((r) => r.json())
+        .then((d) => setFilteredJobs(d.jobs ?? []))
+        .catch(() => {
+          // Fallback to client-side filter
+          setFilteredJobs(allJobs.filter((j) => statuses.includes(j.status)));
+        });
+    } else {
+      // Multi-status group (assigned+confirmed) — client-side filter
+      setFilteredJobs(allJobs.filter((j) => statuses.includes(j.status)));
+    }
+  }, [activeFilter, allJobs]);
+
   const stats: StatCard[] = Object.entries(STATUS_GROUPS).map(([key, { label, statuses }]) => ({
     label,
-    value: jobs.filter((j) => statuses.includes(j.status)).length,
+    value: allJobs.filter((j) => statuses.includes(j.status)).length,
     status: key,
     statuses,
   }));
-
-  const filteredJobs = activeFilter
-    ? jobs.filter((j) => STATUS_GROUPS[activeFilter].statuses.includes(j.status))
-    : jobs;
 
   const sectionTitle = activeFilter
     ? `${STATUS_GROUPS[activeFilter].label} Jobs`
