@@ -75,47 +75,46 @@ export default function ShareBar({ postUrl, postTitle, postId, emailUrl, linkedi
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm text-gray-500 font-medium mr-1">Share:</span>
+    <nav aria-label="Share this post" className="flex flex-wrap items-center gap-2">
+      <span className="text-sm text-slate-500 font-medium mr-1">Share:</span>
 
       <button
         onClick={handleCopy}
-        title="Copy link"
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 border border-slate-200 rounded-lg transition"
+        aria-label={copied ? 'Link copied to clipboard' : `Copy link to "${postTitle}"`}
+        className="flex items-center gap-1.5 min-h-11 px-3 py-2 text-sm text-slate-600 hover:text-amber-600 hover:bg-amber-500/10 border border-slate-200 rounded-lg transition"
       >
-        <Link2 className="w-4 h-4" />
+        <Link2 className="w-4 h-4 shrink-0" aria-hidden="true" />
         {copied ? 'Copied!' : 'Copy link'}
       </button>
 
       <button
         onClick={handleEmail}
-        title={`Share "${postTitle}" via email`}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-amber-400 hover:bg-amber-500/10 border border-slate-200 rounded-lg transition"
+        aria-label={`Share "${postTitle}" via email`}
+        className="flex items-center gap-1.5 min-h-11 px-3 py-2 text-sm text-slate-600 hover:text-amber-600 hover:bg-amber-500/10 border border-slate-200 rounded-lg transition"
       >
-        <Mail className="w-4 h-4" />
+        <Mail className="w-4 h-4 shrink-0" aria-hidden="true" />
         Email
       </button>
 
       <button
         onClick={handleLinkedIn}
-        title={`Share "${postTitle}" on LinkedIn`}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-blue-700 hover:bg-blue-50 border border-gray-200 rounded-lg transition"
+        aria-label={`Share "${postTitle}" on LinkedIn`}
+        className="flex items-center gap-1.5 min-h-11 px-3 py-2 text-sm text-slate-600 hover:text-blue-700 hover:bg-blue-50 border border-slate-200 rounded-lg transition"
       >
-        <Linkedin className="w-4 h-4" />
+        <Linkedin className="w-4 h-4 shrink-0" aria-hidden="true" />
         LinkedIn
       </button>
 
       <button
         onClick={handleFacebook}
-        title={`Share "${postTitle}" on Facebook`}
-        className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-[#1877F2] hover:bg-blue-50 border border-gray-200 rounded-lg transition"
+        aria-label={`Share "${postTitle}" on Facebook`}
+        className="flex items-center gap-1.5 min-h-11 px-3 py-2 text-sm text-slate-600 hover:text-[#1877F2] hover:bg-blue-50 border border-slate-200 rounded-lg transition"
       >
-        {/* Facebook brand icon */}
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.886v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
         </svg>
         Facebook
       </button>
-    </div>
+    </nav>
   );
 }

@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/components -name *Footer* -o -name *Header* -o -name *Nav*)"
+      "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/components -name *Footer* -o -name *Header* -o -name *Nav*)",
+      "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app -type d -name *industri* -o -type d -name *career*)",
+      "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os -path *industri* -o -path *roadmap*)",
+      "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/api/admin -maxdepth 1 -type f -name *.ts)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "additionalDirectories": [
       "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/for"

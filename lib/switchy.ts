@@ -11,6 +11,15 @@ function headers() {
   };
 }
 
+/** Returns pixel UUIDs from SWITCHY_PIXEL_IDS env var (comma-separated). */
+function getPixelIds(): string[] {
+  const raw = process.env.SWITCHY_PIXEL_IDS ?? '';
+  return raw
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean);
+}
+
 export interface SwitchyLink {
   id: string;
   short_url: string;
@@ -25,16 +34,29 @@ interface CreateParams {
   tags?: string[];
 }
 
+/** Defensively parse the Switchy response — shape varies between endpoints. */
+function parseLinkResponse(json: Record<string, unknown>, domain: string): SwitchyLink {
+  const data = (json.link ?? json) as Record<string, unknown>;
+  const id = (data.id ?? data._id ?? '') as string;
+  const short_url =
+    (data.short_url as string) ??
+    (data.shortUrl as string) ??
+    `https://${domain}/${id}`;
+  return { id, short_url };
+}
+
 /**
  * Creates a short link in Switchy. Retries with a random suffix if slug is taken.
+ * All configured pixels are automatically attached.
  * Returns null on failure (caller should handle gracefully).
  */
 export async function createShortLink(params: CreateParams): Promise<SwitchyLink | null> {
   if (!process.env.SWITCHY_API_TOKEN) return null;
 
   const domain = process.env.SWITCHY_DOMAIN ?? 'i.work.witus.online';
+  const pixels = getPixelIds();
 
-  const body = {
+  const linkData = {
     url: params.url,
     domain,
     id: params.slug,
@@ -42,12 +64,13 @@ export async function createShortLink(params: CreateParams): Promise<SwitchyLink
     description: params.description,
     image: params.image,
     tags: params.tags,
+    ...(pixels.length > 0 && { pixels }),
   };
 
   const res = await fetch(`${API_BASE}/links/create`, {
     method: 'POST',
     headers: headers(),
-    body: JSON.stringify(body),
+    body: JSON.stringify({ link: linkData }),
   });
 
   if (!res.ok) {
@@ -57,15 +80,17 @@ export async function createShortLink(params: CreateParams): Promise<SwitchyLink
       const retry = await fetch(`${API_BASE}/links/create`, {
         method: 'POST',
         headers: headers(),
-        body: JSON.stringify({ ...body, id: `${params.slug}-${suffix}` }),
+        body: JSON.stringify({ link: { ...linkData, id: `${params.slug}-${suffix}` } }),
       });
       if (!retry.ok) return null;
-      return retry.json();
+      const json = await retry.json();
+      return parseLinkResponse(json, domain);
     }
     return null;
   }
 
-  return res.json();
+  const json = await res.json();
+  return parseLinkResponse(json, domain);
 }
 
 interface UpdateParams {
@@ -78,9 +103,12 @@ interface UpdateParams {
 
 /**
  * Updates OG metadata and/or destination URL for an existing Switchy link.
+ * All configured pixels are automatically attached.
  */
 export async function updateShortLink(params: UpdateParams): Promise<boolean> {
   if (!process.env.SWITCHY_API_TOKEN) return false;
+
+  const pixels = getPixelIds();
 
   const res = await fetch(`${API_BASE}/links/${params.linkId}`, {
     method: 'PUT',
@@ -91,6 +119,7 @@ export async function updateShortLink(params: UpdateParams): Promise<boolean> {
         title: params.title,
         description: params.description,
         image: params.image,
+        ...(pixels.length > 0 && { pixels }),
       },
     }),
   });
