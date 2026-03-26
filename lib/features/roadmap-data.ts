@@ -236,7 +236,7 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
       { text: 'Notification preferences — control which alerts you receive', status: 'shipped' },
       { text: 'Email marketing opt-out — unsubscribe from campaigns and digests', status: 'shipped' },
       { text: 'Custom dashboard widgets — pin your most-used modules', status: 'planned' },
-      { text: 'Theme support — light, dark, and system modes', status: 'planned' },
+      { text: 'Theme support — light, dark, and system modes', status: 'shipped' },
     ],
   },
   {

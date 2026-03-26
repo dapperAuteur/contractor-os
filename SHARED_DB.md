@@ -91,3 +91,4 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 - `profiles.show_done_counts` — activity count visibility
 - `profiles.fiscal_year_start_month` — fiscal year start month (INT, 1-12, default 1). Migration `155_fiscal_calendar.sql`.
 - `profiles.fiscal_year_start_day` — fiscal year start day (INT, 1-28, default 1). Migration `155_fiscal_calendar.sql`.
+- `profiles.theme` — user theme preference: `'light'`, `'dark'`, or `'system'` (TEXT, default `'light'`). Migration `166_theme_preference.sql`. Both apps share this column.

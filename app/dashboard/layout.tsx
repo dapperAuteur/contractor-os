@@ -15,6 +15,7 @@ import OfflineIndicator from '@/components/ui/OfflineIndicator';
 import MfaBanner from '@/components/ui/MfaBanner';
 import NotificationScheduler from '@/components/NotificationScheduler';
 import { SyncProvider } from '@/lib/contexts/SyncContext';
+import ThemeProvider from '@/components/ThemeProvider';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 // Routes freely accessible without a paid subscription
@@ -147,6 +148,7 @@ export default function DashboardLayout({
   const LayoutComponent = appMode === 'lister' ? ListerLayout : ContractorLayout;
 
   return (
+    <ThemeProvider>
     <SyncProvider>
       <LayoutComponent
         username={username}
@@ -162,5 +164,6 @@ export default function DashboardLayout({
         {children}
       </LayoutComponent>
     </SyncProvider>
+    </ThemeProvider>
   );
 }
