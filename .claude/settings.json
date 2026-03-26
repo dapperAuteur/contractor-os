@@ -6,7 +6,8 @@
       "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os -path *industri* -o -path *roadmap*)",
       "Bash(find /Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/api/admin -maxdepth 1 -type f -name *.ts)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git pull:*)"
     ],
     "additionalDirectories": [
       "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/for",
