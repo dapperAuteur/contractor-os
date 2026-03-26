@@ -3,13 +3,14 @@
 // app/academy/[courseId]/assignments/[id]/page.tsx
 // Student: view assignment, save draft, submit work, see grade/feedback, message thread.
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  ChevronLeft, Send, CheckCircle, Loader2, ClipboardList, MessageCircle, Clock, FileEdit, Activity,
+  ChevronLeft, CheckCircle, Loader2, ClipboardList, Clock, FileEdit, Activity,
 } from 'lucide-react';
 import SubmissionUploader, { SubmissionFile } from '@/components/ui/SubmissionUploader';
+import SubmissionMessageThread from '@/components/academy/SubmissionMessageThread';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 interface Assignment {
@@ -29,20 +30,11 @@ interface Submission {
   teacher_feedback: string | null;
 }
 
-interface Message {
-  id: string;
-  is_teacher: boolean;
-  body: string;
-  created_at: string;
-  profiles: { username: string; display_name: string | null } | null;
-}
-
 export default function AssignmentPage() {
   const { courseId, id: assignmentId } = useParams<{ courseId: string; id: string }>();
 
   const [assignment, setAssignment] = useState<Assignment | null>(null);
   const [submission, setSubmission] = useState<Submission | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form state mirrors the submission
@@ -51,9 +43,7 @@ export default function AssignmentPage() {
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState('');
 
-  const [newMessage, setNewMessage] = useState('');
   const [sending, setSending] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Metric slot picker state
   const [metricSlots, setMetricSlots] = useState(1);
@@ -107,18 +97,6 @@ export default function AssignmentPage() {
     }).catch(() => setLoading(false));
   }, [courseId, assignmentId]);
 
-  useEffect(() => {
-    if (!submission?.id) return;
-    offlineFetch(`/api/academy/assignments/${assignmentId}/submissions/${submission.id}/messages`)
-      .then((r) => r.json())
-      .then((d) => setMessages(Array.isArray(d) ? d : []))
-      .catch(() => {});
-  }, [assignmentId, submission?.id]);
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
   async function handleSave(status: 'draft' | 'submitted') {
     setSaving(true);
     setSaveError('');
@@ -136,25 +114,6 @@ export default function AssignmentPage() {
     } finally {
       setSaving(false);
     }
-  }
-
-  async function handleSendMessage() {
-    if (!newMessage.trim() || !submission?.id) return;
-    setSending(true);
-    const r = await offlineFetch(
-      `/api/academy/assignments/${assignmentId}/submissions/${submission.id}/messages`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ body: newMessage.trim() }),
-      },
-    );
-    if (r.ok) {
-      const msg = await r.json();
-      setMessages((prev) => [...prev, msg]);
-      setNewMessage('');
-    }
-    setSending(false);
   }
 
   if (loading) {
@@ -321,60 +280,11 @@ export default function AssignmentPage() {
 
         {/* Message thread — visible once a submission (draft or submitted) exists */}
         {submission && (
-          <div className="bg-white border border-slate-200 rounded-xl p-6">
-            <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
-              <MessageCircle className="w-4 h-4 text-amber-400" /> Feedback Thread
-            </h2>
-            {messages.length === 0 ? (
-              <p className="text-gray-600 text-sm mb-4">
-                No messages yet.{' '}
-                {isSubmitted
-                  ? 'Your teacher will respond here once they review your submission.'
-                  : 'Submit your work for teacher feedback.'}
-              </p>
-            ) : (
-              <div className="space-y-3 mb-4 max-h-96 overflow-y-auto pr-1">
-                {messages.map((msg) => (
-                  <div key={msg.id} className={`flex ${msg.is_teacher ? '' : 'flex-row-reverse'}`}>
-                    <div className={`max-w-sm ${msg.is_teacher ? '' : 'ml-auto'}`}>
-                      <div className={`inline-block px-4 py-2.5 rounded-xl text-sm leading-relaxed ${
-                        msg.is_teacher
-                          ? 'bg-slate-100 text-slate-800 rounded-tl-none'
-                          : 'bg-amber-700/80 text-white rounded-tr-none'
-                      }`}>
-                        {msg.body}
-                      </div>
-                      <p className={`text-gray-600 text-xs mt-1 ${msg.is_teacher ? '' : 'text-right'}`}>
-                        {msg.is_teacher
-                          ? (msg.profiles?.display_name ?? msg.profiles?.username ?? 'Teacher')
-                          : 'You'}{' '}
-                        · {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
-            )}
-            <div className=" flex gap-2 mt-2">
-              <input
-                type="text"
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) handleSendMessage(); }}
-                placeholder="Message your teacher…"
-                className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-amber-500"
-              />
-              <button
-                type="button"
-                onClick={handleSendMessage}
-                disabled={sending || !newMessage.trim()}
-                className="p-2.5 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition disabled:opacity-50"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <SubmissionMessageThread
+            assignmentId={assignmentId}
+            submissionId={submission.id}
+            perspective="student"
+          />
         )}
       </div>
     </div>
