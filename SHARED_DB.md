@@ -58,6 +58,11 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | `notification_preferences` | `assignment_update` | BOOL | `164_notification_preferences_expand.sql` | Push notification for assignment grading/feedback. |
 | `notification_preferences` | `course_update` | BOOL | `164_notification_preferences_expand.sql` | Push notification for new lessons/announcements. |
 
+| `paychecks` | `168_paycheck_reconciliation.sql` | Groups invoices into paychecks with tax tracking and deposit splits. Work.WitUS only. |
+| `paycheck_invoices` | `168_paycheck_reconciliation.sql` | Join table linking paychecks to invoices. |
+| `paycheck_taxes` | `168_paycheck_reconciliation.sql` | Per-line tax withholding tracking with expected vs actual. |
+| `paycheck_deposits` | `168_paycheck_reconciliation.sql` | Multi-account deposit splits with linked financial transactions. |
+
 ## Tables added by CentenarianOS (used by both)
 
 | Table | Migration | Notes |
