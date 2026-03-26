@@ -129,6 +129,18 @@ export async function POST(_req: NextRequest, { params }: Params) {
     // Remove recipients without email
     filteredRecipients = filteredRecipients.filter((r) => r.email);
 
+    // Respect email marketing opt-out preference
+    if (filteredRecipients.length > 0) {
+      const recipientIds = filteredRecipients.map((r) => r.id);
+      const { data: optedOut } = await db
+        .from('notification_preferences')
+        .select('user_id')
+        .in('user_id', recipientIds)
+        .eq('email_marketing', false);
+      const optedOutIds = new Set((optedOut ?? []).map((o) => o.user_id));
+      filteredRecipients = filteredRecipients.filter((r) => !optedOutIds.has(r.id));
+    }
+
     const siteUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
     const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'admin@work.witus.online';
     const resend = getResend();
