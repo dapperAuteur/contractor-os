@@ -199,6 +199,11 @@ export default function JobDetailPage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('time');
   const [generating, setGenerating] = useState(false);
+
+  // Benefit deductions inline editing
+  const [editingBenefits, setEditingBenefits] = useState(false);
+  const [editBenefits, setEditBenefits] = useState<{ id: string; label: string; amount: string }[]>([]);
+  const [benefitsSaving, setBenefitsSaving] = useState(false);
   const [flash, setFlash] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [quickLogOpen, setQuickLogOpen] = useState(false);
   const [statusEditing, setStatusEditing] = useState(false);
@@ -297,6 +302,26 @@ export default function JobDetailPage() {
     });
     setBulkSaving(false);
     loadJob();
+  }
+
+  /* ─── Save Benefit Deductions ─────────────────────────── */
+  async function saveBenefitDeductions() {
+    setBenefitsSaving(true);
+    const deductions = editBenefits
+      .filter((d) => d.label.trim())
+      .map((d) => ({ label: d.label.trim(), amount: parseFloat(d.amount) || 0 }));
+
+    const res = await offlineFetch(`/api/contractor/jobs/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ benefit_deductions: deductions }),
+    });
+
+    if (res.ok) {
+      setEditingBenefits(false);
+      loadJob();
+    }
+    setBenefitsSaving(false);
   }
 
   /* ─── Generate Invoice ──────────────────────────────── */
@@ -614,10 +639,100 @@ export default function JobDetailPage() {
             </div>
           )}
 
-          {/* Benefit Deductions */}
-          {(job.benefit_deductions?.length ?? 0) > 0 && (
-            <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+          {/* Benefit Deductions — inline editable */}
+          <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
+            <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-slate-800">Employer Benefit Contributions</h3>
+              <button
+                type="button"
+                onClick={() => {
+                  if (editingBenefits) {
+                    // Save
+                    saveBenefitDeductions();
+                  } else {
+                    // Enter edit mode
+                    setEditBenefits(
+                      (job.benefit_deductions ?? []).map((d, i) => ({
+                        id: `${i}`,
+                        label: d.label,
+                        amount: String(d.amount ?? 0),
+                      }))
+                    );
+                    setEditingBenefits(true);
+                  }
+                }}
+                disabled={benefitsSaving}
+                className="flex items-center gap-1 text-xs text-amber-600 hover:text-amber-500 transition min-h-11 px-2"
+                aria-label={editingBenefits ? 'Save benefit changes' : 'Edit benefits'}
+              >
+                {benefitsSaving ? (
+                  <Loader2 className="w-3 h-3 animate-spin" aria-hidden="true" />
+                ) : editingBenefits ? (
+                  <Check className="w-3 h-3" aria-hidden="true" />
+                ) : (
+                  <Edit2 className="w-3 h-3" aria-hidden="true" />
+                )}
+                {editingBenefits ? 'Save' : 'Edit'}
+              </button>
+            </div>
+
+            {editingBenefits ? (
+              <div className="space-y-2">
+                {editBenefits.map((ded, i) => (
+                  <div key={ded.id} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={ded.label}
+                      onChange={(e) => {
+                        const updated = [...editBenefits];
+                        updated[i] = { ...ded, label: e.target.value };
+                        setEditBenefits(updated);
+                      }}
+                      placeholder="Benefit name"
+                      aria-label="Benefit name"
+                      className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                    />
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={ded.amount}
+                      onChange={(e) => {
+                        const updated = [...editBenefits];
+                        updated[i] = { ...ded, amount: e.target.value };
+                        setEditBenefits(updated);
+                      }}
+                      placeholder="0.00"
+                      aria-label="Benefit amount"
+                      className="w-28 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 text-right"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setEditBenefits(editBenefits.filter((_, j) => j !== i))}
+                      className="flex items-center justify-center min-h-11 min-w-11 p-2 text-slate-400 hover:text-red-500 transition rounded-lg"
+                      aria-label={`Remove ${ded.label || 'benefit'}`}
+                    >
+                      <X className="w-4 h-4" aria-hidden="true" />
+                    </button>
+                  </div>
+                ))}
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditBenefits([...editBenefits, { id: `new-${Date.now()}`, label: '', amount: '' }])}
+                    className="flex items-center gap-1.5 text-xs text-amber-600 hover:text-amber-500 transition min-h-11 px-2"
+                  >
+                    <Plus className="w-3 h-3" aria-hidden="true" /> Add Benefit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditingBenefits(false)}
+                    className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-700 transition min-h-11 px-2"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (job.benefit_deductions?.length ?? 0) > 0 ? (
               <div className="space-y-1.5">
                 {job.benefit_deductions.map((ded, i) => (
                   <div key={i} className="flex justify-between items-center text-sm">
@@ -632,8 +747,10 @@ export default function JobDetailPage() {
                   </span>
                 </div>
               </div>
-            </div>
-          )}
+            ) : (
+              <p className="text-sm text-slate-400">No benefit contributions. Click Edit to add.</p>
+            )}
+          </div>
 
           {/* Contacts */}
           <div className="rounded-xl border border-slate-200 bg-white p-4 space-y-3">
