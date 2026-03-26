@@ -70,6 +70,18 @@ export default function TeacherMessagesPage() {
       .catch(() => setLoadingMessages(false));
   }, [activeConv]);
 
+  // Auto-refresh messages every 30 seconds
+  useEffect(() => {
+    if (!activeConv) return;
+    const interval = setInterval(() => {
+      offlineFetch(`/api/academy/courses/${activeConv.courseId}/messages?partner_id=${activeConv.partnerId}`)
+        .then((r) => r.json())
+        .then((d) => { if (Array.isArray(d)) setMessages(d); })
+        .catch(() => {});
+    }, 30_000);
+    return () => clearInterval(interval);
+  }, [activeConv]);
+
   async function handleSend() {
     if (!newMessage.trim() || !activeConv || sending) return;
     setSending(true);
@@ -91,29 +103,32 @@ export default function TeacherMessagesPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+      <div className="flex justify-center py-20" role="status" aria-label="Loading messages">
+        <Loader2 className="w-8 h-8 animate-spin text-amber-600" aria-hidden="true" />
       </div>
     );
   }
 
   return (
     <div className="p-4 sm:p-8 max-w-5xl">
-      <h1 className="text-xl sm:text-2xl font-bold text-white mb-6 flex items-center gap-3">
-        <MessageCircle className="w-6 h-6 text-amber-400" /> Student Messages
+      <h1 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+        <MessageCircle className="w-6 h-6 text-amber-600" aria-hidden="true" /> Student Messages
       </h1>
 
       <div className="flex flex-col lg:flex-row gap-4 min-h-[60vh]">
         {/* Conversation list */}
-        <div className={`w-full lg:w-72 shrink-0 ${activeConv ? 'hidden lg:block' : ''}`}>
+        <nav
+          className={`w-full lg:w-72 shrink-0 ${activeConv ? 'hidden lg:block' : ''}`}
+          aria-label="Student conversations"
+        >
           {conversations.length === 0 ? (
             <div className="text-center py-12 bg-white border border-dashed border-slate-200 rounded-xl">
-              <MessageCircle className="w-10 h-10 mx-auto mb-3 text-gray-700" />
-              <p className="text-slate-400 text-sm">No messages yet.</p>
-              <p className="text-gray-600 text-xs mt-1">Students will message you from course pages.</p>
+              <MessageCircle className="w-10 h-10 mx-auto mb-3 text-slate-300" aria-hidden="true" />
+              <p className="text-slate-500 text-sm">No messages yet.</p>
+              <p className="text-slate-400 text-xs mt-1">Students will message you from course pages.</p>
             </div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-1" role="list">
               {conversations.map((conv) => {
                 const isActive = activeConv?.courseId === conv.course_id && activeConv?.partnerId === conv.partner_id;
                 return (
@@ -121,29 +136,30 @@ export default function TeacherMessagesPage() {
                     key={`${conv.course_id}:${conv.partner_id}`}
                     type="button"
                     onClick={() => setActiveConv({ courseId: conv.course_id, partnerId: conv.partner_id, partnerName: conv.partner_name })}
-                    className={`w-full text-left p-3 rounded-xl transition ${
-                      isActive ? 'bg-amber-900/30 border border-amber-700/50' : 'bg-white border border-slate-200 hover:border-slate-200'
+                    aria-current={isActive ? 'true' : undefined}
+                    className={`w-full text-left p-3 rounded-xl transition min-h-11 ${
+                      isActive ? 'bg-amber-50 border border-amber-200' : 'bg-white border border-slate-200 hover:bg-slate-50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       {conv.partner_avatar ? (
                         <Image src={conv.partner_avatar} alt="" width={36} height={36} className="w-9 h-9 rounded-full object-cover shrink-0" />
                       ) : (
-                        <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-bold shrink-0">
+                        <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 text-xs font-bold shrink-0">
                           {conv.partner_name[0]?.toUpperCase()}
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center justify-between gap-2">
-                          <p className="text-sm font-medium text-white truncate">{conv.partner_name}</p>
+                          <p className="text-sm font-medium text-slate-900 truncate">{conv.partner_name}</p>
                           {conv.unread_count > 0 && (
-                            <span className="bg-amber-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shrink-0">
+                            <span className="bg-amber-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center shrink-0" aria-label={`${conv.unread_count} unread`}>
                               {conv.unread_count}
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-400 truncate">{conv.course_title}</p>
-                        <p className="text-xs text-gray-600 truncate mt-0.5">{conv.last_message}</p>
+                        <p className="text-xs text-slate-500 truncate">{conv.course_title}</p>
+                        <p className="text-xs text-slate-400 truncate mt-0.5">{conv.last_message}</p>
                       </div>
                     </div>
                   </button>
@@ -151,7 +167,7 @@ export default function TeacherMessagesPage() {
               })}
             </div>
           )}
-        </div>
+        </nav>
 
         {/* Thread */}
         <div className={`flex-1 flex flex-col bg-white border border-slate-200 rounded-xl overflow-hidden ${!activeConv ? 'hidden lg:flex' : ''}`}>
@@ -161,20 +177,27 @@ export default function TeacherMessagesPage() {
                 <button
                   type="button"
                   onClick={() => setActiveConv(null)}
-                  className="lg:hidden p-1 text-slate-500 hover:text-white transition"
+                  className="lg:hidden flex items-center justify-center min-h-11 min-w-11 p-1 text-slate-500 hover:text-slate-900 transition rounded-lg"
+                  aria-label="Back to conversations"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-5 h-5" aria-hidden="true" />
                 </button>
-                <p className="font-medium text-white text-sm">{activeConv.partnerName}</p>
+                <p className="font-medium text-slate-900 text-sm">{activeConv.partnerName}</p>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0" style={{ maxHeight: 'calc(60vh - 8rem)' }}>
+              <div
+                className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0"
+                style={{ maxHeight: 'calc(60vh - 8rem)' }}
+                role="log"
+                aria-label="Message thread"
+                aria-live="polite"
+              >
                 {loadingMessages ? (
-                  <div className="flex justify-center py-8">
-                    <Loader2 className="w-6 h-6 animate-spin text-amber-500" />
+                  <div className="flex justify-center py-8" role="status" aria-label="Loading messages">
+                    <Loader2 className="w-6 h-6 animate-spin text-amber-600" aria-hidden="true" />
                   </div>
                 ) : messages.length === 0 ? (
-                  <div className="text-center py-8 text-gray-600 text-sm">
+                  <div className="text-center py-8 text-slate-400 text-sm">
                     No messages yet.
                   </div>
                 ) : (
@@ -187,7 +210,7 @@ export default function TeacherMessagesPage() {
                             ? 'bg-amber-600 text-white rounded-br-md'
                             : 'bg-slate-100 text-slate-800 rounded-bl-md'
                         }`}>
-                          <p className="text-sm whitespace-pre-wrap break-words">{msg.body}</p>
+                          <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.body}</p>
                           <p className={`text-[10px] mt-1 ${isMine ? 'text-amber-200' : 'text-slate-400'}`}>
                             {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
@@ -201,27 +224,30 @@ export default function TeacherMessagesPage() {
 
               <div className="border-t border-slate-200 p-3">
                 <div className="flex items-center gap-2">
+                  <label htmlFor="teacher-dm-input" className="sr-only">Type a message</label>
                   <input
+                    id="teacher-dm-input"
                     type="text"
                     value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
                     placeholder="Type a message..."
-                    className="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 min-h-11"
+                    className="flex-1 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 min-h-11"
                   />
                   <button
                     type="button"
                     onClick={handleSend}
                     disabled={!newMessage.trim() || sending}
-                    className="p-2.5 bg-amber-600 text-white rounded-xl hover:bg-amber-700 transition disabled:opacity-50 min-h-11 min-w-11 flex items-center justify-center"
+                    aria-label="Send message"
+                    className="flex items-center justify-center min-h-11 min-w-11 p-2.5 bg-amber-600 text-white rounded-xl hover:bg-amber-500 transition disabled:opacity-50"
                   >
-                    {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                    {sending ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : <Send className="w-4 h-4" aria-hidden="true" />}
                   </button>
                 </div>
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-600 text-sm">
+            <div className="flex-1 flex items-center justify-center text-slate-400 text-sm">
               Select a conversation to view messages
             </div>
           )}
