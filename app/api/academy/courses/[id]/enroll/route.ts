@@ -51,12 +51,43 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'You cannot enroll in your own course' }, { status: 400 });
   }
 
-  // Parse optional reattempt flag from request body
+  // Parse optional reattempt flag and promo code from request body
   let reattempt = false;
+  let promoCode = '';
   try {
     const reqBody = await request.clone().json();
     reattempt = reqBody?.reattempt === true;
+    promoCode = typeof reqBody?.promo_code === 'string' ? reqBody.promo_code.trim().toUpperCase() : '';
   } catch { /* no body or invalid JSON — default enrollment */ }
+
+  // Validate promo code if provided
+  let stripeCouponId: string | null = null;
+  if (promoCode) {
+    const { data: promo } = await db
+      .from('promo_codes')
+      .select('id, stripe_coupon_id, teacher_id, max_uses, uses_count, expires_at')
+      .eq('code', promoCode)
+      .maybeSingle();
+
+    if (!promo) {
+      return NextResponse.json({ error: 'Invalid promo code' }, { status: 400 });
+    }
+    // Must belong to this course's teacher (or have no course restriction)
+    if (promo.teacher_id !== course.teacher_id) {
+      return NextResponse.json({ error: 'Promo code not valid for this course' }, { status: 400 });
+    }
+    if (promo.max_uses && promo.uses_count >= promo.max_uses) {
+      return NextResponse.json({ error: 'Promo code has reached its usage limit' }, { status: 400 });
+    }
+    if (promo.expires_at && new Date(promo.expires_at) < new Date()) {
+      return NextResponse.json({ error: 'Promo code has expired' }, { status: 400 });
+    }
+
+    stripeCouponId = promo.stripe_coupon_id;
+
+    // Increment usage count
+    await db.from('promo_codes').update({ uses_count: promo.uses_count + 1 }).eq('id', promo.id);
+  }
 
   // Check existing enrollments (ordered by latest attempt)
   const { data: existingEnrollments } = await db
@@ -231,6 +262,7 @@ export async function POST(request: NextRequest, { params }: Params) {
         line_items: [{ price: priceId, quantity: 1 }],
         success_url: `${baseUrl}/academy/${courseId}?enrolled=true&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${baseUrl}/academy/${courseId}`,
+        ...(stripeCouponId && { discounts: [{ coupon: stripeCouponId }] }),
         metadata: { supabase_user_id: user.id, course_id: courseId, type: 'course_enrollment', attempt_number: String(attemptNumber) },
       });
       return NextResponse.json({ url: session.url });

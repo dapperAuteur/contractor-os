@@ -139,6 +139,7 @@ function CourseDetailContent() {
   const [loading, setLoading] = useState(true);
   const [enrolling, setEnrolling] = useState(false);
   const [enrollError, setEnrollError] = useState('');
+  const [promoCode, setPromoCode] = useState('');
 
   // Review form state
   const [reviewRating, setReviewRating] = useState(0);
@@ -238,7 +239,13 @@ function CourseDetailContent() {
     setEnrolling(true);
     setEnrollError('');
     try {
-      const r = await offlineFetch(`/api/academy/courses/${courseId}/enroll`, { method: 'POST' });
+      const enrollBody: Record<string, unknown> = {};
+      if (promoCode.trim()) enrollBody.promo_code = promoCode.trim();
+      const r = await offlineFetch(`/api/academy/courses/${courseId}/enroll`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(enrollBody),
+      });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error ?? 'Failed to enroll');
       if (d.url) {
@@ -821,6 +828,20 @@ function CourseDetailContent() {
 
                   return (
                     <>
+                      {/* Promo code input for paid courses */}
+                      {course.price_type !== 'free' && Number(course.price) > 0 && canEnroll && (
+                        <div className="mb-3">
+                          <label htmlFor="promo-code-input" className="block text-xs font-medium text-slate-500 mb-1">Promo Code</label>
+                          <input
+                            id="promo-code-input"
+                            type="text"
+                            value={promoCode}
+                            onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                            placeholder="Enter code"
+                            className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30 uppercase"
+                          />
+                        </div>
+                      )}
                       <button
                         type="button"
                         onClick={handleEnroll}
