@@ -11,7 +11,8 @@
     ],
     "additionalDirectories": [
       "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/for",
-      "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/api/admin/campaigns/[id]"
+      "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/api/admin/campaigns/[id]",
+      "/Users/bam/Code_NOiCloud/ai-builds/gemini/contractor-os/app/api/finance/paychecks/[id]"
     ]
   }
 }
