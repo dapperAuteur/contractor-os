@@ -244,11 +244,12 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
     icon: 'BarChart3',
     description: 'Auto-generate tracked short links so every share is measured.',
     features: [
-      { text: 'Switchy.io API integration — auto-create short link on every publish', status: 'planned' },
-      { text: 'Custom domain short links', status: 'planned' },
-      { text: 'Share bars use tracked short links (blog, courses)', status: 'planned' },
-      { text: 'OG metadata synced to Switchy on edit', status: 'planned' },
-      { text: 'Admin backfill page — create short links for all existing content', status: 'planned' },
+      { text: 'Switchy.io API integration — auto-create short link on every publish', status: 'shipped' },
+      { text: 'Custom domain short links', status: 'shipped' },
+      { text: 'Share bars use tracked short links (blog, courses)', status: 'shipped' },
+      { text: 'OG metadata synced to Switchy on edit', status: 'shipped' },
+      { text: 'Admin backfill page — create short links for all existing content', status: 'shipped' },
+      { text: 'Marketing pixel auto-attach — all links include configured tracking pixels', status: 'shipped' },
     ],
   },
 ];
