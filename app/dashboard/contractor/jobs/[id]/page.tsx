@@ -43,6 +43,8 @@ interface Job {
   travel_benefits: Record<string, number>;
   benefit_deductions: { label: string; amount: number }[];
   est_pay_date: string | null;
+  paycheck_portal_url: string | null;
+  paycheck_portal_company_id: string | null;
   distance_from_home_miles: number | null;
   is_multi_day: boolean;
   scheduled_dates: string[];
@@ -637,6 +639,18 @@ export default function JobDetailPage() {
             {job.start_date && <span>{new Date(job.start_date + 'T00:00').toLocaleDateString()}{job.end_date && job.end_date !== job.start_date ? ` – ${new Date(job.end_date + 'T00:00').toLocaleDateString()}` : ''}</span>}
             {job.pay_rate && <span>{fmt(job.pay_rate)}/hr</span>}
             {job.est_pay_date && <span>Est. pay: {new Date(job.est_pay_date + 'T00:00').toLocaleDateString()}</span>}
+            {job.paycheck_portal_url && (
+              <a
+                href={job.paycheck_portal_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-amber-600 hover:text-amber-500 flex items-center gap-1 transition"
+                aria-label={`Open paycheck portal for ${job.client_name}`}
+              >
+                <Globe size={14} aria-hidden="true" /> Pay Portal
+                {job.paycheck_portal_company_id && <span className="text-slate-400 ml-0.5">(ID: {job.paycheck_portal_company_id})</span>}
+              </a>
+            )}
           </div>
         </div>
         <div className="flex gap-2">

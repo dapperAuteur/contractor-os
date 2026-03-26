@@ -27,7 +27,7 @@ export async function GET(_req: NextRequest, { params }: Params) {
     .from('paychecks')
     .select(`
       *,
-      contractor_jobs(id, job_number, client_name, event_name),
+      contractor_jobs(id, job_number, client_name, event_name, client_id, user_contacts:client_id(paycheck_portal_url, paycheck_portal_company_id)),
       paycheck_invoices(invoice_id, invoices(id, invoice_number, total, status, invoice_date)),
       paycheck_taxes(id, tax_type, label, expected_amount, actual_amount, sort_order, notes),
       paycheck_deposits(id, account_id, amount, percentage, deposit_type, transaction_id, label, sort_order, financial_accounts(id, name, account_type))
