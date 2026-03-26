@@ -238,7 +238,7 @@ export async function DELETE(
 
   const { data: existing } = await db
     .from('invoices')
-    .select('id, transaction_id')
+    .select('id, transaction_id, job_id')
     .eq('id', id)
     .eq('user_id', user.id)
     .maybeSingle();
@@ -248,6 +248,22 @@ export async function DELETE(
   // Clean up linked transaction if exists
   if (existing.transaction_id) {
     await db.from('financial_transactions').delete().eq('id', existing.transaction_id);
+  }
+
+  // Clear invoice_id on linked time entries so they can be re-invoiced
+  await db
+    .from('job_time_entries')
+    .update({ invoice_id: null })
+    .eq('invoice_id', id);
+
+  // Revert linked job status from 'invoiced' back to 'completed'
+  if (existing.job_id) {
+    await db
+      .from('contractor_jobs')
+      .update({ status: 'completed' })
+      .eq('id', existing.job_id)
+      .eq('user_id', user.id)
+      .eq('status', 'invoiced');
   }
 
   const { error } = await db.from('invoices').delete().eq('id', id);
