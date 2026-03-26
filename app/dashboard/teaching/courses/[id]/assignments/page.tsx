@@ -11,6 +11,7 @@ import {
   ChevronLeft, Plus, ClipboardList, ChevronDown, ChevronUp,
   Loader2, CheckCircle, Clock, Save,
 } from 'lucide-react';
+import SubmissionMessageThread from '@/components/academy/SubmissionMessageThread';
 
 interface Assignment {
   id: string;
@@ -450,6 +451,15 @@ export default function CourseAssignmentsPage() {
                                 {sub.grade ? 'Edit Grade' : 'Grade Submission'}
                               </button>
                             )}
+
+                            {/* Message thread for this submission */}
+                            <div className="mt-3">
+                              <SubmissionMessageThread
+                                assignmentId={a.id}
+                                submissionId={sub.id}
+                                perspective="teacher"
+                              />
+                            </div>
                           </div>
                         ))}
                       </div>
