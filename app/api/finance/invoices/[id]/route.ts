@@ -164,6 +164,17 @@ export async function PATCH(
       .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+    // Update linked job status to 'paid'
+    if (existing.job_id) {
+      await db
+        .from('contractor_jobs')
+        .update({ status: 'paid' })
+        .eq('id', existing.job_id)
+        .eq('user_id', user.id)
+        .in('status', ['completed', 'invoiced']);
+    }
+
     return NextResponse.json(data);
   }
 
@@ -222,6 +233,18 @@ export async function PATCH(
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // When a job_id is linked to an invoice, update the job status to 'invoiced'
+  const linkedJobId = body.job_id ?? existing.job_id;
+  if (linkedJobId && body.job_id !== undefined) {
+    await db
+      .from('contractor_jobs')
+      .update({ status: 'invoiced' })
+      .eq('id', linkedJobId)
+      .eq('user_id', user.id)
+      .in('status', ['completed']);
+  }
+
   return NextResponse.json(data);
 }
 
