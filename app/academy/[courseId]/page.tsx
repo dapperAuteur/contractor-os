@@ -120,7 +120,7 @@ function StarRating({ rating, interactive, onRate }: { rating: number; interacti
             onMouseLeave={() => interactive && setHover(0)}
             className={`${interactive ? 'cursor-pointer' : 'cursor-default'} transition`}
           >
-            <Star className={`w-5 h-5 ${filled ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`} />
+            <Star className={`w-5 h-5 ${filled ? 'text-yellow-400 fill-yellow-400' : 'text-slate-500'}`} />
           </button>
         );
       })}
@@ -459,12 +459,12 @@ function CourseDetailContent() {
                 return (
                 <div key={mod.id} className="bg-white border border-slate-200 rounded-xl overflow-hidden">
                   <div className="px-4 sm:px-5 py-3 bg-slate-100/50 flex items-center gap-2">
-                    {isModuleLocked && <Lock className="w-3.5 h-3.5 text-gray-600 shrink-0" />}
+                    {isModuleLocked && <Lock className="w-3.5 h-3.5 text-slate-500 shrink-0" />}
                     <div className="flex-1">
                       <p className="font-semibold text-white text-sm">{mod.title}</p>
                       <p className="text-slate-400 text-xs mt-0.5">
                         {mod.lessons.length} lessons
-                        {isModuleLocked && <span className="ml-1.5 text-gray-600">· Complete previous modules to unlock</span>}
+                        {isModuleLocked && <span className="ml-1.5 text-slate-500">· Complete previous modules to unlock</span>}
                       </p>
                     </div>
                   </div>
@@ -476,7 +476,7 @@ function CourseDetailContent() {
                         <div key={lesson.id} className="flex items-center gap-3 px-4 sm:px-5 py-3">
                           {canAccess
                             ? <Play className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                            : <Lock className="w-3.5 h-3.5 text-gray-600 shrink-0" />
+                            : <Lock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
                           }
                           {canAccess ? (
                             <Link
@@ -495,12 +495,12 @@ function CourseDetailContent() {
                               )}
                             </Link>
                           ) : (
-                            <span className="flex-1 text-sm min-w-0 text-gray-600">
+                            <span className="flex-1 text-sm min-w-0 text-slate-500">
                               {lesson.title}
                             </span>
                           )}
                           {lesson.duration_seconds && (
-                            <span className="text-gray-600 text-xs shrink-0">{formatDuration(lesson.duration_seconds)}</span>
+                            <span className="text-slate-500 text-xs shrink-0">{formatDuration(lesson.duration_seconds)}</span>
                           )}
                           {canAccess && (
                             <Link
@@ -556,7 +556,7 @@ function CourseDetailContent() {
                             {new Date(a.due_date).toLocaleDateString()}
                           </span>
                         )}
-                        <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition shrink-0" />
+                        <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition shrink-0" />
                       </Link>
                     );
                   })}
@@ -583,7 +583,7 @@ function CourseDetailContent() {
                         <span className="text-sm text-slate-800 group-hover:text-white">{r.title}</span>
                         {r.notes && <p className="text-xs text-slate-400 mt-0.5">{r.notes}</p>}
                       </div>
-                      <ArrowRight className="w-4 h-4 text-gray-600 group-hover:text-amber-400 transition shrink-0" />
+                      <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 transition shrink-0" />
                     </Link>
                   ))}
                 </div>
@@ -696,7 +696,7 @@ function CourseDetailContent() {
               {/* Review list */}
               {reviews.length === 0 ? (
                 <div className="text-center py-8 bg-white border border-dashed border-slate-200 rounded-xl">
-                  <Star className="w-8 h-8 mx-auto mb-2 text-gray-700" />
+                  <Star className="w-8 h-8 mx-auto mb-2 text-slate-300" />
                   <p className="text-slate-400 text-sm">No reviews yet.</p>
                 </div>
               ) : (
@@ -722,7 +722,7 @@ function CourseDetailContent() {
                           {[1, 2, 3, 4, 5].map((i) => (
                             <Star
                               key={i}
-                              className={`w-3.5 h-3.5 ${i <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-700'}`}
+                              className={`w-3.5 h-3.5 ${i <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-300'}`}
                             />
                           ))}
                         </div>
@@ -747,13 +747,13 @@ function CourseDetailContent() {
                   <BookMarked className="w-5 h-5 text-amber-400" />
                   Glossary
                   <span className="text-sm font-normal text-slate-400 ml-1">({glossaryTerms.length})</span>
-                  <ChevronDown className={`w-4 h-4 ml-auto text-gray-600 transition-transform ${showGlossary ? 'rotate-180' : ''}`} />
+                  <ChevronDown className={`w-4 h-4 ml-auto text-slate-500 transition-transform ${showGlossary ? 'rotate-180' : ''}`} />
                 </button>
 
                 {showGlossary && (
                   <div className="space-y-2">
                     <div className="relative">
-                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-600" />
+                      <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
                       <input
                         type="text"
                         value={glossarySearch}
