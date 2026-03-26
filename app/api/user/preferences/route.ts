@@ -19,7 +19,7 @@ export async function GET() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('dashboard_home, scan_auto_save_images, likes_public, show_done_counts, clock_format, fiscal_year_start_month, fiscal_year_start_day')
+    .select('dashboard_home, scan_auto_save_images, likes_public, show_done_counts, clock_format, fiscal_year_start_month, fiscal_year_start_day, theme')
     .eq('id', user.id)
     .single();
 
@@ -31,6 +31,7 @@ export async function GET() {
     clock_format: profile?.clock_format ?? '12h',
     fiscal_year_start_month: profile?.fiscal_year_start_month ?? 1,
     fiscal_year_start_day: profile?.fiscal_year_start_day ?? 1,
+    theme: profile?.theme ?? 'light',
   });
 }
 
@@ -84,6 +85,13 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: 'fiscal_year_start_day must be an integer 1-28' }, { status: 400 });
     }
     updates.fiscal_year_start_day = d;
+  }
+
+  if (body.theme !== undefined) {
+    if (!['light', 'dark', 'system'].includes(body.theme)) {
+      return NextResponse.json({ error: 'theme must be "light", "dark", or "system"' }, { status: 400 });
+    }
+    updates.theme = body.theme;
   }
 
   if (Object.keys(updates).length === 0) {

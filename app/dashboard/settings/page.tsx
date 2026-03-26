@@ -5,7 +5,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { NAV_GROUPS } from '@/components/nav/NavConfig';
-import { Settings, Check, Loader2, Sparkles, RotateCcw, Clock, Bell, Calendar } from 'lucide-react';
+import { Settings, Check, Loader2, Sparkles, RotateCcw, Clock, Bell, Calendar, Sun, Moon, Monitor } from 'lucide-react';
+import { useTheme } from '@/components/ThemeProvider';
 import { getFiscalYear, isCalendarYear, type FiscalConfig } from '@/lib/fiscal';
 import { subscribeToPush, unsubscribeFromPush, isPushSubscribed } from '@/lib/push/subscribe';
 import MfaSetupSection from '@/components/settings/MfaSetupSection';
@@ -44,7 +45,14 @@ function Toggle({ on, saving, onToggle }: { on: boolean; saving: boolean; onTogg
   );
 }
 
+const THEME_OPTIONS = [
+  { value: 'light' as const, label: 'Light', icon: Sun },
+  { value: 'dark' as const, label: 'Dark', icon: Moon },
+  { value: 'system' as const, label: 'System', icon: Monitor },
+];
+
 export default function DashboardSettingsPage() {
+  const { theme, setTheme } = useTheme();
   const [current, setCurrent] = useState<string>('/dashboard/contractor');
   const [selected, setSelected] = useState<string>('/dashboard/contractor');
   const [saving, setSaving] = useState(false);
@@ -249,6 +257,35 @@ export default function DashboardSettingsPage() {
               Saved!
             </span>
           )}
+        </div>
+      </div>
+
+      {/* Theme */}
+      <div className="rounded-2xl border border-slate-200 bg-white p-6">
+        <div className="flex items-center gap-2 mb-1">
+          <Sun className="w-5 h-5 text-amber-400" aria-hidden="true" />
+          <h2 className="text-base font-semibold text-slate-900">Theme</h2>
+        </div>
+        <p className="text-sm text-slate-500 mb-5">
+          Choose your preferred appearance. System matches your device settings.
+        </p>
+        <div className="flex gap-3" role="radiogroup" aria-label="Theme selection">
+          {THEME_OPTIONS.map(({ value, label, icon: Icon }) => (
+            <button
+              key={value}
+              role="radio"
+              aria-checked={theme === value}
+              onClick={() => setTheme(value)}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition min-h-11 ${
+                theme === value
+                  ? 'bg-amber-600 text-white'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              <Icon className="w-4 h-4" aria-hidden="true" />
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
