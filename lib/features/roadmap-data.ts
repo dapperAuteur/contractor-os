@@ -172,8 +172,9 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
       { text: 'Threaded chat on assignment submissions (student ↔ teacher)', status: 'shipped' },
       { text: 'Course direct messages (student ↔ teacher inbox)', status: 'shipped' },
       { text: 'Teacher promo codes (Stripe Coupons API)', status: 'shipped' },
-      { text: 'Course reviews and star ratings', status: 'planned' },
-      { text: 'Re-enrollment flow ("Take Again") for completed courses', status: 'planned' },
+      { text: 'Course reviews and star ratings', status: 'shipped' },
+      { text: 'Free trial periods for subscription courses', status: 'shipped' },
+      { text: 'Re-enrollment flow ("Take Again") for completed courses', status: 'shipped' },
     ],
   },
   {
