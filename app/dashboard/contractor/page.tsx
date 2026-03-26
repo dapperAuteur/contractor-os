@@ -29,7 +29,8 @@ interface StatCard {
 const STATUS_GROUPS: Record<string, { label: string; statuses: string[] }> = {
   assigned:    { label: 'Assigned',    statuses: ['assigned', 'confirmed'] },
   in_progress: { label: 'In Progress', statuses: ['in_progress'] },
-  completed:   { label: 'Completed',   statuses: ['completed', 'invoiced'] },
+  completed:   { label: 'Completed',   statuses: ['completed'] },
+  invoiced:    { label: 'Invoiced',    statuses: ['invoiced'] },
   paid:        { label: 'Paid',        statuses: ['paid'] },
 };
 
@@ -87,7 +88,7 @@ export default function ContractorHubPage() {
       </div>
 
       {/* Stats — clickable filter cards */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" role="group" aria-label="Filter jobs by status">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5" role="group" aria-label="Filter jobs by status">
         {stats.map((s) => {
           const isActive = activeFilter === s.status;
           return (
