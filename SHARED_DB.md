@@ -48,7 +48,13 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | `referral_reward_tiers` | `163_referral_rewards.sql` | Reward tier definitions (Bronze/Silver/Gold). Uses `app` column. Seeded with WitUS defaults — CentOS should insert its own tiers with `app='centenarian'`. |
 | `referral_rewards` | `163_referral_rewards.sql` | Tracks which rewards have been applied to which users. Unique constraint on `(user_id, tier_id)` prevents duplicates. |
 
-## Columns added to shared tables
+## Columns added by Work.WitUS (shared tables)
+
+| Table | Column | Type | Default | Migration | Notes |
+|-------|--------|------|---------|-----------|-------|
+| `profiles` | `dashboard_widgets` | JSONB | `'[]'` | `165_dashboard_widgets.sql` | Widget visibility and order. Format: `[{id, visible, order}]`. Empty = default widgets. CentOS can use same column with different widget IDs. |
+
+## Columns added to shared tables (notification preferences)
 
 | Table | Column(s) | Type | Migration | Notes |
 |-------|-----------|------|-----------|-------|
