@@ -45,6 +45,8 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | `email_campaigns` | `161_email_campaigns.sql` | Email marketing campaigns. Uses `app` column: `'contractor'` for Work.WitUS, `'centenarian'` for CentOS. Each app only reads/writes its own campaigns. |
 | `email_sends` | `161_email_campaigns.sql` | Per-recipient send tracking for campaigns. Linked to `email_campaigns` via `campaign_id`. |
 | `marketing_banners` | `162_marketing_banners.sql` | In-app upgrade banners. Uses `app` column: `'contractor'` for Work.WitUS, `'centenarian'` for CentOS. Admin creates banners targeted to subscription tiers with optional date ranges. |
+| `referral_reward_tiers` | `163_referral_rewards.sql` | Reward tier definitions (Bronze/Silver/Gold). Uses `app` column. Seeded with WitUS defaults — CentOS should insert its own tiers with `app='centenarian'`. |
+| `referral_rewards` | `163_referral_rewards.sql` | Tracks which rewards have been applied to which users. Unique constraint on `(user_id, tier_id)` prevents duplicates. |
 
 ## Tables added by CentenarianOS (used by both)
 
