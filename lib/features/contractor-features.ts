@@ -172,16 +172,16 @@ export const CONTRACTOR_FEATURES: FeatureConfig[] = [
   // ── Money group ──
   {
     slug: 'invoices',
-    title: 'Invoicing',
-    tagline: 'Generate invoices from your time entries.',
+    title: 'Invoicing & Paychecks',
+    tagline: 'From time entries to reconciled paychecks.',
     description:
-      'Create professional invoices directly from your logged time entries. Select a job, pick the date range, and an invoice generates with line items for straight time, overtime, and double time hours. Track payment status, add notes, and export PDF. Each invoice links back to the job and your financial records.',
+      'Generate invoices from logged time entries with ST/OT/DT line items and per-day benefit contributions. Group daily invoices into paychecks, reconcile actual taxes withheld (federal, state, FICA), and split deposits across multiple bank accounts. Scan pay stubs with AI to auto-fill tax amounts. Save paycheck portal URLs on contacts for one-click access during reconciliation.',
     highlights: [
-      'Auto-generate from time entries',
-      'ST/OT/DT line items calculated automatically',
-      'Payment status tracking',
-      'Link to jobs and financial transactions',
-      'Professional format for clients',
+      'Auto-generate invoices from time entries with per-day benefits',
+      'Paycheck reconciliation — group invoices, track taxes, split deposits',
+      'Gemini Vision pay stub scanning — extract taxes and amounts from photos',
+      'Paycheck portal links — save company pay site URLs on contacts',
+      'Expected vs actual variance tracking with dispute flagging',
     ],
     demoRedirect: '/dashboard/finance/invoices',
     icon: 'FileText',
@@ -192,13 +192,13 @@ export const CONTRACTOR_FEATURES: FeatureConfig[] = [
     title: 'Finance Tracking',
     tagline: 'See where every dollar comes from and goes.',
     description:
-      'Track income and expenses across checking, savings, credit, and cash accounts. Every transaction can be categorized, linked to a job, and tagged with a life category. Set budgets, monitor spending trends, and see your complete financial picture — including how each gig contributes to your bottom line.',
+      'Track income and expenses across checking, savings, credit, and cash accounts. Every transaction can be categorized, linked to a job, and tagged with a life category. Set budgets, monitor spending trends, and customize your dashboard with widgets for the metrics you care about. Light, dark, and system theme support.',
     highlights: [
       'Multi-account tracking (checking, savings, credit, cash)',
-      'Link transactions to specific jobs',
+      'Customizable dashboard widgets — pin your most-used modules',
       'Budget categories with spending alerts',
       'Income vs expense trends over time',
-      'Tax-ready categorization',
+      'Light/dark/system theme support',
     ],
     demoRedirect: '/dashboard/finance/transactions',
     icon: 'DollarSign',

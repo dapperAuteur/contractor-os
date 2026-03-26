@@ -10,8 +10,8 @@ Work.WitUS is a comprehensive longevity-focused life-management platform. It com
 
 ### Tech Stack
 - **Framework**: Next.js 15 App Router (TypeScript, app/ directory structure)
-- **Styling**: Tailwind CSS v4 (utility-first, dark theme with fuchsia accents)
-- **Database**: Supabase (PostgreSQL + Row-Level Security), 104+ migrations
+- **Styling**: Tailwind CSS v4 (utility-first, light slate-* theme with amber accents for dashboard, dark neutral-* theme for login/admin)
+- **Database**: Supabase (PostgreSQL + Row-Level Security), 169+ migrations
 - **Auth**: Supabase Auth (email/password, magic link)
 - **Payments**: Stripe (checkout sessions, webhooks, subscription management, Stripe Connect for teacher payouts)
 - **AI**: Google Gemini 2.5 Flash (chat, coaching, embeddings, vision/OCR)
@@ -24,7 +24,7 @@ Work.WitUS is a comprehensive longevity-focused life-management platform. It com
 - **Bot Prevention**: Cloudflare Turnstile on signup
 
 ### Core Architecture
-- **Admin panel** (/admin/*): Dark theme, gated by ADMIN_EMAIL env var. 18 management pages covering users, content, feedback, metrics, academy, institutions, logs, usage analytics, short links, education chat.
+- **Admin panel** (/admin/*): Dark theme, gated by ADMIN_EMAIL env var. 22+ management pages covering users, content, feedback, metrics, academy, institutions, logs, usage analytics, short links, education chat, email campaigns, marketing banners, conversion funnels, churn prevention, referral rewards.
 - **User dashboard** (/dashboard/*): Subscription-gated. Free routes: blog, recipes, billing, messages, feedback. Paid routes: finance, travel, planner, workouts, health metrics, equipment, data hub, coaching, scan, categories.
 - **API routes** (app/api/*): Next.js Route Handlers. Service role client bypasses RLS for admin and webhook operations.
 - **Auth pattern**: createServerClient (SSR cookies) for user auth; service role client for admin ops.
@@ -33,7 +33,7 @@ Work.WitUS is a comprehensive longevity-focused life-management platform. It com
 
 ### Modules (15+)
 
-1. **Finance** — Financial accounts (checking, savings, credit card, loan, cash), transactions with categories, budgets, recurring transactions, invoices, CSV import/export. Balance = opening_balance + SUM(income) - SUM(expenses). Teller API integration for bank account OAuth linking and auto-sync. Institution policies (APR, fees, rewards, dispute windows). Saved contacts with default categories for auto-fill.
+1. **Finance** — Financial accounts (checking, savings, credit card, loan, cash), transactions with categories, budgets, recurring transactions, invoices, CSV import/export. Balance = opening_balance + SUM(income) - SUM(expenses). Teller API integration for bank account OAuth linking and auto-sync. Institution policies (APR, fees, rewards, dispute windows). Saved contacts with default categories for auto-fill. **Paycheck reconciliation**: group daily invoices into paychecks, track tax withholdings (federal, state, FICA) with expected vs actual variance, split net deposits across multiple accounts. Gemini Vision pay stub scanning extracts taxes and amounts. Per-day employer benefit deductions on time entries with copy-across. Paycheck portal URLs saved on contacts for one-click access.
 
 2. **Health Metrics** — Three tiers: Core (RHR, steps, sleep, activity calories), Enrichment (per-metric unlock with disclaimer), Body Composition (locked, per-metric acknowledgment). Wearable OAuth: Oura, WHOOP, Garmin with auto-sync. CSV imports: Apple Health, Google Health, InBody, Hume Health. Admin controls global enable/disable and per-user access overrides.
 

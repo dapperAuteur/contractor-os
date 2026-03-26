@@ -269,6 +269,28 @@ Tables with `app` column: `email_campaigns`, `marketing_banners`, `referral_rewa
 
 ---
 
+## 16. Paycheck Reconciliation
+
+**What changed:** Full paycheck lifecycle — group daily invoices into paychecks, record tax withholdings (Federal, State, FICA) with expected vs actual, split net deposits across multiple bank accounts. Gemini Vision scan extracts data from pay stub photos. Per-day benefit deductions on time entries with copy-across. Paycheck portal URLs and company IDs on contacts.
+
+**Migrations:** 167 (time entry benefits), 168 (paychecks, paycheck_invoices, paycheck_taxes, paycheck_deposits, invoices.paycheck_id), 169 (paycheck_portal_url, paycheck_portal_company_id on contacts)
+
+**CentOS recommendation:** Teachers with Stripe Connect payouts could track received payments vs expected. The paycheck system is Work.WitUS-specific but the pattern (group payments, track taxes, split deposits) is universal.
+
+**See:** [paycheck-reconciliation-guide.md](paycheck-reconciliation-guide.md)
+
+## 17. Invoicing Bug Fixes
+
+**What changed:**
+- Invoice delete now clears `invoice_id` on time entries so they can be re-invoiced
+- Invoice delete reverts job status from `invoiced` → `completed`
+- Invoice create/link sets job status to `invoiced`; mark-paid sets job to `paid`
+- Invoiced jobs now have their own filter (was grouped with Completed)
+- Jobs API limit raised from 100 → 500
+- Dashboard uses server-side filtering for single-status filters
+
+---
+
 ## Detailed Integration Guides
 
 For step-by-step implementation details, see:
@@ -277,3 +299,4 @@ For step-by-step implementation details, see:
 - [email-campaigns-integration-guide.md](email-campaigns-integration-guide.md)
 - [marketing-features-integration-guide.md](marketing-features-integration-guide.md) (banners, funnels, churn, rewards, feature gating)
 - [notification-preferences-integration-guide.md](notification-preferences-integration-guide.md)
+- [paycheck-reconciliation-guide.md](paycheck-reconciliation-guide.md)

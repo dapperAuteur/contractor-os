@@ -775,4 +775,116 @@ export const HELP_ARTICLES: HelpArticle[] = [
     title: 'How to use the Contractor Board',
     content: `The Contractor Board (/dashboard/contractor/board) is a peer-to-peer directory of contractors using Work.WitUS. Use it to find colleagues who can cover your dates when you are double-booked, or to make yourself discoverable so other contractors can reach out to you. Each profile shows skills, union affiliations, and availability notes. You can browse by name or filter by skill. The board is opt-in — your profile only appears if you have made it visible in your account settings. This is different from the Job Board (which is for posting and finding open gig listings). The Contractor Board is specifically for contractor-to-contractor networking and coverage requests.`,
   },
+
+  // ─── PAYCHECK RECONCILIATION ──────────────────────────────────────────────
+
+  {
+    role: 'contractor',
+    title: 'How to create a paycheck from job invoices',
+    content: `Go to Finance → Paychecks and click "New Paycheck." Select a job — this loads all available (un-paychecked) invoices for that job. Check the invoices to include, set the pay date and period, and optionally enter the actual gross amount if it differs from the invoice total. The system computes the variance between expected and actual gross. Click "Create Paycheck" to group those invoices into a single paycheck record. You can also create a paycheck directly from the job detail page.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to reconcile taxes on a paycheck',
+    content: `Open a paycheck and go to the Taxes tab. Click preset tax types to quickly add Federal Income Tax, State Income Tax, FICA Social Security, FICA Medicare, Local Tax, or State Disability. Enter the actual amount withheld for each line. The system calculates total taxes and net pay (gross minus taxes minus deductions). You can also enter expected amounts to track variance — the difference is color-coded green (favorable) or red (unfavorable). Click "Save Taxes" when done.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to split paycheck deposits across multiple accounts',
+    content: `On the paycheck detail page, go to the Deposits tab. Click "Add Split" for each bank account that received a portion of your paycheck. Select the account, enter the dollar amount, and add a label (e.g., "Primary Checking", "Tax Reserve", "Savings"). The balance indicator shows how much is left to allocate — it must reach $0.00. Click "Save Splits" to save, then "Execute & Reconcile" to finalize. This creates a financial transaction for each deposit, marks all linked invoices as paid, and sets the job status to paid.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to scan a pay stub with AI',
+    content: `On the paycheck detail page, find the "Scan Paycheck Image" section. Click "Upload Image" and select a photo of your pay stub. Gemini Vision AI extracts the gross pay, net pay, individual tax lines (Federal, State, FICA, etc.), deductions, and deposit allocations. Review the extracted data in the preview panel and click "Apply to Paycheck" to populate the form. You can edit any values before saving. This is much faster than entering each tax line manually.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to set up paycheck portal links on contacts',
+    content: `Edit a company/client contact and enter the Paycheck Portal URL (e.g., https://portal.adp.com) and Portal Company ID (the employer ID required to log in). Once saved, a "Pay Portal" link appears on the job detail page header, paycheck detail page, and contact detail page — one click to open the company's pay portal for reconciliation. The Company ID is displayed alongside the link for quick reference when logging in.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to edit per-day employer benefit contributions',
+    content: `On the job detail page Time tab, each time entry has a "$" icon (desktop) or "Add Benefits" link (mobile). Click it to open an inline editor where you can add, edit, or remove benefit line items (H&W, Pension, Annuity, TTF, etc.) for that specific work day. Click "Copy to All Dates" to apply the same benefits across every work date in the job. When you generate invoices, per-day benefits are included as line items on each day's invoice. Job-level benefits serve as defaults for days that don't have their own.`,
+  },
+
+  // ─── DASHBOARD & PLATFORM ─────────────────────────────────────────────────
+
+  {
+    role: 'all',
+    title: 'How to customize dashboard widgets',
+    content: `On the contractor dashboard, click the "Customize" button in the header. A panel shows all available widgets with eye icons to show/hide each one and arrows to reorder them. Available widgets: Job Status, Upcoming Jobs, Recent Time, Invoices Due, Finance Snapshot, Travel Summary, Equipment Value, Academy Progress. Your widget preferences are saved to your account and persist across sessions. The default shows Job Status, Upcoming Jobs, Recent Time, and Invoices Due.`,
+  },
+  {
+    role: 'all',
+    title: 'How to change the app theme',
+    content: `Go to Settings and find the Theme section. Choose Light (default), Dark, or System (matches your device settings). The theme applies immediately across the entire dashboard. Your preference is saved to your account. When set to System, the app automatically switches between light and dark mode based on your operating system's appearance setting.`,
+  },
+  {
+    role: 'all',
+    title: 'How to manage email notification preferences',
+    content: `Go to Settings and scroll to the Email Preferences section (always visible, not tied to push notifications). Toggle "Marketing emails" to opt in or out of feature announcements and promotions. Toggle "Weekly digest" to opt in or out of weekly activity summaries. These settings are separate from push notification preferences and apply to all email campaigns sent by the admin. The push notification section (visible when push is enabled) has additional toggles for: clock in/out reminders, pay day reminders, job start reminders, invoice status updates, assignment updates, and course updates.`,
+  },
+
+  // ─── ADMIN MARKETING ──────────────────────────────────────────────────────
+
+  {
+    role: 'admin',
+    title: 'How to create and send email campaigns',
+    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/courses/equipment/travel). Save as Draft, then click "Send Now" to deliver via Resend. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
+  },
+  {
+    role: 'admin',
+    title: 'How to use the conversion funnel dashboard',
+    content: `Go to Admin → Funnels to see the 6-stage conversion funnel: Signed Up → Profile Complete → First Job Created → First Invoice → Subscribed → Retained 90d. Each stage shows the count and drop-off percentage from the previous stage. The biggest drop-off is highlighted. Summary cards show overall signup-to-subscriber conversion rate and 90-day retention rate. Use this to identify where users get stuck and focus improvement efforts.`,
+  },
+  {
+    role: 'admin',
+    title: 'How to use churn prevention',
+    content: `Go to Admin → Churn to see paid users who have been inactive for 14+ days. Users are categorized as At Risk (14-29 days), High (30-59 days), or Critical (60+ days). Each user shows their last active date, subscription renewal date, and top modules used. Click "Win-back" to create a campaign draft for that user. The summary cards show total paid users, at-risk count, and critical count.`,
+  },
+  {
+    role: 'admin',
+    title: 'How to manage marketing banners',
+    content: `Go to Admin → Banners to create in-app upgrade prompts. Set a title, body text, CTA button text and URL, target subscription tiers (free/monthly/lifetime), and optional start/end dates. Active banners are shown at the top of the dashboard to matching users. Users can dismiss banners (stored in their browser). Toggle banners on/off with the toggle button.`,
+  },
+  {
+    role: 'admin',
+    title: 'How referral reward tiers work',
+    content: `Go to Admin → Referrals to see the referral leaderboard with reward tier progress. Three tiers: Bronze (3 paid referrals = 1 month free), Silver (10 = 3 months free), Gold (25 = lifetime upgrade). When you mark a referral invite as "Paid," the system auto-checks if the referrer has earned a new tier. Gold tier auto-upgrades the user to lifetime. Each referrer shows their current tier badge, progress bar to next tier, and total impact score. The "Recent Rewards Issued" section shows recently earned rewards.`,
+  },
+
+  // ─── ACADEMY UPDATES ──────────────────────────────────────────────────────
+
+  {
+    role: 'student',
+    title: 'How to message your teacher about an assignment',
+    content: `On any assignment page, a "Feedback Thread" section appears below your submission. Type a message and press Enter or click Send. Your teacher will see the message on their grading page and can respond in the same thread. Messages auto-refresh every 30 seconds. Your messages appear on the right (amber), teacher messages on the left (gray). This thread is specific to your submission — each assignment has its own conversation.`,
+  },
+  {
+    role: 'student',
+    title: 'How to use course direct messages',
+    content: `Go to My Courses → Messages to see all your DM conversations with teachers, organized by course. Click a conversation to open the message thread. You can also start a conversation from the course detail page. Messages support real-time updates with 30-second auto-refresh. The inbox shows unread counts per conversation.`,
+  },
+  {
+    role: 'student',
+    title: 'How to leave a course review',
+    content: `On the course detail page, scroll to the Reviews section. If you're enrolled and have completed at least one lesson, you'll see a "Leave a Review" form with a star rating (1-5) and optional text review. You can only leave one review per course. After submitting, your review appears in the course's review list and contributes to the average rating shown in the course header. You can update your review at any time.`,
+  },
+  {
+    role: 'student',
+    title: 'How to use a promo code for a course',
+    content: `When enrolling in a paid course, you'll see a "Promo Code" input field above the Enroll button. Enter the code (case-insensitive) and click Enroll. The discount is applied at Stripe checkout. Promo codes are created by course teachers and may have usage limits or expiration dates. If the code is invalid, expired, or has reached its limit, you'll see an error message.`,
+  },
+  {
+    role: 'teacher',
+    title: 'How to respond to student submissions',
+    content: `On the teacher assignments page, expand any assignment to see student submissions. Below each submission's grading form, there's a "Feedback Thread" where you can message the student directly. This is useful for asking clarification questions, providing detailed feedback, or discussing grades. The thread auto-refreshes and shows both your messages and the student's replies.`,
+  },
+  {
+    role: 'teacher',
+    title: 'How to create promo codes for your courses',
+    content: `Go to Teaching → Promo Codes to create discount codes. Set a code name, discount percentage (1-100%), optional maximum uses, and optional expiration date. The system creates a Stripe Coupon behind the scenes. Students enter the code at checkout to receive the discount. You can see usage counts and delete expired codes from the same page.`,
+  },
 ];
