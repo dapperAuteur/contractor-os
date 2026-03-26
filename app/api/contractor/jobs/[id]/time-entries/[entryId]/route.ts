@@ -18,7 +18,7 @@ type Ctx = { params: Promise<{ id: string; entryId: string }> };
 const ALLOWED_FIELDS = [
   'work_date', 'time_in', 'time_out', 'adjusted_in', 'adjusted_out',
   'break_minutes', 'total_hours', 'st_hours', 'ot_hours', 'dt_hours',
-  'meal_provided', 'notes',
+  'meal_provided', 'notes', 'benefit_deductions',
 ];
 
 export async function PATCH(request: NextRequest, ctx: Ctx) {
