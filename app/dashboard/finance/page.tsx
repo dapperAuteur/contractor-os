@@ -375,6 +375,13 @@ export default function FinanceDashboardPage() {
             Invoices
           </Link>
           <Link
+            href="/dashboard/finance/paychecks"
+            className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
+          >
+            <DollarSign className="w-4 h-4" />
+            Paychecks
+          </Link>
+          <Link
             href="/dashboard/finance/brands"
             className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-200 transition"
           >
