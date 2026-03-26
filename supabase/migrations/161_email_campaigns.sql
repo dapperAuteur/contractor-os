@@ -1,8 +1,14 @@
 -- 161_email_campaigns.sql
--- Admin email campaign infrastructure for marketing automation
+-- Admin email campaign infrastructure for marketing automation.
+-- Shared table: both Work.WitUS and CentenarianOS can create campaigns.
+-- The `app` column differentiates which product created/owns each campaign.
+-- COPY THIS MIGRATION TO THE CENTENARIAN-OS REPO (per SHARED_DB.md).
+
+BEGIN;
 
 CREATE TABLE IF NOT EXISTS public.email_campaigns (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  app            TEXT NOT NULL DEFAULT 'contractor',  -- 'contractor' (Work.WitUS) or 'centenarian' (CentenarianOS)
   title          TEXT NOT NULL,
   subject        TEXT NOT NULL,
   body_html      TEXT NOT NULL DEFAULT '',
@@ -31,12 +37,15 @@ CREATE TABLE IF NOT EXISTS public.email_sends (
   error_message  TEXT
 );
 
--- Index for fast campaign send lookups
+-- Indexes
+CREATE INDEX IF NOT EXISTS idx_email_campaigns_app ON public.email_campaigns (app);
 CREATE INDEX IF NOT EXISTS idx_email_sends_campaign ON public.email_sends (campaign_id);
 CREATE INDEX IF NOT EXISTS idx_email_sends_user ON public.email_sends (user_id);
 
--- RLS: admin-only access
+-- RLS: admin-only access (both apps use service role client)
 ALTER TABLE public.email_campaigns ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.email_sends ENABLE ROW LEVEL SECURITY;
 
 -- No RLS policies needed — all access is through service role client in admin API routes
+
+COMMIT;

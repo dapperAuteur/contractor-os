@@ -27,6 +27,7 @@ export async function GET() {
   const { data, error } = await db
     .from('email_campaigns')
     .select('*')
+    .eq('app', 'contractor')
     .order('created_at', { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -48,6 +49,7 @@ export async function POST(request: NextRequest) {
   const { data, error } = await db
     .from('email_campaigns')
     .insert({
+      app: 'contractor',
       title,
       subject,
       body_html: body_html || '',

@@ -42,6 +42,9 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | `contact_job_roles` | `150_contacts_system.sql` | Many-to-many linking contacts to jobs with crew roles (POC, coordinator, tech lead, etc.). |
 | `contact_shares` | `150_contacts_system.sql` | Contact sharing between users with pending/accepted/declined status. |
 
+| `email_campaigns` | `161_email_campaigns.sql` | Email marketing campaigns. Uses `app` column: `'contractor'` for Work.WitUS, `'centenarian'` for CentOS. Each app only reads/writes its own campaigns. |
+| `email_sends` | `161_email_campaigns.sql` | Per-recipient send tracking for campaigns. Linked to `email_campaigns` via `campaign_id`. |
+
 ## Tables added by CentenarianOS (used by both)
 
 | Table | Migration | Notes |
