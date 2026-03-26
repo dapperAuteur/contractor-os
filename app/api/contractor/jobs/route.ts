@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
   const brandId = url.searchParams.get('brand_id');
   const from = url.searchParams.get('from');
   const to = url.searchParams.get('to');
-  const limit = Math.min(Number(url.searchParams.get('limit') ?? 50), 100);
+  const limit = Math.min(Number(url.searchParams.get('limit') ?? 50), 500);
   const offset = Number(url.searchParams.get('offset') ?? 0);
 
   const db = getDb();
