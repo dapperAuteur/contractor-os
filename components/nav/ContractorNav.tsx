@@ -398,10 +398,10 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
             role="dialog"
             aria-modal="true"
             aria-label="Navigation"
-            className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl overflow-y-auto lg:hidden"
-            style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 4rem)' }}
+            className="fixed inset-y-0 left-0 z-50 w-72 bg-white shadow-xl flex flex-col lg:hidden"
           >
-            <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200">
+            {/* Drawer header — fixed */}
+            <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200 shrink-0">
               <span className="text-lg font-bold text-amber-600 flex items-center gap-2">
                 <HardHat className="w-5 h-5" aria-hidden="true" /> Work.WitUS
               </span>
@@ -410,91 +410,94 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
               </button>
             </div>
 
-            {/* Home link */}
-            <div className="py-1">
-              <Link
-                href="/dashboard/contractor"
-                className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
-                  pathname === '/dashboard/contractor' ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'
-                }`}
-                aria-current={pathname === '/dashboard/contractor' ? 'page' : undefined}
-              >
-                <HardHat className="w-5 h-5 shrink-0" aria-hidden="true" />
-                Work.WitUS
-              </Link>
-            </div>
-
-            {/* Grouped sections */}
-            {NAV_GROUPS.map((group) => (
-              <div key={group.label}>
-                <div className="px-4 pt-4 pb-1">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{group.label}</span>
-                </div>
-                {group.items.map((item) => {
-                  const Icon = item.icon;
-                  const active = isActive(item.href, pathname);
-                  const slug = item.href.split('/').pop() || '';
-                  const showSparkle = untoured?.has(slug);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
-                        active ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'
-                      }`}
-                      aria-current={active ? 'page' : undefined}
-                    >
-                      <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
-                      {item.label}
-                      {showSparkle && (
-                        <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse ml-auto shrink-0" aria-hidden="true" />
-                      )}
-                    </Link>
-                  );
-                })}
+            {/* Scrollable nav content */}
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {/* Home link */}
+              <div className="py-1">
+                <Link
+                  href="/dashboard/contractor"
+                  className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                    pathname === '/dashboard/contractor' ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'
+                  }`}
+                  aria-current={pathname === '/dashboard/contractor' ? 'page' : undefined}
+                >
+                  <HardHat className="w-5 h-5 shrink-0" aria-hidden="true" />
+                  Work.WitUS
+                </Link>
               </div>
-            ))}
 
-            <div className="border-t border-slate-200 my-2" />
+              {/* Grouped sections */}
+              {NAV_GROUPS.map((group) => (
+                <div key={group.label}>
+                  <div className="px-4 pt-4 pb-1">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">{group.label}</span>
+                  </div>
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    const active = isActive(item.href, pathname);
+                    const slug = item.href.split('/').pop() || '';
+                    const showSparkle = untoured?.has(slug);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`flex items-center gap-3 px-4 py-3 text-sm font-medium transition ${
+                          active ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'
+                        }`}
+                        aria-current={active ? 'page' : undefined}
+                      >
+                        <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
+                        {item.label}
+                        {showSparkle && (
+                          <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse ml-auto shrink-0" aria-hidden="true" />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              ))}
 
-            <div className="py-1">
-              {username && (
-                <Link href={`/profiles/${username}`} className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
-                  <UserCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> My Profile
-                </Link>
-              )}
-              <Link href="/dashboard/contractor/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
-                <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Contractor Settings
-              </Link>
-              <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
-                <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Account Settings
-              </Link>
-              <Link href="/dashboard/billing" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
-                <CreditCard className="w-4 h-4 shrink-0" aria-hidden="true" /> Billing
-              </Link>
-              <Link href="/dashboard/messages" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
-                <Bell className="w-4 h-4 shrink-0" aria-hidden="true" /> Messages
-                {unreadMessages > 0 && (
-                  <span className="ml-auto w-5 h-5 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
-                    {unreadMessages > 9 ? '9+' : unreadMessages}
-                  </span>
+              <div className="border-t border-slate-200 my-2" />
+
+              <div className="py-1">
+                {username && (
+                  <Link href={`/profiles/${username}`} className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
+                    <UserCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> My Profile
+                  </Link>
                 )}
-              </Link>
-              <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
-                <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> Feedback
-              </Link>
-              {isAdmin && (
-                <Link href="/admin" className={`flex items-center gap-3 px-4 py-2.5 text-sm transition ${pathname.startsWith('/admin') ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'}`}>
-                  <Shield className="w-4 h-4 shrink-0" aria-hidden="true" /> Admin Panel
+                <Link href="/dashboard/contractor/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
+                  <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Contractor Settings
                 </Link>
-              )}
+                <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
+                  <Settings className="w-4 h-4 shrink-0" aria-hidden="true" /> Account Settings
+                </Link>
+                <Link href="/dashboard/billing" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
+                  <CreditCard className="w-4 h-4 shrink-0" aria-hidden="true" /> Billing
+                </Link>
+                <Link href="/dashboard/messages" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
+                  <Bell className="w-4 h-4 shrink-0" aria-hidden="true" /> Messages
+                  {unreadMessages > 0 && (
+                    <span className="ml-auto w-5 h-5 bg-amber-500 text-white text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                      {unreadMessages > 9 ? '9+' : unreadMessages}
+                    </span>
+                  )}
+                </Link>
+                <Link href="/dashboard/feedback" className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-100 transition">
+                  <MessageCircle className="w-4 h-4 shrink-0" aria-hidden="true" /> Feedback
+                </Link>
+                {isAdmin && (
+                  <Link href="/admin" className={`flex items-center gap-3 px-4 py-2.5 text-sm transition ${pathname.startsWith('/admin') ? 'text-amber-600 bg-amber-50' : 'text-slate-700 hover:bg-slate-100'}`}>
+                    <Shield className="w-4 h-4 shrink-0" aria-hidden="true" /> Admin Panel
+                  </Link>
+                )}
+              </div>
             </div>
 
-            <div className="border-t border-slate-200 my-1" />
-            <div className="py-1 pb-4">
+            {/* Logout — pinned to bottom, always visible */}
+            <div className="shrink-0 border-t border-slate-200 p-2" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 0.5rem)' }}>
               <button
                 onClick={() => { setDrawerOpen(false); onLogout(); }}
-                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition min-h-11"
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> Logout
               </button>
