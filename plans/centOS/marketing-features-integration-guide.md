@@ -387,6 +387,97 @@ CREATE INDEX IF NOT EXISTS idx_marketing_banners_active ON public.marketing_bann
 
 ---
 
+## 7. Referral Reward Tiers
+
+### What It Does
+Automatically rewards referrers when they hit milestones (3, 10, 25 paid referrals). Rewards range from free months to lifetime upgrades. Auto-checked when admin marks an invite as paid.
+
+### Database Tables (Shared)
+
+**`referral_reward_tiers`** — Migration `163_referral_rewards.sql` (already run)
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `app` | TEXT | **`'centenarian'` for CentOS** |
+| `name` | TEXT | Tier name (Bronze, Silver, Gold) |
+| `paid_referrals` | INT | Threshold to earn this tier |
+| `reward_type` | TEXT | `'credit'` (free months) or `'upgrade'` (lifetime) |
+| `reward_months` | INT | Months of free service (0 for lifetime) |
+
+**`referral_rewards`** — Tracks applied rewards
+
+| Column | Type | Notes |
+|--------|------|-------|
+| `id` | UUID | PK |
+| `user_id` | UUID | Referrer who earned it |
+| `tier_id` | UUID | FK to tier |
+| `paid_count` | INT | Paid referrals at time of reward |
+| `applied_at` | TIMESTAMPTZ | When applied |
+| `stripe_credit_id` | TEXT | Optional Stripe balance transaction ID |
+
+### CentOS Setup
+
+**Seed your own tiers** (the migration only seeds `app='contractor'`):
+
+```sql
+INSERT INTO public.referral_reward_tiers (app, name, paid_referrals, reward_type, reward_months)
+VALUES
+  ('centenarian', 'Bronze', 3, 'credit', 1),
+  ('centenarian', 'Silver', 10, 'credit', 3),
+  ('centenarian', 'Gold', 25, 'upgrade', 0)
+ON CONFLICT DO NOTHING;
+```
+
+### Files to Create in CentOS
+| File | Purpose |
+|------|---------|
+| `app/api/admin/referrals/rewards/route.ts` | GET tiers + issued rewards, POST to check & apply rewards |
+
+### How It Works
+1. Admin marks an invite as paid → auto-triggers reward check
+2. API counts user's total paid referrals
+3. Compares against tiers (filtered by `app='centenarian'`)
+4. Any newly-earned tiers → insert into `referral_rewards`
+5. If tier is `upgrade` type → sets `subscription_status = 'lifetime'`
+6. If tier is `credit` type → admin applies Stripe credit manually (or automate via Stripe API)
+
+### Referrals Page Updates
+The referrals admin page now shows:
+- Reward tier cards (Bronze/Silver/Gold) with thresholds
+- Per-referrer tier badge and progress bar to next tier
+- "Check & Apply Rewards" button per referrer
+- Recent rewards issued list
+- Auto-check after marking an invite as paid
+- Fixed: light theme colors (was using dark theme text-white on light bg)
+
+### Migration 163 SQL
+```sql
+CREATE TABLE IF NOT EXISTS public.referral_reward_tiers (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  app            TEXT NOT NULL DEFAULT 'contractor',
+  name           TEXT NOT NULL,
+  paid_referrals INT NOT NULL,
+  reward_type    TEXT NOT NULL DEFAULT 'credit',
+  reward_months  INT NOT NULL DEFAULT 1,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.referral_rewards (
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id        UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
+  tier_id        UUID NOT NULL REFERENCES public.referral_reward_tiers ON DELETE CASCADE,
+  paid_count     INT NOT NULL,
+  applied_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  stripe_credit_id TEXT
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_referral_rewards_user_tier
+  ON public.referral_rewards (user_id, tier_id);
+```
+
+---
+
 ## Implementation Order (Recommended for CentOS)
 
 1. **Switchy fixes** — 30 min. Just apply 3 fixes to existing `lib/switchy.ts`
@@ -395,6 +486,7 @@ CREATE INDEX IF NOT EXISTS idx_marketing_banners_active ON public.marketing_bann
 4. **Churn Prevention** — 1-2 hours. Depends on campaign system for win-back
 5. **Upgrade Banners** — 1-2 hours. Component + admin page + dashboard integration
 6. **Feature Gating** — 30 min. Single component, integrate into list pages
+7. **Referral Rewards** — 1 hour. Seed tiers, rewards API, update referrals page
 
 ---
 
@@ -422,4 +514,5 @@ CentOS should use the same `offlineFetch` wrapper (already shared).
 | Banners | `components/marketing/UpgradeBanner.tsx`, `app/api/banners/route.ts`, `app/api/admin/banners/route.ts`, `app/admin/banners/page.tsx` |
 | Feature Gate | `components/marketing/FeatureGate.tsx` |
 | Offline | `lib/offline/offline-fetch.ts`, `lib/offline/sync-manager.ts` |
-| Migrations | `supabase/migrations/161_email_campaigns.sql`, `supabase/migrations/162_marketing_banners.sql` |
+| Referral Rewards | `app/api/admin/referrals/rewards/route.ts`, `app/admin/referrals/page.tsx` |
+| Migrations | `supabase/migrations/161_email_campaigns.sql`, `162_marketing_banners.sql`, `163_referral_rewards.sql` |
