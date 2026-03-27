@@ -84,6 +84,11 @@ export default function ContactDetailPage() {
   const [shareUsername, setShareUsername] = useState('');
   const [shareMessage, setShareMessage] = useState('');
   const [shareStatus, setShareStatus] = useState('');
+  const [shareFields, setShareFields] = useState<Record<string, boolean>>({
+    name: true, company_name: true, job_title: true,
+    email: true, phone: true, notes: true,
+    addresses: true, tags: true, website: true, paycheck_portal: true,
+  });
 
   // Edit form state
   const [editName, setEditName] = useState('');
@@ -198,7 +203,11 @@ export default function ContactDetailPage() {
     const res = await offlineFetch(`/api/contractor/contacts/${id}/share`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: shareUsername.trim(), message: shareMessage.trim() || null }),
+      body: JSON.stringify({
+        username: shareUsername.trim(),
+        message: shareMessage.trim() || null,
+        visible_fields: Object.entries(shareFields).filter(([, v]) => v).map(([k]) => k),
+      }),
     });
     const data = await res.json();
     if (res.ok) {
@@ -591,7 +600,7 @@ export default function ContactDetailPage() {
       <Modal isOpen={showShare} onClose={() => { setShowShare(false); setShareStatus(''); }} title="Share Contact" size="sm">
         <div className="space-y-4 p-4">
           <p className="text-sm text-slate-500">
-            Share <strong>{contact.name}</strong> with another Work.WitUS user. They will receive a copy they can edit independently.
+            Share <strong>{contact.name}</strong> with another Work.WitUS user. They will receive a copy with only the fields you choose to share.
           </p>
           <div>
             <label htmlFor="share-username" className={labelClass}>Username</label>
@@ -601,6 +610,36 @@ export default function ContactDetailPage() {
             <label htmlFor="share-message" className={labelClass}>Message (optional)</label>
             <input id="share-message" type="text" value={shareMessage} onChange={(e) => setShareMessage(e.target.value)} className={inputClass} placeholder="Hey, here's a great contact..." />
           </div>
+
+          {/* Field-level privacy picker */}
+          <fieldset>
+            <legend className="text-sm font-medium text-slate-700 mb-2">What to share</legend>
+            <p className="text-xs text-slate-400 mb-3">Name is always shared. Uncheck anything you want to keep private.</p>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { key: 'company_name', label: 'Company' },
+                { key: 'job_title', label: 'Job Title' },
+                { key: 'email', label: 'Email' },
+                { key: 'phone', label: 'Phone' },
+                { key: 'notes', label: 'Notes' },
+                { key: 'addresses', label: 'Addresses' },
+                { key: 'tags', label: 'Tags' },
+                { key: 'website', label: 'Website' },
+                { key: 'paycheck_portal', label: 'Pay Portal' },
+              ].map(({ key, label }) => (
+                <label key={key} className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer min-h-11 px-2 rounded-lg hover:bg-slate-50">
+                  <input
+                    type="checkbox"
+                    checked={shareFields[key] ?? true}
+                    onChange={(e) => setShareFields((prev) => ({ ...prev, [key]: e.target.checked }))}
+                    className="rounded border-slate-300"
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+          </fieldset>
+
           {shareStatus && (
             <p className={`text-sm ${shareStatus.includes('success') ? 'text-green-600' : 'text-red-500'}`} role="alert">
               {shareStatus}

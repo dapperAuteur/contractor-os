@@ -33,9 +33,17 @@ export async function POST(request: NextRequest, { params }: Params) {
   }
 
   const body = await request.json();
-  const { username, message } = body;
+  const { username, message, visible_fields } = body;
 
   if (!username?.trim()) return NextResponse.json({ error: 'username is required' }, { status: 400 });
+
+  // Validate visible_fields if provided
+  const ALL_FIELDS = ['name', 'company_name', 'job_title', 'email', 'phone', 'notes', 'addresses', 'tags', 'website', 'paycheck_portal'];
+  const fields = Array.isArray(visible_fields)
+    ? visible_fields.filter((f: string) => ALL_FIELDS.includes(f))
+    : ALL_FIELDS;
+  // Name is always shared
+  if (!fields.includes('name')) fields.unshift('name');
 
   // Find target user by username
   const { data: target } = await db
@@ -55,6 +63,7 @@ export async function POST(request: NextRequest, { params }: Params) {
         shared_by: user.id,
         shared_with: target.id,
         message: message?.trim() ?? null,
+        visible_fields: fields,
         status: 'pending',
       },
       { onConflict: 'contact_id,shared_with' },
