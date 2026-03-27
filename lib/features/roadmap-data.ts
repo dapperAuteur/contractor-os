@@ -127,7 +127,7 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
       { text: 'Contact directory with job title, company, city/state, and tagging', status: 'shipped' },
       { text: 'Multiple phone numbers and email addresses per contact', status: 'shipped' },
       { text: 'Contact job role tracking — which contacts worked on which jobs', status: 'shipped' },
-      { text: 'Contact sharing with other users', status: 'shipped' },
+      { text: 'Contact sharing with field-level privacy — choose exactly what to share', status: 'shipped' },
       { text: 'Contractor board — browse profiles and find collaborators', status: 'shipped' },
       { text: 'Job board — post and browse available gigs', status: 'shipped' },
       { text: 'Public contractor profile pages', status: 'shipped' },

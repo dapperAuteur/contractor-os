@@ -776,6 +776,24 @@ export const HELP_ARTICLES: HelpArticle[] = [
     content: `The Contractor Board (/dashboard/contractor/board) is a peer-to-peer directory of contractors using Work.WitUS. Use it to find colleagues who can cover your dates when you are double-booked, or to make yourself discoverable so other contractors can reach out to you. Each profile shows skills, union affiliations, and availability notes. You can browse by name or filter by skill. The board is opt-in — your profile only appears if you have made it visible in your account settings. This is different from the Job Board (which is for posting and finding open gig listings). The Contractor Board is specifically for contractor-to-contractor networking and coverage requests.`,
   },
 
+  // ─── CONTACT SHARING & PRIVACY ──────────────────────────────────────────────
+
+  {
+    role: 'contractor',
+    title: 'How to share a contact with another user',
+    content: `Open the contact detail page and click the Share button in the top-right. Enter the username of the Work.WitUS user you want to share with. Before sending, use the "What to share" checkboxes to control exactly which fields the recipient will receive. Name is always shared. You can uncheck Phone, Email, Notes, Addresses, Tags, Website, or Pay Portal to keep those private. The recipient gets a copy of the contact with only the fields you chose — they can edit their copy independently without affecting yours.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How field-level privacy works for shared contacts',
+    content: `When you share a contact, you choose which fields to include using checkboxes: Company, Job Title, Email, Phone, Notes, Addresses, Tags, Website, and Pay Portal. Name is always shared and cannot be unchecked. When the recipient accepts the share, only the fields you checked are copied to their contact list. Fields you unchecked are not transmitted at all — they remain completely private. For example, you might share a contact\'s email and company name for a job referral, but keep their personal phone number and your private notes to yourself. Once shared, the recipient\'s copy is independent — changes they make don\'t affect your original contact.`,
+  },
+  {
+    role: 'contractor',
+    title: 'How to accept or decline a shared contact',
+    content: `When someone shares a contact with you, it appears in your pending shares. You can accept it to create a copy in your contacts list, or decline it to dismiss. When you accept, only the fields the sender chose to share are included in your copy. You own the copy and can edit it freely — adding your own notes, phone numbers, or other details that the sender didn\'t share.`,
+  },
+
   // ─── PAYCHECK RECONCILIATION ──────────────────────────────────────────────
 
   {
