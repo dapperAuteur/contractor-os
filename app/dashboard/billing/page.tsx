@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useSubscription } from '@/lib/hooks/useSubscription';
-import { CheckCircle, Shirt, CreditCard, Zap, ArrowRight, Copy, Check, Shield } from 'lucide-react';
+import { CheckCircle, Shirt, CreditCard, Zap, ArrowRight, Copy, Check, Shield, DollarSign } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 const POLICIES = 'No Refunds. Cancel Anytime. Monthly fees are not transferable to lifetime membership.';
@@ -22,12 +22,18 @@ export default function BillingPage() {
   const [copied, setCopied] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [syncLoading, setSyncLoading] = useState(!!sessionId);
+  const [cashappPending, setCashappPending] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
 
   useEffect(() => {
     offlineFetch('/api/auth/me')
       .then((r) => r.json())
       .then((d) => setIsAdmin(d.isAdmin ?? false))
+      .catch(() => {});
+    // Check for pending CashApp payment
+    offlineFetch('/api/contractor/cashapp')
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => { if (d?.payment?.status === 'pending') setCashappPending(true); })
       .catch(() => {});
   }, []);
 
@@ -109,6 +115,17 @@ export default function BillingPage() {
         <div className="mb-6 flex items-start gap-3 bg-red-50 border border-red-200 text-red-700 rounded-xl px-5 py-4 text-sm">
           <span className="font-semibold shrink-0">Sync error:</span>
           <span>{syncError}</span>
+        </div>
+      )}
+
+      {/* CashApp pending banner */}
+      {cashappPending && status !== 'lifetime' && (
+        <div className="mb-6 flex items-start gap-3 bg-amber-50 border border-amber-200 text-amber-700 rounded-xl px-5 py-4 text-sm" role="status">
+          <DollarSign className="w-5 h-5 shrink-0 mt-0.5" aria-hidden="true" />
+          <div>
+            <p className="font-semibold">CashApp payment pending verification</p>
+            <p className="text-xs text-amber-600 mt-1">We&apos;re reviewing your CashApp payment. You&apos;ll receive an email once your lifetime membership is activated — usually within 24 hours.</p>
+          </div>
         </div>
       )}
 
