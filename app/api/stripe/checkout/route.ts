@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { stripe } from '@/lib/stripe';
 
 const VALID_PLANS = [
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const { plan } = await request.json();
+  const { plan, stripeCouponId } = await request.json();
   if (!VALID_PLANS.includes(plan)) {
     return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
   }
@@ -40,6 +41,45 @@ export async function POST(request: NextRequest) {
 
   if (!isProductPlan && profile?.subscription_status === 'lifetime') {
     return NextResponse.json({ error: 'Already a lifetime member' }, { status: 400 });
+  }
+
+  // Block lifetime purchases when founders limit is exhausted
+  // UNLESS an admin promo campaign coupon is provided (promo overrides the lock)
+  if (plan === 'lifetime' || plan === 'contractor-lifetime') {
+    const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+
+    // Count paid lifetime (Stripe + CashApp)
+    const [{ count: stripeCount }, { count: cashappCount }] = await Promise.all([
+      db.from('profiles').select('id', { count: 'exact', head: true }).eq('subscription_status', 'lifetime').not('stripe_customer_id', 'is', null),
+      db.from('cashapp_payments').select('id', { count: 'exact', head: true }).eq('status', 'verified'),
+    ]);
+    const { data: limitSetting } = await db.from('platform_settings').select('value').eq('key', 'lifetime_founders_limit').maybeSingle();
+    const limit = Number(limitSetting?.value ?? 100);
+    const paidCount = (stripeCount ?? 0) + (cashappCount ?? 0);
+
+    if (paidCount >= limit) {
+      // Check if a valid admin promo campaign allows this purchase
+      let promoBypass = false;
+      if (stripeCouponId) {
+        const { data: campaign } = await db
+          .from('admin_promo_campaigns')
+          .select('id, is_active, plan_types')
+          .eq('stripe_coupon_id', stripeCouponId)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        if (campaign) {
+          const planTypes = Array.isArray(campaign.plan_types) ? campaign.plan_types : [];
+          promoBypass = planTypes.includes('lifetime');
+        }
+      }
+
+      if (!promoBypass) {
+        return NextResponse.json({
+          error: 'Lifetime founder spots are sold out. Please choose monthly or annual.',
+        }, { status: 400 });
+      }
+    }
   }
 
   let customerId = profile?.stripe_customer_id;
