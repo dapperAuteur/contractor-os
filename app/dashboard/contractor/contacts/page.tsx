@@ -90,6 +90,8 @@ export default function ContactsPage() {
   const [formEmails, setFormEmails] = useState([{ email: '', label: 'work' }]);
   const [formAddresses, setFormAddresses] = useState([{ label: 'home', street: '', city: '', state: '', postal_code: '', country: '' }]);
   const [formWebsite, setFormWebsite] = useState('');
+  const [formPortalUrl, setFormPortalUrl] = useState('');
+  const [formPortalCompanyId, setFormPortalCompanyId] = useState('');
   const [formNotes, setFormNotes] = useState('');
 
   const fetchContacts = useCallback(async () => {
@@ -132,6 +134,8 @@ export default function ContactsPage() {
     setFormEmails([{ email: '', label: 'work' }]);
     setFormAddresses([{ label: 'home', street: '', city: '', state: '', postal_code: '', country: '' }]);
     setFormWebsite('');
+    setFormPortalUrl('');
+    setFormPortalCompanyId('');
     setFormNotes('');
   };
 
@@ -161,6 +165,8 @@ export default function ContactsPage() {
         job_title: formTitle.trim() || null,
         company_name: formCompany.trim() || null,
         website: formWebsite.trim() || null,
+        paycheck_portal_url: formPortalUrl.trim() || null,
+        paycheck_portal_company_id: formPortalCompanyId.trim() || null,
         notes: formNotes.trim() || null,
         phones, emails, addresses,
       }),
@@ -545,10 +551,20 @@ export default function ContactsPage() {
             </button>
           </div>
 
-          {/* Website */}
+          {/* Website & Portal */}
           <div>
             <label htmlFor="contact-website" className={labelClass}>Website</label>
             <input id="contact-website" type="url" value={formWebsite} onChange={(e) => setFormWebsite(e.target.value)} className={inputClass} placeholder="https://example.com" />
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label htmlFor="contact-portal-url" className={labelClass}>Paycheck Portal URL</label>
+              <input id="contact-portal-url" type="url" value={formPortalUrl} onChange={(e) => setFormPortalUrl(e.target.value)} className={inputClass} placeholder="https://portal.adp.com" />
+            </div>
+            <div>
+              <label htmlFor="contact-portal-id" className={labelClass}>Portal Company ID</label>
+              <input id="contact-portal-id" type="text" value={formPortalCompanyId} onChange={(e) => setFormPortalCompanyId(e.target.value)} className={inputClass} placeholder="Employer ID for login" />
+            </div>
           </div>
 
           {/* Notes */}
