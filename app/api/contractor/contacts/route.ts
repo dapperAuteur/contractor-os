@@ -41,9 +41,9 @@ export async function GET(request: NextRequest) {
     `)
     .eq('user_id', user.id);
 
-  // Filter to person contacts if no specific type requested
+  // Filter to person contacts (include null subtype for backward compat with older contacts)
   if (!url.searchParams.has('all')) {
-    query = query.eq('contact_subtype', 'person');
+    query = query.or('contact_subtype.eq.person,contact_subtype.is.null');
   }
 
   if (search) {
@@ -94,7 +94,8 @@ export async function POST(request: NextRequest) {
   const {
     name, job_title, company_name,
     home_city, home_state, home_country,
-    website, notes, phones, emails, tags, addresses,
+    website, paycheck_portal_url, paycheck_portal_company_id,
+    notes, phones, emails, tags, addresses,
   } = body;
 
   if (!name?.trim()) return NextResponse.json({ error: 'Name is required' }, { status: 400 });
@@ -115,6 +116,8 @@ export async function POST(request: NextRequest) {
       home_state: home_state?.trim() ?? null,
       home_country: home_country?.trim() ?? null,
       website: website?.trim() ?? null,
+      paycheck_portal_url: paycheck_portal_url?.trim() ?? null,
+      paycheck_portal_company_id: paycheck_portal_company_id?.trim() ?? null,
       notes: notes?.trim() ?? null,
       // Set legacy single phone/email from primary values
       phone: (phones as Array<{ phone: string; is_primary?: boolean }>)?.find((p) => p.is_primary)?.phone
