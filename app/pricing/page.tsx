@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HardHat, Check, ArrowRight, Loader2, DollarSign, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import Image from 'next/image';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 const FEATURES = [
@@ -43,7 +42,6 @@ export default function ContractorPricingPage() {
   const [cashappName, setCashappName] = useState('');
   const [cashappSubmitting, setCashappSubmitting] = useState(false);
   const [cashappError, setCashappError] = useState('');
-  const [showCashapp, setShowCashapp] = useState(false);
   const [cashappSuccess, setCashappSuccess] = useState(false);
 
   useEffect(() => {
@@ -101,7 +99,6 @@ export default function ContractorPricingPage() {
       const d = await res.json();
       setCashappStatus(d.payment);
       setCashappName('');
-      setShowCashapp(false);
       setCashappSuccess(true);
     } else if (res.status === 401) {
       // Not logged in — redirect to signup then back to pricing
@@ -115,7 +112,7 @@ export default function ContractorPricingPage() {
   }
 
   const foundersPct = founders ? Math.round((founders.count / founders.limit) * 100) : 0;
-  const cashappTag = process.env.NEXT_PUBLIC_CASHAPP_TAG ?? '$WorkWitUS';
+  const cashappTag = process.env.NEXT_PUBLIC_CASHAPP_TAG ?? '$centenarian';
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -217,74 +214,71 @@ export default function ContractorPricingPage() {
               </div>
             )}
 
-            {/* Pay with Card */}
-            <button onClick={() => handleCheckout('contractor-lifetime')} disabled={loading !== null || (founders != null && !founders.active)} className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
-              {loading === 'contractor-lifetime' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Pay with Card <ArrowRight size={16} aria-hidden="true" /></>}
-            </button>
+            {/* Two payment options side by side */}
+            <div className="mt-4 space-y-3">
+              {/* Pay with Card */}
+              <button onClick={() => handleCheckout('contractor-lifetime')} disabled={loading !== null || (founders != null && !founders.active)} className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
+                {loading === 'contractor-lifetime' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Pay with Card — ${LIFETIME_PRICE.toFixed(2)} <ArrowRight size={16} aria-hidden="true" /></>}
+              </button>
 
-            {/* Pay with CashApp */}
-            {cashappSuccess ? (
-              <div className="mt-3 rounded-lg bg-lime-50 border border-lime-200 p-4 text-center" role="alert">
-                <CheckCircle2 className="w-6 h-6 text-lime-600 mx-auto mb-2" aria-hidden="true" />
-                <p className="text-sm font-medium text-lime-800">Payment Submitted!</p>
-                <p className="text-xs text-lime-700 mt-1">We&apos;ll verify your CashApp payment and activate your lifetime membership shortly. Check your billing page for status updates.</p>
+              {/* Divider */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-slate-200" />
+                <span className="text-xs text-slate-400 font-medium">or</span>
+                <div className="flex-1 h-px bg-slate-200" />
               </div>
-            ) : cashappStatus?.status === 'pending' ? (
-              <div className="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-700 text-center">
-                CashApp payment pending verification (submitted as <strong>{cashappStatus.cashapp_name}</strong>)
-              </div>
-            ) : (
-              <>
-                <button
-                  onClick={() => setShowCashapp(!showCashapp)}
-                  className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 min-h-11"
-                  aria-expanded={showCashapp}
-                >
-                  <DollarSign size={16} aria-hidden="true" />
-                  {showCashapp ? 'Hide CashApp' : 'Pay with CashApp — $100 (no processing fees)'}
-                </button>
-                {showCashapp && (
-                  <div className="mt-3 rounded-lg border border-slate-200 p-4 space-y-4">
-                    {/* QR Code */}
-                    <div className="flex justify-center">
-                      <Image
-                        src="/cashapp-qr.jpg"
-                        alt={`CashApp QR code for ${cashappTag}`}
-                        width={160}
-                        height={160}
-                        className="rounded-lg"
-                      />
+
+              {/* CashApp — always visible, no collapsible */}
+              {cashappSuccess ? (
+                <div className="rounded-lg bg-lime-50 border border-lime-200 p-4 text-center" role="alert">
+                  <CheckCircle2 className="w-6 h-6 text-lime-600 mx-auto mb-2" aria-hidden="true" />
+                  <p className="text-sm font-medium text-lime-800">Payment Submitted!</p>
+                  <p className="text-xs text-lime-700 mt-1">We&apos;ll verify your CashApp payment and activate your lifetime membership shortly. Check your billing page for status updates.</p>
+                </div>
+              ) : cashappStatus?.status === 'pending' ? (
+                <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-700 text-center">
+                  CashApp payment pending verification (submitted as <strong>{cashappStatus.cashapp_name}</strong>)
+                </div>
+              ) : (
+                <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                  <div className="flex items-center gap-4">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src="/cashapp-qr.jpg"
+                      alt={`CashApp QR code for ${cashappTag}`}
+                      width={100}
+                      height={100}
+                      className="rounded-lg shrink-0"
+                    />
+                    <div>
+                      <p className="text-base font-bold text-slate-900">Pay with CashApp — $100</p>
+                      <p className="text-xs text-amber-600 font-medium">No processing fees</p>
+                      <p className="text-lg font-bold text-amber-600 mt-1">{cashappTag}</p>
+                      <p className="text-xs text-slate-400 mt-1">Send $100 → enter your name → click &ldquo;I&apos;ve Paid&rdquo;</p>
                     </div>
-                    <p className="text-sm text-slate-600 text-center">
-                      <strong className="text-lg text-amber-600">{cashappTag}</strong>
-                    </p>
-                    <div className="text-sm text-slate-600 space-y-1">
-                      <p>1. Send <strong>$100</strong> to <strong className="text-amber-600">{cashappTag}</strong> on CashApp</p>
-                      <p>2. Enter your CashApp display name below</p>
-                      <p>3. Click &ldquo;I&apos;ve Paid&rdquo; — we&apos;ll verify and activate your account</p>
-                    </div>
-                    <p className="text-xs text-slate-400 text-center">$100 — no processing fees. CashApp charges are absorbed by us.</p>
+                  </div>
+                  <div className="flex gap-2">
                     <input
                       type="text"
                       value={cashappName}
                       onChange={(e) => setCashappName(e.target.value)}
-                      placeholder="Your CashApp display name"
+                      placeholder="Your CashApp name"
                       aria-label="CashApp display name"
-                      className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
+                      className="flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     />
-                    {cashappError && <p className="text-xs text-red-500" role="alert">{cashappError}</p>}
                     <button
                       onClick={handleCashappSubmit}
                       disabled={cashappSubmitting || !cashappName.trim()}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-2.5 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50 min-h-11"
+                      className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50 min-h-11 shrink-0"
                     >
                       {cashappSubmitting ? <Loader2 size={14} className="animate-spin" aria-hidden="true" /> : <DollarSign size={14} aria-hidden="true" />}
                       I&apos;ve Paid
                     </button>
                   </div>
-                )}
-              </>
-            )}
+                  {cashappError && <p className="text-xs text-red-500" role="alert">{cashappError}</p>}
+                </div>
+              )}
+            </div>
 
             {founders && !founders.active && (
               <div className="mt-3 text-center text-sm text-slate-400">
