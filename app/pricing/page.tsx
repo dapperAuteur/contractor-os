@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HardHat, Check, ArrowRight, Loader2, DollarSign, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import Image from 'next/image';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 const FEATURES = [
@@ -247,7 +246,8 @@ export default function ContractorPricingPage() {
                   <div className="mt-3 rounded-lg border border-slate-200 p-4 space-y-4">
                     {/* QR Code */}
                     <div className="flex justify-center">
-                      <Image
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
                         src="/cashapp-qr.jpg"
                         alt={`CashApp QR code for ${cashappTag}`}
                         width={160}
