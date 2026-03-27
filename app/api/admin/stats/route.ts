@@ -54,6 +54,10 @@ export async function GET(_request: NextRequest) {
     recipeViewsRes,
     blogViewsRes,
     promoPendingRes,
+    paidLifetimeRes,
+    cashappPendingRes,
+    cashappVerifiedRes,
+    foundersLimitRes,
   ] = await Promise.all([
     db.from('profiles').select('subscription_status', { count: 'exact' }),
     db.from('profiles').select('id', { count: 'exact' }).gte('created_at', weekAgo),
@@ -68,6 +72,10 @@ export async function GET(_request: NextRequest) {
     db.from('recipe_events').select('id', { count: 'exact' }).eq('event_type', 'view'),
     db.from('blog_events').select('id', { count: 'exact' }).eq('event_type', 'view'),
     db.from('profiles').select('id', { count: 'exact' }).eq('subscription_status', 'lifetime').is('shirt_promo_code', null),
+    db.from('profiles').select('id', { count: 'exact' }).eq('subscription_status', 'lifetime').not('stripe_customer_id', 'is', null),
+    db.from('cashapp_payments').select('id', { count: 'exact' }).eq('status', 'pending'),
+    db.from('cashapp_payments').select('id', { count: 'exact' }).eq('status', 'verified'),
+    db.from('platform_settings').select('value').eq('key', 'lifetime_founders_limit').maybeSingle(),
   ]);
 
   const profiles = profilesRes.data ?? [];
@@ -107,5 +115,14 @@ export async function GET(_request: NextRequest) {
       monthlyMRR: monthly * 10,
     },
     promoCodesPending: promoPendingRes.count ?? 0,
+    founders: {
+      limit: Number(foundersLimitRes.data?.value ?? 100),
+      paidLifetime: paidLifetimeRes.count ?? 0,
+      cashappVerified: cashappVerifiedRes.count ?? 0,
+      cashappPending: cashappPendingRes.count ?? 0,
+      totalPaid: (paidLifetimeRes.count ?? 0) + (cashappVerifiedRes.count ?? 0),
+      giftedLifetime: lifetime - (paidLifetimeRes.count ?? 0),
+      remaining: Math.max(0, Number(foundersLimitRes.data?.value ?? 100) - ((paidLifetimeRes.count ?? 0) + (cashappVerifiedRes.count ?? 0))),
+    },
   });
 }

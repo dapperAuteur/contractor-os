@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { HardHat, Check, ArrowRight, Loader2, DollarSign, AlertTriangle } from 'lucide-react';
+import { HardHat, Check, ArrowRight, Loader2, DollarSign, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import Image from 'next/image';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 const FEATURES = [
@@ -43,6 +44,7 @@ export default function ContractorPricingPage() {
   const [cashappSubmitting, setCashappSubmitting] = useState(false);
   const [cashappError, setCashappError] = useState('');
   const [showCashapp, setShowCashapp] = useState(false);
+  const [cashappSuccess, setCashappSuccess] = useState(false);
 
   useEffect(() => {
     offlineFetch('/api/pricing/founders').then((r) => r.json()).then(setFounders).catch(() => {});
@@ -100,6 +102,7 @@ export default function ContractorPricingPage() {
       setCashappStatus(d.payment);
       setCashappName('');
       setShowCashapp(false);
+      setCashappSuccess(true);
     } else {
       const d = await res.json().catch(() => ({ error: 'Failed' }));
       setCashappError(d.error ?? 'Failed to submit');
@@ -213,7 +216,13 @@ export default function ContractorPricingPage() {
             </button>
 
             {/* Pay with CashApp */}
-            {cashappStatus?.status === 'pending' ? (
+            {cashappSuccess ? (
+              <div className="mt-3 rounded-lg bg-lime-50 border border-lime-200 p-4 text-center" role="alert">
+                <CheckCircle2 className="w-6 h-6 text-lime-600 mx-auto mb-2" aria-hidden="true" />
+                <p className="text-sm font-medium text-lime-800">Payment Submitted!</p>
+                <p className="text-xs text-lime-700 mt-1">We&apos;ll verify your CashApp payment and activate your lifetime membership shortly. Check your billing page for status updates.</p>
+              </div>
+            ) : cashappStatus?.status === 'pending' ? (
               <div className="mt-3 rounded-lg bg-amber-50 border border-amber-200 p-3 text-sm text-amber-700 text-center">
                 CashApp payment pending verification (submitted as <strong>{cashappStatus.cashapp_name}</strong>)
               </div>
@@ -225,20 +234,34 @@ export default function ContractorPricingPage() {
                   aria-expanded={showCashapp}
                 >
                   <DollarSign size={16} aria-hidden="true" />
-                  {showCashapp ? 'Hide CashApp' : 'Pay with CashApp'}
+                  {showCashapp ? 'Hide CashApp' : 'Pay with CashApp — $100 (no processing fees)'}
                 </button>
                 {showCashapp && (
-                  <div className="mt-3 rounded-lg border border-slate-200 p-4 space-y-3">
-                    <p className="text-sm text-slate-600">
-                      1. Send <strong>${LIFETIME_PRICE.toFixed(2)}</strong> to <strong className="text-amber-600">{cashappTag}</strong><br />
-                      2. Enter your CashApp display name below<br />
-                      3. Click &ldquo;I&apos;ve Paid&rdquo; — we&apos;ll verify and upgrade your account
+                  <div className="mt-3 rounded-lg border border-slate-200 p-4 space-y-4">
+                    {/* QR Code */}
+                    <div className="flex justify-center">
+                      <Image
+                        src="/cashapp-qr.jpg"
+                        alt={`CashApp QR code for ${cashappTag}`}
+                        width={160}
+                        height={160}
+                        className="rounded-lg"
+                      />
+                    </div>
+                    <p className="text-sm text-slate-600 text-center">
+                      <strong className="text-lg text-amber-600">{cashappTag}</strong>
                     </p>
+                    <div className="text-sm text-slate-600 space-y-1">
+                      <p>1. Send <strong>$100</strong> to <strong className="text-amber-600">{cashappTag}</strong> on CashApp</p>
+                      <p>2. Enter your CashApp display name below</p>
+                      <p>3. Click &ldquo;I&apos;ve Paid&rdquo; — we&apos;ll verify and activate your account</p>
+                    </div>
+                    <p className="text-xs text-slate-400 text-center">$100 — no processing fees. CashApp charges are absorbed by us.</p>
                     <input
                       type="text"
                       value={cashappName}
                       onChange={(e) => setCashappName(e.target.value)}
-                      placeholder="Your CashApp name"
+                      placeholder="Your CashApp display name"
                       aria-label="CashApp display name"
                       className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:border-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-500/30"
                     />
