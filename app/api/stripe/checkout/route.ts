@@ -9,7 +9,7 @@ import { stripe } from '@/lib/stripe';
 const VALID_PLANS = [
   'monthly', 'lifetime',
   'teacher', 'teacher-annual',
-  'contractor-monthly', 'contractor-annual',
+  'contractor-monthly', 'contractor-annual', 'contractor-lifetime',
   'lister-monthly', 'lister-annual',
 ];
 
@@ -118,6 +118,25 @@ export async function POST(request: NextRequest) {
       cancel_url: `${baseUrl}/academy/teach`,
       metadata: { supabase_user_id: user.id, plan: 'teacher' },
     });
+  } else if (plan === 'contractor-lifetime') {
+    const priceId = process.env.STRIPE_CONTRACTOR_LIFETIME_PRICE_ID;
+    if (!priceId) {
+      return NextResponse.json({ error: 'Contractor lifetime plan not configured' }, { status: 503 });
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const sessionParams: Record<string, any> = {
+      customer: customerId,
+      mode: 'payment',
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${baseUrl}/dashboard/contractor?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/pricing`,
+      metadata: { supabase_user_id: user.id, plan: 'contractor-lifetime' },
+    };
+    // Apply promo coupon if provided
+    if (stripeCouponId) {
+      sessionParams.discounts = [{ coupon: stripeCouponId }];
+    }
+    session = await stripe.checkout.sessions.create(sessionParams);
   } else if (isContractorPlan) {
     const priceId = plan === 'contractor-annual'
       ? process.env.STRIPE_CONTRACTOR_ANNUAL_PRICE_ID

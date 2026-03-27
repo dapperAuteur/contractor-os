@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
         if (error) {
           logError({ source: 'webhook', module: 'stripe', message: 'Failed to update monthly status', metadata: { error: error.message }, userId });
         }
-      } else if (session.mode === 'payment' && plan === 'lifetime') {
+      } else if (session.mode === 'payment' && (plan === 'lifetime' || plan === 'contractor-lifetime')) {
         let promoCode: string | null = null;
         try {
           promoCode = await createShopifyPromoCode();

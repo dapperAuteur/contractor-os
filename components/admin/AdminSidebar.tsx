@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, MessageSquare, FileText, Heart, MessageCircle, GraduationCap, Radio, Activity, Building2, ScrollText, BarChart3, Link2, Sparkles, RefreshCw, MapPin, Globe, Mail, Megaphone } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, FileText, Heart, MessageCircle, GraduationCap, Radio, Activity, Building2, ScrollText, BarChart3, Link2, Sparkles, RefreshCw, MapPin, Globe, Mail, Megaphone, DollarSign, Tag } from 'lucide-react';
 
 interface UnreadCounts { feedback: number; messages: number; logs: number; }
 
@@ -33,6 +33,8 @@ const NAV_ITEMS = [
   { href: '/admin/venue-requests',  label: 'Venue Requests', icon: MapPin,     exact: false, badgeKey: null },
   { href: '/admin/seo',             label: 'SEO',            icon: Globe,      exact: false, badgeKey: null },
   { href: '/admin/referrals',       label: 'Referrals',      icon: Users,      exact: false, badgeKey: null },
+  { href: '/admin/cashapp',         label: 'CashApp',        icon: DollarSign,  exact: false, badgeKey: null },
+  { href: '/admin/promos',          label: 'Promos',         icon: Tag,         exact: false, badgeKey: null },
 ];
 
 export default function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
