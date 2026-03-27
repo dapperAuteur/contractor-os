@@ -23,7 +23,7 @@ const FEATURES = [
   'Offline-capable PWA — works without internet',
 ];
 
-interface FoundersData { limit: number; label: string; count: number; remaining: number; active: boolean }
+interface FoundersData { limit: number; label: string; count: number; remaining: number; active: boolean; show_lifetime: boolean; show_annual: boolean }
 interface PromoData { name: string; discount_type: string; discount_value: number; promo_code: string | null; end_date: string | null; stripe_coupon_id: string | null }
 interface CashAppStatus { id: string; status: string; cashapp_name: string }
 
@@ -148,8 +148,8 @@ export default function ContractorPricingPage() {
           <div role="alert" className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-600">{error}</div>
         )}
 
-        {/* Plan Cards */}
-        <div className="mt-12 grid gap-6 sm:grid-cols-3">
+        {/* Plan Cards — show Monthly always, Annual or Lifetime based on founders */}
+        <div className={`mt-12 grid gap-6 ${founders && !founders.show_annual && founders.show_lifetime ? 'sm:grid-cols-2' : founders && founders.show_annual && !founders.show_lifetime ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
           {/* Monthly */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <h2 className="text-lg font-semibold text-slate-800">Monthly</h2>
@@ -163,20 +163,23 @@ export default function ContractorPricingPage() {
             </button>
           </div>
 
-          {/* Annual */}
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
-            <h2 className="text-lg font-semibold text-slate-800">Annual</h2>
-            <div className="mt-3">
-              <span className="text-4xl font-extrabold text-amber-600">${ANNUAL_PRICE.toFixed(2)}</span>
-              <span className="text-slate-400">/year</span>
+          {/* Annual — hidden while founders active, shown after 100 lifetime sold */}
+          {(!founders || founders.show_annual) && (
+            <div className="rounded-2xl border border-slate-200 bg-white p-6">
+              <h2 className="text-lg font-semibold text-slate-800">Annual</h2>
+              <div className="mt-3">
+                <span className="text-4xl font-extrabold text-amber-600">${ANNUAL_PRICE.toFixed(2)}</span>
+                <span className="text-slate-400">/year</span>
+              </div>
+              <p className="mt-2 text-sm text-slate-400">${(ANNUAL_PRICE / 12).toFixed(2)}/month, billed annually.</p>
+              <button onClick={() => handleCheckout('contractor-annual')} disabled={loading !== null} className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
+                {loading === 'contractor-annual' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Subscribe <ArrowRight size={16} aria-hidden="true" /></>}
+              </button>
             </div>
-            <p className="mt-2 text-sm text-slate-400">${(ANNUAL_PRICE / 12).toFixed(2)}/month, billed annually.</p>
-            <button onClick={() => handleCheckout('contractor-annual')} disabled={loading !== null} className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
-              {loading === 'contractor-annual' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Subscribe <ArrowRight size={16} aria-hidden="true" /></>}
-            </button>
-          </div>
+          )}
 
-          {/* Lifetime */}
+          {/* Lifetime — shown while founders active, hidden after 100 sold */}
+          {(!founders || founders.show_lifetime) && (
           <div className="rounded-2xl border-2 border-amber-600 bg-white p-6 relative">
             {founders?.active && (
               <span className="absolute -top-3 left-4 rounded-full bg-amber-600 px-3 py-0.5 text-xs font-bold text-white">
@@ -286,6 +289,7 @@ export default function ContractorPricingPage() {
               </div>
             )}
           </div>
+          )}
         </div>
 
         {/* Feature list */}
