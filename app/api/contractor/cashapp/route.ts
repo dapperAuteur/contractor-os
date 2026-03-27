@@ -1,6 +1,7 @@
 // app/api/contractor/cashapp/route.ts
 // GET: current user's latest CashApp payment status
 // POST: submit a new CashApp payment for lifetime upgrade
+//       Blocks when founders limit is exhausted.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
@@ -13,7 +14,32 @@ function getDb() {
   );
 }
 
-const LIFETIME_PRICE = 100;
+const LIFETIME_PRICE = 103.29;
+
+/** Check founders availability by querying paid counts directly. */
+async function isFoundersActive(db: ReturnType<typeof getDb>): Promise<boolean> {
+  const { data: limitSetting } = await db
+    .from('platform_settings')
+    .select('value')
+    .eq('key', 'lifetime_founders_limit')
+    .maybeSingle();
+
+  const limit = Number(limitSetting?.value ?? 100);
+
+  const { count: stripeLifetime } = await db
+    .from('profiles')
+    .select('id', { count: 'exact', head: true })
+    .eq('subscription_status', 'lifetime')
+    .not('stripe_customer_id', 'is', null);
+
+  const { count: cashappVerified } = await db
+    .from('cashapp_payments')
+    .select('id', { count: 'exact', head: true })
+    .eq('status', 'verified');
+
+  const total = (stripeLifetime ?? 0) + (cashappVerified ?? 0);
+  return total < limit;
+}
 
 export async function GET() {
   const supabase = await createClient();
@@ -48,6 +74,12 @@ export async function POST(request: NextRequest) {
 
   if (profile?.subscription_status === 'lifetime') {
     return NextResponse.json({ error: 'You already have a lifetime subscription' }, { status: 400 });
+  }
+
+  // Check founders availability
+  const available = await isFoundersActive(db);
+  if (!available) {
+    return NextResponse.json({ error: 'Lifetime founder spots are sold out. Please choose monthly or annual.' }, { status: 400 });
   }
 
   // Check for existing pending payment

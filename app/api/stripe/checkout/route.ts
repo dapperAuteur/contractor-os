@@ -42,6 +42,17 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Already a lifetime member' }, { status: 400 });
   }
 
+  // Block lifetime purchases when founders limit is exhausted
+  if (plan === 'lifetime' || plan === 'contractor-lifetime') {
+    const foundersRes = await fetch(`${request.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL}/api/pricing/founders`);
+    if (foundersRes.ok) {
+      const founders = await foundersRes.json();
+      if (!founders.active) {
+        return NextResponse.json({ error: 'Lifetime founder spots are sold out. Please choose monthly or annual.' }, { status: 400 });
+      }
+    }
+  }
+
   let customerId = profile?.stripe_customer_id;
 
   if (!customerId) {
