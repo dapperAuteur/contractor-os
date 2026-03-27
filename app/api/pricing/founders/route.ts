@@ -71,11 +71,18 @@ export async function GET() {
   const count = allPaidIds.size;
   const remaining = Math.max(0, limit - count);
 
+  const active = remaining > 0;
+
   return NextResponse.json({
     limit,
     label,
     count,
     remaining,
-    active: remaining > 0,
+    active,
+    // Pricing page visibility:
+    // show_lifetime: true when founders active (spots available)
+    // show_annual: true when founders exhausted (lifetime sold out)
+    show_lifetime: active,
+    show_annual: !active,
   });
 }

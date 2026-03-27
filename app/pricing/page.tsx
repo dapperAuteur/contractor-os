@@ -76,7 +76,7 @@ export default function ContractorPricingPage() {
       });
       const data = await res.json();
       if (!res.ok) {
-        if (res.status === 401) { window.location.href = '/signup'; return; }
+        if (res.status === 401) { window.location.href = '/signup?redirect=/pricing'; return; }
         setError(data.error ?? 'Something went wrong');
         return;
       }
@@ -103,6 +103,10 @@ export default function ContractorPricingPage() {
       setCashappName('');
       setShowCashapp(false);
       setCashappSuccess(true);
+    } else if (res.status === 401) {
+      // Not logged in — redirect to signup then back to pricing
+      window.location.href = '/signup?redirect=/pricing';
+      return;
     } else {
       const d = await res.json().catch(() => ({ error: 'Failed' }));
       setCashappError(d.error ?? 'Failed to submit');
