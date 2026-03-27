@@ -8,8 +8,9 @@
 //   - Excluded: invited/gifted users (lifetime status but no stripe_customer_id and no cashapp)
 //   - Excluded: demo, admin, sample accounts
 //
-// When remaining = 0, the pricing page hides the lifetime card and
-// shows only monthly + annual. The checkout route also blocks lifetime purchases.
+// When active=true (remaining > 0): pricing shows Monthly + Lifetime (annual hidden)
+// When active=false (remaining = 0): pricing shows Monthly + Annual (lifetime hidden)
+// The checkout route blocks lifetime when sold out, and blocks annual while founders active.
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
@@ -71,11 +72,18 @@ export async function GET() {
   const count = allPaidIds.size;
   const remaining = Math.max(0, limit - count);
 
+  const active = remaining > 0;
+
   return NextResponse.json({
     limit,
     label,
     count,
     remaining,
-    active: remaining > 0,
+    active,
+    // Pricing page visibility:
+    // show_lifetime: true when founders active (spots available)
+    // show_annual: true when founders exhausted (lifetime sold out)
+    show_lifetime: active,
+    show_annual: !active,
   });
 }

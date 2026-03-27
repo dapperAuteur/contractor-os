@@ -43,9 +43,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Already a lifetime member' }, { status: 400 });
   }
 
-  // Block lifetime purchases when founders limit is exhausted
-  // UNLESS an admin promo campaign coupon is provided (promo overrides the lock)
-  if (plan === 'lifetime' || plan === 'contractor-lifetime') {
+  // Founders pricing logic:
+  // - While founders active (< 100 paid): only monthly + lifetime available (annual blocked)
+  // - After founders sold out (>= 100 paid): only monthly + annual available (lifetime blocked)
+  // - Admin promo campaigns can bypass the lifetime lock after founders close
+  const isLifetimePlan = plan === 'lifetime' || plan === 'contractor-lifetime';
+  const isAnnualPlan = plan === 'contractor-annual';
+
+  if (isLifetimePlan || isAnnualPlan) {
     const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
     // Count paid lifetime (Stripe + CashApp)
@@ -57,7 +62,17 @@ export async function POST(request: NextRequest) {
     const limit = Number(limitSetting?.value ?? 100);
     const paidCount = (stripeCount ?? 0) + (cashappCount ?? 0);
 
-    if (paidCount >= limit) {
+    const foundersActive = paidCount < limit;
+
+    // Block annual while founders window is open (only monthly + lifetime available)
+    if (isAnnualPlan && foundersActive) {
+      return NextResponse.json({
+        error: 'Annual plan will be available after the Founder\'s Price window closes. Choose monthly or lifetime.',
+      }, { status: 400 });
+    }
+
+    // Block lifetime after founders sold out (only monthly + annual available)
+    if (isLifetimePlan && !foundersActive) {
       // Check if a valid admin promo campaign allows this purchase
       let promoBypass = false;
       if (stripeCouponId) {
