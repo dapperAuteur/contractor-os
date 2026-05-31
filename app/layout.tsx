@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration';
 import SocialReferralTracker from '@/components/SocialReferralTracker';
+import MarketingBanner from '@/components/marketing/MarketingBanner';
 import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({ subsets: ['latin'] });
@@ -54,6 +55,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#d97706" />
       </head>
       <body className={inter.className}>
+        <MarketingBanner />
         {children}
         <SocialReferralTracker />
         <Analytics />
