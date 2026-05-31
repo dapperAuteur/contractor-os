@@ -26,9 +26,11 @@ export async function GET() {
   if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const db = getDb();
+  // Filter by app so a contractor-os admin doesn't see CentenarianOS campaigns.
   const { data, error } = await db
     .from('admin_promo_campaigns')
     .select('*')
+    .eq('app', 'contractor')
     .order('created_at', { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -79,12 +81,13 @@ export async function POST(request: NextRequest) {
   const { data, error } = await db
     .from('admin_promo_campaigns')
     .insert({
+      app: 'contractor',
       name: name.trim(),
       description: description?.trim() || null,
       discount_type,
       discount_value: Number(discount_value),
       stripe_coupon_id: stripeCouponId,
-      plan_types: plan_types || ['lifetime'],
+      plan_types: plan_types || ['contractor-lifetime'],
       promo_code: promo_code?.trim()?.toUpperCase() || null,
       start_date: start_date || new Date().toISOString(),
       end_date: end_date || null,

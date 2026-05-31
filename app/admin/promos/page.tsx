@@ -4,7 +4,7 @@
 // Admin promo campaign manager — create, toggle, view campaigns.
 
 import { useEffect, useState, useCallback } from 'react';
-import { Tag, Plus, Loader2, ToggleLeft, ToggleRight, X, Trash2 } from 'lucide-react';
+import { Tag, Plus, Loader2, ToggleLeft, ToggleRight, X, Trash2, Sparkles } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 interface Campaign {
@@ -37,8 +37,11 @@ export default function AdminPromosPage() {
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [showReactivate, setShowReactivate] = useState(false);
+  const [reactivating, setReactivating] = useState(false);
+  const [reactivateError, setReactivateError] = useState<string | null>(null);
 
-  // Form
+  // Generic form
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [discountType, setDiscountType] = useState('percentage');
@@ -46,6 +49,16 @@ export default function AdminPromosPage() {
   const [promoCode, setPromoCode] = useState('');
   const [endDate, setEndDate] = useState('');
   const [maxUses, setMaxUses] = useState('');
+
+  // Reactivation form (lifetime-specific)
+  const [rxName, setRxName] = useState('');
+  const [rxDiscountType, setRxDiscountType] = useState('percentage');
+  const [rxDiscountValue, setRxDiscountValue] = useState('');
+  const [rxPromoCode, setRxPromoCode] = useState('');
+  const [rxEndDate, setRxEndDate] = useState('');
+  const [rxMaxUses, setRxMaxUses] = useState('');
+  const [rxBannerTitle, setRxBannerTitle] = useState('');
+  const [rxBannerBody, setRxBannerBody] = useState('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -93,6 +106,41 @@ export default function AdminPromosPage() {
     await load();
   }
 
+  async function handleReactivate() {
+    if (!rxName.trim() || !rxDiscountValue) return;
+    if (!rxEndDate && !rxMaxUses) {
+      setReactivateError('Provide an end date or a max-uses cap so the promo has a natural close.');
+      return;
+    }
+    setReactivateError(null);
+    setReactivating(true);
+    const res = await offlineFetch('/api/admin/promos/reactivate-lifetime', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: rxName.trim(),
+        discount_type: rxDiscountType,
+        discount_value: Number(rxDiscountValue),
+        promo_code: rxPromoCode.trim().toUpperCase() || null,
+        end_date: rxEndDate || null,
+        max_uses: rxMaxUses ? Number(rxMaxUses) : null,
+        banner_title: rxBannerTitle.trim() || null,
+        banner_body: rxBannerBody.trim() || null,
+      }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Failed' }));
+      setReactivateError(err.error ?? 'Failed to reactivate lifetime');
+      setReactivating(false);
+      return;
+    }
+    setRxName(''); setRxDiscountValue(''); setRxPromoCode(''); setRxEndDate(''); setRxMaxUses('');
+    setRxBannerTitle(''); setRxBannerBody('');
+    setShowReactivate(false);
+    await load();
+    setReactivating(false);
+  }
+
   return (
     <div className="space-y-6 p-4 sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -103,15 +151,104 @@ export default function AdminPromosPage() {
           </h1>
           <p className="text-sm text-slate-500 mt-1">Create and manage discount promotions with Stripe coupon integration</p>
         </div>
-        <button
-          onClick={() => setShowCreate(!showCreate)}
-          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11 text-sm"
-          aria-expanded={showCreate}
-        >
-          {showCreate ? <X className="w-4 h-4" aria-hidden="true" /> : <Plus className="w-4 h-4" aria-hidden="true" />}
-          {showCreate ? 'Cancel' : 'New Campaign'}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => { setShowReactivate(!showReactivate); setShowCreate(false); }}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-lime-600 text-white rounded-xl font-medium hover:bg-lime-500 transition min-h-11 text-sm"
+            aria-expanded={showReactivate}
+          >
+            {showReactivate ? <X className="w-4 h-4" aria-hidden="true" /> : <Sparkles className="w-4 h-4" aria-hidden="true" />}
+            {showReactivate ? 'Cancel' : 'Reactivate Lifetime'}
+          </button>
+          <button
+            onClick={() => { setShowCreate(!showCreate); setShowReactivate(false); }}
+            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-600 text-white rounded-xl font-medium hover:bg-amber-500 transition min-h-11 text-sm"
+            aria-expanded={showCreate}
+          >
+            {showCreate ? <X className="w-4 h-4" aria-hidden="true" /> : <Plus className="w-4 h-4" aria-hidden="true" />}
+            {showCreate ? 'Cancel' : 'New Campaign'}
+          </button>
+        </div>
       </div>
+
+      {/* Lifetime reactivation quick action — creates promo campaign + banner together */}
+      {showReactivate && (
+        <div className="bg-white border-2 border-lime-200 rounded-xl p-5 space-y-4" role="region" aria-label="Reactivate lifetime promo">
+          <div className="flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-lime-600 mt-0.5 shrink-0" aria-hidden="true" />
+            <div>
+              <h2 className="text-base font-semibold text-slate-900">Reactivate Lifetime</h2>
+              <p className="text-xs text-slate-500 mt-0.5">Re-open lifetime memberships after the founder window closed. Creates a Stripe coupon, a contractor lifetime campaign, AND a banner shown to all non-lifetime users.</p>
+            </div>
+          </div>
+
+          {reactivateError && (
+            <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{reactivateError}</div>
+          )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="rx-name" className="block text-sm font-medium text-slate-700 mb-1">Campaign Name</label>
+              <input id="rx-name" type="text" value={rxName} onChange={(e) => setRxName(e.target.value)} className={inputClass} placeholder="Holiday Lifetime" />
+            </div>
+            <div>
+              <label htmlFor="rx-promo-code" className="block text-sm font-medium text-slate-700 mb-1">Promo Code (optional)</label>
+              <input id="rx-promo-code" type="text" value={rxPromoCode} onChange={(e) => setRxPromoCode(e.target.value.toUpperCase())} className={`${inputClass} uppercase`} placeholder="WINTER2026" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="rx-discount-type" className="block text-sm font-medium text-slate-700 mb-1">Discount Type</label>
+              <select id="rx-discount-type" value={rxDiscountType} onChange={(e) => setRxDiscountType(e.target.value)} className={inputClass}>
+                <option value="percentage">Percentage Off</option>
+                <option value="fixed">Fixed Amount Off</option>
+                <option value="free_months">Free Months (no Stripe coupon)</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="rx-discount-value" className="block text-sm font-medium text-slate-700 mb-1">
+                {rxDiscountType === 'percentage' ? 'Percent Off' : rxDiscountType === 'fixed' ? 'Dollar Amount' : 'Months Free'}
+              </label>
+              <input id="rx-discount-value" type="number" step={rxDiscountType === 'percentage' ? '1' : '0.01'} value={rxDiscountValue} onChange={(e) => setRxDiscountValue(e.target.value)} className={inputClass} placeholder={rxDiscountType === 'percentage' ? '20' : '10.00'} />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="rx-end-date" className="block text-sm font-medium text-slate-700 mb-1">End Date</label>
+              <input id="rx-end-date" type="date" value={rxEndDate} onChange={(e) => setRxEndDate(e.target.value)} className={inputClass} />
+              <p className="text-xs text-slate-400 mt-1">Or set Max Uses below. One is required.</p>
+            </div>
+            <div>
+              <label htmlFor="rx-max-uses" className="block text-sm font-medium text-slate-700 mb-1">Max Lifetime Spots</label>
+              <input id="rx-max-uses" type="number" value={rxMaxUses} onChange={(e) => setRxMaxUses(e.target.value)} className={inputClass} placeholder="50" />
+              <p className="text-xs text-slate-400 mt-1">Counts Stripe purchases + verified CashApp.</p>
+            </div>
+          </div>
+
+          <div className="border-t border-slate-200 pt-4 space-y-3">
+            <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold">Banner copy (optional — defaults derived from campaign)</p>
+            <div>
+              <label htmlFor="rx-banner-title" className="block text-sm font-medium text-slate-700 mb-1">Banner Title</label>
+              <input id="rx-banner-title" type="text" value={rxBannerTitle} onChange={(e) => setRxBannerTitle(e.target.value)} className={inputClass} placeholder="Lifetime is back" />
+            </div>
+            <div>
+              <label htmlFor="rx-banner-body" className="block text-sm font-medium text-slate-700 mb-1">Banner Body</label>
+              <input id="rx-banner-body" type="text" value={rxBannerBody} onChange={(e) => setRxBannerBody(e.target.value)} className={inputClass} placeholder="20% off lifetime through Dec 31 — limited spots" />
+            </div>
+          </div>
+
+          <button
+            onClick={handleReactivate}
+            disabled={reactivating || !rxName.trim() || !rxDiscountValue}
+            className="flex items-center gap-2 px-5 py-2.5 bg-lime-600 text-white rounded-xl text-sm font-medium hover:bg-lime-500 transition disabled:opacity-50 min-h-11"
+          >
+            {reactivating && <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />}
+            Reactivate Lifetime + Publish Banner
+          </button>
+        </div>
+      )}
 
       {/* Create form */}
       {showCreate && (
