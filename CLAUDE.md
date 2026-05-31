@@ -126,3 +126,9 @@ This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for d
 - Dashboard uses `slate-*` colors (light theme) — never use `gray-*` or `neutral-*` in dashboard pages
 - Login/admin pages use `neutral-*` colors (dark theme) — never use `gray-*` or `slate-*` there
 - Most common contrast bug: using `text-gray-*` anywhere (wrong scale for both dark and light contexts)
+
+---
+
+## Plans convention
+
+All implementation plans live in `./plans/` as markdown named `NN-description-of-plan.md` — two-digit numeric prefix, kebab-case slug, next available number, don't skip. Sub-queues: `./plans/user-tasks/NN-slug.md` (operator tasks), `./plans/bugs/`, `./plans/future/`. (`plans/` is typically gitignored — local working notes.) Full rule: `gemini/witus/CLAUDE.md` §"Plans convention".
