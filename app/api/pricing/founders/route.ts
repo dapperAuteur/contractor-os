@@ -13,6 +13,7 @@
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { getActiveLifetimePromo } from '@/lib/promo/active-lifetime-promo';
 
 function getDb() {
   return createClient(
@@ -73,6 +74,10 @@ export async function GET() {
 
   const active = remaining > 0;
 
+  // After founders sell out, an active admin promo can re-open lifetime sales.
+  // When non-null, the pricing page shows the Lifetime card alongside Annual.
+  const activeLifetimePromo = active ? null : await getActiveLifetimePromo(db);
+
   return NextResponse.json({
     limit,
     label,
@@ -80,9 +85,10 @@ export async function GET() {
     remaining,
     active,
     // Pricing page visibility:
-    // show_lifetime: true when founders active (spots available)
-    // show_annual: true when founders exhausted (lifetime sold out)
-    show_lifetime: active,
+    // show_lifetime: true when founders active OR an admin lifetime promo is running
+    // show_annual: true when founders exhausted (regardless of promo)
+    show_lifetime: active || activeLifetimePromo !== null,
     show_annual: !active,
+    active_lifetime_promo: activeLifetimePromo,
   });
 }

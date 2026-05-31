@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getActiveLifetimePromo } from '@/lib/promo/active-lifetime-promo';
 
 function getDb() {
   return createServiceClient(
@@ -76,10 +77,19 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'You already have a lifetime subscription' }, { status: 400 });
   }
 
-  // Check founders availability
+  // Check founders availability — fall through to active admin promo if sold out.
+  // Promo discounts apply only to Stripe; CashApp price is unchanged regardless.
   const available = await isFoundersActive(db);
+  let promoCampaignId: string | null = null;
   if (!available) {
-    return NextResponse.json({ error: 'Lifetime founder spots are sold out. Please choose monthly or annual.' }, { status: 400 });
+    const activePromo = await getActiveLifetimePromo(db);
+    if (!activePromo) {
+      return NextResponse.json(
+        { error: 'Lifetime founder spots are sold out. Please choose monthly or annual.' },
+        { status: 400 },
+      );
+    }
+    promoCampaignId = activePromo.id;
   }
 
   // Check for existing pending payment
@@ -106,6 +116,7 @@ export async function POST(request: NextRequest) {
       amount: LIFETIME_PRICE,
       cashapp_name: cashapp_name.trim(),
       status: 'pending',
+      promo_campaign_id: promoCampaignId,
     })
     .select()
     .single();
