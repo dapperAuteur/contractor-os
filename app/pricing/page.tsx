@@ -149,8 +149,13 @@ export default function ContractorPricingPage() {
           <div role="alert" className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-center text-sm text-red-600">{error}</div>
         )}
 
-        {/* Plan Cards — show Monthly always, Annual or Lifetime based on founders */}
-        <div className={`mt-12 grid gap-6 ${founders && !founders.show_annual && founders.show_lifetime ? 'sm:grid-cols-2' : founders && founders.show_annual && !founders.show_lifetime ? 'sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
+        {/* Plan Cards — wait for founders data to avoid flash, then show correct cards */}
+        {!founders ? (
+          <div className="mt-12 flex justify-center py-12">
+            <Loader2 className="w-6 h-6 animate-spin text-slate-300" aria-hidden="true" />
+          </div>
+        ) : (
+        <div className={`mt-12 grid gap-6 sm:grid-cols-2`}>
           {/* Monthly */}
           <div className="rounded-2xl border border-slate-200 bg-white p-6">
             <h2 className="text-lg font-semibold text-slate-800">Monthly</h2>
@@ -289,6 +294,7 @@ export default function ContractorPricingPage() {
           </div>
           )}
         </div>
+        )}
 
         {/* Feature list */}
         <div className="mt-16">

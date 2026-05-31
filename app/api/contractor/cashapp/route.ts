@@ -14,7 +14,10 @@ function getDb() {
   );
 }
 
-const LIFETIME_PRICE = 103.29;
+// CashApp price is $100 flat — does NOT include processing fees.
+// Stripe lifetime is $103.29 (covers Stripe's 2.9% + $0.30 fee).
+// CashApp charges 2.75% on the receiving end — absorbed by the business.
+const CASHAPP_LIFETIME_PRICE = 100;
 
 /** Check founders availability by querying paid counts directly. */
 async function isFoundersActive(db: ReturnType<typeof getDb>): Promise<boolean> {
@@ -103,7 +106,7 @@ export async function POST(request: NextRequest) {
     .from('cashapp_payments')
     .insert({
       user_id: user.id,
-      amount: LIFETIME_PRICE,
+      amount: CASHAPP_LIFETIME_PRICE,
       cashapp_name: cashapp_name.trim(),
       status: 'pending',
     })
