@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map } from 'lucide-react';
+import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map, Trophy } from 'lucide-react';
 
 interface Stats {
   users: { total: number; free: number; monthly: number; lifetime: number; newThisWeek: number };
@@ -13,6 +13,15 @@ interface Stats {
   featureUsage: { focusSessions: number; mealLogs: number; dailyLogs: number; roadmapTasks: number; blogViews: number };
   revenue: { lifetimeRevenue: number; monthlyMRR: number };
   promoCodesPending: number;
+  founders: {
+    limit: number;
+    paidLifetime: number;
+    cashappVerified: number;
+    cashappPending: number;
+    totalPaid: number;
+    giftedLifetime: number;
+    remaining: number;
+  };
 }
 
 function StatCard({ label, value, sub, icon: Icon, color = 'amber' }: { label: string; value: string | number; sub?: string; icon: React.ElementType; color?: string }) {
@@ -72,6 +81,84 @@ export default function AdminOverviewPage() {
             <Link href="/admin/users?filter=promo_pending" className="underline font-semibold">View them →</Link>
           </p>
         </div>
+      )}
+
+      {/* Founders progress — lifetime memberships sold against the 100-spot cap */}
+      {stats.founders && (
+        <section className="mb-8" aria-labelledby="founders-heading">
+          <h2 id="founders-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-3">
+            Founder&apos;s Lifetime Spots
+          </h2>
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-amber-100 text-amber-600">
+                  <Trophy className="w-4 h-4" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Paid lifetime memberships sold</p>
+                  <p className="text-3xl font-bold text-slate-900">
+                    {stats.founders.totalPaid}
+                    <span className="text-base font-normal text-slate-400"> / {stats.founders.limit}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-slate-400 uppercase tracking-wider">Remaining</p>
+                <p className={`text-2xl font-bold ${stats.founders.remaining === 0 ? 'text-red-600' : 'text-lime-600'}`}>
+                  {stats.founders.remaining}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div
+              className="h-3 bg-slate-100 rounded-full overflow-hidden mb-4"
+              role="progressbar"
+              aria-valuenow={stats.founders.totalPaid}
+              aria-valuemin={0}
+              aria-valuemax={stats.founders.limit}
+              aria-label={`${stats.founders.totalPaid} of ${stats.founders.limit} founder spots sold`}
+            >
+              <div
+                className={`h-full rounded-full transition-all ${stats.founders.remaining === 0 ? 'bg-red-500' : 'bg-amber-500'}`}
+                style={{ width: `${Math.min(100, Math.round((stats.founders.totalPaid / Math.max(stats.founders.limit, 1)) * 100))}%` }}
+              />
+            </div>
+
+            {/* Breakdown */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-slate-500">Stripe paid</p>
+                <p className="text-lg font-semibold text-slate-900">{stats.founders.paidLifetime}</p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-slate-500">CashApp verified</p>
+                <p className="text-lg font-semibold text-slate-900">{stats.founders.cashappVerified}</p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-amber-600">CashApp pending</p>
+                <p className="text-lg font-semibold text-amber-600">
+                  {stats.founders.cashappPending}
+                  {stats.founders.cashappPending > 0 && (
+                    <Link href="/admin/cashapp" className="ml-2 text-xs text-amber-600 hover:underline">review →</Link>
+                  )}
+                </p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-slate-500">Gifted / admin</p>
+                <p className="text-lg font-semibold text-slate-900">{stats.founders.giftedLifetime}</p>
+              </div>
+            </div>
+
+            {stats.founders.remaining === 0 && (
+              <p className="mt-4 text-xs text-slate-500 text-center">
+                Founder spots sold out. Annual plan ($103.29/year) is now live on the pricing page.{' '}
+                <Link href="/admin/promos" className="text-amber-600 hover:underline">Run a promo →</Link>
+              </p>
+            )}
+          </div>
+        </section>
       )}
 
       {/* Users */}
