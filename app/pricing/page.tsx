@@ -22,11 +22,33 @@ const FEATURES = [
   'Offline-capable PWA — works without internet',
 ];
 
-interface FoundersData { limit: number; label: string; count: number; remaining: number; active: boolean; show_lifetime: boolean; show_annual: boolean }
+interface ActiveLifetimePromo {
+  id: string;
+  name: string;
+  description: string | null;
+  discount_type: string;
+  discount_value: number;
+  stripe_coupon_id: string | null;
+  promo_code: string | null;
+  end_date: string | null;
+  max_uses: number | null;
+  current_uses: number;
+  remaining_uses: number | null;
+}
+interface FoundersData {
+  limit: number;
+  label: string;
+  count: number;
+  remaining: number;
+  active: boolean;
+  show_lifetime: boolean;
+  show_annual: boolean;
+  active_lifetime_promo?: ActiveLifetimePromo | null;
+}
 interface PromoData { name: string; discount_type: string; discount_value: number; promo_code: string | null; end_date: string | null; stripe_coupon_id: string | null }
 interface CashAppStatus { id: string; status: string; cashapp_name: string }
 
-function applyDiscount(price: number, promo: PromoData | null): number {
+function applyDiscount(price: number, promo: PromoData | ActiveLifetimePromo | null): number {
   if (!promo) return price;
   if (promo.discount_type === 'percentage') return Math.round(price * (1 - promo.discount_value / 100) * 100) / 100;
   if (promo.discount_type === 'fixed') return Math.max(0, price - promo.discount_value);
@@ -55,17 +77,23 @@ export default function ContractorPricingPage() {
   const ANNUAL_PRICE = 103.29;
   const LIFETIME_PRICE = 103.29;
 
-  const discountedLifetime = applyDiscount(LIFETIME_PRICE, promo);
-  const hasDiscount = promo && discountedLifetime < LIFETIME_PRICE;
+  // The admin-controlled lifetime reactivation promo takes precedence over the
+  // generic /api/pricing/promo when it discounts the lifetime price.
+  const activeLifetimePromo = founders?.active_lifetime_promo ?? null;
+  const effectiveLifetimePromo = activeLifetimePromo ?? promo;
+  const discountedLifetime = applyDiscount(LIFETIME_PRICE, effectiveLifetimePromo);
+  const hasDiscount = effectiveLifetimePromo && discountedLifetime < LIFETIME_PRICE;
 
   async function handleCheckout(plan: string) {
     setLoading(plan);
     setError(null);
     try {
       const body: Record<string, string> = { plan };
-      if (promo?.stripe_coupon_id && plan.includes('lifetime')) {
-        body.promoCode = promo.promo_code ?? '';
-        body.stripeCouponId = promo.stripe_coupon_id;
+      // Prefer the admin lifetime promo coupon when present (it bypasses the sold-out gate).
+      const couponSource = plan.includes('lifetime') ? (activeLifetimePromo ?? promo) : null;
+      if (couponSource?.stripe_coupon_id && plan.includes('lifetime')) {
+        body.promoCode = couponSource.promo_code ?? '';
+        body.stripeCouponId = couponSource.stripe_coupon_id;
       }
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -134,8 +162,19 @@ export default function ContractorPricingPage() {
         <h1 className="text-center text-3xl font-extrabold sm:text-4xl">Simple Pricing</h1>
         <p className="mt-3 text-center text-slate-500">Everything included. No feature gating. No surprises.</p>
 
-        {/* Active promo banner */}
-        {promo && (
+        {/* Admin-controlled lifetime reactivation banner takes precedence over the generic promo banner. */}
+        {activeLifetimePromo ? (
+          <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-700">
+            <strong>{activeLifetimePromo.name}</strong>
+            {activeLifetimePromo.discount_type === 'percentage' && ` — ${activeLifetimePromo.discount_value}% off lifetime`}
+            {activeLifetimePromo.discount_type === 'fixed' && ` — $${activeLifetimePromo.discount_value} off lifetime`}
+            {activeLifetimePromo.promo_code && <span className="ml-2 font-mono bg-amber-100 px-2 py-0.5 rounded">{activeLifetimePromo.promo_code}</span>}
+            {activeLifetimePromo.end_date && <span className="ml-2">· Ends {new Date(activeLifetimePromo.end_date).toLocaleDateString()}</span>}
+            {activeLifetimePromo.remaining_uses !== null && (
+              <span className="ml-2">· {activeLifetimePromo.remaining_uses} of {activeLifetimePromo.max_uses} remaining</span>
+            )}
+          </div>
+        ) : promo && (
           <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-700">
             <strong>{promo.name}</strong>
             {promo.discount_type === 'percentage' && ` — ${promo.discount_value}% off`}
@@ -184,12 +223,17 @@ export default function ContractorPricingPage() {
             </div>
           )}
 
-          {/* Lifetime — shown while founders active, hidden after 100 sold */}
+          {/* Lifetime — shown while founders active OR an admin reactivation promo is running */}
           {(!founders || founders.show_lifetime) && (
           <div className="rounded-2xl border-2 border-amber-600 bg-white p-6 relative">
             {founders?.active && (
               <span className="absolute -top-3 left-4 rounded-full bg-amber-600 px-3 py-0.5 text-xs font-bold text-white">
                 {founders.label}
+              </span>
+            )}
+            {!founders?.active && activeLifetimePromo && (
+              <span className="absolute -top-3 left-4 rounded-full bg-amber-600 px-3 py-0.5 text-xs font-bold text-white">
+                Promo
               </span>
             )}
             <h2 className="text-lg font-semibold text-slate-800">Lifetime</h2>
@@ -206,7 +250,7 @@ export default function ContractorPricingPage() {
             </div>
             <p className="mt-2 text-sm text-slate-400">Pay once, use forever. No renewals.</p>
 
-            {/* Founders counter */}
+            {/* Founders counter — shown during the original 100-spot window */}
             {founders?.active && (
               <div className="mt-3">
                 <div className="flex justify-between text-xs text-slate-500 mb-1">
@@ -219,11 +263,27 @@ export default function ContractorPricingPage() {
               </div>
             )}
 
+            {/* Promo counter — shown when an admin reactivation promo is running */}
+            {!founders?.active && activeLifetimePromo && activeLifetimePromo.max_uses !== null && activeLifetimePromo.remaining_uses !== null && (
+              <div className="mt-3">
+                <div className="flex justify-between text-xs text-slate-500 mb-1">
+                  <span>{activeLifetimePromo.remaining_uses} of {activeLifetimePromo.max_uses} promo spots left</span>
+                  {activeLifetimePromo.end_date && <span>Ends {new Date(activeLifetimePromo.end_date).toLocaleDateString()}</span>}
+                </div>
+                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-amber-500 rounded-full transition-all"
+                    style={{ width: `${Math.round((activeLifetimePromo.current_uses / Math.max(activeLifetimePromo.max_uses, 1)) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Two payment options side by side */}
             <div className="mt-4 space-y-3">
-              {/* Pay with Card */}
-              <button onClick={() => handleCheckout('contractor-lifetime')} disabled={loading !== null || (founders != null && !founders.active)} className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
-                {loading === 'contractor-lifetime' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Pay with Card — ${LIFETIME_PRICE.toFixed(2)} <ArrowRight size={16} aria-hidden="true" /></>}
+              {/* Pay with Card — purchasable when founders open OR an admin promo is live */}
+              <button onClick={() => handleCheckout('contractor-lifetime')} disabled={loading !== null || (founders != null && !founders.active && !activeLifetimePromo)} className="flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
+                {loading === 'contractor-lifetime' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Pay with Card — ${discountedLifetime.toFixed(2)} <ArrowRight size={16} aria-hidden="true" /></>}
               </button>
 
               {/* Divider */}

@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map } from 'lucide-react';
+import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map, Trophy, Sparkles } from 'lucide-react';
 
 interface Stats {
   users: { total: number; free: number; monthly: number; lifetime: number; newThisWeek: number };
@@ -13,6 +13,24 @@ interface Stats {
   featureUsage: { focusSessions: number; mealLogs: number; dailyLogs: number; roadmapTasks: number; blogViews: number };
   revenue: { lifetimeRevenue: number; monthlyMRR: number };
   promoCodesPending: number;
+  founders: {
+    limit: number;
+    paidLifetime: number;
+    cashappVerified: number;
+    cashappPending: number;
+    totalPaid: number;
+    giftedLifetime: number;
+    remaining: number;
+  };
+}
+
+interface ActiveLifetimePromo {
+  id: string;
+  name: string;
+  end_date: string | null;
+  max_uses: number | null;
+  current_uses: number;
+  remaining_uses: number | null;
 }
 
 function StatCard({ label, value, sub, icon: Icon, color = 'amber' }: { label: string; value: string | number; sub?: string; icon: React.ElementType; color?: string }) {
@@ -38,12 +56,19 @@ function StatCard({ label, value, sub, icon: Icon, color = 'amber' }: { label: s
 export default function AdminOverviewPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activePromo, setActivePromo] = useState<ActiveLifetimePromo | null>(null);
 
   useEffect(() => {
     fetch('/api/admin/stats')
       .then((r) => r.json())
       .then((data) => { setStats(data); setLoading(false); })
       .catch(() => setLoading(false));
+    // The reactivation promo lives in /api/pricing/founders (public endpoint
+    // that already aggregates this — no need for a duplicate query here).
+    fetch('/api/pricing/founders')
+      .then((r) => r.json())
+      .then((data) => setActivePromo(data.active_lifetime_promo ?? null))
+      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -72,6 +97,125 @@ export default function AdminOverviewPage() {
             <Link href="/admin/users?filter=promo_pending" className="underline font-semibold">View them →</Link>
           </p>
         </div>
+      )}
+
+      {/* Founders progress — lifetime memberships sold against the 100-spot cap */}
+      {stats.founders && (
+        <section className="mb-8" aria-labelledby="founders-heading">
+          <h2 id="founders-heading" className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-3">
+            Founder&apos;s Lifetime Spots
+          </h2>
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-amber-100 text-amber-600">
+                  <Trophy className="w-4 h-4" aria-hidden="true" />
+                </div>
+                <div>
+                  <p className="text-sm text-slate-500">Paid lifetime memberships sold</p>
+                  <p className="text-3xl font-bold text-slate-900">
+                    {stats.founders.totalPaid}
+                    <span className="text-base font-normal text-slate-400"> / {stats.founders.limit}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-xs text-slate-400 uppercase tracking-wider">Remaining</p>
+                <p className={`text-2xl font-bold ${stats.founders.remaining === 0 ? 'text-red-600' : 'text-lime-600'}`}>
+                  {stats.founders.remaining}
+                </p>
+              </div>
+            </div>
+
+            {/* Progress bar */}
+            <div
+              className="h-3 bg-slate-100 rounded-full overflow-hidden mb-4"
+              role="progressbar"
+              aria-valuenow={stats.founders.totalPaid}
+              aria-valuemin={0}
+              aria-valuemax={stats.founders.limit}
+              aria-label={`${stats.founders.totalPaid} of ${stats.founders.limit} founder spots sold`}
+            >
+              <div
+                className={`h-full rounded-full transition-all ${stats.founders.remaining === 0 ? 'bg-red-500' : 'bg-amber-500'}`}
+                style={{ width: `${Math.min(100, Math.round((stats.founders.totalPaid / Math.max(stats.founders.limit, 1)) * 100))}%` }}
+              />
+            </div>
+
+            {/* Breakdown */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-slate-500">Stripe paid</p>
+                <p className="text-lg font-semibold text-slate-900">{stats.founders.paidLifetime}</p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-slate-500">CashApp verified</p>
+                <p className="text-lg font-semibold text-slate-900">{stats.founders.cashappVerified}</p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-amber-600">CashApp pending</p>
+                <p className="text-lg font-semibold text-amber-600">
+                  {stats.founders.cashappPending}
+                  {stats.founders.cashappPending > 0 && (
+                    <Link href="/admin/cashapp" className="ml-2 text-xs text-amber-600 hover:underline">review →</Link>
+                  )}
+                </p>
+              </div>
+              <div className="bg-slate-50 rounded-lg p-3">
+                <p className="text-xs text-slate-500">Gifted / admin</p>
+                <p className="text-lg font-semibold text-slate-900">{stats.founders.giftedLifetime}</p>
+              </div>
+            </div>
+
+            {stats.founders.remaining === 0 && !activePromo && (
+              <p className="mt-4 text-xs text-slate-500 text-center">
+                Founder spots sold out. Annual plan ($103.29/year) is now live on the pricing page.{' '}
+                <Link href="/admin/promos" className="text-amber-600 hover:underline">Run a promo →</Link>
+              </p>
+            )}
+
+            {/* Promo reactivation progress — shown only when an admin lifetime promo is active. */}
+            {activePromo && (
+              <div className="mt-4 rounded-lg border border-lime-200 bg-lime-50 p-3">
+                <div className="flex items-start gap-3">
+                  <Sparkles className="w-4 h-4 text-lime-600 mt-0.5 shrink-0" aria-hidden="true" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-lime-800">
+                      {activePromo.name} — lifetime reactivation live
+                    </p>
+                    {activePromo.max_uses !== null && activePromo.remaining_uses !== null ? (
+                      <>
+                        <p className="text-xs text-lime-700 mt-0.5">
+                          {activePromo.current_uses} of {activePromo.max_uses} additional promo lifetimes claimed
+                          {activePromo.end_date && ` · Ends ${new Date(activePromo.end_date).toLocaleDateString()}`}
+                        </p>
+                        <div
+                          className="mt-2 h-2 bg-lime-200 rounded-full overflow-hidden"
+                          role="progressbar"
+                          aria-valuenow={activePromo.current_uses}
+                          aria-valuemin={0}
+                          aria-valuemax={activePromo.max_uses}
+                          aria-label={`${activePromo.current_uses} of ${activePromo.max_uses} promo lifetimes claimed`}
+                        >
+                          <div
+                            className="h-full bg-lime-600 rounded-full transition-all"
+                            style={{ width: `${Math.round((activePromo.current_uses / Math.max(activePromo.max_uses, 1)) * 100)}%` }}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-xs text-lime-700 mt-0.5">
+                        {activePromo.current_uses} additional promo lifetimes claimed
+                        {activePromo.end_date && ` · Ends ${new Date(activePromo.end_date).toLocaleDateString()}`}
+                      </p>
+                    )}
+                  </div>
+                  <Link href="/admin/promos" className="shrink-0 text-xs text-lime-700 hover:underline">manage →</Link>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
       )}
 
       {/* Users */}
