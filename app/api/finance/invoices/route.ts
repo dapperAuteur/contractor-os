@@ -115,6 +115,16 @@ export async function POST(request: NextRequest) {
     if (itemError) return NextResponse.json({ error: itemError.message }, { status: 500 });
   }
 
+  // Update linked job status to 'invoiced' if it's currently 'completed'
+  if (job_id) {
+    await db
+      .from('contractor_jobs')
+      .update({ status: 'invoiced' })
+      .eq('id', job_id)
+      .eq('user_id', user.id)
+      .in('status', ['completed']);
+  }
+
   // Fetch the invoice with items
   const { data: full } = await db
     .from('invoices')
