@@ -1,12 +1,14 @@
 // app/api/contractor/jobs/route.ts
 // GET: list jobs with filters (status, client, date range, brand)
 // POST: create a new contractor job
+// Fires an outbox draft on successful creation (BAM-gated during smoke).
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
+import { fireOutboxDrafts } from '@/lib/outbox-trigger';
 
 function getDb() {
   return createServiceClient(
@@ -199,6 +201,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Auto-calculate distance from home if not provided and location is set
+  let responsePayload = data;
   if (!distance_from_home_miles && (data.location_id || data.location_name)) {
     const dist = await calcDistance(db, user.id, data.location_id, data.location_name);
     if (dist) {
@@ -208,9 +211,22 @@ export async function POST(request: NextRequest) {
         .eq('id', data.id)
         .select()
         .single();
-      if (updated) return NextResponse.json(updated, { status: 201 });
+      if (updated) responsePayload = updated;
     }
   }
 
-  return NextResponse.json(data, { status: 201 });
+  // Fire outbox draft after DB writes succeed. PII rules: no client name, no
+  // pay rate, no contact info. Only role/department/union (public-facing).
+  const detailParts: string[] = [];
+  if (data.department) detailParts.push(String(data.department));
+  if (data.union_local) detailParts.push(String(data.union_local));
+  const detail = detailParts.length ? ` (${detailParts.join(' · ')})` : '';
+  fireOutboxDrafts({
+    triggerUserId: user.id,
+    externalRefBase: `job-${data.id}`,
+    caption: `Just added another gig to my Work.WitUS calendar${detail}. https://work.witus.online`,
+    platforms: ['linkedin', 'twitter', 'bluesky'],
+  });
+
+  return NextResponse.json(responsePayload, { status: 201 });
 }

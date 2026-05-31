@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { fireOutboxDrafts } from '@/lib/outbox-trigger';
 
 function getDb() {
   return createServiceClient(
@@ -25,7 +26,7 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
 
   const { data: doc } = await db
     .from('union_documents')
-    .select('user_id')
+    .select('user_id, is_shared, union_local')
     .eq('id', id)
     .maybeSingle();
 
@@ -48,6 +49,21 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Fire outbox draft only when the document transitions from private to shared.
+  // Plain metadata edits to an already-shared doc don't fire; an already-public
+  // resource changing its name isn't a publishable moment.
+  const wentPublic = data.is_shared === true && doc.is_shared !== true;
+  if (wentPublic) {
+    const localTag = data.union_local ? ` for ${data.union_local}` : '';
+    fireOutboxDrafts({
+      triggerUserId: user.id,
+      externalRefBase: `union-doc-shared-${data.id}`,
+      caption: `Union resource just went public${localTag} on Work.WitUS. Searchable by every crew member in the local. https://work.witus.online`,
+      platforms: ['linkedin', 'twitter', 'bluesky'],
+    });
+  }
+
   return NextResponse.json(data);
 }
 
