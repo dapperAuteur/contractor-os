@@ -45,10 +45,12 @@ export async function POST(request: NextRequest) {
 
   // Founders pricing logic:
   // - While founders active (< 100 paid): only monthly + lifetime available (annual blocked)
-  // - After founders sold out (>= 100 paid): only monthly + annual available (lifetime blocked)
-  // - Admin promo campaigns can bypass the lifetime lock after founders close
+  // - After founders sold out (>= 100 paid): only monthly + annual available
+  //   UNLESS a CONTRACTOR admin_promo_campaigns row supplies a valid coupon —
+  //   that bypass also re-enables lifetime purchases at the discount.
   const isLifetimePlan = plan === 'lifetime' || plan === 'contractor-lifetime';
   const isAnnualPlan = plan === 'contractor-annual';
+  let promoCampaignId: string | null = null;
 
   if (isLifetimePlan || isAnnualPlan) {
     const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
@@ -61,7 +63,6 @@ export async function POST(request: NextRequest) {
     const { data: limitSetting } = await db.from('platform_settings').select('value').eq('key', 'lifetime_founders_limit').maybeSingle();
     const limit = Number(limitSetting?.value ?? 100);
     const paidCount = (stripeCount ?? 0) + (cashappCount ?? 0);
-
     const foundersActive = paidCount < limit;
 
     // Block annual while founders window is open (only monthly + lifetime available)
@@ -73,27 +74,42 @@ export async function POST(request: NextRequest) {
 
     // Block lifetime after founders sold out (only monthly + annual available)
     if (isLifetimePlan && !foundersActive) {
-      // Check if a valid admin promo campaign allows this purchase
-      let promoBypass = false;
+      // Check if a valid CONTRACTOR admin promo campaign allows this purchase.
+      // Filter by app='contractor' so a CentenarianOS promo doesn't unlock contractor lifetime.
+      let matchedCampaignId: string | null = null;
       if (stripeCouponId) {
+        const now = new Date().toISOString();
         const { data: campaign } = await db
           .from('admin_promo_campaigns')
-          .select('id, is_active, plan_types')
+          .select('id, is_active, plan_types, app, start_date, end_date, max_uses, current_uses')
           .eq('stripe_coupon_id', stripeCouponId)
+          .eq('app', 'contractor')
           .eq('is_active', true)
+          .lte('start_date', now)
+          .or(`end_date.is.null,end_date.gte.${now}`)
           .maybeSingle();
 
         if (campaign) {
           const planTypes = Array.isArray(campaign.plan_types) ? campaign.plan_types : [];
-          promoBypass = planTypes.includes('lifetime');
+          const allowsLifetime =
+            planTypes.includes('contractor-lifetime') || planTypes.includes('lifetime');
+          const withinCap =
+            campaign.max_uses === null ||
+            (campaign.current_uses ?? 0) < campaign.max_uses;
+          if (allowsLifetime && withinCap) {
+            matchedCampaignId = campaign.id;
+          }
         }
       }
 
-      if (!promoBypass) {
+      if (!matchedCampaignId) {
         return NextResponse.json({
           error: 'Lifetime founder spots are sold out. Please choose monthly or annual.',
         }, { status: 400 });
       }
+
+      // Stash for session metadata below.
+      promoCampaignId = matchedCampaignId;
     }
   }
 
@@ -145,7 +161,11 @@ export async function POST(request: NextRequest) {
       line_items: [{ price: priceId, quantity: 1 }],
       success_url: `${baseUrl}/dashboard/contractor?success=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/pricing`,
-      metadata: { supabase_user_id: user.id, plan: 'contractor-lifetime' },
+      metadata: {
+        supabase_user_id: user.id,
+        plan: 'contractor-lifetime',
+        ...(promoCampaignId ? { promo_campaign_id: promoCampaignId } : {}),
+      },
     };
     // Apply promo coupon if provided
     if (stripeCouponId) {

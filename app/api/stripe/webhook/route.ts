@@ -6,6 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 import { stripe } from '@/lib/stripe';
 import Stripe from 'stripe';
 import { createShopifyPromoCode } from '@/lib/shopify/createPromoCode';
+import { incrementCampaignUses } from '@/lib/promo/active-lifetime-promo';
 import { logInfo, logError } from '@/lib/logging';
 
 // Service-role client bypasses RLS — only used server-side in this webhook
@@ -128,6 +129,30 @@ export async function POST(request: NextRequest) {
           .eq('id', userId);
         if (error) {
           logError({ source: 'webhook', module: 'stripe', message: 'Failed to update lifetime status', metadata: { error: error.message }, userId });
+        }
+
+        // If this lifetime purchase redeemed an admin promo campaign,
+        // increment current_uses (and auto-deactivate if max_uses reached).
+        const promoCampaignId = session.metadata?.promo_campaign_id;
+        if (promoCampaignId) {
+          try {
+            await incrementCampaignUses(supabase, promoCampaignId);
+            logInfo({
+              source: 'webhook',
+              module: 'stripe',
+              message: 'Promo campaign use incremented',
+              metadata: { promoCampaignId },
+              userId,
+            });
+          } catch (err) {
+            logError({
+              source: 'webhook',
+              module: 'stripe',
+              message: 'Failed to increment promo campaign use',
+              metadata: { error: err instanceof Error ? err.message : String(err), promoCampaignId },
+              userId,
+            });
+          }
         }
       }
       break;

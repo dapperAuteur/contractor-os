@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createShopifyPromoCode } from '@/lib/shopify/createPromoCode';
+import { incrementCampaignUses } from '@/lib/promo/active-lifetime-promo';
 import { getResend } from '@/lib/email/resend';
 
 function getDb() {
@@ -56,7 +57,7 @@ export async function PATCH(request: NextRequest) {
 
   const { data: payment } = await db
     .from('cashapp_payments')
-    .select('id, user_id, status, cashapp_name, amount')
+    .select('id, user_id, status, cashapp_name, amount, promo_campaign_id')
     .eq('id', id)
     .single();
 
@@ -125,6 +126,14 @@ export async function PATCH(request: NextRequest) {
     cancel_at_period_end: false,
     shirt_promo_code: promoCode,
   }).eq('id', payment.user_id);
+
+  // If this CashApp payment was submitted during an active promo, increment
+  // the campaign's use count (and auto-deactivate if max_uses reached).
+  if (payment.promo_campaign_id) {
+    try {
+      await incrementCampaignUses(db, payment.promo_campaign_id);
+    } catch { /* non-critical — admin can re-run if needed */ }
+  }
 
   // Notify user of verification via email
   if (userEmail) {
