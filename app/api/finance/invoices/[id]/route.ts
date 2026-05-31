@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { fireOutboxDrafts } from '@/lib/outbox-trigger';
 
 function getDb() {
   return createServiceClient(
@@ -174,6 +175,14 @@ export async function PATCH(
         .eq('user_id', user.id)
         .in('status', ['completed', 'invoiced']);
     }
+
+    // Fire outbox draft. NO dollar amount, NO client name in caption.
+    fireOutboxDrafts({
+      triggerUserId: user.id,
+      externalRefBase: `invoice-paid-${existing.id}`,
+      caption: 'Another invoice closed out. Getting paid for the work — powered by Work.WitUS. https://work.witus.online',
+      platforms: ['linkedin', 'twitter', 'bluesky'],
+    });
 
     return NextResponse.json(data);
   }

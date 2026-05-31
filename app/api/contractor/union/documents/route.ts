@@ -7,6 +7,7 @@ export const maxDuration = 120;
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { fireOutboxDrafts } from '@/lib/outbox-trigger';
 
 function getDb() {
   return createServiceClient(
@@ -233,6 +234,18 @@ export async function POST(request: NextRequest) {
       page_count: chunks.length,
       updated_at: new Date().toISOString(),
     }).eq('id', doc.id);
+
+    // Fire outbox draft only when the doc is shared (private docs stay private).
+    // Union local is the only field we surface; doc name may carry sensitive context.
+    if (is_shared) {
+      const localTag = doc.union_local ? ` for ${doc.union_local}` : '';
+      fireOutboxDrafts({
+        triggerUserId: user.id,
+        externalRefBase: `union-doc-${doc.id}`,
+        caption: `New union resource added${localTag} on Work.WitUS. Searchable by every crew member in the local. https://work.witus.online`,
+        platforms: ['linkedin', 'twitter', 'bluesky'],
+      });
+    }
 
     return NextResponse.json({ id: doc.id, status: 'ready', chunks: chunks.length }, { status: 201 });
   } catch (e) {
