@@ -4,9 +4,9 @@
 // Why this file exists
 // --------------------
 // Work.WitUS handles employment records. A crash report from this app can otherwise carry:
-//   • a union member's document (`/api/contractor/union/documents/...`, Cloudinary asset URLs) —
+//   • a union member's document (`/api/contractor/union/documents/...`, Cloudinary asset URLs):
 //     dues history, membership status, uploaded contracts;
-//   • an invite flow's email address and the Supabase auth `?code=` exchange param — a working
+//   • an invite flow's email address and the Supabase auth `?code=` exchange param, a working
 //     credential for somebody else's account;
 //   • a job record's request BODY (client name, site address, crew, rates) echoed into the error;
 //   • the Supabase service-role key or a session JWT, both `eyJ…` strings that show up verbatim in
@@ -15,10 +15,10 @@
 //
 // The bias is deliberate: REDACT WHEN UNSURE. An over-redacted crash report costs a few minutes of
 // triage; an under-redacted one leaks a contractor's employment data to a vendor. This module never
-// returns null — we still want the stack trace, just without the credentials attached.
+// returns null: we still want the stack trace, just without the credentials attached.
 //
-// Pure and dependency-free (no `server-only`, no Supabase import) so it is directly unit-testable —
-// see tests/sentry-scrub.test.ts.
+// Pure and dependency-free (no `server-only`, no Supabase import) so it is directly unit-testable.
+// See tests/sentry-scrub.test.ts.
 
 import type { ErrorEvent } from '@sentry/nextjs';
 
@@ -29,7 +29,7 @@ export const REDACTED_EMAIL = '[redacted email]';
 /** Absolute http(s) URLs. Trailing punctuation is excluded so we replace the URL, not the prose. */
 const URL_RE = /https?:\/\/[^\s<>"'`)\]}]+/g;
 
-/** Any email address. Contractor, lister, crew contact, invited peer — all of them are personal. */
+/** Any email address. Contractor, lister, crew contact, invited peer, all of them are personal. */
 const EMAIL_RE = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
 /** A JWT. Supabase session tokens, the anon key and the SERVICE-ROLE key are all `eyJ…` strings. */
@@ -48,7 +48,7 @@ const SECRET_PATH_RE =
   /^\/(api\/auth|auth|invite|invites|join|accept|reset-password|forgot-password|set-password|confirm|activate|unsubscribe|magic-link)(\/|$)/i;
 
 /** A storage-object URL IS the uploaded file (a scanned licence, a union contract, a signed
- *  invoice), so it is treated as the payload and never sent — not even its path. */
+ *  invoice), so it is treated as the payload and never sent, not even its path. */
 const FILE_PATH_RE = /\/storage\/v1\/(object|render)(\/|$)/i;
 
 /** Cloudinary serves this app's uploaded documents and photos. Same reasoning as above. */
@@ -109,7 +109,7 @@ function maskPath(pathname: string): string {
  * string is ALWAYS dropped (Supabase REST filters embed emails, user ids and job ids; the auth
  * callback embeds `?code=`), and a URL that is itself the payload is dropped entirely.
  *
- * Returns the placeholder for anything unparseable — that is exactly the case where we cannot
+ * Returns the placeholder for anything unparseable, which is exactly the case where we cannot
  * reason about it, and the rule is "redact when unsure".
  */
 export function redactUrl(raw: string): string {
@@ -193,8 +193,8 @@ export function scrubEvent(event: ErrorEvent): ErrorEvent {
     }
   }
 
-  // Browser breadcrumbs record every fetch/XHR the page made — including document downloads and
-  // Supabase queries — so they need the same pass as the exception itself.
+  // Browser breadcrumbs record every fetch/XHR the page made, including document downloads and
+  // Supabase queries, so they need the same pass as the exception itself.
   for (const crumb of event.breadcrumbs ?? []) {
     if (crumb.message) crumb.message = redactSecrets(crumb.message);
     if (crumb.data) scrubStringValues(crumb.data as Record<string, unknown>);

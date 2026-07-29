@@ -30,7 +30,7 @@ A contractor management platform for freelance workers and crew coordinators to 
 - **Links**: Switchy.io (tracked short links with marketing pixels)
 - **Media**: Cloudinary
 - **Analytics**: Umami (privacy-first), custom usage events + page views
-- **Error monitoring**: Better Stack via the Sentry SDK — off unless a DSN is set, and every event
+- **Error monitoring**: Better Stack via the Sentry SDK, off unless a DSN is set, and every event
   is scrubbed of PII by `lib/sentry-scrub.ts` before it leaves the app
 - **Hosting**: Vercel
 - **Offline**: Service Worker + IndexedDB with sync queue
@@ -101,7 +101,7 @@ NEXT_PUBLIC_UMAMI_WEBSITE_ID=
 NEXT_PUBLIC_UMAMI_SCRIPT_URL=
 UMAMI_HOST_URL=
 
-# Error monitoring (optional — Better Stack via the Sentry SDK)
+# Error monitoring (optional, Better Stack via the Sentry SDK)
 # Leave blank and the SDK is never initialised: nothing is captured, nothing is sent.
 SENTRY_DSN=
 NEXT_PUBLIC_SENTRY_DSN=
@@ -210,7 +210,7 @@ The admin panel (`/admin`) includes:
 - **Data Encryption**: TLS in transit, AES-256 at rest (Supabase)
 - **Bot Prevention**: Cloudflare Turnstile on signup
 - **Financial Data**: Private by default, never shared without consent
-- **Error Reports**: crash reports are scrubbed before leaving the app (`lib/sentry-scrub.ts`) —
+- **Error Reports**: crash reports are scrubbed before leaving the app (`lib/sentry-scrub.ts`):
   no request bodies, no query strings, no cookies or auth headers, no emails, no JWTs, no document
   URLs, no requester IP. Verify with `npm run test:scrub`
 

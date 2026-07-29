@@ -1,7 +1,7 @@
 'use client';
 
 // File: app/global-error.tsx
-// Root error boundary — catches errors thrown in the root layout itself, which no other boundary
+// Root error boundary: catches errors thrown in the root layout itself, which no other boundary
 // can see. It renders its own <html>/<body> (the root layout is gone at this point), so the styles
 // are inline: globals.css is not applied here.
 //

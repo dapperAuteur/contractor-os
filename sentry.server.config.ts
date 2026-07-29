@@ -13,7 +13,7 @@ if (dsn) {
   Sentry.init({
     dsn,
     environment: process.env.SENTRY_ENVIRONMENT ?? process.env.VERCEL_ENV ?? process.env.NODE_ENV,
-    // Errors only — no performance/tracing spend until it is explicitly wanted.
+    // Errors only: no performance/tracing spend until it is explicitly wanted.
     tracesSampleRate: 0,
     // Never auto-attach IP / cookies / user email. The beforeSend scrub is the second line of
     // defense, and the one that also covers union documents, invites and job-record bodies.
