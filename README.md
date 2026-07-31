@@ -189,7 +189,7 @@ The admin panel (`/admin`) includes:
 ## Health Check & Uptime Monitoring
 
 `GET /api/health` is the endpoint uptime monitors (Better Stack and friends) should point at.
-**Do not point a monitor at the homepage** — the homepage can serve a cached 200 while the
+**Do not point a monitor at the homepage.** The homepage can serve a cached 200 while the
 database is down, so a green check there proves nothing.
 
 The route actually exercises the critical dependency: it issues the cheapest possible Supabase
