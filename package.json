@@ -6,10 +6,12 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:scrub": "node --test --experimental-strip-types tests/sentry-scrub.test.ts"
   },
   "dependencies": {
     "@ericblade/quagga2": "^1.8.4",
+    "@sentry/nextjs": "^10.69.0",
     "@stripe/stripe-js": "^8.7.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.75.1",

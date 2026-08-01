@@ -1,3 +1,5 @@
+import { withSentryConfig } from '@sentry/nextjs';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -12,6 +14,11 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // NOTE for error monitoring: this policy sets no `connect-src` and no `default-src`, so
+        // outbound fetch/XHR is unrestricted and the Sentry browser transport is NOT blocked here.
+        // If a `connect-src` (or a `default-src`) is ever added, the DSN's ORIGIN must be listed in
+        // it, otherwise every browser-side error report is silently dropped by the browser and the
+        // dashboard just looks quiet. Add the origin only, never the DSN key.
         source: '/blog/:path*',
         headers: [
           {
@@ -49,4 +56,15 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+// Wrap with Sentry's build plugin. Safe with no Sentry env set: without SENTRY_AUTH_TOKEN it simply
+// skips source-map upload (you just get minified stack traces), and the runtime SDK stays inert
+// without a DSN. org/project/authToken all come from env so nothing secret is committed here.
+// Note: `disableLogger` still works in SDK v10 but prints a deprecation warning at build time; its
+// replacement is `webpack.treeshake.removeDebugLogging`, to switch to when we next bump the SDK.
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  silent: !process.env.CI,
+  widenClientFileUpload: true,
+  disableLogger: true,
+});
