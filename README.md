@@ -150,6 +150,7 @@ contractor-os/
 │   │   ├── cron/              # Scheduled notification sender
 │   │   ├── stripe/            # Checkout, webhooks, portal
 │   │   ├── banners/           # Public marketing banner API
+│   │   ├── health/            # Public uptime probe (checks the database)
 │   │   └── user/              # Preferences, notifications, widgets
 │   ├── dashboard/
 │   │   ├── contractor/        # Jobs, rate cards, reports, compare, contacts
@@ -202,6 +203,37 @@ The admin panel (`/admin`) includes:
 - **Links & Traffic** — short link management, page views, UTM tracking
 - **Usage** — module usage analytics, feature adoption
 - **SEO** — OG image tracking, social referral attribution
+
+## Health Check & Uptime Monitoring
+
+`GET /api/health` is the endpoint uptime monitors (Better Stack and friends) should point at.
+**Do not point a monitor at the homepage.** The homepage can serve a cached 200 while the
+database is down, so a green check there proves nothing.
+
+The route actually exercises the critical dependency: it issues the cheapest possible Supabase
+query (a body-less `head` select against a small reference table) with a **4 second timeout**, so
+a hung database fails fast instead of holding the monitor open.
+
+| Condition | Status | Body |
+|-----------|--------|------|
+| Database answered | `200` | `{"ok":true,"checks":{"database":"ok"},"durationMs":12,"timestamp":"..."}` |
+| Database errored, unreachable, or timed out | `503` | `{"ok":false,"error":"database_unreachable","timestamp":"..."}` |
+| Supabase env vars missing | `503` | `{"ok":false,"error":"not_configured","timestamp":"..."}` |
+
+`HEAD /api/health` runs the same check and returns the same status with an empty body.
+
+Notes:
+
+- **Public and unauthenticated.** It is not in the middleware matcher, so no session is required.
+- **Never cached.** `dynamic = "force-dynamic"` plus `Cache-Control: no-store` on every response.
+- **Leaks nothing.** Only the fixed tokens above are ever returned. Raw database errors are never
+  echoed or logged, because a connection failure message can contain the connection string
+  including the password. No contractor, job, union, or document row is read, returned, or
+  counted, and nothing in the response hints at data volume. The probe uses the anon key, never
+  the service role.
+
+Recommended monitor config: `GET https://work.witus.online/api/health`, expect `200`, alert on
+anything else, timeout at or above 5 seconds.
 
 ## Security
 
