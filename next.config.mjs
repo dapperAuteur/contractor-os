@@ -59,12 +59,15 @@ const nextConfig = {
 // Wrap with Sentry's build plugin. Safe with no Sentry env set: without SENTRY_AUTH_TOKEN it simply
 // skips source-map upload (you just get minified stack traces), and the runtime SDK stays inert
 // without a DSN. org/project/authToken all come from env so nothing secret is committed here.
-// Note: `disableLogger` still works in SDK v10 but prints a deprecation warning at build time; its
-// replacement is `webpack.treeshake.removeDebugLogging`, to switch to when we next bump the SDK.
 export default withSentryConfig(nextConfig, {
   org: process.env.SENTRY_ORG,
   project: process.env.SENTRY_PROJECT,
   silent: !process.env.CI,
   widenClientFileUpload: true,
-  disableLogger: true,
+  webpack: {
+    // Strips the SDK's own debug logging from the bundle. Replaces the deprecated top-level
+    // `disableLogger` option. Webpack-only, so it is a no-op under Turbopack (same as the old
+    // flag was), but it silences the v10 deprecation warning.
+    treeshake: { removeDebugLogging: true },
+  },
 });
