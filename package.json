@@ -41,6 +41,7 @@
     "next": "15.5.9",
     "next-cloudinary": "^6.17.5",
     "papaparse": "^5.5.3",
+    "posthog-js": "^1.418.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-webcam": "^7.2.0",

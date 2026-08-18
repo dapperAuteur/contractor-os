@@ -11,6 +11,8 @@ import Link from 'next/link';
 import { HardHat } from 'lucide-react';
 import MfaVerifyStep from '@/components/login/MfaVerifyStep';
 import { getAalAndFactors, needsMfaVerification } from '@/lib/mfa/helpers';
+import { capture } from '@/lib/analytics/capture';
+import { EVENTS } from '@/lib/analytics/events';
 
 type LoginTab = 'password' | 'otp';
 type OtpStep = 'email' | 'code';
@@ -71,18 +73,28 @@ function LoginContent() {
     e.preventDefault();
     setError('');
     setLoading(true);
+    // Shared ecosystem sign-in funnel. `method` distinguishes the two tabs; nothing
+    // identifying goes with it. Never send the Supabase error text: it is vendor copy
+    // that can echo the submitted address, and capture here is anonymous by design.
+    capture(EVENTS.signinStarted, { method: 'password' });
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       // Check if MFA verification is needed
       const { currentLevel, nextLevel } = await getAalAndFactors(supabase);
       if (needsMfaVerification(currentLevel, nextLevel)) {
+        // Credentials were accepted, so the sign-in step succeeded; MFA is a separate
+        // step the user has not passed yet. Flagged rather than treated as a second
+        // funnel so the shared signin_* ratio means the same thing in every app.
+        capture(EVENTS.signinSucceeded, { method: 'password', mfaRequired: true });
         setMfaRequired(true);
         return;
       }
+      capture(EVENTS.signinSucceeded, { method: 'password', mfaRequired: false });
       router.push(dashboardRedirect);
       router.refresh();
     } catch (err: any) {
+      capture(EVENTS.signinFailed, { method: 'password', stage: 'credentials' });
       setError(err.message);
     } finally {
       setLoading(false);
@@ -94,6 +106,10 @@ function LoginContent() {
     e.preventDefault();
     setOtpError('');
     setOtpLoading(true);
+    // The OTP flow starts here, not at verify: requesting the code is where the user
+    // enters the funnel, and the gap between this and signin_succeeded is exactly the
+    // drop-off (never got the mail, gave up on the code) worth being able to see.
+    capture(EVENTS.signinStarted, { method: 'otp' });
     try {
       let emailRedirectTo: string | undefined;
       if (typeof window !== 'undefined') {
@@ -109,6 +125,7 @@ function LoginContent() {
       if (error) throw error;
       setOtpStep('code');
     } catch (err: any) {
+      capture(EVENTS.signinFailed, { method: 'otp', stage: 'send_code' });
       setOtpError(err.message ?? 'Failed to send code');
     } finally {
       setOtpLoading(false);
@@ -130,12 +147,15 @@ function LoginContent() {
       // Check if MFA verification is needed
       const { currentLevel, nextLevel } = await getAalAndFactors(supabase);
       if (needsMfaVerification(currentLevel, nextLevel)) {
+        capture(EVENTS.signinSucceeded, { method: 'otp', mfaRequired: true });
         setMfaRequired(true);
         return;
       }
+      capture(EVENTS.signinSucceeded, { method: 'otp', mfaRequired: false });
       router.push(dashboardRedirect);
       router.refresh();
     } catch (err: any) {
+      capture(EVENTS.signinFailed, { method: 'otp', stage: 'verify_code' });
       setOtpError(err.message ?? 'Invalid code');
     } finally {
       setOtpLoading(false);

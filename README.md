@@ -101,6 +101,12 @@ NEXT_PUBLIC_UMAMI_WEBSITE_ID=
 NEXT_PUBLIC_UMAMI_SCRIPT_URL=
 UMAMI_HOST_URL=
 
+# Product analytics — shared WitUS PostHog project (optional)
+# No key means posthog.init never runs and capture() no-ops. Both are publishable.
+# The host must be the US one: a US key against the EU cluster fails silently.
+NEXT_PUBLIC_POSTHOG_KEY=
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+
 # Error monitoring (optional, Better Stack via the Sentry SDK)
 # Leave blank and the SDK is never initialised: nothing is captured, nothing is sent.
 SENTRY_DSN=
@@ -172,6 +178,8 @@ contractor-os/
 │   ├── nav/                   # Navigation (desktop + mobile)
 │   └── ui/                    # Shared UI components
 ├── lib/
+│   ├── analytics/             # PostHog: provider + capture (ecosystem copies, do not
+│   │                          #   edit) + events.ts (this app's taxonomy)
 │   ├── ocr/                   # Gemini vision, document classification
 │   ├── push/                  # Push subscribe + send
 │   ├── offline/               # IndexedDB sync queue, offline fetch
@@ -234,6 +242,48 @@ Notes:
 
 Recommended monitor config: `GET https://work.witus.online/api/health`, expect `200`, alert on
 anything else, timeout at or above 5 seconds.
+
+## Product Analytics
+
+Behavioural analytics goes to the **shared WitUS ecosystem PostHog project** (US region),
+where every event carries `app: "work"` so this product's data stays separable from the
+rest of the ecosystem. The slug is `work`, not the repo directory name: it is the same
+identity slug this app uses as an OIDC client, so PostHog events join to authenticated
+sessions with no translation table. This sits alongside Umami and Vercel Analytics rather than
+replacing them: those answer "how much traffic and how fast", PostHog answers "where do
+people fall out of a flow".
+
+**One deployment, two hosts.** This Vercel project serves both `work.witus.online` and
+`www.badcba.com`, so a single instrumentation covers both brands. Nothing is configured
+per host: the `/ingest` proxy path is relative, and posthog-js attaches `$host` and
+`$current_url` to every event, so the two surfaces are separable by filter. Do not add a
+hand-rolled `brand` property to duplicate that.
+
+**It is opt-in and inert by default.** Without `NEXT_PUBLIC_POSTHOG_KEY` the provider never
+calls `posthog.init`, `capture()` no-ops, and every page renders exactly as before. Set
+both vars per [`.env.example`](./.env.example) — and redeploy, because `NEXT_PUBLIC_*` is
+inlined at build time.
+
+**Capture is anonymous, which is why there is no consent banner.** `persistence` is
+`"memory"`, so no cookie and no `localStorage`; `autocapture` is off, so the login form is
+not keystroke-logged; session replay is off, which matters on an app whose screens carry
+contractor rates, invoices, and union documents. The trade is real: every hard navigation
+looks like a new visitor, so treat unique counts as sessions and never quote a
+unique-visitor number. Ratios between events are unaffected.
+
+Ingest is reverse-proxied through `/ingest` (rewrites in `next.config.mjs`) so uBlock,
+Brave, and Safari cannot drop events at the vendor hostname. That is why
+`skipTrailingSlashRedirect` is on, which disables trailing-slash redirects for **every**
+route; the public marketing and blog routes set `alternates.canonical`, which is what keeps
+search engines on one URL. Any new indexable public route must set it too.
+
+`lib/analytics/posthog-provider.tsx` and `lib/analytics/capture.ts` are byte-for-byte
+copies of the ecosystem standard in the witus repo and are audited by its
+`scripts/check-posthog-conformance.mjs` — **do not edit them here.** Only
+`lib/analytics/events.ts` is per-app. Today it carries `route_viewed` plus the contractual
+shared sign-in funnel (`signin_started` / `signin_succeeded` / `signin_failed`, wired in
+`app/login/page.tsx` for both the password and OTP tabs). No Supabase error text is ever
+sent with a failure event, only a coarse `method` and `stage`.
 
 ## Security
 

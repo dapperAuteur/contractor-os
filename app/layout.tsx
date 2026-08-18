@@ -9,6 +9,7 @@ import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration';
 import SocialReferralTracker from '@/components/SocialReferralTracker';
 import MarketingBanner from '@/components/marketing/MarketingBanner';
 import { Analytics } from "@vercel/analytics/next"
+import { PostHogProvider } from '@/lib/analytics/posthog-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -55,6 +56,18 @@ export default function RootLayout({
         <meta name="theme-color" content="#d97706" />
       </head>
       <body className={inter.className}>
+        <PostHogProvider
+          // Read here, in a Server Component, and passed down — rather than reading
+          // process.env inside the client component — so the env surface stays in one
+          // place. `?? null` is meaningful: it is what puts the provider in its
+          // supported keyless state instead of initialising with `undefined`.
+          apiKey={process.env.NEXT_PUBLIC_POSTHOG_KEY ?? null}
+          // "/ingest" is proxied to PostHog by next.config.mjs so ad blockers can't
+          // drop events. Relative, so it works unchanged on both hosts this project
+          // serves. The real upstream host is named literally in that rewrite, not read
+          // from NEXT_PUBLIC_POSTHOG_HOST, which nothing in this repo reads at runtime.
+          apiHost="/ingest"
+        />
         <MarketingBanner />
         {children}
         <SocialReferralTracker />
