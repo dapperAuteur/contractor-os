@@ -75,6 +75,29 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 |-------|-----------|-------|
 | `equipment_media` | `119_equipment_media.sql` | Multi-media gallery for equipment items. Used by both apps. |
 
+## ⚠️ Corrections found 2026-08-28 (this doc was incomplete)
+
+While sizing the database split (`centenarian-os/plans/55-stage2-db-split.md`) two couplings were
+measured that this document did not list. Both dominate the migration effort, and the split was
+under-estimated because the plan was written from this file.
+
+| Coupling | Reality | Why it matters |
+|---|---|---|
+| `financial_transactions` | **CentOS-owned** (`051_financial_dashboard.sql`). Work.WitUS **WRITES** to it from 8+ routes (invoices, paychecks, deposits, transfers, transactions, job costs, activity-links) and it carries `job_id`. | "Personal finance" and "business finance" are the same table today. Splitting it is the second-hardest part of the DB split, after identity. |
+| `invoices` | **CentOS-owned** (`058_invoices.sql`), with full CRUD **and UI in BOTH apps** (`/dashboard/finance/invoices` exists in each). | Moving invoices to Work.WitUS is an **ownership transfer**, not a table move. BAM confirmed 2026-08-27 that CentOS raises no personal invoices, so CentOS's authoring routes are removed in Phase 4. |
+| `profiles` | Read by **88 files** in Work.WitUS and 83 in CentOS. | This is identity, and it is the blocker. Chosen approach: Route B — Work.WitUS gets its own `profiles` seeded from a snapshot; SSO is a later, separate project. |
+
+## New: income_events projection (Phase 2, in progress)
+
+CentOS added `income_events` (migration `196_income_events.sql`) — a **local projection** of
+business income that Work.WitUS pushes to via a signed webhook at `POST /api/events/income`.
+It mirrors the `expected_payments` view column-for-column so consumers change one table name.
+
+CentOS's forecast and planner now read the projection through `lib/finance/income-source.ts`,
+falling back to the `expected_payments` view while the projection is empty. **The view and both
+sync triggers below stay in place until the projection is proven live** — nothing here is removed
+yet, so both apps keep working during the transition.
+
 ## Views (cross-app)
 
 | View | Migration | Notes |
