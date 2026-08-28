@@ -9,6 +9,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { getJobWithRole } from '@/lib/contractor/job-access';
+import { fireJobScheduleEvent, fireJobDeletedEvent } from '@/lib/events/schedule-emitter';
 
 function getDb() {
   return createServiceClient(
@@ -150,11 +151,19 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
             .eq('id', id)
             .select()
             .single();
-          if (updated) return NextResponse.json(updated);
+          if (updated) {
+            // Keep CentOS's planner projection in step (Phase 2b of the DB split).
+            fireJobScheduleEvent(updated);
+            return NextResponse.json(updated);
+          }
         }
       }
     } catch { /* non-blocking */ }
   }
+
+  // Keep CentOS's planner projection in step (Phase 2b of the DB split). Covers status,
+  // date and cancellation changes, which is all the planner cares about.
+  fireJobScheduleEvent(data);
 
   return NextResponse.json(data);
 }
@@ -175,6 +184,10 @@ export async function DELETE(_request: NextRequest, ctx: Ctx) {
     .eq('user_id', user.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Retire it from CentOS's planner. Without this a deleted job stays on the calendar there
+  // until the next resync.
+  fireJobDeletedEvent(id, user.id);
 
   return NextResponse.json({ success: true });
 }
