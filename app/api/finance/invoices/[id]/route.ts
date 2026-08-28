@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { fireOutboxDrafts } from '@/lib/outbox-trigger';
+import { fireInvoiceIncomeEvent } from '@/lib/events/income-emitter';
 
 function getDb() {
   return createServiceClient(
@@ -103,6 +104,9 @@ export async function PATCH(
       .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    // Keep CentOS's income projection in step with this invoice (Phase 2 of the DB split).
+    // Fire-and-forget: the write already succeeded and must not be undone by a sibling app.
+    fireInvoiceIncomeEvent(data);
     return NextResponse.json(data);
   }
 
@@ -120,6 +124,9 @@ export async function PATCH(
       .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    // Keep CentOS's income projection in step with this invoice (Phase 2 of the DB split).
+    // Fire-and-forget: the write already succeeded and must not be undone by a sibling app.
+    fireInvoiceIncomeEvent(data);
     return NextResponse.json(data);
   }
 
@@ -184,6 +191,9 @@ export async function PATCH(
       platforms: ['linkedin', 'twitter', 'bluesky'],
     });
 
+    // Keep CentOS's income projection in step with this invoice (Phase 2 of the DB split).
+    // Fire-and-forget: the write already succeeded and must not be undone by a sibling app.
+    fireInvoiceIncomeEvent(data);
     return NextResponse.json(data);
   }
 
@@ -254,6 +264,9 @@ export async function PATCH(
       .in('status', ['completed']);
   }
 
+  // Keep CentOS's income projection in step with this invoice (Phase 2 of the DB split).
+  // Fire-and-forget: the write already succeeded and must not be undone by a sibling app.
+  fireInvoiceIncomeEvent(data);
   return NextResponse.json(data);
 }
 

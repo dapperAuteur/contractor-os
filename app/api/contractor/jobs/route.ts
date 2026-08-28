@@ -9,6 +9,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { fireOutboxDrafts } from '@/lib/outbox-trigger';
+import { fireJobScheduleEvent } from '@/lib/events/schedule-emitter';
 
 function getDb() {
   return createServiceClient(
@@ -214,6 +215,11 @@ export async function POST(request: NextRequest) {
       if (updated) responsePayload = updated;
     }
   }
+
+  // Push the new job onto CentOS's planner projection (Phase 2b of the DB split).
+  // responsePayload, not data: it carries the distance backfill above.
+  // Fire-and-forget, like the outbox draft below - the job is saved either way.
+  fireJobScheduleEvent(responsePayload);
 
   // Fire outbox draft after DB writes succeed. PII rules: no client name, no
   // pay rate, no contact info. Only role/department/union (public-facing).
