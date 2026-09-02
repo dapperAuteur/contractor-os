@@ -12,10 +12,10 @@
 // `MfaVerifyStep` before the dashboard. The session minted below is an ordinary aal1 Supabase
 // session, exactly like the one `signInWithPassword` produces, so without this branch "Sign in with
 // WitUS" would be a one-click second-factor bypass for every account that has MFA enabled. The
-// verdict is computed from `supabase.auth.getUser()` (a server-validated round trip, via
-// getAalAndFactors -> listFactors), never from the cookie's unsigned user object; middleware.ts
-// re-runs the same check on every protected request, so a user who edits the redirect out of the
-// address bar still cannot reach /dashboard or /admin at aal1.
+// verdict is computed from `supabase.auth.getUser()` (a server-validated round trip, reached via
+// mfa.listFactors), never from the cookie's unsigned user object; middleware.ts re-runs the same
+// check on every protected request, so a user who edits the redirect out of the address bar still
+// cannot reach /dashboard or /admin at aal1.
 //
 // NOTE (verify live): step 4 mints a session via admin.generateLink('magiclink') +
 // verifyOtp({ token_hash }). This is the one part that cannot be unit-tested and is the most
@@ -29,7 +29,7 @@ import { createClient as createAdminClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { WITUS_CALLBACK_PATH, withAttemptMarker } from '@/lib/auth/witus-sso';
 import { postWitusSignInPath } from '@/lib/auth/route-guard';
-import { getAalAndFactors, mfaVerificationPending } from '@/lib/mfa/helpers';
+import { mfaVerificationPending } from '@/lib/mfa/helpers';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -143,26 +143,35 @@ export async function GET(request: NextRequest) {
     .from('witus_identities')
     .upsert({ user_id: verified.user.id, witus_sub: sub }, { onConflict: 'witus_sub' });
 
-  // 5. The MFA gate. `getAalAndFactors` reads the assurance level off the freshly minted session and
-  // the enrolled factors off `getUser()` — the server-validated list, not the cookie's copy — so an
-  // account with a verified TOTP factor lands on /login?mfa=pending and gets exactly the
-  // MfaVerifyStep a password login gets. An account with no factor goes straight to the dashboard,
-  // which is also exactly what a password login does.
+  // 5. The MFA gate. `listFactors()` goes through `getUser()`, so the factor list is the
+  // SERVER-VALIDATED one rather than the auth cookie's copy; the assurance level comes off the
+  // session that was just minted. An account with a verified TOTP factor lands on
+  // /login?mfa=pending and gets exactly the MfaVerifyStep a password login gets. An account with no
+  // factor goes straight to the dashboard, which is also exactly what a password login does.
   //
-  // FAIL CLOSED. If the assurance lookup throws (network blip against the auth server), we do NOT
-  // assume "no MFA": we send the browser to the MFA gate, where the login page re-checks and either
-  // shows the second-factor form or lets them through. A transient error must not be able to become
-  // the bypass this step exists to prevent.
-  let mfaPending: boolean;
+  // FAIL CLOSED, AND CHECK THE `error` FIELDS TO DO IT. supabase-js returns `{ data, error }`
+  // instead of throwing, so `lib/mfa/helpers.ts`'s `getAalAndFactors` — which drops `error` and
+  // falls back to `aal1` / "no factors" — would quietly fail OPEN here: one flaky call to the auth
+  // server and an enrolled account walks to the dashboard. So this reads both errors itself and
+  // treats either one as "still owes a factor". The cost of a false positive is one extra trip
+  // through /login, which re-checks; the cost of a false negative is the bypass this step exists to
+  // prevent. (middleware.ts would still stop them at the dashboard door — this is defence in depth,
+  // not the only line.)
+  let mfaPending = true;
   try {
-    const { currentLevel, nextLevel, hasMfaEnabled } = await getAalAndFactors(supabase);
-    mfaPending = mfaVerificationPending({
-      hasVerifiedTotp: hasMfaEnabled,
-      currentLevel,
-      nextLevel,
-    });
+    const [aal, factors] = await Promise.all([
+      supabase.auth.mfa.getAuthenticatorAssuranceLevel(),
+      supabase.auth.mfa.listFactors(),
+    ]);
+    if (!aal.error && !factors.error) {
+      mfaPending = mfaVerificationPending({
+        hasVerifiedTotp: (factors.data?.totp ?? []).some((f) => f.status === 'verified'),
+        currentLevel: aal.data?.currentLevel ?? 'aal1',
+        nextLevel: aal.data?.nextLevel ?? 'aal1',
+      });
+    }
   } catch {
-    mfaPending = true;
+    // Stays true. Same reasoning as above.
   }
 
   clearTransient();
