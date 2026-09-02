@@ -14,6 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
+import { useSignOutLabel } from '@/lib/auth/witus-sso-client';
 
 interface ListerNavItem {
   label: string;
@@ -45,6 +46,10 @@ export interface ListerNavProps {
 }
 
 export default function ListerNav({ username, unreadMessages, onLogout, untoured }: ListerNavProps) {
+
+  // "Sign out of WitUS" when the click will also end the shared ecosystem session;
+  // plain "Logout" otherwise. Resolves after mount, so first paint is today's copy.
+  const logoutLabel = useSignOutLabel();
   const pathname = usePathname();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -197,7 +202,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                       role="menuitem"
                     >
                       <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
-                      Logout
+                      {logoutLabel}
                     </button>
                   </div>
                 )}
@@ -314,7 +319,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                 onClick={() => { setDrawerOpen(false); onLogout(); }}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
               >
-                <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> Logout
+                <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> {logoutLabel}
               </button>
             </div>
           </div>

@@ -88,7 +88,17 @@ block text-sm font-medium text-slate-700 mb-1
 - Login/signup always show Work.WitUS branding (amber accent, dark theme).
 - Post-login redirect: `/dashboard/contractor` (or user's `dashboard_home` preference).
 - Blog is admin-only (locked for non-admin users).
-- MFA is optional — users can enable/disable in settings, not enforced in middleware.
+- MFA is optional to ENROL — users enable/disable it in settings — but once enrolled it is
+  ENFORCED IN MIDDLEWARE (`lib/auth/route-guard.ts`): a session at aal1 with a verified TOTP factor
+  reaches no `/dashboard/*` or `/admin/*` route, only `/login?mfa=pending`. This holds for every
+  door — password, email OTP, and the WitUS ecosystem callback. BAM's decision, 2026-09-02: an SSO
+  sign-in must not be a way to skip the second factor.
+- Ecosystem SSO ("Sign in with WitUS") is a bespoke Supabase OIDC code flow at
+  `app/api/auth/witus/*`, registered as slug `work` / client_id `witus-work`. The registered
+  redirect URI is `https://work.witus.online/api/auth/witus/callback` — matched with `===` by the
+  IdP, so do not change the path. The whole surface is dark unless `WITUS_OIDC_CLIENT_ID` is set,
+  and hidden on `www.badcba.com`, the second host this one deployment serves, which the IdP does not
+  know.
 
 ---
 

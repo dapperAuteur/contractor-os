@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/hooks/useAuth';
 import { useSubscription } from '@/lib/hooks/useSubscription';
 import { useUnreadCount } from '@/lib/hooks/useUnreadCount';
 import { createClient } from '@/lib/supabase/client';
+import { useGlobalSignOutUrl } from '@/lib/auth/witus-sso-client';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect, useCallback } from 'react';
 import ContractorLayout from '@/components/nav/ContractorLayout';
@@ -41,6 +42,8 @@ export default function DashboardLayout({
   const router = useRouter();
   const pathname = usePathname();
   const supabase = createClient();
+  // Null unless this app is a configured ecosystem OIDC client on its registered host.
+  const globalSignOutUrl = useGlobalSignOutUrl();
 
   const isPaid = subStatus === 'monthly' || subStatus === 'lifetime';
   const [isAdmin, setIsAdmin] = useState(false);
@@ -130,8 +133,25 @@ export default function DashboardLayout({
     }
   }, [hasAccess, isInvited, isPaid, isAdmin, allowedModules, pathname, subLoading, loading, adminLoading, router]);
 
+  // GLOBAL SIGN-OUT (BAM's decision, 2026-08-30: signing out of one WitUS app signs you out of
+  // every WitUS app in this browser). `globalSignOutUrl` is built from a SERVER-resolved config and
+  // is null unless this app is a configured ecosystem OIDC client on its registered host, in which
+  // case sign-out stays exactly as local as it is today.
   const handleLogout = async () => {
+    // ORDER IS THE SAFETY PROPERTY. Destroy the LOCAL session first, so if the IdP is unreachable
+    // or refuses the logout, the person is still signed out HERE. Never hand off first — that turns
+    // any IdP failure into "I clicked sign out and I'm still signed in".
     await supabase.auth.signOut();
+    if (globalSignOutUrl) {
+      // A full navigation, not router.push: this leaves our origin for the IdP, which then returns
+      // to https://work.witus.online/. Do NOT add a restrictive Referrer-Policy to this app —
+      // work.witus.online and accounts.witus.online are different registrable domains, so
+      // better-auth's endSession handler only accepts this cross-site navigation because the
+      // browser's default strict-origin-when-cross-origin referrer lets the IdP match it against
+      // its trustedOrigins.
+      window.location.assign(globalSignOutUrl);
+      return;
+    }
     router.push('/login');
     router.refresh();
   };

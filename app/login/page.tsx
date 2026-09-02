@@ -10,6 +10,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { HardHat } from 'lucide-react';
 import MfaVerifyStep from '@/components/login/MfaVerifyStep';
+import WitusSsoButton from '@/components/login/WitusSsoButton';
 import { getAalAndFactors, needsMfaVerification } from '@/lib/mfa/helpers';
 import { capture } from '@/lib/analytics/capture';
 import { EVENTS } from '@/lib/analytics/events';
@@ -46,18 +47,37 @@ function LoginContent() {
   const searchParams = useSearchParams();
   const supabase = createClient();
 
+  // `?mfa=pending` means we arrived here ALREADY AUTHENTICATED and owing a second factor — the
+  // middleware sent us (lib/auth/route-guard.ts), and the WitUS OIDC callback is one of the doors
+  // that can trigger it, exactly like a password login. Hold the credential form back while the
+  // check runs: showing "Welcome back, enter your password" to someone who has already passed that
+  // step, for the half second before it flips to the code field, reads as a failed login.
+  const mfaPendingParam = searchParams.get('mfa') === 'pending';
+  const [mfaChecking, setMfaChecking] = useState(mfaPendingParam);
+
   const dashboardRedirect = '/dashboard/contractor';
 
   // Handle middleware redirect with ?mfa=pending
   useEffect(() => {
-    if (searchParams.get('mfa') !== 'pending') return;
+    if (searchParams.get('mfa') !== 'pending') {
+      setMfaChecking(false);
+      return;
+    }
+    let live = true;
     async function checkMfa() {
-      const { currentLevel, nextLevel, hasMfaEnabled } = await getAalAndFactors(supabase);
-      if (hasMfaEnabled && needsMfaVerification(currentLevel, nextLevel)) {
-        setMfaRequired(true);
+      try {
+        const { currentLevel, nextLevel, hasMfaEnabled } = await getAalAndFactors(supabase);
+        if (live && hasMfaEnabled && needsMfaVerification(currentLevel, nextLevel)) {
+          setMfaRequired(true);
+        }
+      } finally {
+        if (live) setMfaChecking(false);
       }
     }
     checkMfa();
+    return () => {
+      live = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
@@ -183,7 +203,12 @@ function LoginContent() {
       {/* Login Form */}
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="max-w-md w-full rounded-2xl p-8 border border-slate-200 bg-white">
-          {mfaRequired ? (
+          {mfaChecking ? (
+            <div className="flex flex-col items-center justify-center py-12 space-y-3" role="status">
+              <div className="animate-spin h-6 w-6 border-2 border-amber-500 border-t-transparent rounded-full" />
+              <p className="text-sm text-slate-500">Checking your sign-in...</p>
+            </div>
+          ) : mfaRequired ? (
             <>
               <header className="mb-6">
                 <h1 className="text-3xl font-bold text-slate-900">Welcome back</h1>
@@ -383,6 +408,18 @@ function LoginContent() {
               )}
             </div>
           )}
+
+          {/* ── Sign in with WitUS (ecosystem SSO) ──────────────────────
+              Renders "Sign in with WitUS", and in parallel asks the IdP whether this browser
+              already has a WitUS session — if so the label becomes "Continue as <name>". A blocked
+              or timed-out check changes nothing. Renders null entirely when this app is not a
+              configured OIDC client, and on www.badcba.com, the other host this one deployment
+              serves, which the IdP does not know.
+
+              `signedIn`: the middleware bounces an authenticated visitor off /login, so the only
+              way to be here WITH a local session is ?mfa=pending — its one exemption. Skip the
+              probe in that case: the visitor is signed in already and just owes a second factor. */}
+          <WitusSsoButton signedIn={mfaPendingParam} />
           </>
           )}
         </div>
