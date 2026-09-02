@@ -1,7 +1,10 @@
 // lib/mfa/helpers.ts
 // Shared MFA utilities for login, settings, the middleware route guard, and the WitUS SSO callback.
 
-import { SupabaseClient } from '@supabase/supabase-js';
+// `import type`: this module is now pulled into the EDGE middleware bundle (middleware.ts imports
+// mfaVerificationPending), and a value import here would drag @supabase/supabase-js in behind a
+// name that is only ever used as a type.
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 export async function getAalAndFactors(supabase: SupabaseClient) {
   const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
