@@ -74,6 +74,7 @@ _None currently tracked. Add entries here when CentOS adds columns that Work.Wit
 | Table | Migration | Notes |
 |-------|-----------|-------|
 | `equipment_media` | `119_equipment_media.sql` | Multi-media gallery for equipment items. Used by both apps. |
+| `witus_identities` | CentOS `20260630120000_witus_identities.sql`, copied here as `196_witus_identities.sql` | Maps a WitUS OIDC `sub` (accounts.witus.online) to a Supabase user. Written by each app's "Sign in with WitUS" callback. RLS on with no policies — service role only. Both copies are `create table if not exists`, so whichever app runs first wins and the other is a no-op. |
 
 ## ⚠️ Corrections found 2026-08-28 (this doc was incomplete)
 

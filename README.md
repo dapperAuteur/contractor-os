@@ -212,6 +212,56 @@ The admin panel (`/admin`) includes:
 - **Usage** — module usage analytics, feature adoption
 - **SEO** — OG image tracking, social referral attribution
 
+## Sign in with WitUS (ecosystem SSO)
+
+Work.WitUS is an OIDC client of the shared WitUS identity provider at `accounts.witus.online`, slug
+`work`, client_id `witus-work`. Because this app authenticates with **Supabase** rather than Better
+Auth or NextAuth, it runs a bespoke authorization-code flow in `app/api/auth/witus/*` — the same
+shape CentenarianOS runs against the same IdP and the same Supabase project. Its registered redirect
+URI is `https://work.witus.online/api/auth/witus/callback`, matched by the IdP with `===`.
+
+**Three behaviours, all optional and all dark by default.** Without `WITUS_OIDC_CLIENT_ID` the
+"Sign in with WitUS" button renders nothing at all and sign-out stays purely local. An affordance a
+visitor cannot complete is worse than none. See [`.env.example`](./.env.example) for the vars.
+
+1. **"Continue as ⟨name⟩".** The login form renders exactly as before; in parallel the button asks
+   `accounts.witus.online/api/ecosystem/session` (CORS, `credentials: include`, 4s abort) whether
+   this browser already has a WitUS session, and relabels if it does. **A failed, blocked, or
+   timed-out probe is completely invisible** — no error, no spinner, no layout shift. The IdP's
+   cookie is third-party here, so Safari ITP and Firefox Total Cookie Protection answer nothing, by
+   design. The name is display copy and never a credential: clicking runs the real code flow. The
+   loop guard is two-part — a `sessionStorage` marker written immediately *before* the redirect, plus
+   a `?sso=tried` parameter that every bounce back to `/login` carries.
+2. **Global sign-out.** Signing out here also ends the shared session at the IdP, so it signs you out
+   of every WitUS app in this browser (BAM's decision, 2026-08-30). The local session is destroyed
+   **first** — if the IdP is unreachable or refuses, you are still signed out here.
+3. **MFA is enforced on the SSO path, exactly as on the others.** See below.
+
+**One deployment, two hosts — and only one of them does SSO.** This Vercel project also serves
+`www.badcba.com`, which is not in the IdP's registry: its origin is not on the probe's CORS
+allowlist, its redirect URI is unregistered, and `post_logout_redirect_uri` from it would 400. So
+the whole surface is gated to the origin in `NEXT_PUBLIC_SITE_URL` and `www.badcba.com` makes **no**
+request to `accounts.witus.online` at all. That gate is resolved from env rather than from
+`headers()` on purpose: reading the request host in the root layout would opt every marketing page
+into dynamic rendering to learn a fixed deployment constant.
+
+### MFA is not bypassable through SSO
+
+The WitUS callback mints an ordinary **aal1** Supabase session — the same kind
+`signInWithPassword` produces. An account with a verified TOTP factor therefore has to clear the same
+`MfaVerifyStep` gate a password login clears, and the enforcement is server-side in two places:
+
+- `app/api/auth/witus/callback/route.ts` sends an enrolled account to `/login?mfa=pending&sso=tried`
+  instead of the dashboard, and **fails closed** if the assurance lookup errors.
+- `middleware.ts` (via `lib/auth/route-guard.ts`) re-checks on every request, so typing a dashboard
+  URL does not help. The factor list comes from `supabase.auth.getUser()` — a server-validated round
+  trip — not from `nextLevel`, which is derived from the auth cookie's *unsigned* user object and can
+  be edited by the client.
+
+This closed a gap that predates SSO: the middleware previously ran no assurance check at all, so MFA
+was enforced only by the login page's own client-side branch. **MFA is now enforced for password and
+email-OTP logins too.** `npm run test:sso` pins the property.
+
 ## Health Check & Uptime Monitoring
 
 `GET /api/health` is the endpoint uptime monitors (Better Stack and friends) should point at.
