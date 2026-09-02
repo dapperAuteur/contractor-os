@@ -55,6 +55,18 @@ function LoginContent() {
   const mfaPendingParam = searchParams.get('mfa') === 'pending';
   const [mfaChecking, setMfaChecking] = useState(mfaPendingParam);
 
+  // A failed WitUS sign-in bounces back here with ?error=witus_*. Say SOMETHING: the alternative is
+  // a visitor who clicks the button, watches the page reload unchanged, and concludes the app is
+  // broken. The specific code is deliberately not spelled out in prose — it is in the URL for BAM
+  // and for a support conversation, and it names internal flow stages ("witus_token") that mean
+  // nothing to a contractor.
+  const ssoError = searchParams.get('error');
+  const ssoErrorMessage = ssoError?.startsWith('witus_')
+    ? ssoError === 'witus_not_configured'
+      ? 'Sign in with WitUS is not available right now. Use your email and password below.'
+      : 'We could not finish signing you in with WitUS. Try again, or use your email and password below.'
+    : null;
+
   const dashboardRedirect = '/dashboard/contractor';
 
   // Handle middleware redirect with ?mfa=pending
@@ -231,6 +243,12 @@ function LoginContent() {
             <h1 className="text-3xl font-bold text-slate-900">Welcome back</h1>
             <p className="text-slate-500 mt-2">Log in to Work.WitUS</p>
           </header>
+
+          {ssoErrorMessage && (
+            <div className="bg-amber-50 border border-amber-200 text-amber-800 p-3 rounded-lg text-sm mb-6" role="alert">
+              {ssoErrorMessage}
+            </div>
+          )}
 
           {/* Tabs */}
           <div className="flex mb-6 border rounded-lg overflow-hidden border-slate-200">
