@@ -10,6 +10,7 @@ import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { getJobWithRole } from '@/lib/contractor/job-access';
 import { fireJobScheduleEvent, fireJobDeletedEvent } from '@/lib/events/schedule-emitter';
+import { fireJobIncomeEvent } from '@/lib/events/income-emitter';
 
 function getDb() {
   return createServiceClient(
@@ -154,6 +155,7 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
           if (updated) {
             // Keep CentOS's planner projection in step (Phase 2b of the DB split).
             fireJobScheduleEvent(updated);
+            fireJobIncomeEvent(db, updated);
             return NextResponse.json(updated);
           }
         }
@@ -164,6 +166,8 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   // Keep CentOS's planner projection in step (Phase 2b of the DB split). Covers status,
   // date and cancellation changes, which is all the planner cares about.
   fireJobScheduleEvent(data);
+  // Status and est_pay_date changes both move the expected payment, so emit on every update.
+  fireJobIncomeEvent(db, data);
 
   return NextResponse.json(data);
 }
@@ -188,6 +192,8 @@ export async function DELETE(_request: NextRequest, ctx: Ctx) {
   // Retire it from CentOS's planner. Without this a deleted job stays on the calendar there
   // until the next resync.
   fireJobDeletedEvent(id, user.id);
+  // Retire its expected payment too, or a deleted job leaves a phantom row in CentOS's forecast.
+  fireJobIncomeEvent(db, { id, user_id: user.id, status: 'deleted', est_pay_date: null });
 
   return NextResponse.json({ success: true });
 }
