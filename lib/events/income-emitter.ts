@@ -14,6 +14,7 @@
 //   X-Witus-Source / X-Witus-Timestamp / X-Witus-Signature: sha256=hex(HMAC(secret, `${ts}.${body}`))
 
 import { createHmac } from 'node:crypto';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 /** Mirrors CentOS's income_events row (migration 196), which mirrors expected_payments. */
 export interface IncomeEvent {
@@ -183,4 +184,122 @@ export function fireInvoiceIncomeEvent(
       log('income event emit failed', { invoice_id: inv.id, error: r.error, status: r.status });
     }
   });
+}
+
+/** The subset of a contractor_jobs row needed to compute an expected payment. */
+export interface JobLike {
+  id: string;
+  user_id?: string | null;
+  job_number?: string | null;
+  client_name?: string | null;
+  status?: string | null;
+  est_pay_date?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  pay_rate?: number | string | null;
+  ot_rate?: number | string | null;
+  dt_rate?: number | string | null;
+  rate_type?: string | null;
+  brand_id?: string | null;
+}
+
+interface TimeEntry {
+  st_hours?: number | string | null;
+  ot_hours?: number | string | null;
+  dt_hours?: number | string | null;
+}
+
+const n = (v: unknown): number => {
+  const x = Number(v ?? 0);
+  return Number.isFinite(x) ? x : 0;
+};
+
+/**
+ * Expected payment for a job. Port of the SQL in migration 153's expected_payments view:
+ * sum the time entries at straight/overtime/double rates, and if there are none, fall back to
+ * the daily or flat estimate.
+ *
+ * This computation lives HERE rather than in CentOS because job_time_entries is moving to this
+ * app's database. CentOS receives the number, not the inputs.
+ */
+export function computeExpectedAmount(job: JobLike, entries: TimeEntry[]): number {
+  const pay = n(job.pay_rate);
+  const ot = job.ot_rate == null ? pay * 1.5 : n(job.ot_rate);
+  const dt = job.dt_rate == null ? pay * 2 : n(job.dt_rate);
+
+  const fromEntries = entries.reduce(
+    (sum, te) => sum + n(te.st_hours) * pay + n(te.ot_hours) * ot + n(te.dt_hours) * dt,
+    0,
+  );
+  if (fromEntries > 0) return fromEntries;
+
+  if (job.rate_type === 'daily' && job.start_date && job.end_date) {
+    const days = Math.round(
+      (Date.parse(job.end_date) - Date.parse(job.start_date)) / 86_400_000,
+    ) + 1;
+    return pay * Math.max(days, 0);
+  }
+  if (job.rate_type === 'flat') return pay;
+  return 0;
+}
+
+/**
+ * Map a job to its income event.
+ *
+ * `is_active` mirrors migration 153's job predicate exactly:
+ *   est_pay_date IS NOT NULL AND status IN ('completed','invoiced')
+ *
+ * A job that falls out of it (paid, cancelled, pay date cleared) is emitted inactive, which
+ * retires it from CentOS's forecast and archives its planner task — the same effect the view
+ * achieved by not returning the row.
+ */
+export function jobToIncomeEvent(job: JobLike, entries: TimeEntry[]): IncomeEvent {
+  const isExpected =
+    !!job.est_pay_date && (job.status === 'completed' || job.status === 'invoiced');
+
+  return {
+    event_id: incomeEventId('job', job.id),
+    user_id: job.user_id ?? '',
+    source_type: 'job',
+    source_id: job.id,
+    expected_date: job.est_pay_date ?? job.end_date ?? new Date().toISOString().split('T')[0],
+    label: job.client_name ?? null,
+    reference_number: job.job_number ?? null,
+    expected_amount: computeExpectedAmount(job, entries),
+    status: job.status ?? null,
+    start_date: job.start_date ?? null,
+    end_date: job.end_date ?? null,
+    brand_id: job.brand_id ?? null,
+    is_active: isExpected,
+  };
+}
+
+/**
+ * Fire-and-forget a job's income event. Fetches the job's time entries first, because the amount
+ * cannot be computed without them.
+ *
+ * Nothing emitted job income events before this: the invoice path covered invoices only, so a job
+ * with an est_pay_date reached CentOS's projection through the backfill and never through a live
+ * write. This closes that gap.
+ */
+export function fireJobIncomeEvent(
+  db: SupabaseClient,
+  job: JobLike,
+  log?: (msg: string, meta?: Record<string, unknown>) => void,
+): void {
+  if (!job.user_id) return;
+  void (async () => {
+    let entries: TimeEntry[] = [];
+    try {
+      const { data } = await db
+        .from('job_time_entries')
+        .select('st_hours, ot_hours, dt_hours')
+        .eq('job_id', job.id);
+      entries = (data ?? []) as TimeEntry[];
+    } catch {
+      // No entries readable — computeExpectedAmount falls back to the rate estimate.
+    }
+    const r = await emitIncomeEvents([jobToIncomeEvent(job, entries)]);
+    if (!r.ok && log) log('job income event emit failed', { job_id: job.id, error: r.error });
+  })();
 }

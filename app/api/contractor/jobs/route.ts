@@ -10,6 +10,7 @@ import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { fireOutboxDrafts } from '@/lib/outbox-trigger';
 import { fireJobScheduleEvent } from '@/lib/events/schedule-emitter';
+import { fireJobIncomeEvent } from '@/lib/events/income-emitter';
 
 function getDb() {
   return createServiceClient(
@@ -220,6 +221,8 @@ export async function POST(request: NextRequest) {
   // responsePayload, not data: it carries the distance backfill above.
   // Fire-and-forget, like the outbox draft below - the job is saved either way.
   fireJobScheduleEvent(responsePayload);
+  // And its expected payment, if it already has an est_pay_date.
+  fireJobIncomeEvent(db, responsePayload);
 
   // Fire outbox draft after DB writes succeed. PII rules: no client name, no
   // pay rate, no contact info. Only role/department/union (public-facing).
