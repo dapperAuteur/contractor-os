@@ -207,6 +207,11 @@ interface TimeEntry {
   st_hours?: number | string | null;
   ot_hours?: number | string | null;
   dt_hours?: number | string | null;
+  /**
+   * Present on real rows and often the ONLY hours field set — the job UI lets you enter a bare
+   * total without splitting it into straight/overtime/double. See computeExpectedAmount.
+   */
+  total_hours?: number | string | null;
 }
 
 const n = (v: unknown): number => {
@@ -227,8 +232,18 @@ export function computeExpectedAmount(job: JobLike, entries: TimeEntry[]): numbe
   const ot = job.ot_rate == null ? pay * 1.5 : n(job.ot_rate);
   const dt = job.dt_rate == null ? pay * 2 : n(job.dt_rate);
 
+  // st_hours ?? total_hours is deliberate, and it is a correction to the SQL this was ported from.
+  // The expected_payments view uses COALESCE(te.st_hours, 0), so an entry logged as a bare
+  // total_hours with no split contributes ZERO to the forecast — while
+  // jobs/[id]/generate-invoice computes `entry.st_hours ?? entry.total_hours ?? 0` and bills the
+  // full amount. Same row, two answers: the invoice says 10 hours, the forecast says $0.
+  // Real data hits this: job TEST, 2026-09-07, total_hours 10 with st/ot/dt all NULL.
+  // Matching the invoice is the correct side to agree with, since that is what gets billed.
   const fromEntries = entries.reduce(
-    (sum, te) => sum + n(te.st_hours) * pay + n(te.ot_hours) * ot + n(te.dt_hours) * dt,
+    (sum, te) =>
+      sum + (te.st_hours == null ? n(te.total_hours) : n(te.st_hours)) * pay
+          + n(te.ot_hours) * ot
+          + n(te.dt_hours) * dt,
     0,
   );
   if (fromEntries > 0) return fromEntries;
@@ -293,7 +308,7 @@ export function fireJobIncomeEvent(
     try {
       const { data } = await db
         .from('job_time_entries')
-        .select('st_hours, ot_hours, dt_hours')
+        .select('st_hours, ot_hours, dt_hours, total_hours')
         .eq('job_id', job.id);
       entries = (data ?? []) as TimeEntry[];
     } catch {
