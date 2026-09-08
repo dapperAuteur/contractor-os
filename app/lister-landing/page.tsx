@@ -176,9 +176,16 @@ export default function ListerLandingPage() {
         <p className="text-sm text-slate-500">New to CrewOps?</p>
         <p className="mt-1 text-lg font-semibold text-slate-800">Take the free Lister & Crew Coordinator Guide</p>
         <p className="mt-2 text-sm text-slate-400">12 lessons covering everything from roster setup to union leader tools. No account required.</p>
-        <Link href="/academy" className="mt-3 inline-block text-sm font-medium text-indigo-600 hover:text-indigo-500 min-h-11">
-          Browse Academy courses &rarr;
-        </Link>
+        {/* Courses moved to Learn.WitUS. Linking to its root rather than guessing a deep path. */}
+        <a
+          href="https://learn.witus.online"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 inline-flex items-center text-sm font-medium text-indigo-600 hover:text-indigo-500 min-h-11"
+        >
+          Browse the guide on Learn.WitUS &rarr;
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
       </section>
 
       {/* CTA */}

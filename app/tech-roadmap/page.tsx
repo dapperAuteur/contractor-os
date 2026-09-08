@@ -134,7 +134,7 @@ export default function RoadmapPage() {
             Get Started
           </Link>
           <Link
-            href="/academy"
+            href="https://learn.witus.online" target="_blank" rel="noopener noreferrer"
             className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium min-h-11 flex items-center"
           >
             Browse Academy

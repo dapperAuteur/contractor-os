@@ -188,7 +188,7 @@ export default async function PublicProfilePage({ params }: Params) {
                   {teacher.published_courses.map((c) => (
                     <Link
                       key={c.id}
-                      href={`/academy/${c.id}`}
+                      href="https://learn.witus.online" target="_blank" rel="noopener noreferrer"
                       className="group block bg-white border border-slate-200 hover:border-amber-300 rounded-xl overflow-hidden transition"
                     >
                       {c.cover_image_url ? (
@@ -265,7 +265,7 @@ export default async function PublicProfilePage({ params }: Params) {
                       key={c.id}
                       className="flex flex-col bg-white border border-slate-200 hover:border-amber-300 rounded-xl p-3 transition gap-2"
                     >
-                      <Link href={`/academy/${c.id}`} className="group flex items-center gap-3">
+                      <Link href="https://learn.witus.online" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3">
                         {c.cover_image_url ? (
                           <Image
                             src={c.cover_image_url}
@@ -319,7 +319,7 @@ export default async function PublicProfilePage({ params }: Params) {
                       key={pc.id}
                       className="flex flex-col bg-white border border-slate-200 hover:border-amber-300 rounded-xl px-4 py-3 transition gap-2"
                     >
-                      <Link href={`/academy/paths/${pc.path_id}`} className="flex items-center gap-3 group">
+                      <Link href="https://learn.witus.online" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group">
                         <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
                           <Trophy className="w-4 h-4 text-amber-600" />
                         </div>

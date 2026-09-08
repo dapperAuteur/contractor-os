@@ -24,13 +24,16 @@ function PublicHeader() {
           Work.WitUS
         </Link>
         <div className="flex items-center gap-1">
-          <Link
-            href="/academy"
+          <a
+            href="https://learn.witus.online"
+            target="_blank"
+            rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"
           >
             <GraduationCap className="w-4 h-4" />
-            Academy
-          </Link>
+            Learn
+            <span className="sr-only"> (opens Learn.WitUS in a new tab)</span>
+          </a>
           <Link
             href="/blog"
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"
