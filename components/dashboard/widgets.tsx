@@ -282,7 +282,7 @@ function AcademyProgressWidget() {
   if (!data) return <WidgetLoader />;
 
   return (
-    <WidgetShell title="Academy" icon={GraduationCap} href="/academy/my-courses">
+    <WidgetShell title="Learning" icon={GraduationCap} href="https://learn.witus.online">
       <div className="space-y-1.5">
         <StatRow label="Enrolled" value={data.enrolled} />
         <StatRow label="Completed" value={data.completed} />

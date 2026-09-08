@@ -1,6 +1,6 @@
 // app/sitemap.ts
 // Dynamic sitemap for Work.WitUS.
-// Includes static marketing pages + dynamic profiles, blog posts, and academy courses.
+// Includes static marketing pages + dynamic profiles and blog posts.
 
 import { MetadataRoute } from 'next';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
@@ -26,7 +26,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE_URL}/features/lister`,             lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE_URL}/lister-landing`,              lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE_URL}/lister-pricing`,              lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${SITE_URL}/academy`,                     lastModified: now, changeFrequency: 'weekly',  priority: 0.8 },
     { url: `${SITE_URL}/blog`,                        lastModified: now, changeFrequency: 'daily',   priority: 0.8 },
     { url: `${SITE_URL}/community`,                   lastModified: now, changeFrequency: 'yearly',  priority: 0.4 },
     { url: `${SITE_URL}/privacy`,                     lastModified: now, changeFrequency: 'yearly',  priority: 0.3 },
@@ -77,19 +76,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  // ── Dynamic: academy courses ───────────────────────────────────────────────
-  const { data: courses } = await supabase
-    .from('courses')
-    .select('id, updated_at')
-    .eq('status', 'published')
-    .limit(2000);
+  // Academy courses are no longer listed here. Work.WitUS's courses moved to Learn.WitUS
+  // (learn.witus.online), which publishes its own sitemap. Emitting /academy/<id> URLs from here
+  // after the routes were removed would have fed Google a page of 404s.
 
-  const courseRoutes: MetadataRoute.Sitemap = (courses ?? []).map((c) => ({
-    url: `${SITE_URL}/academy/${c.id}`,
-    lastModified: c.updated_at ?? now,
-    changeFrequency: 'weekly',
-    priority: 0.7,
-  }));
-
-  return [...staticRoutes, ...profileRoutes, ...blogRoutes, ...courseRoutes];
+  return [...staticRoutes, ...profileRoutes, ...blogRoutes];
 }
