@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import DemoResetCard from '@/components/admin/DemoResetCard';
 import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map, Trophy, Sparkles } from 'lucide-react';
 
 interface Stats {
@@ -248,6 +249,11 @@ export default function AdminOverviewPage() {
       <div className="bg-white border border-slate-200 rounded-xl p-5">
         <p className="text-slate-500 text-sm mb-1">New users this week</p>
         <p className="text-4xl font-bold text-slate-900">{stats.users.newThisWeek}</p>
+      </div>
+
+      {/* Maintenance */}
+      <div className="mt-8">
+        <DemoResetCard />
       </div>
     </div>
   );

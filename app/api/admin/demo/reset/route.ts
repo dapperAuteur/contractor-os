@@ -1,10 +1,15 @@
 // app/api/admin/demo/reset/route.ts
 // Clears and reseeds all demo accounts with realistic dummy data.
-// Called daily by Vercel cron (GET) or manually by admin (POST).
-// Guard: Authorization: Bearer {CRON_SECRET}
+// Called daily by Vercel cron (GET) or manually from the admin dashboard (POST).
+// Guard: GET needs Authorization: Bearer {CRON_SECRET}. POST accepts that OR a signed-in
+// ADMIN_EMAIL session — the dashboard's "Reset demo data" button has no way to hold the secret.
+// Middleware only matches /admin/* pages, not /api/*, so these checks are the only gate.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { mfaVerificationPending } from '@/lib/mfa/helpers';
 import { clearUserData, seedTutorial, seedVisitor } from '@/lib/demo/seed';
 import { seedContractor } from '@/lib/demo/seed-contractor';
 import { seedLister } from '@/lib/demo/seed-lister';
@@ -26,11 +31,55 @@ function guard(request: NextRequest): boolean {
   return auth === `Bearer ${secret}`;
 }
 
+async function isAdminSession(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get: (name: string) => cookieStore.get(name)?.value,
+        set: (name: string, value: string, options: CookieOptions) => { try { cookieStore.set({ name, value, ...options }); } catch {} },
+        remove: (name: string, options: CookieOptions) => { try { cookieStore.set({ name, value: '', ...options }); } catch {} },
+      },
+    },
+  );
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user || !process.env.ADMIN_EMAIL || user.email !== process.env.ADMIN_EMAIL) return false;
+
+  // Same rule middleware applies to the /admin pages: an admin enrolled in MFA who has not passed
+  // the second factor has not finished signing in. Fails closed, as middleware does.
+  const hasVerifiedTotp = (user.factors ?? []).some(
+    (factor) => factor.factor_type === 'totp' && factor.status === 'verified',
+  );
+  if (!hasVerifiedTotp) return true;
+  try {
+    const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    return !mfaVerificationPending({
+      hasVerifiedTotp,
+      currentLevel: data?.currentLevel ?? 'aal1',
+      nextLevel: data?.nextLevel ?? 'aal1',
+    });
+  } catch {
+    return false;
+  }
+}
+
 export async function GET(request: NextRequest) {
   if (!guard(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  return runReset();
+}
 
+export async function POST(request: NextRequest) {
+  if (!guard(request) && !(await isAdminSession())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return runReset();
+}
+
+async function runReset() {
   const tutorialUserId = process.env.DEMO_TUTORIAL_USER_ID;
   const visitorUserId = process.env.DEMO_VISITOR_USER_ID;
   const contractorUserId = process.env.DEMO_CONTRACTOR_USER_ID;
@@ -67,10 +116,6 @@ export async function GET(request: NextRequest) {
     const msg = err instanceof Error ? err.message : String(err);
     return NextResponse.json({ error: msg }, { status: 500 });
   }
-}
-
-export async function POST(request: NextRequest) {
-  return GET(request);
 }
 
 async function resetUser(supabase: ReturnType<typeof db>, userId: string, type: SeedType) {
