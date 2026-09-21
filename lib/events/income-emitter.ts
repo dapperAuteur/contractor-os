@@ -69,7 +69,10 @@ function readConfig(): { url: string; secret: string; slug: string } | null {
  * the user's invoice must still save. Failures are returned for the caller to log, and the
  * periodic resync (scripts/resync-income-events.mjs) is what guarantees eventual consistency.
  */
-export async function emitIncomeEvents(events: IncomeEvent[]): Promise<EmitResult> {
+export async function emitIncomeEvents(
+  events: IncomeEvent[],
+  opts: { timeoutMs?: number } = {},
+): Promise<EmitResult> {
   if (events.length === 0) return { ok: true, accepted: 0 };
 
   const cfg = readConfig();
@@ -94,8 +97,9 @@ export async function emitIncomeEvents(events: IncomeEvent[]): Promise<EmitResul
         'X-Witus-Signature': `sha256=${signature}`,
       },
       body: rawBody,
-      // Do not let a slow sibling app hold an invoice save open.
-      signal: AbortSignal.timeout(5000),
+      // Do not let a slow sibling app hold an invoice save open. Batch callers (the demo reset)
+      // pass a longer timeout: CentOS syncs one user's planner tasks in order before replying.
+      signal: AbortSignal.timeout(opts.timeoutMs ?? 5000),
     });
 
     const text = await res.text();
