@@ -210,6 +210,7 @@ The admin panel (`/admin`) includes:
 - **Referrals** — leaderboard with reward tiers (Bronze/Silver/Gold)
 - **Links & Traffic** — short link management, page views, UTM tracking
 - **Usage** — module usage analytics, feature adoption
+- **Demo reset** — "Reset demo data" on the Overview wipes and reseeds the tutorial, visitor, contractor and lister demo accounts on demand (the same reset runs nightly at 00:00 UTC). The contractor reset also sends its invoices and jobs to CentOS as income events, so the demo account gets planner tasks the way a real one does
 - **SEO** — OG image tracking, social referral attribution
 
 ## Sign in with WitUS (ecosystem SSO)

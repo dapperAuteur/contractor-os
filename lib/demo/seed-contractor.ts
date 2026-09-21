@@ -202,6 +202,12 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
       status,
       start_date: e.start,
       end_date: e.end,
+      // Past jobs get a pay date, same offset as their invoice's due date below. Without one an
+      // invoiced job produces no "Expected Payment" planner task in CentOS, which is correct for a
+      // real user who never set it but leaves that half of the demo empty.
+      est_pay_date: isPast
+        ? new Date(new Date(e.end + 'T00:00:00').getTime() + 30 * 86400000).toISOString().split('T')[0]
+        : null,
       is_multi_day: e.start !== e.end,
       pay_rate: e.rate,
       ot_rate: e.ot_rate,
