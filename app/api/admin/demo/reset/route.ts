@@ -9,6 +9,7 @@ import { clearUserData, seedTutorial, seedVisitor } from '@/lib/demo/seed';
 import { seedContractor } from '@/lib/demo/seed-contractor';
 import { seedLister } from '@/lib/demo/seed-lister';
 import { syncAllKnowledge } from '@/lib/admin/syncKnowledge';
+import { readIncomeSourceIds, emitDemoIncomeEvents } from '@/lib/demo/income-events';
 
 type SeedType = 'tutorial' | 'visitor' | 'contractor' | 'lister';
 
@@ -74,6 +75,9 @@ export async function POST(request: NextRequest) {
 }
 
 async function resetUser(supabase: ReturnType<typeof db>, userId: string, type: SeedType) {
+  // The contractor seed is the only one with invoices and jobs. Read their ids before clearing so
+  // CentOS can retire last night's planner tasks along with creating tonight's.
+  const priorIncome = type === 'contractor' ? await readIncomeSourceIds(supabase, userId) : null;
   await clearUserData(supabase, userId);
   switch (type) {
     case 'tutorial':
@@ -88,6 +92,10 @@ async function resetUser(supabase: ReturnType<typeof db>, userId: string, type: 
     case 'lister':
       await seedLister(supabase, userId);
       break;
+  }
+  if (priorIncome) {
+    const r = await emitDemoIncomeEvents(supabase, userId, priorIncome);
+    if (!r.ok) console.error('[demo-reset] income events failed:', r.error, `(${r.accepted}/${r.sent} accepted)`);
   }
 }
 
