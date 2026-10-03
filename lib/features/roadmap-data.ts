@@ -264,11 +264,7 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
 ];
 
 export const UPCOMING_FEATURES: UpcomingFeature[] = [
-  {
-    title: 'Bank Account Sync',
-    description: 'Connect your bank via Plaid or Teller to auto-import transactions.',
-    icon: 'Landmark',
-  },
+  // Bank Account Sync — removed 2026-10: bank linking retired; statement CSV import planned in CentenarianOS
   {
     title: 'Mobile Native App',
     description: 'Native iOS and Android apps with full offline sync.',

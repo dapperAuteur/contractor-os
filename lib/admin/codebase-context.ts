@@ -20,7 +20,6 @@ Work.WitUS is a comprehensive longevity-focused life-management platform. It com
 - **Video Embedding**: VideoEmbed Tiptap node (YouTube, Viloud.tv, Mux, Cloudinary direct) — used in blog posts and recipes
 - **Offline**: offlineFetch wrapper caches GETs in IndexedDB, queues mutations for replay — all contractor/lister pages
 - **Charts**: Recharts (admin analytics, finance dashboards)
-- **Banking**: Teller API (bank account OAuth linking and auto-sync)
 - **Bot Prevention**: Cloudflare Turnstile on signup
 
 ### Core Architecture
@@ -33,7 +32,7 @@ Work.WitUS is a comprehensive longevity-focused life-management platform. It com
 
 ### Modules (15+)
 
-1. **Finance** — Financial accounts (checking, savings, credit card, loan, cash), transactions with categories, budgets, recurring transactions, invoices, CSV import/export. Balance = opening_balance + SUM(income) - SUM(expenses). Teller API integration for bank account OAuth linking and auto-sync. Institution policies (APR, fees, rewards, dispute windows). Saved contacts with default categories for auto-fill. **Paycheck reconciliation**: group daily invoices into paychecks, track tax withholdings (federal, state, FICA) with expected vs actual variance, split net deposits across multiple accounts. Gemini Vision pay stub scanning extracts taxes and amounts. Per-day employer benefit deductions on time entries with copy-across. Paycheck portal URLs saved on contacts for one-click access.
+1. **Finance** — Financial accounts (checking, savings, credit card, loan, cash), transactions with categories, budgets, recurring transactions, invoices, CSV import/export. Balance = opening_balance + SUM(income) - SUM(expenses). No live bank connection: accounts and transactions are entered manually or imported by CSV (Teller bank linking was retired 2026-10; historic rows keep source 'bank_sync'). Institution policies (APR, fees, rewards, dispute windows). Saved contacts with default categories for auto-fill. **Paycheck reconciliation**: group daily invoices into paychecks, track tax withholdings (federal, state, FICA) with expected vs actual variance, split net deposits across multiple accounts. Gemini Vision pay stub scanning extracts taxes and amounts. Per-day employer benefit deductions on time entries with copy-across. Paycheck portal URLs saved on contacts for one-click access.
 
 2. **Health Metrics** — Three tiers: Core (RHR, steps, sleep, activity calories), Enrichment (per-metric unlock with disclaimer), Body Composition (locked, per-metric acknowledgment). Wearable OAuth: Oura, WHOOP, Garmin with auto-sync. CSV imports: Apple Health, Google Health, InBody, Hume Health. Admin controls global enable/disable and per-user access overrides.
 
@@ -94,7 +93,7 @@ Overview, Users (list + detail), Messages, Content moderation, Engagement analyt
 
 ### Database Architecture
 - **170+ migrations** in supabase/migrations/ (000 through 170)
-- **Key tables**: profiles, financial_accounts, financial_transactions, budget_categories, vehicles, trips, trip_routes, fuel_logs, vehicle_maintenance, equipment, equipment_categories, equipment_valuations, exercises, exercise_categories, workout_logs, workout_templates, courses, lessons, modules (academy), course_prerequisites, prerequisite_override_requests, gem_personas, language_coach_sessions, life_categories, entity_life_categories, activity_links, user_contacts, contact_locations, scan_images, receipt_line_items, item_prices, institutions, institution_offers, invited_users, teller_enrollments, admin_chats, admin_chat_messages, app_logs, usage_events, page_views
+- **Key tables**: profiles, financial_accounts, financial_transactions, budget_categories, vehicles, trips, trip_routes, fuel_logs, vehicle_maintenance, equipment, equipment_categories, equipment_valuations, exercises, exercise_categories, workout_logs, workout_templates, courses, lessons, modules (academy), course_prerequisites, prerequisite_override_requests, gem_personas, language_coach_sessions, life_categories, entity_life_categories, activity_links, user_contacts, contact_locations, scan_images, receipt_line_items, item_prices, institutions, institution_offers, invited_users, teller_enrollments (legacy, unused since Teller was retired), admin_chats, admin_chat_messages, app_logs, usage_events, page_views
 - **Patterns**: Soft-delete via is_active flags, .maybeSingle() for optional rows, service role for admin ops, fire-and-forget logging
 - **RLS**: Enabled on all user-facing tables. Service role key bypasses RLS for admin/webhook routes.
 
@@ -114,7 +113,6 @@ Overview, Users (list + detail), Messages, Content moderation, Engagement analyt
 - **Fire-and-forget logging**: App logs and usage events never block the user's request
 - **CYOA via embeddings**: Lesson navigation uses cosine similarity rather than manual prerequisite graphs, with cross-course matching option
 - **Tiptap + Markdown dual support**: Lessons can use either format, stored in same column with content_format flag
-- **Teller API for banking**: OAuth-based bank account linking for transaction auto-sync, institution policy tracking
 - **offlineFetch pattern**: Drop-in fetch replacement caches in IndexedDB, queues mutations — enables offline-first contractor/lister apps
 - **VideoEmbed Tiptap node**: Isomorphic custom node stores src URL, auto-detects provider (YouTube/Viloud/Mux/Cloudinary)
 - **Module tours**: TourOverlay component with server-persisted step progress, event tracking, and restart capability

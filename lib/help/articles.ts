@@ -527,8 +527,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
 
   {
     role: 'all',
-    title: 'How to manage financial accounts and bank linking',
-    content: `Go to Dashboard → Finance → Accounts to add and manage your financial accounts: checking, savings, credit card, loan, and cash accounts. Each account tracks institution name, last four digits, interest rate, credit limit, opening balance, monthly fees, and due/statement dates. Balance is calculated as opening balance plus income minus expenses. You can link bank accounts via the Teller API for automatic transaction syncing — click Connect Bank Account, complete the OAuth flow, and transactions import automatically. Deactivated accounts preserve transaction history but hide from active views.`,
+    title: 'How to manage financial accounts',
+    content: `Go to Dashboard → Finance → Accounts to add and manage your financial accounts: checking, savings, credit card, loan, and cash accounts. Each account tracks institution name, last four digits, interest rate, credit limit, opening balance, monthly fees, and due/statement dates. Balance is calculated as opening balance plus income minus expenses. Accounts are added and updated by hand; there is no live bank connection. To bring in many transactions at once, import a CSV from Dashboard → Data Hub → Finance. Deactivated accounts preserve transaction history but hide from active views.`,
   },
 
   // ─── PLANNER DETAILS ──────────────────────────────────────────────────────
@@ -537,14 +537,6 @@ export const HELP_ARTICLES: HelpArticle[] = [
     role: 'all',
     title: 'How to use the goal hierarchy and roadmap',
     content: `The Planner uses a four-level hierarchy: Roadmaps → Goals → Milestones → Tasks. Start by creating a Roadmap (your big-picture vision, e.g., "Health Optimization 2026"). Add Goals under it (e.g., "Run a half marathon"). Break goals into Milestones (e.g., "Complete Couch to 5K"). Then create Tasks under milestones (e.g., "Run 2 miles today"). Tasks appear in your daily/weekly planner views. Each level shows completion progress based on child items. You can archive and restore items. The AI Weekly Review analyzes your task completion patterns.`,
-  },
-
-  // ─── TELLER BANK SYNC ─────────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How does Teller bank account syncing work?',
-    content: `Teller is a bank account linking API that lets you automatically import transactions. Go to Dashboard → Finance → Accounts and click Connect Bank Account. Select your bank from the Teller enrollment flow and authorize access. Once connected, your transactions sync daily. Each synced transaction includes date, amount, description, and merchant. You can categorize synced transactions and link them to contacts. If you disconnect, historical synced transactions remain in your account. Teller supports most major US banks and credit unions.`,
   },
 
   // ─── CONTRACTOR ─────────────────────────────────────────────────────────────
@@ -607,7 +599,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to use financial tracking',
-    content: `Go to /dashboard/finance/transactions to track income and expenses. Add transactions manually or sync from your bank via Teller. Categorize transactions into budget categories (Equipment, Travel, Meals, Union Dues, etc.). Set monthly budgets for each category and track spending. View reports and charts showing income vs expenses over time. Financial accounts (checking, savings, credit cards) track balances separately.`,
+    content: `Go to /dashboard/finance/transactions to track income and expenses. Add transactions manually or import them from a CSV file at /dashboard/finance/import. Categorize transactions into budget categories (Equipment, Travel, Meals, Union Dues, etc.). Set monthly budgets for each category and track spending. View reports and charts showing income vs expenses over time. Financial accounts (checking, savings, credit cards) track balances separately.`,
   },
   {
     role: 'contractor',
