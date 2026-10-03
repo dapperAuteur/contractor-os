@@ -31,7 +31,6 @@ interface Transaction {
   notes: string | null;
   created_at: string;
   updated_at: string;
-  teller_transaction_id: string | null;
   dispute_status: string | null;
   dispute_date: string | null;
   dispute_notes: string | null;
@@ -71,7 +70,7 @@ const SOURCE_LABELS: Record<string, string> = {
   interest: 'Interest',
   recurring: 'Recurring',
   scan: 'Scan',
-  bank_sync: 'Bank Sync',
+  bank_sync: 'Bank Import',
 };
 
 export default function TransactionDetailPage() {
