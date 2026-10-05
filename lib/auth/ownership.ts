@@ -145,6 +145,7 @@ export const TABLE_ACCESS_RULES: Readonly<Record<string, TableAccessRule>> = {
   user_brands: OWNER_ONLY,
   invoices: OWNER_ONLY,
   invoice_templates: OWNER_ONLY,
+  paychecks: OWNER_ONLY, // 168: user_id, paychecks_owner
   contractor_jobs: {
     select: 'user_id, is_public',
     ownerColumn: 'user_id',

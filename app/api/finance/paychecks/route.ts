@@ -5,6 +5,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkInvoiceReferences, invoiceReferences } from '@/lib/finance/invoice-references';
+import { invalidReferenceMessage } from '@/lib/auth/ownership';
+import { visiblePaycheckEmbeds } from '@/lib/finance/paycheck-embeds';
 
 function getDb() {
   return createServiceClient(
@@ -28,10 +31,10 @@ export async function GET(request: NextRequest) {
     .from('paychecks')
     .select(`
       *,
-      contractor_jobs(job_number, client_name),
+      contractor_jobs(id, user_id, job_number, client_name),
       paycheck_invoices(invoice_id),
       paycheck_taxes(id, tax_type, label, actual_amount),
-      paycheck_deposits(id, account_id, amount, label, financial_accounts(name))
+      paycheck_deposits(id, account_id, amount, label, financial_accounts(user_id, name))
     `)
     .eq('user_id', user.id)
     .order('pay_date', { ascending: false })
@@ -43,7 +46,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json(data ?? []);
+  return NextResponse.json(await visiblePaycheckEmbeds(db, user.id, data ?? []));
 }
 
 export async function POST(request: NextRequest) {
@@ -62,6 +65,11 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
+
+  // The job may be one the caller works (owner, lister, crew); the brand must be theirs.
+  const refs = await checkInvoiceReferences(db, user.id, invoiceReferences({ job_id, brand_id }));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // Fetch invoices and compute expected gross
   const { data: invoices } = await db
@@ -112,7 +120,9 @@ export async function POST(request: NextRequest) {
   await db
     .from('invoices')
     .update({ paycheck_id: paycheck.id })
-    .in('id', invoice_ids);
+    // Only the caller's invoices fetched above, never ids straight from the body.
+    .in('id', invoices.map((inv) => inv.id))
+    .eq('user_id', user.id);
 
   return NextResponse.json(paycheck, { status: 201 });
 }

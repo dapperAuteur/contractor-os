@@ -6,6 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkOwned, checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { visiblePaycheckEmbeds } from '@/lib/finance/paycheck-embeds';
 
 function getDb() {
   return createServiceClient(
@@ -27,10 +29,10 @@ export async function GET(_req: NextRequest, { params }: Params) {
     .from('paychecks')
     .select(`
       *,
-      contractor_jobs(id, job_number, client_name, event_name, client_id, user_contacts:client_id(paycheck_portal_url, paycheck_portal_company_id)),
+      contractor_jobs(id, user_id, job_number, client_name, event_name, client_id, user_contacts:client_id(user_id, paycheck_portal_url, paycheck_portal_company_id)),
       paycheck_invoices(invoice_id, invoices(id, invoice_number, total, status, invoice_date)),
       paycheck_taxes(id, tax_type, label, expected_amount, actual_amount, sort_order, notes),
-      paycheck_deposits(id, account_id, amount, percentage, deposit_type, transaction_id, label, sort_order, financial_accounts(id, name, account_type))
+      paycheck_deposits(id, account_id, amount, percentage, deposit_type, transaction_id, label, sort_order, financial_accounts(id, user_id, name, account_type))
     `)
     .eq('id', id)
     .eq('user_id', user.id)
@@ -38,7 +40,9 @@ export async function GET(_req: NextRequest, { params }: Params) {
 
   if (error || !data) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  return NextResponse.json(data);
+  // The job and deposit accounts are joined through stored ids with the service
+  // role: show them only when the caller may see them.
+  return NextResponse.json(await visiblePaycheckEmbeds(db, user.id, data));
 }
 
 export async function PATCH(request: NextRequest, { params }: Params) {
@@ -81,7 +85,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         status: 'paid',
         paid_date: body.pay_date || new Date().toISOString().split('T')[0],
         updated_at: new Date().toISOString(),
-      }).in('id', invoiceIds);
+      }).in('id', invoiceIds).eq('user_id', user.id);
     }
 
     // Update job status to paid
@@ -119,6 +123,9 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   for (const key of allowed) {
     if (key in body) updates[key] = body[key];
   }
+  const refs = await checkReferences(db, user.id, [{ field: 'brand_id', table: 'user_brands', id: updates.brand_id }]);
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // Recalculate net when amounts change
   const gross = Number(body.gross_amount ?? existing.gross_amount);
@@ -152,8 +159,13 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
   const db = getDb();
 
+  // Ownership first: everything below is keyed on the paycheck id.
+  const owned = await checkOwned(db, user.id, 'paychecks', id);
+  if (owned.failed) return NextResponse.json({ error: 'Could not verify ownership' }, { status: 500 });
+  if (!owned.allowed) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
   // Clear paycheck_id on linked invoices
-  await db.from('invoices').update({ paycheck_id: null }).eq('paycheck_id', id);
+  await db.from('invoices').update({ paycheck_id: null }).eq('paycheck_id', id).eq('user_id', user.id);
 
   // Delete linked deposit transactions
   const { data: deposits } = await db
@@ -163,7 +175,7 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
   const txIds = (deposits ?? []).map((d) => d.transaction_id).filter(Boolean);
   if (txIds.length > 0) {
-    await db.from('financial_transactions').delete().in('id', txIds);
+    await db.from('financial_transactions').delete().in('id', txIds).eq('user_id', user.id);
   }
 
   // Delete paycheck (cascades to paycheck_invoices, paycheck_taxes, paycheck_deposits)

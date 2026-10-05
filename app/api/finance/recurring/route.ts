@@ -4,6 +4,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage, withOwnEmbeds } from '@/lib/auth/ownership';
+
+// user_id inside each embed lets withOwnEmbeds drop another user's account or
+// category (an id stored before reference checks existed).
+const RECURRING_SELECT = '*, financial_accounts(id, user_id, name, account_type), budget_categories(id, user_id, name, color)';
+const EMBEDS = ['financial_accounts', 'budget_categories'];
 
 function getDb() {
   return createServiceClient(
@@ -20,12 +26,12 @@ export async function GET() {
   const db = getDb();
   const { data, error } = await db
     .from('recurring_payments')
-    .select('*, financial_accounts(id, name, account_type), budget_categories(id, name, color)')
+    .select(RECURRING_SELECT)
     .eq('user_id', user.id)
     .order('created_at', { ascending: true });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data ?? []);
+  return NextResponse.json((data ?? []).map((row) => withOwnEmbeds(row, EMBEDS, user.id)));
 }
 
 export async function POST(request: NextRequest) {
@@ -52,6 +58,9 @@ export async function POST(request: NextRequest) {
     .eq('user_id', user.id)
     .maybeSingle();
   if (!acct) return NextResponse.json({ error: 'Account not found' }, { status: 400 });
+  const catRefs = await checkReferences(db, user.id, [{ field: 'category_id', table: 'budget_categories', id: category_id }]);
+  if (catRefs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!catRefs.ok) return NextResponse.json({ error: invalidReferenceMessage(catRefs.invalid) }, { status: 400 });
 
   const { data, error } = await db
     .from('recurring_payments')
@@ -64,11 +73,11 @@ export async function POST(request: NextRequest) {
       category_id: category_id || null,
       day_of_month: Number(day_of_month),
     })
-    .select('*, financial_accounts(id, name, account_type), budget_categories(id, name, color)')
+    .select(RECURRING_SELECT)
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data, { status: 201 });
+  return NextResponse.json(withOwnEmbeds(data, EMBEDS, user.id), { status: 201 });
 }
 
 export async function PATCH(request: NextRequest) {
@@ -88,16 +97,24 @@ export async function PATCH(request: NextRequest) {
   if (payload.amount) payload.amount = Math.abs(Number(payload.amount));
 
   const db = getDb();
+  const refs = await checkReferences(db, user.id, [
+    { field: 'account_id', table: 'financial_accounts', id: payload.account_id },
+    { field: 'category_id', table: 'budget_categories', id: payload.category_id },
+  ]);
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   const { data, error } = await db
     .from('recurring_payments')
     .update(payload)
     .eq('id', id)
     .eq('user_id', user.id)
-    .select('*, financial_accounts(id, name, account_type), budget_categories(id, name, color)')
-    .single();
+    .select(RECURRING_SELECT)
+    .maybeSingle();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
+  if (!data) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(withOwnEmbeds(data, EMBEDS, user.id));
 }
 
 export async function DELETE(request: NextRequest) {

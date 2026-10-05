@@ -5,6 +5,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage, usableReferences } from '@/lib/auth/ownership';
+import { invoiceReferences } from '@/lib/finance/invoice-references';
 
 function getDb() {
   return createServiceClient(
@@ -78,6 +80,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Ids saved on the template before reference checks existed are copied only
+    // when they are still the caller's own.
+    const usable = await usableReferences(db, user.id, invoiceReferences(template));
+    if (usable.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+    const ref = (field: string) => usable.values[field] ?? null;
+
     // Create invoice from template
     const { data: invoice, error: iErr } = await db
       .from('invoices')
@@ -86,7 +94,7 @@ export async function POST(request: NextRequest) {
         direction: template.direction,
         status: 'draft',
         contact_name: template.contact_name ?? '',
-        contact_id: template.contact_id,
+        contact_id: ref('contact_id'),
         subtotal: template.subtotal,
         tax_amount: template.tax_amount,
         total: template.total,
@@ -95,9 +103,9 @@ export async function POST(request: NextRequest) {
         invoice_number: invoiceNumber,
         invoice_number_prefix: template.invoice_number_prefix,
         custom_fields: customFieldValues,
-        account_id: template.account_id,
-        brand_id: template.brand_id,
-        category_id: template.category_id,
+        account_id: ref('account_id'),
+        brand_id: ref('brand_id'),
+        category_id: ref('category_id'),
         notes: template.notes,
       })
       .select('id')
@@ -129,6 +137,11 @@ export async function POST(request: NextRequest) {
   if (!body.name?.trim()) {
     return NextResponse.json({ error: 'Template name is required' }, { status: 400 });
   }
+
+  // Contact, account, brand and category must be the caller's own.
+  const refs = await checkReferences(db, user.id, invoiceReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const { data: newTemplate, error: createErr } = await db
     .from('invoice_templates')
