@@ -5,6 +5,8 @@ import {
   updateLinkedTransaction,
   deleteLinkedTransaction,
 } from '@/lib/finance/linked-transaction';
+import { checkReferences, invalidReferenceMessage, withoutFields } from '@/lib/auth/ownership';
+import { travelReferences, TRAVEL_PROTECTED_FIELDS } from '@/lib/travel/references';
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
@@ -47,6 +49,11 @@ export async function POST(request: NextRequest) {
   } = body;
 
   if (!date) return NextResponse.json({ error: 'date is required' }, { status: 400 });
+
+  // Foreign ids from the browser (vehicle, job, brand, category) must be the caller's own.
+  const refs = await checkReferences(supabase, user.id, travelReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const mpg_calculated =
     miles_since_last_fill && gallons && gallons > 0
@@ -113,8 +120,16 @@ export async function PATCH(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { id, ...updates } = body;
+  const { id } = body;
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
+  // Never from the browser: the owner, the generated transaction, FIFO bookkeeping, timestamps.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updates: Record<string, any> = withoutFields(body, TRAVEL_PROTECTED_FIELDS);
+
+  // Foreign ids from the browser (vehicle, job, brand, category) must be the caller's own.
+  const refs = await checkReferences(supabase, user.id, travelReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // Fetch existing record for derived-field recalculation and transaction sync
   const { data: existing } = await supabase
@@ -159,12 +174,12 @@ export async function PATCH(request: NextRequest) {
       if (!newCost || newCost <= 0) {
         // Cost removed — delete linked transaction
         try {
-          await deleteLinkedTransaction(supabase, existing.transaction_id);
+          await deleteLinkedTransaction(supabase, user.id, existing.transaction_id);
           await supabase.from('fuel_logs').update({ transaction_id: null }).eq('id', id);
         } catch { /* non-fatal */ }
       } else {
         try {
-          await updateLinkedTransaction(supabase, existing.transaction_id, {
+          await updateLinkedTransaction(supabase, user.id, existing.transaction_id, {
             amount: newCost,
             vendor: newVendor,
             date: newDate,

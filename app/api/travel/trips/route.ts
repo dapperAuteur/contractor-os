@@ -5,6 +5,8 @@ import {
   updateLinkedTransaction,
   deleteLinkedTransaction,
 } from '@/lib/finance/linked-transaction';
+import { checkReferences, invalidReferenceMessage, withoutFields } from '@/lib/auth/ownership';
+import { travelReferences, TRAVEL_PROTECTED_FIELDS } from '@/lib/travel/references';
 import { getRoute } from '@/lib/geo/route';
 
 // CO2 emission factors in kg per mile
@@ -92,6 +94,11 @@ export async function POST(request: NextRequest) {
   if (!mode || !date) {
     return NextResponse.json({ error: 'mode and date are required' }, { status: 400 });
   }
+
+  // Foreign ids from the browser (vehicle, job, brand, category) must be the caller's own.
+  const refs = await checkReferences(supabase, user.id, travelReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // Auto-calculate distance via OSRM if coordinates provided and no manual distance
   let resolvedDistance = distance_miles;
@@ -184,8 +191,18 @@ export async function PATCH(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { id, origin_lat, origin_lng, dest_lat, dest_lng, ...updates } = body;
+  const { id, origin_lat, origin_lng, dest_lat, dest_lng } = body;
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
+  // Never from the browser: the owner, the generated transaction, the route a leg
+  // belongs to, timestamps. A trip pointed at someone else's transaction could
+  // otherwise read it back, or delete it when its route is deleted.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updates: Record<string, any> = withoutFields(body, [...TRAVEL_PROTECTED_FIELDS, 'origin_lat', 'origin_lng', 'dest_lat', 'dest_lng']);
+
+  // Foreign ids from the browser (vehicle, job, brand, category) must be the caller's own.
+  const refs = await checkReferences(supabase, user.id, travelReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // Auto-calculate distance via OSRM if coordinates provided and no manual distance override
   const hasCoords = typeof origin_lat === 'number' && typeof origin_lng === 'number'
@@ -255,12 +272,12 @@ export async function PATCH(request: NextRequest) {
     if (existing.transaction_id) {
       if (!newCost || newCost <= 0) {
         try {
-          await deleteLinkedTransaction(supabase, existing.transaction_id);
+          await deleteLinkedTransaction(supabase, user.id, existing.transaction_id);
           await supabase.from('trips').update({ transaction_id: null }).eq('id', id);
         } catch { /* non-fatal */ }
       } else {
         try {
-          await updateLinkedTransaction(supabase, existing.transaction_id, {
+          await updateLinkedTransaction(supabase, user.id, existing.transaction_id, {
             amount: newCost,
             vendor: newVendor,
             date: newDate,

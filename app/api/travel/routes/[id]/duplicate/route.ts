@@ -35,6 +35,7 @@ export async function POST(
     .from('trips')
     .select('*')
     .eq('route_id', id)
+    .eq('user_id', user.id)
     .order('leg_order', { ascending: true });
 
   const today = new Date().toISOString().split('T')[0];
