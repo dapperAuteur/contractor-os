@@ -1,5 +1,8 @@
 // app/api/blog/route.ts
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { checkAssetClaim } from '@/lib/cloudinary/asset-guard';
+import { invalidReferenceMessage } from '@/lib/auth/ownership';
 import { PUBLIC_PROFILES_VIEW } from '@/lib/profiles/public-profiles';
 import { NextRequest, NextResponse } from 'next/server';
 import { estimateReadingTime } from '@/lib/blog/reading-time';
@@ -71,6 +74,11 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
+  // A Cloudinary id from the browser must not be one another user's record holds:
+  // deleting this record later destroys the asset with the server's secret.
+  const asset = await checkAssetClaim(createAdminClient(), user.id, body.cover_image_public_id);
+  if (asset.failed) return NextResponse.json({ error: 'Could not verify the image' }, { status: 500 });
+  if (!asset.allowed) return NextResponse.json({ error: invalidReferenceMessage(['cover_image_public_id']) }, { status: 400 });
 
   if (!body.title) {
     return NextResponse.json({ error: 'Title is required' }, { status: 400 });

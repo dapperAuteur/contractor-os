@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('equipment')
     .select('*, equipment_categories(name)')
+    // RLS also shows other users' public equipment; the export is the caller's own.
+    .eq('user_id', user.id)
     .order('name', { ascending: true });
 
   if (categoryId) query = query.eq('category_id', categoryId);

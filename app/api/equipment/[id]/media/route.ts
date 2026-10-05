@@ -4,6 +4,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { checkAssetClaim } from '@/lib/cloudinary/asset-guard';
+import { invalidReferenceMessage } from '@/lib/auth/ownership';
 
 export async function GET(
   _request: NextRequest,
@@ -64,6 +67,12 @@ export async function POST(
   if (!url || typeof url !== 'string') {
     return NextResponse.json({ error: 'url is required' }, { status: 400 });
   }
+
+  // A Cloudinary id from the browser must not be one another user's record holds:
+  // deleting this record later destroys the asset with the server's secret.
+  const asset = await checkAssetClaim(createAdminClient(), user.id, public_id);
+  if (asset.failed) return NextResponse.json({ error: 'Could not verify the image' }, { status: 500 });
+  if (!asset.allowed) return NextResponse.json({ error: invalidReferenceMessage(['public_id']) }, { status: 400 });
 
   const validTypes = ['image', 'video', 'audio'];
   const type = validTypes.includes(media_type) ? media_type : 'image';

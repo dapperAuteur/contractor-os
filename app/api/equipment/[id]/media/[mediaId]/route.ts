@@ -4,6 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { mayDestroyAsset } from '@/lib/cloudinary/asset-guard';
 
 type Params = { params: Promise<{ id: string; mediaId: string }> };
 
@@ -56,7 +58,8 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
   if (!media) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
   // Clean up Cloudinary asset
-  if (media.public_id) {
+  // Only an asset no other user's record holds.
+  if (media.public_id && await mayDestroyAsset(createAdminClient(), user.id, media.public_id)) {
     try {
       await deleteCloudinaryAsset(media.public_id, media.media_type === 'video' ? 'video' : 'image');
     } catch {
