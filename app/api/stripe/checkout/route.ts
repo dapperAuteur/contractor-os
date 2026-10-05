@@ -21,6 +21,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Service-role client: used for the founders count below and for writing stripe_customer_id.
+  // The profiles billing columns (stripe_customer_id, subscription_status, ...) can only be set by
+  // the service role; a trigger rejects that write from a user session (shared DB migration 206).
+  const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
+
   const { plan, stripeCouponId } = await request.json();
   if (!VALID_PLANS.includes(plan)) {
     return NextResponse.json({ error: 'Invalid plan' }, { status: 400 });
@@ -53,8 +58,6 @@ export async function POST(request: NextRequest) {
   let promoCampaignId: string | null = null;
 
   if (isLifetimePlan || isAnnualPlan) {
-    const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
-
     // Count paid lifetime (Stripe + CashApp)
     const [{ count: stripeCount }, { count: cashappCount }] = await Promise.all([
       db.from('profiles').select('id', { count: 'exact', head: true }).eq('subscription_status', 'lifetime').not('stripe_customer_id', 'is', null),
@@ -122,10 +125,15 @@ export async function POST(request: NextRequest) {
     });
     customerId = customer.id;
 
-    await supabase
+    const { error: customerSaveError } = await db
       .from('profiles')
       .update({ stripe_customer_id: customerId })
       .eq('id', user.id);
+    if (customerSaveError) {
+      // Checkout still proceeds (the webhook finds the user via session metadata), but log it so a
+      // missing stripe_customer_id is traceable.
+      console.error('[stripe/checkout] Failed to save stripe_customer_id:', customerSaveError.message);
+    }
   }
 
   // Prefer the actual request origin so subdomain users (contractor.*, lister.*) get
