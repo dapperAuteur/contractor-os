@@ -17,13 +17,11 @@ export async function GET(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  // Admin check
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .maybeSingle();
-  if (!profile?.is_admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  // Admin check: the same ADMIN_EMAIL rule every other admin route uses.
+  // profiles.is_admin was read with the user's own client, and the profiles
+  // RLS policy lets a user write their own row, so it proved nothing.
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail || user.email !== adminEmail) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const { searchParams } = new URL(request.url);
   const status = searchParams.get('status') ?? 'pending';
