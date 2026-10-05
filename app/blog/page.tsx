@@ -3,6 +3,7 @@
 
 import type { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
+import { PUBLIC_PROFILES_VIEW } from '@/lib/profiles/public-profiles';
 import PostCard from '@/components/blog/PostCard';
 import Link from 'next/link';
 import type { BlogPost, Profile } from '@/lib/types';
@@ -36,7 +37,7 @@ export default async function BlogIndexPage() {
   const authorIds = [...new Set((posts || []).map((p) => p.user_id))];
   const { data: profiles } = authorIds.length
     ? await supabase
-        .from('profiles')
+        .from(PUBLIC_PROFILES_VIEW)
         .select('id, username, display_name')
         .in('id', authorIds)
     : { data: [] };

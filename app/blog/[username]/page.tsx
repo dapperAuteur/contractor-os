@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { PUBLIC_PROFILES_VIEW } from '@/lib/profiles/public-profiles';
 import { notFound } from 'next/navigation';
 import PostCard from '@/components/blog/PostCard';
 import type { BlogPost, Profile } from '@/lib/types';
@@ -11,8 +12,8 @@ export default async function UserBlogPage({ params }: Props) {
 
   // Look up the profile by username
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
+    .from(PUBLIC_PROFILES_VIEW)
+    .select('id, username, display_name, bio, avatar_url')
     .eq('username', username)
     .maybeSingle();
 

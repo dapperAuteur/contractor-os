@@ -1,5 +1,6 @@
 // app/api/blog/route.ts
 import { createClient } from '@/lib/supabase/server';
+import { PUBLIC_PROFILES_VIEW } from '@/lib/profiles/public-profiles';
 import { NextRequest, NextResponse } from 'next/server';
 import { estimateReadingTime } from '@/lib/blog/reading-time';
 import { generateSlug, makeUniqueSlug } from '@/lib/blog/slug';
@@ -24,8 +25,7 @@ export async function GET(request: NextRequest) {
     .from('blog_posts')
     .select(`
       id, slug, title, excerpt, cover_image_url,
-      published_at, tags, reading_time_minutes, view_count, user_id,
-      profiles!inner(username, display_name)
+      published_at, tags, reading_time_minutes, view_count, user_id
     `, { count: 'exact' })
     .or('visibility.eq.public,and(visibility.eq.scheduled,scheduled_at.lte.now())')
     .order('published_at', { ascending: false })
@@ -42,7 +42,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ posts: data, total: count, page, limit });
+  // Author names come from the public_profiles view: other users' rows in `profiles` are
+  // readable only by their owner (shared-DB migration 207), so an embedded profiles join would
+  // drop every post by someone else.
+  const authorIds = [...new Set((data ?? []).map((p) => p.user_id))];
+  const { data: authors } = authorIds.length
+    ? await supabase
+        .from(PUBLIC_PROFILES_VIEW)
+        .select('id, username, display_name')
+        .in('id', authorIds)
+    : { data: [] };
+  const authorMap = new Map((authors ?? []).map((a) => [a.id, { username: a.username, display_name: a.display_name }]));
+  const posts = (data ?? []).map((p) => ({ ...p, profiles: authorMap.get(p.user_id) ?? null }));
+
+  return NextResponse.json({ posts, total: count, page, limit });
 }
 
 /**
