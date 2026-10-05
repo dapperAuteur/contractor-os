@@ -2,11 +2,11 @@
 // Seeds demo data for an invited user's account.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient as createSessionClient } from '@/lib/supabase/server';
 import { createClient } from '@supabase/supabase-js';
 import { clearUserData, seedVisitor, seedTutorial } from '@/lib/demo/seed';
 import { seedContractor } from '@/lib/demo/seed-contractor';
 import { seedLister } from '@/lib/demo/seed-lister';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function serviceDb() {
   return createClient(
@@ -15,16 +15,9 @@ function serviceDb() {
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createSessionClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function POST(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { id } = await params;
   const db = serviceDb();

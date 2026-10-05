@@ -2,9 +2,8 @@
 // Aggregate stats for the admin overview dashboard
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getServiceClient() {
   return createClient(
@@ -13,29 +12,10 @@ function getServiceClient() {
   );
 }
 
-async function getAdminUser() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        set: (name: string, value: string, options: CookieOptions) => { try { cookieStore.set({ name, value, ...options }); } catch {} },
-        remove: (name: string, options: CookieOptions) => { try { cookieStore.set({ name, value: '', ...options }); } catch {} },
-      },
-    },
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(_request: NextRequest) {
-  const user = await getAdminUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = getServiceClient();
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();

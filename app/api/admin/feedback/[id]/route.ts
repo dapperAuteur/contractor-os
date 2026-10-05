@@ -3,10 +3,9 @@
 // POST: admin replies to a feedback thread → emails user
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
 import { getResend } from '@/lib/email/resend';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createClient(
@@ -15,27 +14,10 @@ function getDb() {
   );
 }
 
-async function getAdminUser() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        set: (name: string, value: string, options: CookieOptions) => { try { cookieStore.set({ name, value, ...options }); } catch {} },
-        remove: (name: string, options: CookieOptions) => { try { cookieStore.set({ name, value: '', ...options }); } catch {} },
-      },
-    }
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const admin = await getAdminUser();
-  if (!admin || admin.email !== process.env.ADMIN_EMAIL) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = getDb();
   const [{ data: feedback }, { data: replies }] = await Promise.all([
@@ -65,8 +47,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const admin = await getAdminUser();
-  if (!admin || admin.email !== process.env.ADMIN_EMAIL) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.user;
 
   const { body, media_url } = await req.json();
   if (!body?.trim()) return NextResponse.json({ error: 'body is required' }, { status: 400 });

@@ -2,8 +2,8 @@
 // PATCH: update a user's contractor_role, products, lister fields (admin only)
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -17,11 +17,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const allowed = ['contractor_role', 'products', 'lister_company_name', 'lister_union_local'];

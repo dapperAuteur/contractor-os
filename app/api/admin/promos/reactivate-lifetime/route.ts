@@ -20,9 +20,9 @@
 // Returns { campaign, banner } on success.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { stripe } from '@/lib/stripe';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -31,16 +31,9 @@ function getDb() {
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function POST(request: NextRequest) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const {

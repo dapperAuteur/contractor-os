@@ -3,8 +3,8 @@
 // POST: check and apply rewards for a specific referrer (called after marking an invite as paid)
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient as createSessionClient } from '@/lib/supabase/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function serviceDb() {
   return createClient(
@@ -13,16 +13,9 @@ function serviceDb() {
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createSessionClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function GET() {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = serviceDb();
 
@@ -58,8 +51,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { user_id } = await request.json();
   if (!user_id) return NextResponse.json({ error: 'user_id required' }, { status: 400 });

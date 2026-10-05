@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -12,18 +12,11 @@ function getDb() {
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 type Params = { params: Promise<{ id: string }> };
 
 export async function GET(_req: NextRequest, { params }: Params) {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { id } = await params;
   const db = getDb();
@@ -41,8 +34,8 @@ export async function GET(_req: NextRequest, { params }: Params) {
 }
 
 export async function PATCH(request: NextRequest, { params }: Params) {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { id } = await params;
   const body = await request.json();
@@ -65,8 +58,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 }
 
 export async function DELETE(_req: NextRequest, { params }: Params) {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { id } = await params;
   const db = getDb();

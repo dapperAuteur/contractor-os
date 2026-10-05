@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/auth/require-admin';
 import { markdownToTiptapJSON } from '@/lib/blog/markdown-to-tiptap';
 import { generateSlug, makeUniqueSlug } from '@/lib/blog/slug';
 import { estimateReadingTime } from '@/lib/blog/reading-time';
@@ -19,14 +20,11 @@ interface ImportRow {
 const VALID_VISIBILITY = ['draft', 'private', 'public', 'authenticated_only', 'scheduled'];
 
 export async function POST(req: Request) {
+  // Admin-only: ADMIN_EMAIL + two-factor verified (lib/auth/require-admin.ts).
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const user = auth.user;
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  // Admin-only: check email
-  if (user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
 
   const { rows } = (await req.json()) as { rows: ImportRow[] };
   if (!rows || !Array.isArray(rows) || rows.length === 0) {

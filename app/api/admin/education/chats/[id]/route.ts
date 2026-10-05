@@ -3,42 +3,20 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { cookies } from 'next/headers';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!,
 );
 
-async function requireAdmin() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        set: (name: string, value: string, options: CookieOptions) => {
-          try { cookieStore.set({ name, value, ...options }); } catch {}
-        },
-        remove: (name: string, options: CookieOptions) => {
-          try { cookieStore.set({ name, value: '', ...options }); } catch {}
-        },
-      },
-    },
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 type RouteContext = { params: Promise<{ id: string }> };
 
 // GET — fetch chat with all messages
 export async function GET(_req: NextRequest, ctx: RouteContext) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.user;
 
   const { id } = await ctx.params;
 
@@ -63,8 +41,9 @@ export async function GET(_req: NextRequest, ctx: RouteContext) {
 
 // PATCH — update title, tags, notes
 export async function PATCH(req: NextRequest, ctx: RouteContext) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.user;
 
   const { id } = await ctx.params;
   const body = await req.json();
@@ -90,8 +69,9 @@ export async function PATCH(req: NextRequest, ctx: RouteContext) {
 
 // DELETE — remove chat and all messages (cascade)
 export async function DELETE(_req: NextRequest, ctx: RouteContext) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.user;
 
   const { id } = await ctx.params;
 

@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
 import { HELP_ARTICLES } from '@/lib/help/articles';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -42,11 +42,8 @@ async function getEmbedding(text: string): Promise<number[]> {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function POST(_req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   // Preflight: validate API key exists and the Gemini API is reachable
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
@@ -111,11 +108,8 @@ export async function POST(_req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   // ?diagnose=1 → list models available to this API key
   const diagnose = new URL(req.url).searchParams.get('diagnose');

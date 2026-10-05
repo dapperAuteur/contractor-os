@@ -1,5 +1,6 @@
 // app/admin/layout.tsx
-// Admin-only layout — middleware enforces ADMIN_EMAIL check before this renders
+// Admin-only layout — middleware enforces the ADMIN_EMAIL check before this renders. The admin APIs
+// also require two-factor sign-in (aal2, lib/auth/require-admin.ts); AdminMfaNotice explains a refusal.
 
 'use client';
 
@@ -7,6 +8,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Menu, X } from 'lucide-react';
 import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminMfaNotice from '@/components/admin/AdminMfaNotice';
 import FloatingActionsMenu from '@/components/ui/FloatingActionsMenu';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -70,6 +72,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       {/* Main */}
       <main className="flex-1 overflow-auto pt-14 lg:pt-0">
+        <AdminMfaNotice />
         {children}
       </main>
       <FloatingActionsMenu isAdmin={true} />

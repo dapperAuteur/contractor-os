@@ -3,8 +3,8 @@
 // POST — admin grants or revokes a metric permission for any user
 
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function adminClient() {
   return createServiceClient(
@@ -13,17 +13,10 @@ function adminClient() {
   );
 }
 
-async function assertAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 // GET /api/admin/metrics/users?userId=<uuid>
 export async function GET(request: NextRequest) {
-  const adminUser = await assertAdmin();
-  if (!adminUser) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const userId = request.nextUrl.searchParams.get('userId');
   if (!userId) return NextResponse.json({ error: 'userId is required' }, { status: 400 });
@@ -42,8 +35,9 @@ export async function GET(request: NextRequest) {
 // Body: { userId, metricKey, isEnabled }
 // Admin can grant or revoke any metric for any user (for testing)
 export async function POST(request: NextRequest) {
-  const adminUser = await assertAdmin();
-  if (!adminUser) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const adminUser = auth.user;
 
   let body: { userId?: string; metricKey?: string; isEnabled?: boolean };
   try {

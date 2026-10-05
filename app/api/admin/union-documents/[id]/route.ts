@@ -3,8 +3,8 @@
 // Intended use: reset stuck 'processing' docs to 'error' so users can retry
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -18,11 +18,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const { status, error_msg } = body as { status: string; error_msg?: string };

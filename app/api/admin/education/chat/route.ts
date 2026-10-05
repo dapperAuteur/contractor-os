@@ -3,9 +3,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { cookies } from 'next/headers';
 import { CODEBASE_CONTEXT } from '@/lib/admin/codebase-context';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -13,27 +12,6 @@ const supabaseAdmin = createClient(
 );
 
 const GEMINI_MODEL = 'gemini-2.5-flash';
-
-async function getAdminUser() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        set: (name: string, value: string, options: CookieOptions) => {
-          try { cookieStore.set({ name, value, ...options }); } catch {}
-        },
-        remove: (name: string, options: CookieOptions) => {
-          try { cookieStore.set({ name, value: '', ...options }); } catch {}
-        },
-      },
-    },
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
 
 interface ChatMessage {
   role: 'user' | 'model';
@@ -49,10 +27,8 @@ const MODE_INSTRUCTIONS: Record<string, string> = {
 };
 
 export async function POST(req: NextRequest) {
-  const adminUser = await getAdminUser();
-  if (!adminUser || adminUser.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { message, history, mode, chatId } = await req.json() as {
     message: string;

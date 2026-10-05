@@ -3,9 +3,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
 import { createShortLink, toSwitchySlug } from '@/lib/switchy';
 import { MODULES } from '@/lib/features/modules';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -17,11 +17,8 @@ function getDb() {
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function POST(request: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const type = request.nextUrl.searchParams.get('type') || 'all';
   const siteUrl = process.env.NEXT_PUBLIC_APP_URL || '';
@@ -149,11 +146,8 @@ export async function POST(request: NextRequest) {
 
 // GET: return counts of content with/without short links
 export async function GET() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = getDb();
 

@@ -4,22 +4,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { createClient as createServerClient } from '@/lib/supabase/server';
 import fs from 'fs';
 import path from 'path';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
   );
-}
-
-async function requireAdmin() {
-  const supabase = await createServerClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
 }
 
 // All available tutorial series with metadata
@@ -336,8 +329,8 @@ function parseTutorialMd(content: string) {
 
 // GET: list all available tutorial series with import status
 export async function GET() {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: 'Admin only' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = getDb();
 
@@ -389,8 +382,9 @@ export async function GET() {
 
 // POST: import a tutorial series as a new Academy course
 export async function POST(request: NextRequest) {
-  const user = await requireAdmin();
-  if (!user) return NextResponse.json({ error: 'Admin only' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const user = auth.user;
 
   const { slug } = await request.json();
   if (!slug) return NextResponse.json({ error: 'slug is required' }, { status: 400 });
