@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkOwned, ownedIds } from '@/lib/auth/ownership';
 
 function getDb() {
   return createServiceClient(
@@ -27,7 +28,11 @@ export async function GET() {
     .eq('user_id', user.id)
     .not('location_id', 'is', null);
 
-  const locationIds = [...new Set((jobs ?? []).map((j) => j.location_id).filter(Boolean))];
+  // Only the caller's own locations: a job's location_id saved before reference
+  // checks existed could name another user's venue.
+  const owned = await ownedIds(db, user.id, 'contact_locations', (jobs ?? []).map((j) => j.location_id));
+  if (owned.failed) return NextResponse.json({ error: 'Could not load venues' }, { status: 500 });
+  const locationIds = [...owned.ids];
 
   if (locationIds.length === 0) {
     return NextResponse.json({ venues: [] });
@@ -69,7 +74,12 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: 'location_id required' }, { status: 400 });
   }
 
-  // Verify user has a job at this venue
+  // The venue must be the caller's own location (not found otherwise)...
+  const owned = await checkOwned(db, user.id, 'contact_locations', location_id);
+  if (owned.failed) return NextResponse.json({ error: 'Could not verify venue' }, { status: 500 });
+  if (!owned.allowed) return NextResponse.json({ error: 'Venue not found' }, { status: 404 });
+
+  // ...and the user must have a job at it
   const { data: jobLink } = await db
     .from('contractor_jobs')
     .select('id')

@@ -5,6 +5,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkOwned, checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { invoiceReferences } from '@/lib/finance/invoice-references';
 
 function getDb() {
   return createServiceClient(
@@ -25,6 +27,17 @@ export async function PATCH(
   const db = getDb();
   const body = await request.json();
 
+  // Ownership first: the line items below are replaced by template id, so this
+  // must run before anything is deleted. Not yours and missing both answer 404.
+  const owned = await checkOwned(db, user.id, 'invoice_templates', id);
+  if (owned.failed) return NextResponse.json({ error: 'Could not verify ownership' }, { status: 500 });
+  if (!owned.allowed) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  // Contact, account, brand and category must be the caller's own.
+  const refs = await checkReferences(db, user.id, invoiceReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   const allowed = [
     'name', 'direction', 'contact_name', 'contact_id',
     'subtotal', 'tax_amount', 'total',
@@ -37,7 +50,7 @@ export async function PATCH(
   }
 
   // Handle line items update (delete-and-reinsert)
-  if (body.items) {
+  if (Array.isArray(body.items)) {
     await db.from('invoice_template_items').delete().eq('template_id', id);
 
     const lineItems = body.items.map((item: { description: string; quantity?: number; unit_price?: number; sort_order?: number; item_type?: string }, idx: number) => {

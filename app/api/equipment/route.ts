@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { checkAssetClaim } from '@/lib/cloudinary/asset-guard';
+import { checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 
 function getServiceDb() {
@@ -49,6 +52,18 @@ export async function POST(request: NextRequest) {
   if (!name?.trim()) {
     return NextResponse.json({ error: 'name is required' }, { status: 400 });
   }
+
+  const refs = await checkReferences(supabase, user.id, [
+    { field: 'category_id', table: 'equipment_categories', id: category_id },
+    { field: 'transaction_id', table: 'financial_transactions', id: transaction_id },
+  ]);
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+  // A Cloudinary id from the browser must not be one another user's record holds:
+  // deleting this record later destroys the asset with the server's secret.
+  const asset = await checkAssetClaim(createAdminClient(), user.id, image_public_id);
+  if (asset.failed) return NextResponse.json({ error: 'Could not verify the image' }, { status: 500 });
+  if (!asset.allowed) return NextResponse.json({ error: invalidReferenceMessage(['image_public_id']) }, { status: 400 });
 
   const { data, error } = await supabase
     .from('equipment')

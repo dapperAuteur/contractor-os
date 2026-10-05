@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage, ownedIds } from '@/lib/auth/ownership';
 
 function getDb() {
   return createServiceClient(
@@ -46,7 +47,10 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
     .order('name', { ascending: true });
 
   // Get venue names for entries with near_venue_id
-  const venueIds = [...new Set((entries ?? []).map((e) => e.near_venue_id).filter(Boolean))];
+  // Only the guide owner's own venues are named (an id saved before reference
+  // checks existed could be someone else's location).
+  const ownedVenues = await ownedIds(db, guide.user_id, 'contact_locations', (entries ?? []).map((e) => e.near_venue_id));
+  const venueIds = [...ownedVenues.ids];
   const venueMap: Record<string, string> = {};
   if (venueIds.length > 0) {
     const { data: venues } = await db
@@ -146,6 +150,11 @@ export async function POST(request: NextRequest, ctx: Ctx) {
   if (!category || !name?.trim()) {
     return NextResponse.json({ error: 'category and name are required' }, { status: 400 });
   }
+
+  // The nearby venue must be one of the caller's own locations.
+  const refs = await checkReferences(db, user.id, [{ field: 'near_venue_id', table: 'contact_locations', id: near_venue_id }]);
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const validCategories = ['restaurant', 'hotel', 'grocery', 'gym', 'pharmacy', 'entertainment', 'transport', 'coffee', 'laundry', 'other'];
   if (!validCategories.includes(category)) {

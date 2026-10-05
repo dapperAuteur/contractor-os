@@ -9,6 +9,8 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { getJobWithRole } from '@/lib/contractor/job-access';
+import { checkOwned, checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { changedReferences } from '@/lib/contractor/job-fields';
 import { fireJobScheduleEvent, fireJobDeletedEvent } from '@/lib/events/schedule-emitter';
 import { fireJobIncomeEvent } from '@/lib/events/income-emitter';
 
@@ -37,8 +39,10 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   // Fetch client paycheck portal info if client_id exists
   let paycheck_portal_url: string | null = null;
   let paycheck_portal_company_id: string | null = null;
-  if (job.client_id) {
-    const { data: contact } = await db.from('user_contacts').select('paycheck_portal_url, paycheck_portal_company_id').eq('id', job.client_id).maybeSingle();
+  // The owner's client contact holds their payroll portal: only for the owner,
+  // and only when the contact is theirs.
+  if (job.client_id && role === 'owner') {
+    const { data: contact } = await db.from('user_contacts').select('paycheck_portal_url, paycheck_portal_company_id').eq('id', job.client_id).eq('user_id', user.id).maybeSingle();
     paycheck_portal_url = contact?.paycheck_portal_url ?? null;
     paycheck_portal_company_id = contact?.paycheck_portal_company_id ?? null;
   }
@@ -101,6 +105,12 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
     if (key in body) updates[key] = body[key];
   }
 
+  // A new client, contact, venue, event or brand must be the caller's own.
+  // Ids the job already has (a lister re-sending the owner's venue) are not re-checked.
+  const refs = await checkReferences(db, user.id, changedReferences(updates, result.job));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   const { data, error } = await db
     .from('contractor_jobs')
     .update(updates)
@@ -133,7 +143,11 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
         let destLat: number | null = null;
         let destLng: number | null = null;
 
-        if (data.location_id) {
+        // Venue coordinates are read and written only on the caller's own location.
+        const ownsLocation = data.location_id
+          ? (await checkOwned(db, user.id, 'contact_locations', data.location_id)).allowed
+          : false;
+        if (data.location_id && ownsLocation) {
           const { data: loc } = await db.from('contact_locations').select('lat, lng').eq('id', data.location_id).maybeSingle();
           if (loc?.lat && loc?.lng) { destLat = loc.lat; destLng = loc.lng; }
         }
@@ -141,7 +155,7 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
           const geo = await geocodeAddress(data.location_name);
           if (geo) {
             destLat = geo.lat; destLng = geo.lng;
-            if (data.location_id) await db.from('contact_locations').update({ lat: geo.lat, lng: geo.lng }).eq('id', data.location_id);
+            if (data.location_id && ownsLocation) await db.from('contact_locations').update({ lat: geo.lat, lng: geo.lng }).eq('id', data.location_id);
           }
         }
         if (destLat !== null && destLng !== null) {

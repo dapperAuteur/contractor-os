@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { withoutFields } from '@/lib/auth/ownership';
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
@@ -85,8 +86,11 @@ export async function PATCH(request: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const body = await request.json();
-  const { id, retire, reactivate, ...updates } = body;
+  const { id, retire, reactivate } = body;
   if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
+  // is_system marks the shared public-transport vehicles every user can read;
+  // a user must not be able to publish their own vehicle that way.
+  const updates: Record<string, unknown> = withoutFields(body, ['id', 'retire', 'reactivate', 'user_id', 'is_system', 'created_at', 'updated_at']);
 
   // Shorthand flags for retire/reactivate
   if (retire) updates.active = false;

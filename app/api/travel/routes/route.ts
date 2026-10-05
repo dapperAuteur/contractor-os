@@ -8,6 +8,8 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createLinkedTransaction } from '@/lib/finance/linked-transaction';
 import { CO2_PER_MILE, HUMAN_POWERED } from '@/lib/travel/constants';
 import { getRoute } from '@/lib/geo/route';
+import { checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { routeLegReferences } from '@/lib/travel/references';
 
 function getDb() {
   return createServiceClient(
@@ -92,6 +94,10 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
+  // Each leg's vehicle, job, brand and category must be the caller's own.
+  const refs = await checkReferences(db, user.id, routeLegReferences(legs));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // 1. Create the route parent
   const { data: route, error: routeErr } = await db

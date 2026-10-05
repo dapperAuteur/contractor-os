@@ -70,6 +70,7 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     const result = await getJobWithRole(db, id, user.id);
     if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
     const job = result.job;
+    const isOwner = result.role === 'owner';
 
     // Fetch time entries to invoice
     let entryQuery = db
@@ -136,14 +137,16 @@ export async function POST(request: NextRequest, ctx: Ctx) {
           direction: 'receivable',
           status: 'draft',
           contact_name: typedJob.client_name,
-          contact_id: typedJob.client_id,
+          // The client contact and brand are the job owner's records: a crew
+          // member's own invoice must not point at them.
+          contact_id: isOwner ? typedJob.client_id : null,
           subtotal,
           tax_amount: 0,
           total: subtotal,
           invoice_date: entry.work_date,
           due_date: typedJob.est_pay_date ?? null,
           invoice_number: invoiceNumber,
-          brand_id: typedJob.brand_id ?? null,
+          brand_id: isOwner ? (typedJob.brand_id ?? null) : null,
           job_id: typedJob.id,
           custom_fields: customFields,
           notes: typedJob.event_name
@@ -176,11 +179,15 @@ export async function POST(request: NextRequest, ctx: Ctx) {
       invoices.push(invoice);
     }
 
-    // Update job status to 'invoiced' so it appears in the invoiced filter
-    await db
-      .from('contractor_jobs')
-      .update({ status: 'invoiced' })
-      .eq('id', id);
+    // Update job status to 'invoiced' so it appears in the invoiced filter.
+    // Only the owner's own invoicing moves the owner's job.
+    if (isOwner) {
+      await db
+        .from('contractor_jobs')
+        .update({ status: 'invoiced' })
+        .eq('id', id)
+        .eq('user_id', user.id);
+    }
 
     return NextResponse.json({ invoices, count: invoices.length }, { status: 201 });
   } catch (err) {

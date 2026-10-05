@@ -6,6 +6,13 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { checkReferences, invalidReferenceMessage, referencesIn, type ReferenceField } from '@/lib/auth/ownership';
+
+const TRANSACTION_REFERENCE_FIELDS: readonly ReferenceField[] = [
+  { field: 'category_id', table: 'budget_categories' },
+  { field: 'account_id', table: 'financial_accounts' },
+  { field: 'brand_id', table: 'user_brands' },
+];
 
 export async function GET(request: NextRequest) {
   const supabase = await createClient();
@@ -61,6 +68,10 @@ export async function POST(request: NextRequest) {
   if (!amount || !transaction_date) {
     return NextResponse.json({ error: 'Amount and date are required' }, { status: 400 });
   }
+  // Category, account and brand must be the caller's own (RLS checks only user_id).
+  const refs = await checkReferences(supabase, user.id, referencesIn(body, TRANSACTION_REFERENCE_FIELDS));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const { data, error } = await supabase
     .from('financial_transactions')
@@ -93,6 +104,10 @@ export async function PATCH(request: NextRequest) {
   const body = await request.json();
   const { id, ...updates } = body;
   if (!id) return NextResponse.json({ error: 'Transaction ID required' }, { status: 400 });
+  // Category, account and brand must be the caller's own (RLS checks only user_id).
+  const refs = await checkReferences(supabase, user.id, referencesIn(body, TRANSACTION_REFERENCE_FIELDS));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const allowed = [
     'amount', 'type', 'description', 'vendor', 'transaction_date', 'category_id',

@@ -15,6 +15,12 @@ function getDb() {
   );
 }
 
+// public_venues columns a change request may set (131_public_venues.sql).
+const VENUE_EDITABLE_FIELDS = [
+  'name', 'address', 'city', 'state', 'country', 'lat', 'lng',
+  'venue_type', 'capacity', 'notes', 'knowledge_base', 'schematics_url',
+] as const;
+
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -23,13 +29,11 @@ export async function PATCH(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  // Admin check
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .maybeSingle();
-  if (!profile?.is_admin) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  // Admin check: the same ADMIN_EMAIL rule every other admin route uses.
+  // profiles.is_admin was read with the user's own client, and the profiles
+  // RLS policy lets a user write their own row, so it proved nothing.
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail || user.email !== adminEmail) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
   const { id } = await params;
   const { action, admin_note } = await request.json();
@@ -53,10 +57,17 @@ export async function PATCH(
 
   if (action === 'approve') {
     if (changeReq.request_type === 'edit' && changeReq.proposed_changes) {
-      // Apply proposed changes to the venue
+      // Apply proposed changes to the venue. proposed_changes is user-written
+      // JSON (users can insert requests directly), so only descriptive columns
+      // are copied: never is_active, created_by, id or timestamps.
+      const proposed = (changeReq.proposed_changes ?? {}) as Record<string, unknown>;
+      const changes: Record<string, unknown> = {};
+      for (const key of VENUE_EDITABLE_FIELDS) {
+        if (Object.prototype.hasOwnProperty.call(proposed, key)) changes[key] = proposed[key];
+      }
       const { error: venueErr } = await db
         .from('public_venues')
-        .update({ ...changeReq.proposed_changes, updated_at: new Date().toISOString() })
+        .update({ ...changes, updated_at: new Date().toISOString() })
         .eq('id', changeReq.venue_id);
       if (venueErr) return NextResponse.json({ error: venueErr.message }, { status: 500 });
     } else if (changeReq.request_type === 'delete') {

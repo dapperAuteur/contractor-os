@@ -4,6 +4,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { travelReferences } from '@/lib/travel/references';
 
 function getDb() {
   return createServiceClient(
@@ -32,15 +34,20 @@ export async function PATCH(
   }
 
   const db = getDb();
+  const refs = await checkReferences(db, user.id, travelReferences({ vehicle_id: updates.vehicle_id }));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   const { data, error } = await db
     .from('trip_templates')
     .update(updates)
     .eq('id', id)
     .eq('user_id', user.id)
     .select()
-    .single();
+    .maybeSingle();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!data) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(data);
 }
 

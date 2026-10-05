@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage, ownedIds } from '@/lib/auth/ownership';
 
 function getDb() {
   return createServiceClient(
@@ -45,6 +46,15 @@ export async function PUT(request: NextRequest, { params }: Params) {
     }, { status: 400 });
   }
 
+  // Each deposit account must be the caller's own.
+  const refs = await checkReferences(
+    db,
+    user.id,
+    deposits.map((d: { account_id?: unknown }) => ({ field: 'deposits.account_id', table: 'financial_accounts', id: d?.account_id })),
+  );
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   // Delete old deposits and their transactions
   const { data: oldDeposits } = await db
     .from('paycheck_deposits')
@@ -53,7 +63,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
 
   const oldTxIds = (oldDeposits ?? []).map((d) => d.transaction_id).filter(Boolean);
   if (oldTxIds.length > 0) {
-    await db.from('financial_transactions').delete().in('id', oldTxIds);
+    await db.from('financial_transactions').delete().in('id', oldTxIds).eq('user_id', user.id);
   }
 
   await db.from('paycheck_deposits').delete().eq('paycheck_id', id);
@@ -109,6 +119,16 @@ export async function POST(request: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'No unexecuted deposits found. Save splits first.' }, { status: 400 });
   }
 
+  // Accounts and brand saved before reference checks existed are used only
+  // when they are still the caller's own.
+  const [accounts, brands] = await Promise.all([
+    ownedIds(db, user.id, 'financial_accounts', deposits.map((d) => d.account_id)),
+    ownedIds(db, user.id, 'user_brands', [paycheck.brand_id]),
+  ]);
+  if (accounts.failed || brands.failed) {
+    return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  }
+
   // Create transactions for each deposit
   for (const dep of deposits) {
     const { data: tx, error: txErr } = await db
@@ -121,9 +141,9 @@ export async function POST(request: NextRequest, { params }: Params) {
         vendor: 'Employer',
         transaction_date: paycheck.pay_date,
         source: 'manual',
-        account_id: dep.account_id,
+        account_id: accounts.has(dep.account_id) ? dep.account_id : null,
         job_id: paycheck.job_id,
-        brand_id: paycheck.brand_id,
+        brand_id: brands.has(paycheck.brand_id) ? paycheck.brand_id : null,
         source_module: 'paycheck',
         source_module_id: paycheck.id,
       })

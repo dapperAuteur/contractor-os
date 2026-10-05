@@ -82,6 +82,24 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     if (key in body) jobData[key] = body[key];
   }
 
+  // A lister job names its lister: only ever the caller. Naming someone else
+  // would hand them edit rights on this job.
+  if (jobData.lister_id != null && jobData.lister_id !== user.id) {
+    return NextResponse.json({ error: 'lister_id must be your own account' }, { status: 400 });
+  }
+
+  // Offering the job to someone is the lister flow, same rule as /assignments.
+  if (body.assigned_to) {
+    const { data: profile } = await db
+      .from('profiles')
+      .select('contractor_role')
+      .eq('id', user.id)
+      .maybeSingle();
+    if (!profile || !['lister', 'union_leader'].includes(profile.contractor_role)) {
+      return NextResponse.json({ error: 'Lister role required to assign' }, { status: 403 });
+    }
+  }
+
   const { data: job, error: jobError } = await db
     .from('contractor_jobs')
     .insert(jobData)

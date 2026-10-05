@@ -2,6 +2,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { forbiddenSignParam } from '@/lib/cloudinary/asset-guard';
 
 /**
  * POST /api/blog/upload
@@ -32,7 +33,18 @@ export async function POST(request: NextRequest) {
   // CldUploadWidget sends { paramsToSign: { folder, timestamp, source, ... } }
   // We must sign exactly what the widget sends — nothing more, nothing less.
   const body = await request.json();
-  const paramsToSign: Record<string, string | number> = body.paramsToSign ?? body;
+  const paramsToSign: Record<string, string | number> = body?.paramsToSign ?? body;
+  if (!paramsToSign || typeof paramsToSign !== 'object' || Array.isArray(paramsToSign)) {
+    return NextResponse.json({ error: 'paramsToSign required' }, { status: 400 });
+  }
+
+  // Sign new uploads only. A signature over public_id + timestamp is exactly
+  // what Cloudinary's destroy endpoint accepts, so signing whatever the client
+  // sent let any signed-in user delete or overwrite any asset in the account.
+  const forbidden = forbiddenSignParam(paramsToSign);
+  if (forbidden) {
+    return NextResponse.json({ error: `Cannot sign ${forbidden}` }, { status: 400 });
+  }
 
   // Params excluded from Cloudinary signatures: file, resource_type, api_key, cloud_name
   const excluded = new Set(['file', 'resource_type', 'api_key', 'cloud_name']);

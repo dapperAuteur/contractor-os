@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
 
 function getDb() {
   return createServiceClient(
@@ -41,6 +42,11 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   for (const k of allowed) {
     if (body[k] !== undefined) updates[k] = body[k];
   }
+
+  // The nearby venue must be one of the caller's own locations.
+  const refs = await checkReferences(db, user.id, [{ field: 'near_venue_id', table: 'contact_locations', id: updates.near_venue_id }]);
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const { data, error } = await db
     .from('city_guide_entries')

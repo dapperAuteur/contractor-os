@@ -1,5 +1,8 @@
 // app/api/blog/[id]/route.ts
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { checkAssetClaim, mayDestroyAsset } from '@/lib/cloudinary/asset-guard';
+import { invalidReferenceMessage } from '@/lib/auth/ownership';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { estimateReadingTime } from '@/lib/blog/reading-time';
@@ -68,6 +71,12 @@ export async function PATCH(request: NextRequest, { params }: Params) {
   if (!existing) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
+
+  // A Cloudinary id from the browser must not be one another user's record holds:
+  // deleting this record later destroys the asset with the server's secret.
+  const asset = await checkAssetClaim(createAdminClient(), user.id, body.cover_image_public_id);
+  if (asset.failed) return NextResponse.json({ error: 'Could not verify the image' }, { status: 500 });
+  if (!asset.allowed) return NextResponse.json({ error: invalidReferenceMessage(['cover_image_public_id']) }, { status: 400 });
 
   const newVisibility: PostVisibility = body.visibility || existing.visibility;
   const isNowPublishing =
@@ -176,7 +185,9 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
   }
 
   // Delete Cloudinary cover image if present
-  if (post.cover_image_public_id) {
+  // Only an asset no other user's record holds (one saved before this check
+  // existed could be someone else's image).
+  if (post.cover_image_public_id && await mayDestroyAsset(createAdminClient(), user.id, post.cover_image_public_id)) {
     try {
       await deleteCloudinaryAsset(post.cover_image_public_id);
     } catch (err) {

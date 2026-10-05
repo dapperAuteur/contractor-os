@@ -7,6 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { fireOutboxDrafts } from '@/lib/outbox-trigger';
+import { invalidReferenceMessage, usableReferences, withOwnEmbeds } from '@/lib/auth/ownership';
+import { checkInvoiceReferences, invoiceReferences } from '@/lib/finance/invoice-references';
 import { fireInvoiceIncomeEvent } from '@/lib/events/income-emitter';
 
 function getDb() {
@@ -28,7 +30,7 @@ export async function GET(
   const db = getDb();
   const { data, error } = await db
     .from('invoices')
-    .select('*, invoice_items(*), budget_categories(id, name, color)')
+    .select('*, invoice_items(*), budget_categories(id, user_id, name, color)')
     .eq('id', id)
     .eq('user_id', user.id)
     .maybeSingle();
@@ -48,11 +50,13 @@ export async function GET(
       .from('financial_transactions')
       .select('id, amount, transaction_date, description')
       .eq('id', data.transaction_id)
+      .eq('user_id', user.id)
       .maybeSingle();
     linked_transaction = tx;
   }
 
-  return NextResponse.json({ invoice: data, linked_transaction });
+  // A category_id saved before reference checks could name someone else's category.
+  return NextResponse.json({ invoice: withOwnEmbeds(data, ['budget_categories'], user.id), linked_transaction });
 }
 
 export async function PATCH(
@@ -78,6 +82,12 @@ export async function PATCH(
 
   const body = await request.json();
 
+  // Contact, account, brand and category must be the caller's own; the job may
+  // be one they work as lister or crew.
+  const refs = await checkInvoiceReferences(db, user.id, invoiceReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   // Handle "unmark paid" — revert paid invoice
   if (body.unmark_paid) {
     if (existing.status !== 'paid') {
@@ -86,7 +96,7 @@ export async function PATCH(
 
     // Delete the auto-created transaction
     if (existing.transaction_id) {
-      await db.from('financial_transactions').delete().eq('id', existing.transaction_id);
+      await db.from('financial_transactions').delete().eq('id', existing.transaction_id).eq('user_id', user.id);
     }
 
     const revertStatus = body.revert_to || 'sent';
@@ -140,6 +150,15 @@ export async function PATCH(
       updated_at: new Date().toISOString(),
     };
 
+    // Ids saved on the invoice before reference checks existed are copied onto
+    // the transaction only when they are still the caller's own.
+    const usable = await usableReferences(db, user.id, invoiceReferences({
+      account_id: existing.account_id,
+      brand_id: existing.brand_id,
+      category_id: existing.category_id,
+    }));
+    if (usable.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+
     // Auto-create a financial transaction
     const txType = existing.direction === 'receivable' ? 'income' : 'expense';
     const { data: tx, error: txError } = await db
@@ -152,9 +171,9 @@ export async function PATCH(
         vendor: existing.contact_name,
         transaction_date: paidDate,
         source: 'manual',
-        category_id: existing.category_id,
-        account_id: existing.account_id ?? body.account_id ?? null,
-        brand_id: existing.brand_id,
+        category_id: usable.values.category_id ?? null,
+        account_id: usable.values.account_id ?? body.account_id ?? null,
+        brand_id: usable.values.brand_id ?? null,
       })
       .select('id')
       .single();
@@ -292,14 +311,15 @@ export async function DELETE(
 
   // Clean up linked transaction if exists
   if (existing.transaction_id) {
-    await db.from('financial_transactions').delete().eq('id', existing.transaction_id);
+    await db.from('financial_transactions').delete().eq('id', existing.transaction_id).eq('user_id', user.id);
   }
 
   // Clear invoice_id on linked time entries so they can be re-invoiced
   await db
     .from('job_time_entries')
     .update({ invoice_id: null })
-    .eq('invoice_id', id);
+    .eq('invoice_id', id)
+    .eq('user_id', user.id);
 
   // Revert linked job status from 'invoiced' back to 'completed'
   if (existing.job_id) {

@@ -675,7 +675,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'lister',
     title: 'How to check contractor availability',
-    content: `Go to /dashboard/contractor/lister/availability to check who is available for upcoming dates. Set a date range (defaults to next 7 days). The page shows each contractor in your roster with their availability status — available (green) or busy (red with conflicting job info). This helps you quickly identify who you can assign to a new job without double-booking.`,
+    content: `Go to /dashboard/contractor/lister/availability to check who is available for upcoming dates. Set a date range (defaults to next 7 days). The page shows each contractor in your roster with their availability status — available (green) or busy (red with the conflicting dates). Jobs you listed show their event name; a contractor's other bookings show as "Booked elsewhere" with dates only, to keep their other clients private. Availability needs the lister role. This helps you quickly identify who you can assign to a new job without double-booking.`,
   },
   {
     role: 'lister',

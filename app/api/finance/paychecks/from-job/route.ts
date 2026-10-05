@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { accessibleJobIds } from '@/lib/contractor/job-references';
 
 function getDb() {
   return createServiceClient(
@@ -23,6 +24,13 @@ export async function POST(request: NextRequest) {
   if (!pay_date) return NextResponse.json({ error: 'pay_date is required' }, { status: 400 });
 
   const db = getDb();
+
+  // The job must be one the caller owns, lists, or crews; otherwise 404.
+  const access = await accessibleJobIds(db, user.id, [job_id]);
+  if (access.failed) return NextResponse.json({ error: 'Could not verify job' }, { status: 500 });
+  if (typeof job_id !== 'string' || !access.ids.has(job_id.toLowerCase())) {
+    return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  }
 
   // Fetch un-paychecked invoices for this job
   const { data: invoices } = await db

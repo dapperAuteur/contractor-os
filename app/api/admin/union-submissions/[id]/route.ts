@@ -117,6 +117,31 @@ export async function PATCH(
     return NextResponse.json({ status: 'rejected' });
   }
 
+  // The submission row can be written directly by its owner (its RLS policy is
+  // FOR ALL on user_id), so its URL and replacement target are re-checked here
+  // before the server fetches or deletes anything.
+  // 1. The file must be one Cloudinary served for this app's account: the
+  //    server fetches it, so an arbitrary URL would be a request forgery.
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  if (!cloudName) {
+    return NextResponse.json({ error: 'Cloudinary is not configured' }, { status: 500 });
+  }
+  if (typeof sub.file_url !== 'string' || !sub.file_url.startsWith(`https://res.cloudinary.com/${cloudName}/`)) {
+    return NextResponse.json({ error: 'Submission file is not a Cloudinary upload for this app' }, { status: 400 });
+  }
+  // 2. A replacement may only replace a document the submitter owns.
+  if (sub.replaces_document_id) {
+    const { data: original } = await db
+      .from('union_documents')
+      .select('id')
+      .eq('id', sub.replaces_document_id)
+      .eq('user_id', sub.user_id)
+      .maybeSingle();
+    if (!original) {
+      return NextResponse.json({ error: 'The document this replaces does not belong to the submitter' }, { status: 400 });
+    }
+  }
+
   // Approve — mark as processing, then process the file
   await db.from('union_rag_submissions').update({
     status: 'processing',
@@ -198,7 +223,7 @@ export async function PATCH(
 
     // If this is a replacement, delete the original document (chunks cascade via FK)
     if (sub.replaces_document_id) {
-      await db.from('union_documents').delete().eq('id', sub.replaces_document_id);
+      await db.from('union_documents').delete().eq('id', sub.replaces_document_id).eq('user_id', sub.user_id);
     }
 
     // Mark submission as live

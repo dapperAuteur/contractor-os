@@ -72,7 +72,9 @@ export async function POST(request: NextRequest) {
     if (!item.category_hint || ['grocery', 'produce', 'dairy', 'meat', 'bakery', 'beverage'].includes(item.category_hint)) {
       const { data: ingredientMatches } = await serviceClient
         .from('recipe_ingredients')
-        .select('id, name')
+        // Only ingredients of the caller's own recipes (the service role skips RLS).
+        .select('id, name, recipes!inner(user_id)')
+        .eq('recipes.user_id', user.id)
         .ilike('name', `%${normalized}%`)
         .limit(3);
 

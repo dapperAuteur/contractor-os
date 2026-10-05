@@ -42,7 +42,10 @@ export async function GET(request: NextRequest) {
     const { data: txns } = await db
       .from('financial_transactions')
       .select('id, amount, type')
-      .in('id', uniqueIds);
+      .in('id', uniqueIds)
+      // A tag saved before the tag route checked ownership could name someone
+      // else's transaction: only the caller's own amounts count.
+      .eq('user_id', user.id);
 
     const txMap = new Map((txns || []).map((t) => [t.id, t]));
     transactionAmounts = {};

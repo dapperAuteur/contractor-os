@@ -7,7 +7,8 @@ import {
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 interface BusyJob {
-  job_id: string;
+  /** null when the job is not one you listed: the API names only your own jobs. */
+  job_id: string | null;
   event_name: string | null;
   start_date: string | null;
   end_date: string | null;
@@ -143,11 +144,11 @@ export default function ListerAvailabilityPage() {
                   {c.busy_dates.length > 0 && (
                     <div className="mt-2 space-y-1">
                       <p className="text-xs text-slate-400 font-medium">Conflicting jobs:</p>
-                      {c.busy_dates.map((b) => (
-                        <div key={b.job_id} className="text-xs text-red-400/80 flex gap-2">
+                      {c.busy_dates.map((b, i) => (
+                        <div key={b.job_id ?? `busy-${i}`} className="text-xs text-red-400/80 flex gap-2">
                           <CalendarCheck size={12} className="shrink-0 mt-0.5" aria-hidden="true" />
                           <span>
-                            {b.event_name || 'Unnamed job'}
+                            {b.job_id ? (b.event_name || 'Unnamed job') : 'Booked elsewhere'}
                             {b.start_date && ` (${new Date(b.start_date + 'T00:00:00').toLocaleDateString()}`}
                             {b.end_date && ` – ${new Date(b.end_date + 'T00:00:00').toLocaleDateString()}`}
                             {b.start_date && ')'}

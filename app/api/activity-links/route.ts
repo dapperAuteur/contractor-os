@@ -6,6 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getEntityRule } from '@/lib/activity-links/ownership';
+import { checkOwned } from '@/lib/auth/ownership';
 
 const VALID_TYPES = new Set([
   'task', 'trip', 'route', 'transaction', 'recipe',
@@ -19,12 +21,32 @@ function getDb() {
   );
 }
 
+/**
+ * May the caller reference this record in a link? Their own, or a row its
+ * table's public-read policy would show them (lib/activity-links/ownership.ts).
+ */
+async function mayReference(
+  db: ReturnType<typeof getDb>,
+  userId: string,
+  entityType: unknown,
+  entityId: unknown,
+): Promise<{ allowed: boolean; failed: boolean }> {
+  const rule = getEntityRule(entityType);
+  if (!rule) return { allowed: false, failed: false };
+  return checkOwned(db, userId, rule.table, entityId, { allowPublic: true });
+}
+
 // Resolve a display name for a linked entity
 async function resolveDisplayName(
   db: ReturnType<typeof getDb>,
+  userId: string,
   entityType: string,
   entityId: string,
 ): Promise<string> {
+  // Names are read with the service role: only for records the caller may see.
+  // A link saved before this check existed could point at someone else's record.
+  const access = await mayReference(db, userId, entityType, entityId);
+  if (!access.allowed) return entityType;
   switch (entityType) {
     case 'task': {
       const { data } = await db.from('tasks').select('activity').eq('id', entityId).maybeSingle();
@@ -147,7 +169,7 @@ export async function GET(request: NextRequest) {
       const isSource = link.source_type === entityType && link.source_id === entityId;
       const otherType = isSource ? link.target_type : link.source_type;
       const otherId = isSource ? link.target_id : link.source_id;
-      const displayName = await resolveDisplayName(db, otherType, otherId);
+      const displayName = await resolveDisplayName(db, user.id, otherType, otherId);
       return {
         ...link,
         linked_type: otherType,
@@ -176,6 +198,16 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
+
+  // Both ends must be the caller's own (or public). "Not yours" and "does not
+  // exist" get the same 404.
+  const [source, target] = await Promise.all([
+    mayReference(db, user.id, source_type, source_id),
+    mayReference(db, user.id, target_type, target_id),
+  ]);
+  if (source.failed || target.failed) return NextResponse.json({ error: 'Could not create link' }, { status: 500 });
+  if (!source.allowed || !target.allowed) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
   const { data, error } = await db
     .from('activity_links')
     .insert({
