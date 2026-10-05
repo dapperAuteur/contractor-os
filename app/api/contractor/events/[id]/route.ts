@@ -6,6 +6,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkOwned, checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { jobReferences } from '@/lib/contractor/job-fields';
+
+// Jobs an event may read or change: the caller's own, or ones they list. Another
+// user's job can carry this event_id (a lister links it), and must not be touched.
+const mineOrListed = (userId: string) => `user_id.eq.${userId},lister_id.eq.${userId}`;
 
 function getDb() {
   return createServiceClient(
@@ -39,6 +45,7 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
     .from('contractor_jobs')
     .select('id, job_number, client_name, status, start_date, end_date, pay_rate, event_name')
     .eq('event_id', id)
+    .or(mineOrListed(user.id))
     .order('start_date', { ascending: true });
 
   // Aggregate stats from linked jobs
@@ -110,6 +117,11 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
     return NextResponse.json({ error: 'No valid fields to update' }, { status: 400 });
   }
 
+  // Client, contacts, venue and brand must be the caller's own.
+  const refs = await checkReferences(db, user.id, jobReferences(updates));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
+
   // Update the event
   let event;
   if (Object.keys(updates).length > 0) {
@@ -139,7 +151,8 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
   const { count: linkedJobCount } = await db
     .from('contractor_jobs')
     .select('id', { count: 'exact', head: true })
-    .eq('event_id', id);
+    .eq('event_id', id)
+    .or(mineOrListed(user.id));
 
   // Propagate changes to linked jobs if requested
   let propagatedCount = 0;
@@ -156,6 +169,7 @@ export async function PATCH(request: NextRequest, ctx: Ctx) {
         .from('contractor_jobs')
         .update(jobUpdates)
         .eq('event_id', id)
+        .or(mineOrListed(user.id))
         .select('id');
       propagatedCount = updatedJobs?.length ?? 0;
     }
@@ -176,7 +190,12 @@ export async function DELETE(_request: NextRequest, ctx: Ctx) {
   const { id } = await ctx.params;
   const db = getDb();
 
-  // Unlink all jobs from this event
+  // Ownership first: the unlink below is keyed on the event id.
+  const owned = await checkOwned(db, user.id, 'contractor_events', id);
+  if (owned.failed) return NextResponse.json({ error: 'Could not verify ownership' }, { status: 500 });
+  if (!owned.allowed) return NextResponse.json({ error: 'Event not found' }, { status: 404 });
+
+  // Unlink all jobs from this event (the FK is ON DELETE SET NULL as well)
   await db
     .from('contractor_jobs')
     .update({ event_id: null, updated_at: new Date().toISOString() })

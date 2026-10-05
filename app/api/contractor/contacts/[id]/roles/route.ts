@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkOwned } from '@/lib/auth/ownership';
 
 function getDb() {
   return createServiceClient(
@@ -80,6 +81,13 @@ export async function POST(request: NextRequest, { params }: Params) {
     .maybeSingle();
   if (!job || job.user_id !== user.id) {
     return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  }
+
+  // The event, when given, must be the caller's own.
+  if (event_id) {
+    const evt = await checkOwned(db, user.id, 'contractor_events', event_id);
+    if (evt.failed) return NextResponse.json({ error: 'Could not verify event' }, { status: 500 });
+    if (!evt.allowed) return NextResponse.json({ error: 'Event not found' }, { status: 404 });
   }
 
   const { data: roleData, error } = await db

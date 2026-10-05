@@ -155,6 +155,7 @@ export const TABLE_ACCESS_RULES: Readonly<Record<string, TableAccessRule>> = {
     isPublic: (row) => row.is_public === true,
   },
   scan_images: OWNER_ONLY,
+  contractor_events: OWNER_ONLY, // 149: user_id, contractor_events_owner
 
   // ── Contacts ──
   user_contacts: OWNER_ONLY,

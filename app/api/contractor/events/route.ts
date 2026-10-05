@@ -5,6 +5,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { jobReferences } from '@/lib/contractor/job-fields';
 
 function getDb() {
   return createServiceClient(
@@ -46,7 +48,8 @@ export async function GET(request: NextRequest) {
     const { data: counts } = await db
       .from('contractor_jobs')
       .select('event_id')
-      .in('event_id', eventIds);
+      .in('event_id', eventIds)
+      .or(`user_id.eq.${user.id},lister_id.eq.${user.id}`);
     if (counts) {
       for (const row of counts) {
         jobCounts[row.event_id] = (jobCounts[row.event_id] || 0) + 1;
@@ -89,6 +92,11 @@ export async function POST(request: NextRequest) {
   for (const key of FIELDS) {
     if (key in body) insert[key] = body[key];
   }
+
+  // Client, contacts, venue and brand must be the caller's own.
+  const refs = await checkReferences(db, user.id, jobReferences(insert));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   const { data: event, error } = await db
     .from('contractor_events')

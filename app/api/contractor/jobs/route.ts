@@ -6,6 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { checkOwned, checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
+import { jobReferences } from '@/lib/contractor/job-fields';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { fireOutboxDrafts } from '@/lib/outbox-trigger';
@@ -37,7 +39,12 @@ async function calcDistance(
     let destLat: number | null = null;
     let destLng: number | null = null;
 
-    if (locationId) {
+    // Venue coordinates are read and written only on the caller's own location.
+    const ownsLocation = locationId
+      ? (await checkOwned(db, userId, 'contact_locations', locationId)).allowed
+      : false;
+
+    if (locationId && ownsLocation) {
       const { data: loc } = await db
         .from('contact_locations')
         .select('lat, lng')
@@ -54,7 +61,7 @@ async function calcDistance(
       if (geo) {
         destLat = geo.lat;
         destLng = geo.lng;
-        if (locationId) {
+        if (locationId && ownsLocation) {
           await db.from('contact_locations').update({ lat: geo.lat, lng: geo.lng }).eq('id', locationId);
         }
       }
@@ -130,6 +137,11 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
+
+  // Client, contacts, venue, event and brand must be the caller's own.
+  const refs = await checkReferences(db, user.id, jobReferences(body));
+  if (refs.failed) return NextResponse.json({ error: 'Could not verify references' }, { status: 500 });
+  if (!refs.ok) return NextResponse.json({ error: invalidReferenceMessage(refs.invalid) }, { status: 400 });
 
   // Check job limit from invite record (trial users may have a restricted cap)
   const { data: invite } = await db
