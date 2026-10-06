@@ -2,11 +2,21 @@
 // GET: list documents for a job
 // POST: add a document (Cloudinary URL)
 // DELETE: remove a document (via ?doc_id=)
+//
+// Visibility (plan 14.5, lib/contractor/job-documents.ts): someone on the job
+// (owner, lister, accepted crew) sees the documents they uploaded plus shared
+// ones. A worker's private document is visible only to that worker, whatever
+// the viewer's role. "Not on this job" and "no such job" both answer 404.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { getJobWithRole } from '@/lib/contractor/job-access';
+import {
+  cleanDocumentUrl,
+  jobDocumentsOrFilter,
+  visibleJobDocuments,
+} from '@/lib/contractor/job-documents';
 
 function getDb() {
   return createServiceClient(
@@ -28,22 +38,22 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   const result = await getJobWithRole(db, id, user.id);
   if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  // Workers see shared docs + their own; owners/listers see all
-  let query = db
+  // Every role sees its own uploads plus shared documents; never another
+  // member's private ones.
+  const filter = jobDocumentsOrFilter(user.id);
+  if (!filter) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  const { data, error } = await db
     .from('job_documents')
     .select('*')
     .eq('job_id', id)
+    .or(filter)
     .order('created_at', { ascending: false });
-
-  if (result.role === 'worker') {
-    query = query.or(`user_id.eq.${user.id},is_shared.eq.true`);
-  }
-
-  const { data, error } = await query;
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  return NextResponse.json({ documents: data ?? [] });
+  // Belt and braces: re-apply the rule to what came back.
+  return NextResponse.json({ documents: visibleJobDocuments(data, user.id, true) });
 }
 
 export async function POST(request: NextRequest, ctx: Ctx) {
@@ -61,10 +71,15 @@ export async function POST(request: NextRequest, ctx: Ctx) {
     return NextResponse.json({ error: 'title or name is required' }, { status: 400 });
   }
 
+  const docUrl = cleanDocumentUrl(url);
+  if (docUrl === false) {
+    return NextResponse.json({ error: 'url must be an http(s) link' }, { status: 400 });
+  }
+
   // Verify job access (owner, lister, or accepted worker)
   const db = getDb();
   const result = await getJobWithRole(db, id, user.id);
-  if (!result) return NextResponse.json({ error: 'Job not found' }, { status: 404 });
+  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
   const { data, error } = await db
     .from('job_documents')
@@ -72,13 +87,13 @@ export async function POST(request: NextRequest, ctx: Ctx) {
       job_id: id,
       user_id: user.id,
       name: docTitle,
-      url: url?.trim() || null,
+      url: docUrl,
       doc_type: doc_type ?? 'other',
       doc_category: doc_category ?? null,
       title: docTitle,
       description: description ?? notes ?? null,
       metadata: metadata ?? null,
-      is_shared: is_shared ?? false,
+      is_shared: is_shared === true,
       file_size: file_size ?? null,
       notes: notes ?? null,
     })
@@ -95,18 +110,27 @@ export async function DELETE(request: NextRequest, ctx: Ctx) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  await ctx.params; // consume params
+  const { id } = await ctx.params;
   const docId = request.nextUrl.searchParams.get('doc_id');
   if (!docId) return NextResponse.json({ error: 'doc_id is required' }, { status: 400 });
 
   const db = getDb();
-  const { error } = await db
+  const result = await getJobWithRole(db, id, user.id);
+  if (!result) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  // Only the uploader deletes, and only a document on this job.
+  const { data: deleted, error } = await db
     .from('job_documents')
     .delete()
     .eq('id', docId)
-    .eq('user_id', user.id);
+    .eq('job_id', id)
+    .eq('user_id', user.id)
+    .select('id');
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!deleted || deleted.length === 0) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  }
 
   return NextResponse.json({ success: true });
 }
