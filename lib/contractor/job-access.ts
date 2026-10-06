@@ -1,5 +1,9 @@
 // lib/contractor/job-access.ts
 // Shared helper to check if a user has access to a job and determine their role.
+//
+// Membership here (owner, lister, accepted crew) is the same rule as the SQL
+// helper public.is_contractor_job_member (migration 197). Being on a job does
+// not mean seeing every document on it: see lib/contractor/job-documents.ts.
 
 import type { SupabaseClient } from '@supabase/supabase-js';
 

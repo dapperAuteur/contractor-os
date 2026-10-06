@@ -9,6 +9,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { estimateDrivingDistance, milesToKm } from '@/lib/geo/distance';
 import { geocodeAddress } from '@/lib/geo/geocode';
 import { getJobWithRole } from '@/lib/contractor/job-access';
+import { jobDocumentsOrFilter } from '@/lib/contractor/job-documents';
 import { checkOwned, checkReferences, invalidReferenceMessage } from '@/lib/auth/ownership';
 import { changedReferences } from '@/lib/contractor/job-fields';
 import { fireJobScheduleEvent, fireJobDeletedEvent } from '@/lib/events/schedule-emitter';
@@ -53,7 +54,10 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
     db.from('invoices').select('id', { count: 'exact', head: true }).eq('job_id', id),
     db.from('trips').select('id', { count: 'exact', head: true }).eq('job_id', id),
     db.from('financial_transactions').select('id', { count: 'exact', head: true }).eq('job_id', id),
-    db.from('job_documents').select('id', { count: 'exact', head: true }).eq('job_id', id),
+    // Count only the documents this caller can see (own + shared), so the tab
+    // badge does not reveal other members' private uploads.
+    db.from('job_documents').select('id', { count: 'exact', head: true }).eq('job_id', id)
+      .or(jobDocumentsOrFilter(user.id) ?? 'id.is.null'),
   ]);
 
   return NextResponse.json({

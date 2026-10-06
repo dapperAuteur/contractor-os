@@ -121,6 +121,8 @@ interface Document {
   title: string | null;
   description: string | null;
   metadata: Record<string, unknown> | null;
+  user_id: string;
+  is_shared: boolean;
   created_at: string;
 }
 
@@ -287,7 +289,7 @@ export default function JobDetailPage() {
   const [quickLogOpen, setQuickLogOpen] = useState(false);
   const [statusEditing, setStatusEditing] = useState(false);
   const [newStatus, setNewStatus] = useState('');
-  const [docForm, setDocForm] = useState({ title: '', category: 'note', description: '' });
+  const [docForm, setDocForm] = useState({ title: '', category: 'note', description: '', is_shared: false });
   const [docSaving, setDocSaving] = useState(false);
   const [showDocForm, setShowDocForm] = useState(false);
 
@@ -564,11 +566,12 @@ export default function JobDetailPage() {
         title: docForm.title,
         doc_category: docForm.category,
         description: docForm.description || null,
+        is_shared: docForm.is_shared,
       }),
     });
     setDocSaving(false);
     if (res.ok) {
-      setDocForm({ title: '', category: 'note', description: '' });
+      setDocForm({ title: '', category: 'note', description: '', is_shared: false });
       setShowDocForm(false);
       loadJob();
     }
@@ -1271,6 +1274,22 @@ export default function JobDetailPage() {
                 <label htmlFor="doc-desc" className="block text-sm text-slate-500 mb-1">Description</label>
                 <textarea id="doc-desc" className={inputClass} rows={3} value={docForm.description} onChange={(e) => setDocForm(p => ({ ...p, description: e.target.value }))} />
               </div>
+              <div className="flex items-start gap-2 min-h-11">
+                <input
+                  id="doc-shared"
+                  type="checkbox"
+                  className="mt-1 h-5 w-5 shrink-0"
+                  checked={docForm.is_shared}
+                  onChange={(e) => setDocForm(p => ({ ...p, is_shared: e.target.checked }))}
+                  aria-describedby="doc-shared-help"
+                />
+                <div>
+                  <label htmlFor="doc-shared" className="text-sm text-slate-700">Share with everyone on this job</label>
+                  <p id="doc-shared-help" className="text-xs text-slate-500">
+                    If you leave this unchecked, only you can see it. Shared items are visible to the job owner, the lister and accepted crew.
+                  </p>
+                </div>
+              </div>
               <div className="flex gap-2">
                 <button type="submit" disabled={docSaving} className="rounded-lg bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
                   {docSaving ? <Loader2 size={14} className="animate-spin" /> : 'Save'}
@@ -1309,6 +1328,7 @@ export default function JobDetailPage() {
                             <span className="text-sm font-medium text-slate-900 truncate">{doc.title || doc.name}</span>
                           )}
                           <span className="text-xs text-slate-400 shrink-0">{cat?.label || doc.doc_type}</span>
+                          <span className="text-xs text-slate-500 shrink-0">{doc.is_shared ? 'Shared with job' : 'Only you'}</span>
                         </div>
                         {doc.description && (
                           <p className="text-xs text-slate-500 mt-1">{doc.description}</p>
