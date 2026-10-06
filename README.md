@@ -6,7 +6,7 @@ A contractor management platform for freelance workers and crew coordinators to 
 
 | Category | Features |
 |----------|----------|
-| **Job Management** | Job creation with client/location/scope, multi-day scheduling, event grouping, cost tracking, crew assignment, job comparison |
+| **Job Management** | Job creation with client/location/scope, multi-day scheduling, event grouping, cost tracking, crew assignment, job comparison, job documents (private to the uploader unless shared with the job) |
 | **Time & Invoicing** | Clock in/out with ST/OT/DT, break logging, auto-generated invoices, custom templates, recurring invoices, rate cards |
 | **Finance** | Financial accounts, transaction tracking, budget categories, brand P&L, expected payments, fiscal year customization, CSV import/export |
 | **Travel & Mileage** | Vehicle profiles, fuel logs with FIFO allocation, trip logging with tax tagging, multi-stop routes, templates, maintenance tracking |

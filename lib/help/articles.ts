@@ -560,6 +560,11 @@ export const HELP_ARTICLES: HelpArticle[] = [
     content: `Your jobs are listed at /dashboard/contractor/jobs. Each job shows the client, event name, venue, dates, status, and pay rate. Click any job to see full details including time entries, documents, and notes. Job statuses flow: assigned → confirmed → in_progress → completed → invoiced → paid. You can filter jobs by status, date range, and client. Multi-day jobs show all scheduled dates.`,
   },
   {
+    role: 'all',
+    title: 'Who can see job documents and notes',
+    content: `Open a job and go to the Docs tab. Each document, note or incident report you add is private by default: only you can see it, whatever your role on the job. To show it to the rest of the job, check "Share with everyone on this job" when you add it. Shared items are visible to the job owner, the lister and crew who accepted the job, and to nobody else. Each item in the list is labeled "Shared with job" or "Only you". The job owner and lister do not see a crew member's private documents, such as a W-9 or a certificate; send those to them directly or add them as shared.`,
+  },
+  {
     role: 'contractor',
     title: 'How to log time entries',
     content: `Open any job and scroll to the Time Entries section. Click Add Time Entry. Enter the work date, clock-in time, clock-out time, and break minutes. The system calculates standard hours, overtime hours (over 8h), and double-time hours (over 12h) automatically based on your rate card. You can also manually enter hours if you prefer. Time entries are used to generate invoices.`,
