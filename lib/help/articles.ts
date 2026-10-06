@@ -855,7 +855,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'admin',
     title: 'How to create and send email campaigns',
-    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/courses/equipment/travel). Save as Draft, then click "Send Now" to deliver via Resend. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
+    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/courses/equipment/travel). Save as Draft, then click "Send Now" to deliver by email. Each person gets their own copy, and {{name}} in the body is replaced with their display name. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
   },
   {
     role: 'admin',

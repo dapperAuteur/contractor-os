@@ -26,7 +26,7 @@ A contractor management platform for freelance workers and crew coordinators to 
 - **Auth**: Supabase Auth (email/password + optional MFA)
 - **AI**: Google Gemini 2.5 Flash (document scanning, learning path recommendations, course suggestions)
 - **Payments**: Stripe (subscriptions, course enrollment, Connect payouts, promo codes)
-- **Email**: Resend (campaigns, auth, admin messages)
+- **Email**: Mailgun HTTP API (campaigns, admin messages, notifications); Supabase Auth emails go through Mailgun SMTP
 - **Links**: Switchy.io (tracked short links with marketing pixels)
 - **Media**: Cloudinary
 - **Analytics**: Umami (privacy-first), custom usage events + page views
@@ -87,9 +87,11 @@ VAPID_PRIVATE_KEY=
 VAPID_SUBJECT=                 # mailto: or https: contact; falls back to the https NEXT_PUBLIC_SITE_URL
 CRON_SECRET=
 
-# Email (Resend)
-RESEND_API_KEY=
-RESEND_FROM_EMAIL=             # Work.WitUS address on a Resend-verified domain; unset = email skipped
+# Email (Mailgun) — unset key, domain or sender = email skipped
+MAILGUN_API_KEY=
+MAILGUN_DOMAIN=                # sending domain verified in Mailgun
+EMAIL_FROM=                    # "Work.WitUS <name@MAILGUN_DOMAIN>"
+MAILGUN_REGION=us              # us (default) or eu
 NEXT_PUBLIC_CONTACT_EMAIL=     # shown on /privacy, /terms, /community; unset = link to /dashboard/feedback
 
 # Short Links (Switchy.io)
@@ -184,7 +186,7 @@ contractor-os/
 │   ├── ocr/                   # Gemini vision, document classification
 │   ├── push/                  # Push subscribe + send
 │   ├── offline/               # IndexedDB sync queue, offline fetch
-│   ├── email/                 # Resend client, campaign templates
+│   ├── email/                 # Mailgun client, email templates, campaign templates
 │   ├── features/              # Roadmap data, industry configs, module registry
 │   ├── switchy.ts             # Switchy.io short link API
 │   └── supabase/              # Server & admin Supabase clients
@@ -366,12 +368,22 @@ above.
 
 All email this app sends comes from Work.WitUS, never from a CentenarianOS address:
 
-- **App email (Resend)** uses `RESEND_FROM_EMAIL` only, via `lib/email/sender.ts`. There is no
-  built-in fallback address. When it is unset, notification emails are skipped (logged once),
-  in-app records are still saved, and campaign sends are refused with a clear error.
-- **Login, signup and password emails** are sent by Supabase Auth. Their sender name and address
-  are set in the Work.WitUS Supabase project (Authentication, SMTP settings); the HTML templates
-  live in `lib/email/supabase-templates.ts`.
+- **App email (Mailgun)** goes through `sendEmail()` in `lib/email/mailgun.ts`: Mailgun's HTTP
+  API with `MAILGUN_API_KEY`, `MAILGUN_DOMAIN`, `MAILGUN_REGION` (`us` default, or `eu`) and the
+  sender from `EMAIL_FROM` (`lib/email/sender.ts`). There is no built-in fallback address. When any
+  of the three required values is unset, notification emails are skipped (logged once), in-app
+  records are still saved, a broadcast reports that email was skipped, and campaign sends are
+  refused with a clear error. Open and click tracking are off.
+- **Campaigns and broadcasts** use Mailgun batch sends (up to 1,000 recipients per request, with
+  recipient-variables so each person gets their own copy). `{{name}}` in a campaign body is filled
+  per recipient.
+- **Templates** live in `lib/email/templates/` (functions returning `{ subject, html, text }`,
+  always with a plain-text part). `npm run email:preview` renders every email to
+  `.email-preview/`; `npm run test:email` checks them.
+- **Login, signup and password emails** are sent by Supabase Auth through Mailgun's SMTP (set in
+  the Work.WitUS Supabase project: Authentication, SMTP settings). Their paste-ready HTML and
+  subjects are in `lib/email/supabase-templates.ts` (also written to `.email-preview/supabase-*.html`
+  by the preview script).
 - **Public contact** on `/privacy`, `/terms` and `/community` comes from
   `NEXT_PUBLIC_CONTACT_EMAIL`; when it is unset those pages link to `/dashboard/feedback`.
 
