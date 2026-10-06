@@ -5,8 +5,8 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { getResend } from '@/lib/email/resend';
-import { getSenderEmail } from '@/lib/email/sender';
+import { sendEmail } from '@/lib/email/mailgun';
+import { adminFeedbackReplyNotice } from '@/lib/email/templates';
 import { mirrorFeedbackToInbox } from '@/lib/feedback/inbox-mirror';
 
 function getDb() {
@@ -77,16 +77,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    const from = getSenderEmail();
-    if (adminEmail && from && !isAdmin) {
-      const resend = getResend();
-      await resend.emails.send({
-        from,
+    if (adminEmail && !isAdmin) {
+      // Skipped (logged once) when Mailgun is not configured; the reply is already saved.
+      await sendEmail({
         to: adminEmail,
-        subject: `[Work.WitUS] User replied to feedback`,
-        html: `<p><strong>${user.email}</strong> replied to a feedback thread:</p>
-               <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${body}</blockquote>
-               <p><a href="${siteUrl}/admin/feedback">View in Admin Dashboard →</a></p>`,
+        ...adminFeedbackReplyNotice({ userEmail: user.email ?? '', body, siteUrl }),
+        replyTo: user.email ?? undefined,
+        tags: ['admin-notice', 'feedback-reply'],
       });
     }
   } catch (e) {

@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test:scrub": "node --test --experimental-strip-types tests/sentry-scrub.test.ts",
     "test:sso": "node --test --experimental-strip-types tests/witus-sso.test.ts",
-    "test:email": "node --test --experimental-strip-types tests/email-sender.test.ts",
+    "test:email": "node --test --experimental-strip-types tests/email-sender.test.ts tests/email-mailgun.test.ts tests/email-templates.test.ts",
+    "email:preview": "node --experimental-strip-types scripts/email-preview.ts",
     "test:auth": "node --test --experimental-strip-types tests/ownership.test.ts tests/travel-references.test.ts tests/invoice-references.test.ts tests/activity-link-ownership.test.ts tests/job-references.test.ts tests/asset-guard.test.ts tests/job-fields.test.ts tests/message-visibility.test.ts tests/admin-guard.test.ts tests/job-documents.test.ts"
   },
   "dependencies": {
@@ -49,7 +50,6 @@
     "react-dom": "19.1.0",
     "react-webcam": "^7.2.0",
     "recharts": "^3.3.0",
-    "resend": "^6.9.2",
     "slugify": "^1.6.6",
     "stripe": "^20.3.1",
     "tailwind-merge": "^3.3.1",

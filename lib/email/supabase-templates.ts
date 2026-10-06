@@ -1,246 +1,114 @@
-// lib/email/supabase-templates.ts
-// HTML email templates for Supabase Auth email configuration.
-// Copy the HTML from each export and paste into Supabase Dashboard → Authentication → Email Templates.
-// Variables: {{ .ConfirmationURL }}, {{ .Token }}, {{ .SiteURL }}
+// File: lib/email/supabase-templates.ts
+// Paste-ready Work.WitUS templates for Supabase Auth emails. Supabase sends these itself (through
+// the SMTP settings in the Supabase dashboard, which should point at Mailgun's SMTP), so they are
+// static HTML strings with Supabase's Go-template variables, not functions.
+//
+// To install: `npm run email:preview` writes each one to .email-preview/supabase-*.html (with the
+// footer contact taken from NEXT_PUBLIC_CONTACT_EMAIL in your shell). Paste the HTML and the
+// subject into Supabase Dashboard → Authentication → Email Templates → <dashboardName>.
+//
+// Variables (Supabase docs: Auth → Email Templates):
+//   {{ .ConfirmationURL }}  sign-in / confirm link      {{ .Token }}  6-digit one-time code
+//   {{ .SiteURL }}          the project's Site URL       {{ .NewEmail }} (change email only)
+//
+// The login and signup pages accept either the link or the 6-digit code, so the magic-link and
+// confirm-signup emails carry both. Reauthentication is code-only in Supabase.
+//
+// Supabase sends HTML only; it builds no plain-text part from these. Every template is real text
+// (no images) so it still reads in a text-first client.
+//
+// Pure, no '@/' imports.
 
-const HEADER = `
-          <!-- Header -->
-          <tr>
-            <td style="background:#0a0a0a;padding:32px 40px;">
-              <p style="margin:0;color:#fbbf24;font-size:22px;font-weight:700;">WitUS</p>
-              <p style="margin:6px 0 0;color:rgba(255,255,255,.6);font-size:12px;">Work.WitUS — Powered by WitUS.online</p>
-            </td>
-          </tr>`;
+import { BRAND, renderLayout } from './templates/layout.ts';
 
-const FOOTER = `
-          <!-- Footer -->
-          <tr>
-            <td style="padding:24px 40px;border-top:1px solid #262626;background:#0a0a0a;color:#a3a3a3;font-size:12px;line-height:1.6;">
-              If you did not request this email, you can safely ignore it.
-              <br><br>&copy; ${new Date().getFullYear()} WitUS. Powered by <a href="https://witus.online" style="color:#fbbf24;text-decoration:none;">WitUS.online</a>, a B4C LLC brand.
-            </td>
-          </tr>`;
+const SITE = '{{ .SiteURL }}';
+const IGNORE = 'If you did not request this email, you can ignore it. Nothing changes until the link or code is used.';
 
-function wrap(title: string, bodyRows: string): string {
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>${title}</title>
-</head>
-<body style="margin:0;padding:0;background:#171717;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background:#171717;padding:40px 20px;">
-    <tr>
-      <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background:#1c1c1c;border-radius:12px;overflow:hidden;border:1px solid #333;">
-${HEADER}
-${bodyRows}
-${FOOTER}
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
-</html>`;
+function codeBlock(): string {
+  return `<p style="margin:0 0 8px;">Or enter this 6-digit code:</p>
+      <p style="margin:0 0 16px;font-size:28px;font-weight:700;letter-spacing:6px;font-family:Menlo,Consolas,monospace;color:${BRAND.text};">{{ .Token }}</p>`;
 }
 
-/**
- * Confirm Signup — sent when a user signs up to verify their email.
- * Supabase variable: {{ .ConfirmationURL }}
- */
-export const confirmSignup = wrap(
-  'Confirm Your Email',
-  `
-          <tr>
-            <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#f5f5f5;">Welcome to Work.WitUS</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 40px 24px;color:#d4d4d4;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">Thanks for signing up! Please confirm your email address to get started.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
-                Confirm Email Address
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;color:#a3a3a3;font-size:13px;">
-              Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#fbbf24;word-break:break-all;">{{ .ConfirmationURL }}</a>
-            </td>
-          </tr>`,
-);
+function p(text: string): string {
+  return `<p style="margin:0 0 16px;">${text}</p>`;
+}
 
-/**
- * Magic Link — sent when a user requests a passwordless login.
- * Supabase variable: {{ .ConfirmationURL }}
- */
-export const magicLink = wrap(
-  'Your Sign-In Link',
-  `
-          <tr>
-            <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#f5f5f5;">Sign In to Work.WitUS</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 40px 24px;color:#d4d4d4;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">Click the button below to sign in. This link expires in 24 hours and can only be used once.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
-                Sign In
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;color:#a3a3a3;font-size:13px;">
-              Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#fbbf24;word-break:break-all;">{{ .ConfirmationURL }}</a>
-            </td>
-          </tr>`,
-);
+export interface SupabaseAuthTemplate {
+  key: string;
+  /** The template's name in Supabase Dashboard → Authentication → Email Templates. */
+  dashboardName: string;
+  subject: string;
+  html: string;
+}
 
-/**
- * Change Email Address — sent when a user requests to change their email.
- * Supabase variable: {{ .ConfirmationURL }}
- */
-export const changeEmail = wrap(
-  'Confirm Email Change',
-  `
-          <tr>
-            <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#f5f5f5;">Confirm Your New Email</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 40px 24px;color:#d4d4d4;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">You requested to change your email address on Work.WitUS. Click the button below to confirm this change.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
-                Confirm New Email
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;color:#a3a3a3;font-size:13px;">
-              Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#fbbf24;word-break:break-all;">{{ .ConfirmationURL }}</a>
-            </td>
-          </tr>`,
-);
+/** Magic Link — passwordless sign-in. The login page accepts the link or the 6-digit code. */
+export const magicLink = renderLayout({
+  heading: 'Sign in to Work.WitUS',
+  preheader: 'Your sign-in link and code',
+  bodyHtml: p('Use the button below to sign in. The link and the code work once and expire soon.') + codeBlock(),
+  cta: { label: 'Sign in', url: '{{ .ConfirmationURL }}' },
+  reason: IGNORE,
+  siteUrl: SITE,
+});
 
-/**
- * Reset Password — sent when a user requests a password reset.
- * Supabase variable: {{ .ConfirmationURL }}
- */
-export const resetPassword = wrap(
-  'Reset Your Password',
-  `
-          <tr>
-            <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#f5f5f5;">Reset Your Password</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 40px 24px;color:#d4d4d4;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">We received a request to reset your password. Click the button below to choose a new one.</p>
-              <p style="margin:0 0 16px;color:#a3a3a3;font-size:14px;">This link expires in 24 hours. If you didn&rsquo;t request this, you can safely ignore this email.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
-                Reset Password
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;color:#a3a3a3;font-size:13px;">
-              Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#fbbf24;word-break:break-all;">{{ .ConfirmationURL }}</a>
-            </td>
-          </tr>`,
-);
+/** Confirm Signup — new account (email + password, or the signup page's code flow). */
+export const confirmSignup = renderLayout({
+  heading: 'Confirm your email',
+  preheader: 'Confirm your email to finish creating your Work.WitUS account',
+  bodyHtml: p(`Thanks for signing up for ${BRAND.name}. Confirm your email address to finish creating your account.`) + codeBlock(),
+  cta: { label: 'Confirm email address', url: '{{ .ConfirmationURL }}' },
+  reason: IGNORE,
+  siteUrl: SITE,
+});
 
-/**
- * Reauthentication — sent when a user needs to verify identity for a sensitive action.
- * Supabase variable: {{ .ConfirmationURL }}
- */
-export const reauthentication = wrap(
-  'Verify Your Identity',
-  `
-          <tr>
-            <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#f5f5f5;">Verify Your Identity</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 40px 24px;color:#d4d4d4;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">For your security, please verify your identity to continue with the requested action on Work.WitUS.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
-                Verify Identity
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;color:#a3a3a3;font-size:13px;">
-              Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#fbbf24;word-break:break-all;">{{ .ConfirmationURL }}</a>
-            </td>
-          </tr>`,
-);
+/** Invite User — an admin or a contractor invited someone. */
+export const invite = renderLayout({
+  heading: 'You are invited to Work.WitUS',
+  preheader: 'Accept your invitation to Work.WitUS',
+  bodyHtml:
+    p(`You have been invited to join ${BRAND.name}: job tracking, invoicing and business tools for independent contractors.`) +
+    p('Accept the invitation to set up your account.'),
+  cta: { label: 'Accept invitation', url: '{{ .ConfirmationURL }}' },
+  reason: 'If you were not expecting this invitation, you can ignore this email.',
+  siteUrl: SITE,
+});
 
-/**
- * Invite User — sent when an admin invites a new user via Supabase auth.
- * Supabase variable: {{ .ConfirmationURL }}
- */
-export const invite = wrap(
-  "You're Invited to Work.WitUS",
-  `
-          <tr>
-            <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#f5f5f5;">You&rsquo;re Invited!</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:16px 40px 24px;color:#d4d4d4;font-size:15px;line-height:1.6;">
-              <p style="margin:0 0 16px;">You&rsquo;ve been invited to join Work.WitUS — job tracking, invoicing, and business tools for independent contractors.</p>
-              <p style="margin:0 0 16px;">Click the button below to accept your invitation and set up your account.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
-                Accept Invitation
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 40px 32px;color:#a3a3a3;font-size:13px;">
-              Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#fbbf24;word-break:break-all;">{{ .ConfirmationURL }}</a>
-            </td>
-          </tr>`,
-);
+/** Change Email Address — confirm the new address. */
+export const changeEmail = renderLayout({
+  heading: 'Confirm your new email address',
+  preheader: 'Confirm the change to your Work.WitUS email address',
+  bodyHtml: p(`You asked to change the email address on your ${BRAND.name} account to {{ .NewEmail }}. Confirm the change below.`),
+  cta: { label: 'Confirm email change', url: '{{ .ConfirmationURL }}' },
+  reason: 'If you did not ask for this change, ignore this email and your address stays the same.',
+  siteUrl: SITE,
+});
+
+/** Reset Password. */
+export const resetPassword = renderLayout({
+  heading: 'Reset your password',
+  preheader: 'Reset your Work.WitUS password',
+  bodyHtml: p('We received a request to reset your password. Choose a new one below. The link works once and expires soon.'),
+  cta: { label: 'Reset password', url: '{{ .ConfirmationURL }}' },
+  reason: 'If you did not ask to reset your password, ignore this email. Your password stays the same.',
+  siteUrl: SITE,
+});
+
+/** Reauthentication — code-only in Supabase. */
+export const reauthentication = renderLayout({
+  heading: 'Confirm it is you',
+  preheader: 'Your Work.WitUS verification code',
+  bodyHtml:
+    p(`Enter this code in ${BRAND.name} to continue:`) +
+    `<p style="margin:0 0 16px;font-size:28px;font-weight:700;letter-spacing:6px;font-family:Menlo,Consolas,monospace;color:${BRAND.text};">{{ .Token }}</p>`,
+  reason: 'If you did not start this, ignore this email and consider changing your password.',
+  siteUrl: SITE,
+});
+
+export const SUPABASE_AUTH_TEMPLATES: SupabaseAuthTemplate[] = [
+  { key: 'magic-link', dashboardName: 'Magic Link', subject: 'Your Work.WitUS sign-in link and code', html: magicLink },
+  { key: 'confirm-signup', dashboardName: 'Confirm signup', subject: 'Confirm your Work.WitUS email', html: confirmSignup },
+  { key: 'invite', dashboardName: 'Invite user', subject: 'You are invited to Work.WitUS', html: invite },
+  { key: 'change-email', dashboardName: 'Change Email Address', subject: 'Confirm your new Work.WitUS email address', html: changeEmail },
+  { key: 'reset-password', dashboardName: 'Reset Password', subject: 'Reset your Work.WitUS password', html: resetPassword },
+  { key: 'reauthentication', dashboardName: 'Reauthentication', subject: 'Your Work.WitUS verification code', html: reauthentication },
+];

@@ -5,9 +5,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { getResend } from '@/lib/email/resend';
-import { getSenderEmail } from '@/lib/email/sender';
-import { canSeeAdminMessage, escapeHtml, visibleReply } from '@/lib/messages/visibility';
+import { sendEmail } from '@/lib/email/mailgun';
+import { adminMessageReplyNotice } from '@/lib/email/templates';
+import { canSeeAdminMessage, visibleReply } from '@/lib/messages/visibility';
 
 function getDb() {
   return createServiceClient(
@@ -106,17 +106,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    const from = getSenderEmail();
-    if (adminEmail && from && !isAdmin) {
-      const subject = thread.subject ?? '';
-      const resend = getResend();
-      await resend.emails.send({
-        from,
+    if (adminEmail && !isAdmin) {
+      // Skipped (logged once) when Mailgun is not configured; the reply is already saved.
+      await sendEmail({
         to: adminEmail,
-        subject: `[Work.WitUS] User replied to: ${subject || 'a message'}`,
-        html: `<p><strong>${escapeHtml(user.email ?? '')}</strong> replied to your message "${escapeHtml(subject)}":</p>
-               <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${escapeHtml(body)}</blockquote>
-               <p><a href="${siteUrl}/admin/messages">View in Admin Dashboard →</a></p>`,
+        ...adminMessageReplyNotice({ userEmail: user.email ?? '', subject: thread.subject, body, siteUrl }),
+        replyTo: user.email ?? undefined,
+        tags: ['admin-notice', 'message-reply'],
       });
     }
   } catch (e) {

@@ -3,9 +3,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getResend } from '@/lib/email/resend';
-import { getSenderEmail } from '@/lib/email/sender';
-import { adminMessageTemplate } from '@/lib/email/adminMessageTemplate';
+import { chunk, mailConfigured, sendEmail } from '@/lib/email/mailgun';
+import { adminMessageEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getServiceClient() {
@@ -78,30 +77,22 @@ export async function POST(request: NextRequest) {
     emails = allUsers.filter((u) => ids.has(u.id) && u.email).map((u) => u.email as string);
   }
 
-  // Send emails via Resend in batches
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-  const html = adminMessageTemplate({ subject, body, siteUrl });
-  // The in-app message is already saved. With no verified sender configured, skip only the email
-  // copy and say so, rather than failing the request.
-  const fromEmail = getSenderEmail();
-  if (!fromEmail) {
+  // The in-app message is already saved. With Mailgun not configured (MAILGUN_API_KEY,
+  // MAILGUN_DOMAIN, EMAIL_FROM), skip only the email copy and say so, rather than failing.
+  if (!mailConfigured()) {
     return NextResponse.json({ ok: true, messageId: message.id, sent: 0, total: emails.length, emailSkipped: true });
   }
-  const resend = getResend();
 
+  // Email copies via Mailgun batch sends: one request per 1,000 recipients (Mailgun's batch cap).
+  // sendEmail adds recipient-variables for multi-recipient sends, so each person sees only their
+  // own address in To.
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const rendered = adminMessageEmail({ subject, body, siteUrl });
   let sent = 0;
-  for (const email of emails) {
-    try {
-      await resend.emails.send({
-        from: fromEmail,
-        to: email,
-        subject,
-        html,
-      });
-      sent++;
-    } catch (e) {
-      console.error('Failed to send email to', email, e);
-    }
+  for (const group of chunk(emails)) {
+    const result = await sendEmail({ to: group, ...rendered, tags: ['admin-message'] });
+    if (result.sent) sent += group.length;
+    else console.error('[admin-messages] Batch send failed:', result.reason, result.status ?? '');
   }
 
   return NextResponse.json({ ok: true, messageId: message.id, sent, total: emails.length });

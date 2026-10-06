@@ -4,8 +4,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import { getResend } from '@/lib/email/resend';
-import { getSenderEmail } from '@/lib/email/sender';
+import { sendEmail } from '@/lib/email/mailgun';
+import { feedbackReplyEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
@@ -77,18 +77,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const { data: authUser } = await db.auth.admin.getUserById(feedback.user_id);
     const userEmail = authUser?.user?.email;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    const from = getSenderEmail();
-    if (userEmail && from) {
-      const resend = getResend();
-      await resend.emails.send({
-        from,
-        to: userEmail,
-        subject: 'Work.WitUS team replied to your feedback',
-        html: `<p>The Work.WitUS team replied to your feedback submission:</p>
-               <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${body}</blockquote>
-               <p><a href="${siteUrl}/dashboard/feedback">View your feedback history →</a></p>
-               <p style="color:#9ca3af;font-size:12px;">— Work.WitUS Team</p>`,
-      });
+    if (userEmail) {
+      // Skipped (logged once) when Mailgun is not configured; the reply is already saved.
+      await sendEmail({ to: userEmail, ...feedbackReplyEmail({ body, siteUrl }), tags: ['feedback-reply'] });
     }
   } catch (e) {
     console.error('[admin-feedback-reply] Email failed:', e);

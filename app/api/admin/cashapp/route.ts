@@ -6,8 +6,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createShopifyPromoCode } from '@/lib/shopify/createPromoCode';
 import { incrementCampaignUses } from '@/lib/promo/active-lifetime-promo';
-import { getResend } from '@/lib/email/resend';
-import { getSenderEmail } from '@/lib/email/sender';
+import { sendEmail } from '@/lib/email/mailgun';
+import { cashappRejectedEmail, cashappVerifiedEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
@@ -80,18 +80,19 @@ export async function PATCH(request: NextRequest) {
       verified_at: new Date().toISOString(),
     }).eq('id', id);
 
-    // Notify user of rejection
-    const from = getSenderEmail();
-    if (userEmail && from) {
-      try {
-        const resend = getResend();
-        await resend.emails.send({
-          from,
-          to: userEmail,
-          subject: 'Work.WitUS — CashApp Payment Update',
-          html: buildRejectionEmail(userProfile?.display_name || userProfile?.username || 'there', admin_notes),
-        });
-      } catch { /* non-critical */ }
+    // Notify user of rejection. Non-critical: sendEmail never throws, and skips when Mailgun is
+    // not configured.
+    if (userEmail) {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.online';
+      await sendEmail({
+        to: userEmail,
+        ...cashappRejectedEmail({
+          name: userProfile?.display_name || userProfile?.username || 'there',
+          adminNotes: admin_notes ?? null,
+          siteUrl,
+        }),
+        tags: ['cashapp', 'cashapp-rejected'],
+      });
     }
 
     return NextResponse.json({ status: 'rejected' });
@@ -131,80 +132,19 @@ export async function PATCH(request: NextRequest) {
     } catch { /* non-critical — admin can re-run if needed */ }
   }
 
-  // Notify user of verification via email
-  const from = getSenderEmail();
-  if (userEmail && from) {
-    try {
-      const resend = getResend();
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.online';
-      await resend.emails.send({
-        from,
-        to: userEmail,
-        subject: 'Work.WitUS — Your Lifetime Membership is Active! 🎉',
-        html: buildVerificationEmail(
-          userProfile?.display_name || userProfile?.username || 'there',
-          promoCode,
-          siteUrl,
-        ),
-      });
-    } catch { /* non-critical */ }
+  // Notify user of verification via email (non-critical; skipped when Mailgun is not configured)
+  if (userEmail) {
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.online';
+    await sendEmail({
+      to: userEmail,
+      ...cashappVerifiedEmail({
+        name: userProfile?.display_name || userProfile?.username || 'there',
+        promoCode,
+        siteUrl,
+      }),
+      tags: ['cashapp', 'cashapp-verified'],
+    });
   }
 
   return NextResponse.json({ status: 'verified', promo_code: promoCode });
-}
-
-// ─── Email Templates ────────────────────────────────────────────────
-
-function buildVerificationEmail(name: string, promoCode: string | null, siteUrl: string): string {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lifetime Active</title></head>
-<body style="margin:0;padding:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-<div style="max-width:600px;margin:0 auto;padding:24px 16px;">
-<div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:32px 24px;">
-  <div style="text-align:center;padding-bottom:24px;border-bottom:1px solid #e2e8f0;margin-bottom:24px;">
-    <a href="${siteUrl}" style="font-size:20px;font-weight:800;color:#d97706;text-decoration:none;">Work.WitUS</a>
-  </div>
-  <h1 style="font-size:22px;color:#0f172a;margin:0 0 12px;">Your Lifetime Membership is Active!</h1>
-  <p style="font-size:15px;color:#475569;line-height:1.6;">Hey ${name},</p>
-  <p style="font-size:15px;color:#475569;line-height:1.6;">Your CashApp payment has been verified and your <strong>Lifetime membership</strong> is now active. You have full, unlimited access to every feature — forever. No renewals, no expiration.</p>
-  ${promoCode ? `
-  <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:16px;margin:16px 0;text-align:center;">
-    <p style="font-size:13px;color:#92400e;margin:0 0 4px;">Your free shirt promo code:</p>
-    <p style="font-size:20px;font-weight:700;color:#d97706;margin:0;font-family:monospace;">${promoCode}</p>
-    <p style="font-size:12px;color:#92400e;margin:4px 0 0;">Use it at checkout in our merch store!</p>
-  </div>` : ''}
-  <p style="text-align:center;margin:24px 0;">
-    <a href="${siteUrl}/dashboard/contractor" style="display:inline-block;background:#d97706;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:15px;">Go to Dashboard</a>
-  </p>
-  <p style="font-size:15px;color:#475569;line-height:1.6;">Welcome to the founding crew. 🤝</p>
-</div>
-<div style="text-align:center;padding-top:24px;font-size:12px;color:#94a3b8;">
-  <p>&copy; ${new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-</div>
-</div>
-</body></html>`;
-}
-
-function buildRejectionEmail(name: string, adminNotes: string | null): string {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Payment Update</title></head>
-<body style="margin:0;padding:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-<div style="max-width:600px;margin:0 auto;padding:24px 16px;">
-<div style="background:#fff;border-radius:12px;border:1px solid #e2e8f0;padding:32px 24px;">
-  <div style="text-align:center;padding-bottom:24px;border-bottom:1px solid #e2e8f0;margin-bottom:24px;">
-    <span style="font-size:20px;font-weight:800;color:#d97706;">Work.WitUS</span>
-  </div>
-  <h1 style="font-size:22px;color:#0f172a;margin:0 0 12px;">CashApp Payment Update</h1>
-  <p style="font-size:15px;color:#475569;line-height:1.6;">Hey ${name},</p>
-  <p style="font-size:15px;color:#475569;line-height:1.6;">We were unable to verify your CashApp payment. This usually means the payment wasn't received or the CashApp name didn't match.</p>
-  ${adminNotes ? `<p style="font-size:14px;color:#64748b;line-height:1.6;background:#f1f5f9;padding:12px;border-radius:8px;"><strong>Note:</strong> ${adminNotes}</p>` : ''}
-  <p style="font-size:15px;color:#475569;line-height:1.6;">If you believe this is an error, please reply to this email or use the in-app feedback form and we'll sort it out.</p>
-</div>
-<div style="text-align:center;padding-top:24px;font-size:12px;color:#94a3b8;">
-  <p>&copy; ${new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-</div>
-</div>
-</body></html>`;
 }

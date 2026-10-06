@@ -1,11 +1,18 @@
 // app/api/admin/campaigns/[id]/send/route.ts
-// POST: send a campaign to its audience segment via Resend
+// POST: send a campaign to its audience segment via Mailgun.
+//
+// Sending: Mailgun batch sends, one request per MAILGUN_BATCH_MAX (1,000) recipients, with
+// recipient-variables so each person gets their own copy (only their address in To) and their
+// own {{name}} (sent to Mailgun as %recipient.name%). One request per thousand keeps a send of a
+// few thousand users well inside the function time limit, where the old one-request-per-user
+// loop did not. A batch fails or succeeds as a whole, so its email_sends rows are written
+// together with the same status.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { getResend } from '@/lib/email/resend';
-import { getSenderEmail } from '@/lib/email/sender';
+import { chunk, mailConfigured, sendEmail } from '@/lib/email/mailgun';
 import { renderTemplate } from '@/lib/email/campaign-templates';
+import { campaignEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
@@ -46,12 +53,14 @@ export async function POST(_req: NextRequest, { params }: Params) {
     return NextResponse.json({ error: 'Campaign already sent or in progress' }, { status: 409 });
   }
 
-  // No verified Work.WitUS sender configured: refuse before touching the campaign, so it stays a
-  // draft and can be sent once RESEND_FROM_EMAIL is set.
-  const fromEmail = getSenderEmail();
-  if (!fromEmail) {
+  // Mailgun not configured: refuse before touching the campaign, so it stays a draft and can be
+  // sent once MAILGUN_API_KEY, MAILGUN_DOMAIN and EMAIL_FROM are set.
+  if (!mailConfigured()) {
     return NextResponse.json(
-      { error: 'Email sending is not configured (RESEND_FROM_EMAIL is not set). The campaign was not sent.' },
+      {
+        error:
+          'Email sending is not configured (MAILGUN_API_KEY, MAILGUN_DOMAIN or EMAIL_FROM is not set). The campaign was not sent.',
+      },
       { status: 503 },
     );
   }
@@ -146,51 +155,40 @@ export async function POST(_req: NextRequest, { params }: Params) {
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-    const resend = getResend();
+    // {{name}} becomes a Mailgun recipient variable; everything else is the same for everyone.
+    const body = renderTemplate(campaign.body_html, { siteUrl, name: '%recipient.name%' });
+    const rendered = campaignEmail({ subject: campaign.subject, bodyHtml: body, siteUrl });
 
     let sentCount = 0;
     let failedCount = 0;
 
-    // Send in batches of 50
-    const batchSize = 50;
-    for (let i = 0; i < filteredRecipients.length; i += batchSize) {
-      const batch = filteredRecipients.slice(i, i + batchSize);
+    for (const group of chunk(filteredRecipients)) {
+      const recipientVariables: Record<string, { name: string }> = {};
+      for (const r of group) recipientVariables[r.email] = { name: safeName(r.display_name) };
 
-      const sendPromises = batch.map(async (recipient) => {
-        const html = renderTemplate(campaign.body_html, {
-          siteUrl,
-          name: recipient.display_name || 'there',
-        });
-
-        try {
-          await resend.emails.send({
-            from: fromEmail,
-            to: recipient.email,
-            subject: campaign.subject,
-            html,
-          });
-
-          await db.from('email_sends').insert({
-            campaign_id: id,
-            user_id: recipient.id,
-            email: recipient.email,
-            status: 'sent',
-            sent_at: new Date().toISOString(),
-          });
-          sentCount++;
-        } catch (err) {
-          await db.from('email_sends').insert({
-            campaign_id: id,
-            user_id: recipient.id,
-            email: recipient.email,
-            status: 'failed',
-            error_message: err instanceof Error ? err.message : 'Unknown error',
-          });
-          failedCount++;
-        }
+      const result = await sendEmail({
+        to: group.map((r) => r.email),
+        ...rendered,
+        recipientVariables,
+        tags: ['campaign', `campaign-${id}`.slice(0, 128)],
       });
 
-      await Promise.all(sendPromises);
+      const now = new Date().toISOString();
+      await db.from('email_sends').insert(
+        group.map((r) =>
+          result.sent
+            ? { campaign_id: id, user_id: r.id, email: r.email, status: 'sent', sent_at: now }
+            : {
+                campaign_id: id,
+                user_id: r.id,
+                email: r.email,
+                status: 'failed',
+                error_message: `${result.reason}${result.status ? ` (${result.status})` : ''}${result.error ? `: ${result.error}` : ''}`.slice(0, 500),
+              },
+        ),
+      );
+      if (result.sent) sentCount += group.length;
+      else failedCount += group.length;
     }
 
     // Update campaign status
@@ -206,4 +204,10 @@ export async function POST(_req: NextRequest, { params }: Params) {
     console.error('[Campaigns] Send failed:', err);
     return NextResponse.json({ error: 'Send failed' }, { status: 500 });
   }
+}
+
+/** Display name for the {{name}} slot: plain text only, since Mailgun puts it in both parts. */
+function safeName(displayName: string | null | undefined): string {
+  const cleaned = (displayName ?? '').replace(/[<>&"]/g, '').trim().slice(0, 80);
+  return cleaned || 'there';
 }

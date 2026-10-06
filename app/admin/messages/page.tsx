@@ -232,7 +232,7 @@ function AdminMessagesPage() {
       setResult({
         type: 'ok',
         text: d.emailSkipped
-          ? 'Message posted in the app. Email copies were not sent because RESEND_FROM_EMAIL is not set.'
+          ? 'Message posted in the app. Email copies were not sent because Mailgun is not configured (MAILGUN_API_KEY, MAILGUN_DOMAIN, EMAIL_FROM).'
           : `Sent to ${d.sent} / ${d.total} recipients.`,
       });
       setSubject('');
