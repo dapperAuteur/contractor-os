@@ -3,8 +3,8 @@
 // Approve triggers: download file → extract text → chunk → embed → create union_document as shared
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 export const maxDuration = 120;
 
@@ -76,11 +76,8 @@ export async function PATCH(
   { params }: { params: Promise<{ id: string }> },
 ) {
   const { id } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const { action, admin_notes } = body as { action: string; admin_notes?: string };

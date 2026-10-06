@@ -5,7 +5,7 @@
 //   reject           → marks request rejected with optional admin_note
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { requireAdmin } from '@/lib/auth/require-admin';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 
 function getDb() {
@@ -25,15 +25,12 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  // Admin check: the same ADMIN_EMAIL rule every other admin route uses.
+  // Admin check: the shared requireAdmin() rule (ADMIN_EMAIL + two-factor verified).
   // profiles.is_admin was read with the user's own client, and the profiles
   // RLS policy lets a user write their own row, so it proved nothing.
-  const adminEmail = process.env.ADMIN_EMAIL;
-  if (!adminEmail || user.email !== adminEmail) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const user = auth.user;
 
   const { id } = await params;
   const { action, admin_note } = await request.json();

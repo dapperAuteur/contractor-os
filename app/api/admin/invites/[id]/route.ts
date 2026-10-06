@@ -2,8 +2,8 @@
 // PATCH: update invite fields. DELETE: hard-delete invite.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient as createSessionClient } from '@/lib/supabase/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function serviceDb() {
   return createClient(
@@ -12,18 +12,11 @@ function serviceDb() {
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createSessionClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 const PATCHABLE = ['access_type', 'expires_at', 'is_active', 'allowed_modules', 'notes', 'demo_profile', 'is_paid', 'paid_at', 'subscription_tier', 'job_limit'];
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { id } = await params;
   const body = await request.json();
@@ -46,8 +39,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 }
 
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { id } = await params;
   const db = serviceDb();

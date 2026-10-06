@@ -199,7 +199,15 @@ contractor-os/
 
 ## Admin Dashboard
 
-The admin panel (`/admin`) includes:
+The admin panel (`/admin`) is for the `ADMIN_EMAIL` account only, and **every admin API requires
+two-factor sign-in**. The shared guard `lib/auth/require-admin.ts` (`requireAdmin()`) answers 401 when
+signed out, 403 for anyone else, and 403 with `code: "mfa_required"` for the admin account when the
+session has not passed a second factor (aal2). An admin account with no authenticator enrolled must
+turn on two-factor in **Settings**, then sign in again; until then the admin pages show a notice and
+their panels stay empty. The only exceptions are the cron routes guarded by `CRON_SECRET`
+(`/api/admin/demo/setup`, and the `GET` of `/api/admin/demo/reset`).
+
+The admin panel includes:
 
 - **Overview** — user stats, MRR, lifetime revenue
 - **Users** — search, filter by subscription, manage accounts

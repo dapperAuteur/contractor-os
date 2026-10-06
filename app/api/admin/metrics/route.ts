@@ -3,8 +3,8 @@
 // PATCH — update a metric_config row (is_globally_enabled, is_locked, etc.)
 
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { createClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function adminClient() {
   return createServiceClient(
@@ -13,16 +13,9 @@ function adminClient() {
   );
 }
 
-async function assertAdmin() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function GET() {
-  const user = await assertAdmin();
-  if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const admin = adminClient();
   const { data, error } = await admin
@@ -35,8 +28,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const user = await assertAdmin();
-  if (!user) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   let body: { metricKey?: string; updates?: Record<string, unknown> };
   try {

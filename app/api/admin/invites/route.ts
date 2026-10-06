@@ -4,8 +4,8 @@
 // POST: create invite + send Supabase magic link.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient as createSessionClient } from '@/lib/supabase/server';
 import { createClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function serviceDb() {
   return createClient(
@@ -22,16 +22,9 @@ function adminAuthClient() {
   );
 }
 
-async function requireAdmin() {
-  const supabase = await createSessionClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user || user.email !== process.env.ADMIN_EMAIL) return null;
-  return user;
-}
-
 export async function GET() {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = serviceDb();
   const { data, error } = await db
@@ -44,8 +37,9 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const admin = await requireAdmin();
-  if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
+  const admin = auth.user;
 
   const body = await request.json();
   const { email, access_type = 'trial', expires_at, allowed_modules, demo_profile, notes, product = 'centos', job_limit } = body;

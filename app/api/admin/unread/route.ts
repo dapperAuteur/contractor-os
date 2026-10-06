@@ -4,9 +4,8 @@
 // - messages: message_replies from users (is_admin=false) not yet read
 
 import { NextResponse } from 'next/server';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createClient(
@@ -15,28 +14,9 @@ function getDb() {
   );
 }
 
-async function getAdminUser() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        set: (name: string, value: string, options: CookieOptions) => { try { cookieStore.set({ name, value, ...options }); } catch {} },
-        remove: (name: string, options: CookieOptions) => { try { cookieStore.set({ name, value: '', ...options }); } catch {} },
-      },
-    }
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
 export async function GET() {
-  const admin = await getAdminUser();
-  if (!admin || admin.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ feedback: 0, messages: 0, logs: 0 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = getDb();
   const [{ count: feedbackCount }, { count: messagesCount }, { count: logsCount }] = await Promise.all([

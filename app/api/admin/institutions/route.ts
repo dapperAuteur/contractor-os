@@ -4,8 +4,8 @@
 // PATCH: update institution metadata
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
   return createServiceClient(
@@ -14,17 +14,9 @@ function getDb() {
   );
 }
 
-async function getAdminUser() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
 export async function GET() {
-  const adminUser = await getAdminUser();
-  if (!adminUser || adminUser.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const db = getDb();
   const { data, error } = await db
@@ -37,10 +29,8 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const adminUser = await getAdminUser();
-  if (!adminUser || adminUser.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const { name, slug, logo_url, website, description } = body;
@@ -67,10 +57,8 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const adminUser = await getAdminUser();
-  if (!adminUser || adminUser.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const body = await request.json();
   const { id, ...updates } = body;

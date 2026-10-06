@@ -2,9 +2,8 @@
 // Admin-only: promote a user exercise to the shared system_exercises library
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { createClient } from '@supabase/supabase-js';
-import { cookies } from 'next/headers';
+import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getServiceDb() {
   return createClient(
@@ -13,30 +12,11 @@ function getServiceDb() {
   );
 }
 
-async function getAdminUser() {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get: (name: string) => cookieStore.get(name)?.value,
-        set: (name: string, value: string, options: CookieOptions) => { try { cookieStore.set({ name, value, ...options }); } catch {} },
-        remove: (name: string, options: CookieOptions) => { try { cookieStore.set({ name, value: '', ...options }); } catch {} },
-      },
-    },
-  );
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
-
 // POST — promote a user exercise to system_exercises
 // Body: { exercise_id, notification_id? }
 export async function POST(request: NextRequest) {
-  const adminUser = await getAdminUser();
-  if (!adminUser || adminUser.email !== process.env.ADMIN_EMAIL) {
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-  }
+  const auth = await requireAdmin();
+  if (!auth.ok) return auth.response;
 
   const { exercise_id, notification_id, difficulty } = await request.json();
   if (!exercise_id) {
