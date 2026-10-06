@@ -83,6 +83,7 @@ export default function CampaignsPage() {
   const [showCreate, setShowCreate] = useState(false);
   const [sending, setSending] = useState<string | null>(null);
   const [sendResult, setSendResult] = useState<{ sent: number; failed: number } | null>(null);
+  const [sendError, setSendError] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
 
@@ -162,11 +163,15 @@ export default function CampaignsPage() {
     if (!confirm('Send this campaign now? This cannot be undone.')) return;
     setSending(campaignId);
     setSendResult(null);
+    setSendError(null);
     const res = await offlineFetch(`/api/admin/campaigns/${campaignId}/send`, { method: 'POST' });
     if (res.ok) {
       const result = await res.json();
       setSendResult(result);
       await loadCampaigns();
+    } else {
+      const data = await res.json().catch(() => ({}));
+      setSendError(data.error ?? 'Failed to send campaign');
     }
     setSending(null);
   };
@@ -214,6 +219,13 @@ export default function CampaignsPage() {
       </div>
 
       {/* Send result banner */}
+      {sendError && (
+        <div className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl p-4" role="alert">
+          <AlertCircle className="w-5 h-5 text-red-600 shrink-0" aria-hidden="true" />
+          <p className="text-sm text-red-700">{sendError}</p>
+        </div>
+      )}
+
       {sendResult && (
         <div className="flex items-center gap-2 bg-lime-50 border border-lime-200 rounded-xl p-4" role="alert">
           <CheckCircle2 className="w-5 h-5 text-lime-600 shrink-0" aria-hidden="true" />

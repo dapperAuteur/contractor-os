@@ -1,4 +1,5 @@
 <!-- Supabase Auth Template: Magic Link -->
+<!-- Canonical source: lib/email/supabase-templates.ts (dark Work.WitUS theme). This file is a light-theme alternative. -->
 <!-- Paste into: Supabase Dashboard → Authentication → Email Templates → Magic Link -->
 <!-- Subject: Your Sign-In Link -->
 <html>
@@ -12,13 +13,13 @@
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
           <tr>
-            <td style="background:linear-gradient(135deg,#c026d3,#0284c7);padding:32px 40px;">
-              <p style="margin:0;color:#fff;font-size:22px;font-weight:700;">CentenarianOS</p>
+            <td style="background:#0a0a0a;padding:32px 40px;">
+              <p style="margin:0;color:#fff;font-size:22px;font-weight:700;">Work.WitUS</p>
             </td>
           </tr>
           <tr>
             <td style="padding:32px 40px 0;">
-              <h1 style="margin:0;font-size:20px;font-weight:700;color:#111827;">Sign In to CentenarianOS</h1>
+              <h1 style="margin:0;font-size:20px;font-weight:700;color:#111827;">Sign In to Work.WitUS</h1>
             </td>
           </tr>
           <tr>
@@ -29,7 +30,7 @@
           <tr>
             <td style="padding:0 40px 32px;">
               <a href="{{ .ConfirmationURL }}"
-                 style="display:inline-block;padding:14px 28px;background:#c026d3;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
+                 style="display:inline-block;padding:14px 28px;background:#d97706;color:#fff;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;">
                 Sign In
               </a>
             </td>
@@ -37,13 +38,13 @@
           <tr>
             <td style="padding:0 40px 32px;color:#9ca3af;font-size:13px;">
               Or copy and paste this link into your browser:<br>
-              <a href="{{ .ConfirmationURL }}" style="color:#0284c7;word-break:break-all;">{{ .ConfirmationURL }}</a>
+              <a href="{{ .ConfirmationURL }}" style="color:#d97706;word-break:break-all;">{{ .ConfirmationURL }}</a>
             </td>
           </tr>
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #f3f4f6;color:#9ca3af;font-size:12px;">
               If you did not request this email, you can safely ignore it.
-              <br>&copy; 2025 CentenarianOS. All rights reserved.
+              <br>&copy; Work.WitUS. Powered by WitUS.online, a B4C LLC brand.
             </td>
           </tr>
         </table>

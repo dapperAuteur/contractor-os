@@ -4,7 +4,13 @@
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
-const VAPID_SUBJECT = process.env.VAPID_SUBJECT || 'mailto:admin@centenarianos.com';
+// VAPID subject: a contact URI the push services can reach about this sender. It used to fall back
+// to a CentenarianOS address; the apps are separate now, so it comes from VAPID_SUBJECT, and as a
+// FALLBACK only, this app's own https site URL (VAPID accepts an https: URL as the subject).
+// With neither set, push is treated as not configured rather than borrowing another app's identity.
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+const VAPID_SUBJECT =
+  process.env.VAPID_SUBJECT || (SITE_URL?.startsWith('https://') ? SITE_URL : undefined);
 
 let configured = false;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,6 +20,9 @@ async function ensureConfigured() {
   if (configured) return;
   if (!VAPID_PUBLIC_KEY || !VAPID_PRIVATE_KEY) {
     throw new Error('VAPID keys not configured');
+  }
+  if (!VAPID_SUBJECT) {
+    throw new Error('VAPID_SUBJECT not configured');
   }
   // Hide from webpack static analysis
   const mod = 'web-push';

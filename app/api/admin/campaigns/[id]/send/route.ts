@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { getResend } from '@/lib/email/resend';
+import { getSenderEmail } from '@/lib/email/sender';
 import { renderTemplate } from '@/lib/email/campaign-templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
@@ -43,6 +44,16 @@ export async function POST(_req: NextRequest, { params }: Params) {
 
   if (campaign.status === 'sent' || campaign.status === 'sending') {
     return NextResponse.json({ error: 'Campaign already sent or in progress' }, { status: 409 });
+  }
+
+  // No verified Work.WitUS sender configured: refuse before touching the campaign, so it stays a
+  // draft and can be sent once RESEND_FROM_EMAIL is set.
+  const fromEmail = getSenderEmail();
+  if (!fromEmail) {
+    return NextResponse.json(
+      { error: 'Email sending is not configured (RESEND_FROM_EMAIL is not set). The campaign was not sent.' },
+      { status: 503 },
+    );
   }
 
   // Mark as sending
@@ -135,7 +146,6 @@ export async function POST(_req: NextRequest, { params }: Params) {
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
-    const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'admin@work.witus.online';
     const resend = getResend();
 
     let sentCount = 0;

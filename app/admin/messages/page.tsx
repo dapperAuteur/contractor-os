@@ -229,7 +229,12 @@ function AdminMessagesPage() {
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error);
-      setResult({ type: 'ok', text: `Sent to ${d.sent} / ${d.total} recipients.` });
+      setResult({
+        type: 'ok',
+        text: d.emailSkipped
+          ? 'Message posted in the app. Email copies were not sent because RESEND_FROM_EMAIL is not set.'
+          : `Sent to ${d.sent} / ${d.total} recipients.`,
+      });
       setSubject('');
       setBody('');
       fetch('/api/admin/messages').then((r) => r.json()).then((d) => setSent(d.messages ?? []));

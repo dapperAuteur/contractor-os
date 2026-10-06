@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { getResend } from '@/lib/email/resend';
+import { getSenderEmail } from '@/lib/email/sender';
 import { canSeeAdminMessage, escapeHtml, visibleReply } from '@/lib/messages/visibility';
 
 function getDb() {
@@ -105,11 +106,12 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    if (adminEmail && !isAdmin) {
+    const from = getSenderEmail();
+    if (adminEmail && from && !isAdmin) {
       const subject = thread.subject ?? '';
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
+        from,
         to: adminEmail,
         subject: `[Work.WitUS] User replied to: ${subject || 'a message'}`,
         html: `<p><strong>${escapeHtml(user.email ?? '')}</strong> replied to your message "${escapeHtml(subject)}":</p>

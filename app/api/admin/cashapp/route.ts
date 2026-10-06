@@ -7,6 +7,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createShopifyPromoCode } from '@/lib/shopify/createPromoCode';
 import { incrementCampaignUses } from '@/lib/promo/active-lifetime-promo';
 import { getResend } from '@/lib/email/resend';
+import { getSenderEmail } from '@/lib/email/sender';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
@@ -80,11 +81,12 @@ export async function PATCH(request: NextRequest) {
     }).eq('id', id);
 
     // Notify user of rejection
-    if (userEmail) {
+    const from = getSenderEmail();
+    if (userEmail && from) {
       try {
         const resend = getResend();
         await resend.emails.send({
-          from: process.env.RESEND_FROM_EMAIL ?? 'admin@work.witus.online',
+          from,
           to: userEmail,
           subject: 'Work.WitUS — CashApp Payment Update',
           html: buildRejectionEmail(userProfile?.display_name || userProfile?.username || 'there', admin_notes),
@@ -130,12 +132,13 @@ export async function PATCH(request: NextRequest) {
   }
 
   // Notify user of verification via email
-  if (userEmail) {
+  const from = getSenderEmail();
+  if (userEmail && from) {
     try {
       const resend = getResend();
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.online';
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@work.witus.online',
+        from,
         to: userEmail,
         subject: 'Work.WitUS — Your Lifetime Membership is Active! 🎉',
         html: buildVerificationEmail(

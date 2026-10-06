@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getResend } from '@/lib/email/resend';
+import { getSenderEmail } from '@/lib/email/sender';
 import { adminMessageTemplate } from '@/lib/email/adminMessageTemplate';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
@@ -80,7 +81,12 @@ export async function POST(request: NextRequest) {
   // Send emails via Resend in batches
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   const html = adminMessageTemplate({ subject, body, siteUrl });
-  const fromEmail = process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com';
+  // The in-app message is already saved. With no verified sender configured, skip only the email
+  // copy and say so, rather than failing the request.
+  const fromEmail = getSenderEmail();
+  if (!fromEmail) {
+    return NextResponse.json({ ok: true, messageId: message.id, sent: 0, total: emails.length, emailSkipped: true });
+  }
   const resend = getResend();
 
   let sent = 0;

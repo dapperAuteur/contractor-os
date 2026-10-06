@@ -62,7 +62,6 @@ export function adminMessageTemplate({
           <tr>
             <td style="padding:24px 40px;border-top:1px solid #262626;background:#0a0a0a;color:#a3a3a3;font-size:12px;line-height:1.6;">
               You received this message because you have a Work.WitUS account.
-              <br>Your WitUS account works across <a href="https://centenarianos.com" style="color:#fbbf24;text-decoration:none;">CentenarianOS</a> and <a href="https://work.witus.online" style="color:#fbbf24;text-decoration:none;">Work.WitUS</a>.
               <br><br>&copy; ${new Date().getFullYear()} WitUS. Powered by <a href="https://witus.online" style="color:#fbbf24;text-decoration:none;">WitUS.online</a>, a B4C LLC brand.
             </td>
           </tr>

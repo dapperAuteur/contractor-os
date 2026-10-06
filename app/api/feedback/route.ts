@@ -6,6 +6,7 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { getResend } from '@/lib/email/resend';
+import { getSenderEmail } from '@/lib/email/sender';
 import { mirrorFeedbackToInbox } from '@/lib/feedback/inbox-mirror';
 
 function getServiceClient() {
@@ -50,7 +51,9 @@ export async function POST(request: NextRequest) {
   }
 
   const { category, message, media_url, source_app } = body;
-  const app = source_app?.trim() || 'centenarian';
+  // Default matches what components/FeedbackModal.tsx sends. The old 'centenarian' default dates
+  // from when the apps shared a database.
+  const app = source_app?.trim() || 'Work.WitUS';
 
   if (!category || !VALID_CATEGORIES.includes(category as Category)) {
     return NextResponse.json({ error: 'category must be one of: bug, feature, general' }, { status: 400 });
@@ -87,10 +90,11 @@ export async function POST(request: NextRequest) {
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    if (adminEmail) {
+    const from = getSenderEmail();
+    if (adminEmail && from) {
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
+        from,
         to: adminEmail,
         subject: `[${app}] New ${category} feedback from ${user.email}`,
         html: `<p><strong>App:</strong> ${app}</p>

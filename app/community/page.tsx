@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
+import ContactLink from '@/components/ui/ContactLink';
 
 export const metadata: Metadata = {
   title: 'Community Conduct | Work.WitUS',
@@ -106,19 +107,15 @@ export default function CommunityPage() {
           </ul>
           <p className="mt-3">
             We reserve the right to take action at our discretion. Decisions may be appealed by
-            contacting us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
-              hello@centenarianos.com
-            </a>.
+            contacting us via{' '}
+            <ContactLink />.
           </p>
         </Section>
 
         <Section title="8. Reporting Violations">
           <p>
-            If you witness or experience a violation of this Code of Conduct, please report it to{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
-              hello@centenarianos.com
-            </a>{' '}
+            If you witness or experience a violation of this Code of Conduct, please report it via{' '}
+            <ContactLink />{' '}
             with as much detail as possible. All reports are reviewed confidentially.
           </p>
         </Section>
@@ -142,10 +139,8 @@ export default function CommunityPage() {
 
         <Section title="11. Contact">
           <p>
-            Questions or concerns? Reach us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
-              hello@centenarianos.com
-            </a>.
+            Questions or concerns? Reach us via{' '}
+            <ContactLink />.
           </p>
         </Section>
 

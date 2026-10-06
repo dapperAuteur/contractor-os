@@ -84,12 +84,13 @@ CLOUDINARY_API_SECRET=
 # Push Notifications
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=
 VAPID_PRIVATE_KEY=
-VAPID_SUBJECT=mailto:admin@work.witus.online
+VAPID_SUBJECT=                 # mailto: or https: contact; falls back to the https NEXT_PUBLIC_SITE_URL
 CRON_SECRET=
 
 # Email (Resend)
 RESEND_API_KEY=
-RESEND_FROM_EMAIL=
+RESEND_FROM_EMAIL=             # Work.WitUS address on a Resend-verified domain; unset = email skipped
+NEXT_PUBLIC_CONTACT_EMAIL=     # shown on /privacy, /terms, /community; unset = link to /dashboard/feedback
 
 # Short Links (Switchy.io)
 SWITCHY_API_TOKEN=
@@ -226,7 +227,7 @@ The admin panel includes:
 Work.WitUS is an OIDC client of the shared WitUS identity provider at `accounts.witus.online`, slug
 `work`, client_id `witus-work`. Because this app authenticates with **Supabase** rather than Better
 Auth or NextAuth, it runs a bespoke authorization-code flow in `app/api/auth/witus/*` — the same
-shape CentenarianOS runs against the same IdP and the same Supabase project. Its registered redirect
+shape CentenarianOS runs against the same IdP (each app has its own Supabase project). Its registered redirect
 URI is `https://work.witus.online/api/auth/witus/callback`, matched by the IdP with `===`.
 
 **Three behaviours, all optional and all dark by default.** Without `WITUS_OIDC_CLIENT_ID` the
@@ -357,9 +358,22 @@ sent with a failure event, only a coarse `method` and `stage`.
 
 Report vulnerabilities: [hello@badcba.com](mailto:hello@badcba.com)
 
-## Shared Database
+## Database and email identity
 
-This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details on migration coordination, shared tables, and the `app` discriminator pattern.
+Work.WitUS no longer shares a database or a Supabase account system with CentenarianOS (the split
+finished 2026-10-05); `SHARED_DB.md` is kept for history. Ecosystem sign-in goes through WitUS SSO
+above.
+
+All email this app sends comes from Work.WitUS, never from a CentenarianOS address:
+
+- **App email (Resend)** uses `RESEND_FROM_EMAIL` only, via `lib/email/sender.ts`. There is no
+  built-in fallback address. When it is unset, notification emails are skipped (logged once),
+  in-app records are still saved, and campaign sends are refused with a clear error.
+- **Login, signup and password emails** are sent by Supabase Auth. Their sender name and address
+  are set in the Work.WitUS Supabase project (Authentication, SMTP settings); the HTML templates
+  live in `lib/email/supabase-templates.ts`.
+- **Public contact** on `/privacy`, `/terms` and `/community` comes from
+  `NEXT_PUBLIC_CONTACT_EMAIL`; when it is unset those pages link to `/dashboard/feedback`.
 
 ## License
 

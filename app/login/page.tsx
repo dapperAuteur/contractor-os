@@ -382,11 +382,9 @@ function LoginContent() {
                     </p>
                     <div className="rounded-lg border border-slate-200 bg-slate-100 p-3 mb-4 text-xs text-slate-500">
                       <p>
-                        Your login link will come from{' '}
-                        <span className="font-medium text-amber-600">CentenarianOS.com</span>
-                        {' '}&mdash;{' '}
-                        <span className="text-slate-700">Work.WitUS</span> and CentenarianOS share a unified account system powered by{' '}
-                        <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="font-medium text-amber-600 hover:underline">WitUS.online</a>.
+                        Your login email comes from{' '}
+                        <span className="font-medium text-slate-700">Work.WitUS</span>. If it isn&apos;t in your inbox
+                        in a minute or two, check your spam folder.
                       </p>
                     </div>
                     <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-slate-700">

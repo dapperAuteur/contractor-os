@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getResend } from '@/lib/email/resend';
+import { getSenderEmail } from '@/lib/email/sender';
 import { requireAdmin } from '@/lib/auth/require-admin';
 
 function getDb() {
@@ -76,10 +77,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     const { data: authUser } = await db.auth.admin.getUserById(feedback.user_id);
     const userEmail = authUser?.user?.email;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
-    if (userEmail) {
+    const from = getSenderEmail();
+    if (userEmail && from) {
       const resend = getResend();
       await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
+        from,
         to: userEmail,
         subject: 'Work.WitUS team replied to your feedback',
         html: `<p>The Work.WitUS team replied to your feedback submission:</p>

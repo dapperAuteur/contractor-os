@@ -5,8 +5,8 @@
 // production origin https://work.witus.online. Three things are built on top of that registration:
 //
 //   1. A bespoke OIDC authorization-code flow (app/api/auth/witus/*), because this app authenticates
-//      with Supabase, not with better-auth or NextAuth. Same shape as CentenarianOS, which shares
-//      this app's Supabase project and already runs it.
+//      with Supabase, not with better-auth or NextAuth. Same shape as CentenarianOS, which already
+//      runs it against its own Supabase project (the apps stopped sharing one on 2026-10-05).
 //   2. On /login, the form renders immediately as it always did, and IN PARALLEL the browser asks
 //      the IdP who it is. If an answer comes back, the "Sign in with WitUS" button relabels to
 //      "Continue as <name>". Not automatic — clicking still runs the real code flow.
