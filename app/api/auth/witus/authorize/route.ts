@@ -5,7 +5,7 @@
 //
 // Work.WitUS authenticates with Supabase, not better-auth, so it runs this bespoke authorization
 // code flow rather than a library's built-in one — the same shape CentenarianOS runs against the
-// same IdP and the same Supabase project.
+// same IdP (each app against its own Supabase project since the 2026-10 database split).
 
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'node:crypto';

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   // Service-role client: used for the founders count below and for writing stripe_customer_id.
   // The profiles billing columns (stripe_customer_id, subscription_status, ...) can only be set by
-  // the service role; a trigger rejects that write from a user session (shared DB migration 206).
+  // the service role; a trigger rejects that write from a user session (migration 206, from the shared-DB era).
   const db = createServiceClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!);
 
   const { plan, stripeCouponId } = await request.json();

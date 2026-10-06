@@ -226,7 +226,7 @@ The admin panel includes:
 Work.WitUS is an OIDC client of the shared WitUS identity provider at `accounts.witus.online`, slug
 `work`, client_id `witus-work`. Because this app authenticates with **Supabase** rather than Better
 Auth or NextAuth, it runs a bespoke authorization-code flow in `app/api/auth/witus/*` — the same
-shape CentenarianOS runs against the same IdP and the same Supabase project. Its registered redirect
+shape CentenarianOS runs against the same IdP (each app now against its own Supabase project). Its registered redirect
 URI is `https://work.witus.online/api/auth/witus/callback`, matched by the IdP with `===`.
 
 **Three behaviours, all optional and all dark by default.** Without `WITUS_OIDC_CLIENT_ID` the
@@ -357,9 +357,9 @@ sent with a failure event, only a coarse `method` and `stage`.
 
 Report vulnerabilities: [hello@badcba.com](mailto:hello@badcba.com)
 
-## Shared Database
+## Database
 
-This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details on migration coordination, shared tables, and the `app` discriminator pattern.
+Work.WitUS has its own database since 2026-10; it no longer shares one with CentenarianOS. Cross-app data flows only through signed events (income and work-schedule events to CentenarianOS; RideWitUS business-travel events are planned). Migrations stay additive and idempotent. The `app` discriminator columns on formerly shared tables (promos, banners, campaigns, help articles, SEO) remain and routes still filter on them. See `CLAUDE.md` §"Database" for the rules and `SHARED_DB.md` for the historical record of the shared era.
 
 ## License
 

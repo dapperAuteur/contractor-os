@@ -1,8 +1,17 @@
 # Shared Database: Work.WitUS + CentenarianOS
 
-Both **Work.WitUS** (contractor-os) and **CentenarianOS** (centenarian-os) share the same Supabase database and `profiles` table. Migrations in either repo must not break the other app.
+> **Historical: the shared database ended 2026-10; kept for the record of what was shared and why
+> migrations are additive.** Work.WitUS and CentenarianOS each have their own database since
+> 2026-10 (BAM, 2026-10-05). Nothing below describes the current setup: the rules, tables, views,
+> triggers and edge functions are how the apps were coupled *before* the split. Cross-app data now
+> flows only through signed events/APIs. For the current rules see `CLAUDE.md` §"Database".
 
-## Rules
+Until 2026-10, both **Work.WitUS** (contractor-os) and **CentenarianOS** (centenarian-os) shared the same Supabase database and `profiles` table, and migrations in either repo had to not break the other app.
+
+## Rules (shared era — no longer in force)
+
+Rules 3 and 4 ended with the split; do not copy migrations to the CentenarianOS repo any more.
+Rule 1 (additive, idempotent migrations) remains the house rule in this repo.
 
 1. **Always use `IF NOT EXISTS` / `IF EXISTS`** for additive or removal migrations.
 2. **Never drop columns** that the other app relies on — check both repos first.
@@ -88,7 +97,7 @@ under-estimated because the plan was written from this file.
 | `invoices` | **CentOS-owned** (`058_invoices.sql`), with full CRUD **and UI in BOTH apps** (`/dashboard/finance/invoices` exists in each). | Moving invoices to Work.WitUS is an **ownership transfer**, not a table move. BAM confirmed 2026-08-27 that CentOS raises no personal invoices, so CentOS's authoring routes are removed in Phase 4. |
 | `profiles` | Read by **88 files** in Work.WitUS and 83 in CentOS. | This is identity, and it is the blocker. Chosen approach: Route B — Work.WitUS gets its own `profiles` seeded from a snapshot; SSO is a later, separate project. |
 
-## New: income_events projection (Phase 2, in progress)
+## income_events projection (Phase 2 of the split — historical)
 
 CentOS added `income_events` (migration `196_income_events.sql`) — a **local projection** of
 business income that Work.WitUS pushes to via a signed webhook at `POST /api/events/income`.
@@ -98,6 +107,10 @@ CentOS's forecast and planner now read the projection through `lib/finance/incom
 falling back to the `expected_payments` view while the projection is empty. **The view and both
 sync triggers below stay in place until the projection is proven live** — nothing here is removed
 yet, so both apps keep working during the transition.
+
+_Since the split, the income projection is fed only by Work.WitUS's signed income events; the
+cross-app views and triggers below belonged to the shared database and do not exist between the two
+databases._
 
 ## Views (cross-app)
 

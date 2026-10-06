@@ -102,13 +102,27 @@ block text-sm font-medium text-slate-700 mb-1
 
 ---
 
-## Shared Database
+## Database
 
-This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details.
-- **Always use `IF NOT EXISTS` / `IF EXISTS`** in migrations
-- **Never drop columns** without checking both repos
-- **Copy new migrations to both repos** to keep schema history in sync
-- When adding columns that only Work.WitUS uses, document them in `SHARED_DB.md`
+Work.WitUS has its **own database** since 2026-10 (BAM, 2026-10-05). It no longer shares a
+database, a `profiles` table, or migrations with CentenarianOS. The app reaches it through the
+Supabase clients in `lib/supabase/` (`client.ts`, `server.ts`, `admin.ts`), configured by
+`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY`.
+`SHARED_DB.md` is kept as history only.
+
+- **Cross-app data flows only through signed events/APIs**, never through shared tables or
+  triggers:
+  - income events to CentenarianOS (`lib/events/income-emitter.ts`, `INCOME_EVENTS_*`)
+  - work-schedule events to CentenarianOS (`lib/events/schedule-emitter.ts`, `SCHEDULE_EVENTS_URL`)
+  - RideWitUS business-travel events (planned, `plans/15-ridewitus-business-travel-events.md`)
+- **Migrations stay additive and idempotent** — the house rule: `IF NOT EXISTS` / `IF EXISTS`,
+  no drops or renames without a plan. Do **not** copy migrations to the CentenarianOS repo any more.
+- **`app` discriminator columns stay.** Formerly shared tables (`admin_promo_campaigns`,
+  `marketing_banners`, `email_campaigns`, `referral_reward_tiers`, `help_articles`, SEO tracking,
+  etc.) keep their `app` column, and routes still filter `app = 'contractor'` (or `'workwitus'`
+  for SEO). New rows no longer need CentenarianOS values, but keep the filters: the new database was
+  seeded from shared-era data, and whether CentenarianOS rows came along is not verified from this
+  repo. Until they are confirmed absent or cleaned out, the filter keeps them off Work.WitUS pages.
 
 ---
 
