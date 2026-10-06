@@ -1,5 +1,7 @@
 # Security Policy
 
+This policy covers Work.WitUS, the app in the [dapperAuteur/contractor-os](https://github.com/dapperAuteur/contractor-os) repository.
+
 ## Supported Versions
 
 | Version | Supported          |
@@ -89,5 +91,5 @@ We follow **coordinated disclosure**:
 ## Security Updates
 
 Subscribe to security advisories:
-- GitHub Security Advisories: [Watch this repo](https://github.com/dapperAuteur/centenarian-os)
+- GitHub Security Advisories: [Watch this repo](https://github.com/dapperAuteur/contractor-os)
 - Release notes: Check for `[SECURITY]` tags

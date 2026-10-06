@@ -1,90 +1,35 @@
-# Contributing to CentenarianOS
+# Contributing to Work.WitUS
+
+Work.WitUS is the contractor app in the WitUS ecosystem. This repository is
+[dapperAuteur/contractor-os](https://github.com/dapperAuteur/contractor-os).
 
 ## Development Setup
 
-1. Fork the repository
-2. Clone your fork: `git clone https://github.com/dapperAuteur/centenarian-os.git`
-3. Create a feature branch: `git checkout -b feature/your-feature-name`
-4. Install dependencies: `npm install`
-5. Copy `.env.example` to `.env.local` and configure
+1. Clone the repository: `git clone https://github.com/dapperAuteur/contractor-os.git`
+2. Create a branch off `main` (see [Branch Naming](#branch-naming))
+3. Install dependencies: `npm install`
+4. Copy `.env.example` to `.env.local` and fill in the values you need
+5. Start the dev server: `npm run dev`
+
+Read [CLAUDE.md](./CLAUDE.md) for the code-style rules (theme, touch targets, ARIA, Supabase
+patterns) before changing UI or API code.
 
 ## Coding Standards
 
 ### TypeScript
-- **Strict mode enabled** - No `any` types without `eslint-disable` comment
-- **Explicit return types** for exported functions
-- **Interface over type** for object shapes
-- **Named exports** preferred over default exports
-
-```typescript
-// ✅ Good
-export interface Task {
-  id: string;
-  title: string;
-}
-
-export function createTask(title: string): Task {
-  return { id: crypto.randomUUID(), title };
-}
-
-// ❌ Avoid
-export type Task = { id: string; title: string; };
-export default function(title: any) { ... }
-```
+- **Strict mode** is on. No `any` without an `eslint-disable` comment that says why.
+- **Explicit return types** for exported functions.
+- **Interfaces** for object shapes; **named exports** over default exports (Next.js pages and
+  route handlers excepted).
 
 ### React Components
-- **Functional components** with TypeScript interfaces for props
-- **Descriptive names** (`TaskCard` not `Card`, `useTasks` not `useFetch`)
-- **Single responsibility** - max 200 lines per component
-- **Prop destructuring** with default values
+- Functional components with a TypeScript interface for props.
+- Descriptive names (`JobCard`, not `Card`).
+- One job per component; split anything that grows past about 200 lines.
 
-```typescript
-// ✅ Good
-interface TaskCardProps {
-  task: Task;
-  onToggle: (id: string) => void;
-  variant?: 'compact' | 'expanded';
-}
-
-export function TaskCard({ task, onToggle, variant = 'compact' }: TaskCardProps) {
-  // ...
-}
-```
-
-### File Organization
-```
-components/
-  planner/
-    TaskCard.tsx        # Component
-    TaskCard.test.tsx   # Tests
-    TaskList.tsx
-  shared/
-    Button.tsx
-    
-lib/
-  hooks/
-    useTasks.ts         # Hook
-    useTasks.test.ts    # Tests
-  types/
-    index.ts            # All type exports
-```
-
-### Comments & Documentation
-- **JSDoc** for all exported functions
-- **Inline comments** explain "why", not "what"
-- **TODO comments** include issue number: `// TODO(#123): Add pagination`
-
-```typescript
-/**
- * Syncs offline queue with Supabase when connection restored
- * @throws {Error} If Supabase operation fails
- */
-export async function syncQueue(): Promise<void> {
-  // Process oldest operations first to maintain data consistency
-  const operations = await db.getAll('queue');
-  // ...
-}
-```
+### Comments
+- Explain *why*, not *what*.
+- Exported functions get a short JSDoc comment.
 
 ## Git Workflow
 
@@ -92,22 +37,34 @@ export async function syncQueue(): Promise<void> {
 Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat(planner): add milestone grouping by quarter
-fix(auth): prevent duplicate signups on slow networks
-docs(readme): update installation steps
-refactor(hooks): extract shared date logic
-test(planner): add task toggle edge cases
+feat(jobs): add multi-day scheduling
+fix(invoices): round overtime to the minute
+docs(readme): document Mailgun env vars
+refactor(email): share one email layout
+test(email): cover Mailgun batch sends
 ```
+
+### Branch Naming
+Every change starts on a new branch off `main`; never commit to `main` directly.
+
+- `feat/short-description`
+- `fix/short-description`
+- `chore/short-description`
+- `docs/short-description`
+
+A checked-in pre-commit guard refuses commits on `main`/`master`. Enable it once per clone:
+`git config core.hooksPath .githooks`.
 
 ### Pull Requests
 
-**Before submitting:**
-1. Run tests: `npm test`
-2. Check types: `npm run type-check`
-3. Lint code: `npm run lint`
-4. Update docs if needed
+**Before opening one, run:**
+1. Types: `npx tsc --noEmit`
+2. Lint: `npm run lint`
+3. Unit tests: `npm run test:auth`, `npm run test:email`, `npm run test:scrub`, `npm run test:sso`
+4. Build: `npm run build`
+5. Update the docs the change affects (README, help articles, `.env.example`) in the same branch
 
-**PR Template:**
+**PR description:**
 ```markdown
 ## What
 Brief description of changes
@@ -119,108 +76,62 @@ Problem this solves or feature it adds
 Implementation approach
 
 ## Testing
-Steps to verify changes work
+Steps to verify the change works
 
 ## Screenshots (if UI changes)
-[Attach images]
-
-Closes #123
 ```
 
-### Branch Naming
-- `feature/add-nutrition-module`
-- `fix/task-sorting-bug`
-- `docs/update-security-policy`
-- `refactor/extract-date-utils`
+## Testing
 
-## Testing Requirements
-
-### Unit Tests
-- **Coverage**: 80%+ for new business logic
-- **File location**: Next to source file (`useTasks.test.ts`)
-- **Framework**: Jest + React Testing Library
-
-```typescript
-// useTasks.test.ts
-import { renderHook, waitFor } from '@testing-library/react';
-import { useTasks } from './useTasks';
-
-describe('useTasks', () => {
-  it('fetches tasks for date range', async () => {
-    const { result } = renderHook(() => useTasks('2025-01-01', '2025-01-07'));
-    
-    await waitFor(() => expect(result.current.loading).toBe(false));
-    expect(result.current.tasks).toHaveLength(5);
-  });
-});
-```
-
-### E2E Tests
-- **Critical user flows** (signup, create task, toggle completion)
-- **Framework**: Playwright
-- **Location**: `e2e/` directory
+- Unit tests use Node's built-in test runner (`node --test --experimental-strip-types`) and live
+  in `tests/`. The code under test must be importable without the `@/` alias (pure modules).
+- Never send real email, charge real cards or call paid APIs from tests: stub `fetch` or inject
+  the dependency (see `tests/email-mailgun.test.ts`).
+- `npm run email:preview` renders every email to `.email-preview/` for a visual check.
 
 ## Database Changes
 
-### Migrations
-1. Create migration file: `supabase/migrations/003_add_nutrition_table.sql`
-2. Use timestamp prefix: `YYYYMMDDHHMMSS_description.sql`
-3. Include rollback instructions in comments
-4. Test locally before pushing
+- Migrations live in `supabase/migrations/` with the next number as a prefix.
+- **Additive only**: `CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`. Don't drop or
+  rename tables or columns without a plan.
+- Enable Row Level Security on every new table and add its policies in the same migration.
 
 ```sql
--- Migration: Add nutrition tracking
--- Rollback: DROP TABLE meals; DROP TABLE ingredients;
-
-CREATE TABLE ingredients (
+CREATE TABLE IF NOT EXISTS job_notes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT NOT NULL,
-  -- ...
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  body TEXT NOT NULL
 );
 
--- Add RLS policies
-ALTER TABLE ingredients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE job_notes ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can view own ingredients"
-  ON ingredients FOR SELECT
+CREATE POLICY "Users can view own job notes"
+  ON job_notes FOR SELECT
   USING (auth.uid() = user_id);
 ```
 
 ## Security Requirements
 
 **Never commit:**
-- API keys or secrets (use `.env.local`)
+- API keys or secrets (use `.env.local`; every `.env*` file is gitignored)
 - User data or PII
-- Database credentials
-- Session tokens
+- Database credentials or session tokens
 
 **Always:**
-- Validate user input (use Zod schemas)
-- Use parameterized queries (Supabase handles this)
-- Enable RLS on new tables
-- Add CSRF protection for mutations
-- Test auth flows in incognito mode
+- Validate user input (Zod schemas)
+- Check ownership in API routes that use the service-role client
+- Escape user-supplied text before putting it in HTML (including email)
+- Test auth flows in a private window
 
 ## Code Review Checklist
 
-Reviewers should verify:
-- [ ] Tests pass (`npm test`)
-- [ ] No TypeScript errors (`npm run type-check`)
-- [ ] Follows coding standards (linter passes)
-- [ ] Security best practices followed
-- [ ] Documentation updated (if needed)
-- [ ] No breaking changes (or properly versioned)
-- [ ] Accessible (keyboard nav, ARIA labels if needed)
-- [ ] Mobile responsive (if UI changes)
+- [ ] Types, lint, unit tests and build pass
+- [ ] Follows CLAUDE.md (touch targets, ARIA, contrast, `.maybeSingle()`)
+- [ ] Security practices above followed
+- [ ] Docs updated in the same branch
+- [ ] Accessible (keyboard navigation, labels) and mobile responsive
 
 ## Questions?
 
-- **Bug reports**: [GitHub Issues](https://github.com/dapperAuteur/centenarian-os/issues)
-- **Feature requests**: [Discussions](https://github.com/dapperAuteur/centenarian-os/discussions)
-- **Security issues**: [security@awews.com](mailto:security@awews.com)
-
-## Recognition
-
-Contributors are listed in [README.md](./README.md) and release notes.
-
-Thank you for contributing! 🎉
+- **Bug reports and feature requests**: [GitHub Issues](https://github.com/dapperAuteur/contractor-os/issues)
+- **Security issues**: see [SECURITY.md](./SECURITY.md). Do not open a public issue.
