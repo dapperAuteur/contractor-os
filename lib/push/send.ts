@@ -5,8 +5,9 @@
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 // VAPID subject: a contact URI the push services can reach about this sender. It used to fall back
-// to a CentenarianOS address; the apps are separate now, so it comes from VAPID_SUBJECT, and as a
-// FALLBACK only, this app's own https site URL (VAPID accepts an https: URL as the subject).
+// to a CentenarianOS address; Work.WitUS must not borrow another product's identity (the apps are
+// separate products, though they still share a Supabase project), so it comes from VAPID_SUBJECT,
+// and as a FALLBACK only, this app's own https site URL (VAPID accepts an https: URL as the subject).
 // With neither set, push is treated as not configured rather than borrowing another app's identity.
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 const VAPID_SUBJECT =

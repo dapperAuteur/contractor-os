@@ -26,6 +26,6 @@ for (const p of previews) {
 writeFileSync(
   join(out, 'index.html'),
   `<!DOCTYPE html><html lang="en"><meta charset="utf-8"><title>Work.WitUS email previews</title><body style="font-family:sans-serif;padding:24px"><h1>Work.WitUS email previews</h1><ul>${index.join('')}</ul>
-<h2>Supabase subjects</h2><ul>${SUPABASE_AUTH_TEMPLATES.map((t) => `<li>${t.dashboardName}: ${t.subject}</li>`).join('')}</ul></body></html>`,
+<h2>Supabase subjects</h2><p><strong>Do not paste while the Supabase project is shared with CentenarianOS</strong>; that changes CentenarianOS login emails too.</p><ul>${SUPABASE_AUTH_TEMPLATES.map((t) => `<li>${t.dashboardName}: ${t.subject}</li>`).join('')}</ul></body></html>`,
 );
 console.log(`Wrote ${previews.length} emails to ${out}/ (open index.html)`);

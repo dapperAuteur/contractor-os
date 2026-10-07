@@ -6,8 +6,9 @@
 // Work.WitUS sender, until the two apps are on separate Supabase projects.
 //
 // Paste-ready Work.WitUS templates for Supabase Auth emails. Supabase sends these itself (through
-// the SMTP settings in the Supabase dashboard, which should point at Mailgun's SMTP), so they are
-// static HTML strings with Supabase's Go-template variables, not functions.
+// the project's SMTP settings; once the apps are on separate projects, Work.WitUS's should point at
+// Mailgun's SMTP), so they are static HTML strings with Supabase's Go-template variables, not
+// functions.
 //
 // To install: `npm run email:preview` writes each one to .email-preview/supabase-*.html (with the
 // footer contact taken from NEXT_PUBLIC_CONTACT_EMAIL in your shell). Paste the HTML and the

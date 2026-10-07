@@ -2,8 +2,8 @@
 // The public contact point on the legal and policy pages (privacy, terms, community).
 //
 // The address comes from NEXT_PUBLIC_CONTACT_EMAIL. These pages used to hardcode a CentenarianOS
-// address; Work.WitUS is a separate app now, and its contact address is BAM's to choose, so none is
-// guessed here (authoritative-values rule).
+// address; Work.WitUS is its own product with its own contact address, which is BAM's to choose, so
+// none is guessed here (authoritative-values rule).
 //
 // FALLBACK: when NEXT_PUBLIC_CONTACT_EMAIL is unset, link to the in-app feedback page instead, the
 // existing way to reach the Work.WitUS team (sign-in required).

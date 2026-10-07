@@ -51,8 +51,9 @@ export async function POST(request: NextRequest) {
   }
 
   const { category, message, media_url, source_app } = body;
-  // Default matches what components/FeedbackModal.tsx sends. The old 'centenarian' default dates
-  // from when the apps shared a database.
+  // Default matches what components/FeedbackModal.tsx sends. The old 'centenarian' default was
+  // copied from CentenarianOS; the two apps still share one Supabase project (and this feedback
+  // table), so this value is what tells their rows apart.
   const app = source_app?.trim() || 'Work.WitUS';
 
   if (!category || !VALID_CATEGORIES.includes(category as Category)) {

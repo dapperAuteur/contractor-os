@@ -93,7 +93,8 @@ We follow **coordinated disclosure**:
   types parsed AI responses in `lib/gemini/gemini-parser.ts`)
 - Session cookies are not httpOnly (see Known Security Considerations above)
 - ✅ Rate limits on Supabase Auth's own endpoints (sign-in, sign-up, email sending), set per project
-  in the Supabase dashboard. The app's own API routes have no rate limiting.
+  in the Supabase dashboard (that project is shared with CentenarianOS as of 2026-10-06, so a change
+  there applies to both apps). The app's own API routes have no rate limiting.
 
 ## Security Updates
 

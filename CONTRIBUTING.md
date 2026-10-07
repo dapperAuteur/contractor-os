@@ -95,6 +95,9 @@ Steps to verify the change works
 - **Additive only**: `CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`. Don't drop or
   rename tables or columns without a plan.
 - Enable Row Level Security on every new table and add its policies in the same migration.
+- The database is the Supabase project shared with CentenarianOS (see SHARED_DB.md): check
+  centenarian-os before dropping or renaming anything, copy new migrations there, and run them in
+  that Supabase project, never in the planned Neon instance.
 
 ```sql
 CREATE TABLE IF NOT EXISTS job_notes (
