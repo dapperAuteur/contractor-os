@@ -26,7 +26,9 @@ A contractor management platform for freelance workers and crew coordinators to 
 - **Auth**: Supabase Auth (email/password + optional MFA)
 - **AI**: Google Gemini 2.5 Flash (document scanning, learning path recommendations, course suggestions)
 - **Payments**: Stripe (subscriptions, course enrollment, Connect payouts, promo codes)
-- **Email**: Mailgun HTTP API (campaigns, admin messages, notifications); Supabase Auth emails go through Mailgun SMTP
+- **Email**: Mailgun HTTP API (campaigns, admin messages, notifications). Login, signup and password emails
+  are sent by Supabase Auth itself, from the shared Supabase project's own email settings (see
+  [Database and email identity](#database-and-email-identity))
 - **Links**: Switchy.io (tracked short links with marketing pixels)
 - **Media**: Cloudinary
 - **Analytics**: Umami (privacy-first), custom usage events + page views
@@ -229,7 +231,7 @@ The admin panel includes:
 Work.WitUS is an OIDC client of the shared WitUS identity provider at `accounts.witus.online`, slug
 `work`, client_id `witus-work`. Because this app authenticates with **Supabase** rather than Better
 Auth or NextAuth, it runs a bespoke authorization-code flow in `app/api/auth/witus/*` — the same
-shape CentenarianOS runs against the same IdP (each app has its own Supabase project). Its registered redirect
+shape CentenarianOS runs against the same IdP. Its registered redirect
 URI is `https://work.witus.online/api/auth/witus/callback`, matched by the IdP with `===`.
 
 **Three behaviours, all optional and all dark by default.** Without `WITUS_OIDC_CLIENT_ID` the
@@ -362,11 +364,13 @@ Report vulnerabilities: [hello@badcba.com](mailto:hello@badcba.com)
 
 ## Database and email identity
 
-Work.WitUS no longer shares a database or a Supabase account system with CentenarianOS (the split
-finished 2026-10-05); `SHARED_DB.md` is kept for history. Ecosystem sign-in goes through WitUS SSO
-above.
+As of 2026-10-06, Work.WitUS and CentenarianOS still use **one shared Supabase project**: the same
+database, the same Supabase Auth users, and the same Auth email settings. See `SHARED_DB.md`. A move
+to Work.WitUS's own Neon database is planned (CentenarianOS plan 55, Phase 3) and has not happened;
+no code here reads Neon. Ecosystem sign-in goes through WitUS SSO above.
 
-All email this app sends comes from Work.WitUS, never from a CentenarianOS address:
+Every email the app itself sends comes from Work.WitUS, never from a CentenarianOS address. Login
+emails are the exception while the Supabase project is shared (last two bullets):
 
 - **App email (Mailgun)** goes through `sendEmail()` in `lib/email/mailgun.ts`: Mailgun's HTTP
   API with `MAILGUN_API_KEY`, `MAILGUN_DOMAIN`, `MAILGUN_REGION` (`us` default, or `eu`) and the
@@ -380,10 +384,14 @@ All email this app sends comes from Work.WitUS, never from a CentenarianOS addre
 - **Templates** live in `lib/email/templates/` (functions returning `{ subject, html, text }`,
   always with a plain-text part). `npm run email:preview` renders every email to
   `.email-preview/`; `npm run test:email` checks them.
-- **Login, signup and password emails** are sent by Supabase Auth through Mailgun's SMTP (set in
-  the Work.WitUS Supabase project: Authentication, SMTP settings). Their paste-ready HTML and
-  subjects are in `lib/email/supabase-templates.ts` (also written to `.email-preview/supabase-*.html`
-  by the preview script).
+- **Login, signup and password emails** are sent by Supabase Auth, not by this app. Their sender,
+  SMTP server and templates are set per Supabase project (Supabase Dashboard → Authentication), and
+  that project is **shared with CentenarianOS**, so any change there changes CentenarianOS's login
+  emails too.
+- **Do not rebrand the shared project's login emails.** Don't paste the Work.WitUS templates or point
+  its SMTP at a Work.WitUS or Mailgun sender until the two apps are on separate Supabase projects.
+  The paste-ready HTML and subjects for that day are in `lib/email/supabase-templates.ts` (also
+  written to `.email-preview/supabase-*.html` by the preview script).
 - **Public contact** on `/privacy`, `/terms` and `/community` comes from
   `NEXT_PUBLIC_CONTACT_EMAIL`; when it is unset those pages link to `/dashboard/feedback`.
 

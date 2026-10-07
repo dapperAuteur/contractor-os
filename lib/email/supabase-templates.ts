@@ -1,4 +1,10 @@
 // File: lib/email/supabase-templates.ts
+//
+// SHARED PROJECT: pasting these changes CentenarianOS's login emails too. As of 2026-10-06
+// Work.WitUS and CentenarianOS use one Supabase project, and Supabase Auth email templates and
+// SMTP settings are per project. Do not paste these templates, or point that project's SMTP at a
+// Work.WitUS sender, until the two apps are on separate Supabase projects.
+//
 // Paste-ready Work.WitUS templates for Supabase Auth emails. Supabase sends these itself (through
 // the SMTP settings in the Supabase dashboard, which should point at Mailgun's SMTP), so they are
 // static HTML strings with Supabase's Go-template variables, not functions.

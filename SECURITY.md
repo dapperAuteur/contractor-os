@@ -74,7 +74,9 @@ We follow **coordinated disclosure**:
 ## Known Security Considerations
 
 - **Offline sync queue**: Operations stored in IndexedDB are unencrypted. Don't store sensitive data in offline queue.
-- **Browser storage**: Session tokens in httpOnly cookies (not accessible to JavaScript)
+- **Browser storage**: The Supabase session lives in `@supabase/ssr` cookies set with SameSite=Lax and
+  **without httpOnly**, so page JavaScript can read them and a cross-site scripting bug could expose a
+  session. Only the short-lived "Sign in with WitUS" state and PKCE cookies are httpOnly.
 - **API keys**: Supabase anon key is public-safe (RLS enforces access control)
 
 ## Security Features
@@ -82,11 +84,16 @@ We follow **coordinated disclosure**:
 - ✅ TLS 1.3 encryption in transit
 - ✅ AES-256 encryption at rest (Supabase)
 - ✅ Row Level Security (RLS) policies
-- ✅ CSRF protection via Supabase
-- ✅ Security headers (CSP, HSTS, X-Frame-Options)
-- ✅ Input validation (Zod + Supabase types)
-- ✅ httpOnly session cookies
-- ✅ Rate limiting (Supabase managed)
+- ✅ CSRF mitigation: session cookies are SameSite=Lax, so other sites can't attach them to
+  cross-site POST, PUT or DELETE requests, and the "Sign in with WitUS" flow checks a random `state`
+  value against an httpOnly cookie, plus PKCE. There are no CSRF tokens.
+- ✅ A Content-Security-Policy on `/blog` pages (`next.config.mjs`). The app sets no site-wide CSP,
+  HSTS or X-Frame-Options header itself.
+- Input validation is done route by route, with no shared schema layer (Zod is installed but only
+  types parsed AI responses in `lib/gemini/gemini-parser.ts`)
+- Session cookies are not httpOnly (see Known Security Considerations above)
+- ✅ Rate limits on Supabase Auth's own endpoints (sign-in, sign-up, email sending), set per project
+  in the Supabase dashboard. The app's own API routes have no rate limiting.
 
 ## Security Updates
 

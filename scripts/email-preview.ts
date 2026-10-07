@@ -5,6 +5,7 @@
 // The Supabase auth templates (supabase-*.html) are the paste-ready HTML for Supabase Dashboard →
 // Authentication → Email Templates. Their footer contact line uses NEXT_PUBLIC_CONTACT_EMAIL from
 // your shell, so set it before running if you want an email address in the footer. Nothing is sent.
+// Read the SHARED PROJECT note at the top of lib/email/supabase-templates.ts before pasting any.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
