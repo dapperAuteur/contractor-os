@@ -382,9 +382,10 @@ function LoginContent() {
                     </p>
                     <div className="rounded-lg border border-slate-200 bg-slate-100 p-3 mb-4 text-xs text-slate-500">
                       <p>
-                        Your login email comes from{' '}
-                        <span className="font-medium text-slate-700">Work.WitUS</span>. If it isn&apos;t in your inbox
-                        in a minute or two, check your spam folder.
+                        Your sign-in email may come from{' '}
+                        <span className="font-medium text-slate-700">CentenarianOS</span>: Work.WitUS and
+                        CentenarianOS share one sign-in system for now. If it isn&apos;t in your inbox in a minute
+                        or two, check your spam folder.
                       </p>
                     </div>
                     <label htmlFor="otp-code" className="block text-sm font-medium mb-1 text-slate-700">
