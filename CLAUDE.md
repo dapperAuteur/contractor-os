@@ -105,6 +105,11 @@ block text-sm font-medium text-slate-700 mb-1
 ## Shared Database
 
 This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details.
+
+A move to its own Neon database is planned (CentOS plan 55 Phase 3); not done as of 2026-10-06; no
+code reads Neon. Until that move happens, treat the database, Supabase Auth users and Auth email
+settings (templates, SMTP, MFA) as shared with CentenarianOS.
+
 - **Always use `IF NOT EXISTS` / `IF EXISTS`** in migrations
 - **Never drop columns** without checking both repos
 - **Copy new migrations to both repos** to keep schema history in sync

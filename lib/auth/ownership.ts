@@ -9,10 +9,12 @@
 // user's planner, or read another user's names and amounts back through a join.
 // This file is the one place that check lives.
 //
-// Ported from CentenarianOS (lib/auth/ownership.ts, 2026-10-05). The two apps
-// share one Supabase database, so the table rules below hold here too; the
-// migration numbers refer to supabase/migrations in either repo. Keep the two
-// copies in step when a rule changes.
+// Ported from CentenarianOS (lib/auth/ownership.ts, 2026-10-05). The rules come
+// from the migrations cited, in this repo's supabase/migrations (numbering
+// differs from CentenarianOS's from 196 on). A CentenarianOS change to its copy
+// of this file does not apply here automatically. As of 2026-10-06 the two apps
+// still share one Supabase project, so a schema or RLS change made from either
+// repo reaches both.
 //
 // THE RULE, PER TABLE (taken from the migrations, not guessed)
 //   - Tables with a user_id column: the row's user_id must be the caller.

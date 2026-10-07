@@ -1,4 +1,5 @@
 -- 197_job_documents_member_read.sql
+-- Target: the Supabase project Work.WitUS production uses (shared with CentenarianOS as of 2026-10-06). Supabase-only; never run against the Neon Phase 3 instance.
 -- Job documents: only people on the job can read shared documents, and
 -- documents can only be attached to a job the uploader is on (plan 14.5).
 --
