@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
+import ContactLink from '@/components/ui/ContactLink';
 
 export const metadata: Metadata = {
   title: 'Terms of Use | Work.WitUS',
@@ -202,10 +203,8 @@ export default function TermsPage() {
 
         <Section title="15. Contact">
           <p>
-            Questions about these Terms? Contact us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
-              hello@centenarianos.com
-            </a>
+            Questions about these Terms? Contact us via{' '}
+            <ContactLink />
             .
           </p>
         </Section>
