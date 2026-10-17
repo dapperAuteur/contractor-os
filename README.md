@@ -26,7 +26,9 @@ A contractor management platform for freelance workers and crew coordinators to 
 - **Auth**: Supabase Auth (email/password + optional MFA)
 - **AI**: Google Gemini 2.5 Flash (document scanning, learning path recommendations, course suggestions)
 - **Payments**: Stripe (subscriptions, course enrollment, Connect payouts, promo codes)
-- **Email**: Resend (campaigns, auth, admin messages)
+- **Email**: Mailgun HTTP API (campaigns, admin messages, notifications). Login, signup and password emails
+  are sent by Supabase Auth itself, from the shared Supabase project's own email settings (see
+  [Database and email identity](#database-and-email-identity))
 - **Links**: Switchy.io (tracked short links with marketing pixels)
 - **Media**: Cloudinary
 - **Analytics**: Umami (privacy-first), custom usage events + page views
@@ -84,12 +86,15 @@ CLOUDINARY_API_SECRET=
 # Push Notifications
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=
 VAPID_PRIVATE_KEY=
-VAPID_SUBJECT=mailto:admin@work.witus.online
+VAPID_SUBJECT=                 # mailto: or https: contact; falls back to the https NEXT_PUBLIC_SITE_URL
 CRON_SECRET=
 
-# Email (Resend)
-RESEND_API_KEY=
-RESEND_FROM_EMAIL=
+# Email (Mailgun) — unset key, domain or sender = email skipped
+MAILGUN_API_KEY=
+MAILGUN_DOMAIN=                # sending domain verified in Mailgun
+EMAIL_FROM=                    # "Work.WitUS <name@MAILGUN_DOMAIN>"
+MAILGUN_REGION=us              # us (default) or eu
+NEXT_PUBLIC_CONTACT_EMAIL=     # shown on /privacy, /terms, /community; unset = link to /dashboard/feedback
 
 # Short Links (Switchy.io)
 SWITCHY_API_TOKEN=
@@ -183,7 +188,7 @@ contractor-os/
 │   ├── ocr/                   # Gemini vision, document classification
 │   ├── push/                  # Push subscribe + send
 │   ├── offline/               # IndexedDB sync queue, offline fetch
-│   ├── email/                 # Resend client, campaign templates
+│   ├── email/                 # Mailgun client, email templates, campaign templates
 │   ├── features/              # Roadmap data, industry configs, module registry
 │   ├── switchy.ts             # Switchy.io short link API
 │   └── supabase/              # Server & admin Supabase clients
@@ -226,7 +231,7 @@ The admin panel includes:
 Work.WitUS is an OIDC client of the shared WitUS identity provider at `accounts.witus.online`, slug
 `work`, client_id `witus-work`. Because this app authenticates with **Supabase** rather than Better
 Auth or NextAuth, it runs a bespoke authorization-code flow in `app/api/auth/witus/*` — the same
-shape CentenarianOS runs against the same IdP and the same Supabase project. Its registered redirect
+shape CentenarianOS runs against the same IdP. Its registered redirect
 URI is `https://work.witus.online/api/auth/witus/callback`, matched by the IdP with `===`.
 
 **Three behaviours, all optional and all dark by default.** Without `WITUS_OIDC_CLIENT_ID` the
@@ -357,9 +362,38 @@ sent with a failure event, only a coarse `method` and `stage`.
 
 Report vulnerabilities: [hello@badcba.com](mailto:hello@badcba.com)
 
-## Shared Database
+## Database and email identity
 
-This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details on migration coordination, shared tables, and the `app` discriminator pattern.
+As of 2026-10-06, Work.WitUS and CentenarianOS still use **one shared Supabase project**: the same
+database, the same Supabase Auth users, and the same Auth email settings. See `SHARED_DB.md`. A move
+to Work.WitUS's own Neon database is planned (CentenarianOS plan 55, Phase 3) and has not happened;
+no code here reads Neon. Ecosystem sign-in goes through WitUS SSO above.
+
+Every email the app itself sends comes from Work.WitUS, never from a CentenarianOS address. Login
+emails are the exception while the Supabase project is shared (last two bullets):
+
+- **App email (Mailgun)** goes through `sendEmail()` in `lib/email/mailgun.ts`: Mailgun's HTTP
+  API with `MAILGUN_API_KEY`, `MAILGUN_DOMAIN`, `MAILGUN_REGION` (`us` default, or `eu`) and the
+  sender from `EMAIL_FROM` (`lib/email/sender.ts`). There is no built-in fallback address. When any
+  of the three required values is unset, notification emails are skipped (logged once), in-app
+  records are still saved, a broadcast reports that email was skipped, and campaign sends are
+  refused with a clear error. Open and click tracking are off.
+- **Campaigns and broadcasts** use Mailgun batch sends (up to 1,000 recipients per request, with
+  recipient-variables so each person gets their own copy). `{{name}}` in a campaign body is filled
+  per recipient.
+- **Templates** live in `lib/email/templates/` (functions returning `{ subject, html, text }`,
+  always with a plain-text part). `npm run email:preview` renders every email to
+  `.email-preview/`; `npm run test:email` checks them.
+- **Login, signup and password emails** are sent by Supabase Auth, not by this app. Their sender,
+  SMTP server and templates are set per Supabase project (Supabase Dashboard → Authentication), and
+  that project is **shared with CentenarianOS**, so any change there changes CentenarianOS's login
+  emails too.
+- **Do not rebrand the shared project's login emails.** Don't paste the Work.WitUS templates or point
+  its SMTP at a Work.WitUS or Mailgun sender until the two apps are on separate Supabase projects.
+  The paste-ready HTML and subjects for that day are in `lib/email/supabase-templates.ts` (also
+  written to `.email-preview/supabase-*.html` by the preview script).
+- **Public contact** on `/privacy`, `/terms` and `/community` comes from
+  `NEXT_PUBLIC_CONTACT_EMAIL`; when it is unset those pages link to `/dashboard/feedback`.
 
 ## License
 

@@ -5,7 +5,8 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { createClient as createServerClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { getResend } from '@/lib/email/resend';
+import { sendEmail } from '@/lib/email/mailgun';
+import { adminFeedbackNotice } from '@/lib/email/templates';
 import { mirrorFeedbackToInbox } from '@/lib/feedback/inbox-mirror';
 
 function getServiceClient() {
@@ -50,7 +51,10 @@ export async function POST(request: NextRequest) {
   }
 
   const { category, message, media_url, source_app } = body;
-  const app = source_app?.trim() || 'centenarian';
+  // Default matches what components/FeedbackModal.tsx sends. The old 'centenarian' default was
+  // copied from CentenarianOS; the two apps still share one Supabase project (and this feedback
+  // table), so this value is what tells their rows apart.
+  const app = source_app?.trim() || 'Work.WitUS';
 
   if (!category || !VALID_CATEGORIES.includes(category as Category)) {
     return NextResponse.json({ error: 'category must be one of: bug, feature, general' }, { status: 400 });
@@ -88,16 +92,19 @@ export async function POST(request: NextRequest) {
     const adminEmail = process.env.ADMIN_EMAIL;
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
     if (adminEmail) {
-      const resend = getResend();
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL ?? 'admin@centenarianos.com',
+      // Skipped (logged once) when Mailgun is not configured; the feedback is already saved.
+      await sendEmail({
         to: adminEmail,
-        subject: `[${app}] New ${category} feedback from ${user.email}`,
-        html: `<p><strong>App:</strong> ${app}</p>
-               <p><strong>${user.email}</strong> submitted a <strong>${category}</strong> report:</p>
-               <blockquote style="border-left:3px solid #d97706;padding-left:12px;color:#374151;">${message.trim()}</blockquote>
-               ${media_url ? `<p>📎 <a href="${media_url}">View attachment</a></p>` : ''}
-               <p><a href="${siteUrl}/admin/feedback">Reply in Admin Dashboard →</a></p>`,
+        ...adminFeedbackNotice({
+          app,
+          userEmail: user.email ?? '',
+          category,
+          message,
+          mediaUrl: media_url || null,
+          siteUrl,
+        }),
+        replyTo: user.email ?? undefined,
+        tags: ['admin-notice', 'feedback'],
       });
     }
   } catch (e) {

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/ui/SiteFooter';
+import ContactLink from '@/components/ui/ContactLink';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | Work.WitUS',
@@ -175,10 +176,8 @@ export default function PrivacyPage() {
             <li><strong>Opt-out:</strong> Disable push notifications, scan image saving, or public job listings at any time</li>
           </ul>
           <p className="mt-3">
-            To exercise these rights, email us at{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
-              hello@centenarianos.com
-            </a>
+            To exercise these rights, contact us via{' '}
+            <ContactLink />
             .
           </p>
         </Section>
@@ -202,9 +201,7 @@ export default function PrivacyPage() {
         <Section title="13. Contact">
           <p>
             Privacy questions or requests:{' '}
-            <a href="mailto:hello@centenarianos.com" className="text-amber-600 hover:underline">
-              hello@centenarianos.com
-            </a>
+            <ContactLink />
             <br />
             B4C LLC / AwesomeWebStore.com — Indianapolis, Indiana, USA
           </p>
