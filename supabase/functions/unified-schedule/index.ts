@@ -7,6 +7,36 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Row shapes this function reads, typed by hand because the Deno function has no
+// generated database types. PostgREST returns an embedded many-to-one row as an object.
+interface EmbeddedJob {
+  id: string;
+  job_number?: string | null;
+  client_name: string;
+  event_name: string | null;
+  location_name?: string | null;
+  status?: string;
+  start_date: string;
+  end_date: string | null;
+  is_multi_day?: boolean | null;
+  scheduled_dates?: string[] | null;
+  pay_rate?: number | null;
+  rate_type?: string | null;
+}
+
+interface AssignmentRow {
+  contractor_jobs: EmbeddedJob | null;
+  profiles?: { display_name: string | null } | null;
+}
+
+/** One entry in the unified feed or the availability conflict list. */
+interface FeedEntry {
+  type: string;
+  date?: string | null;
+  time?: string | null;
+  [field: string]: unknown;
+}
+
 function jsonResponse(data: unknown, status = 200) {
   return new Response(JSON.stringify(data), {
     status,
@@ -112,7 +142,7 @@ serve(async (req) => {
     ]);
 
     // Merge into unified feed
-    const items: unknown[] = [];
+    const items: FeedEntry[] = [];
 
     for (const t of tasksRes.data ?? []) {
       items.push({
@@ -149,8 +179,9 @@ serve(async (req) => {
     }
 
     for (const a of assignedJobsRes.data ?? []) {
-      const j = (a as any).contractor_jobs;
-      const p = (a as any).profiles;
+      const row = a as unknown as AssignmentRow;
+      const j = row.contractor_jobs;
+      const p = row.profiles;
       if (!j || j.status === 'cancelled') continue;
       // Filter by date range
       if (j.start_date > to || (j.end_date && j.end_date < from)) continue;
@@ -200,7 +231,7 @@ serve(async (req) => {
     }
 
     // Sort chronologically
-    items.sort((a: any, b: any) => {
+    items.sort((a, b) => {
       const cmp = (a.date ?? '').localeCompare(b.date ?? '');
       if (cmp !== 0) return cmp;
       return (a.time ?? '').localeCompare(b.time ?? '');
@@ -241,16 +272,16 @@ serve(async (req) => {
         .eq('completed', false),
     ]);
 
-    const conflicts: unknown[] = [];
+    const conflicts: FeedEntry[] = [];
 
     for (const j of jobsRes.data ?? []) {
       conflicts.push({ type: 'job', id: j.id, title: `${j.client_name}${j.event_name ? ' — ' + j.event_name : ''}`, start_date: j.start_date, end_date: j.end_date });
     }
 
     for (const a of assignedRes.data ?? []) {
-      const j = (a as any).contractor_jobs;
+      const j = (a as unknown as AssignmentRow).contractor_jobs;
       if (!j) continue;
-      if (j.start_date > date || j.end_date < date) continue;
+      if (j.start_date > date || (j.end_date !== null && j.end_date < date)) continue;
       conflicts.push({ type: 'job', id: j.id, title: `${j.client_name}${j.event_name ? ' — ' + j.event_name : ''}`, start_date: j.start_date, end_date: j.end_date, source: 'assigned' });
     }
 
@@ -260,9 +291,9 @@ serve(async (req) => {
 
     return jsonResponse({
       date,
-      available: conflicts.filter((c: any) => c.type === 'job').length === 0,
-      job_conflicts: conflicts.filter((c: any) => c.type === 'job').length,
-      task_count: conflicts.filter((c: any) => c.type === 'task').length,
+      available: conflicts.filter((c) => c.type === 'job').length === 0,
+      job_conflicts: conflicts.filter((c) => c.type === 'job').length,
+      task_count: conflicts.filter((c) => c.type === 'task').length,
       conflicts,
     });
   }
