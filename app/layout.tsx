@@ -71,8 +71,8 @@ export default function RootLayout({
           apiHost="/ingest"
         />
         <MarketingBanner />
-        {/* Ecosystem SSO ("Continue as ...", global sign-out). Resolved HERE, in the Server
-            Component, and passed down — the login button and the nav logout rows are all client
+        {/* Ecosystem SSO ("Continue as ...", "Sign out of WitUS everywhere"). Resolved HERE, in the Server
+            Component, and passed down — the login button and the nav sign-out rows are all client
             components and must not touch process.env.WITUS_OIDC_*. Fully dark (every field null)
             when WITUS_OIDC_CLIENT_ID is unset. Reads env only, never headers(), so the whole route
             tree stays statically renderable. See lib/auth/witus-sso-server.ts. */}

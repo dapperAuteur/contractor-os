@@ -14,7 +14,6 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import {
   WITUS_SSO_DISABLED,
   onRegisteredOrigin,
-  signOutLabel,
   witusLogoutUrl,
   type WitusSsoConfig,
 } from './witus-sso';
@@ -41,8 +40,9 @@ export function useWitusSso(): WitusSsoConfig {
 }
 
 /**
- * The IdP logout URL to navigate to after the local session is destroyed, or null when sign-out
- * must stay local.
+ * The IdP logout URL "Sign out of WitUS everywhere" navigates to after the local session is
+ * destroyed, or null when that control must not render. The plain "Sign out" never uses it
+ * (BAM, 2026-10-29, witus task 128 option (b)).
  *
  * Null whenever this app is not a configured ecosystem client, OR the browser is on a host the IdP
  * does not know. This project also serves www.badcba.com, where `post_logout_redirect_uri` would be
@@ -52,8 +52,8 @@ export function useWitusSso(): WitusSsoConfig {
  * RESOLVED AFTER MOUNT, not during render. One deployment serves two hosts, so the server cannot
  * know which one this is without `headers()`, and paying for that in the root layout would make the
  * whole app dynamic (see lib/auth/witus-sso-server.ts). Reading `window.location.origin` during
- * render instead would hydrate a different label than the server sent. So it starts null — today's
- * purely local sign-out, today's "Logout" copy — and upgrades once mounted on the registered host.
+ * render instead would hydrate different markup than the server sent. So it starts null — no
+ * everywhere control — and the control appears once mounted on the registered host.
  *
  * USE IT AFTER `supabase.auth.signOut()`, NEVER BEFORE. Order is the safety property: destroy the
  * local session first, so an unreachable or refusing IdP still leaves the person signed out here.
@@ -76,16 +76,4 @@ export function useGlobalSignOutUrl(): string | null {
   }, [endSessionUrl, appOrigin]);
 
   return url;
-}
-
-/**
- * What the logout row in the nav should say.
- *
- * "Logout" — this app's existing word — until we know the click will end the shared session too, at
- * which point it becomes "Sign out of WitUS". A control that signs you out of a dozen other apps
- * should admit it before you press it. Follows `useGlobalSignOutUrl`'s after-mount resolution, so
- * the first paint is always today's copy and there is no hydration mismatch.
- */
-export function useSignOutLabel(): string {
-  return signOutLabel(useGlobalSignOutUrl());
 }

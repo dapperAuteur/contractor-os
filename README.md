@@ -246,9 +246,15 @@ visitor cannot complete is worse than none. See [`.env.example`](./.env.example)
    design. The name is display copy and never a credential: clicking runs the real code flow. The
    loop guard is two-part — a `sessionStorage` marker written immediately *before* the redirect, plus
    a `?sso=tried` parameter that every bounce back to `/login` carries.
-2. **Global sign-out.** Signing out here also ends the shared session at the IdP, so it signs you out
-   of every WitUS app in this browser (BAM's decision, 2026-08-30). The local session is destroyed
-   **first** — if the IdP is unreachable or refuses, you are still signed out here.
+2. **"Sign out" vs. "Sign out of WitUS everywhere"** (BAM, 2026-10-29, witus task 128 option (b)).
+   **Sign out** in the nav ends only this app's session and goes to `/login`; you stay signed in to
+   WitUS, so the next "Sign in with WitUS" goes straight in. **Sign out of WitUS everywhere** sits
+   under it (desktop user menu and mobile drawer, contractor and lister navs) with the help text
+   "Also signs you out of WitUS. Other WitUS apps you are signed in to stay signed in until you sign
+   out of them." It destroys the local session **first**, then sends the browser to the IdP's
+   `oauth2/endsession` with `client_id` and `post_logout_redirect_uri=https://work.witus.online/`;
+   if the IdP is unreachable or refuses, you are still signed out here. It renders only on the
+   registered host of a configured client.
 3. **MFA is enforced on the SSO path, exactly as on the others.** See below.
 
 **One deployment, two hosts — and only one of them does SSO.** This Vercel project also serves

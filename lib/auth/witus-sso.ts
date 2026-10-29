@@ -1,5 +1,6 @@
 // File: lib/auth/witus-sso.ts
-// Ecosystem SSO helpers — "Sign in with WitUS", "Continue as <name>", and global sign-out.
+// Ecosystem SSO helpers — "Sign in with WitUS", "Continue as <name>", and "Sign out of WitUS
+// everywhere".
 //
 // Work.WitUS is registered in the WitUS identity provider as slug `work` / client_id `witus-work`,
 // production origin https://work.witus.online. Three things are built on top of that registration:
@@ -9,8 +10,10 @@
 //   2. On /login, the form renders immediately as it always did, and IN PARALLEL the browser asks
 //      the IdP who it is. If an answer comes back, the "Sign in with WitUS" button relabels to
 //      "Continue as <name>". Not automatic — clicking still runs the real code flow.
-//   3. Signing out here also ends the shared session at the IdP, so it signs you out of every WitUS
-//      app in this browser (BAM's decision, 2026-08-30).
+//   3. "Sign out" ends only this app's Supabase session. A separate "Sign out of WitUS everywhere"
+//      also ends the shared session at the IdP; other WitUS apps keep their own sessions until the
+//      person signs out of them (BAM, 2026-10-29, witus task 128 option (b), replacing the
+//      2026-08-30 global sign-out).
 //
 // WHY A CROSS-ORIGIN PROBE AND NOT OIDC `prompt=none`. `prompt=none` is a NAVIGATION: you leave the
 // login page to ask. The only way to ask without leaving is a hidden iframe, which Safari's ITP
@@ -269,12 +272,37 @@ export function continueAsLabel(identity: SsoIdentity | null): string {
 }
 
 /**
- * Sign-out menu copy. "Logout" is this app's existing word and stays the label whenever sign-out is
- * purely local; the global variant says so explicitly, because a control that signs you out of a
- * dozen other apps should admit it before you press it.
+ * Sign-out copy. One place the exact strings live (BAM, 2026-10-29, witus task 128 option (b)).
+ *
+ * "Sign out" ends only this app's session, in every state; its name never flips (shared UI rule:
+ * the header Sign in / Sign out control is never renamed). "Sign out of WitUS everywhere" is a
+ * second control that also ends the WitUS session, and its help text says what it does NOT do.
  */
-export function signOutLabel(endSessionUrl: string | null | undefined): string {
-  return endSessionUrl ? 'Sign out of WitUS' : 'Logout';
+export const SIGN_OUT_LABEL = 'Sign out';
+export const SIGN_OUT_EVERYWHERE_LABEL = 'Sign out of WitUS everywhere';
+export const SIGN_OUT_EVERYWHERE_HELP =
+  'Also signs you out of WitUS. Other WitUS apps you are signed in to stay signed in until you sign out of them.';
+
+/**
+ * What "Sign out of WitUS everywhere" does, with the browser pieces passed in so the order can be
+ * tested without a DOM.
+ *
+ * ORDER IS THE SAFETY PROPERTY. The LOCAL session is destroyed first (awaited), so if the IdP is
+ * unreachable or refuses the logout, the person is still signed out HERE. Handing off first turns
+ * any IdP failure into "I clicked sign out and I'm still signed in." An error from the local
+ * sign-out is swallowed so the WitUS sign-out the person asked for still happens.
+ */
+export async function signOutEverywhere(deps: {
+  signOutLocal: () => Promise<unknown>;
+  navigate: (url: string) => void;
+  logoutUrl: string;
+}): Promise<void> {
+  try {
+    await deps.signOutLocal();
+  } catch {
+    // Swallowed on purpose: see above. The handoff below must still happen.
+  }
+  deps.navigate(deps.logoutUrl);
 }
 
 /**

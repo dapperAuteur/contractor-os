@@ -114,7 +114,7 @@ export default function MeSheet({
           className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition"
         >
           <LogOut className="w-5 h-5 shrink-0" />
-          Logout
+          Sign out
         </button>
       </div>
     </BottomSheet>

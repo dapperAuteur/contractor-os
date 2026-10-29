@@ -14,7 +14,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
-import { useSignOutLabel } from '@/lib/auth/witus-sso-client';
+import SignOutEverywhereButton from '@/components/nav/SignOutEverywhereButton';
+import { SIGN_OUT_LABEL } from '@/lib/auth/witus-sso';
 
 interface ListerNavItem {
   label: string;
@@ -47,9 +48,9 @@ export interface ListerNavProps {
 
 export default function ListerNav({ username, unreadMessages, onLogout, untoured }: ListerNavProps) {
 
-  // "Sign out of WitUS" when the click will also end the shared ecosystem session;
-  // plain "Logout" otherwise. Resolves after mount, so first paint is today's copy.
-  const logoutLabel = useSignOutLabel();
+  // "Sign out" ends only this app's session and always reads "Sign out". The separate
+  // SignOutEverywhereButton beside it ends the WitUS session too, and renders only on the
+  // registered host of a configured ecosystem client (BAM, 2026-10-29, witus task 128 option (b)).
   const pathname = usePathname();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -152,7 +153,7 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                 </button>
 
                 {userMenuOpen && (
-                  <div className="absolute top-full right-0 mt-1 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50" role="menu">
+                  <div className="absolute top-full right-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-50" role="menu">
                     {username && (
                       <Link
                         href={`/profiles/${username}`}
@@ -197,13 +198,15 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
                     </div>
                     <div className="my-1 border-t border-slate-200" />
                     <button
+                      type="button"
                       onClick={() => { setUserMenuOpen(false); onLogout(); }}
                       className="w-full flex items-center gap-2 px-3 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
                       role="menuitem"
                     >
                       <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
-                      {logoutLabel}
+                      {SIGN_OUT_LABEL}
                     </button>
+                    <SignOutEverywhereButton variant="menu" onBeforeSignOut={() => setUserMenuOpen(false)} />
                   </div>
                 )}
               </div>
@@ -316,11 +319,13 @@ export default function ListerNav({ username, unreadMessages, onLogout, untoured
             <div className="border-t border-slate-200 my-1" />
             <div className="py-1 pb-4">
               <button
+                type="button"
                 onClick={() => { setDrawerOpen(false); onLogout(); }}
                 className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
               >
-                <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> {logoutLabel}
+                <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" /> {SIGN_OUT_LABEL}
               </button>
+              <SignOutEverywhereButton variant="drawer" onBeforeSignOut={() => setDrawerOpen(false)} />
             </div>
           </div>
         </>

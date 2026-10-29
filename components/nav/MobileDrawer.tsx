@@ -205,7 +205,7 @@ export default function MobileDrawer({
           </Link>
         </div>
 
-        {/* Logout */}
+        {/* Sign out (this app only) */}
         <div className="border-t border-slate-200 my-1" />
         <div className="py-1 pb-4">
           <button
@@ -216,7 +216,7 @@ export default function MobileDrawer({
             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition min-h-11"
           >
             <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
-            Logout
+            Sign out
           </button>
         </div>
       </div>

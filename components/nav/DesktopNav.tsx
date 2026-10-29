@@ -279,7 +279,7 @@ export default function DesktopNav({
                     role="menuitem"
                   >
                     <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
-                    Logout
+                    Sign out
                   </button>
                 </div>
               )}

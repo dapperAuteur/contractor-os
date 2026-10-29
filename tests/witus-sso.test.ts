@@ -1,5 +1,6 @@
 // File: tests/witus-sso.test.ts
-// Ecosystem SSO ("Sign in with WitUS" / "Continue as <name>" / global sign-out) and the MFA gate
+// Ecosystem SSO ("Sign in with WitUS" / "Continue as <name>" / "Sign out" vs. "Sign out of WitUS
+// everywhere") and the MFA gate
 // that sits behind it. Run with `npm run test:sso`.
 //
 // THE TEST THAT MATTERS MOST HERE is the last group: an account with a verified TOTP factor that
@@ -14,6 +15,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   SSO_ATTEMPT_STORAGE_KEY,
   continueAsLabel,
@@ -21,7 +23,10 @@ import {
   hasAttemptMarker,
   onRegisteredOrigin,
   parseSilentSsoIdentity,
-  signOutLabel,
+  SIGN_OUT_EVERYWHERE_HELP,
+  SIGN_OUT_EVERYWHERE_LABEL,
+  SIGN_OUT_LABEL,
+  signOutEverywhere,
   silentSsoDecision,
   silentSsoEndpointFromAuthorizeUrl,
   withAttemptMarker,
@@ -176,13 +181,105 @@ test('a probe identity is sanitised, capped, and optional', () => {
 test('button copy switches only when an identity was found', () => {
   assert.equal(continueAsLabel(null), 'Sign in with WitUS');
   assert.equal(continueAsLabel({ label: 'Ada' }), 'Continue as Ada');
-  assert.equal(signOutLabel(null), 'Logout');
-  assert.equal(signOutLabel(END_SESSION), 'Sign out of WitUS');
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Global sign-out.
+// Sign out (this app only) and Sign out of WitUS everywhere (BAM, 2026-10-29,
+// witus task 128 option (b)).
 // ─────────────────────────────────────────────────────────────────────────────
+
+test('the sign-out copy is exact and never flips to a global label', () => {
+  assert.equal(SIGN_OUT_LABEL, 'Sign out');
+  assert.equal(SIGN_OUT_EVERYWHERE_LABEL, 'Sign out of WitUS everywhere');
+  assert.equal(
+    SIGN_OUT_EVERYWHERE_HELP,
+    'Also signs you out of WitUS. Other WitUS apps you are signed in to stay signed in until you sign out of them.',
+  );
+});
+
+test('everywhere: the local session ends BEFORE the browser leaves for the IdP', async () => {
+  const calls: string[] = [];
+  let releaseLocal: () => void = () => {};
+  const local = new Promise<void>((resolve) => {
+    releaseLocal = resolve;
+  });
+  const logoutUrl = witusLogoutUrl(END_SESSION, APP_ORIGIN);
+  const run = signOutEverywhere({
+    signOutLocal: async () => {
+      calls.push('local:start');
+      await local;
+      calls.push('local:done');
+    },
+    navigate: (url) => calls.push(`navigate:${url}`),
+    logoutUrl,
+  });
+  // While the local sign-out is still pending, nothing has navigated.
+  await Promise.resolve();
+  assert.deepEqual(calls, ['local:start']);
+  releaseLocal();
+  await run;
+  assert.deepEqual(calls, ['local:start', 'local:done', `navigate:${logoutUrl}`]);
+  assert.ok(
+    logoutUrl.startsWith(
+      'https://accounts.witus.online/api/idp/oauth2/endsession?client_id=witus-work&post_logout_redirect_uri=',
+    ),
+  );
+  assert.ok(logoutUrl.endsWith(`post_logout_redirect_uri=${encodeURIComponent('https://work.witus.online/')}`));
+});
+
+// No DOM test setup in this repo (node:test only), so the components are pinned at the source level.
+const source = (rel: string) =>
+  readFileSync(new URL(`../${rel}`, import.meta.url), 'utf-8')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+
+test('"Sign out" handlers are local only and never reach the IdP', () => {
+  for (const rel of ['components/SiteHeader.tsx', 'app/dashboard/layout.tsx']) {
+    const code = source(rel);
+    assert.ok(code.includes('await supabase.auth.signOut();'), `${rel}: ends the local session`);
+    assert.ok(code.includes("router.push('/login');"), `${rel}: goes to /login`);
+    assert.ok(!code.includes('useGlobalSignOutUrl'), `${rel}: never reads the IdP logout URL`);
+    assert.ok(!code.includes('window.location.assign'), `${rel}: never navigates off-origin`);
+    assert.ok(!code.includes('endsession'), `${rel}: never names the end-session endpoint`);
+  }
+});
+
+test('the navs say exactly "Sign out" and put the everywhere control beside it', () => {
+  for (const rel of ['components/nav/ContractorNav.tsx', 'components/nav/ListerNav.tsx']) {
+    const code = source(rel);
+    assert.ok(!code.includes('Sign out of WitUS\''), `${rel}: no flipped label`);
+    assert.ok(!code.includes('useSignOutLabel'), `${rel}: no label hook`);
+    assert.equal(code.split('{SIGN_OUT_LABEL}').length - 1, 2, `${rel}: user menu + drawer`);
+    assert.ok(code.includes('<SignOutEverywhereButton variant="menu"'), `${rel}: desktop menu`);
+    assert.ok(code.includes('<SignOutEverywhereButton variant="drawer"'), `${rel}: mobile drawer`);
+  }
+});
+
+test('the everywhere control is absent without a logout URL and describes itself', () => {
+  const code = source('components/nav/SignOutEverywhereButton.tsx');
+  // useGlobalSignOutUrl() is null when dark AND on the unregistered host (www.badcba.com).
+  assert.ok(code.includes('const logoutUrl = useGlobalSignOutUrl();'));
+  assert.ok(code.includes('if (!logoutUrl) return null;'));
+  assert.ok(code.includes('aria-describedby={helpId}'));
+  assert.ok(code.includes('id={helpId}'));
+  assert.ok(code.includes('{SIGN_OUT_EVERYWHERE_HELP}'));
+  assert.ok(code.includes('signOutEverywhere({'), 'goes through the ordered helper');
+  // And the hook it relies on is gated on the registered host.
+  const hook = source('lib/auth/witus-sso-client.tsx');
+  assert.ok(hook.includes('onRegisteredOrigin(appOrigin, window.location.origin)'));
+});
+
+test('everywhere: a failed local sign-out is swallowed and the handoff still happens', async () => {
+  const navigated: string[] = [];
+  await signOutEverywhere({
+    signOutLocal: async () => {
+      throw new Error('network down');
+    },
+    navigate: (url) => navigated.push(url),
+    logoutUrl: witusLogoutUrl(END_SESSION, APP_ORIGIN),
+  });
+  assert.equal(navigated.length, 1);
+});
 
 test('the logout URL carries client_id and an exactly-registered post-logout target', () => {
   const url = new URL(witusLogoutUrl(END_SESSION, APP_ORIGIN));
