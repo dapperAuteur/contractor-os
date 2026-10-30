@@ -1,0 +1,692 @@
+{
+  "$comment": "Plan 18 §3 as data. scripts/db/generate-baseline.mjs reads `tables` and `views` to build db/migrations 0000-0002; Phase 4 copy-from-supabase.mjs will read `filter`. Filters are prose until Phase 4 turns them into SQL. `pending` lists tables waiting on task 21 Q3 (cut or keep); they are NOT in the Neon schema yet. If BAM keeps any, add them to `tables` and generate a NEW migration (never rewrite 0000-0002 once applied).",
+  "updated": "2026-10-30",
+  "tables": [
+    {
+      "decided": true,
+      "name": "users",
+      "section": "3.3",
+      "action": "new",
+      "filter": "built from auth.users (id, email, email_confirmed_at, created_at, last_sign_in_at) for the moving people; passwords and TOTP secrets are not copied"
+    },
+    {
+      "decided": true,
+      "name": "contractor_events",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contractor_rate_cards",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "job_time_entries",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "job_notes",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "job_documents",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "job_replacement_requests",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "paychecks",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "paycheck_deposits",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "paycheck_invoices",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "paycheck_taxes",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "union_documents",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "union_document_chunks",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "union_memberships",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "union_dues_payments",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "union_rag_submissions",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "lister_messages",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "lister_message_groups",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "lister_message_group_members",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contact_phones",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contact_emails",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contact_addresses",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contact_tags",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contact_job_roles",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contact_shares",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "public_venues",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "venue_change_requests",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "email_sends",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "notification_log",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "notification_preferences",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "push_subscriptions",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "referral_rewards",
+      "section": "3.1",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "email_campaigns",
+      "section": "3.1",
+      "action": "move-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "referral_reward_tiers",
+      "section": "3.1",
+      "action": "move-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "contractor_jobs",
+      "section": "3.2",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "contractor_job_assignments",
+      "section": "3.2",
+      "action": "move",
+      "filter": "all rows"
+    },
+    {
+      "decided": true,
+      "name": "invoices",
+      "section": "3.2",
+      "action": "move",
+      "filter": "all rows; CentOS keeps authoring invoices in the shared table (BAM, 2026-10-30, Q5), so Phase 6 decides how CentOS-authored invoices reach Work.WitUS after the cutover"
+    },
+    {
+      "decided": true,
+      "name": "invoice_items",
+      "section": "3.2",
+      "action": "move",
+      "filter": "all rows; CentOS keeps authoring invoices in the shared table (BAM, 2026-10-30, Q5), so Phase 6 decides how CentOS-authored invoices reach Work.WitUS after the cutover"
+    },
+    {
+      "decided": true,
+      "name": "invoice_templates",
+      "section": "3.2",
+      "action": "move",
+      "filter": "all rows; CentOS keeps authoring invoices in the shared table (BAM, 2026-10-30, Q5), so Phase 6 decides how CentOS-authored invoices reach Work.WitUS after the cutover"
+    },
+    {
+      "decided": true,
+      "name": "invoice_template_items",
+      "section": "3.2",
+      "action": "move",
+      "filter": "all rows; CentOS keeps authoring invoices in the shared table (BAM, 2026-10-30, Q5), so Phase 6 decides how CentOS-authored invoices reach Work.WitUS after the cutover"
+    },
+    {
+      "decided": true,
+      "name": "profiles",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "people: only people who have used Work.WitUS (BAM, 2026-10-30, task 21 Q2); the footprint query is written in Phase 4"
+    },
+    {
+      "decided": true,
+      "name": "witus_identities",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "people: only people who have used Work.WitUS (BAM, 2026-10-30, task 21 Q2); the footprint query is written in Phase 4"
+    },
+    {
+      "decided": true,
+      "name": "user_contacts",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "contact_locations",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "equipment",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "equipment_categories",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "equipment_media",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "equipment_valuations",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "user_brands",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "budget_categories",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "life_categories",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": true,
+      "name": "entity_life_categories",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "user_id in the moving people"
+    },
+    {
+      "decided": false,
+      "name": "equipment_catalog",
+      "section": "3.3",
+      "action": "copy-all",
+      "filter": "all rows if it is global reference data (check in Phase 4)"
+    },
+    {
+      "decided": false,
+      "name": "financial_accounts",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "only the accounts Work.WitUS rows point at (task 21 Q4, open)"
+    },
+    {
+      "decided": false,
+      "name": "blog_posts",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "open: which posts are Work.WitUS's (task 21 Q12); blog_posts has no app column"
+    },
+    {
+      "decided": false,
+      "name": "blog_likes",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "open: which posts are Work.WitUS's (task 21 Q12); blog_posts has no app column"
+    },
+    {
+      "decided": false,
+      "name": "blog_saves",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "open: which posts are Work.WitUS's (task 21 Q12); blog_posts has no app column"
+    },
+    {
+      "decided": false,
+      "name": "blog_events",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "open: which posts are Work.WitUS's (task 21 Q12); blog_posts has no app column"
+    },
+    {
+      "decided": true,
+      "name": "help_articles",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "marketing_banners",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "admin_promo_campaigns",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "cashapp_payments",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "og_image_requests",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "social_referrals",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "user_feedback",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "feedback_replies",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "module_tours",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "tour_events",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "app column in ('contractor', 'workwitus', 'lister') where the table has one, else by people (plan 18 §3.1: the code uses both app values)"
+    },
+    {
+      "decided": true,
+      "name": "admin_chats",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "rows of the moving people"
+    },
+    {
+      "decided": true,
+      "name": "admin_chat_messages",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "rows of the moving people"
+    },
+    {
+      "decided": true,
+      "name": "admin_messages",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "rows of the moving people"
+    },
+    {
+      "decided": true,
+      "name": "admin_notifications",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "rows of the moving people"
+    },
+    {
+      "decided": true,
+      "name": "message_replies",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "rows of the moving people"
+    },
+    {
+      "decided": true,
+      "name": "message_reads",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "rows of the moving people"
+    },
+    {
+      "decided": false,
+      "name": "invited_users",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "platform_settings",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "institutions",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "institution_offers",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "coaching_applications",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "content_shares",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "recurring_payments",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "scan_images",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "receipt_line_items",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "item_prices",
+      "section": "3.3",
+      "action": "copy-filtered",
+      "filter": "by user or app; Phase 3 checks whether each is a CentOS feature to cut"
+    },
+    {
+      "decided": false,
+      "name": "usage_events",
+      "section": "3.3",
+      "action": "start-empty",
+      "filter": "none: start empty unless BAM says copy (task 21 Q13, open)"
+    },
+    {
+      "decided": false,
+      "name": "app_logs",
+      "section": "3.3",
+      "action": "start-empty",
+      "filter": "none: start empty unless BAM says copy (task 21 Q13, open)"
+    },
+    {
+      "decided": false,
+      "name": "page_views",
+      "section": "3.3",
+      "action": "start-empty",
+      "filter": "none: start empty unless BAM says copy (task 21 Q13, open)"
+    },
+    {
+      "decided": true,
+      "name": "financial_transactions",
+      "section": "3.4",
+      "action": "split",
+      "filter": "CentOS plans/ecosystem/phase3-finance-rule.md; re-run the audit before the rehearsal"
+    }
+  ],
+  "views": [
+    {
+      "name": "expected_payments",
+      "section": "3.2",
+      "note": "recreated with the total_hours fix (plan 55 §4c)"
+    },
+    {
+      "name": "public_profiles",
+      "section": "3.1",
+      "note": "recreated as on Supabase"
+    }
+  ],
+  "pending": {
+    "travel (task 21 Q3)": [
+      "trips",
+      "vehicles",
+      "vehicle_maintenance",
+      "fuel_logs",
+      "trip_routes",
+      "trip_templates",
+      "trip_template_stops",
+      "travel_settings",
+      "component_wear",
+      "city_guides",
+      "city_guide_entries"
+    ],
+    "centos-module panels (task 21 Q3)": [
+      "tasks",
+      "focus_sessions",
+      "daily_logs",
+      "meal_logs",
+      "goals",
+      "recipes",
+      "recipe_likes",
+      "recipe_saves",
+      "recipe_events",
+      "recipe_ingredients",
+      "exercises",
+      "system_exercises",
+      "exercise_likes",
+      "workout_logs",
+      "workout_templates",
+      "workout_likes",
+      "session_templates",
+      "user_health_metrics",
+      "user_metric_permissions",
+      "metric_config",
+      "user_achievements",
+      "gem_action_log",
+      "media_notes",
+      "audio_attachments",
+      "image_attachments",
+      "media_assets"
+    ],
+    "academy (task 21 Q3)": [
+      "courses",
+      "lessons",
+      "course_modules",
+      "enrollments",
+      "lesson_progress",
+      "lesson_embeddings",
+      "learning_path_completions",
+      "teacher_profiles"
+    ]
+  },
+  "not_copied": {
+    "$comment": "Foreign-key targets that stay out of Neon. The FK is dropped and the column kept as a soft reference (listed at the end of 0001_constraints.sql).",
+    "teller_enrollments": "Teller bank linking removed from Work.WitUS (task 13); holds bank tokens",
+    "import_batches": "no Work.WitUS code reads it (grep of app/ lib/ components/, 2026-10-30)"
+  }
+}
