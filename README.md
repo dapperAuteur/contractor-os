@@ -130,6 +130,17 @@ SENTRY_AUTH_TOKEN=
 supabase db push
 ```
 
+Production still runs on that shared Supabase project. Work.WitUS's own Neon database is being
+prepared (plan 18): `db/migrations/` holds its Drizzle migrations, applied by
+`.github/workflows/migrate-production.yml` and never to Supabase. Commands, env names and the
+cutover steps: [`docs/05-operations.md`](docs/05-operations.md).
+
+```bash
+npm run db:migrate:status   # Neon branch in .env.local (STORAGE_DATABASE_URL_UNPOOLED)
+npm run db:migrate          # apply pending Neon migrations
+npm run db:generate         # after editing lib/db/schema, write the next migration
+```
+
 ### Development
 
 ```bash
@@ -142,6 +153,7 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ```bash
 npm run test:scrub   # Sentry PII scrubber (Node built-in test runner, no framework needed)
+npm run test:db      # Neon move: database URL guard, session-user shape, migration/schema consistency
 ```
 
 ## Project Structure
@@ -372,8 +384,10 @@ Report vulnerabilities: [hello@badcba.com](mailto:hello@badcba.com)
 
 As of 2026-10-06, Work.WitUS and CentenarianOS still use **one shared Supabase project**: the same
 database, the same Supabase Auth users, and the same Auth email settings. See `SHARED_DB.md`. A move
-to Work.WitUS's own Neon database is planned (CentenarianOS plan 55, Phase 3) and has not happened;
-no code here reads Neon. Ecosystem sign-in goes through WitUS SSO above.
+to Work.WitUS's own Neon database (`contractor-os-db`) is under way (plan 18, building on
+CentenarianOS plan 55): as of 2026-10-30 the Drizzle schema, client (`lib/db`) and migrations exist,
+but nothing in production imports them, so the app still reads and writes only Supabase. See
+[`docs/05-operations.md`](docs/05-operations.md). Ecosystem sign-in goes through WitUS SSO above.
 
 Every email the app itself sends comes from Work.WitUS, never from a CentenarianOS address. Login
 emails are the exception while the Supabase project is shared (last two bullets):

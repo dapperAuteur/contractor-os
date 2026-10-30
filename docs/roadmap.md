@@ -20,11 +20,10 @@ updated: 2026-10-30
 
 ## In progress
 - Separation from CentenarianOS (CentenarianOS plan 55): own repo, own deploy, own sign-in and signed events are done. The database is NOT separate yet: production still reads and writes CentenarianOS's Supabase project (verified 2026-10-30). A second database is attached in Vercel but no code uses it
+- Own Neon database (plan 18): the Drizzle schema, migrations and migrate workflow are built and the schema is on the Neon dev branch (2026-10-30). Next the data access moves to Drizzle module by module, still on Supabase; then data copy, new sign-in, and the cutover
 
 ## Next
-- Decide which database becomes Work.WitUS's own (the attached integration database or a new one), then update this repo's database docs
-- Refresh the table-move plan (CentenarianOS plan 55, Phase 3) and size the schema gap
-- Automate migrations after deploy with a migration ledger (ecosystem post-deploy rule)
+- Move the data access to Drizzle, module by module, while still on Supabase (plan 18 Phase 3)
 
 ## Backlog
 - Move the remaining contractor tables and data, then retire them from CentenarianOS (plan 55, Phases 3 to 5)
@@ -33,6 +32,5 @@ updated: 2026-10-30
 
 ## Blocked on
 - The table move itself (plan 55 Phase 3); until it lands, Work.WitUS and CentenarianOS share one database and its safety rules
-- Postgres 17 client for the schema dump (CentenarianOS task 56)
 - Run migration 197 for job-document visibility (task 16)
 - Login email templates and SMTP held until the database question is settled (task 18)
