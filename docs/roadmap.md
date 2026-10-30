@@ -3,7 +3,7 @@ app: work
 name: Work.WitUS
 stage: live
 url: https://work.witus.online
-updated: 2026-10-29
+updated: 2026-10-30
 ---
 
 ## Live now
@@ -19,20 +19,20 @@ updated: 2026-10-29
 - Sign out leaves only this app; a second control signs out of WitUS everywhere
 
 ## In progress
-- Separation from CentenarianOS (CentenarianOS plan 55): own repo, own deploy, own sign-in and signed events are done; whether the database is fully separate is being confirmed against the production settings
+- Separation from CentenarianOS (CentenarianOS plan 55): own repo, own deploy, own sign-in and signed events are done. The database is NOT separate yet: production still reads and writes CentenarianOS's Supabase project (verified 2026-10-30). A second database is attached in Vercel but no code uses it
 
 ## Next
-- Confirm the database separation and update the database sections of this repo's docs to match
+- Decide which database becomes Work.WitUS's own (the attached integration database or a new one), then update this repo's database docs
 - Refresh the table-move plan (CentenarianOS plan 55, Phase 3) and size the schema gap
 - Automate migrations after deploy with a migration ledger (ecosystem post-deploy rule)
 
 ## Backlog
 - Move the remaining contractor tables and data, then retire them from CentenarianOS (plan 55, Phases 3 to 5)
 - Optional: business mileage moves to RideWitUS with the travel module
-- Branded login emails once the auth project is confirmed separate
+- Branded login emails once Work.WitUS has its own auth project
 
 ## Blocked on
-- Confirmation of the production database setup (BAM, from the hosting dashboard)
+- The table move itself (plan 55 Phase 3); until it lands, Work.WitUS and CentenarianOS share one database and its safety rules
 - Postgres 17 client for the schema dump (CentenarianOS task 56)
 - Run migration 197 for job-document visibility (task 16)
 - Login email templates and SMTP held until the database question is settled (task 18)
