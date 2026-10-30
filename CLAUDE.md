@@ -106,9 +106,18 @@ block text-sm font-medium text-slate-700 mb-1
 
 This app shares a Supabase database with CentenarianOS. See `SHARED_DB.md` for details.
 
-A move to its own Neon database is planned (CentOS plan 55 Phase 3); not done as of 2026-10-06; no
-code reads Neon. Until that move happens, treat the database, Supabase Auth users and Auth email
-settings (templates, SMTP, MFA) as shared with CentenarianOS.
+The move to its own Neon database (`contractor-os-db`) is plan 18 (builds on CentOS plan 55 Phase 3).
+As of 2026-10-30 (Phase 2) the Drizzle schema (`lib/db/schema`), client (`lib/db/index.ts`, reads
+`WORK_DB_URL` then `STORAGE_DATABASE_URL`) and Neon migrations (`db/migrations`, applied by
+`.github/workflows/migrate-production.yml`) exist, but nothing in production imports `lib/db`, so
+production reads only Supabase. Until the cutover, treat the database, Supabase Auth users and Auth
+email settings (templates, SMTP, MFA) as shared with CentenarianOS. Runbook: `docs/05-operations.md`.
+
+- **Two schemas until the cutover.** A column the app needs goes into `supabase/migrations` (rules
+  below) AND `lib/db/schema` + `npm run db:generate`. Never point a Drizzle migration at Supabase;
+  `scripts/db/migrate.mjs` refuses Supabase hosts.
+- **Drizzle queries bypass RLS** on both databases (owner connection): filter every query by the
+  session user (`getSessionUser()`, `lib/auth/session-user.ts`) or `lib/auth/ownership.ts`.
 
 - **Always use `IF NOT EXISTS` / `IF EXISTS`** in migrations
 - **Never drop columns** without checking both repos
