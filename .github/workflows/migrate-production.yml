@@ -1,0 +1,83 @@
+# Migrate Work.WitUS's Neon database after a merge to main, so nobody pastes a connection string.
+# Plan 18 §6; Post-deploy automation rule (witus CLAUDE.md, shared rules v9).
+#
+# Runs when a push to main changes db/migrations/**, and on demand (Actions -> "Migrate Neon
+# database" -> Run workflow), where you can pick the target:
+#   production -> secret NEON_DIRECT_URL      (Neon project contractor-os-db, branch main, direct)
+#   dev        -> secret NEON_DEV_DIRECT_URL  (branch dev-contractor-os-db, direct)
+# Set each once without copying the value (docs/05-operations.md, "Automatic migrations"):
+#   neon connection-string main --project-id square-field-10829204 | gh secret set NEON_DIRECT_URL --repo dapperAuteur/contractor-os
+# GitHub masks the value in every log line. The job fails closed when the secret is missing.
+#
+# What it runs: scripts/db/migrate.mjs, with the secret mapped onto STORAGE_DATABASE_URL_UNPOOLED.
+# The script refuses any Supabase host (the shared project is never migrated from here), refuses a
+# target that has tables but no Drizzle ledger, and records each migration in
+# drizzle.__drizzle_migrations, so a second run is a no-op. "status only" reports without applying.
+#
+# Until the cutover (plan 18 Phase 7) production still reads Supabase through WORK_DB_URL, so this
+# job builds the schema on a Neon `main` nothing reads yet: harmless, and it proves the pipeline.
+# After the cutover, keep migrations additive: Vercel deploys the same push in parallel.
+name: Migrate Neon database
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "db/migrations/**"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Which Neon branch"
+        type: choice
+        options: [production, dev]
+        default: production
+      status_only:
+        description: "Report pending migrations without applying them"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: migrate-neon-${{ inputs.target || 'production' }}
+  # Never cancel a migration halfway: a second merge waits for the first run to finish.
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TARGET: ${{ inputs.target || 'production' }}
+      # Pushes always target production; only a manual run can pick dev.
+      MIGRATION_URL: ${{ (github.event_name == 'workflow_dispatch' && inputs.target == 'dev') && secrets.NEON_DEV_DIRECT_URL || secrets.NEON_DIRECT_URL }}
+    steps:
+      - name: Require the migration secret
+        run: |
+          if [ -z "$MIGRATION_URL" ]; then
+            if [ "$TARGET" = "dev" ]; then name=NEON_DEV_DIRECT_URL; else name=NEON_DIRECT_URL; fi
+            echo "::error::Set the repository secret $name (docs/05-operations.md, Automatic migrations)."
+            exit 1
+          fi
+
+      - uses: actions/checkout@v4
+
+      # Node 24, matching ci.yml.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Migrate (${{ env.TARGET }})
+        env:
+          STORAGE_DATABASE_URL_UNPOOLED: ${{ env.MIGRATION_URL }}
+        run: |
+          if [ "${{ inputs.status_only }}" = "true" ]; then
+            node --experimental-strip-types scripts/db/migrate.mjs --status
+          else
+            node --experimental-strip-types scripts/db/migrate.mjs
+          fi
