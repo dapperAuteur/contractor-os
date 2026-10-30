@@ -51,9 +51,8 @@ export function psqlJson(url, sql, { readOnly }) {
   }
   args.push('-c', 'SET search_path = public');
   args.push('-c', sql);
-  const { PGPASSWORD: _omit, ...rest } = process.env;
   const res = spawnSync('psql', args, {
-    env: { ...rest, ...pgEnvFromUrl(url) },
+    env: { ...process.env, ...pgEnvFromUrl(url) },
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
   });
