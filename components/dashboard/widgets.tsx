@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
-  Briefcase, Clock, DollarSign, Car, Wrench, GraduationCap, FileText,
+  Briefcase, Clock, DollarSign, Wrench, GraduationCap, FileText,
   ArrowRight, Loader2, TrendingUp, CalendarDays,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
@@ -27,7 +27,6 @@ export const WIDGET_REGISTRY: WidgetDef[] = [
   { id: 'upcoming-jobs', label: 'Upcoming Jobs', description: 'Next 5 upcoming jobs by start date', icon: CalendarDays, component: UpcomingJobsWidget },
   { id: 'recent-time', label: 'Recent Time', description: 'Hours logged this week', icon: Clock, component: RecentTimeWidget },
   { id: 'finance-snapshot', label: 'Finance', description: 'Account balances and recent transactions', icon: DollarSign, component: FinanceSnapshotWidget, paid: true },
-  { id: 'travel-summary', label: 'Travel', description: 'Miles and trips this month', icon: Car, component: TravelSummaryWidget, paid: true },
   { id: 'equipment-value', label: 'Equipment', description: 'Total equipment value', icon: Wrench, component: EquipmentValueWidget, paid: true },
   { id: 'academy-progress', label: 'Learn.WitUS', description: 'Where the Work.WitUS tutorials are going', icon: GraduationCap, component: LearnWidget },
   { id: 'invoices-due', label: 'Invoices Due', description: 'Unpaid and overdue invoices', icon: FileText, component: InvoicesDueWidget },
@@ -209,33 +208,6 @@ function FinanceSnapshotWidget() {
           <p className="text-2xl font-bold text-slate-900">${data.total_balance.toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
           <p className="text-xs text-slate-500">across {data.accounts} account{data.accounts !== 1 ? 's' : ''}</p>
         </div>
-      </div>
-    </WidgetShell>
-  );
-}
-
-function TravelSummaryWidget() {
-  const [data, setData] = useState<{ trips: number; miles: number } | null>(null);
-
-  useEffect(() => {
-    const monthStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0, 10);
-    offlineFetch(`/api/travel/trips?from=${monthStart}`)
-      .then((r) => r.json())
-      .then((d) => {
-        const trips = d.trips ?? d ?? [];
-        const miles = trips.reduce((sum: number, t: { distance_miles?: number }) => sum + Number(t.distance_miles ?? 0), 0);
-        setData({ trips: trips.length, miles: Math.round(miles) });
-      })
-      .catch(() => setData({ trips: 0, miles: 0 }));
-  }, []);
-
-  if (!data) return <WidgetLoader />;
-
-  return (
-    <WidgetShell title="Travel This Month" icon={Car} href="/dashboard/contractor/travel">
-      <div className="space-y-1.5">
-        <StatRow label="Trips" value={data.trips} />
-        <StatRow label="Miles" value={data.miles.toLocaleString()} />
       </div>
     </WidgetShell>
   );

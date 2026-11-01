@@ -5,7 +5,7 @@
 
 import Link from 'next/link';
 import {
-  DollarSign, HeartPulse, Navigation, Fuel, Wrench, Car, Package,
+  DollarSign, HeartPulse, Package,
   Users, CalendarClock, Dumbbell, ListChecks, Upload, Download, FileDown,
   Database, Calendar,
 } from 'lucide-react';
@@ -41,46 +41,6 @@ const MODULES: ModuleCard[] = [
     templateUrl: '/templates/health-metrics-import-template.csv',
     description: 'Daily logs — RHR, steps, sleep, activity, body composition',
     filters: '?from=YYYY-MM-DD&to=YYYY-MM-DD',
-  },
-  {
-    slug: 'trips',
-    label: 'Trips',
-    icon: <Navigation className="w-5 h-5" />,
-    exportUrl: '/api/travel/trips/export',
-    importHref: '/dashboard/data/import/trips',
-    templateUrl: '/templates/trips-import-template.csv',
-    description: 'All trip logs — car, bike, walk, transit, flight',
-    filters: '?from=&to=&mode=&trip_category=',
-  },
-  {
-    slug: 'fuel',
-    label: 'Fuel Logs',
-    icon: <Fuel className="w-5 h-5" />,
-    exportUrl: '/api/travel/fuel/export',
-    importHref: '/dashboard/data/import/fuel',
-    templateUrl: '/templates/fuel-import-template.csv',
-    description: 'Fill-ups — gallons, cost, MPG, station',
-    filters: '?from=&to=&vehicle_id=',
-  },
-  {
-    slug: 'maintenance',
-    label: 'Maintenance',
-    icon: <Wrench className="w-5 h-5" />,
-    exportUrl: '/api/travel/maintenance/export',
-    importHref: '/dashboard/data/import/maintenance',
-    templateUrl: '/templates/maintenance-import-template.csv',
-    description: 'Vehicle service records and upcoming reminders',
-    filters: '?vehicle_id=',
-  },
-  {
-    slug: 'vehicles',
-    label: 'Vehicles',
-    icon: <Car className="w-5 h-5" />,
-    exportUrl: '/api/travel/vehicles/export',
-    importHref: '/dashboard/data/import/vehicles',
-    templateUrl: '/templates/vehicles-import-template.csv',
-    description: 'Your fleet — cars, bikes, trucks, boats',
-    filters: '?include_retired=true',
   },
   {
     slug: 'equipment',
@@ -154,7 +114,7 @@ export default function DataHubPage() {
           <li><strong>Export</strong> — click the Export button to download all your data as a CSV file. Add date range or filter parameters to the URL for filtered exports.</li>
           <li><strong>Import</strong> — download the CSV template, fill in your data, then upload it on the import page. Preview your data before confirming.</li>
           <li><strong>Google Sheets</strong> — publish your Google Sheet as CSV, then paste the URL on any import page.</li>
-          <li><strong>Max 1,000 rows</strong> per import (200 for vehicles, 500 for contacts).</li>
+          <li><strong>Max 1,000 rows</strong> per import (500 for contacts).</li>
         </ul>
       </div>
 

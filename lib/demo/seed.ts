@@ -16,6 +16,9 @@ export function daysFromNow(n: number): string {
 }
 
 // Deletion order respects FK constraints (children before parents).
+// Travel tables (trips, vehicles, fuel_logs, ...) are no longer seeded
+// (plan 18 Phase 1) but stay in this list so a reset still clears rows earlier seeds created.
+// They leave this list when the tables are dropped (plan 18 Phase 8 / CentOS plan 49 Stage 6).
 // Child tables with ON DELETE CASCADE are omitted — they are auto-deleted
 // when their parent row is removed (e.g. invoice_items via invoices).
 export const CLEAR_ORDER = [
@@ -139,44 +142,6 @@ export async function seedTutorial(supabase: SupabaseClient, userId: string): Pr
     { user_id: userId, amount: 55.00, type: 'expense', description: 'Internet service', vendor: 'Comcast', transaction_date: daysAgo(55), source: 'manual', category_id: catId('Utilities'), account_id: checkingId },
   ]);
   if (txErr) throw new Error(`Tutorial transactions: ${txErr.message}`);
-
-  // Vehicle
-  const { data: veh, error: vehErr } = await supabase
-    .from('vehicles')
-    .insert([{ user_id: userId, nickname: 'My Camry', type: 'car', make: 'Toyota', model: 'Camry', year: 2022, ownership_type: 'owned', active: true }])
-    .select('id');
-  if (vehErr) throw new Error(`Tutorial vehicle: ${vehErr.message}`);
-  const vehicleId = veh?.[0]?.id;
-
-  if (vehicleId) {
-    const { error: fuelErr } = await supabase.from('fuel_logs').insert([
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(5), odometer_miles: 24850, miles_since_last_fill: 312, gallons: 8.9, total_cost: 30.56, cost_per_gallon: 3.434, mpg_display: 35.1, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(19), odometer_miles: 24538, miles_since_last_fill: 298, gallons: 8.6, total_cost: 29.82, cost_per_gallon: 3.468, mpg_display: 34.7, station: 'Chevron', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(34), odometer_miles: 24240, miles_since_last_fill: 305, gallons: 8.8, total_cost: 30.41, cost_per_gallon: 3.456, mpg_display: 34.7, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(50), odometer_miles: 23935, miles_since_last_fill: 310, gallons: 8.9, total_cost: 31.20, cost_per_gallon: 3.506, mpg_display: 34.8, station: 'Shell', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(58), odometer_miles: 23625, miles_since_last_fill: 308, gallons: 8.8, total_cost: 30.98, cost_per_gallon: 3.520, mpg_display: 35.0, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-    ]);
-    if (fuelErr) throw new Error(`Tutorial fuel logs: ${fuelErr.message}`);
-
-    const { error: maintErr } = await supabase.from('vehicle_maintenance').insert([
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(45), service_type: 'oil_change', cost: 89.99, odometer_at_service: 24000, vendor: 'Jiffy Lube', next_service_miles: 27000, notes: 'Synthetic oil' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(90), service_type: 'tire_rotation', cost: 29.99, odometer_at_service: 22500, vendor: 'Discount Tire' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(60), service_type: 'other', cost: 24.99, odometer_at_service: 23500, vendor: 'AutoZone', notes: 'Air filter replacement' },
-    ]);
-    if (maintErr) throw new Error(`Tutorial maintenance: ${maintErr.message}`);
-  }
-
-  const { error: tripErr } = await supabase.from('trips').insert([
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(1), mode: 'car', origin: 'Home', destination: 'Office', distance_miles: 12.4, duration_min: 22, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(2), mode: 'car', origin: 'Office', destination: 'Home', distance_miles: 12.4, duration_min: 25, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, date: daysAgo(4), mode: 'bike', origin: 'Home', destination: 'Park', distance_miles: 8.2, duration_min: 35, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(8), mode: 'car', origin: 'Home', destination: 'Grocery Store', distance_miles: 3.1, duration_min: 8, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(14), mode: 'car', origin: 'Home', destination: 'Airport', distance_miles: 28.5, duration_min: 45, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, date: daysAgo(15), mode: 'bike', origin: 'Hotel', destination: 'Conference Center', distance_miles: 2.3, duration_min: 12, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(22), mode: 'car', origin: 'Home', destination: 'Doctor', distance_miles: 7.8, duration_min: 18, trip_category: 'travel', tax_category: 'medical', source: 'manual' },
-    { user_id: userId, date: daysAgo(30), mode: 'bike', origin: 'Home', destination: 'Farmers Market', distance_miles: 5.5, duration_min: 24, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-  ]);
-  if (tripErr) throw new Error(`Tutorial trips: ${tripErr.message}`);
 
   // Equipment
   const { data: eqCats, error: eqCatErr } = await supabase
@@ -353,70 +318,6 @@ export async function seedVisitor(supabase: SupabaseClient, userId: string): Pro
     { user_id: userId, amount: 5400.00, type: 'income', description: 'Salary — main job', vendor: 'Employer LLC', transaction_date: daysAgo(91), source: 'manual', account_id: checkingId },
   ]);
   if (txErr) throw new Error(`Visitor transactions: ${txErr.message}`);
-
-  // Vehicles
-  const { data: vehs, error: vehErr } = await supabase
-    .from('vehicles')
-    .insert([
-      { user_id: userId, nickname: 'My CR-V', type: 'car', make: 'Honda', model: 'CR-V', year: 2020, ownership_type: 'owned', active: true },
-      { user_id: userId, nickname: 'Trek FX3', type: 'bike', make: 'Trek', model: 'FX 3', year: 2021, ownership_type: 'owned', active: true },
-    ])
-    .select('id, nickname');
-  if (vehErr) throw new Error(`Visitor vehicles: ${vehErr.message}`);
-
-  const crvId = vehs?.find(v => v.nickname === 'My CR-V')?.id;
-  const bikeId = vehs?.find(v => v.nickname === 'Trek FX3')?.id;
-
-  if (crvId) {
-    const { error: fuelErr } = await supabase.from('fuel_logs').insert([
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(4), odometer_miles: 52340, miles_since_last_fill: 285, gallons: 9.8, total_cost: 34.12, cost_per_gallon: 3.482, mpg_display: 29.1, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(11), odometer_miles: 52055, miles_since_last_fill: 278, gallons: 9.5, total_cost: 33.44, cost_per_gallon: 3.520, mpg_display: 29.3, station: 'Shell', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(23), odometer_miles: 51777, miles_since_last_fill: 290, gallons: 9.9, total_cost: 34.76, cost_per_gallon: 3.511, mpg_display: 29.3, station: 'Chevron', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(35), odometer_miles: 51487, miles_since_last_fill: 348, gallons: 11.9, total_cost: 43.20, cost_per_gallon: 3.630, mpg_display: 29.2, station: 'Arco', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(33), odometer_miles: 51835, miles_since_last_fill: 355, gallons: 12.2, total_cost: 43.68, cost_per_gallon: 3.580, mpg_display: 29.1, station: 'Mobil', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(32), odometer_miles: 52190, miles_since_last_fill: 338, gallons: 11.6, total_cost: 41.52, cost_per_gallon: 3.580, mpg_display: 29.1, station: 'BP', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(31), odometer_miles: 52528, miles_since_last_fill: 350, gallons: 12.0, total_cost: 42.60, cost_per_gallon: 3.550, mpg_display: 29.2, station: 'Arco', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(29), odometer_miles: 52878, miles_since_last_fill: 340, gallons: 11.7, total_cost: 41.60, cost_per_gallon: 3.556, mpg_display: 29.1, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(52), odometer_miles: 51197, miles_since_last_fill: 295, gallons: 10.1, total_cost: 35.45, cost_per_gallon: 3.510, mpg_display: 29.2, station: 'Shell', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(65), odometer_miles: 50902, miles_since_last_fill: 310, gallons: 10.6, total_cost: 38.16, cost_per_gallon: 3.600, mpg_display: 29.2, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(80), odometer_miles: 50592, miles_since_last_fill: 288, gallons: 9.9, total_cost: 35.64, cost_per_gallon: 3.600, mpg_display: 29.1, station: 'Chevron', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(90), odometer_miles: 50304, miles_since_last_fill: 302, gallons: 10.3, total_cost: 37.08, cost_per_gallon: 3.600, mpg_display: 29.3, station: 'Shell', fuel_grade: 'regular', source: 'manual' },
-    ]);
-    if (fuelErr) throw new Error(`Visitor fuel logs: ${fuelErr.message}`);
-
-    const { error: maintErr } = await supabase.from('vehicle_maintenance').insert([
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(60), service_type: 'oil_change', cost: 94.99, odometer_at_service: 50500, vendor: 'Honda Dealership', next_service_miles: 55500, notes: 'Full synthetic 0W-20' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(30), service_type: 'tire_rotation', cost: 35.00, odometer_at_service: 51500, vendor: 'Costco Tire' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(45), service_type: 'inspection', cost: 0, odometer_at_service: 51000, vendor: 'Honda Dealership', notes: 'Brakes fine — 50% life remaining' },
-      { user_id: userId, vehicle_id: bikeId, date: daysAgo(20), service_type: 'tune_up', cost: 0, vendor: 'REI', notes: 'Adjusted derailleurs, inflated tires' },
-      { user_id: userId, vehicle_id: crvId, date: daysAgo(88), service_type: 'oil_change', cost: 89.99, odometer_at_service: 48500, vendor: 'Jiffy Lube', next_service_miles: 51500 },
-    ]);
-    if (maintErr) throw new Error(`Visitor maintenance: ${maintErr.message}`);
-  }
-
-  const { error: tripErr } = await supabase.from('trips').insert([
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(1), mode: 'car', origin: 'Home', destination: 'Office', distance_miles: 18.2, duration_min: 32, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: bikeId, date: daysAgo(2), mode: 'bike', origin: 'Home', destination: 'Embarcadero', distance_miles: 12.5, duration_min: 55, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(3), mode: 'car', origin: 'Office', destination: 'Client Site', distance_miles: 8.4, duration_min: 18, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: bikeId, date: daysAgo(5), mode: 'bike', origin: 'Home', destination: 'Golden Gate Park', distance_miles: 15.3, duration_min: 68, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(8), mode: 'car', origin: 'Home', destination: 'Grocery Store', distance_miles: 4.2, duration_min: 10, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(10), mode: 'car', origin: 'Home', destination: 'Airport SFO', distance_miles: 22.8, duration_min: 38, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: bikeId, date: daysAgo(12), mode: 'bike', origin: 'Home', destination: 'Marin Headlands', distance_miles: 24.8, duration_min: 95, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(14), mode: 'car', origin: 'Home', destination: 'Doctor', distance_miles: 5.6, duration_min: 14, trip_category: 'travel', tax_category: 'medical', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(35), mode: 'car', origin: 'San Francisco, CA', destination: 'Los Angeles, CA', distance_miles: 382.0, duration_min: 380, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(34), mode: 'car', origin: 'Los Angeles, CA', destination: 'San Diego, CA', distance_miles: 121.0, duration_min: 120, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(32), mode: 'car', origin: 'San Diego, CA', destination: 'Joshua Tree, CA', distance_miles: 148.0, duration_min: 155, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(31), mode: 'car', origin: 'Joshua Tree, CA', destination: 'Las Vegas, NV', distance_miles: 272.0, duration_min: 270, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(29), mode: 'car', origin: 'Las Vegas, NV', destination: 'San Francisco, CA', distance_miles: 570.0, duration_min: 540, trip_category: 'travel', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(22), mode: 'car', origin: 'Home', destination: 'Client Meeting', distance_miles: 12.1, duration_min: 25, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: bikeId, date: daysAgo(19), mode: 'bike', origin: 'Home', destination: 'Ocean Beach', distance_miles: 18.0, duration_min: 78, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(45), mode: 'car', origin: 'Home', destination: 'Dentist', distance_miles: 7.2, duration_min: 16, trip_category: 'travel', tax_category: 'medical', source: 'manual' },
-    { user_id: userId, vehicle_id: bikeId, date: daysAgo(50), mode: 'bike', origin: 'Home', destination: 'Crissy Field', distance_miles: 10.5, duration_min: 45, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(55), mode: 'car', origin: 'Home', destination: 'Warehouse District', distance_miles: 9.8, duration_min: 20, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: bikeId, date: daysAgo(60), mode: 'bike', origin: 'Home', destination: 'Sausalito', distance_miles: 22.4, duration_min: 92, trip_category: 'fitness', tax_category: 'personal', source: 'manual' },
-    { user_id: userId, vehicle_id: crvId, date: daysAgo(70), mode: 'car', origin: 'Home', destination: 'Conference Center', distance_miles: 3.5, duration_min: 9, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-  ]);
-  if (tripErr) throw new Error(`Visitor trips: ${tripErr.message}`);
 
   const { error: contactErr } = await supabase.from('user_contacts').insert([
     { user_id: userId, name: 'Costco Gas', contact_type: 'vendor', use_count: 8 },

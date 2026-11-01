@@ -72,7 +72,6 @@ const FEATURE_OPTIONS = [
   { value: '', label: 'Any' },
   { value: 'jobs', label: 'Has jobs' },
   { value: 'equipment', label: 'Has equipment' },
-  { value: 'travel', label: 'Has trips' },
 ];
 
 export default function CampaignsPage() {

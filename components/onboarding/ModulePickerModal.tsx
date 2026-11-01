@@ -58,7 +58,6 @@ export default function ModulePickerModal({
         union: '/dashboard/contractor/union',
         invoices: '/dashboard/finance/invoices',
         finance: '/dashboard/finance/transactions',
-        travel: '/dashboard/travel',
         equipment: '/dashboard/equipment',
         scan: '/dashboard/scan',
       },

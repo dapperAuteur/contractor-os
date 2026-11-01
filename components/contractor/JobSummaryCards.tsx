@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, DollarSign, FileText, Car, Briefcase } from 'lucide-react';
+import { Clock, DollarSign, FileText, Briefcase } from 'lucide-react';
 
 interface Summary {
   days_worked: number;
@@ -8,7 +8,6 @@ interface Summary {
   total_invoiced: number;
   total_paid: number;
   pending_invoices: number;
-  total_miles: number;
   total_expenses: number;
   net_earnings: number;
 }
@@ -35,9 +34,6 @@ export default function JobSummaryCards({ summary }: { summary: Summary }) {
       <Card icon={DollarSign} label="Total Invoiced" value={fmt(summary.total_invoiced)} sub={`${fmt(summary.total_paid)} paid`} />
       <Card icon={FileText} label="Pending" value={String(summary.pending_invoices)} sub="invoices" />
       <Card icon={Briefcase} label="Net Earnings" value={fmt(summary.net_earnings)} sub={summary.total_expenses > 0 ? `${fmt(summary.total_expenses)} expenses` : undefined} />
-      {summary.total_miles > 0 && (
-        <Card icon={Car} label="Mileage" value={`${summary.total_miles.toLocaleString()} mi`} />
-      )}
     </div>
   );
 }

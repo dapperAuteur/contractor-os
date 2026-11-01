@@ -362,34 +362,6 @@ export const CONTRACTOR_TOURS: ModuleTour[] = [
     ],
   },
   {
-    slug: 'travel',
-    app: 'contractor',
-    name: 'Travel & Mileage',
-    description: 'Track trips, fuel, and vehicle maintenance.',
-    icon: 'Car',
-    steps: [
-      {
-        title: 'Welcome to Travel',
-        description: 'Log every trip with distance, cost, and purpose. Track fuel and vehicle maintenance.',
-        target: '[data-tour="travel-summary"]',
-        placement: 'bottom',
-        action: 'observe',
-      },
-      {
-        title: 'Log a trip',
-        description: 'Enter origin, destination, distance, and mode of travel. Link to a job for tax deduction tracking.',
-        target: '[data-tour="new-trip-btn"]',
-        placement: 'left',
-        action: 'observe',
-      },
-      {
-        title: 'Tour complete!',
-        description: 'Track every mile. Link travel to jobs. Make tax season painless.',
-        action: 'observe',
-      },
-    ],
-  },
-  {
     slug: 'equipment',
     app: 'contractor',
     name: 'Equipment Tracker',

@@ -1,5 +1,6 @@
 // app/api/contractor/jobs/[id]/summary/route.ts
-// GET: computed summary for a job — hours, earnings, expenses, mileage, benefits
+// GET: computed summary for a job — hours, earnings, expenses, benefits
+// (Mileage left with Travel: RideWitUS owns trips and job mileage, plan 18 Phase 1.)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
@@ -37,9 +38,6 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   let invoiceQuery = db.from('invoices')
     .select('total, amount_paid, status, invoice_items(amount, item_type)')
     .eq('job_id', id);
-  let tripQuery = db.from('trips')
-    .select('distance_miles, cost, is_round_trip')
-    .eq('job_id', id);
   let expenseQuery = db.from('financial_transactions')
     .select('amount, type')
     .eq('job_id', id);
@@ -47,12 +45,11 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   if (scopeToUser) {
     timeQuery = timeQuery.eq('user_id', user.id);
     invoiceQuery = invoiceQuery.eq('user_id', user.id);
-    tripQuery = tripQuery.eq('user_id', user.id);
     expenseQuery = expenseQuery.eq('user_id', user.id);
   }
 
-  const [timeRes, invoiceRes, tripRes, expenseRes] = await Promise.all([
-    timeQuery, invoiceQuery, tripQuery, expenseQuery,
+  const [timeRes, invoiceRes, expenseRes] = await Promise.all([
+    timeQuery, invoiceQuery, expenseQuery,
   ]);
 
   // Time totals
@@ -80,14 +77,6 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
     }
   }
 
-  // Trip/mileage totals
-  const trips = tripRes.data ?? [];
-  const totalMiles = trips.reduce((s, t) => {
-    const miles = Number(t.distance_miles) || 0;
-    return s + (t.is_round_trip ? miles * 2 : miles);
-  }, 0);
-  const totalTripCost = trips.reduce((s, t) => s + (Number(t.cost) || 0), 0);
-
   // Expense totals (from financial_transactions linked to this job)
   const transactions = expenseRes.data ?? [];
   const totalExpenses = transactions
@@ -107,8 +96,6 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
     total_paid: Math.round(totalPaid * 100) / 100,
     pending_invoices: pendingInvoices,
     total_benefits: Math.round(totalBenefits * 100) / 100,
-    total_miles: Math.round(totalMiles * 100) / 100,
-    total_trip_cost: Math.round(totalTripCost * 100) / 100,
     total_expenses: Math.round(totalExpenses * 100) / 100,
     total_income: Math.round(totalIncome * 100) / 100,
     net_earnings: Math.round((totalInvoiced - totalExpenses) * 100) / 100,

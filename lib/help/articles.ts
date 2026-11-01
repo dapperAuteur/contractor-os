@@ -154,7 +154,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to create and manage contractor jobs',
-    content: `Go to Dashboard → Jobs → New Job. Fill in the client, event name, venue/location, dates, pay rates (ST/OT/DT), department, and union local. You can link a saved contact as the client and a contact location as the venue. Jobs have statuses: assigned, confirmed, in_progress, completed, invoiced, paid, cancelled. Multi-day jobs can specify non-consecutive scheduled dates. Once a job is created, you can log time entries, upload documents, generate invoices, and link trips and expenses from the job detail page.`,
+    content: `Go to Dashboard → Jobs → New Job. Fill in the client, event name, venue/location, dates, pay rates (ST/OT/DT), department, and union local. You can link a saved contact as the client and a contact location as the venue. Jobs have statuses: assigned, confirmed, in_progress, completed, invoiced, paid, cancelled. Multi-day jobs can specify non-consecutive scheduled dates. Once a job is created, you can log time entries, upload documents, generate invoices, and link expenses from the job detail page. Mileage for a job is logged in RideWitUS.`,
   },
   {
     role: 'all',
@@ -199,7 +199,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use contractor reports and job comparison',
-    content: `Go to Dashboard → Reports for earnings summaries by client, 1099 threshold tracking ($600 per client), mileage totals, and benefits accrued YTD. Go to Dashboard → Compare to select 2-4 jobs and see side-by-side comparison: total pay, hours, rates, benefits, mileage cost, and net earnings. This helps evaluate which clients and events are most profitable. Reports can be exported as CSV for tax purposes.`,
+    content: `Go to Dashboard → Reports for earnings summaries by client, 1099 threshold tracking ($600 per client), and benefits accrued YTD. Go to Dashboard → Compare to select 2-4 jobs and see side-by-side comparison: total pay, hours, rates, benefits, expenses, and net earnings. This helps evaluate which clients and events are most profitable. Reports can be exported as CSV for tax purposes.`,
   },
   {
     role: 'all',
@@ -348,7 +348,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use saved contacts',
-    content: `Saved contacts let you store frequently-used vendors, customers, and locations across all modules. Go to Dashboard → Contacts or use the contact autocomplete on any form that supports it (finance transactions, travel trips, planner tasks). Contacts have a type (vendor, customer, or location), optional default budget category, and notes. When you select a saved vendor on a transaction, its default category auto-fills. Contacts also support sub-locations — for example, a venue contact can have multiple addresses (main entrance, loading dock, parking lot). Import contacts in bulk via the Data Hub.`,
+    content: `Saved contacts let you store frequently-used vendors, customers, and locations across all modules. Go to Dashboard → Contacts or use the contact autocomplete on any form that supports it (finance transactions, jobs, venues). Contacts have a type (vendor, customer, or location), optional default budget category, and notes. When you select a saved vendor on a transaction, its default category auto-fills. Contacts also support sub-locations — for example, a venue contact can have multiple addresses (main entrance, loading dock, parking lot). Import contacts in bulk via the Data Hub.`,
   },
 
   // ─── COACHING GEMS ────────────────────────────────────────────────────────
@@ -412,7 +412,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'What is Work.WitUS?',
-    content: `Work.WitUS is a contractor management platform for freelance workers in broadcast, events, and production. It helps you track jobs, manage invoices, log time entries, organize equipment, track travel and fuel expenses, manage union memberships, and stay on top of your finances. The main dashboard is at /dashboard/contractor. From there you can access all your jobs, invoices, contacts, venues, city guides, and more.`,
+    content: `Work.WitUS is a contractor management platform for freelance workers in broadcast, events, and production. It helps you track jobs, manage invoices, log time entries, organize equipment, manage union memberships, and stay on top of your finances. The main dashboard is at /dashboard/contractor. From there you can access all your jobs, invoices, contacts, venues, city guides, and more.`,
   },
   {
     role: 'contractor',
@@ -466,8 +466,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     role: 'contractor',
-    title: 'How to track travel and vehicle expenses',
-    content: `Go to /dashboard/travel to manage your vehicles, trips, and fuel logs. Add your vehicles with make, model, year, and type. Log each trip with origin, destination, distance, duration, and tax category (business/personal). Log fuel fill-ups with gallons, cost, station, and odometer. The system calculates MPG and cost-per-mile. All business trips are tracked for IRS mileage deduction purposes. You can also create trip templates for routes you drive frequently.`,
+    title: 'Where did Travel and Mileage go?',
+    content: `Trips, vehicles, fuel, maintenance and job mileage moved to RideWitUS (https://ride.witus.online/app), the WitUS home for travel. Work.WitUS no longer keeps its own travel log. Sign in to RideWitUS with the same WitUS account. Trips you logged before the move are still in CentenarianOS (https://centenarianos.com/dashboard/travel) until RideWitUS imports them. The Travel link in the Money menu and the Mileage tab on each job explain this and link out. Your home address for "distance from home" on jobs is still set in Work.WitUS under Contractor Settings, and job travel benefits (per diem, mileage rate, meal allowance) still flow into invoices.`
   },
   {
     role: 'contractor',
@@ -612,11 +612,6 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     role: 'contractor',
-    title: 'How to use travel planning for production work',
-    content: `Go to Dashboard → Travel (/dashboard/travel). Create a trip linked to a job — this connects your travel expenses, flights, hotels, and per diem to the specific gig. Trips have arrival/departure dates, destination city, accommodation details, and budget tracking. Add travel expenses (flights, rideshare, meals) as line items and compare them against your per diem allowance from the job's travel benefits. The travel dashboard shows all upcoming and past trips with budget vs. actual comparison. You can also create city guides for destinations you visit frequently — add restaurant, hotel, gym, and coffee recommendations for your crew.`,
-  },
-  {
-    role: 'contractor',
     title: 'How to use the job board to find or post gigs',
     content: `Go to Dashboard → Board (/dashboard/contractor/board). The board shows jobs marked public by other contractors who need replacements. Browse available gigs by date, location, or department. Click a job to see the details and rates, then click Apply to send a request to cover it. The original contractor reviews your request and can approve or decline. If you need to find a replacement for a job you cannot work, open the job and toggle Make Public — your job appears on the board for others to apply. This creates a peer-to-peer coverage system within the contractor community.`,
   },
@@ -628,7 +623,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to view earnings reports and 1099 tracking',
-    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099 — any client who paid $600+ in a year), earnings breakdown by month, total hours worked, mileage totals, and travel benefits accrued. Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, mileage cost, and net earnings. This helps you identify your most profitable clients.`,
+    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099 — any client who paid $600+ in a year), earnings breakdown by month, total hours worked, and travel benefits accrued. Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, expenses, and net earnings. This helps you identify your most profitable clients.`,
   },
   {
     role: 'contractor',
@@ -697,7 +692,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to customize dashboard widgets',
-    content: `On the contractor dashboard, click the "Customize" button in the header. A panel shows all available widgets with eye icons to show/hide each one and arrows to reorder them. Available widgets: Job Status, Upcoming Jobs, Recent Time, Invoices Due, Finance Snapshot, Travel Summary, Equipment Value, Learn.WitUS. Your widget preferences are saved to your account and persist across sessions. The default shows Job Status, Upcoming Jobs, Recent Time, and Invoices Due.`,
+    content: `On the contractor dashboard, click the "Customize" button in the header. A panel shows all available widgets with eye icons to show/hide each one and arrows to reorder them. Available widgets: Job Status, Upcoming Jobs, Recent Time, Invoices Due, Finance Snapshot, Equipment Value, Learn.WitUS. Your widget preferences are saved to your account and persist across sessions. The default shows Job Status, Upcoming Jobs, Recent Time, and Invoices Due.`,
   },
   {
     role: 'all',
@@ -715,7 +710,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'admin',
     title: 'How to create and send email campaigns',
-    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/equipment/travel). Save as Draft, then click "Send Now" to deliver by email. Each person gets their own copy, and {{name}} in the body is replaced with their display name. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
+    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/equipment). Save as Draft, then click "Send Now" to deliver by email. Each person gets their own copy, and {{name}} in the body is replaced with their display name. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
   },
   {
     role: 'admin',

@@ -26,7 +26,7 @@ export const CONTRACTOR_FEATURES: FeatureConfig[] = [
       'Document attachments (call sheets, W9s, certificates)',
       'Job detail with earnings summary and history',
       'Quick-log hours from any job page',
-      'Link jobs to invoices, travel, and expenses',
+      'Link jobs to invoices and expenses',
     ],
     demoRedirect: '/dashboard/contractor/jobs',
     icon: 'HardHat',
@@ -205,24 +205,6 @@ export const CONTRACTOR_FEATURES: FeatureConfig[] = [
     group: 'Money',
   },
   {
-    slug: 'travel',
-    title: 'Travel & Mileage',
-    tagline: 'Track every trip, every mile, every dollar.',
-    description:
-      'Log trips with origin, destination, distance, and cost. Track fuel fill-ups, vehicle maintenance, and CO2 emissions. Multi-stop routes let you plan complex travel days. Link travel costs to specific jobs for complete financial visibility and tax deduction tracking.',
-    highlights: [
-      'Trip logging with distance and cost',
-      'Multi-stop route planning',
-      'Fuel log with per-gallon tracking',
-      'Vehicle maintenance schedules',
-      'Link travel expenses to jobs',
-      'CO2 emission calculations',
-    ],
-    demoRedirect: '/dashboard/travel',
-    icon: 'Car',
-    group: 'Money',
-  },
-  {
     slug: 'equipment',
     title: 'Equipment Tracker',
     tagline: 'Know what you own, what it\'s worth, and where it is.',
@@ -267,6 +249,6 @@ export const CONTRACTOR_FEATURE_GROUPS = [
   { label: 'Jobs', slugs: ['jobs', 'offers', 'board', 'rate-cards', 'compare', 'reports'] },
   { label: 'Places', slugs: ['venues', 'cities'] },
   { label: 'Union', slugs: ['union'] },
-  { label: 'Money', slugs: ['invoices', 'finance', 'travel', 'equipment'] },
+  { label: 'Money', slugs: ['invoices', 'finance', 'equipment'] },
   { label: 'Tools', slugs: ['scan'] },
 ];
