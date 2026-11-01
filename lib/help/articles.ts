@@ -3,6 +3,8 @@
 // Role: 'student' | 'teacher' | 'admin' | 'contractor' | 'lister' | 'all'
 // Each chunk is embedded and stored in help_articles via /api/admin/help/ingest.
 
+import { FORM_1099_HELP_SENTENCE } from '../contractor/form-1099';
+
 export interface HelpArticle {
   title: string;
   content: string;
@@ -153,7 +155,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use contractor reports and job comparison',
-    content: `Go to Dashboard → Reports for earnings summaries by client, 1099 threshold tracking ($600 per client), and benefits accrued YTD. Go to Dashboard → Compare to select 2-4 jobs and see side-by-side comparison: total pay, hours, rates, benefits, expenses, and net earnings. This helps evaluate which clients and events are most profitable. Reports can be exported as CSV for tax purposes.`,
+    content: `Go to Dashboard → Reports for earnings summaries by client, 1099 threshold tracking per client, and benefits accrued YTD. ${FORM_1099_HELP_SENTENCE} Go to Dashboard → Compare to select 2-4 jobs and see side-by-side comparison: total pay, hours, rates, benefits, expenses, and net earnings. This helps evaluate which clients and events are most profitable. Reports can be exported as CSV for tax purposes.`,
   },
   {
     role: 'all',
@@ -501,7 +503,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to view earnings reports and 1099 tracking',
-    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099 — any client who paid $600+ in a year), earnings breakdown by month, total hours worked, and travel benefits accrued. Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, expenses, and net earnings. This helps you identify your most profitable clients.`,
+    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099: a client whose payments reach that tax year's threshold gets a 1099 badge), earnings breakdown by month, total hours worked, and travel benefits accrued. ${FORM_1099_HELP_SENTENCE} Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, expenses, and net earnings. This helps you identify your most profitable clients.`,
   },
   {
     role: 'contractor',
