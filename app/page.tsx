@@ -6,10 +6,11 @@ import {
   Package, ArrowUpDown,
 } from 'lucide-react';
 import { organizationSchema } from '@/lib/seo/json-ld';
+import { CONTRACTOR_PRICE_SUMMARY } from '@/lib/pricing/prices';
 
 export const metadata: Metadata = {
   title: 'Work.WitUS — Job Tracking for Independent Contractors',
-  description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors. $10/month or $100/year.',
+  description: `Track jobs, invoices, travel, and union benefits — built for crew & production contractors. ${CONTRACTOR_PRICE_SUMMARY}.`,
   openGraph: {
     title: 'Work.WitUS — Job Tracking for Independent Contractors',
     description: 'Track jobs, invoices, travel, and union benefits — built for crew & production contractors.',
@@ -229,7 +230,7 @@ export default function ContractorLandingPage() {
       {/* CTA */}
       <section className="border-t border-slate-200 py-16 text-center">
         <h2 className="text-2xl font-bold">Ready to get organized?</h2>
-        <p className="mt-2 text-slate-500">$10/month or $100/year. No free tier — just the tools you need.</p>
+        <p className="mt-2 text-slate-500">{CONTRACTOR_PRICE_SUMMARY}. No free tier — just the tools you need.</p>
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/signup"

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Users, Check, ArrowRight, Loader2 } from 'lucide-react';
+import { CONTRACTOR_PRICES, LISTER_PRICES, formatPrice, formatPriceCents, perMonthOfAnnual } from '@/lib/pricing/prices';
 
 const FEATURES = [
   'Unlimited job listings',
@@ -89,10 +90,10 @@ export default function ListerPricingPage() {
             </span>
             <h2 className="text-lg font-semibold text-slate-800">Monthly</h2>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-4xl font-extrabold text-indigo-600">$10.60</span>
+              <span className="text-4xl font-extrabold text-indigo-600">{formatPriceCents(LISTER_PRICES.introMonthly)}</span>
               <span className="text-slate-400">/month</span>
             </div>
-            <p className="mt-1 text-sm text-slate-400 line-through">$50/month regular price</p>
+            <p className="mt-1 text-sm text-slate-400 line-through">{formatPrice(LISTER_PRICES.regularMonthly)}/month regular price</p>
             <p className="mt-1 text-sm text-slate-400">Cancel anytime.</p>
             <button
               onClick={() => handleCheckout('lister-monthly')}
@@ -114,11 +115,11 @@ export default function ListerPricingPage() {
             </span>
             <h2 className="text-lg font-semibold text-slate-800">Annual</h2>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-4xl font-extrabold text-indigo-600">$103.29</span>
+              <span className="text-4xl font-extrabold text-indigo-600">{formatPriceCents(LISTER_PRICES.introAnnual)}</span>
               <span className="text-slate-400">/year</span>
             </div>
-            <p className="mt-1 text-sm text-slate-400 line-through">$500/year regular price</p>
-            <p className="mt-1 text-sm text-slate-400">${(103.29 / 12).toFixed(2)}/month, billed annually.</p>
+            <p className="mt-1 text-sm text-slate-400 line-through">{formatPrice(LISTER_PRICES.regularAnnual)}/year regular price</p>
+            <p className="mt-1 text-sm text-slate-400">{perMonthOfAnnual(LISTER_PRICES.introAnnual)}/month, billed annually.</p>
             <button
               onClick={() => handleCheckout('lister-annual')}
               disabled={loading !== null}
@@ -151,7 +152,7 @@ export default function ListerPricingPage() {
           <h2 className="text-xl font-bold text-center mb-6">FAQ</h2>
           {[
             { q: 'How long does the intro pricing last?', a: 'The promotional pricing will be available until we announce otherwise. Lock in now to keep your rate.' },
-            { q: 'Do contractors need a subscription too?', a: 'Contractors you assign to jobs need their own Contractor Hub subscription ($10.60/mo) to accept assignments and log time.' },
+            { q: 'Do contractors need a subscription too?', a: `Contractors you assign to jobs need their own Contractor Hub subscription (${formatPrice(CONTRACTOR_PRICES.monthly)}/mo) to accept assignments and log time.` },
             { q: 'Can I be both a lister and a contractor?', a: 'Yes. Subscribe to both products independently. Your dashboard adapts based on your role.' },
             { q: 'What union features are included?', a: 'Union contract search (AI-powered), membership management, and dues tracking. All included at the same price.' },
             { q: 'How do I get help if I have a problem?', a: 'Customer support is managed by a real human — not AI. Reach out through the in-app feedback form or email and a team member will respond personally.' },
