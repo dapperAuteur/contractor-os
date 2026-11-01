@@ -111,18 +111,6 @@ const TUTORIAL_SERIES = [
     ],
   },
   {
-    slug: 'travel',
-    title: 'Travel & Vehicle Tracker Guide',
-    description: 'Log trips, track fuel and maintenance, import Garmin activities, and manage your vehicle fleet.',
-    category: 'Platform Guide',
-    tags: ['tutorial', 'travel', 'vehicles', 'fuel', 'trips'],
-    type: 'academy' as const,
-    modules: [
-      { title: 'Vehicles & Fuel', order: 1, lessons: ['01', '02', '03', '04', '05'] },
-      { title: 'Trips & Maintenance', order: 2, lessons: ['06', '07', '08', '09', '10'] },
-    ],
-  },
-  {
     slug: 'engine',
     title: 'Focus Engine Guide',
     description: 'Run focus sessions, use Pomodoro mode, track body checks, and analyze your productivity patterns.',

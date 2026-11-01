@@ -49,10 +49,9 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
   }
 
   // Fetch linked counts in parallel
-  const [timeEntries, invoices, trips, expenses, documents] = await Promise.all([
+  const [timeEntries, invoices, expenses, documents] = await Promise.all([
     db.from('job_time_entries').select('id', { count: 'exact', head: true }).eq('job_id', id),
     db.from('invoices').select('id', { count: 'exact', head: true }).eq('job_id', id),
-    db.from('trips').select('id', { count: 'exact', head: true }).eq('job_id', id),
     db.from('financial_transactions').select('id', { count: 'exact', head: true }).eq('job_id', id),
     // Count only the documents this caller can see (own + shared), so the tab
     // badge does not reveal other members' private uploads.
@@ -69,7 +68,6 @@ export async function GET(_request: NextRequest, ctx: Ctx) {
     _counts: {
       time_entries: timeEntries.count ?? 0,
       invoices: invoices.count ?? 0,
-      trips: trips.count ?? 0,
       expenses: expenses.count ?? 0,
       documents: documents.count ?? 0,
     },

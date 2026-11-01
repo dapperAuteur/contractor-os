@@ -26,7 +26,7 @@ interface AudienceFilter {
   tiers?: string[];       // 'free' | 'monthly' | 'lifetime'
   roles?: string[];       // 'contractor' | 'lister' | 'teacher'
   activity?: string;      // 'active_7d' | 'active_30d' | 'inactive_30d'
-  has_feature?: string;   // 'jobs' | 'courses' | 'equipment' | 'travel'
+  has_feature?: string;   // 'jobs' | 'courses' | 'equipment'
 }
 
 type Params = { params: Promise<{ id: string }> };
@@ -125,7 +125,6 @@ export async function POST(_req: NextRequest, { params }: Params) {
         jobs: 'contractor_jobs',
         courses: 'enrollments',
         equipment: 'equipment_items',
-        travel: 'trips',
       };
       const table = featureTable[filter.has_feature];
       if (table) {

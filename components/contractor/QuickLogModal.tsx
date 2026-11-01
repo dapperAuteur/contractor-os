@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Loader2, Zap } from 'lucide-react';
 import Modal from '@/components/ui/Modal';
+import { RIDEWITUS_APP_URL } from '@/lib/ecosystem/links';
 
 interface QuickLogModalProps {
   isOpen: boolean;
@@ -24,9 +25,6 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
     // Expense
     expense_amount: '',
     expense_description: '',
-    // Mileage
-    mileage_miles: '',
-    mileage_cost: '',
   });
 
   const set = (field: string, value: string) => setForm((p) => ({ ...p, [field]: value }));
@@ -74,25 +72,6 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
       if (res.ok) results.push('expense');
     }
 
-    // 3. Log mileage
-    if (form.mileage_miles && parseFloat(form.mileage_miles) > 0) {
-      const res = await fetch('/api/travel/trips', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          mode: 'car',
-          date: form.work_date,
-          distance_miles: parseFloat(form.mileage_miles),
-          cost: form.mileage_cost ? parseFloat(form.mileage_cost) : null,
-          purpose: `Job ${jobNumber}`,
-          tax_category: 'business',
-          trip_category: 'travel',
-          job_id: jobId,
-        }),
-      });
-      if (res.ok) results.push('mileage');
-    }
-
     setSaving(false);
     if (results.length > 0) {
       onLogged();
@@ -101,7 +80,6 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
         work_date: new Date().toISOString().split('T')[0],
         total_hours: '', st_hours: '', ot_hours: '', dt_hours: '', notes: '',
         expense_amount: '', expense_description: '',
-        mileage_miles: '', mileage_cost: '',
       });
     }
   }
@@ -110,7 +88,7 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
     <Modal isOpen={isOpen} onClose={onClose} title="Quick Log">
       <form onSubmit={handleSubmit} className="space-y-4">
         <p className="text-sm text-slate-500">
-          <Zap size={12} className="inline text-amber-400" aria-hidden="true" /> Log hours, expense, and mileage in one shot for <span className="text-amber-400">{jobNumber}</span>.
+          <Zap size={12} className="inline text-amber-400" aria-hidden="true" /> Log hours and an expense in one shot for <span className="text-amber-400">{jobNumber}</span>.
         </p>
 
         {/* Date */}
@@ -152,14 +130,13 @@ export default function QuickLogModal({ isOpen, onClose, jobId, jobNumber, onLog
           </div>
         </fieldset>
 
-        {/* Mileage */}
-        <fieldset className="space-y-2 rounded-lg border border-slate-200 p-3">
-          <legend className="px-1 text-sm text-slate-500">Mileage (optional)</legend>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <input type="number" step="0.1" className={inputClass} placeholder="Miles" value={form.mileage_miles} onChange={(e) => set('mileage_miles', e.target.value)} aria-label="Mileage in miles" />
-            <input type="number" step="0.01" className={inputClass} placeholder="Cost ($)" value={form.mileage_cost} onChange={(e) => set('mileage_cost', e.target.value)} aria-label="Mileage cost" />
-          </div>
-        </fieldset>
+        <p className="text-xs text-slate-500">
+          Mileage for this job is logged in{' '}
+          <a href={RIDEWITUS_APP_URL} target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">
+            RideWitUS
+          </a>
+          , the WitUS home for trips and mileage.
+        </p>
 
         <button
           type="submit"
