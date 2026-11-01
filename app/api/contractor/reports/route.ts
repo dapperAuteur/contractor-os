@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { form1099Threshold, isForm1099ThresholdConfirmed, meetsForm1099Threshold } from '@/lib/contractor/form-1099';
 
 function getDb() {
   return createServiceClient(
@@ -117,7 +118,9 @@ export async function GET(request: NextRequest) {
 
   const earningsByClient = Array.from(clientMap.values()).map((c) => ({
     ...c,
-    exceeds_1099: c.total_paid >= 600,
+    // The threshold depends on the tax year reported (it rose for tax years after 2025);
+    // lib/contractor/form-1099.ts cites the IRS source.
+    exceeds_1099: meetsForm1099Threshold(c.total_paid, year),
   })).sort((a, b) => b.total_paid - a.total_paid);
 
   // --- Expense totals ---
@@ -213,6 +216,8 @@ export async function GET(request: NextRequest) {
     },
     benefit_deductions_by_label: Object.fromEntries(benefitDeductionMap),
     earnings_by_client: earningsByClient,
+    threshold_1099: form1099Threshold(year),
+    threshold_1099_confirmed: isForm1099ThresholdConfirmed(year),
     monthly_earnings: monthlyEarnings,
     by_union: Object.fromEntries(unionMap),
     by_department: Object.fromEntries(deptMap),

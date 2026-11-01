@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Loader2, ChevronLeft, ChevronRight, AlertTriangle, TrendingUp, Clock, Briefcase, DollarSign } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import { FORM_1099_SOURCE_URL, form1099Threshold, formatThreshold, isForm1099ThresholdConfirmed } from '@/lib/contractor/form-1099';
 
 interface ClientEarnings {
   client_name: string;
@@ -34,6 +35,9 @@ interface ReportData {
   year: number;
   summary: Summary;
   earnings_by_client: ClientEarnings[];
+  /** 1099-NEC threshold for this tax year (older API responses omit it). */
+  threshold_1099?: number;
+  threshold_1099_confirmed?: boolean;
   monthly_earnings: number[];
   by_union: Record<string, number>;
   by_department: Record<string, number>;
@@ -161,10 +165,26 @@ export default function ContractorReportsPage() {
 
           {/* Earnings by client / 1099 tracking */}
           <section aria-label="Earnings by client">
-            <h2 className="text-lg font-semibold text-slate-800 mb-3">
+            <h2 className="text-lg font-semibold text-slate-800 mb-1">
               Earnings by Client
-              <span className="text-sm font-normal text-slate-400 ml-2">1099 Threshold: $600</span>
+              <span className="text-sm font-normal text-slate-500 ml-2">
+                {data!.year} 1099 threshold: {formatThreshold(data!.threshold_1099 ?? form1099Threshold(data!.year))}
+              </span>
             </h2>
+            <p className="text-xs text-slate-500 mb-3">
+              {(data!.threshold_1099_confirmed ?? isForm1099ThresholdConfirmed(data!.year))
+                ? 'Clients who paid you at least this much in the year get a 1099 badge. '
+                : 'The IRS may adjust this amount for inflation starting in 2027; this uses the last amount the IRS published. '}
+              <a
+                href={FORM_1099_SOURCE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-amber-600 underline hover:text-amber-500"
+              >
+                IRS instructions for Forms 1099-MISC and 1099-NEC
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </p>
             {data!.earnings_by_client.length === 0 ? (
               <div className="rounded-xl border border-slate-200 bg-white p-6 text-center text-slate-400">
                 No client data.
