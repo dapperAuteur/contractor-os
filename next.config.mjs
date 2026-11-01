@@ -52,6 +52,17 @@ const nextConfig = {
     ];
   },
 
+  async redirects() {
+    // The Academy left Work.WitUS on 2026-09-07 (tutorials move to Learn.WitUS, plan 18 §8
+    // answer 3). Old bookmarks, emails and a saved dashboard_home of /academy land on Learn.WitUS
+    // instead of a 404. Temporary (307): Learn.WitUS owns its URLs, and the tutorials will get
+    // their own paths there once they are published (see plans/user-tasks for the course move).
+    return [
+      { source: '/academy', destination: 'https://learn.witus.online', permanent: false },
+      { source: '/academy/:path*', destination: 'https://learn.witus.online', permanent: false },
+    ];
+  },
+
   async rewrites() {
     // Reverse-proxy PostHog through our own origin. us.i.posthog.com is on uBlock
     // Origin, Brave Shields, and Safari's tracker list, so a meaningful share of events

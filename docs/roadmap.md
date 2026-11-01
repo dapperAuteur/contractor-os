@@ -3,14 +3,16 @@ app: work
 name: Work.WitUS
 stage: live
 url: https://work.witus.online
-updated: 2026-10-30
+updated: 2026-11-01
 ---
 
 ## Live now
 - Jobs with clients, locations, multi-day scheduling, crew and job documents
 - Time tracking with clock in and out, overtime rules and auto-generated invoices
 - Finance accounts, transactions, budgets and expected payments
-- Travel and mileage, equipment and depreciation, contacts and crew boards
+- Equipment and depreciation, contacts and crew boards
+- Travel and job mileage live in RideWitUS; the Travel link and each job's Mileage tab explain the move and link out (plan 18 Phase 1)
+- Work.WitUS keeps only its own data: CentenarianOS panels and cross-module reads are gone, and `/academy` and the guides point to Learn.WitUS (plan 18 Phase 1)
 - Document scanner with AI classification and offline scanning
 - Union hub: membership, dues and documents
 - Sign in with WitUS beside email sign-in with two-factor
@@ -24,13 +26,15 @@ updated: 2026-10-30
 
 ## Next
 - Move the data access to Drizzle, module by module, while still on Supabase (plan 18 Phase 3)
+- "Travel for this job" panel on job pages, read from a keyed, signed RideWitUS endpoint (plan 18 §8 answer 3)
 
 ## Backlog
 - Move the remaining contractor tables and data, then retire them from CentenarianOS (plan 55, Phases 3 to 5)
-- Optional: business mileage moves to RideWitUS with the travel module
 - Branded login emails once Work.WitUS has its own auth project
+- Decide whether City Guides stay (Work.WitUS-only feature; plan 18 lists their tables as cut with Travel, but CentenarianOS does not use them)
 
 ## Blocked on
 - The table move itself (plan 55 Phase 3); until it lands, Work.WitUS and CentenarianOS share one database and its safety rules
 - Run migration 197 for job-document visibility (task 16)
 - Login email templates and SMTP held until the database question is settled (task 18)
+- Work.WitUS tutorials published on Learn.WitUS before Help and the home page can link to them (task 25)

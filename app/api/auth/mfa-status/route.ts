@@ -1,5 +1,6 @@
 // app/api/auth/mfa-status/route.ts
-// Returns whether MFA is required for the current user (has health or financial data).
+// Returns whether MFA is required for the current user (has financial data).
+// Health metrics are CentenarianOS data; Work.WitUS no longer reads them (plan 18 Phase 1).
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
@@ -19,17 +20,6 @@ export async function GET() {
     .limit(1);
 
   if (txCount && txCount > 0) {
-    return NextResponse.json({ mfaRequired: true });
-  }
-
-  // Check for health metrics
-  const { count: healthCount } = await supabase
-    .from('user_health_metrics')
-    .select('id', { count: 'exact', head: true })
-    .eq('user_id', user.id)
-    .limit(1);
-
-  if (healthCount && healthCount > 0) {
     return NextResponse.json({ mfaRequired: true });
   }
 

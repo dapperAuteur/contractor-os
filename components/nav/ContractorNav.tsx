@@ -66,6 +66,7 @@ const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: 'Invoices', href: '/dashboard/finance/invoices', icon: FileText },
       { label: 'Finance', href: '/dashboard/finance/transactions', icon: DollarSign },
+      // Travel moved to RideWitUS (plan 18 Phase 1); this page explains and links out.
       { label: 'Travel', href: '/dashboard/travel', icon: Car },
       { label: 'Equipment', href: '/dashboard/equipment', icon: Package },
     ],
@@ -528,7 +529,7 @@ export default function ContractorNav({ username, unreadMessages, onLogout, isAd
             { label: 'Hub', href: '/dashboard/contractor', icon: HardHat },
             { label: 'Jobs', href: '/dashboard/contractor/jobs', icon: HardHat },
             { label: 'Invoices', href: '/dashboard/finance/invoices', icon: FileText },
-            { label: 'Travel', href: '/dashboard/travel', icon: Car },
+            { label: 'Finance', href: '/dashboard/finance/transactions', icon: DollarSign },
             { label: 'Scan', href: '/dashboard/scan', icon: ScanLine },
           ].map(({ label, href, icon: Icon }) => {
             const active = isActive(href, pathname);

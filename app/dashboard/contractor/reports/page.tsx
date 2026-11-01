@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Loader2, ChevronLeft, ChevronRight, AlertTriangle, TrendingUp, Clock, Car, DollarSign } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight, AlertTriangle, TrendingUp, Clock, Briefcase, DollarSign } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 interface ClientEarnings {
@@ -23,7 +23,6 @@ interface Summary {
   ot_hours: number;
   dt_hours: number;
   days_worked: number;
-  total_miles: number;
   total_expenses: number;
   net_earnings: number;
   benefits_eligible_jobs: number;
@@ -127,7 +126,7 @@ export default function ContractorReportsPage() {
               <StatCard icon={DollarSign} label="Net Earnings" value={fmt(s.net_earnings)} sub={`${fmt(s.total_paid)} paid`} />
               <StatCard icon={TrendingUp} label="Total Invoiced" value={fmt(s.total_invoiced)} sub={`${s.pending_invoices} pending`} />
               <StatCard icon={Clock} label="Hours Worked" value={`${s.total_hours.toFixed(1)}h`} sub={`${s.days_worked} days · ST ${s.st_hours.toFixed(1)} · OT ${s.ot_hours.toFixed(1)} · DT ${s.dt_hours.toFixed(1)}`} />
-              <StatCard icon={Car} label="Mileage" value={`${s.total_miles.toLocaleString()} mi`} sub={`${s.total_jobs} jobs · ${s.benefits_eligible_jobs} w/ benefits`} />
+              <StatCard icon={Briefcase} label="Jobs" value={String(s.total_jobs)} sub={`${s.benefits_eligible_jobs} w/ benefits`} />
             </div>
           </section>
 

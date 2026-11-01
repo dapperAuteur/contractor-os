@@ -1,5 +1,5 @@
 // app/api/contractor/reports/route.ts
-// GET: contractor earnings reports — by client, 1099 tracking, mileage, benefits YTD
+// GET: contractor earnings reports — by client, 1099 tracking, benefits YTD
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
   const db = getDb();
 
   // Parallel queries for all report data
-  const [jobsRes, invoicesRes, tripsRes, expensesRes, timeRes] = await Promise.all([
+  const [jobsRes, invoicesRes, expensesRes, timeRes] = await Promise.all([
     // All jobs in year
     db.from('contractor_jobs')
       .select('id, job_number, client_name, client_id, status, start_date, end_date, pay_rate, union_local, department, benefits_eligible, benefit_deductions, travel_benefits')
@@ -41,14 +41,6 @@ export async function GET(request: NextRequest) {
       .not('job_id', 'is', null)
       .gte('invoice_date', startDate)
       .lte('invoice_date', endDate),
-
-    // Mileage from trips linked to jobs
-    db.from('trips')
-      .select('id, distance_miles, is_round_trip, job_id, trip_date')
-      .eq('user_id', user.id)
-      .not('job_id', 'is', null)
-      .gte('trip_date', startDate)
-      .lte('trip_date', endDate),
 
     // Expenses (financial_transactions with source='job')
     db.from('financial_transactions')
@@ -68,7 +60,6 @@ export async function GET(request: NextRequest) {
 
   const jobs = jobsRes.data ?? [];
   const invoices = invoicesRes.data ?? [];
-  const trips = tripsRes.data ?? [];
   const expenses = expensesRes.data ?? [];
   const timeEntries = timeRes.data ?? [];
 
@@ -128,13 +119,6 @@ export async function GET(request: NextRequest) {
     ...c,
     exceeds_1099: c.total_paid >= 600,
   })).sort((a, b) => b.total_paid - a.total_paid);
-
-  // --- Mileage totals ---
-  let totalMiles = 0;
-  for (const t of trips) {
-    const d = Number(t.distance_miles ?? 0);
-    totalMiles += t.is_round_trip ? d * 2 : d;
-  }
 
   // --- Expense totals ---
   let totalExpenses = 0;
@@ -220,7 +204,6 @@ export async function GET(request: NextRequest) {
       ot_hours: totalOT,
       dt_hours: totalDT,
       days_worked: daysWorked,
-      total_miles: totalMiles,
       total_expenses: totalExpenses,
       total_income: totalIncome,
       net_earnings: totalPaid - totalExpenses,

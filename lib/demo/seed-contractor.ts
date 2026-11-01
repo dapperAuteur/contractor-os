@@ -451,34 +451,6 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   ]);
   if (txErr) throw new Error(`Contractor transactions: ${txErr.message}`);
 
-  // 11. Vehicle + Fuel Logs + Trips
-  const { data: veh, error: vehErr } = await db
-    .from('vehicles')
-    .insert([{ user_id: userId, nickname: 'Work Truck', type: 'car', make: 'Ford', model: 'F-150', year: 2021, ownership_type: 'owned', active: true }])
-    .select('id');
-  if (vehErr) throw new Error(`Contractor vehicle: ${vehErr.message}`);
-  const vehicleId = veh?.[0]?.id;
-
-  if (vehicleId) {
-    const { error: fuelErr } = await db.from('fuel_logs').insert([
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(3), odometer_miles: 48720, miles_since_last_fill: 280, gallons: 16.2, total_cost: 55.89, cost_per_gallon: 3.45, mpg_display: 17.3, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(10), odometer_miles: 48440, miles_since_last_fill: 265, gallons: 15.8, total_cost: 54.51, cost_per_gallon: 3.45, mpg_display: 16.8, station: 'Shell', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(20), odometer_miles: 48175, miles_since_last_fill: 290, gallons: 16.5, total_cost: 57.09, cost_per_gallon: 3.46, mpg_display: 17.6, station: 'Chevron', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(28), odometer_miles: 47885, miles_since_last_fill: 275, gallons: 16.0, total_cost: 54.40, cost_per_gallon: 3.40, mpg_display: 17.2, station: 'Costco Gas', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(38), odometer_miles: 47610, miles_since_last_fill: 260, gallons: 15.5, total_cost: 52.70, cost_per_gallon: 3.40, mpg_display: 16.8, station: 'BP', fuel_grade: 'regular', source: 'manual' },
-    ]);
-    if (fuelErr) throw new Error(`Contractor fuel logs: ${fuelErr.message}`);
-  }
-
-  const { error: tripErr } = await db.from('trips').insert([
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(3), mode: 'car', origin: 'Home', destination: 'Lucas Oil Stadium', distance_miles: 48.5, duration_min: 55, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(6), mode: 'car', origin: 'Home', destination: 'Gainbridge Fieldhouse', distance_miles: 45.2, duration_min: 50, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(12), mode: 'car', origin: 'Home', destination: 'Simon Skjodt Assembly Hall', distance_miles: 52.8, duration_min: 60, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(18), mode: 'car', origin: 'Home', destination: 'Lucas Oil Stadium', distance_miles: 48.5, duration_min: 55, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(25), mode: 'car', origin: 'Home', destination: 'Gainbridge Fieldhouse', distance_miles: 45.2, duration_min: 50, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-  ]);
-  if (tripErr) throw new Error(`Contractor trips: ${tripErr.message}`);
-
   // 12. Equipment
   const { data: eqCats, error: eqCatErr } = await db
     .from('equipment_categories')
@@ -509,16 +481,6 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
     { user_id: userId, name: 'Relationships', icon: 'users', color: '#8b5cf6', sort_order: 5 },
   ]);
   if (lcErr) throw new Error(`Contractor life categories: ${lcErr.message}`);
-
-  // 17. Focus Sessions
-  const { error: fsErr } = await db.from('focus_sessions').insert([
-    { user_id: userId, start_time: new Date(Date.now() - 86400000 - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 86400000 - 60 * 60000).toISOString(), duration: 30, notes: 'Reviewing call sheets for B1G Tournament', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 172800000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 172800000 - 35 * 60000).toISOString(), duration: 25, notes: 'Logging time entries for completed Colts games', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 259200000 - 45 * 60000).toISOString(), end_time: new Date(Date.now() - 259200000 - 20 * 60000).toISOString(), duration: 25, notes: 'Creating invoices for CBS Sports jobs', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 345600000 - 75 * 60000).toISOString(), end_time: new Date(Date.now() - 345600000 - 45 * 60000).toISOString(), duration: 30, notes: 'Equipment inventory and condition check', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 432000000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 432000000 - 35 * 60000).toISOString(), duration: 25, notes: 'Updating city guide entries for Indianapolis', session_type: 'work' },
-  ]);
-  if (fsErr) throw new Error(`Contractor focus sessions: ${fsErr.message}`);
 
   // 18. Blog Post
   const { error: blogErr } = await db.from('blog_posts').insert([

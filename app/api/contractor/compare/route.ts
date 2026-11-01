@@ -1,5 +1,5 @@
 // app/api/contractor/compare/route.ts
-// GET: compare 2-4 jobs side-by-side (totals, rates, hours, expenses, mileage)
+// GET: compare 2-4 jobs side-by-side (totals, rates, hours, expenses)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
@@ -36,18 +36,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Jobs not found' }, { status: 404 });
   }
 
-  // Parallel: time entries, invoices, trips, expenses for all jobs
-  const [timeRes, invRes, tripRes, expRes] = await Promise.all([
+  // Parallel: time entries, invoices, expenses for all jobs (mileage left with Travel; RideWitUS owns it)
+  const [timeRes, invRes, expRes] = await Promise.all([
     db.from('job_time_entries')
       .select('job_id, total_hours, st_hours, ot_hours, dt_hours')
       .eq('user_id', user.id)
       .in('job_id', ids),
     db.from('invoices')
       .select('job_id, total, amount_paid, status')
-      .eq('user_id', user.id)
-      .in('job_id', ids),
-    db.from('trips')
-      .select('job_id, distance_miles, is_round_trip')
       .eq('user_id', user.id)
       .in('job_id', ids),
     db.from('financial_transactions')
@@ -59,14 +55,12 @@ export async function GET(request: NextRequest) {
 
   const timeEntries = timeRes.data ?? [];
   const invoices = invRes.data ?? [];
-  const trips = tripRes.data ?? [];
   const expenses = expRes.data ?? [];
 
   // Build comparison per job
   const comparisons = jobs.map((job) => {
     const jobTime = timeEntries.filter((t) => t.job_id === job.id);
     const jobInv = invoices.filter((i) => i.job_id === job.id);
-    const jobTrips = trips.filter((t) => t.job_id === job.id);
     const jobExp = expenses.filter((e) => e.job_id === job.id);
 
     const totalHours = jobTime.reduce((s, t) => s + Number(t.total_hours ?? 0), 0);
@@ -75,10 +69,6 @@ export async function GET(request: NextRequest) {
     const dtHours = jobTime.reduce((s, t) => s + Number(t.dt_hours ?? 0), 0);
     const totalInvoiced = jobInv.reduce((s, i) => s + Number(i.total ?? 0), 0);
     const totalPaid = jobInv.reduce((s, i) => s + Number(i.amount_paid ?? 0), 0);
-    const totalMiles = jobTrips.reduce((s, t) => {
-      const d = Number(t.distance_miles ?? 0);
-      return s + (t.is_round_trip ? d * 2 : d);
-    }, 0);
     const totalExpenses = jobExp.reduce((s, e) => s + Number(e.amount ?? 0), 0);
     const netEarnings = totalPaid - totalExpenses;
     const effectiveRate = totalHours > 0 ? netEarnings / totalHours : 0;
@@ -105,7 +95,6 @@ export async function GET(request: NextRequest) {
       dt_hours: dtHours,
       total_invoiced: totalInvoiced,
       total_paid: totalPaid,
-      total_miles: totalMiles,
       total_expenses: totalExpenses,
       net_earnings: netEarnings,
       effective_rate: effectiveRate,

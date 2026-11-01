@@ -6,16 +6,16 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { Link2, X, Plus, Search } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
-type EntityType =
-  | 'task' | 'trip' | 'route' | 'transaction' | 'recipe'
-  | 'fuel_log' | 'maintenance' | 'invoice' | 'workout' | 'equipment' | 'focus_session' | 'exercise' | 'daily_log';
+// Types this app can link to. CentenarianOS types (task, recipe, workout, focus_session,
+// exercise, daily_log) and travel types (trip, route, fuel_log, maintenance) were removed in
+// plan 18 Phase 1; links saved earlier still list, labelled by their raw type, and can be removed.
+type LinkableType = 'transaction' | 'equipment';
 
 interface ActivityLink {
   id: string;
-  linked_type: EntityType;
+  linked_type: string;
   linked_id: string;
   linked_display_name: string;
   relationship: string | null;
@@ -27,52 +27,31 @@ interface SearchResult {
 }
 
 interface ActivityLinkerProps {
-  entityType: EntityType;
+  /** The record this panel belongs to: 'invoice', 'transaction' or 'equipment'. */
+  entityType: string;
   entityId: string;
 }
 
-const TYPE_LABELS: Record<EntityType, string> = {
-  task: 'Task',
-  trip: 'Trip',
-  route: 'Route',
+const TYPE_LABELS: Record<string, string> = {
   transaction: 'Transaction',
-  recipe: 'Recipe',
-  fuel_log: 'Fuel Log',
-  maintenance: 'Maintenance',
   invoice: 'Invoice',
-  workout: 'Workout',
   equipment: 'Equipment',
-  focus_session: 'Focus Session',
-  exercise: 'Exercise',
-  daily_log: 'Daily Log',
 };
 
-const TYPE_COLORS: Record<EntityType, string> = {
-  task: 'bg-violet-900/20 text-violet-400 border-violet-800',
-  trip: 'bg-amber-900/20 text-amber-400 border-amber-800',
-  route: 'bg-amber-900/20 text-amber-400 border-amber-800',
+const TYPE_COLORS: Record<string, string> = {
   transaction: 'bg-green-900/20 text-green-400 border-green-800',
-  recipe: 'bg-amber-900/20 text-amber-400 border-amber-800',
-  fuel_log: 'bg-orange-900/20 text-orange-400 border-orange-800',
-  maintenance: 'bg-slate-100 text-slate-700 border-slate-200',
   invoice: 'bg-blue-900/20 text-blue-400 border-blue-800',
-  workout: 'bg-rose-900/20 text-rose-400 border-rose-800',
   equipment: 'bg-teal-900/20 text-teal-400 border-teal-800',
-  focus_session: 'bg-orange-900/20 text-orange-400 border-orange-800',
-  exercise: 'bg-amber-900/20 text-amber-400 border-amber-800',
-  daily_log: 'bg-indigo-50 text-indigo-700 border-indigo-200',
 };
 
 // Linkable types (exclude the current entity type)
-const LINKABLE_TYPES: EntityType[] = [
-  'task', 'trip', 'route', 'transaction', 'recipe', 'workout', 'equipment', 'focus_session', 'exercise', 'daily_log',
-];
+const LINKABLE_TYPES: LinkableType[] = ['transaction', 'equipment'];
 
 export default function ActivityLinker({ entityType, entityId }: ActivityLinkerProps) {
   const [links, setLinks] = useState<ActivityLink[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAdd, setShowAdd] = useState(false);
-  const [addType, setAddType] = useState<EntityType | ''>('');
+  const [addType, setAddType] = useState<LinkableType | ''>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searching, setSearching] = useState(false);
@@ -113,38 +92,6 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
       const q = searchQuery.trim().toLowerCase();
 
       switch (addType) {
-        case 'trip': {
-          const res = await offlineFetch('/api/travel/trips?limit=20');
-          if (res.ok) {
-            const d = await res.json();
-            results = (d.trips || [])
-              .filter((t: Record<string, string | null>) => {
-                const search = `${t.origin || ''} ${t.destination || ''} ${t.mode || ''} ${t.date || ''}`.toLowerCase();
-                return search.includes(q);
-              })
-              .map((t: Record<string, string | null>) => ({
-                id: t.id,
-                display_name: `${t.mode}: ${t.origin || '?'} → ${t.destination || '?'} (${t.date})`,
-              }));
-          }
-          break;
-        }
-        case 'route': {
-          const res = await offlineFetch('/api/travel/routes?limit=20');
-          if (res.ok) {
-            const d = await res.json();
-            results = (d.routes || [])
-              .filter((r: Record<string, string | null>) => {
-                const search = `${r.name || ''} ${r.date || ''}`.toLowerCase();
-                return search.includes(q);
-              })
-              .map((r: Record<string, string | null | number>) => ({
-                id: r.id,
-                display_name: `${r.name || 'Route'} (${r.date})`,
-              }));
-          }
-          break;
-        }
         case 'transaction': {
           const res = await offlineFetch('/api/finance/transactions?limit=20');
           if (res.ok) {
@@ -159,19 +106,6 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
               .map((t: Record<string, string | number | null>) => ({
                 id: String(t.id),
                 display_name: `${t.vendor || 'Transaction'} $${Number(t.amount || 0).toFixed(2)} (${t.transaction_date})`,
-              }));
-          }
-          break;
-        }
-        case 'recipe': {
-          const res = await offlineFetch(`/api/recipes?search=${encodeURIComponent(q)}&limit=10`);
-          if (res.ok) {
-            const d = await res.json();
-            const recipes = d.recipes || d || [];
-            results = (Array.isArray(recipes) ? recipes : [])
-              .map((r: Record<string, string>) => ({
-                id: r.id,
-                display_name: r.title || 'Recipe',
               }));
           }
           break;
@@ -193,111 +127,6 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                   display_name: cat ? `${e.name} (${cat.name})` : String(e.name),
                 };
               });
-          }
-          break;
-        }
-        case 'exercise': {
-          const res = await offlineFetch(`/api/exercises?search=${encodeURIComponent(q)}`);
-          if (res.ok) {
-            const d = await res.json();
-            results = (Array.isArray(d) ? d : [])
-              .slice(0, 10)
-              .map((e: Record<string, unknown>) => {
-                const cat = e.exercise_categories as { name: string } | null;
-                return {
-                  id: String(e.id),
-                  display_name: cat ? `${e.name} (${cat.name})` : String(e.name),
-                };
-              });
-          }
-          break;
-        }
-        case 'focus_session': {
-          const supabase = createClient();
-          const { data: sessions } = await supabase
-            .from('focus_sessions')
-            .select('id, start_time, duration, session_type, notes')
-            .order('start_time', { ascending: false })
-            .limit(20);
-          if (sessions) {
-            results = sessions
-              .filter((s) => {
-                const search = `${s.notes || ''} ${s.session_type || ''} ${s.start_time || ''}`.toLowerCase();
-                return search.includes(q);
-              })
-              .slice(0, 10)
-              .map((s) => {
-                const mins = s.duration ? Math.round(s.duration / 60) : 0;
-                const dateStr = s.start_time ? new Date(s.start_time).toLocaleDateString() : '?';
-                const label = s.session_type === 'work' ? 'Work' : 'Focus';
-                return {
-                  id: s.id,
-                  display_name: `${label}: ${mins}min (${dateStr})`,
-                };
-              });
-          }
-          break;
-        }
-        case 'daily_log': {
-          const supabase = createClient();
-          const { data: logs } = await supabase
-            .from('daily_logs')
-            .select('id, date, energy_rating, biggest_win, pain_intensity')
-            .order('date', { ascending: false })
-            .limit(30);
-          if (logs) {
-            results = logs
-              .filter((l) => {
-                const search = `${l.date || ''} ${l.biggest_win || ''}`.toLowerCase();
-                return search.includes(q);
-              })
-              .slice(0, 10)
-              .map((l) => ({
-                id: l.id,
-                display_name: `Daily Log (${l.date})${l.energy_rating ? ` — energy ${l.energy_rating}/5` : ''}`,
-              }));
-          }
-          break;
-        }
-        case 'task': {
-          const supabase = createClient();
-          const { data: taskData } = await supabase
-            .from('tasks')
-            .select('id, activity, date, tag')
-            .order('date', { ascending: false })
-            .limit(30);
-          if (taskData) {
-            results = taskData
-              .filter((t) => {
-                const search = `${t.activity || ''} ${t.date || ''} ${t.tag || ''}`.toLowerCase();
-                return search.includes(q);
-              })
-              .slice(0, 10)
-              .map((t) => ({
-                id: t.id,
-                display_name: `${t.activity} (${t.date})`,
-              }));
-          }
-          break;
-        }
-        case 'workout': {
-          const supabase = createClient();
-          const { data: workoutData } = await supabase
-            .from('workout_logs')
-            .select('id, name, date, duration_minutes')
-            .order('date', { ascending: false })
-            .limit(20);
-          if (workoutData) {
-            results = workoutData
-              .filter((w) => {
-                const search = `${w.name || ''} ${w.date || ''}`.toLowerCase();
-                return search.includes(q);
-              })
-              .slice(0, 10)
-              .map((w) => ({
-                id: w.id,
-                display_name: `${w.name || 'Workout'} (${w.date})${w.duration_minutes ? ` ${w.duration_minutes}min` : ''}`,
-              }));
           }
           break;
         }
@@ -362,7 +191,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
               key={link.id}
               className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-xs ${TYPE_COLORS[link.linked_type] || 'bg-slate-50 text-slate-700 border-slate-200'}`}
             >
-              <span className="font-medium">{TYPE_LABELS[link.linked_type]}:</span>
+              <span className="font-medium">{TYPE_LABELS[link.linked_type] ?? link.linked_type}:</span>
               <span className="truncate max-w-48">{link.linked_display_name}</span>
               <button
                 type="button"
@@ -385,7 +214,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
             <select
               value={addType}
               onChange={(e) => {
-                setAddType(e.target.value as EntityType);
+                setAddType(e.target.value as LinkableType);
                 setSearchResults([]);
                 setSearchQuery('');
               }}
@@ -406,7 +235,7 @@ export default function ActivityLinker({ entityType, entityId }: ActivityLinkerP
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleSearch())}
-                  placeholder={`Search ${TYPE_LABELS[addType as EntityType] || ''}...`}
+                  placeholder={`Search ${TYPE_LABELS[addType] || ''}...`}
                   className="flex-1 border border-slate-200 rounded-lg px-2 py-1.5 text-xs"
                 />
                 <button

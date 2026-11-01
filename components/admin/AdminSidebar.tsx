@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, MessageSquare, FileText, Heart, MessageCircle, GraduationCap, Radio, Activity, Building2, ScrollText, BarChart3, Link2, Sparkles, RefreshCw, MapPin, Globe, Mail, Megaphone, DollarSign, Tag, Filter, UserX } from 'lucide-react';
+import { LayoutDashboard, Users, MessageSquare, FileText, Heart, MessageCircle, Radio, Building2, ScrollText, BarChart3, Link2, Sparkles, RefreshCw, MapPin, Globe, Mail, Megaphone, DollarSign, Tag, Filter, UserX } from 'lucide-react';
 
 interface UnreadCounts { feedback: number; messages: number; logs: number; }
 
@@ -19,9 +19,7 @@ const NAV_ITEMS = [
   { href: '/admin/union-submissions', label: 'Union Docs', icon: ScrollText, exact: false, badgeKey: null },
   { href: '/admin/engagement', label: 'Engagement',  icon: Heart,           exact: false, badgeKey: null },
   { href: '/admin/feedback',   label: 'Feedback',    icon: MessageCircle,   exact: false, badgeKey: 'feedback' as const },
-  { href: '/admin/academy',    label: 'Academy',     icon: GraduationCap,   exact: false, badgeKey: null },
   { href: '/admin/live',       label: 'Live',        icon: Radio,           exact: false, badgeKey: null },
-  { href: '/admin/metrics',    label: 'Metrics',     icon: Activity,        exact: false, badgeKey: null },
   { href: '/admin/institutions', label: 'Institutions', icon: Building2,    exact: false, badgeKey: null },
   { href: '/admin/logs',         label: 'Logs',         icon: ScrollText,    exact: false, badgeKey: 'logs' as const },
   { href: '/admin/usage',        label: 'Usage',        icon: BarChart3,     exact: false, badgeKey: null },

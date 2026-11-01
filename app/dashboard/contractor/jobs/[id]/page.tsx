@@ -13,6 +13,7 @@ import Modal from '@/components/ui/Modal';
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import JobSummaryCards from '@/components/contractor/JobSummaryCards';
 import QuickLogModal from '@/components/contractor/QuickLogModal';
+import TravelMovedNotice from '@/components/ecosystem/TravelMovedNotice';
 import JobNoteForm from '@/components/contractor/JobNoteForm';
 import JobNoteCard from '@/components/contractor/JobNoteCard';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
@@ -56,7 +57,6 @@ interface Job {
   _counts: {
     time_entries: number;
     invoices: number;
-    trips: number;
     expenses: number;
     documents: number;
   };
@@ -96,7 +96,6 @@ interface Summary {
   total_invoiced: number;
   total_paid: number;
   pending_invoices: number;
-  total_miles: number;
   total_expenses: number;
   net_earnings: number;
 }
@@ -1238,11 +1237,8 @@ export default function JobDetailPage() {
       )}
 
       {tab === 'mileage' && (
-        <div className="text-center py-6">
-          <p className="text-sm text-slate-400 mb-2">View trips linked to this job in the Travel module.</p>
-          <Link href={`/dashboard/travel?job_id=${id}`} className="text-sm text-amber-400 hover:underline">
-            Open Travel <Car size={12} className="inline" aria-hidden="true" />
-          </Link>
+        <div className="py-2">
+          <TravelMovedNotice compact />
         </div>
       )}
 

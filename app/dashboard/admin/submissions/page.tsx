@@ -1,26 +1,25 @@
 'use client';
 
 // app/dashboard/admin/submissions/page.tsx
-// Admin curation queue — review new user-submitted exercises and equipment.
-// Promote items to the shared system library / equipment catalog, or dismiss.
+// Admin curation queue — review new user-submitted equipment.
+// Promote items to the shared equipment catalog, or dismiss.
+// Exercise submissions are CentenarianOS's and are no longer shown here (plan 18 Phase 1).
 
 import { useEffect, useState, useCallback } from 'react';
 import {
-  Inbox, CheckCheck, Trash2, Loader2, Dumbbell, Package,
-  ArrowUpRight, Check, ChevronDown,
+  Inbox, CheckCheck, Trash2, Loader2, Package,
+  ArrowUpRight, Check,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 interface Notification {
   id: string;
-  type: 'new_exercise' | 'new_equipment';
+  type: 'new_equipment';
   user_email: string | null;
   entity_name: string;
   entity_id: string;
   entity_meta: {
     category?: string | null;
-    primary_muscles?: string[] | null;
-    equipment_needed?: string | null;
     brand?: string | null;
     model?: string | null;
     condition?: string | null;
@@ -30,21 +29,17 @@ interface Notification {
   created_at: string;
 }
 
-const DIFFICULTY_OPTIONS = ['beginner', 'intermediate', 'advanced'];
-
 export default function AdminSubmissionsPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'new_exercise' | 'new_equipment'>('all');
   const [promoting, setPromoting] = useState<Record<string, boolean>>({});
   const [dismissing, setDismissing] = useState<Record<string, boolean>>({});
   const [promoted, setPromoted] = useState<Set<string>>(new Set());
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
-  const [difficulty, setDifficulty] = useState<Record<string, string>>({});
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await offlineFetch('/api/admin/notifications');
+    const res = await offlineFetch('/api/admin/notifications?type=new_equipment');
     if (res.ok) {
       const d = await res.json();
       setNotifications(d.notifications || []);
@@ -55,24 +50,16 @@ export default function AdminSubmissionsPage() {
   useEffect(() => { load(); }, [load]);
 
   const markAllRead = async () => {
-    await offlineFetch('/api/admin/notifications', { method: 'PATCH' });
+    await offlineFetch('/api/admin/notifications?type=new_equipment', { method: 'PATCH' });
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
   };
 
   const handlePromote = async (n: Notification) => {
     setPromoting((prev) => ({ ...prev, [n.id]: true }));
     try {
-      const endpoint =
-        n.type === 'new_exercise'
-          ? '/api/admin/system-exercises'
-          : '/api/admin/equipment/catalog';
+      const body = { equipment_id: n.entity_id, notification_id: n.id };
 
-      const body =
-        n.type === 'new_exercise'
-          ? { exercise_id: n.entity_id, notification_id: n.id, difficulty: difficulty[n.id] || 'intermediate' }
-          : { equipment_id: n.entity_id, notification_id: n.id };
-
-      const res = await offlineFetch(endpoint, {
+      const res = await offlineFetch('/api/admin/equipment/catalog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -100,11 +87,10 @@ export default function AdminSubmissionsPage() {
 
   const visible = notifications.filter((n) => {
     if (dismissed.has(n.id)) return false;
-    if (filter !== 'all' && n.type !== filter) return false;
-    return true;
+    return n.type === 'new_equipment';
   });
 
-  const unread = notifications.filter((n) => !n.is_read && !n.promoted).length;
+  const unread = notifications.filter((n) => n.type === 'new_equipment' && !n.is_read && !n.promoted).length;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 sm:py-10 space-y-6">
@@ -113,12 +99,12 @@ export default function AdminSubmissionsPage() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 flex items-center gap-3">
             <Inbox className="w-7 h-7 text-amber-600 shrink-0" />
-            Library Submissions
+            Equipment Submissions
           </h1>
           <p className="text-slate-600 text-sm mt-1">
             {unread > 0
-              ? `${unread} unread submission${unread !== 1 ? 's' : ''} — review and promote to shared libraries.`
-              : 'All caught up. Items added by users appear here for review.'}
+              ? `${unread} unread submission${unread !== 1 ? 's' : ''} — review and promote to the equipment catalog.`
+              : 'All caught up. Equipment added by users appears here for review.'}
           </p>
         </div>
         <div className="flex gap-2">
@@ -131,27 +117,6 @@ export default function AdminSubmissionsPage() {
         </div>
       </header>
 
-      {/* Type filter */}
-      <div className="flex gap-1.5 flex-wrap">
-        {([
-          ['all',          'All'],
-          ['new_exercise', 'Exercises'],
-          ['new_equipment','Equipment'],
-        ] as const).map(([val, label]) => (
-          <button
-            key={val}
-            onClick={() => setFilter(val)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
-              filter === val
-                ? 'bg-amber-600 text-white border-amber-600'
-                : 'bg-white text-slate-700 border-slate-300 hover:border-slate-400'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-
       {/* List */}
       {loading ? (
         <div className="flex justify-center py-12">
@@ -160,12 +125,11 @@ export default function AdminSubmissionsPage() {
       ) : visible.length === 0 ? (
         <div className="text-center py-16 text-slate-400">
           <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
-          <p className="text-sm">No submissions{filter !== 'all' ? ' for this filter' : ''}.</p>
+          <p className="text-sm">No submissions.</p>
         </div>
       ) : (
         <div className="space-y-3">
           {visible.map((n) => {
-            const isExercise = n.type === 'new_exercise';
             const isPromoted = promoted.has(n.id) || n.promoted;
             const isDismissed = dismissed.has(n.id);
             if (isDismissed) return null;
@@ -181,11 +145,8 @@ export default function AdminSubmissionsPage() {
               >
                 <div className="flex items-start gap-3">
                   {/* Icon */}
-                  <div className={`p-2 rounded-lg shrink-0 ${isExercise ? 'bg-amber-500/10' : 'bg-indigo-50'}`}>
-                    {isExercise
-                      ? <Dumbbell className="w-4 h-4 text-amber-600" />
-                      : <Package className="w-4 h-4 text-indigo-600" />
-                    }
+                  <div className="p-2 rounded-lg shrink-0 bg-indigo-50">
+                    <Package className="w-4 h-4 text-indigo-600" aria-hidden="true" />
                   </div>
 
                   {/* Content */}
@@ -214,22 +175,12 @@ export default function AdminSubmissionsPage() {
                           {n.entity_meta.category}
                         </span>
                       )}
-                      {n.entity_meta.equipment_needed && (
-                        <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-600 rounded">
-                          {n.entity_meta.equipment_needed}
-                        </span>
-                      )}
                       {n.entity_meta.brand && (
                         <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded">
                           {n.entity_meta.brand}
                           {n.entity_meta.model ? ` ${n.entity_meta.model}` : ''}
                         </span>
                       )}
-                      {n.entity_meta.primary_muscles?.slice(0, 3).map((m) => (
-                        <span key={m} className="text-[10px] px-1.5 py-0.5 bg-amber-500/10 text-amber-700 rounded">
-                          {m}
-                        </span>
-                      ))}
                       {n.entity_meta.condition && (
                         <span className="text-[10px] px-1.5 py-0.5 bg-amber-50 text-amber-700 rounded">
                           {n.entity_meta.condition}
@@ -240,22 +191,6 @@ export default function AdminSubmissionsPage() {
                     {/* Actions */}
                     {!isPromoted && (
                       <div className="flex flex-wrap gap-2 items-center">
-                        {/* Exercise: difficulty picker before promote */}
-                        {isExercise && (
-                          <div className="relative">
-                            <select
-                              value={difficulty[n.id] || 'intermediate'}
-                              onChange={(e) => setDifficulty((prev) => ({ ...prev, [n.id]: e.target.value }))}
-                              className="appearance-none pl-2 pr-6 py-1 border border-slate-300 rounded text-xs bg-white text-slate-700 cursor-pointer"
-                            >
-                              {DIFFICULTY_OPTIONS.map((d) => (
-                                <option key={d} value={d}>{d}</option>
-                              ))}
-                            </select>
-                            <ChevronDown className="absolute right-1.5 top-1.5 w-3 h-3 text-slate-400 pointer-events-none" />
-                          </div>
-                        )}
-
                         <button
                           onClick={() => handlePromote(n)}
                           disabled={!!promoting[n.id]}
@@ -263,7 +198,7 @@ export default function AdminSubmissionsPage() {
                         >
                           {promoting[n.id]
                             ? <><Loader2 className="w-3 h-3 animate-spin" /> Promoting...</>
-                            : <><ArrowUpRight className="w-3 h-3" /> {isExercise ? 'Add to System Library' : 'Add to Equipment Catalog'}</>
+                            : <><ArrowUpRight className="w-3 h-3" /> Add to Equipment Catalog</>
                           }
                         </button>
 
@@ -284,7 +219,7 @@ export default function AdminSubmissionsPage() {
                     {isPromoted && (
                       <div className="flex items-center gap-1.5 text-xs text-green-700">
                         <Check className="w-3.5 h-3.5" />
-                        {isExercise ? 'Added to System Library' : 'Added to Equipment Catalog'}
+                        Added to Equipment Catalog
                       </div>
                     )}
                   </div>

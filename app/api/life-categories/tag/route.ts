@@ -3,10 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getEntityRule } from '@/lib/activity-links/ownership';
 import { checkOwned } from '@/lib/auth/ownership';
 
-const VALID_TYPES = new Set([
-  'task','trip','route','transaction','recipe',
-  'fuel_log','maintenance','invoice','workout','equipment','focus_session',
-]);
+// Work.WitUS records only (plan 18 Phase 1 removed CentenarianOS and travel types).
+const VALID_TYPES = new Set(['transaction', 'invoice', 'equipment']);
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();

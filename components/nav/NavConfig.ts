@@ -63,7 +63,6 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { label: 'Scan', href: '/dashboard/scan', icon: ScanLine, paid: true },
       { label: 'Finance', href: '/dashboard/finance', icon: DollarSign, paid: true },
-      { label: 'Travel', href: '/dashboard/travel', icon: Navigation, paid: true },
       { label: 'Equipment', href: '/dashboard/equipment', icon: Package, paid: true },
       { label: 'Data Hub', href: '/dashboard/data', icon: Database, paid: true },
     ],
@@ -74,7 +73,6 @@ export const NAV_GROUPS: NavGroup[] = [
     icon: GraduationCap,
     items: [
       { label: 'Blog', href: '/dashboard/blog', icon: BookOpen, paid: false, adminOnly: true },
-      { label: 'Academy', href: '/academy', icon: GraduationCap, paid: false },
     ],
   },
   {

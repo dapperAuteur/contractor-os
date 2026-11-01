@@ -43,7 +43,7 @@ export const CAMPAIGN_TEMPLATES: CampaignTemplate[] = [
       <p style="${P}">You just joined the platform built by contractors, for contractors. Here&rsquo;s how to get the most out of it:</p>
       <p style="${P}"><strong>1. Complete your profile</strong> &mdash; add your skills, rates, and a photo so listers can find you.</p>
       <p style="${P}"><strong>2. Create your first job</strong> &mdash; log the details, track hours, and generate invoices in minutes.</p>
-      <p style="${P}"><strong>3. Explore the Academy</strong> &mdash; free courses on equipment tracking, finance, and more.</p>
+      <p style="${P}"><strong>3. Ask Help</strong> &mdash; the in-app help chat answers questions about jobs, invoices, finance, and more.</p>
       <p style="${P}">
         <a href="{{siteUrl}}/dashboard/contractor" style="${CTA}">Go to Dashboard</a>
       </p>
@@ -59,7 +59,7 @@ export const CAMPAIGN_TEMPLATES: CampaignTemplate[] = [
       <p style="${P}">Hey there &mdash; it&rsquo;s been a few days since you joined. Here are some tools other contractors love:</p>
       <p style="${P}"><strong>Receipt Scanner</strong> &mdash; snap a photo of any receipt and our AI extracts the data instantly.</p>
       <p style="${P}"><strong>Rate Cards</strong> &mdash; save your ST/OT/DT rates by union, department, and role for one-tap job setup.</p>
-      <p style="${P}"><strong>Travel &amp; Mileage</strong> &mdash; log trips, fuel, and maintenance for accurate tax deductions.</p>
+      <p style="${P}"><strong>Job Reports</strong> &mdash; see earnings by client, 1099 thresholds, and benefits year to date.</p>
       <p style="${P}">
         <a href="{{siteUrl}}/features" style="${CTA}">See All Features</a>
       </p>
@@ -74,7 +74,7 @@ export const CAMPAIGN_TEMPLATES: CampaignTemplate[] = [
       <p style="${P}">You&rsquo;ve been using ${SITE_NAME} for a week &mdash; hope it&rsquo;s been helpful! Free accounts are great for getting started, but Pro unlocks:</p>
       <ul style="${UL}">
         <li>Unlimited jobs, invoices, and rate cards</li>
-        <li>Full travel, equipment, and finance tracking</li>
+        <li>Full equipment and finance tracking</li>
         <li>AI document scanner with auto-classification</li>
         <li>Priority support</li>
       </ul>
@@ -105,9 +105,8 @@ export const CAMPAIGN_TEMPLATES: CampaignTemplate[] = [
     body_html: baseLayout(`It’s been a while`, `
       <p style="${P}">We noticed you haven&rsquo;t logged in recently. A lot has changed since your last visit:</p>
       <ul style="${UL}">
-        <li>New Academy courses and learning paths</li>
+        <li>Paycheck reconciliation and pay stub scanning</li>
         <li>Improved receipt scanner with smarter AI</li>
-        <li>Travel templates for faster trip logging</li>
       </ul>
       <p style="${P}">
         <a href="{{siteUrl}}/dashboard/contractor" style="${CTA}">Jump Back In</a>

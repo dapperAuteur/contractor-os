@@ -9,7 +9,7 @@ import { Camera, ScanLine, ExternalLink } from 'lucide-react';
 import ScanButton from '@/components/scan/ScanButton';
 import ScanResultRouter from '@/components/scan/ScanResultRouter';
 import type { ScanResult } from '@/components/scan/ScanButton';
-import type { ReceiptExtraction, MaintenanceExtraction } from '@/lib/ocr/extractors';
+import type { ReceiptExtraction } from '@/lib/ocr/extractors';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
 export default function ScanPage() {
@@ -103,26 +103,6 @@ export default function ScanPage() {
     [],
   );
 
-  const handleCreateMaintenance = useCallback(
-    async (data: MaintenanceExtraction) => {
-      setCreating(true);
-      try {
-        const params = new URLSearchParams();
-        if (data.shop_name) params.set('vendor', data.shop_name);
-        if (data.date) params.set('date', data.date);
-        if (data.total_cost != null) params.set('cost', String(data.total_cost));
-        if (data.odometer != null) params.set('odometer', String(data.odometer));
-        if (data.services?.length) {
-          params.set('description', data.services.map((s) => s.description).join(', '));
-        }
-        router.push(`/dashboard/travel/maintenance?${params.toString()}`);
-      } finally {
-        setCreating(false);
-      }
-    },
-    [router],
-  );
-
   const handleCreateJob = useCallback(
     (prefill: Record<string, unknown>) => {
       sessionStorage.setItem('scan_job_prefill', JSON.stringify(prefill));
@@ -202,7 +182,6 @@ export default function ScanPage() {
           <ScanResultRouter
             result={scanResult}
             onCreateTransaction={handleCreateTransaction}
-            onCreateMaintenance={handleCreateMaintenance}
             onCreateJob={handleCreateJob}
             onCreateInvoice={handleCreateInvoice}
             onAddToJob={handleAddToJob}

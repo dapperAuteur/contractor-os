@@ -2,7 +2,7 @@
 
 // components/settings/MfaSetupSection.tsx
 // MFA enrollment/management card for the settings page.
-// MFA is optional by default, mandatory for users with health or financial data.
+// MFA is optional by default, mandatory for users with financial data.
 
 import { useState, useEffect, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -161,7 +161,7 @@ export default function MfaSetupSection() {
         Add an extra layer of security to your account using an authenticator app.
         {mfaRequired && state !== 'enabled' && (
           <span className="block mt-1 text-amber-600 font-medium">
-            MFA is required because your account contains health or financial data.
+            MFA is required because your account contains financial data.
           </span>
         )}
       </p>
@@ -179,7 +179,7 @@ export default function MfaSetupSection() {
             <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
               <AlertTriangle className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
               <p className="text-sm text-amber-700">
-                You must enable two-factor authentication to continue using health metrics and financial features.
+                You must enable two-factor authentication to continue using financial features.
               </p>
             </div>
           )}

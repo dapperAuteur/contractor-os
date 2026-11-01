@@ -34,7 +34,6 @@ interface Comparison {
   dt_hours: number;
   total_invoiced: number;
   total_paid: number;
-  total_miles: number;
   total_expenses: number;
   net_earnings: number;
   effective_rate: number;
@@ -66,7 +65,6 @@ const ROW_DEFS: { label: string; key: keyof Comparison; format?: (v: unknown, co
   { label: 'DT Hours', key: 'dt_hours', format: (v) => `${(v as number).toFixed(1)}h` },
   { label: 'Total Invoiced', key: 'total_invoiced', format: (v) => fmt(v as number) },
   { label: 'Total Paid', key: 'total_paid', format: (v) => fmt(v as number) },
-  { label: 'Mileage', key: 'total_miles', format: (v) => `${(v as number).toLocaleString()} mi` },
   { label: 'Expenses', key: 'total_expenses', format: (v) => fmt(v as number) },
   { label: 'Net Earnings', key: 'net_earnings', format: (v) => fmt(v as number) },
   { label: 'Effective $/hr', key: 'effective_rate', format: (v) => fmt(v as number) },
@@ -121,8 +119,8 @@ export default function CompareJobsPage() {
     for (const row of ROW_DEFS) {
       const val = results[0]?.[row.key];
       if (typeof val !== 'number') continue;
-      // Higher is better for earnings/rates/hours, lower for expenses/miles
-      const lowerBetter = row.key === 'total_expenses' || row.key === 'total_miles';
+      // Higher is better for earnings/rates/hours, lower for expenses
+      const lowerBetter = row.key === 'total_expenses';
       let best = 0;
       for (let i = 1; i < results.length; i++) {
         const a = results[best][row.key] as number;

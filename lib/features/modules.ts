@@ -2,8 +2,8 @@
 // Centralized module data used by features landing pages.
 
 import {
-  Car, DollarSign,
-  Package, GraduationCap, BookOpen, Database,
+  DollarSign,
+  Package, BookOpen, Database,
   HardHat, Users, type LucideIcon,
 } from 'lucide-react';
 
@@ -49,7 +49,7 @@ export const MODULES: ModuleData[] = [
     highlights: [
       {
         title: 'Job Lifecycle Management',
-        description: 'Track every gig from assignment through payment. Store client, event, venue, dates, rates, department, and union local. Link invoices, trips, and expenses to each job.',
+        description: 'Track every gig from assignment through payment. Store client, event, venue, dates, rates, department, and union local. Link invoices and expenses to each job.',
       },
       {
         title: 'Invoice Generation',
@@ -66,7 +66,7 @@ export const MODULES: ModuleData[] = [
     ],
     dashboardPath: '/dashboard/contractor',
     tutorialSlug: 'contractor',
-    relatedSlugs: ['finance', 'travel', 'lister'],
+    relatedSlugs: ['finance', 'lister'],
   },
   {
     slug: 'lister',
@@ -107,44 +107,6 @@ export const MODULES: ModuleData[] = [
     relatedSlugs: ['contractor', 'finance'],
   },
   {
-    slug: 'travel',
-    name: 'Travel & Vehicles',
-    tagline: 'Track every mile, fuel-up, and trip cost',
-    description: 'Comprehensive travel logging — vehicles, fuel, maintenance, trips, and multi-stop routes. Know the real cost of getting from A to B.',
-    color: 'border-amber-500',
-    iconColor: 'text-amber-600',
-    checkColor: 'text-amber-600',
-    bgGradient: 'from-amber-600 to-amber-800',
-    Icon: Car,
-    features: [
-      'Vehicle profiles & fuel logging with OCR',
-      'Trip tracking (car, bike, walk, run)',
-      'Bike savings vs. car cost-per-mile',
-      'Garmin activity import',
-    ],
-    highlights: [
-      {
-        title: 'Vehicle Profiles',
-        description: 'Track multiple vehicles with ownership type, tax category, and fuel efficiency. Retire old vehicles while keeping their history.',
-      },
-      {
-        title: 'OCR Fuel Receipts',
-        description: 'Snap a photo of your fuel receipt. Gemini Vision extracts gallons, price, odometer, and station automatically.',
-      },
-      {
-        title: 'Multi-Stop Routes',
-        description: 'Plan complex journeys with multiple legs. Each stop can have its own mode of transport, and costs are tracked per-leg with linked finance transactions.',
-      },
-      {
-        title: 'Bike Savings Calculator',
-        description: 'See how much you save by biking instead of driving. Compares your car\'s cost-per-mile against zero-cost bike trips.',
-      },
-    ],
-    dashboardPath: '/dashboard/travel',
-    tutorialSlug: 'travel',
-    relatedSlugs: ['finance', 'equipment'],
-  },
-  {
     slug: 'finance',
     name: 'Financial Dashboard',
     tagline: 'Complete financial visibility in one place',
@@ -180,7 +142,7 @@ export const MODULES: ModuleData[] = [
     ],
     dashboardPath: '/dashboard/finance',
     tutorialSlug: 'finance',
-    relatedSlugs: ['travel', 'equipment', 'contractor'],
+    relatedSlugs: ['equipment', 'contractor'],
   },
   {
     slug: 'equipment',
@@ -195,7 +157,7 @@ export const MODULES: ModuleData[] = [
     features: [
       'Equipment categories with auto-seeding',
       'Valuation history with chart visualization',
-      'Link equipment to trips and finance',
+      'Link equipment to jobs and finance',
       'Total asset value dashboard',
     ],
     highlights: [
@@ -213,50 +175,12 @@ export const MODULES: ModuleData[] = [
       },
       {
         title: 'Cross-Module Connections',
-        description: 'Link gear to trips (what did you bring?), jobs (what equipment was used?), and maintenance records.',
+        description: 'Link gear to jobs (what equipment was used?) and finance records.',
       },
     ],
     dashboardPath: '/dashboard/equipment',
     tutorialSlug: 'equipment',
-    relatedSlugs: ['finance', 'travel', 'contractor'],
-  },
-  {
-    slug: 'academy',
-    name: 'Academy',
-    tagline: 'Learn, teach, and earn — all in one LMS',
-    description: 'A full learning management system. Create courses with video, text, quizzes, and interactive maps. Sell your courses or take free tutorials.',
-    color: 'border-violet-500',
-    iconColor: 'text-violet-600',
-    checkColor: 'text-violet-600',
-    bgGradient: 'from-violet-600 to-violet-800',
-    Icon: GraduationCap,
-    features: [
-      'Video, text, audio, quiz & map lessons',
-      'Choose Your Own Adventure navigation',
-      'Assignments, certificates & badges',
-      'Free tutorial course series',
-    ],
-    highlights: [
-      {
-        title: 'Rich Lesson Types',
-        description: 'Create video lessons, rich text articles, audio content, multiple-choice quizzes, interactive map lessons, and document-based assignments.',
-      },
-      {
-        title: 'CYOA Navigation',
-        description: 'Courses can use linear progression or Choose Your Own Adventure mode, where AI suggests related lessons based on content similarity.',
-      },
-      {
-        title: 'Teach & Earn',
-        description: 'Become a teacher with a teacher subscription. Set your course price, and receive payouts via Stripe Connect. The platform handles payments.',
-      },
-      {
-        title: 'Free Tutorial Library',
-        description: 'Tutorial series teach every Work.WitUS module. Free for all users — the best way to learn the platform.',
-      },
-    ],
-    dashboardPath: '/academy',
-    tutorialSlug: 'academy',
-    relatedSlugs: ['data-hub', 'contractor'],
+    relatedSlugs: ['finance', 'contractor'],
   },
   {
     slug: 'data-hub',
@@ -272,12 +196,11 @@ export const MODULES: ModuleData[] = [
       'CSV import/export for all modules',
       'Date-range filtering on exports',
       'Google Sheets compatible templates',
-      'Bulk course importer for Academy',
     ],
     highlights: [
       {
         title: 'Multi-Module Support',
-        description: 'Import and export data for finance, trips, vehicles, equipment, contacts, and more.',
+        description: 'Import and export data for finance, equipment, contacts, and more.',
       },
       {
         title: 'Smart Templates',
@@ -331,7 +254,7 @@ export const MODULES: ModuleData[] = [
       },
     ],
     dashboardPath: '/dashboard/blog',
-    relatedSlugs: ['academy', 'contractor'],
+    relatedSlugs: ['contractor'],
   },
 ];
 

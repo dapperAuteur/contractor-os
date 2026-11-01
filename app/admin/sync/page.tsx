@@ -111,7 +111,7 @@ export default function AdminSyncPage() {
       if (res.ok) {
         setKnowledgeResult({
           ok: true,
-          message: `Synced ${data.helpArticles?.succeeded ?? 0} help articles, ${data.courses?.processed ?? 0} course lessons.`,
+          message: `Synced ${data.helpArticles?.succeeded ?? 0} help articles.`,
           details: data,
         });
         setStatus({ lastSynced: data.timestamp ?? new Date().toISOString() });
@@ -198,7 +198,7 @@ export default function AdminSyncPage() {
       <div className="space-y-4">
         <ActionCard
           title="Knowledge Sync"
-          description="Re-embeds all help articles and course lessons into the vector database. Updates the knowledge timestamp. Runs daily at 3:00 AM UTC via cron."
+          description="Re-embeds all help articles into the vector database. Updates the knowledge timestamp. Runs daily at 3:00 AM UTC via cron."
           icon={BookOpen}
           buttonLabel="Run Knowledge Sync"
           onAction={runKnowledgeSync}

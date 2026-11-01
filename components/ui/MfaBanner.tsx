@@ -40,7 +40,7 @@ export default function MfaBanner() {
       <div className="max-w-7xl mx-auto flex items-center gap-3">
         <ShieldAlert className="w-5 h-5 text-amber-600 shrink-0" />
         <p className="text-sm text-amber-800 flex-1">
-          Your account contains health or financial data.{' '}
+          Your account contains financial data.{' '}
           <Link
             href="/dashboard/settings"
             className="font-semibold text-amber-900 underline underline-offset-2 hover:text-amber-700"

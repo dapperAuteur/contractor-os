@@ -44,7 +44,6 @@ const DEFAULT_WIDGETS: WidgetPref[] = [
   { id: 'recent-time', visible: true, order: 2 },
   { id: 'invoices-due', visible: true, order: 3 },
   { id: 'finance-snapshot', visible: false, order: 4 },
-  { id: 'travel-summary', visible: false, order: 5 },
   { id: 'equipment-value', visible: false, order: 6 },
   { id: 'academy-progress', visible: false, order: 7 },
 ];

@@ -187,28 +187,6 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
   ]);
   if (txErr) throw new Error(`Lister transactions: ${txErr.message}`);
 
-  // 8. Vehicle + Fuel Logs + Trips
-  const { data: veh, error: vehErr } = await db
-    .from('vehicles')
-    .insert([{ user_id: userId, nickname: 'Work Truck', type: 'car', make: 'Ford', model: 'F-150', year: 2023, ownership_type: 'owned', active: true }])
-    .select('id');
-  if (vehErr) throw new Error(`Lister vehicle: ${vehErr.message}`);
-  const vehicleId = veh?.[0]?.id;
-
-  if (vehicleId) {
-    const { error: fuelErr } = await db.from('fuel_logs').insert([
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(4), odometer_miles: 18200, miles_since_last_fill: 280, gallons: 14.2, total_cost: 48.96, cost_per_gallon: 3.449, mpg_display: 19.7, station: 'Speedway', fuel_grade: 'regular', source: 'manual' },
-      { user_id: userId, vehicle_id: vehicleId, date: daysAgo(18), odometer_miles: 17920, miles_since_last_fill: 265, gallons: 13.8, total_cost: 47.61, cost_per_gallon: 3.450, mpg_display: 19.2, station: 'Circle K', fuel_grade: 'regular', source: 'manual' },
-    ]);
-    if (fuelErr) throw new Error(`Lister fuel logs: ${fuelErr.message}`);
-  }
-
-  const { error: tripErr } = await db.from('trips').insert([
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(3), mode: 'car', origin: 'Office', destination: 'Lucas Oil Stadium', distance_miles: 8.5, duration_min: 18, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-    { user_id: userId, vehicle_id: vehicleId, date: daysAgo(10), mode: 'car', origin: 'Office', destination: 'Gainbridge Fieldhouse', distance_miles: 6.2, duration_min: 14, trip_category: 'travel', tax_category: 'business', source: 'manual' },
-  ]);
-  if (tripErr) throw new Error(`Lister trips: ${tripErr.message}`);
-
   // 9. Equipment Categories + Equipment
   const { data: eqCats, error: eqCatErr } = await db
     .from('equipment_categories')
@@ -235,13 +213,6 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
     { user_id: userId, name: 'Relationships', icon: 'users', color: '#f59e0b', sort_order: 4 },
   ]);
   if (lcErr) throw new Error(`Lister life categories: ${lcErr.message}`);
-
-  // 14. Focus Sessions
-  const { error: fsErr } = await db.from('focus_sessions').insert([
-    { user_id: userId, start_time: new Date(Date.now() - 86400000 - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 86400000 - 40 * 60000).toISOString(), duration: 50, notes: 'Crew scheduling for B1G Tournament — assigning 4 camera positions', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 172800000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 172800000 - 30 * 60000).toISOString(), duration: 30, notes: 'Reviewing CBS Sports contracts and updated rate cards for 2026', session_type: 'focus' },
-  ]);
-  if (fsErr) throw new Error(`Lister focus sessions: ${fsErr.message}`);
 
   // 15. Blog Post
   const { error: blogErr } = await db.from('blog_posts').insert([

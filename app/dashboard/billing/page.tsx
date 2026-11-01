@@ -157,7 +157,7 @@ export default function BillingPage() {
               <span className="inline-flex items-center gap-2 text-lg font-bold text-slate-700">
                 Free
               </span>
-              <p className="text-sm text-slate-500 mt-1">Blog and Academy access only.</p>
+              <p className="text-sm text-slate-500 mt-1">Blog access only.</p>
             </div>
             <Link
               href="/pricing"

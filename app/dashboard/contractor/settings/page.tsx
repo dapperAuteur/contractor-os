@@ -7,7 +7,7 @@ import {
 import TourRestartButton from '@/components/onboarding/TourRestartButton';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 
-interface TravelSettings {
+interface HomeSettings {
   home_address: string | null;
   home_lat: number | null;
   home_lng: number | null;
@@ -21,7 +21,7 @@ interface TourStatus {
 }
 
 export default function ContractorSettingsPage() {
-  const [settings, setSettings] = useState<TravelSettings | null>(null);
+  const [settings, setSettings] = useState<HomeSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [geocoding, setGeocoding] = useState(false);
@@ -44,7 +44,7 @@ export default function ContractorSettingsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await offlineFetch('/api/travel/settings');
+    const res = await offlineFetch('/api/contractor/home');
     if (res.ok) {
       const d = await res.json();
       const s = d.settings;
@@ -100,8 +100,8 @@ export default function ContractorSettingsPage() {
     setError('');
     setSuccess('');
 
-    // Save just the distance unit via the travel settings API
-    const res = await offlineFetch('/api/travel/settings', {
+    // Save just the distance unit
+    const res = await offlineFetch('/api/contractor/home', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ distance_unit: unit }),
