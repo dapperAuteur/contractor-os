@@ -45,16 +45,21 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ notifications: data || [], unread: count ?? 0 });
 }
 
-// PATCH /api/admin/notifications — mark all as read
-export async function PATCH() {
+// PATCH /api/admin/notifications?type=new_equipment — mark all (of one type) as read.
+// admin_notifications is shared with CentenarianOS until the cutover; pass `type` so this app
+// only touches its own kind of row.
+export async function PATCH(request: NextRequest) {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
 
+  const type = request.nextUrl.searchParams.get('type');
   const db = getServiceDb();
-  const { error } = await db
+  let query = db
     .from('admin_notifications')
     .update({ is_read: true })
     .eq('is_read', false);
+  if (type) query = query.eq('type', type);
+  const { error } = await query;
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });

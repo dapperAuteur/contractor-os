@@ -214,13 +214,6 @@ export async function seedLister(db: SupabaseClient, userId: string): Promise<vo
   ]);
   if (lcErr) throw new Error(`Lister life categories: ${lcErr.message}`);
 
-  // 14. Focus Sessions
-  const { error: fsErr } = await db.from('focus_sessions').insert([
-    { user_id: userId, start_time: new Date(Date.now() - 86400000 - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 86400000 - 40 * 60000).toISOString(), duration: 50, notes: 'Crew scheduling for B1G Tournament — assigning 4 camera positions', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 172800000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 172800000 - 30 * 60000).toISOString(), duration: 30, notes: 'Reviewing CBS Sports contracts and updated rate cards for 2026', session_type: 'focus' },
-  ]);
-  if (fsErr) throw new Error(`Lister focus sessions: ${fsErr.message}`);
-
   // 15. Blog Post
   const { error: blogErr } = await db.from('blog_posts').insert([
     {

@@ -15,7 +15,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Blog and how do I access it?',
-    content: `The Blog is a public writing space inside Work.WitUS where members share their health journeys, longevity research, recipes, and insights. The public blog listing is at /blog. To write your own posts, go to Dashboard → Blog or /dashboard/blog. Posts are tied to your username — visitors can see all your posts at /blog/[username]. You must set a username in Dashboard → Profile before you can publish.`,
+    content: `The Blog is a public writing space inside Work.WitUS where members share work stories, crew tips, and industry insights. The public blog listing is at /blog. To write your own posts, go to Dashboard → Blog or /dashboard/blog. Posts are tied to your username — visitors can see all your posts at /blog/[username]. You must set a username in Dashboard → Profile before you can publish.`,
   },
   {
     role: 'all',
@@ -48,44 +48,6 @@ export const HELP_ARTICLES: HelpArticle[] = [
     content: `On any blog post you can Like it (heart icon) to show appreciation to the author, or Save it (bookmark icon) to add it to your personal saved list. Find your saved posts at Dashboard → Blog → Saved tab. Your liked posts are at the Liked tab. To share a post use the Share Bar at the bottom: Copy Link (copies the full URL), Email (opens email client pre-filled), LinkedIn (opens LinkedIn share dialog). Your author page at /blog/[username] shows all your public posts and can be shared directly.`,
   },
 
-  // ─── RECIPES ─────────────────────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'What is the Recipes module?',
-    content: `Recipes is the cooking and nutrition library inside Work.WitUS. Members can create, share, and discover longevity-focused recipes with automatic nutrition tracking. Every recipe gets a NCV (Nutritional Caloric Value) score — Green, Yellow, or Red — showing how nutrient-dense the calories are. The public recipe listing is at /recipes. Manage your own recipes at Dashboard → Recipes (/dashboard/recipes).`,
-  },
-  {
-    role: 'all',
-    title: 'How to create a recipe',
-    content: `Go to Dashboard → Recipes and click New Recipe (or /dashboard/recipes/new). Fill in: Title and Description (short summary). Set Servings, Prep Time, and Cook Time. Add ingredients using the ingredient builder — search by name, pick from USDA or Open Food Facts database, enter quantity and unit. Nutrition data fills in automatically. Write step-by-step instructions in the rich text editor. Add tags (e.g., high-protein, anti-inflammatory, meal-prep). Upload a cover image and optional gallery photos. Set Visibility (Draft, Public, or Scheduled) and click Publish.`,
-  },
-  {
-    role: 'all',
-    title: 'How the ingredient builder and nutrition tracking work',
-    content: `The ingredient builder lets you look up foods in the USDA Food Data Central (FDC) database or Open Food Facts. Type the ingredient name, select from the dropdown results, enter quantity and unit. Nutrition values (calories, protein, carbs, fat, fiber) are automatically scaled to your quantity. You can also scan a product barcode or enter nutrition manually for items not in the database. Drag ingredients to reorder them. The Nutrition Panel shows totals and per-serving breakdown for the whole recipe, updating live as you add ingredients.`,
-  },
-  {
-    role: 'all',
-    title: 'What is the NCV score on recipes?',
-    content: `NCV stands for Nutritional Caloric Value. It measures how nutrient-dense a recipe is relative to its calories. Formula: NCV = (protein grams + fiber grams) ÷ total calories. Green NCV means high nutrient density — lots of protein and fiber for the calories (e.g., salmon with vegetables). Yellow means balanced macros. Red means calorie-dense with lower protein and fiber (e.g., pastries or heavy sauces). NCV helps you see at a glance whether a meal is optimized for longevity nutrition. It is one signal — context matters (a pre-workout meal may be high-carb by design).`,
-  },
-  {
-    role: 'all',
-    title: 'How to import a recipe from a website',
-    content: `Go to Dashboard → Recipes → Import Recipe (or /dashboard/recipes/import). Paste the full URL of any recipe page from a major cooking website. Click Import. Work.WitUS reads the recipe's structured data (schema.org/Recipe format) and fills in title, description, ingredients, prep time, cook time, servings, and instructions automatically. Review and adjust the imported recipe — look up USDA nutrition data for each ingredient — then publish or save as draft. Works with most major recipe sites including AllRecipes, Food Network, and NYT Cooking.`,
-  },
-  {
-    role: 'all',
-    title: 'How to clone a recipe from another user',
-    content: `On any public recipe detail page, click the Clone button. This copies the full recipe (title, ingredients, instructions, and media) to your own account as a draft. You own the copy and can edit it freely without affecting the original. Cloning is useful for adapting a community recipe to your dietary needs, using a recipe as a template, or keeping a personal copy of a favorite. Credit the original author in your description as a courtesy.`,
-  },
-  {
-    role: 'all',
-    title: 'How to like, save, and share recipes',
-    content: `On any recipe you can Like it (heart icon) to show appreciation, or Save it (bookmark icon) to add to your personal collection. Find saved recipes at Dashboard → Recipes → Saved tab. Liked recipes are at the Liked tab. Share recipes using the Share Bar: Copy Link, Email, or LinkedIn. You can also add any recipe directly to your Fuel / meal tracker by clicking Add to Fuel on the recipe detail page — nutrition totals carry over automatically.`,
-  },
-
   // ─── ALL ROLES ───────────────────────────────────────────────────────────────
 
   {
@@ -109,7 +71,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use Smart Scan for receipts and documents',
-    content: `Go to Dashboard → Scan. Take a photo or upload an image of a receipt, fuel receipt, maintenance invoice, recipe, or medical document. The AI automatically detects the document type, extracts key data (line items, totals, dates, vendors), and lets you save the results to the appropriate module. For receipts, individual line items are tracked with price history per vendor — you can see how prices change over time. Scanned documents can be linked to contacts and financial transactions.`,
+    content: `Go to Dashboard → Scan. Take a photo or upload an image of a receipt, pay stub, call sheet, invoice, or other work document. The AI automatically detects the document type, extracts key data (line items, totals, dates, vendors), and lets you save the results to the appropriate module. For receipts, individual line items are tracked with price history per vendor — you can see how prices change over time. Scanned documents can be linked to contacts and financial transactions.`,
   },
 
   // ─── DATA HUB ───────────────────────────────────────────────────────────────
@@ -117,7 +79,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to import and export data with the Data Hub',
-    content: `Go to Dashboard → Data Hub. You will see cards for all modules: Finance, Health Metrics, Trips, Fuel, Maintenance, Vehicles, Equipment, Contacts, Tasks, and Workouts. Each card has Import, Export, and Template buttons. Click Template to download a CSV template with example rows. Fill in your data and use Import to upload it. You can also paste directly from Google Sheets. Exports support date range filtering. All imports use the service role client and bypass RLS for efficient bulk operations.`,
+    content: `Go to Dashboard → Data Hub. You will see cards for Finance, Equipment, and Contacts. Each card has Import, Export, and Template buttons. Click Template to download a CSV template with example rows. Fill in your data and use Import to upload it. You can also paste directly from Google Sheets. Exports support date range filtering. All imports use the service role client and bypass RLS for efficient bulk operations.`,
   },
 
   // ─── LIFE CATEGORIES ───────────────────────────────────────────────────────
@@ -125,7 +87,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to tag activities with Life Categories',
-    content: `Life Categories let you tag any activity across all modules with life-area labels like Health, Finance, Career, Relationships, etc. Go to Dashboard → Categories to manage your categories, view analytics (spending by category, activity distribution), and find uncategorized items for batch tagging. You can also tag items directly from the Activity Linker modal when editing tasks, workouts, transactions, or any other entity. Each category has a custom icon and color. Default categories are auto-created on first use.`,
+    content: `Life Categories let you tag any activity across all modules with life-area labels like Health, Finance, Career, Relationships, etc. Go to Dashboard → Categories to manage your categories, view analytics (spending by category, activity distribution), and find uncategorized items for batch tagging. You can also tag items directly from the Activity Linker modal when editing transactions, invoices, or equipment. Each category has a custom icon and color. Default categories are auto-created on first use.`,
   },
 
   // ─── EQUIPMENT TRACKER ─────────────────────────────────────────────────────
@@ -134,14 +96,6 @@ export const HELP_ARTICLES: HelpArticle[] = [
     role: 'all',
     title: 'How to track equipment and asset valuations',
     content: `Go to Dashboard → Equipment. You can add gear, electronics, fitness equipment, and other assets with purchase price, brand, model, condition, and category. Track current valuations over time — add a new valuation entry whenever the value changes, and the detail page shows a chart of value history. Equipment can be linked to financial transactions (the purchase transaction) and to other modules via Activity Links. Categories are auto-seeded with defaults (Electronics, Fitness, Travel, etc.) and you can add your own.`,
-  },
-
-  // ─── CORRELATIONS ──────────────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to use correlations and analytics',
-    content: `Go to Dashboard → Correlations. This module analyzes relationships between your health metrics, financial data, sleep, activity, and other tracked data using Pearson correlation analysis. Select two metrics to compare and see how strongly they are related. For example, you might discover that sleep hours correlate with lower spending, or that workout frequency correlates with higher recovery scores. The analytics view shows multi-metric trend lines over time.`,
   },
 
   // ─── CONTRACTOR HUB ──────────────────────────────────────────────────────
@@ -269,26 +223,8 @@ export const HELP_ARTICLES: HelpArticle[] = [
   },
   {
     role: 'all',
-    title: 'How to embed videos in recipes',
-    content: `Recipes support video embedding using the same VideoEmbed system as blog posts. In the recipe editor, use the media embed button to paste a YouTube, Viloud.tv, Mux, or Cloudinary video URL. The video appears at the top of your recipe content. This is great for cooking demonstrations, technique walkthroughs, or plating guides. Videos are responsive and work on mobile.`,
-  },
-  {
-    role: 'all',
     title: 'Supported video providers for embedding',
     content: `Work.WitUS supports embedding videos from these providers: YouTube (paste any youtube.com or youtu.be link — automatically converted to embed format), Viloud.tv (paste the Viloud stream URL), Mux (paste the Mux playback URL), and Cloudinary (upload directly or paste a Cloudinary video URL — rendered with native HTML5 video player). For other providers, use the social embed tab in the media modal to paste raw HTML embed code (iframes).`,
-  },
-
-  // ─── EXERCISE & WORKOUT VIDEO ─────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to add videos to exercises',
-    content: `Each exercise in your library has a video_url field. When creating or editing an exercise, paste a YouTube, Viloud, Mux, or direct video URL into the Video URL field. The video appears on the exercise detail page as an embedded player. You can also upload images via the Media field (Cloudinary) and audio cues via the Audio field. Exercises also support written instructions and form cues for text-based guidance. When you add an exercise to a workout template, the video is accessible from the workout view.`,
-  },
-  {
-    role: 'all',
-    title: 'How to share and like exercises and workouts',
-    content: `Exercises and workouts can be set to public visibility. When public, other users can view, like, copy to their own library, and mark them as done. Like counts, copy counts, and done counts are tracked. You can share exercises and workouts via a shareable link — the share URL uses a public alias (no personal info exposed). Browse public exercises and workouts in the Discover pages at Dashboard → Exercises → Discover and Dashboard → Workouts → Discover. Your liked items are at Dashboard → Profile → Likes.`,
   },
 
   // ─── MODULE WALKTHROUGH ONBOARDING ────────────────────────────────────────
@@ -296,7 +232,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What are interactive feature walkthroughs?',
-    content: `Every major module in Work.WitUS has an interactive walkthrough — a step-by-step guided tour that highlights key UI elements and explains how to use the feature. Walkthroughs are offered when you first visit a module. Each step shows a tooltip card with a title, description, and progress bar. You can advance with Next, skip individual steps with Skip, or exit anytime. Your progress is saved so you can resume where you left off. Walkthroughs cover the Planner, Finance, Travel, Health Metrics, Workouts, Equipment, Academy, and more.`,
+    content: `Every major module in Work.WitUS has an interactive walkthrough — a step-by-step guided tour that highlights key UI elements and explains how to use the feature. Walkthroughs are offered when you first visit a module. Each step shows a tooltip card with a title, description, and progress bar. You can advance with Next, skip individual steps with Skip, or exit anytime. Your progress is saved so you can resume where you left off. Walkthroughs cover Jobs, Rate Cards, Venues, Union, Invoices, Finance, Equipment, Scan, and more.`,
   },
   {
     role: 'all',
@@ -325,46 +261,12 @@ export const HELP_ARTICLES: HelpArticle[] = [
     content: `Contractor (Work.WitUS) and Lister (CrewOps) pages work offline. When you load any page while connected, data is automatically cached in your browser's IndexedDB. If you lose connectivity, cached data is displayed so you can still browse your jobs, roster, assignments, messages, and other content. Changes you make while offline (creating, editing, deleting) are queued and automatically replayed when your connection returns. Text-based pages are also available offline once loaded. The offline system uses the offlineFetch wrapper around standard fetch calls.`,
   },
 
-  // ─── WORKOUTS & NOMAD OS ──────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'What is Nomad Longevity OS?',
-    content: `Nomad Longevity OS is a built-in fitness protocol inside Work.WitUS designed for people who travel frequently and need flexible workout routines. It includes 28 pre-loaded exercises and 12 workout templates organized into four programs: AM (morning mobility), PM (evening recovery), Hotel (bodyweight-only for hotel rooms), and Gym (full equipment). The Friction Protocol helps you choose the right workout based on your available time, equipment, and energy. Access it at Dashboard → Workouts → Nomad OS. All exercises include detailed instructions and form cues.`,
-  },
-  {
-    role: 'all',
-    title: 'How to use the exercise library',
-    content: `The exercise library at Dashboard → Exercises stores all your exercises with detailed metadata: name, category (Push, Pull, Legs, Core, Cardio, etc.), instructions, form cues, video URL, images, audio cues, primary muscles, difficulty level, and equipment requirements. You start with 110+ system-seeded exercises and can add your own. Each exercise tracks usage count across your workouts. The library supports filtering by category, muscle group, difficulty, and equipment type. You can duplicate exercises to create variations and link equipment from your Equipment Tracker.`,
-  },
-  {
-    role: 'all',
-    title: 'How to use enhanced workout fields',
-    content: `Workout templates and logs support 16+ enhanced tracking fields per exercise: RPE (rate of perceived exertion 1-10), tempo (e.g., 3-1-2-0 for eccentric-pause-concentric-pause), superset grouping, circuit flag, negatives, isometrics, to-failure, unilateral (single-limb), balance work, percent of max, distance, hold time, and side (left/right/both). These fields appear in a collapsible Advanced section on each exercise row. Workout logs also track overall feeling (1-5), purpose, warmup notes, and cooldown notes.`,
-  },
-
   // ─── SAVED CONTACTS ───────────────────────────────────────────────────────
 
   {
     role: 'all',
     title: 'How to use saved contacts',
     content: `Saved contacts let you store frequently-used vendors, customers, and locations across all modules. Go to Dashboard → Contacts or use the contact autocomplete on any form that supports it (finance transactions, jobs, venues). Contacts have a type (vendor, customer, or location), optional default budget category, and notes. When you select a saved vendor on a transaction, its default category auto-fills. Contacts also support sub-locations — for example, a venue contact can have multiple addresses (main entrance, loading dock, parking lot). Import contacts in bulk via the Data Hub.`,
-  },
-
-  // ─── COACHING GEMS ────────────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to create and use Coaching Gems',
-    content: `Coaching Gems are custom AI personas you create for specific coaching needs. Go to Dashboard → Gems and click New Gem. Give it a name, system prompt (personality and instructions), and select which data sources it can access (health metrics, finance, workouts, recipes, planner, etc.). Then start a coaching session — the AI has access to your selected real data and can give personalized advice. Gems can also execute actions: create recipes, log workouts, create transactions, or generate flashcards from conversations. Upload files (CSV, images, PDFs) for the AI to analyze during sessions.`,
-  },
-
-  // ─── FOCUS ENGINE ─────────────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to use the Focus Engine',
-    content: `The Focus Engine at Dashboard → Engine is a productivity timer with session tracking. Start a focus session with a task, duration, and optional template. Choose free-form timing or Pomodoro mode (25 min work / 5 min break cycles). After each session, complete a debrief rating your focus, energy, and mood. Log pain or body check data if relevant. View session history and analytics to identify your most productive times and patterns. Sessions can be linked to planner tasks and life categories. Templates let you save reusable session configurations.`,
   },
 
   // ─── SMART SCAN DETAILS ───────────────────────────────────────────────────
@@ -375,36 +277,12 @@ export const HELP_ARTICLES: HelpArticle[] = [
     content: `When you scan a receipt with Smart Scan, the AI extracts individual line items with prices. These are stored in the item_prices table, creating a price history per item per vendor over time. On subsequent scans from the same vendor, you can see how prices have changed. The receipt overview shows total, tax, and vendor. Each line item can be linked to a financial transaction. This is useful for tracking grocery price inflation, comparing vendor pricing, and maintaining expense records for tax purposes.`,
   },
 
-  // ─── HEALTH METRICS WEARABLES ─────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to connect wearables and sync health data',
-    content: `Work.WitUS integrates with three wearable platforms via OAuth: Oura (ring), WHOOP (strap), and Garmin (watch). Go to Dashboard → Settings → Wearable Connections and click Connect next to your device. Complete the OAuth flow to authorize data sharing. Once connected, your daily metrics (resting heart rate, HRV, sleep duration, sleep score, steps, activity calories, respiratory rate) sync automatically each day. You can also import health data via CSV from Apple Health, Google Health, InBody, and Hume Health using the Data Hub import.`,
-  },
-
-  // ─── LIFE RETROSPECTIVE ───────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to use Life Retrospective with Google Calendar import',
-    content: `Life Retrospective lets you import your Google Calendar history and have AI analyze patterns in how you spend your time. Go to Dashboard → Planner → Retrospective. Export your Google Calendar as an .ics file and upload it. The system parses all events using a pure TypeScript ICS parser (no external dependencies). The AI then identifies patterns like meeting frequency, time allocation across categories, and schedule evolution over time. This gives you a bird's-eye view of how your life priorities have shifted.`,
-  },
-
   // ─── FINANCIAL ACCOUNTS ───────────────────────────────────────────────────
 
   {
     role: 'all',
     title: 'How to manage financial accounts',
     content: `Go to Dashboard → Finance → Accounts to add and manage your financial accounts: checking, savings, credit card, loan, and cash accounts. Each account tracks institution name, last four digits, interest rate, credit limit, opening balance, monthly fees, and due/statement dates. Balance is calculated as opening balance plus income minus expenses. Accounts are added and updated by hand; there is no live bank connection. To bring in many transactions at once, import a CSV from Dashboard → Data Hub → Finance. Deactivated accounts preserve transaction history but hide from active views.`,
-  },
-
-  // ─── PLANNER DETAILS ──────────────────────────────────────────────────────
-
-  {
-    role: 'all',
-    title: 'How to use the goal hierarchy and roadmap',
-    content: `The Planner uses a four-level hierarchy: Roadmaps → Goals → Milestones → Tasks. Start by creating a Roadmap (your big-picture vision, e.g., "Health Optimization 2026"). Add Goals under it (e.g., "Run a half marathon"). Break goals into Milestones (e.g., "Complete Couch to 5K"). Then create Tasks under milestones (e.g., "Run 2 miles today"). Tasks appear in your daily/weekly planner views. Each level shows completion progress based on child items. You can archive and restore items. The AI Weekly Review analyzes your task completion patterns.`,
   },
 
   // ─── CONTRACTOR ─────────────────────────────────────────────────────────────
@@ -502,7 +380,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to use the Data Hub',
-    content: `The Data Hub at /dashboard/data is your personal data dashboard. It aggregates metrics from across Work.WitUS — health metrics, workout logs, focus sessions, and life categories. Track daily steps, sleep hours, resting heart rate, and more. Log workouts with exercises, sets, reps, and RPE. Use focus sessions to track deep work time on admin tasks. Life categories let you rate and reflect on different areas of your life.`,
+    content: `The Data Hub at /dashboard/data is where you import and export your Work.WitUS data as CSV: finance transactions, equipment, and contacts. Each card has Import, Export, and Template buttons.`,
   },
   {
     role: 'contractor',

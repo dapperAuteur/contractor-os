@@ -5,9 +5,9 @@
 
 import Link from 'next/link';
 import {
-  DollarSign, HeartPulse, Package,
-  Users, CalendarClock, Dumbbell, ListChecks, Upload, Download, FileDown,
-  Database, Calendar,
+  DollarSign, Package,
+  Users, Upload, Download, FileDown,
+  Database,
 } from 'lucide-react';
 
 interface ModuleCard {
@@ -33,16 +33,6 @@ const MODULES: ModuleCard[] = [
     filters: '?from=YYYY-MM-DD&to=YYYY-MM-DD',
   },
   {
-    slug: 'health-metrics',
-    label: 'Health Metrics',
-    icon: <HeartPulse className="w-5 h-5" />,
-    exportUrl: '/api/health-metrics/export',
-    importHref: '/dashboard/data/import/health-metrics',
-    templateUrl: '/templates/health-metrics-import-template.csv',
-    description: 'Daily logs — RHR, steps, sleep, activity, body composition',
-    filters: '?from=YYYY-MM-DD&to=YYYY-MM-DD',
-  },
-  {
     slug: 'equipment',
     label: 'Equipment',
     icon: <Package className="w-5 h-5" />,
@@ -61,35 +51,6 @@ const MODULES: ModuleCard[] = [
     templateUrl: '/templates/contacts-import-template.csv',
     description: 'Vendors, customers, and saved locations',
     filters: '?type=vendor|customer|location',
-  },
-  {
-    slug: 'tasks',
-    label: 'Tasks',
-    icon: <CalendarClock className="w-5 h-5" />,
-    exportUrl: '/api/planner/export',
-    importHref: '/dashboard/data/import/tasks',
-    templateUrl: '/templates/tasks-import-template.csv',
-    description: 'Planner tasks — daily, weekly, and recurring',
-    filters: '?from=&to=&tag=&completed=true|false',
-  },
-  {
-    slug: 'workouts',
-    label: 'Workouts',
-    icon: <Dumbbell className="w-5 h-5" />,
-    exportUrl: '/api/workouts/logs/export',
-    importHref: '/dashboard/data/import/workouts',
-    templateUrl: '/templates/workouts-import-template.csv',
-    description: 'Workout logs with exercises, sets, reps, weights',
-    filters: '?from=YYYY-MM-DD&to=YYYY-MM-DD',
-  },
-  {
-    slug: 'exercises',
-    label: 'Exercises',
-    icon: <ListChecks className="w-5 h-5" />,
-    exportUrl: '/api/exercises/export',
-    importHref: '/dashboard/data/import/exercises',
-    templateUrl: '/templates/exercises-import-template.csv',
-    description: 'Exercise library — instructions, cues, muscles, defaults',
   },
 ];
 
@@ -116,36 +77,6 @@ export default function DataHubPage() {
           <li><strong>Google Sheets</strong> — publish your Google Sheet as CSV, then paste the URL on any import page.</li>
           <li><strong>Max 1,000 rows</strong> per import (500 for contacts).</li>
         </ul>
-      </div>
-
-      {/* Special Imports */}
-      <div>
-        <h2 className="text-sm font-semibold text-gray-700 mb-3">Special Imports</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-amber-500/10 rounded-xl flex items-center justify-center text-amber-600">
-                <Calendar className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Google Calendar</h3>
-                <p className="text-xs text-gray-500">Import .ics exports as planner tasks</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              <Link
-                href="/dashboard/data/import/google-calendar"
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-500/10 text-amber-700 rounded-lg text-xs font-semibold hover:bg-amber-500/10 transition"
-              >
-                <Upload className="w-3 h-3" />
-                Import .ics
-              </Link>
-            </div>
-            <p className="text-[10px] text-gray-400">
-              &ldquo;Future money&rdquo; events also create draft invoices from your PPI CBS template.
-            </p>
-          </div>
-        </div>
       </div>
 
       {/* Module Cards Grid */}

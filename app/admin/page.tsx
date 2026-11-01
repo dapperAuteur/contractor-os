@@ -6,12 +6,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import DemoResetCard from '@/components/admin/DemoResetCard';
-import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Timer, Utensils, CalendarDays, Map, Trophy, Sparkles } from 'lucide-react';
+import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Briefcase, Trophy, Sparkles } from 'lucide-react';
 
 interface Stats {
   users: { total: number; free: number; monthly: number; lifetime: number; newThisWeek: number };
   content: { blogPosts: number; publicPosts: number; newBlogThisWeek: number };
-  featureUsage: { focusSessions: number; mealLogs: number; dailyLogs: number; roadmapTasks: number; blogViews: number };
+  featureUsage: { jobs: number; blogViews: number };
   revenue: { lifetimeRevenue: number; monthlyMRR: number };
   promoCodesPending: number;
   founders: {
@@ -238,10 +238,7 @@ export default function AdminOverviewPage() {
       {/* Feature usage */}
       <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-700 mb-3">Feature Usage (all-time)</h2>
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-        <StatCard label="Focus Sessions" value={stats.featureUsage.focusSessions} icon={Timer} color="amber" />
-        <StatCard label="Meal Logs" value={stats.featureUsage.mealLogs} icon={Utensils} color="sky" />
-        <StatCard label="Daily Debriefs" value={stats.featureUsage.dailyLogs} icon={CalendarDays} color="lime" />
-        <StatCard label="Roadmap Tasks" value={stats.featureUsage.roadmapTasks} icon={Map} color="amber" />
+        <StatCard label="Jobs" value={stats.featureUsage.jobs} icon={Briefcase} color="amber" />
         <StatCard label="Blog Views" value={stats.featureUsage.blogViews} icon={BookOpen} color="amber" />
       </div>
 

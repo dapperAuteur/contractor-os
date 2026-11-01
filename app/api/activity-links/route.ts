@@ -9,10 +9,11 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { getEntityRule } from '@/lib/activity-links/ownership';
 import { checkOwned } from '@/lib/auth/ownership';
 
-const VALID_TYPES = new Set([
-  'task', 'trip', 'route', 'transaction', 'recipe',
-  'fuel_log', 'maintenance', 'invoice', 'workout', 'equipment', 'focus_session', 'exercise', 'daily_log',
-]);
+// Work.WitUS links only its own records. Tasks, recipes, workouts, focus sessions, exercises and
+// daily logs are CentenarianOS data, and trips, routes, fuel logs and maintenance moved to RideWitUS
+// (plan 18 Phase 1). Old links to those types still list and can be removed; their names are no
+// longer read, so they show the bare type.
+const VALID_TYPES = new Set(['transaction', 'invoice', 'equipment']);
 
 function getDb() {
   return createServiceClient(
@@ -45,48 +46,19 @@ async function resolveDisplayName(
 ): Promise<string> {
   // Names are read with the service role: only for records the caller may see.
   // A link saved before this check existed could point at someone else's record.
+  if (!VALID_TYPES.has(entityType)) return entityType;
   const access = await mayReference(db, userId, entityType, entityId);
   if (!access.allowed) return entityType;
   switch (entityType) {
-    case 'task': {
-      const { data } = await db.from('tasks').select('activity').eq('id', entityId).maybeSingle();
-      return data?.activity || 'Task';
-    }
-    case 'trip': {
-      const { data } = await db.from('trips').select('mode, origin, destination, date').eq('id', entityId).maybeSingle();
-      if (!data) return 'Trip';
-      const route = data.origin && data.destination ? `${data.origin} → ${data.destination}` : '';
-      return `${data.mode}${route ? ': ' + route : ''} (${data.date})`;
-    }
-    case 'route': {
-      const { data } = await db.from('trip_routes').select('name, date').eq('id', entityId).maybeSingle();
-      return data?.name || `Route (${data?.date || '?'})`;
-    }
     case 'transaction': {
       const { data } = await db.from('financial_transactions').select('vendor, amount, type').eq('id', entityId).maybeSingle();
       if (!data) return 'Transaction';
       const sign = data.type === 'expense' ? '-' : '+';
       return `${data.vendor || 'Transaction'} ${sign}$${Number(data.amount).toFixed(2)}`;
     }
-    case 'recipe': {
-      const { data } = await db.from('recipes').select('title').eq('id', entityId).maybeSingle();
-      return data?.title || 'Recipe';
-    }
-    case 'fuel_log': {
-      const { data } = await db.from('fuel_logs').select('station, date, total_cost').eq('id', entityId).maybeSingle();
-      return data?.station ? `${data.station} (${data.date})` : `Fuel (${data?.date || '?'})`;
-    }
-    case 'maintenance': {
-      const { data } = await db.from('vehicle_maintenance').select('service_type, date').eq('id', entityId).maybeSingle();
-      return data?.service_type ? `${data.service_type} (${data.date})` : `Maintenance`;
-    }
     case 'invoice': {
       const { data } = await db.from('invoices').select('contact_name, total').eq('id', entityId).maybeSingle();
       return data?.contact_name ? `Invoice: ${data.contact_name}` : 'Invoice';
-    }
-    case 'workout': {
-      const { data } = await db.from('workout_logs').select('name, date').eq('id', entityId).maybeSingle();
-      return data?.name ? `${data.name} (${data.date || '?'})` : 'Workout';
     }
     case 'equipment': {
       const { data } = await db.from('equipment').select('name, equipment_categories(name)').eq('id', entityId).maybeSingle();
@@ -95,27 +67,6 @@ async function resolveDisplayName(
       const cat = data.equipment_categories as any;
       const catName = cat?.name as string | undefined;
       return catName ? `${data.name} (${catName})` : data.name;
-    }
-    case 'exercise': {
-      const { data } = await db.from('exercises').select('name, exercise_categories(name)').eq('id', entityId).maybeSingle();
-      if (!data) return 'Exercise';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const cat = data.exercise_categories as any;
-      const catName = cat?.name as string | undefined;
-      return catName ? `${data.name} (${catName})` : data.name;
-    }
-    case 'focus_session': {
-      const { data } = await db.from('focus_sessions').select('start_time, duration, session_type').eq('id', entityId).maybeSingle();
-      if (!data) return 'Focus Session';
-      const mins = data.duration ? Math.round(data.duration / 60) : 0;
-      const dateStr = data.start_time ? new Date(data.start_time).toLocaleDateString() : '?';
-      const label = data.session_type === 'work' ? 'Work' : 'Focus';
-      return `${label}: ${mins}min (${dateStr})`;
-    }
-    case 'daily_log': {
-      const { data } = await db.from('daily_logs').select('date, energy_rating').eq('id', entityId).maybeSingle();
-      if (!data) return 'Daily Log';
-      return `Daily Log (${data.date})${data.energy_rating ? ` — energy ${data.energy_rating}/5` : ''}`;
     }
     default:
       return entityType;

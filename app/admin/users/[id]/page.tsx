@@ -18,7 +18,7 @@ interface UserDetail {
     created_at: string;
   };
   email: string | null;
-  stats: { focusSessions: number; blogPosts: number };
+  stats: { jobs: number; blogPosts: number };
 }
 
 const SUBSCRIPTION_OPTIONS = ['free', 'monthly', 'lifetime'] as const;
@@ -101,7 +101,7 @@ export default function AdminUserDetailPage({ params }: { params: Promise<{ id: 
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        {[['Focus Sessions', stats.focusSessions], ['Blog Posts', stats.blogPosts]].map(([label, val]) => (
+        {[['Jobs', stats.jobs], ['Blog Posts', stats.blogPosts]].map(([label, val]) => (
           <div key={label as string} className="bg-white border border-slate-200 rounded-xl p-4 text-center">
             <p className="text-2xl font-bold text-slate-900">{val}</p>
             <p className="text-slate-500 text-xs mt-1">{label}</p>
