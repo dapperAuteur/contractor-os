@@ -14,6 +14,7 @@ import { GraduationCap, LogIn, BookOpen, Zap } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
 import ContractorNav from '@/components/nav/ContractorNav';
+import { LEARN_WITUS_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 function PublicHeader() {
   return (
@@ -24,7 +25,7 @@ function PublicHeader() {
         </Link>
         <div className="flex items-center gap-1">
           <a
-            href="https://learn.witus.online"
+            href={LEARN_WITUS_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"

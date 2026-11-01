@@ -2,6 +2,7 @@
 // Minimal footer for public pages. theme='dark' (default) or 'light'.
 
 import Link from 'next/link';
+import { LEARN_WITUS_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 interface SiteFooterProps {
   theme?: 'dark' | 'light';
@@ -28,7 +29,7 @@ export default function SiteFooter({ theme = 'dark' }: SiteFooterProps) {
           <Link href="/community" className={linkCls}>Community Conduct</Link>
           <Link href="/safety" className={linkCls}>Safety &amp; Resources</Link>
           <Link href="/blog" className={linkCls}>Blog</Link>
-          <a href="https://learn.witus.online" target="_blank" rel="noopener noreferrer" className={linkCls}>Learn.WitUS</a>
+          <a href={LEARN_WITUS_URL} target="_blank" rel="noopener noreferrer" className={linkCls}>Learn.WitUS</a>
         </nav>
         <p className={`${copyCls} text-center sm:text-right shrink-0`}>
           &copy; {year} B4C LLC / AwesomeWebStore.com. All rights reserved.

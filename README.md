@@ -2,7 +2,7 @@
 
 A contractor management platform for freelance workers and crew coordinators to track jobs, log time, manage invoices, scan documents, and organize work schedules.
 
-Work.WitUS keeps only its own data. CentenarianOS modules (planner, health metrics, recipes, workouts, focus) and Travel are not part of it; travel lives in RideWitUS and the tutorials are moving to Learn.WitUS (plan 18 Phase 1, 2026-11-01).
+Work.WitUS keeps only its own data. CentenarianOS modules (planner, health metrics, recipes, workouts, focus) and Travel are not part of it; travel lives in RideWitUS and the tutorials are the [Work.WitUS guides](https://learn.witus.online/series/work-witus-guides) on Learn.WitUS (plan 18 Phase 1, 2026-11-01).
 
 ## Features
 
@@ -15,7 +15,7 @@ Work.WitUS keeps only its own data. CentenarianOS modules (planner, health metri
 | **Equipment & Assets** | Equipment CRUD, valuation history, depreciation tracking, transaction linking, activity links (transactions, invoices, equipment) |
 | **Contacts & Crew** | Contact directory, multiple phones/emails, job role tracking, contact sharing, contractor/job boards, lister mode |
 | **Document Scanner** | Gemini Vision OCR, auto-classification, AI job estimates, offline scanning with IndexedDB |
-| **Tutorials (moving)** | The Academy left on 2026-09-07; the Work.WitUS tutorials move to [Learn.WitUS](https://learn.witus.online) (not published there yet). `/academy` redirects there; the admin content library is read-only |
+| **Tutorials (on Learn.WitUS)** | The Academy left on 2026-09-07; the Work.WitUS tutorials are seven free courses in the [Work.WitUS guides](https://learn.witus.online/series/work-witus-guides) series on Learn.WitUS. `/academy` redirects to the series; Help, the home and lister pages, the dashboard widget and each topic page link to their guide (URLs in `lib/ecosystem/learn-witus.mjs`); the admin content library is read-only |
 | **Union Hub** | Membership tracking, dues, document storage, contract RAG, union chat |
 | **Blog & Community** | Rich text editor, scheduled publishing, share bars with tracked short links, author profiles |
 | **Marketing** | Switchy.io short links with pixel tracking, email campaigns with audience segmentation, conversion funnels, churn prevention, in-app upgrade banners, feature gating, referral reward tiers |

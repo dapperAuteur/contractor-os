@@ -10,6 +10,7 @@ import {
   ArrowRight, Loader2, TrendingUp, CalendarDays,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import { LEARN_WITUS_GUIDES, WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 // ─── Widget Registry ────────────────────────────────────────────────────────
 
@@ -28,7 +29,7 @@ export const WIDGET_REGISTRY: WidgetDef[] = [
   { id: 'recent-time', label: 'Recent Time', description: 'Hours logged this week', icon: Clock, component: RecentTimeWidget },
   { id: 'finance-snapshot', label: 'Finance', description: 'Account balances and recent transactions', icon: DollarSign, component: FinanceSnapshotWidget, paid: true },
   { id: 'equipment-value', label: 'Equipment', description: 'Total equipment value', icon: Wrench, component: EquipmentValueWidget, paid: true },
-  { id: 'academy-progress', label: 'Learn.WitUS', description: 'Where the Work.WitUS tutorials are going', icon: GraduationCap, component: LearnWidget },
+  { id: 'academy-progress', label: 'Learn.WitUS', description: 'The Work.WitUS guides on Learn.WitUS', icon: GraduationCap, component: LearnWidget },
   { id: 'invoices-due', label: 'Invoices Due', description: 'Unpaid and overdue invoices', icon: FileText, component: InvoicesDueWidget },
 ];
 
@@ -241,16 +242,31 @@ function LearnWidget() {
   return (
     <WidgetShell title="Learn.WitUS" icon={GraduationCap}>
       <p className="text-sm text-slate-500">
-        Work.WitUS tutorials are moving to Learn.WitUS, the WitUS home for courses.
+        The Work.WitUS guides are free courses on Learn.WitUS, the WitUS home for courses.
       </p>
+      <ul className="mt-2 space-y-0.5">
+        {[LEARN_WITUS_GUIDES.contractor, LEARN_WITUS_GUIDES.finance, LEARN_WITUS_GUIDES.equipment].map((g) => (
+          <li key={g.url}>
+            <a
+              href={g.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center text-sm text-amber-600 hover:text-amber-500 hover:underline"
+            >
+              {g.title}
+              <span className="sr-only"> (opens Learn.WitUS in a new tab)</span>
+            </a>
+          </li>
+        ))}
+      </ul>
       <a
-        href="https://learn.witus.online"
+        href={WORK_WITUS_GUIDES_SERIES_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-3 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-500"
+        className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-500"
       >
-        Open Learn.WitUS <ArrowRight className="h-3 w-3" aria-hidden="true" />
-        <span className="sr-only">(opens in a new tab)</span>
+        All seven guides <ArrowRight className="h-3 w-3" aria-hidden="true" />
+        <span className="sr-only">(opens Learn.WitUS in a new tab)</span>
       </a>
     </WidgetShell>
   );

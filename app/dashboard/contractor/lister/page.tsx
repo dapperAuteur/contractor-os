@@ -7,6 +7,7 @@ import {
   UsersRound, BarChart3, ChevronRight, Clock,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 interface DashboardData {
   summary: {
@@ -72,7 +73,10 @@ export default function ListerDashboardPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 p-4">
-      <h1 className="text-2xl font-bold text-slate-900">Lister Dashboard</h1>
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Lister Dashboard</h1>
+        <LearnGuideLink guide="crewops" accent="indigo" />
+      </div>
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

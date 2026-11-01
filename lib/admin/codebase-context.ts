@@ -15,8 +15,8 @@ Work.WitUS (work.witus.online) is a job and money tool for freelance crew in bro
 and production. Contractors track jobs, time, invoices, paychecks, union memberships, venues,
 equipment and finances. Listers (CrewOps) coordinate crews: rosters, job assignment, availability
 and group messages. It is part of the WitUS ecosystem: sign-in with WitUS (accounts.witus.online),
-Travel and job mileage live in RideWitUS (ride.witus.online), and tutorials are on Learn.WitUS
-(learn.witus.online).
+Travel and job mileage live in RideWitUS (ride.witus.online), and the tutorials are the
+"Work.WitUS guides" series on Learn.WitUS (learn.witus.online/series/work-witus-guides).
 
 ### Stack
 - **Framework**: Next.js 15 App Router, React 19, TypeScript, Tailwind v4

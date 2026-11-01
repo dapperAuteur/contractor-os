@@ -6,6 +6,7 @@ import {
   Package, ArrowUpDown,
 } from 'lucide-react';
 import { organizationSchema } from '@/lib/seo/json-ld';
+import { LEARN_WITUS_GUIDES, WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 export const metadata: Metadata = {
   title: 'Work.WitUS — Job Tracking for Independent Contractors',
@@ -209,21 +210,31 @@ export default function ContractorLandingPage() {
         </div>
       </section>
 
-      {/* Guide link (the tutorials are moving to Learn.WitUS; not published there yet) */}
+      {/* Guide link: the Contractor guide on Learn.WitUS (URLs in lib/ecosystem/learn-witus.mjs) */}
       <section className="border-t border-slate-200 py-12 text-center">
         <p className="text-sm text-slate-500">New to Work.WitUS?</p>
-        <p className="mt-1 text-lg font-semibold text-slate-800">The free Contractor Work.WitUS Guide is moving to Learn.WitUS</p>
-        <p className="mt-2 text-sm text-slate-400">15 lessons covering everything from job creation to 1099 tracking. Until it is published there, members can ask the in-app Help.</p>
-        {/* Linking to Learn.WitUS's root rather than guessing a deep path. */}
-        <a
-          href="https://learn.witus.online"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 inline-flex items-center text-sm font-medium text-amber-600 hover:text-amber-500 min-h-11"
-        >
-          Visit Learn.WitUS &rarr;
-          <span className="sr-only"> (opens in a new tab)</span>
-        </a>
+        <p className="mt-1 text-lg font-semibold text-slate-800">The free Contractor guide is on Learn.WitUS</p>
+        <p className="mt-2 text-sm text-slate-500">{LEARN_WITUS_GUIDES.contractor.lessons} lessons covering everything from job creation to 1099 tracking, plus six more guides for Finance, Equipment, the Data Hub, Settings and Billing, the Blog and CrewOps.</p>
+        <div className="mt-3 flex flex-col sm:flex-row items-center justify-center gap-x-6">
+          <a
+            href={LEARN_WITUS_GUIDES.contractor.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center text-sm font-medium text-amber-600 hover:text-amber-500 min-h-11"
+          >
+            Take the Contractor guide &rarr;
+            <span className="sr-only"> (opens Learn.WitUS in a new tab)</span>
+          </a>
+          <a
+            href={WORK_WITUS_GUIDES_SERIES_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center text-sm font-medium text-amber-600 hover:text-amber-500 min-h-11"
+          >
+            All Work.WitUS guides &rarr;
+            <span className="sr-only"> (opens Learn.WitUS in a new tab)</span>
+          </a>
+        </div>
       </section>
 
       {/* CTA */}

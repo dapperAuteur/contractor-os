@@ -143,12 +143,12 @@ export const ROADMAP_CATEGORIES: RoadmapCategory[] = [
   },
   {
     slug: 'academy',
-    title: 'Tutorials (moving to Learn.WitUS)',
+    title: 'Tutorials (on Learn.WitUS)',
     icon: 'GraduationCap',
-    description: 'The Academy left Work.WitUS on 2026-09-07. The Work.WitUS tutorials move to Learn.WitUS, the WitUS home for courses.',
+    description: 'The Academy left Work.WitUS on 2026-09-07. The Work.WitUS tutorials are now the seven-course "Work.WitUS guides" series on Learn.WitUS, the WitUS home for courses.',
     features: [
       { text: 'Academy (courses, teachers, enrollments) removed from Work.WitUS; /academy links forward to Learn.WitUS', status: 'shipped' },
-      { text: 'Contractor and Lister guides published on Learn.WitUS and linked from Help', status: 'planned' },
+      { text: 'Seven Work.WitUS guides on Learn.WitUS (Contractor, CrewOps, Finance, Equipment, Data Hub, Settings and Billing, Blog), linked from Help, the home and lister pages, the dashboard widget and each topic page', status: 'shipped' },
     ],
   },
   {

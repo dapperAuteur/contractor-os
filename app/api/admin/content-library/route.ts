@@ -1,12 +1,13 @@
 // app/api/admin/content-library/route.ts
 // GET: list available tutorial content with import status
-// POST: turned off (410); the tutorials move to Learn.WitUS (plan 18 Phase 1)
+// POST: turned off (410); the tutorials are on Learn.WitUS (plan 18 Phase 1, task 25)
 
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 function getDb() {
   return createClient(
@@ -318,7 +319,7 @@ export async function GET() {
 }
 
 // POST: importing into the Academy is turned off (plan 18 Phase 1). The Academy left Work.WitUS on
-// 2026-09-07 and the tutorials move to Learn.WitUS; writing new courses, modules and lessons into
+// 2026-09-07 and the tutorials are now the Work.WitUS guides on Learn.WitUS; writing new courses, modules and lessons into
 // the shared LMS tables from here would only add rows the move has to carry or clean up.
 export async function POST() {
   const auth = await requireAdmin();
@@ -327,7 +328,7 @@ export async function POST() {
   return NextResponse.json(
     {
       error:
-        'Importing into the Work.WitUS Academy is turned off. The tutorials are moving to Learn.WitUS (https://learn.witus.online).',
+        `Importing into the Work.WitUS Academy is turned off. The tutorials are on Learn.WitUS: ${WORK_WITUS_GUIDES_SERIES_URL}`,
     },
     { status: 410 },
   );
