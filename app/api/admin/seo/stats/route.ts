@@ -77,14 +77,13 @@ export async function GET() {
   }
 
   // ── Sitemap coverage counts ────────────────────────────────────────────────
+  // (Courses left with the Academy; sitemap.ts no longer lists them.)
   const [
     { count: profileCount },
     { count: blogCount },
-    { count: courseCount },
   ] = await Promise.all([
     db.from('profiles').select('id', { count: 'exact', head: true }).not('username', 'is', null),
     db.from('blog_posts').select('id', { count: 'exact', head: true }).eq('visibility', 'public').not('published_at', 'is', null),
-    db.from('courses').select('id', { count: 'exact', head: true }).eq('status', 'published'),
   ]);
 
   const STATIC_PAGE_COUNT = 12; // matches static routes in sitemap.ts
@@ -106,9 +105,8 @@ export async function GET() {
     sitemap_coverage: {
       profiles: profileCount ?? 0,
       blog_posts: blogCount ?? 0,
-      courses: courseCount ?? 0,
       static_pages: STATIC_PAGE_COUNT,
-      total: (profileCount ?? 0) + (blogCount ?? 0) + (courseCount ?? 0) + STATIC_PAGE_COUNT,
+      total: (profileCount ?? 0) + (blogCount ?? 0) + STATIC_PAGE_COUNT,
     },
   });
 }

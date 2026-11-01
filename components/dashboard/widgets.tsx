@@ -29,7 +29,7 @@ export const WIDGET_REGISTRY: WidgetDef[] = [
   { id: 'finance-snapshot', label: 'Finance', description: 'Account balances and recent transactions', icon: DollarSign, component: FinanceSnapshotWidget, paid: true },
   { id: 'travel-summary', label: 'Travel', description: 'Miles and trips this month', icon: Car, component: TravelSummaryWidget, paid: true },
   { id: 'equipment-value', label: 'Equipment', description: 'Total equipment value', icon: Wrench, component: EquipmentValueWidget, paid: true },
-  { id: 'academy-progress', label: 'Academy', description: 'Enrolled courses and progress', icon: GraduationCap, component: AcademyProgressWidget },
+  { id: 'academy-progress', label: 'Learn.WitUS', description: 'Where the Work.WitUS tutorials are going', icon: GraduationCap, component: LearnWidget },
   { id: 'invoices-due', label: 'Invoices Due', description: 'Unpaid and overdue invoices', icon: FileText, component: InvoicesDueWidget },
 ];
 
@@ -263,38 +263,23 @@ function EquipmentValueWidget() {
   );
 }
 
-function AcademyProgressWidget() {
-  const [data, setData] = useState<{ enrolled: number; completed: number } | null>(null);
-
-  useEffect(() => {
-    offlineFetch('/api/academy/my-courses')
-      .then((r) => r.json())
-      .then((d) => {
-        const courses = d.courses ?? d ?? [];
-        setData({
-          enrolled: courses.length,
-          completed: courses.filter((c: { completion_pct?: number }) => (c.completion_pct ?? 0) >= 100).length,
-        });
-      })
-      .catch(() => setData({ enrolled: 0, completed: 0 }));
-  }, []);
-
-  if (!data) return <WidgetLoader />;
-
+// The Academy left Work.WitUS (2026-09-07); its enrollment API is gone. The widget id stays
+// 'academy-progress' so saved dashboard layouts keep their slot.
+function LearnWidget() {
   return (
-    <WidgetShell title="Learning" icon={GraduationCap} href="https://learn.witus.online">
-      <div className="space-y-1.5">
-        <StatRow label="Enrolled" value={data.enrolled} />
-        <StatRow label="Completed" value={data.completed} />
-        {data.enrolled > 0 && (
-          <div className="h-2 bg-slate-100 rounded-full overflow-hidden mt-2">
-            <div
-              className="h-full bg-amber-500 rounded-full transition-all"
-              style={{ width: `${data.enrolled > 0 ? Math.round((data.completed / data.enrolled) * 100) : 0}%` }}
-            />
-          </div>
-        )}
-      </div>
+    <WidgetShell title="Learn.WitUS" icon={GraduationCap}>
+      <p className="text-sm text-slate-500">
+        Work.WitUS tutorials are moving to Learn.WitUS, the WitUS home for courses.
+      </p>
+      <a
+        href="https://learn.witus.online"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-amber-600 hover:text-amber-500"
+      >
+        Open Learn.WitUS <ArrowRight className="h-3 w-3" aria-hidden="true" />
+        <span className="sr-only">(opens in a new tab)</span>
+      </a>
     </WidgetShell>
   );
 }

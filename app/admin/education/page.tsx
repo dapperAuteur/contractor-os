@@ -68,7 +68,6 @@ const SUGGESTIONS: Record<Mode, string[]> = {
   general: [
     'What modules does Work.WitUS include?',
     'How does the AI integration work across the platform?',
-    'Explain the LMS / Academy system architecture.',
     'What wearable integrations are supported and how do they work?',
   ],
 };

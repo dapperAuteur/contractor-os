@@ -12,7 +12,6 @@ import { Link2, Loader2, CheckCircle2, Eye, Globe, TrendingUp, ExternalLink, Ref
 
 interface ShortlinkCounts {
   blog: { with: number; without: number };
-  course: { with: number; without: number };
   feature?: { total: number };
 }
 
@@ -85,7 +84,7 @@ export default function LinksAndTrafficPage() {
 
   const s = traffic?.summary;
   const totalShortLinks = counts
-    ? (counts.blog.with + counts.course.with)
+    ? counts.blog.with
     : 0;
 
   if (loading) {
@@ -98,7 +97,6 @@ export default function LinksAndTrafficPage() {
 
   const shortlinkSections = [
     { key: 'blog', label: 'Blog Posts', data: counts?.blog },
-    { key: 'course', label: 'Courses', data: counts?.course },
   ];
 
   const prefixOptions = [

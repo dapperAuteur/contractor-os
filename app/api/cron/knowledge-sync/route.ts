@@ -1,5 +1,5 @@
 // app/api/cron/knowledge-sync/route.ts
-// Daily cron to re-sync help articles, course embeddings, and knowledge timestamp.
+// Daily cron to re-sync help articles and the knowledge timestamp.
 // Also callable manually by admin via POST.
 
 import { NextRequest, NextResponse } from 'next/server';
