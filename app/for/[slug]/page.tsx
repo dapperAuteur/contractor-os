@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { INDUSTRY_CONFIGS, getIndustryConfig } from '@/lib/features/industry-configs';
 import { organizationSchema } from '@/lib/seo/json-ld';
+import { CONTRACTOR_PRICE_SUMMARY } from '@/lib/pricing/prices';
 
 // Icon registry — all icons used in industry configs
 const ICONS: Record<string, React.ComponentType<{ className?: string; size?: number }>> = {
@@ -213,7 +214,7 @@ export default async function IndustryDetailPage(
       <section className="border-t border-slate-200 py-12 text-center">
         <div className="mx-auto max-w-3xl px-4">
           <h2 className="text-xl font-bold mb-2">One Price. Every Feature.</h2>
-          <p className="text-slate-500 mb-1">$10/month or $100/year. No feature gates, no upsells.</p>
+          <p className="text-slate-500 mb-1">{CONTRACTOR_PRICE_SUMMARY}. No feature gates, no upsells.</p>
           <p className="text-sm text-slate-400 mb-6">Every tool on this page is included in every plan.</p>
           <div className="flex justify-center gap-3">
             <Link

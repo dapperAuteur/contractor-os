@@ -4,6 +4,7 @@ import {
   Users, Calendar, BarChart3, UserPlus, Shield, ClipboardList, MessageCircle,
   ArrowRight, Crown, Play,
 } from 'lucide-react';
+import { LISTER_PRICES, formatPrice } from '@/lib/pricing/prices';
 
 export const metadata: Metadata = {
   title: 'CrewOps — Crew Management for Listers & Production Coordinators',
@@ -191,7 +192,7 @@ export default function ListerLandingPage() {
       {/* CTA */}
       <section className="border-t border-slate-200 py-16 text-center">
         <h2 className="text-2xl font-bold">Ready to streamline crew management?</h2>
-        <p className="mt-2 text-slate-500">Intro pricing: $10/month (regularly $50). Limited time.</p>
+        <p className="mt-2 text-slate-500">Intro pricing: {formatPrice(LISTER_PRICES.introMonthly)}/month (regularly {formatPrice(LISTER_PRICES.regularMonthly)}). Limited time.</p>
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/signup"

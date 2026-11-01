@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { getActiveLifetimePromo } from '@/lib/promo/active-lifetime-promo';
+import { CONTRACTOR_PRICES } from '@/lib/pricing/prices';
 
 function getDb() {
   return createServiceClient(
@@ -15,10 +16,10 @@ function getDb() {
   );
 }
 
-// CashApp price is $100 flat — does NOT include processing fees.
-// Stripe lifetime is $103.29 (covers Stripe's 2.9% + $0.30 fee).
-// CashApp charges 2.75% on the receiving end — absorbed by the business.
-const CASHAPP_LIFETIME_PRICE = 100;
+// CashApp lifetime price is flat — it does NOT include processing fees. The card (Stripe) lifetime
+// price carries Stripe's 2.9% + $0.30 fee. CashApp charges 2.75% on the receiving end, absorbed by the
+// business. Both prices live in lib/pricing/prices.ts.
+const CASHAPP_LIFETIME_PRICE = CONTRACTOR_PRICES.lifetimeCashApp;
 
 /** Check founders availability by querying paid counts directly. */
 async function isFoundersActive(db: ReturnType<typeof getDb>): Promise<boolean> {
