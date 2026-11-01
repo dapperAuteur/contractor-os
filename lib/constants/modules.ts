@@ -10,7 +10,6 @@ export const MODULES = {
   EXERCISES: 'exercises',
   EQUIPMENT: 'equipment',
   RECIPES: 'recipes',
-  ACADEMY: 'academy',
   LIFE_CATEGORIES: 'life_categories',
   CONTACTS: 'contacts',
   DATA_HUB: 'data_hub',

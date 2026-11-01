@@ -1,8 +1,8 @@
 // app/api/admin/content-library/route.ts
 // GET: list available tutorial content with import status
-// POST: import a tutorial series into the Academy as a course
+// POST: turned off (410); the tutorials move to Learn.WitUS (plan 18 Phase 1)
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
@@ -276,57 +276,6 @@ const TUTORIAL_SERIES = [
   },
 ];
 
-// Parse front matter and extract content from a tutorial markdown file
-function parseTutorialMd(content: string) {
-  const lines = content.split('\n');
-  let title = '';
-  let durationMin = 5;
-
-  // Extract title from first heading
-  for (const line of lines) {
-    if (line.startsWith('# ')) {
-      title = line.replace(/^#\s+/, '').replace(/^Lesson \d+:\s*/, '');
-      break;
-    }
-  }
-
-  // Extract duration
-  for (const line of lines) {
-    const match = line.match(/\*\*Duration:\*\*\s*~?(\d+)\s*min/);
-    if (match) {
-      durationMin = parseInt(match[1], 10);
-      break;
-    }
-  }
-
-  // Extract content after "## Narrator Script" or after the front matter separator
-  let scriptStart = -1;
-  for (let i = 0; i < lines.length; i++) {
-    if (lines[i].match(/^##\s+Narrator Script/)) {
-      scriptStart = i + 1;
-      break;
-    }
-  }
-
-  // If no Narrator Script heading, take everything after the second ---
-  if (scriptStart === -1) {
-    let separatorCount = 0;
-    for (let i = 0; i < lines.length; i++) {
-      if (lines[i].trim() === '---') {
-        separatorCount++;
-        if (separatorCount === 2) {
-          scriptStart = i + 1;
-          break;
-        }
-      }
-    }
-  }
-
-  const textContent = scriptStart >= 0 ? lines.slice(scriptStart).join('\n').trim() : content;
-
-  return { title, durationSeconds: durationMin * 60, textContent };
-}
-
 // GET: list all available tutorial series with import status
 export async function GET() {
   const auth = await requireAdmin();
@@ -380,130 +329,18 @@ export async function GET() {
   return NextResponse.json(items);
 }
 
-// POST: import a tutorial series as a new Academy course
-export async function POST(request: NextRequest) {
+// POST: importing into the Academy is turned off (plan 18 Phase 1). The Academy left Work.WitUS on
+// 2026-09-07 and the tutorials move to Learn.WitUS; writing new courses, modules and lessons into
+// the shared LMS tables from here would only add rows the move has to carry or clean up.
+export async function POST() {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
-  const user = auth.user;
 
-  const { slug } = await request.json();
-  if (!slug) return NextResponse.json({ error: 'slug is required' }, { status: 400 });
-
-  const series = TUTORIAL_SERIES.find((s) => s.slug === slug);
-  if (!series) return NextResponse.json({ error: `Unknown series: ${slug}` }, { status: 404 });
-
-  const db = getDb();
-
-  // Check if already imported
-  const { data: existing } = await db
-    .from('courses')
-    .select('id')
-    .eq('title', series.title)
-    .eq('category', 'Platform Guide')
-    .maybeSingle();
-
-  if (existing) {
-    return NextResponse.json({ error: 'This series has already been imported', courseId: existing.id }, { status: 409 });
-  }
-
-  // 1. Create the course
-  const { data: course, error: courseErr } = await db
-    .from('courses')
-    .insert({
-      teacher_id: user.id,
-      title: series.title,
-      description: series.description,
-      category: series.category,
-      tags: series.tags,
-      price: 0,
-      price_type: 'free',
-      navigation_mode: 'cyoa',
-      is_published: false,
-    })
-    .select()
-    .single();
-
-  if (courseErr || !course) {
-    return NextResponse.json({ error: courseErr?.message ?? 'Failed to create course' }, { status: 500 });
-  }
-
-  // 2. Create modules
-  const moduleIdMap = new Map<string, string>();
-  for (const mod of series.modules) {
-    const { data: moduleRow, error: modErr } = await db
-      .from('course_modules')
-      .insert({
-        course_id: course.id,
-        title: mod.title,
-        order: mod.order,
-      })
-      .select('id')
-      .single();
-
-    if (modErr || !moduleRow) {
-      console.error('Module creation error:', modErr);
-      continue;
-    }
-    moduleIdMap.set(mod.title, moduleRow.id);
-  }
-
-  // 3. Read markdown files and create lessons
-  const tutorialsDir = path.join(process.cwd(), 'content', 'tutorials', series.slug);
-  let lessonsCreated = 0;
-  const errors: string[] = [];
-
-  for (const mod of series.modules) {
-    const moduleId = moduleIdMap.get(mod.title);
-    if (!moduleId) continue;
-
-    for (let i = 0; i < mod.lessons.length; i++) {
-      const lessonNum = mod.lessons[i];
-      // Find the actual file (glob-like matching)
-      let actualFile: string | null = null;
-      try {
-        const allFiles = fs.readdirSync(tutorialsDir);
-        actualFile = allFiles.find((f: string) => f.startsWith(`${lessonNum}-`) && f.endsWith('.md')) ?? null;
-      } catch {
-        errors.push(`Cannot read directory ${tutorialsDir}`);
-        continue;
-      }
-
-      if (!actualFile) {
-        errors.push(`File not found for lesson ${lessonNum} in ${series.slug}`);
-        continue;
-      }
-
-      const content = fs.readFileSync(path.join(tutorialsDir, actualFile), 'utf-8');
-      const parsed = parseTutorialMd(content);
-
-      const { error: lessonErr } = await db
-        .from('lessons')
-        .insert({
-          course_id: course.id,
-          module_id: moduleId,
-          title: parsed.title,
-          lesson_type: 'text',
-          text_content: parsed.textContent,
-          content_format: 'markdown',
-          duration_seconds: parsed.durationSeconds,
-          is_free_preview: true,
-          order: i + 1,
-        });
-
-      if (lessonErr) {
-        errors.push(`Lesson ${lessonNum}: ${lessonErr.message}`);
-      } else {
-        lessonsCreated++;
-      }
-    }
-  }
-
-  return NextResponse.json({
-    success: true,
-    courseId: course.id,
-    title: series.title,
-    modulesCreated: moduleIdMap.size,
-    lessonsCreated,
-    errors,
-  });
+  return NextResponse.json(
+    {
+      error:
+        'Importing into the Work.WitUS Academy is turned off. The tutorials are moving to Learn.WitUS (https://learn.witus.online).',
+    },
+    { status: 410 },
+  );
 }

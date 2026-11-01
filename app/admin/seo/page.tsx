@@ -31,7 +31,6 @@ interface SocialReferrals {
 interface SitemapCoverage {
   profiles: number;
   blog_posts: number;
-  courses: number;
   static_pages: number;
   total: number;
 }
@@ -77,10 +76,8 @@ const OG_COVERAGE = [
   { page: 'Lister pricing',               done: true  },
   { page: 'Blog listing (/blog)',          done: true  },
   { page: 'Blog posts (/blog/*/slug)',     done: true  },
-  { page: 'Academy (/academy)',            done: true  },
   { page: 'Public profiles (/profiles/*)',  done: true  },
   { page: 'Community guidelines',         done: false },
-  { page: 'Academy courses (/academy/*)', done: false },
 ];
 
 export default function AdminSeoPage() {
@@ -277,7 +274,6 @@ export default function AdminSeoPage() {
           <StatCard label="Static Pages"  value={sitemap_coverage.static_pages} sub="marketing, legal" />
           <StatCard label="Profiles"      value={sitemap_coverage.profiles}      sub="public users" />
           <StatCard label="Blog Posts"    value={sitemap_coverage.blog_posts}    sub="public posts" />
-          <StatCard label="Courses"       value={sitemap_coverage.courses}       sub="published" />
         </div>
         <div className="bg-amber-50 border border-amber-200 rounded-xl px-5 py-4 text-sm text-amber-700">
           <strong className="font-semibold">{sitemap_coverage.total.toLocaleString()} total URLs</strong> in your sitemap — all indexed by Google on next crawl.

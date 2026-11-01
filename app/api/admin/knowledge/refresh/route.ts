@@ -1,5 +1,5 @@
 // app/api/admin/knowledge/refresh/route.ts
-// POST: Admin-only on-demand trigger to re-sync help articles + course embeddings.
+// POST: Admin-only on-demand trigger to re-sync help articles.
 
 import { NextResponse } from 'next/server';
 import { syncAllKnowledge } from '@/lib/admin/syncKnowledge';

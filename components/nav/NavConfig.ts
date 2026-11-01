@@ -74,7 +74,6 @@ export const NAV_GROUPS: NavGroup[] = [
     icon: GraduationCap,
     items: [
       { label: 'Blog', href: '/dashboard/blog', icon: BookOpen, paid: false, adminOnly: true },
-      { label: 'Academy', href: '/academy', icon: GraduationCap, paid: false },
     ],
   },
   {

@@ -43,7 +43,7 @@ export const CAMPAIGN_TEMPLATES: CampaignTemplate[] = [
       <p style="${P}">You just joined the platform built by contractors, for contractors. Here&rsquo;s how to get the most out of it:</p>
       <p style="${P}"><strong>1. Complete your profile</strong> &mdash; add your skills, rates, and a photo so listers can find you.</p>
       <p style="${P}"><strong>2. Create your first job</strong> &mdash; log the details, track hours, and generate invoices in minutes.</p>
-      <p style="${P}"><strong>3. Explore the Academy</strong> &mdash; free courses on equipment tracking, finance, and more.</p>
+      <p style="${P}"><strong>3. Ask Help</strong> &mdash; the in-app help chat answers questions about jobs, invoices, finance, and more.</p>
       <p style="${P}">
         <a href="{{siteUrl}}/dashboard/contractor" style="${CTA}">Go to Dashboard</a>
       </p>
@@ -105,7 +105,7 @@ export const CAMPAIGN_TEMPLATES: CampaignTemplate[] = [
     body_html: baseLayout(`It’s been a while`, `
       <p style="${P}">We noticed you haven&rsquo;t logged in recently. A lot has changed since your last visit:</p>
       <ul style="${UL}">
-        <li>New Academy courses and learning paths</li>
+        <li>Paycheck reconciliation and pay stub scanning</li>
         <li>Improved receipt scanner with smarter AI</li>
         <li>Travel templates for faster trip logging</li>
       </ul>

@@ -10,122 +10,6 @@ export interface HelpArticle {
 }
 
 export const HELP_ARTICLES: HelpArticle[] = [
-  // ─── STUDENT ─────────────────────────────────────────────────────────────────
-
-  {
-    role: 'student',
-    title: 'What is Work.WitUS Academy?',
-    content: `Work.WitUS Academy is the learning platform inside Work.WitUS. Members can enroll in courses taught by longevity experts, health coaches, and community teachers. Courses include video lessons, text content, audio tracks, assignments, live sessions, and an optional Choose-Your-Own-Adventure (CYOA) learning path. The Academy is accessible at /academy from the main navigation.`,
-  },
-  {
-    role: 'student',
-    title: 'How to browse and find courses',
-    content: `Visit /academy to see the course catalog. You can browse all published courses in a card grid, filter by category (Nutrition, Movement, Mindset, etc.), and search by keyword using the search bar at the top. Each course card shows the cover image, title, instructor name, pricing (Free, one-time, or subscription), and category tag. Click any card to open the course detail page.`,
-  },
-  {
-    role: 'student',
-    title: 'How to enroll in a course',
-    content: `On the course detail page (/academy/[courseId]), click Enroll or Subscribe. Free courses enroll you immediately with no payment. Paid one-time courses redirect to Stripe Checkout — complete payment and you are enrolled. Subscription courses bill you monthly or annually through Stripe. If your instructor gave you a promo code, enter it in the discount field on the Stripe Checkout page.`,
-  },
-  {
-    role: 'student',
-    title: 'How to watch a lesson',
-    content: `After enrolling, click any lesson in the curriculum on the course detail page. Lessons open at /academy/[courseId]/lessons/[lessonId]. Video lessons have a player — watch and scrub freely. Audio lessons have an inline player. Text lessons are scrollable articles. Slides lessons show an embedded slide deck. Free preview lessons are visible without enrolling and are marked with a Preview badge. A lesson is marked complete automatically when you reach the end, or you can click Mark Complete manually.`,
-  },
-  {
-    role: 'student',
-    title: 'What is CYOA Choose Your Own Adventure mode?',
-    content: `Some courses have CYOA mode enabled. After completing each lesson in a CYOA course, you see a Crossroads screen instead of a simple Next button. The Crossroads shows up to 5 paths: (1) Continue — next lesson in standard order, (2) and (3) Related paths — semantically similar lessons chosen by AI, (4) Surprise Me — a random lesson, (5) View Course Map — see the full module list and jump anywhere. CYOA lets you follow your curiosity and build a personalized learning journey.`,
-  },
-  {
-    role: 'student',
-    title: 'How to track your course progress',
-    content: `Visit /academy/my-courses to see all your enrollments. Each course shows a progress bar with lessons completed out of total lessons, a percentage, and the instructor and enrollment date. Click Continue to jump back to where you left off. When a course reaches 100% it is marked Complete with a green badge.`,
-  },
-  {
-    role: 'student',
-    title: 'How to submit an assignment',
-    content: `Assignments appear on the course detail page under the Assignments section once you are enrolled. Click an assignment to open it at /academy/[courseId]/assignments/[id]. Read the instructions at the top. Type your response in the text area. Attach files if needed (images, video, audio, PDF, Word, Markdown, CSV — up to 5 files). Click Save Draft to save without submitting (your instructor is not notified). Click Submit to send your work to the instructor for grading.`,
-  },
-  {
-    role: 'student',
-    title: 'Draft vs Submitted assignment status',
-    content: `Draft status means your work is saved on the server but your instructor has not been notified. You can come back later and keep editing. Submitted status means your instructor can see and grade your work. After submitting you can still click Update Submission to revise your work. The status badge (Draft or Submitted) appears in the top navigation bar of the assignment page.`,
-  },
-  {
-    role: 'student',
-    title: 'Assignment grades and feedback',
-    content: `When your instructor grades your submission, a grade banner appears at the top of the assignment page showing your grade (for example A, 85/100, or Excellent) and written feedback. A Feedback Thread below the assignment form lets you have a back-and-forth conversation with your instructor about your work. You can send messages and your instructor will reply in the same thread.`,
-  },
-  {
-    role: 'student',
-    title: 'What file types can I attach to assignments?',
-    content: `Assignment submissions support: images (JPG, PNG, GIF, WEBP, SVG, HEIC), video (MP4, MOV, WEBM, AVI, MKV, M4V), audio (MP3, WAV, OGG, M4A, AAC, FLAC), and documents (PDF, DOC, DOCX, TXT, MD, CSV, XLS, XLSX, PPT, PPTX). You can attach up to 5 files per submission. Files are uploaded to Cloudinary.`,
-  },
-  {
-    role: 'student',
-    title: 'How to watch live sessions',
-    content: `Live sessions from the Work.WitUS team are at /live. The page shows upcoming and currently live sessions. When a session is live the Join Live button activates and opens the embedded video stream. Per-course live sessions scheduled by your instructor appear on the course detail page.`,
-  },
-  {
-    role: 'student',
-    title: 'Troubleshooting enrollment and progress issues',
-    content: `If you enrolled but lessons are still locked, refresh the page. If the issue persists, sign out and sign back in. If your progress bar is not updating, reload the My Courses page — progress is saved server-side. If you cannot upload a file, check the supported formats (images, video, audio, PDF, DOC, DOCX, TXT, MD, CSV, XLS, XLSX, PPT, PPTX) and ensure you have fewer than 5 files. Unsaved draft changes are lost if you close the page without clicking Save Draft.`,
-  },
-
-  // ─── TEACHER ─────────────────────────────────────────────────────────────────
-
-  {
-    role: 'teacher',
-    title: 'How to become a teacher on Work.WitUS Academy',
-    content: `To publish courses you need a Teacher account. From your dashboard go to Teaching in the sidebar. If you do not have a teacher plan, you will be prompted to subscribe. Complete Stripe Checkout for the teacher subscription. Once payment is confirmed your account is upgraded to teacher role. You can then create and publish courses.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to connect Stripe for payouts',
-    content: `To receive payouts from paid course enrollments, go to Dashboard > Teaching > Payouts and click Connect with Stripe. Complete the Stripe Express onboarding including identity verification and bank details. Once onboarded your payout status shows Connected. Platform fees (default 15%) are deducted automatically at checkout and the remainder is sent to your bank. Free courses do not require Stripe Connect.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to create a course',
-    content: `Go to /dashboard/teaching/courses/new. Fill in the title, description, category, cover image, price type (free, one-time, or subscription), and price amount for paid courses. Choose Navigation Mode: Linear (standard sequential order) or CYOA (Choose Your Own Adventure crossroads after each lesson). Click Create. Your course starts as a draft and is not visible to students until you publish it. Visibility options: Public (anyone), Members Only (logged-in members), or Scheduled (goes live at a specific date).`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to add modules and lessons to a course',
-    content: `On the course editor page (/dashboard/teaching/courses/[id]), click Add Module and enter the module title. Under each module click Add Lesson. Fill in the title, lesson type (video, text, audio, slides), content upload or embed URL, optional duration, and toggle Free Preview on if you want non-enrolled visitors to access this lesson. Drag lessons and modules to reorder them. When your curriculum is ready, toggle Published in the Settings panel to make the course live.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to upload video and audio content',
-    content: `For video and audio lessons, drag your file onto the upload area or click to browse. Cloudinary handles transcoding automatically so your video will be playable on any device. For slides lessons, paste an embed code (Google Slides, Canva, or any iframe). For text lessons, type directly in the rich text editor on the lesson form.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to set up CYOA AI paths',
-    content: `When your course has Navigation Mode set to CYOA, add all your lessons first. Then click Generate AI Paths on the course editor page. The system sends each lesson's content to Gemini for embedding and stores semantic similarity scores. Students then get AI-suggested related lessons at the Crossroads after each lesson. Run Generate AI Paths again whenever you add new lessons. CYOA courses work best with 10 or more lessons across diverse but related topics.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to create and manage assignments',
-    content: `Click Assignments in the course editor header to go to /dashboard/teaching/courses/[id]/assignments. Click New Assignment and fill in the title, detailed instructions, and optional due date. Assignments appear on the course detail page for all enrolled students. To grade a submission, expand the assignment row and click on a submission. Read the student's response and attachments, enter a grade and feedback text, and click Save Grade. The student sees the grade immediately on their assignment page.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to create promo codes',
-    content: `Go to Dashboard > Teaching > Promo Codes. Enter the code string (e.g. LAUNCH50), discount percentage (e.g. 50 for 50% off), optional maximum number of uses, and optional expiration date. Codes are created as Stripe Coupons and applied automatically at Stripe Checkout when students enter them. Share codes with your audience for launch promotions, community groups, or scholarships.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to schedule a live session',
-    content: `Go to Dashboard > Teaching > Live. Click Schedule Session. Enter the title, description, scheduled date and time, and paste your embed code from Zoom, Google Meet, Mux, or any iframe-embeddable streaming service. Toggle Is Live when the session goes live so students can join. Students enrolled in the associated course see the session on the course detail page.`,
-  },
-  {
-    role: 'teacher',
-    title: 'Teacher tips for better courses',
-    content: `Start with a free preview lesson to show potential students your teaching style. Use CYOA mode for exploratory topics like nutrition, mindset, and lifestyle where non-linear paths make sense. Keep video lessons under 15 minutes for higher completion rates. Write detailed assignment instructions — students produce better work when expectations are clear. Respond to feedback threads within 48 hours to improve student satisfaction and retention.`,
-  },
-
   // ─── BLOG ────────────────────────────────────────────────────────────────────
 
   {
@@ -207,7 +91,12 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use the in-app help chat',
-    content: `The Help button appears as part of the floating action menu (the fuchsia button in the bottom-right corner). Click the button to expand it, then click the question mark (Help) option. A chat drawer opens where you can ask any question about using Work.WitUS Academy. The system searches the tutorial documentation and uses AI to give you a direct answer. The chat is context-aware — ask things like How do I submit an assignment, How do I create a CYOA course, or How do I set up Stripe payouts.`,
+    content: `The Help button appears as part of the floating action menu (the fuchsia button in the bottom-right corner). Click the button to expand it, then click the question mark (Help) option. A chat drawer opens where you can ask any question about using Work.WitUS. The system searches the help documentation and uses AI to give you a direct answer. Ask things like How do I generate an invoice from my hours, How do I split a paycheck deposit, or How do I check union contract rules.`,
+  },
+  {
+    role: 'all',
+    title: 'Where are the Work.WitUS tutorials and the Academy?',
+    content: `The Academy (courses, teachers, enrollments) left Work.WitUS on September 7, 2026. The Work.WitUS tutorials, including the Contractor guide and the Lister and Crew Coordinator guide, are moving to Learn.WitUS (https://learn.witus.online), the WitUS home for courses. They are not published there yet; until they are, ask the in-app Help chat, which answers the same questions. Old /academy links forward to Learn.WitUS.`,
   },
   {
     role: 'all',
@@ -245,27 +134,6 @@ export const HELP_ARTICLES: HelpArticle[] = [
     role: 'all',
     title: 'How to track equipment and asset valuations',
     content: `Go to Dashboard → Equipment. You can add gear, electronics, fitness equipment, and other assets with purchase price, brand, model, condition, and category. Track current valuations over time — add a new valuation entry whenever the value changes, and the detail page shows a chart of value history. Equipment can be linked to financial transactions (the purchase transaction) and to other modules via Activity Links. Categories are auto-seeded with defaults (Electronics, Fitness, Travel, etc.) and you can add your own.`,
-  },
-
-  // ─── COURSE PREREQUISITES ──────────────────────────────────────────────────
-
-  {
-    role: 'student',
-    title: 'What are course prerequisites and how do override requests work',
-    content: `Some courses have prerequisites — required or recommended courses you should complete first. When you try to enroll in a course with prerequisites, you will see which ones are met and which are not. If you have not completed a required prerequisite, you can submit an Override Request to the teacher. Fill out the teacher's questionnaire explaining your background, and the teacher will approve or deny your request. Recommended prerequisites are informational and do not block enrollment.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to set up course prerequisites and handle override requests',
-    content: `When editing a course, go to the Prerequisites section. You can add required or recommended prerequisites from other published courses. Optionally, add override questions — a questionnaire students must fill out if they request to skip a prerequisite. Override requests appear in your Teaching Dashboard under the Overrides tab. Review the student's answers and approve or deny the request. Approved students can enroll immediately.`,
-  },
-
-  // ─── CROSS-COURSE CYOA ─────────────────────────────────────────────────────
-
-  {
-    role: 'teacher',
-    title: 'How to enable cross-course CYOA navigation',
-    content: `When editing a course, toggle the Allow Cross-Course CYOA option. When enabled, students in CYOA mode will see lesson suggestions from other courses (in addition to your own) at Crossroads screens. This uses semantic similarity matching across all published lessons with embeddings. It is a great way to connect related content across the Academy catalog and help students discover new courses organically.`,
   },
 
   // ─── CORRELATIONS ──────────────────────────────────────────────────────────
@@ -454,7 +322,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How does offline mode work for contractor and lister pages?',
-    content: `Contractor (Work.WitUS) and Lister (CrewOps) pages work offline. When you load any page while connected, data is automatically cached in your browser's IndexedDB. If you lose connectivity, cached data is displayed so you can still browse your jobs, roster, assignments, messages, and other content. Changes you make while offline (creating, editing, deleting) are queued and automatically replayed when your connection returns. Text-based pages like tutorials and academy lessons are also available offline once loaded. The offline system uses the offlineFetch wrapper around standard fetch calls.`,
+    content: `Contractor (Work.WitUS) and Lister (CrewOps) pages work offline. When you load any page while connected, data is automatically cached in your browser's IndexedDB. If you lose connectivity, cached data is displayed so you can still browse your jobs, roster, assignments, messages, and other content. Changes you make while offline (creating, editing, deleting) are queued and automatically replayed when your connection returns. Text-based pages are also available offline once loaded. The offline system uses the offlineFetch wrapper around standard fetch calls.`,
   },
 
   // ─── WORKOUTS & NOMAD OS ──────────────────────────────────────────────────
@@ -829,7 +697,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to customize dashboard widgets',
-    content: `On the contractor dashboard, click the "Customize" button in the header. A panel shows all available widgets with eye icons to show/hide each one and arrows to reorder them. Available widgets: Job Status, Upcoming Jobs, Recent Time, Invoices Due, Finance Snapshot, Travel Summary, Equipment Value, Academy Progress. Your widget preferences are saved to your account and persist across sessions. The default shows Job Status, Upcoming Jobs, Recent Time, and Invoices Due.`,
+    content: `On the contractor dashboard, click the "Customize" button in the header. A panel shows all available widgets with eye icons to show/hide each one and arrows to reorder them. Available widgets: Job Status, Upcoming Jobs, Recent Time, Invoices Due, Finance Snapshot, Travel Summary, Equipment Value, Learn.WitUS. Your widget preferences are saved to your account and persist across sessions. The default shows Job Status, Upcoming Jobs, Recent Time, and Invoices Due.`,
   },
   {
     role: 'all',
@@ -847,7 +715,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'admin',
     title: 'How to create and send email campaigns',
-    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/courses/equipment/travel). Save as Draft, then click "Send Now" to deliver by email. Each person gets their own copy, and {{name}} in the body is replaced with their display name. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
+    content: `Go to Admin → Campaigns and click "New Campaign." Choose from built-in templates (Welcome drip, Upgrade nudge, Win-back, Announcement) or start blank. Set a title, subject line, and HTML body. Configure audience targeting by subscription tier (free/monthly/lifetime), user role (contractor/lister/teacher), activity level (active 7d/30d, inactive 30d+), and feature usage (has jobs/equipment/travel). Save as Draft, then click "Send Now" to deliver by email. Each person gets their own copy, and {{name}} in the body is replaced with their display name. The system respects email marketing opt-out preferences — users who disabled marketing emails in settings are automatically excluded.`,
   },
   {
     role: 'admin',
@@ -870,36 +738,4 @@ export const HELP_ARTICLES: HelpArticle[] = [
     content: `Go to Admin → Referrals to see the referral leaderboard with reward tier progress. Three tiers: Bronze (3 paid referrals = 1 month free), Silver (10 = 3 months free), Gold (25 = lifetime upgrade). When you mark a referral invite as "Paid," the system auto-checks if the referrer has earned a new tier. Gold tier auto-upgrades the user to lifetime. Each referrer shows their current tier badge, progress bar to next tier, and total impact score. The "Recent Rewards Issued" section shows recently earned rewards.`,
   },
 
-  // ─── ACADEMY UPDATES ──────────────────────────────────────────────────────
-
-  {
-    role: 'student',
-    title: 'How to message your teacher about an assignment',
-    content: `On any assignment page, a "Feedback Thread" section appears below your submission. Type a message and press Enter or click Send. Your teacher will see the message on their grading page and can respond in the same thread. Messages auto-refresh every 30 seconds. Your messages appear on the right (amber), teacher messages on the left (gray). This thread is specific to your submission — each assignment has its own conversation.`,
-  },
-  {
-    role: 'student',
-    title: 'How to use course direct messages',
-    content: `Go to My Courses → Messages to see all your DM conversations with teachers, organized by course. Click a conversation to open the message thread. You can also start a conversation from the course detail page. Messages support real-time updates with 30-second auto-refresh. The inbox shows unread counts per conversation.`,
-  },
-  {
-    role: 'student',
-    title: 'How to leave a course review',
-    content: `On the course detail page, scroll to the Reviews section. If you're enrolled and have completed at least one lesson, you'll see a "Leave a Review" form with a star rating (1-5) and optional text review. You can only leave one review per course. After submitting, your review appears in the course's review list and contributes to the average rating shown in the course header. You can update your review at any time.`,
-  },
-  {
-    role: 'student',
-    title: 'How to use a promo code for a course',
-    content: `When enrolling in a paid course, you'll see a "Promo Code" input field above the Enroll button. Enter the code (case-insensitive) and click Enroll. The discount is applied at Stripe checkout. Promo codes are created by course teachers and may have usage limits or expiration dates. If the code is invalid, expired, or has reached its limit, you'll see an error message.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to respond to student submissions',
-    content: `On the teacher assignments page, expand any assignment to see student submissions. Below each submission's grading form, there's a "Feedback Thread" where you can message the student directly. This is useful for asking clarification questions, providing detailed feedback, or discussing grades. The thread auto-refreshes and shows both your messages and the student's replies.`,
-  },
-  {
-    role: 'teacher',
-    title: 'How to create promo codes for your courses',
-    content: `Go to Teaching → Promo Codes to create discount codes. Set a code name, discount percentage (1-100%), optional maximum uses, and optional expiration date. The system creates a Stripe Coupon behind the scenes. Students enter the code at checkout to receive the discount. You can see usage counts and delete expired codes from the same page.`,
-  },
 ];

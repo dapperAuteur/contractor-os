@@ -3,7 +3,7 @@
 
 import {
   Car, DollarSign,
-  Package, GraduationCap, BookOpen, Database,
+  Package, BookOpen, Database,
   HardHat, Users, type LucideIcon,
 } from 'lucide-react';
 
@@ -221,44 +221,6 @@ export const MODULES: ModuleData[] = [
     relatedSlugs: ['finance', 'travel', 'contractor'],
   },
   {
-    slug: 'academy',
-    name: 'Academy',
-    tagline: 'Learn, teach, and earn — all in one LMS',
-    description: 'A full learning management system. Create courses with video, text, quizzes, and interactive maps. Sell your courses or take free tutorials.',
-    color: 'border-violet-500',
-    iconColor: 'text-violet-600',
-    checkColor: 'text-violet-600',
-    bgGradient: 'from-violet-600 to-violet-800',
-    Icon: GraduationCap,
-    features: [
-      'Video, text, audio, quiz & map lessons',
-      'Choose Your Own Adventure navigation',
-      'Assignments, certificates & badges',
-      'Free tutorial course series',
-    ],
-    highlights: [
-      {
-        title: 'Rich Lesson Types',
-        description: 'Create video lessons, rich text articles, audio content, multiple-choice quizzes, interactive map lessons, and document-based assignments.',
-      },
-      {
-        title: 'CYOA Navigation',
-        description: 'Courses can use linear progression or Choose Your Own Adventure mode, where AI suggests related lessons based on content similarity.',
-      },
-      {
-        title: 'Teach & Earn',
-        description: 'Become a teacher with a teacher subscription. Set your course price, and receive payouts via Stripe Connect. The platform handles payments.',
-      },
-      {
-        title: 'Free Tutorial Library',
-        description: 'Tutorial series teach every Work.WitUS module. Free for all users — the best way to learn the platform.',
-      },
-    ],
-    dashboardPath: '/academy',
-    tutorialSlug: 'academy',
-    relatedSlugs: ['data-hub', 'contractor'],
-  },
-  {
     slug: 'data-hub',
     name: 'Data Hub',
     tagline: 'Your data, your way — import and export everything',
@@ -272,7 +234,6 @@ export const MODULES: ModuleData[] = [
       'CSV import/export for all modules',
       'Date-range filtering on exports',
       'Google Sheets compatible templates',
-      'Bulk course importer for Academy',
     ],
     highlights: [
       {
@@ -331,7 +292,7 @@ export const MODULES: ModuleData[] = [
       },
     ],
     dashboardPath: '/dashboard/blog',
-    relatedSlugs: ['academy', 'contractor'],
+    relatedSlugs: ['contractor'],
   },
 ];
 

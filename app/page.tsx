@@ -209,19 +209,19 @@ export default function ContractorLandingPage() {
         </div>
       </section>
 
-      {/* Academy Link */}
+      {/* Guide link (the tutorials are moving to Learn.WitUS; not published there yet) */}
       <section className="border-t border-slate-200 py-12 text-center">
         <p className="text-sm text-slate-500">New to Work.WitUS?</p>
-        <p className="mt-1 text-lg font-semibold text-slate-800">Take the free Contractor Work.WitUS Guide</p>
-        <p className="mt-2 text-sm text-slate-400">15 lessons covering everything from job creation to 1099 tracking. No account required.</p>
-        {/* Courses moved to Learn.WitUS. Linking to its root rather than guessing a deep path. */}
+        <p className="mt-1 text-lg font-semibold text-slate-800">The free Contractor Work.WitUS Guide is moving to Learn.WitUS</p>
+        <p className="mt-2 text-sm text-slate-400">15 lessons covering everything from job creation to 1099 tracking. Until it is published there, members can ask the in-app Help.</p>
+        {/* Linking to Learn.WitUS's root rather than guessing a deep path. */}
         <a
           href="https://learn.witus.online"
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 inline-flex items-center text-sm font-medium text-amber-600 hover:text-amber-500 min-h-11"
         >
-          Browse the guide on Learn.WitUS &rarr;
+          Visit Learn.WitUS &rarr;
           <span className="sr-only"> (opens in a new tab)</span>
         </a>
       </section>

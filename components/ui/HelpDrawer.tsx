@@ -1,7 +1,7 @@
 'use client';
 
 // components/ui/HelpDrawer.tsx
-// Slide-in drawer with RAG-powered Academy help chat.
+// Slide-in drawer with RAG-powered help chat.
 
 import { useEffect, useRef, useState } from 'react';
 import { X, Send, Loader2, HelpCircle, BookOpen } from 'lucide-react';

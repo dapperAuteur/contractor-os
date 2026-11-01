@@ -1,5 +1,8 @@
 // lib/admin/syncKnowledge.ts
-// Shared logic for syncing help articles, course embeddings, and context timestamp.
+// Shared logic for syncing help articles and the context timestamp.
+// Course (lesson) embeddings were dropped in plan 18 Phase 1: the Academy left Work.WitUS, and the
+// job re-embedded every published CYOA course in the shared database, CentenarianOS's included.
+// CentenarianOS runs its own sync for its courses.
 // Called by: daily cron (/api/admin/demo/reset) and on-demand (/api/admin/knowledge/refresh).
 
 import { createClient } from '@supabase/supabase-js';
@@ -39,7 +42,6 @@ async function getEmbedding(text: string): Promise<number[]> {
 
 export interface SyncResult {
   helpArticles: { succeeded: number; failed: number };
-  courses: { processed: number; errors: number };
   timestamp: string;
 }
 
@@ -85,49 +87,6 @@ export async function syncHelpArticles(): Promise<{ succeeded: number; failed: n
   return { succeeded, failed };
 }
 
-/** Regenerate embeddings for all published CYOA courses. */
-export async function syncCourseEmbeddings(): Promise<{ processed: number; errors: number }> {
-  const db = getDb();
-
-  // Get all published CYOA courses
-  const { data: courses } = await db
-    .from('courses')
-    .select('id')
-    .eq('is_published', true)
-    .eq('navigation_mode', 'cyoa');
-
-  if (!courses?.length) return { processed: 0, errors: 0 };
-
-  let processed = 0;
-  let errors = 0;
-
-  for (const course of courses) {
-    const { data: lessons } = await db
-      .from('lessons')
-      .select('id, title, text_content')
-      .eq('course_id', course.id);
-
-    if (!lessons?.length) continue;
-
-    for (const lesson of lessons) {
-      const text = [lesson.title, lesson.text_content].filter(Boolean).join('\n\n');
-      if (!text.trim()) continue;
-
-      try {
-        const embedding = await getEmbedding(text);
-        await db
-          .from('lesson_embeddings')
-          .upsert({ lesson_id: lesson.id, embedding: `[${embedding.join(',')}]` }, { onConflict: 'lesson_id' });
-        processed++;
-      } catch {
-        errors++;
-      }
-    }
-  }
-
-  return { processed, errors };
-}
-
 /** Update the knowledge sync timestamp in platform_settings. */
 export async function updateContextTimestamp(): Promise<string> {
   const db = getDb();
@@ -142,20 +101,15 @@ export async function updateContextTimestamp(): Promise<string> {
 
 /** Run all sync tasks. Returns combined results. */
 export async function syncAllKnowledge(): Promise<SyncResult> {
-  const [helpResult, courseResult] = await Promise.allSettled([
+  const [helpResult] = await Promise.allSettled([
     syncHelpArticles(),
-    syncCourseEmbeddings(),
   ]);
 
   const helpArticles = helpResult.status === 'fulfilled'
     ? helpResult.value
     : { succeeded: 0, failed: HELP_ARTICLES.length };
 
-  const courses = courseResult.status === 'fulfilled'
-    ? courseResult.value
-    : { processed: 0, errors: -1 };
-
   const timestamp = await updateContextTimestamp();
 
-  return { helpArticles, courses, timestamp };
+  return { helpArticles, timestamp };
 }
