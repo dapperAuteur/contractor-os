@@ -22,11 +22,10 @@ export async function GET(_request: NextRequest, { params }: Params) {
   const { id } = await params;
   const db = getServiceClient();
 
-  const [profileRes, authUserRes, focusRes, recipesRes, blogRes] = await Promise.all([
+  const [profileRes, authUserRes, jobsRes, blogRes] = await Promise.all([
     db.from('profiles').select('*').eq('id', id).single(),
     db.auth.admin.getUserById(id),
-    db.from('focus_sessions').select('id', { count: 'exact' }).eq('user_id', id),
-    db.from('recipes').select('id', { count: 'exact' }).eq('user_id', id),
+    db.from('contractor_jobs').select('id', { count: 'exact', head: true }).eq('user_id', id),
     db.from('blog_posts').select('id', { count: 'exact' }).eq('user_id', id),
   ]);
 
@@ -34,8 +33,7 @@ export async function GET(_request: NextRequest, { params }: Params) {
     profile: profileRes.data,
     email: authUserRes.data.user?.email ?? null,
     stats: {
-      focusSessions: focusRes.count ?? 0,
-      recipes: recipesRes.count ?? 0,
+      jobs: jobsRes.count ?? 0,
       blogPosts: blogRes.count ?? 0,
     },
   });

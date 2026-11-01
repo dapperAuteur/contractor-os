@@ -16,6 +16,9 @@ export function daysFromNow(n: number): string {
 }
 
 // Deletion order respects FK constraints (children before parents).
+// CentenarianOS-module tables (focus_sessions, teller_enrollments) are no longer seeded
+// (plan 18 Phase 1) but stay in this list so a reset still clears rows earlier seeds created.
+// They leave this list when the tables are dropped (plan 18 Phase 8 / CentOS plan 49 Stage 6).
 // Child tables with ON DELETE CASCADE are omitted — they are auto-deleted
 // when their parent row is removed (e.g. invoice_items via invoices).
 export const CLEAR_ORDER = [
@@ -203,14 +206,6 @@ export async function seedTutorial(supabase: SupabaseClient, userId: string): Pr
     { user_id: userId, name: 'Relationships', icon: 'users', color: '#f59e0b', sort_order: 4 },
   ]);
   if (lcErr) throw new Error(`Tutorial life categories: ${lcErr.message}`);
-
-  // Focus Sessions (3 sessions)
-  const { error: tutFsErr } = await supabase.from('focus_sessions').insert([
-    { user_id: userId, start_time: new Date(Date.now() - 86400000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 86400000 - 35 * 60000).toISOString(), duration: 25, notes: 'Reviewing monthly budget categories', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 172800000 - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 172800000 - 40 * 60000).toISOString(), duration: 50, notes: 'Meal planning and recipe research for the week', session_type: 'focus' },
-    { user_id: userId, start_time: new Date(Date.now() - 259200000 - 45 * 60000).toISOString(), end_time: new Date(Date.now() - 259200000 - 15 * 60000).toISOString(), duration: 30, notes: 'Logging health metrics and daily reflection', session_type: 'focus' },
-  ]);
-  if (tutFsErr) throw new Error(`Tutorial focus sessions: ${tutFsErr.message}`);
 
   // ── Contacts ──
   const { error: contactErr } = await supabase.from('user_contacts').insert([
@@ -485,22 +480,6 @@ export async function seedVisitor(supabase: SupabaseClient, userId: string): Pro
       if (tagErr) throw new Error(`Visitor life category tags: ${tagErr.message}`);
     }
   }
-
-  // ── Focus Sessions (10 sessions over 30 days) ──
-  const DAY_MS = 86400000;
-  const { error: fsErr } = await supabase.from('focus_sessions').insert([
-    { user_id: userId, start_time: new Date(Date.now() - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 40 * 60000).toISOString(), duration: 50, notes: 'Deep work on client proposal — DataCo SOW', session_type: 'focus', hourly_rate: 150, revenue: 125 },
-    { user_id: userId, start_time: new Date(Date.now() - DAY_MS - 120 * 60000).toISOString(), end_time: new Date(Date.now() - DAY_MS - 45 * 60000).toISOString(), duration: 75, notes: 'Code review and architecture planning', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 2 * DAY_MS - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 2 * DAY_MS - 15 * 60000).toISOString(), duration: 45, notes: 'Blog writing — fuel tracking post', session_type: 'focus' },
-    { user_id: userId, start_time: new Date(Date.now() - 3 * DAY_MS - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 3 * DAY_MS - 30 * 60000).toISOString(), duration: 60, notes: 'Financial reconciliation and invoice review', session_type: 'work', hourly_rate: 150, revenue: 150 },
-    { user_id: userId, start_time: new Date(Date.now() - 4 * DAY_MS - 50 * 60000).toISOString(), end_time: new Date(Date.now() - 4 * DAY_MS).toISOString(), duration: 50, notes: 'Client presentation prep — TechCorp Q1 review', session_type: 'focus', hourly_rate: 150, revenue: 125 },
-    { user_id: userId, start_time: new Date(Date.now() - 7 * DAY_MS - 80 * 60000).toISOString(), end_time: new Date(Date.now() - 7 * DAY_MS - 20 * 60000).toISOString(), duration: 60, notes: 'Market research for consulting pitch', session_type: 'focus', hourly_rate: 150, revenue: 150 },
-    { user_id: userId, start_time: new Date(Date.now() - 10 * DAY_MS - 45 * 60000).toISOString(), end_time: new Date(Date.now() - 10 * DAY_MS).toISOString(), duration: 45, notes: 'Quarterly goal review and roadmap update', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 14 * DAY_MS - 55 * 60000).toISOString(), end_time: new Date(Date.now() - 14 * DAY_MS - 10 * 60000).toISOString(), duration: 45, notes: 'Blog post outline — longevity habits for desk workers', session_type: 'focus' },
-    { user_id: userId, start_time: new Date(Date.now() - 18 * DAY_MS - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 18 * DAY_MS - 30 * 60000).toISOString(), duration: 60, notes: 'StartupXYZ project planning session', session_type: 'work', hourly_rate: 150, revenue: 150 },
-    { user_id: userId, start_time: new Date(Date.now() - 22 * DAY_MS - 40 * 60000).toISOString(), end_time: new Date(Date.now() - 22 * DAY_MS).toISOString(), duration: 40, notes: 'Equipment inventory and valuation updates', session_type: 'work' },
-  ]);
-  if (fsErr) throw new Error(`Visitor focus sessions: ${fsErr.message}`);
 
   // ── Blog Posts ──
   const { error: blogErr } = await supabase.from('blog_posts').insert([

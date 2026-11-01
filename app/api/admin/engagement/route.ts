@@ -1,5 +1,6 @@
 // app/api/admin/engagement/route.ts
-// Admin-only engagement analytics: top liked/saved content + activity timeline
+// Admin-only engagement analytics: top liked/saved blog posts + activity timeline.
+// Recipe engagement is CentenarianOS data; removed in plan 18 Phase 1.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
@@ -13,7 +14,7 @@ function getServiceClient() {
 }
 
 type ActivityEntry = {
-  type: 'blog_like' | 'blog_save' | 'recipe_like' | 'recipe_save';
+  type: 'blog_like' | 'blog_save';
   created_at: string;
   actor_username: string;
   content_title: string;
@@ -24,8 +25,6 @@ type DayEntry = {
   date: string;
   blog_likes: number;
   blog_saves: number;
-  recipe_likes: number;
-  recipe_saves: number;
 };
 
 function toDateStr(iso: string) {
@@ -53,16 +52,10 @@ export async function GET(_request: NextRequest) {
   const [
     topLikedPostsRes,
     topSavedPostsRes,
-    topLikedRecipesRes,
-    topSavedRecipesRes,
     recentBlogLikesRes,
     recentBlogSavesRes,
-    recentRecipeLikesRes,
-    recentRecipeSavesRes,
     blogLikesDatesRes,
     blogSavesDatesRes,
-    recipeLikesDatesRes,
-    recipeSavesDatesRes,
   ] = await Promise.all([
     // Top liked blog posts (join profiles for author username)
     db.from('blog_posts')
@@ -73,18 +66,6 @@ export async function GET(_request: NextRequest) {
     // Top saved blog posts
     db.from('blog_posts')
       .select('id, title, slug, like_count, save_count, profiles!blog_posts_user_id_fkey(username)')
-      .order('save_count', { ascending: false })
-      .limit(10),
-
-    // Top liked recipes
-    db.from('recipes')
-      .select('id, title, slug, like_count, save_count, profiles!recipes_user_id_fkey(username)')
-      .order('like_count', { ascending: false })
-      .limit(10),
-
-    // Top saved recipes
-    db.from('recipes')
-      .select('id, title, slug, like_count, save_count, profiles!recipes_user_id_fkey(username)')
       .order('save_count', { ascending: false })
       .limit(10),
 
@@ -100,23 +81,9 @@ export async function GET(_request: NextRequest) {
       .order('created_at', { ascending: false })
       .limit(25),
 
-    // Recent recipe likes (with recipe info)
-    db.from('recipe_likes')
-      .select('user_id, recipe_id, created_at, recipes(title, slug)')
-      .order('created_at', { ascending: false })
-      .limit(25),
-
-    // Recent recipe saves
-    db.from('recipe_saves')
-      .select('user_id, recipe_id, created_at, recipes(title, slug)')
-      .order('created_at', { ascending: false })
-      .limit(25),
-
     // Activity by day — blog likes
     db.from('blog_likes').select('created_at').gte('created_at', thirtyDaysAgo),
     db.from('blog_saves').select('created_at').gte('created_at', thirtyDaysAgo),
-    db.from('recipe_likes').select('created_at').gte('created_at', thirtyDaysAgo),
-    db.from('recipe_saves').select('created_at').gte('created_at', thirtyDaysAgo),
   ]);
 
   // ── Collect unique user_ids from all recent activity ─────────────────────
@@ -124,8 +91,6 @@ export async function GET(_request: NextRequest) {
   const allRecentRows: AnyRow[] = [
     ...(recentBlogLikesRes.data ?? []) as AnyRow[],
     ...(recentBlogSavesRes.data ?? []) as AnyRow[],
-    ...(recentRecipeLikesRes.data ?? []) as AnyRow[],
-    ...(recentRecipeSavesRes.data ?? []) as AnyRow[],
   ];
   const uniqueUserIds = [...new Set(allRecentRows.map((r) => r.user_id))];
 
@@ -169,37 +134,9 @@ export async function GET(_request: NextRequest) {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function mapRecipeLike(row: any): ActivityEntry | null {
-    const recipe = row.recipes;
-    if (!recipe) return null;
-    return {
-      type: 'recipe_like',
-      created_at: row.created_at,
-      actor_username: profileMap[row.user_id] ?? 'unknown',
-      content_title: recipe.title,
-      content_url: `${appUrl}/recipes/cooks/${recipe.slug}`,
-    };
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function mapRecipeSave(row: any): ActivityEntry | null {
-    const recipe = row.recipes;
-    if (!recipe) return null;
-    return {
-      type: 'recipe_save',
-      created_at: row.created_at,
-      actor_username: profileMap[row.user_id] ?? 'unknown',
-      content_title: recipe.title,
-      content_url: `${appUrl}/recipes/cooks/${recipe.slug}`,
-    };
-  }
-
   const recentActivity: ActivityEntry[] = [
     ...(recentBlogLikesRes.data ?? []).map(mapBlogLike).filter(Boolean) as ActivityEntry[],
     ...(recentBlogSavesRes.data ?? []).map(mapBlogSave).filter(Boolean) as ActivityEntry[],
-    ...(recentRecipeLikesRes.data ?? []).map(mapRecipeLike).filter(Boolean) as ActivityEntry[],
-    ...(recentRecipeSavesRes.data ?? []).map(mapRecipeSave).filter(Boolean) as ActivityEntry[],
   ]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
     .slice(0, 50);
@@ -207,8 +144,6 @@ export async function GET(_request: NextRequest) {
   // ── Build activity-by-day ─────────────────────────────────────────────────
   const blMap = buildDayMap((blogLikesDatesRes.data ?? []).map((r) => r.created_at));
   const bsMap = buildDayMap((blogSavesDatesRes.data ?? []).map((r) => r.created_at));
-  const rlMap = buildDayMap((recipeLikesDatesRes.data ?? []).map((r) => r.created_at));
-  const rsMap = buildDayMap((recipeSavesDatesRes.data ?? []).map((r) => r.created_at));
 
   // Generate last 30 days
   const activityByDay: DayEntry[] = [];
@@ -219,8 +154,6 @@ export async function GET(_request: NextRequest) {
       date,
       blog_likes: blMap[date] ?? 0,
       blog_saves: bsMap[date] ?? 0,
-      recipe_likes: rlMap[date] ?? 0,
-      recipe_saves: rsMap[date] ?? 0,
     });
   }
 
@@ -238,24 +171,9 @@ export async function GET(_request: NextRequest) {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function shapeRecipe(row: any) {
-    const profile = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles;
-    return {
-      id: row.id,
-      name: row.title,
-      slug: row.slug,
-      username: profile?.username ?? '',
-      like_count: row.like_count ?? 0,
-      save_count: row.save_count ?? 0,
-    };
-  }
-
   return NextResponse.json({
     topLikedPosts:   (topLikedPostsRes.data ?? []).map(shapePost),
     topSavedPosts:   (topSavedPostsRes.data ?? []).map(shapePost),
-    topLikedRecipes: (topLikedRecipesRes.data ?? []).map(shapeRecipe),
-    topSavedRecipes: (topSavedRecipesRes.data ?? []).map(shapeRecipe),
     recentActivity,
     activityByDay,
   });

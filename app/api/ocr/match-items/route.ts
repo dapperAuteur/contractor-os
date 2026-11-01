@@ -1,5 +1,6 @@
 // app/api/ocr/match-items/route.ts
-// Fuzzy-match scanned line items against existing item_prices, recipe_ingredients, and equipment.
+// Fuzzy-match scanned line items against existing item_prices and equipment.
+// (Recipe ingredients are CentenarianOS data; dropped in plan 18 Phase 1.)
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
@@ -68,36 +69,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // 2. Check recipe_ingredients for matching ingredient names
-    if (!item.category_hint || ['grocery', 'produce', 'dairy', 'meat', 'bakery', 'beverage'].includes(item.category_hint)) {
-      const { data: ingredientMatches } = await serviceClient
-        .from('recipe_ingredients')
-        // Only ingredients of the caller's own recipes (the service role skips RLS).
-        .select('id, name, recipes!inner(user_id)')
-        .eq('recipes.user_id', user.id)
-        .ilike('name', `%${normalized}%`)
-        .limit(3);
-
-      if (ingredientMatches) {
-        // Deduplicate by name
-        const seen = new Set(matches.map((m) => m.name.toLowerCase()));
-        for (const im of ingredientMatches) {
-          if (!seen.has(im.name.toLowerCase())) {
-            matches.push({
-              id: im.id,
-              name: im.name,
-              last_price: null,
-              last_date: null,
-              vendor_name: null,
-              source_table: 'recipe_ingredients',
-            });
-            seen.add(im.name.toLowerCase());
-          }
-        }
-      }
-    }
-
-    // 3. Check equipment for matching item names
+    // 2. Check equipment for matching item names
     if (item.category_hint && ['equipment', 'tools', 'electronics', 'hardware'].includes(item.category_hint)) {
       const { data: equipMatches } = await serviceClient
         .from('equipment')

@@ -2,11 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import {
-  BookOpen, Trophy, Layers, Award,
-  BookMarked, Star, Heart, Calendar, Bike, Footprints,
-  Leaf, MapPin, GraduationCap,
-} from 'lucide-react';
+import { BookOpen, Heart, Calendar } from 'lucide-react';
 import SiteFooter from '@/components/ui/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
 import { getPublicProfile } from '@/lib/profiles/getPublicProfile';
@@ -29,10 +25,10 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 
   return {
     title: `${name} — Work.WitUS`,
-    description: profile.bio || `${name} has completed ${stats.courses_completed} courses on Work.WitUS.`,
+    description: profile.bio || `${name} on Work.WitUS.`,
     openGraph: {
       title: name,
-      description: `${stats.courses_completed} courses · ${stats.paths_completed} paths`,
+      description: `${stats.blog_posts} post${stats.blog_posts === 1 ? '' : 's'} on Work.WitUS`,
       images: [`${base}/api/og/profile/${username}`],
       url: `${base}/profiles/${username}`,
     },
@@ -44,14 +40,6 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   };
 }
 
-// ─── Badge config ─────────────────────────────────────────────────────────────
-
-const BADGE_CONFIG: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  course_complete:  { label: 'Course Complete',     icon: BookMarked, color: 'bg-amber-50 text-amber-700' },
-  path_complete:    { label: 'Path Complete',       icon: Layers,     color: 'bg-amber-50 text-amber-700' },
-  first_blog:       { label: 'First Blog Post',     icon: BookOpen,   color: 'bg-amber-50 text-amber-700' },
-};
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default async function PublicProfilePage({ params }: Params) {
@@ -59,15 +47,9 @@ export default async function PublicProfilePage({ params }: Params) {
   const data = await getPublicProfile(username);
   if (!data) notFound();
 
-  const { profile, stats, achievements, completed_courses, path_completions, blog_posts, travel, teacher } = data;
+  const { profile, stats, blog_posts } = data;
 
   const name = profile.display_name || profile.username;
-
-  // Deduplicate achievements for display (show each type once for non-course/path)
-  const badgeAchievements = achievements.filter(
-    (a) => !['course_complete', 'path_complete'].includes(a.achievement_type)
-  );
-  const uniqueBadges = Array.from(new Map(badgeAchievements.map((a) => [a.achievement_type, a])).values());
 
   const joinYear = new Date(profile.created_at).getFullYear();
 
@@ -125,8 +107,6 @@ export default async function PublicProfilePage({ params }: Params) {
           {/* Stats strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { icon: BookMarked, label: 'Courses',  value: stats.courses_completed },
-              { icon: Layers,     label: 'Paths',    value: stats.paths_completed },
               { icon: BookOpen,   label: 'Posts',     value: stats.blog_posts },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="bg-white rounded-2xl border border-slate-200 p-4 text-center">
@@ -136,217 +116,6 @@ export default async function PublicProfilePage({ params }: Params) {
               </div>
             ))}
           </div>
-
-          {/* Travel stats */}
-          {travel && (
-            <section>
-              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-amber-400" />
-                Travel
-              </h2>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  { icon: MapPin,      label: 'Total Miles',  value: Math.round(travel.total_miles).toLocaleString() },
-                  { icon: Bike,        label: 'Bike Miles',   value: Math.round(travel.bike_miles).toLocaleString() },
-                  { icon: Footprints,  label: 'Walk Miles',   value: Math.round(travel.walk_miles).toLocaleString() },
-                  { icon: Leaf,        label: 'CO₂ Saved (kg)', value: Math.round(travel.co2_saved_kg).toLocaleString() },
-                ].map(({ icon: Icon, label, value }) => (
-                  <div key={label} className="bg-white rounded-2xl border border-slate-200 p-4 text-center">
-                    <Icon className="w-5 h-5 text-emerald-400 mx-auto mb-1.5" />
-                    <p className="text-2xl font-bold text-slate-900">{value}</p>
-                    <p className="text-xs text-slate-400 mt-0.5">{label}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* Teacher section */}
-          {teacher && (
-            <section>
-              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <GraduationCap className="w-5 h-5 text-amber-400" />
-                Teaching
-              </h2>
-              {teacher.bio && (
-                <p className="text-slate-700 mb-4 max-w-xl leading-relaxed">{teacher.bio}</p>
-              )}
-              {teacher.specialties.length > 0 && (
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {teacher.specialties.map((s) => (
-                    <span
-                      key={s}
-                      className="px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
-              {teacher.published_courses.length > 0 && (
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {teacher.published_courses.map((c) => (
-                    <Link
-                      key={c.id}
-                      href="https://learn.witus.online" target="_blank" rel="noopener noreferrer"
-                      className="group block bg-white border border-slate-200 hover:border-amber-300 rounded-xl overflow-hidden transition"
-                    >
-                      {c.cover_image_url ? (
-                        <div className="aspect-video overflow-hidden">
-                          <Image
-                            src={c.cover_image_url}
-                            alt={c.title}
-                            width={400}
-                            height={225}
-                            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-                          />
-                        </div>
-                      ) : (
-                        <div className="aspect-video bg-slate-100 flex items-center justify-center">
-                          <GraduationCap className="w-8 h-8 text-slate-400" />
-                        </div>
-                      )}
-                      <div className="p-3">
-                        <p className="font-medium text-slate-900 text-sm truncate group-hover:text-amber-600 transition">
-                          {c.title}
-                        </p>
-                        <div className="flex items-center gap-2 mt-1 text-xs text-slate-400">
-                          {c.category && <span>{c.category}</span>}
-                          <span>{c.price_type === 'free' ? 'Free' : `$${c.price}`}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </section>
-          )}
-
-          {/* Badge shelf */}
-          {uniqueBadges.length > 0 && (
-            <section>
-              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <Award className="w-5 h-5 text-amber-600" />
-                Badges
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {uniqueBadges.map((a) => {
-                  const cfg = BADGE_CONFIG[a.achievement_type];
-                  if (!cfg) return null;
-                  const Icon = cfg.icon;
-                  return (
-                    <span
-                      key={a.id}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium ${cfg.color}`}
-                    >
-                      <Icon className="w-3.5 h-3.5" />
-                      {cfg.label}
-                    </span>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {/* Completed courses */}
-          {completed_courses.length > 0 && (
-            <section>
-              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-amber-600" />
-                Courses Completed
-              </h2>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {completed_courses.map((c) => {
-                  const achievementRow = achievements.find(
-                    (a) => a.achievement_type === 'course_complete' && a.ref_id === c.id
-                  );
-                  return (
-                    <div
-                      key={c.id}
-                      className="flex flex-col bg-white border border-slate-200 hover:border-amber-300 rounded-xl p-3 transition gap-2"
-                    >
-                      <Link href="https://learn.witus.online" target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3">
-                        {c.cover_image_url ? (
-                          <Image
-                            src={c.cover_image_url}
-                            alt={c.title}
-                            width={48}
-                            height={48}
-                            className="w-12 h-12 rounded-lg object-cover shrink-0"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-                            <Star className="w-5 h-5 text-amber-600" />
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="font-medium text-slate-900 text-sm truncate group-hover:text-amber-600 transition">
-                            {c.title}
-                          </p>
-                          {c.category && <p className="text-xs text-slate-400">{c.category}</p>}
-                        </div>
-                      </Link>
-                      {achievementRow && (
-                        <Link
-                          href={`/certificates/${achievementRow.id}`}
-                          className="text-xs text-amber-600 hover:underline flex items-center gap-1 pl-1"
-                        >
-                          <Award className="w-3 h-3" />
-                          View Certificate
-                        </Link>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
-
-          {/* Learning paths completed */}
-          {path_completions.length > 0 && (
-            <section>
-              <h2 className="text-lg font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                <Layers className="w-5 h-5 text-amber-600" />
-                Learning Paths Completed
-              </h2>
-              <div className="grid sm:grid-cols-2 gap-3">
-                {path_completions.map((pc) => {
-                  const achievementRow = achievements.find(
-                    (a) => a.achievement_type === 'path_complete' && a.ref_id === pc.path_id
-                  );
-                  return (
-                    <div
-                      key={pc.id}
-                      className="flex flex-col bg-white border border-slate-200 hover:border-amber-300 rounded-xl px-4 py-3 transition gap-2"
-                    >
-                      <Link href="https://learn.witus.online" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 group">
-                        <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
-                          <Trophy className="w-4 h-4 text-amber-600" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-medium text-slate-900 text-sm truncate group-hover:text-amber-600 transition">
-                            {pc.learning_paths?.title ?? 'Learning Path'}
-                          </p>
-                          <p className="text-xs text-slate-400">
-                            {new Date(pc.completed_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                          </p>
-                        </div>
-                      </Link>
-                      {achievementRow && (
-                        <Link
-                          href={`/certificates/${achievementRow.id}`}
-                          className="text-xs text-amber-600 hover:underline flex items-center gap-1 pl-1"
-                        >
-                          <Award className="w-3 h-3" />
-                          View Certificate
-                        </Link>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
 
           {/* Blog posts */}
           {blog_posts.length > 0 && (
@@ -385,10 +154,10 @@ export default async function PublicProfilePage({ params }: Params) {
           )}
 
           {/* Empty state */}
-          {completed_courses.length === 0 && blog_posts.length === 0 && (
+          {blog_posts.length === 0 && (
             <div className="text-center py-16">
               <p className="text-lg font-medium text-slate-500">{name} is just getting started.</p>
-              <p className="text-sm text-slate-400 mt-1">Check back soon for their courses and posts.</p>
+              <p className="text-sm text-slate-400 mt-1">Check back soon for their posts.</p>
             </div>
           )}
         </div>

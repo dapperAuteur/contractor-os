@@ -510,16 +510,6 @@ export async function seedContractor(db: SupabaseClient, userId: string): Promis
   ]);
   if (lcErr) throw new Error(`Contractor life categories: ${lcErr.message}`);
 
-  // 17. Focus Sessions
-  const { error: fsErr } = await db.from('focus_sessions').insert([
-    { user_id: userId, start_time: new Date(Date.now() - 86400000 - 90 * 60000).toISOString(), end_time: new Date(Date.now() - 86400000 - 60 * 60000).toISOString(), duration: 30, notes: 'Reviewing call sheets for B1G Tournament', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 172800000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 172800000 - 35 * 60000).toISOString(), duration: 25, notes: 'Logging time entries for completed Colts games', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 259200000 - 45 * 60000).toISOString(), end_time: new Date(Date.now() - 259200000 - 20 * 60000).toISOString(), duration: 25, notes: 'Creating invoices for CBS Sports jobs', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 345600000 - 75 * 60000).toISOString(), end_time: new Date(Date.now() - 345600000 - 45 * 60000).toISOString(), duration: 30, notes: 'Equipment inventory and condition check', session_type: 'work' },
-    { user_id: userId, start_time: new Date(Date.now() - 432000000 - 60 * 60000).toISOString(), end_time: new Date(Date.now() - 432000000 - 35 * 60000).toISOString(), duration: 25, notes: 'Updating city guide entries for Indianapolis', session_type: 'work' },
-  ]);
-  if (fsErr) throw new Error(`Contractor focus sessions: ${fsErr.message}`);
-
   // 18. Blog Post
   const { error: blogErr } = await db.from('blog_posts').insert([
     {

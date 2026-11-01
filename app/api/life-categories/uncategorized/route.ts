@@ -22,6 +22,8 @@ interface ModuleGroup {
   items: UncategorizedItem[];
 }
 
+// Work.WitUS records only. CentenarianOS modules (tasks, workouts, focus, recipes) and travel
+// (trips, routes, fuel, maintenance) were removed in plan 18 Phase 1.
 const MODULE_CONFIG: Record<string, { table: string; label: string; fields: string; dateFn: (row: Record<string, unknown>) => string; nameFn: (row: Record<string, unknown>) => string }> = {
   transaction: {
     table: 'financial_transactions',
@@ -33,68 +35,12 @@ const MODULE_CONFIG: Record<string, { table: string; label: string; fields: stri
       return `${r.vendor || r.description || 'Transaction'} ${sign}$${Number(r.amount).toFixed(2)}`;
     },
   },
-  task: {
-    table: 'tasks',
-    label: 'Tasks',
-    fields: 'id, activity, date',
-    dateFn: (r) => r.date as string,
-    nameFn: (r) => (r.activity as string) || 'Task',
-  },
-  trip: {
-    table: 'trips',
-    label: 'Trips',
-    fields: 'id, mode, origin, destination, date',
-    dateFn: (r) => r.date as string,
-    nameFn: (r) => {
-      const route = r.origin && r.destination ? `${r.origin} → ${r.destination}` : '';
-      return `${r.mode}${route ? ': ' + route : ''}`;
-    },
-  },
-  workout: {
-    table: 'workout_logs',
-    label: 'Workouts',
-    fields: 'id, name, started_at',
-    dateFn: (r) => r.started_at ? new Date(r.started_at as string).toISOString().split('T')[0] : '',
-    nameFn: (r) => (r.name as string) || 'Workout',
-  },
   equipment: {
     table: 'equipment',
     label: 'Equipment',
     fields: 'id, name, created_at',
     dateFn: (r) => r.created_at ? new Date(r.created_at as string).toISOString().split('T')[0] : '',
     nameFn: (r) => (r.name as string) || 'Equipment',
-  },
-  focus_session: {
-    table: 'focus_sessions',
-    label: 'Focus Sessions',
-    fields: 'id, start_time, duration, session_type',
-    dateFn: (r) => r.start_time ? new Date(r.start_time as string).toISOString().split('T')[0] : '',
-    nameFn: (r) => {
-      const mins = r.duration ? Math.round(Number(r.duration) / 60) : 0;
-      const label = r.session_type === 'work' ? 'Work' : 'Focus';
-      return `${label}: ${mins}min`;
-    },
-  },
-  recipe: {
-    table: 'recipes',
-    label: 'Recipes',
-    fields: 'id, title, created_at',
-    dateFn: (r) => r.created_at ? new Date(r.created_at as string).toISOString().split('T')[0] : '',
-    nameFn: (r) => (r.title as string) || 'Recipe',
-  },
-  fuel_log: {
-    table: 'fuel_logs',
-    label: 'Fuel Logs',
-    fields: 'id, station, date, total_cost',
-    dateFn: (r) => r.date as string,
-    nameFn: (r) => r.station ? `${r.station}` : 'Fuel',
-  },
-  maintenance: {
-    table: 'vehicle_maintenance',
-    label: 'Maintenance',
-    fields: 'id, service_type, date',
-    dateFn: (r) => r.date as string,
-    nameFn: (r) => (r.service_type as string) || 'Maintenance',
   },
   invoice: {
     table: 'invoices',
@@ -103,28 +49,13 @@ const MODULE_CONFIG: Record<string, { table: string; label: string; fields: stri
     dateFn: (r) => r.invoice_date as string,
     nameFn: (r) => r.contact_name ? `Invoice: ${r.contact_name}` : 'Invoice',
   },
-  route: {
-    table: 'trip_routes',
-    label: 'Routes',
-    fields: 'id, name, date',
-    dateFn: (r) => r.date as string,
-    nameFn: (r) => (r.name as string) || 'Route',
-  },
 };
 
 // Date field name per table for .gte() filtering
 const DATE_COLUMN: Record<string, string> = {
   financial_transactions: 'transaction_date',
-  tasks: 'date',
-  trips: 'date',
-  workout_logs: 'started_at',
   equipment: 'created_at',
-  focus_sessions: 'start_time',
-  recipes: 'created_at',
-  fuel_logs: 'date',
-  vehicle_maintenance: 'date',
   invoices: 'invoice_date',
-  trip_routes: 'date',
 };
 
 export async function GET(request: NextRequest) {

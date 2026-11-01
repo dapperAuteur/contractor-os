@@ -59,39 +59,6 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  // Recipes
-  if (type === 'all' || type === 'recipe') {
-    const { data: recipes } = await db
-      .from('recipes')
-      .select('id, slug, title, description, cover_image_url, user_id')
-      .not('published_at', 'is', null)
-      .is('short_link_id', null);
-
-    for (const recipe of recipes || []) {
-      const { data: profile } = await db.from('profiles').select('username').eq('id', recipe.user_id).maybeSingle();
-      const username = profile?.username || recipe.user_id;
-
-      const link = await createShortLink({
-        url: `${siteUrl}/recipes/cooks/${username}/${recipe.slug}`,
-        slug: toSwitchySlug('r', recipe.slug),
-        title: recipe.title,
-        description: recipe.description || undefined,
-        image: recipe.cover_image_url || undefined,
-        tags: ['recipe'],
-      });
-
-      if (link) {
-        await db.from('recipes')
-          .update({ short_link_id: link.id, short_link_url: link.short_url })
-          .eq('id', recipe.id);
-        created++;
-      } else {
-        failed++;
-      }
-      await delay(100);
-    }
-  }
-
   // Courses
   if (type === 'all' || type === 'course') {
     const { data: courses } = await db
@@ -151,11 +118,9 @@ export async function GET() {
 
   const db = getDb();
 
-  const [blogWith, blogWithout, recipeWith, recipeWithout, courseWith, courseWithout] = await Promise.all([
+  const [blogWith, blogWithout, courseWith, courseWithout] = await Promise.all([
     db.from('blog_posts').select('id', { count: 'exact', head: true }).not('short_link_id', 'is', null),
     db.from('blog_posts').select('id', { count: 'exact', head: true }).not('published_at', 'is', null).is('short_link_id', null),
-    db.from('recipes').select('id', { count: 'exact', head: true }).not('short_link_id', 'is', null),
-    db.from('recipes').select('id', { count: 'exact', head: true }).not('published_at', 'is', null).is('short_link_id', null),
     db.from('courses').select('id', { count: 'exact', head: true }).not('short_link_id', 'is', null),
     db.from('courses').select('id', { count: 'exact', head: true }).eq('is_published', true).is('short_link_id', null),
   ]);
@@ -166,7 +131,6 @@ export async function GET() {
 
   return NextResponse.json({
     blog: { with: blogWith.count || 0, without: blogWithout.count || 0 },
-    recipe: { with: recipeWith.count || 0, without: recipeWithout.count || 0 },
     course: { with: courseWith.count || 0, without: courseWithout.count || 0 },
     feature: { total: featureTotal },
   });
