@@ -2,6 +2,8 @@
 
 A contractor management platform for freelance workers and crew coordinators to track jobs, log time, manage invoices, scan documents, and organize work schedules.
 
+Work.WitUS keeps only its own data. CentenarianOS modules (planner, health metrics, recipes, workouts, focus) and Travel are not part of it; travel lives in RideWitUS and the tutorials are moving to Learn.WitUS (plan 18 Phase 1, 2026-11-01).
+
 ## Features
 
 | Category | Features |
@@ -9,11 +11,11 @@ A contractor management platform for freelance workers and crew coordinators to 
 | **Job Management** | Job creation with client/location/scope, multi-day scheduling, event grouping, cost tracking, crew assignment, job comparison, job documents (private to the uploader unless shared with the job) |
 | **Time & Invoicing** | Clock in/out with ST/OT/DT, break logging, auto-generated invoices, custom templates, recurring invoices, rate cards |
 | **Finance** | Financial accounts, transaction tracking, budget categories, brand P&L, expected payments, fiscal year customization, CSV import/export |
-| **Travel & Mileage** | Vehicle profiles, fuel logs with FIFO allocation, trip logging with tax tagging, multi-stop routes, templates, maintenance tracking |
-| **Equipment & Assets** | Equipment CRUD, valuation history, depreciation tracking, transaction linking, activity links |
+| **Travel (moved)** | Trips, vehicles, fuel, maintenance and job mileage live in [RideWitUS](https://ride.witus.online/app); the Travel link and each job's Mileage tab explain this and link out (plan 18 Phase 1) |
+| **Equipment & Assets** | Equipment CRUD, valuation history, depreciation tracking, transaction linking, activity links (transactions, invoices, equipment) |
 | **Contacts & Crew** | Contact directory, multiple phones/emails, job role tracking, contact sharing, contractor/job boards, lister mode |
 | **Document Scanner** | Gemini Vision OCR, auto-classification, AI job estimates, offline scanning with IndexedDB |
-| **Academy (LMS)** | Course builder, student enrollment, Stripe Connect payouts, CYOA navigation, assignments, grading, reviews, promo codes, free trials, re-enrollment, threaded discussions, DMs |
+| **Tutorials (moving)** | The Academy left on 2026-09-07; the Work.WitUS tutorials move to [Learn.WitUS](https://learn.witus.online) (not published there yet). `/academy` redirects there; the admin content library is read-only |
 | **Union Hub** | Membership tracking, dues, document storage, contract RAG, union chat |
 | **Blog & Community** | Rich text editor, scheduled publishing, share bars with tracked short links, author profiles |
 | **Marketing** | Switchy.io short links with pixel tracking, email campaigns with audience segmentation, conversion funnels, churn prevention, in-app upgrade banners, feature gating, referral reward tiers |
@@ -24,8 +26,8 @@ A contractor management platform for freelance workers and crew coordinators to 
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS v4
 - **Backend**: Supabase (PostgreSQL + Row Level Security)
 - **Auth**: Supabase Auth (email/password + optional MFA)
-- **AI**: Google Gemini 2.5 Flash (document scanning, learning path recommendations, course suggestions)
-- **Payments**: Stripe (subscriptions, course enrollment, Connect payouts, promo codes)
+- **AI**: Google Gemini 2.5 Flash (document scanning, union contract chat, help chat)
+- **Payments**: Stripe (subscriptions, promo codes)
 - **Email**: Mailgun HTTP API (campaigns, admin messages, notifications). Login, signup and password emails
   are sent by Supabase Auth itself, from the shared Supabase project's own email settings (see
   [Database and email identity](#database-and-email-identity))
@@ -163,12 +165,9 @@ contractor-os/
 ├── app/
 │   ├── api/
 │   │   ├── contractor/        # Job CRUD, time entries, documents
-│   │   ├── academy/           # Courses, enrollments, assignments, messages, reviews
 │   │   ├── finance/           # Accounts, transactions, invoices
-│   │   ├── travel/            # Trips, fuel, vehicles, maintenance
 │   │   ├── equipment/         # Equipment items, valuations
 │   │   ├── admin/             # Admin dashboard APIs (campaigns, funnels, churn, banners)
-│   │   ├── teacher/           # Teacher promo codes
 │   │   ├── push/              # Push notification subscriptions
 │   │   ├── cron/              # Scheduled notification sender
 │   │   ├── stripe/            # Checkout, webhooks, portal
@@ -177,9 +176,8 @@ contractor-os/
 │   │   └── user/              # Preferences, notifications, widgets
 │   ├── dashboard/
 │   │   ├── contractor/        # Jobs, rate cards, reports, compare, contacts
-│   │   ├── teaching/          # Course editor, assignments, promo codes, DMs
+│   │   ├── travel/            # One page: Travel moved to RideWitUS
 │   │   └── settings/          # Preferences, notifications, theme, MFA
-│   ├── academy/               # Course catalog, enrollment, lessons, assignments, paths
 │   ├── admin/                 # Admin: campaigns, funnels, churn, banners, referrals
 │   ├── blog/                  # Community blog
 │   ├── for/                   # Industry landing pages
@@ -188,7 +186,6 @@ contractor-os/
 │   └── pricing/               # Pricing page
 ├── components/
 │   ├── contractor/            # Job status, summary cards
-│   ├── academy/               # SubmissionMessageThread
 │   ├── dashboard/             # Customizable widget components
 │   ├── marketing/             # UpgradeBanner, FeatureGate
 │   ├── admin/                 # AdminSidebar
