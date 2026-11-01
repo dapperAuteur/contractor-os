@@ -4,9 +4,9 @@
 // Admin content library: the tutorial series and whether each was imported into the old Academy.
 //
 // READ-ONLY since plan 18 Phase 1. The Academy left Work.WitUS on 2026-09-07 and the tutorials
-// move to Learn.WitUS (plan 18 §8 answer 3). They are not on Learn.WitUS yet, so nothing is
-// deleted here: the list stays visible for the move, and importing into the Academy tables is
-// turned off (the API answers 410). The course move is an operator task in plans/user-tasks/.
+// are now the "Work.WitUS guides" series on Learn.WitUS (plan 18 §8 answer 3; task 25). Nothing is
+// deleted here: the list stays visible as a record, and importing into the Academy tables is
+// turned off (the API answers 410).
 
 import { useState, useEffect, useCallback } from 'react';
 import {
@@ -21,6 +21,7 @@ import {
   Info,
 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import { WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 interface ContentItem {
   slug: string;
@@ -95,19 +96,21 @@ export default function ContentLibraryPage() {
       <div className="mb-8 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
         <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         <div className="space-y-1">
-          <p className="font-medium">The tutorials are moving to Learn.WitUS.</p>
+          <p className="font-medium">The tutorials are on Learn.WitUS now.</p>
           <p>
-            Work.WitUS no longer has an Academy, so importing here is turned off. This list stays so the
-            series can be moved; nothing has been deleted. Once a course is live on Learn.WitUS, the
-            Work.WitUS help and nav will link to it.
+            Work.WitUS no longer has an Academy, so importing here is turned off. The guides are the
+            seven-course series &ldquo;Work.WitUS guides&rdquo; on Learn.WitUS, and Work.WitUS help, the
+            home page and the dashboards link to them. This list is kept read-only; nothing has been
+            deleted. Travel went to RideWitUS, and the getting-started, academy, teaching and coach folders
+            were not moved (they describe CentenarianOS or the old Academy).
           </p>
           <a
-            href="https://learn.witus.online"
+            href={WORK_WITUS_GUIDES_SERIES_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center gap-1 font-medium text-amber-700 hover:underline"
           >
-            Open Learn.WitUS <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            Open the Work.WitUS guides <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
             <span className="sr-only">(opens in a new tab)</span>
           </a>
         </div>

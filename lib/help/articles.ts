@@ -8,8 +8,9 @@ import {
   CONTRACTOR_PRICES, CONTRACTOR_PRICE_SUMMARY, CONTRACTOR_LIFETIME_SUMMARY, LISTER_PRICES,
   annualSavings, formatPrice,
 } from '../pricing/prices';
-
 import { FORM_1099_HELP_SENTENCE } from '../contractor/form-1099';
+
+import { LEARN_WITUS_GUIDES, WORK_WITUS_GUIDES_SERIES_URL } from '../ecosystem/learn-witus.mjs';
 
 export interface HelpArticle {
   title: string;
@@ -66,7 +67,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Where are the Work.WitUS tutorials and the Academy?',
-    content: `The Academy (courses, teachers, enrollments) left Work.WitUS on September 7, 2026. The Work.WitUS tutorials, including the Contractor guide and the Lister and Crew Coordinator guide, are moving to Learn.WitUS (https://learn.witus.online), the WitUS home for courses. They are not published there yet; until they are, ask the in-app Help chat, which answers the same questions. Old /academy links forward to Learn.WitUS.`,
+    content: `The Academy (courses, teachers, enrollments) left Work.WitUS on September 7, 2026. The Work.WitUS tutorials are now free courses on Learn.WitUS, the WitUS home for courses, in the series "Work.WitUS guides" (${WORK_WITUS_GUIDES_SERIES_URL}). The seven guides: ${Object.values(LEARN_WITUS_GUIDES).map((g) => `${g.title} (${g.url})`).join('; ')}. Pages such as Finance, Equipment, Data Hub, Settings, Billing and the dashboards link to their guide under the page title. Old /academy links forward to the series page. The in-app Help chat still answers questions about Work.WitUS.`,
   },
   {
     role: 'all',

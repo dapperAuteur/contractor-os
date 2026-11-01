@@ -23,6 +23,7 @@ import Modal from '@/components/ui/Modal';
 import ScanButton from '@/components/scan/ScanButton';
 import type { ScanResult } from '@/components/scan/ScanButton';
 import type { ReceiptExtraction } from '@/lib/ocr/extractors';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 interface CategoryBreakdown {
   id: string;
@@ -324,6 +325,7 @@ export default function FinanceDashboardPage() {
             )}
           </h1>
           <p className="text-slate-500 mt-1">Track spending, budgets, and income</p>
+          <LearnGuideLink guide="finance" />
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <button

@@ -8,6 +8,7 @@ import { offlineFetch } from '@/lib/offline/offline-fetch';
 import { useTrackPageView } from '@/lib/hooks/useTrackPageView';
 import EquipmentCard, { type EquipmentItem } from '@/components/equipment/EquipmentCard';
 import CategoryFilter from '@/components/equipment/CategoryFilter';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 interface Category {
   id: string;
@@ -72,6 +73,7 @@ export default function EquipmentHubPage() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Equipment</h1>
           <p className="text-sm text-gray-500 mt-0.5">Track your tools, gear, and merchandise</p>
+          <LearnGuideLink guide="equipment" />
         </div>
         <div className="flex gap-2">
           <button

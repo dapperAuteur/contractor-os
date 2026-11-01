@@ -1,4 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs';
+import { WORK_WITUS_GUIDES_SERIES_URL } from './lib/ecosystem/learn-witus.mjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -53,13 +54,13 @@ const nextConfig = {
   },
 
   async redirects() {
-    // The Academy left Work.WitUS on 2026-09-07 (tutorials move to Learn.WitUS, plan 18 §8
-    // answer 3). Old bookmarks, emails and a saved dashboard_home of /academy land on Learn.WitUS
-    // instead of a 404. Temporary (307): Learn.WitUS owns its URLs, and the tutorials will get
-    // their own paths there once they are published (see plans/user-tasks for the course move).
+    // The Academy left Work.WitUS on 2026-09-07 and its tutorials are now the "Work.WitUS guides"
+    // series on Learn.WitUS (plan 18 §8 answer 3; task 25). Old bookmarks, emails and a saved
+    // dashboard_home of /academy land on that series page instead of a 404. Temporary (307):
+    // Learn.WitUS owns its URLs (lib/ecosystem/learn-witus.mjs records where they were read from).
     return [
-      { source: '/academy', destination: 'https://learn.witus.online', permanent: false },
-      { source: '/academy/:path*', destination: 'https://learn.witus.online', permanent: false },
+      { source: '/academy', destination: WORK_WITUS_GUIDES_SERIES_URL, permanent: false },
+      { source: '/academy/:path*', destination: WORK_WITUS_GUIDES_SERIES_URL, permanent: false },
     ];
   },
 

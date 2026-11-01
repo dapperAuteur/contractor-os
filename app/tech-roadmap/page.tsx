@@ -12,6 +12,7 @@ import SiteFooter from '@/components/ui/SiteFooter';
 import { ROADMAP_CATEGORIES, UPCOMING_FEATURES } from '@/lib/features/roadmap-data';
 import type { RoadmapCategory, UpcomingFeature } from '@/lib/features/roadmap-data';
 import { CONTRACTOR_PRICE_SUMMARY } from '@/lib/pricing/prices';
+import { WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 export const metadata: Metadata = {
   title: 'Product Roadmap — Work.WitUS',
@@ -135,10 +136,10 @@ export default function RoadmapPage() {
             Get Started
           </Link>
           <Link
-            href="https://learn.witus.online" target="_blank" rel="noopener noreferrer"
+            href={WORK_WITUS_GUIDES_SERIES_URL} target="_blank" rel="noopener noreferrer"
             className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium min-h-11 flex items-center"
           >
-            Visit Learn.WitUS
+            Work.WitUS guides on Learn.WitUS
           </Link>
         </div>
       </section>

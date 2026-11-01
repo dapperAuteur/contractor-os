@@ -11,6 +11,7 @@ import { getFiscalYear, isCalendarYear, type FiscalConfig } from '@/lib/fiscal';
 import { subscribeToPush, unsubscribeFromPush, isPushSubscribed } from '@/lib/push/subscribe';
 import MfaSetupSection from '@/components/settings/MfaSetupSection';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 interface TourStatus {
   module_slug: string;
@@ -197,7 +198,10 @@ export default function DashboardSettingsPage() {
     <div className="max-w-2xl mx-auto py-8 px-4 space-y-6">
       <div className="flex items-center gap-3 mb-6">
         <Settings className="w-6 h-6 text-amber-400" />
-        <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+          <LearnGuideLink guide="settingsAndBilling" />
+        </div>
       </div>
 
       {/* Home Page */}
