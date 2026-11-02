@@ -11,6 +11,7 @@ import UsernameSetupModal from '@/components/blog/UsernameSetupModal';
 import { PenLine, BarChart2, List, FileDown, Upload, Heart, Bookmark } from 'lucide-react';
 import { isAdmin } from '@/lib/blog/admin';
 import type { Profile } from '@/lib/types';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 type Tab = 'posts' | 'analytics' | 'liked' | 'saved';
 
@@ -76,6 +77,7 @@ export default function BlogDashboardPage() {
                   /blog/{profile.username}
                 </a>
               </p>
+              <LearnGuideLink guide="blog" />
             </div>
             <div className="flex items-center gap-2">
               {isAdmin(user.email) && (

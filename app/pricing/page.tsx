@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HardHat, Check, ArrowRight, Loader2, DollarSign, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import { CONTRACTOR_PRICES, formatPrice, perMonthOfAnnual } from '@/lib/pricing/prices';
 
 const FEATURES = [
   'Unlimited jobs, time entries, and invoices',
@@ -73,9 +74,11 @@ export default function ContractorPricingPage() {
     offlineFetch('/api/contractor/cashapp').then((r) => r.ok ? r.json() : null).then((d) => { if (d?.payment) setCashappStatus(d.payment); }).catch(() => {});
   }, []);
 
-  const MONTHLY_PRICE = 10.60;
-  const ANNUAL_PRICE = 103.29;
-  const LIFETIME_PRICE = 103.29;
+  // Display prices come from lib/pricing/prices.ts (one source for every page).
+  const MONTHLY_PRICE = CONTRACTOR_PRICES.monthly;
+  const ANNUAL_PRICE = CONTRACTOR_PRICES.annual;
+  const LIFETIME_PRICE = CONTRACTOR_PRICES.lifetimeCard;
+  const CASHAPP_PRICE = formatPrice(CONTRACTOR_PRICES.lifetimeCashApp);
 
   // The admin-controlled lifetime reactivation promo takes precedence over the
   // generic /api/pricing/promo when it discounts the lifetime price.
@@ -216,7 +219,7 @@ export default function ContractorPricingPage() {
                 <span className="text-4xl font-extrabold text-amber-600">${ANNUAL_PRICE.toFixed(2)}</span>
                 <span className="text-slate-400">/year</span>
               </div>
-              <p className="mt-2 text-sm text-slate-400">${(ANNUAL_PRICE / 12).toFixed(2)}/month, billed annually.</p>
+              <p className="mt-2 text-sm text-slate-400">{perMonthOfAnnual(ANNUAL_PRICE)}/month, billed annually.</p>
               <button onClick={() => handleCheckout('contractor-annual')} disabled={loading !== null} className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-amber-600 py-3 text-base font-medium text-white hover:bg-amber-500 disabled:opacity-50 min-h-11">
                 {loading === 'contractor-annual' ? <><Loader2 size={16} className="animate-spin" aria-hidden="true" /> Processing…</> : <>Subscribe <ArrowRight size={16} aria-hidden="true" /></>}
               </button>
@@ -316,10 +319,10 @@ export default function ContractorPricingPage() {
                       className="rounded-lg shrink-0"
                     />
                     <div>
-                      <p className="text-base font-bold text-slate-900">Pay with CashApp — $100</p>
+                      <p className="text-base font-bold text-slate-900">Pay with CashApp — {CASHAPP_PRICE}</p>
                       <p className="text-xs text-amber-600 font-medium">No processing fees</p>
                       <p className="text-lg font-bold text-amber-600 mt-1">{cashappTag}</p>
-                      <p className="text-xs text-slate-400 mt-1">Send $100 → enter your name → click &ldquo;I&apos;ve Paid&rdquo;</p>
+                      <p className="text-xs text-slate-400 mt-1">Send {CASHAPP_PRICE} → enter your name → click &ldquo;I&apos;ve Paid&rdquo;</p>
                     </div>
                   </div>
                   <div className="flex gap-2">

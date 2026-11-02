@@ -9,6 +9,8 @@ import { useSearchParams } from 'next/navigation';
 import { useSubscription } from '@/lib/hooks/useSubscription';
 import { CheckCircle, Shirt, CreditCard, Zap, ArrowRight, Copy, Check, Shield, DollarSign } from 'lucide-react';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import { CONTRACTOR_PRICES, CONTRACTOR_LIFETIME_SUMMARY, formatPrice } from '@/lib/pricing/prices';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 const POLICIES = 'No Refunds. Cancel Anytime. Monthly fees are not transferable to lifetime membership.';
 
@@ -108,7 +110,8 @@ export default function BillingPage() {
   return (
     <div className="max-w-2xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold text-slate-900 mb-2">Billing</h1>
-      <p className="text-slate-500 mb-8">Manage your subscription and membership.</p>
+      <p className="text-slate-500 mb-1">Manage your subscription and membership.</p>
+      <LearnGuideLink guide="settingsAndBilling" className="mb-6" />
 
       {/* Sync error banner */}
       {syncError && (
@@ -174,7 +177,7 @@ export default function BillingPage() {
             <div>
               <span className="inline-flex items-center gap-2 text-lg font-bold text-amber-700">
                 <Zap className="w-5 h-5" />
-                Monthly — $10/month
+                Monthly — {formatPrice(CONTRACTOR_PRICES.monthly)}/month
               </span>
               {cancelAtPeriodEnd && cancelAt ? (
                 <p className="text-sm text-amber-600 font-medium mt-1">
@@ -268,12 +271,12 @@ export default function BillingPage() {
 
       {/* Upgrade to lifetime CTA for monthly members */}
       {status === 'monthly' && (
-        <div className="bg-white text-white rounded-2xl p-6 mb-6">
+        <div className="bg-white border border-slate-200 text-slate-900 rounded-2xl p-6 mb-6">
           <div className="flex items-start gap-3">
-            <Shirt className="w-5 h-5 text-lime-400 shrink-0 mt-0.5" />
+            <Shirt className="w-5 h-5 text-lime-600 shrink-0 mt-0.5" aria-hidden="true" />
             <div>
-              <h3 className="font-bold mb-1">Upgrade to Lifetime for $100</h3>
-              <p className="text-sm text-slate-400 mb-4">
+              <h3 className="font-bold mb-1">Upgrade to Lifetime: {CONTRACTOR_LIFETIME_SUMMARY}</h3>
+              <p className="text-sm text-slate-500 mb-4">
                 Pay once, own it forever — plus get a free Work.WitUS shirt from AwesomeWebStore.com.
               </p>
               <Link

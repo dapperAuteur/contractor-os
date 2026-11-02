@@ -10,6 +10,7 @@ import { Plus, HardHat, ArrowRight, Loader2, Settings2, X, GripVertical, Eye, Ey
 import JobStatusBadge from '@/components/contractor/JobStatusBadge';
 import { WIDGET_REGISTRY, type WidgetDef } from '@/components/dashboard/widgets';
 import { offlineFetch } from '@/lib/offline/offline-fetch';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 interface Job {
   id: string;
@@ -168,7 +169,10 @@ export default function ContractorHubPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <HardHat className="text-amber-400" size={28} aria-hidden="true" />
-          <h1 className="text-2xl font-bold text-slate-900">Work.WitUS</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">Work.WitUS</h1>
+            <LearnGuideLink guide="contractor" />
+          </div>
         </div>
         <div className="flex gap-2">
           <button

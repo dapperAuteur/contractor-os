@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import DemoResetCard from '@/components/admin/DemoResetCard';
 import { Users, BookOpen, DollarSign, Zap, AlertTriangle, Briefcase, Trophy, Sparkles } from 'lucide-react';
+import { CONTRACTOR_PRICES, formatPrice } from '@/lib/pricing/prices';
 
 interface Stats {
   users: { total: number; free: number; monthly: number; lifetime: number; newThisWeek: number };
@@ -170,7 +171,7 @@ export default function AdminOverviewPage() {
 
             {stats.founders.remaining === 0 && !activePromo && (
               <p className="mt-4 text-xs text-slate-500 text-center">
-                Founder spots sold out. Annual plan ($103.29/year) is now live on the pricing page.{' '}
+                Founder spots sold out. Annual plan ({formatPrice(CONTRACTOR_PRICES.annual)}/year) is now live on the pricing page.{' '}
                 <Link href="/admin/promos" className="text-amber-600 hover:underline">Run a promo →</Link>
               </p>
             )}
@@ -224,8 +225,8 @@ export default function AdminOverviewPage() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <StatCard label="Total Users" value={stats.users.total} icon={Users} />
         <StatCard label="Free" value={stats.users.free} sub={`${Math.round(stats.users.free / Math.max(stats.users.total, 1) * 100)}% of users`} icon={Users} color="sky" />
-        <StatCard label="Monthly ($10)" value={stats.users.monthly} sub={`$${stats.revenue.monthlyMRR}/mo MRR`} icon={Zap} color="amber" />
-        <StatCard label="Lifetime ($100)" value={stats.users.lifetime} sub={`$${stats.revenue.lifetimeRevenue} total`} icon={DollarSign} color="lime" />
+        <StatCard label={`Monthly (${formatPrice(CONTRACTOR_PRICES.monthly)})`} value={stats.users.monthly} sub={`$${stats.revenue.monthlyMRR}/mo MRR after fees`} icon={Zap} color="amber" />
+        <StatCard label={`Lifetime (${formatPrice(CONTRACTOR_PRICES.lifetimeCard)} card / ${formatPrice(CONTRACTOR_PRICES.lifetimeCashApp)} CashApp)`} value={stats.users.lifetime} sub={`$${stats.revenue.lifetimeRevenue} total after fees`} icon={DollarSign} color="lime" />
       </div>
 
       {/* Content */}

@@ -12,7 +12,8 @@ updated: 2026-11-01
 - Finance accounts, transactions, budgets and expected payments
 - Equipment and depreciation, contacts and crew boards
 - Travel and job mileage live in RideWitUS; the Travel link and each job's Mileage tab explain the move and link out (plan 18 Phase 1)
-- Work.WitUS keeps only its own data: CentenarianOS panels and cross-module reads are gone, and `/academy` and the guides point to Learn.WitUS (plan 18 Phase 1)
+- Work.WitUS keeps only its own data: CentenarianOS panels and cross-module reads are gone (plan 18 Phase 1)
+- Tutorials are the seven-course "Work.WitUS guides" series on Learn.WitUS; `/academy`, Help, the home and lister pages, the dashboard widget and each topic page link to it (task 25)
 - Document scanner with AI classification and offline scanning
 - Union hub: membership, dues and documents
 - Sign in with WitUS beside email sign-in with two-factor
@@ -37,4 +38,3 @@ updated: 2026-11-01
 - The table move itself (plan 55 Phase 3); until it lands, Work.WitUS and CentenarianOS share one database and its safety rules
 - Run migration 197 for job-document visibility (task 16)
 - Login email templates and SMTP held until the database question is settled (task 18)
-- Work.WitUS tutorials published on Learn.WitUS before Help and the home page can link to them (task 25)

@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { CONTRACTOR_NET } from '@/lib/pricing/prices';
 
 function getServiceClient() {
   return createClient(
@@ -72,8 +73,9 @@ export async function GET(_request: NextRequest) {
       blogViews: blogViewsRes.count ?? 0,
     },
     revenue: {
-      lifetimeRevenue: lifetime * 100,
-      monthlyMRR: monthly * 10,
+      // Net of card fees, from the one price source (lib/pricing/prices.ts).
+      lifetimeRevenue: lifetime * CONTRACTOR_NET.lifetime,
+      monthlyMRR: monthly * CONTRACTOR_NET.monthly,
     },
     promoCodesPending: promoPendingRes.count ?? 0,
     founders: {

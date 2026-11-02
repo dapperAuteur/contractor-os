@@ -11,6 +11,8 @@ import {
 import SiteFooter from '@/components/ui/SiteFooter';
 import { ROADMAP_CATEGORIES, UPCOMING_FEATURES } from '@/lib/features/roadmap-data';
 import type { RoadmapCategory, UpcomingFeature } from '@/lib/features/roadmap-data';
+import { CONTRACTOR_PRICE_SUMMARY } from '@/lib/pricing/prices';
+import { WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
 
 export const metadata: Metadata = {
   title: 'Product Roadmap — Work.WitUS',
@@ -134,10 +136,10 @@ export default function RoadmapPage() {
             Get Started
           </Link>
           <Link
-            href="https://learn.witus.online" target="_blank" rel="noopener noreferrer"
+            href={WORK_WITUS_GUIDES_SERIES_URL} target="_blank" rel="noopener noreferrer"
             className="px-6 py-3 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium min-h-11 flex items-center"
           >
-            Visit Learn.WitUS
+            Work.WitUS guides on Learn.WitUS
           </Link>
         </div>
       </section>
@@ -239,7 +241,7 @@ export default function RoadmapPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Ready to Get Started?</h2>
           <p className="text-slate-400 mb-8 text-lg">
-            $10/month or $100/year. Every feature included.
+            {CONTRACTOR_PRICE_SUMMARY}. Every feature included.
           </p>
           <div className="flex justify-center flex-wrap gap-4">
             <Link

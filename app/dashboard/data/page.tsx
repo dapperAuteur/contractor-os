@@ -9,6 +9,7 @@ import {
   Users, Upload, Download, FileDown,
   Database,
 } from 'lucide-react';
+import LearnGuideLink from '@/components/ecosystem/LearnGuideLink';
 
 interface ModuleCard {
   slug: string;
@@ -66,6 +67,7 @@ export default function DataHubPage() {
         <p className="text-sm text-gray-500 mt-1">
           Import and export your data across all modules. Download CSV templates, upload bulk data, or export filtered datasets.
         </p>
+        <LearnGuideLink guide="dataHub" />
       </div>
 
       {/* Instructions */}

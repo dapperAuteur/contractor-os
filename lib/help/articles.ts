@@ -2,6 +2,15 @@
 // Chunked tutorial content for the RAG help system.
 // Role: 'student' | 'teacher' | 'admin' | 'contractor' | 'lister' | 'all'
 // Each chunk is embedded and stored in help_articles via /api/admin/help/ingest.
+// Prices come from lib/pricing/prices.ts; never type a price into an article.
+
+import {
+  CONTRACTOR_PRICES, CONTRACTOR_PRICE_SUMMARY, CONTRACTOR_LIFETIME_SUMMARY, LISTER_PRICES,
+  annualSavings, formatPrice,
+} from '../pricing/prices';
+import { FORM_1099_HELP_SENTENCE } from '../contractor/form-1099';
+
+import { LEARN_WITUS_GUIDES, WORK_WITUS_GUIDES_SERIES_URL } from '../ecosystem/learn-witus.mjs';
 
 export interface HelpArticle {
   title: string;
@@ -58,7 +67,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Where are the Work.WitUS tutorials and the Academy?',
-    content: `The Academy (courses, teachers, enrollments) left Work.WitUS on September 7, 2026. The Work.WitUS tutorials, including the Contractor guide and the Lister and Crew Coordinator guide, are moving to Learn.WitUS (https://learn.witus.online), the WitUS home for courses. They are not published there yet; until they are, ask the in-app Help chat, which answers the same questions. Old /academy links forward to Learn.WitUS.`,
+    content: `The Academy (courses, teachers, enrollments) left Work.WitUS on September 7, 2026. The Work.WitUS tutorials are now free courses on Learn.WitUS, the WitUS home for courses, in the series "Work.WitUS guides" (${WORK_WITUS_GUIDES_SERIES_URL}). The seven guides: ${Object.values(LEARN_WITUS_GUIDES).map((g) => `${g.title} (${g.url})`).join('; ')}. Pages such as Finance, Equipment, Data Hub, Settings, Billing and the dashboards link to their guide under the page title. Old /academy links forward to the series page. The in-app Help chat still answers questions about Work.WitUS.`,
   },
   {
     role: 'all',
@@ -103,7 +112,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Contractor Hub (Work.WitUS)?',
-    content: `The Contractor Hub (branded as Work.WitUS) is a dedicated module for independent contractors in broadcast, production, and live events. It provides job tracking, time entry logging, invoice generation, rate cards, venue knowledge bases, city guides, union contract chat, and union membership/dues tracking. Access it at /dashboard/contractor or via the contractor subdomain (work.witus.online). The Contractor Hub is a separate paid product from Work.WitUS — you need a Contractor subscription ($10/month or $100/year).`,
+    content: `The Contractor Hub (branded as Work.WitUS) is a dedicated module for independent contractors in broadcast, production, and live events. It provides job tracking, time entry logging, invoice generation, rate cards, venue knowledge bases, city guides, union contract chat, and union membership/dues tracking. Access it at /dashboard/contractor or via the contractor subdomain (work.witus.online). The Contractor Hub is a separate paid product from Work.WitUS — you need a Contractor subscription (${CONTRACTOR_PRICE_SUMMARY}).`,
   },
   {
     role: 'all',
@@ -153,7 +162,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'How to use contractor reports and job comparison',
-    content: `Go to Dashboard → Reports for earnings summaries by client, 1099 threshold tracking ($600 per client), and benefits accrued YTD. Go to Dashboard → Compare to select 2-4 jobs and see side-by-side comparison: total pay, hours, rates, benefits, expenses, and net earnings. This helps evaluate which clients and events are most profitable. Reports can be exported as CSV for tax purposes.`,
+    content: `Go to Dashboard → Reports for earnings summaries by client, 1099 threshold tracking per client, and benefits accrued YTD. ${FORM_1099_HELP_SENTENCE} Go to Dashboard → Compare to select 2-4 jobs and see side-by-side comparison: total pay, hours, rates, benefits, expenses, and net earnings. This helps evaluate which clients and events are most profitable. Reports can be exported as CSV for tax purposes.`,
   },
   {
     role: 'all',
@@ -168,7 +177,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Contractor pricing and billing',
-    content: `The Contractor Hub (Work.WitUS) is a separate paid product. Pricing: $10/month or $100/year (save $20). No free tier — access is via paid subscription or admin/peer invite. The subscription is independent from Work.WitUS and Lister subscriptions. Manage your subscription at Dashboard → Billing. Visit work.witus.online/pricing for details.`,
+    content: `The Contractor Hub (Work.WitUS) is a separate paid product. Pricing: ${CONTRACTOR_PRICE_SUMMARY} (the annual plan saves ${annualSavings(CONTRACTOR_PRICES.monthly, CONTRACTOR_PRICES.annual)}). Lifetime, when offered: ${CONTRACTOR_LIFETIME_SUMMARY}. No free tier — access is via paid subscription or admin/peer invite. The subscription is independent from Work.WitUS and Lister subscriptions. Manage your subscription at Dashboard → Billing. Visit work.witus.online/pricing for details.`,
   },
 
   // ─── LISTER / CREW COORDINATOR ──────────────────────────────────────────
@@ -176,7 +185,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'What is the Lister platform (CrewOps)?',
-    content: `The Lister platform (branded as CrewOps) is for crew coordinators, staffing agencies, and union leaders who list and assign jobs to contractors. It includes job creation, crew roster management, assignment dispatch, group messaging, and availability tracking. Access it at /dashboard/contractor/lister or via the lister subdomain (lister.witus.online). The Lister is a separate paid product — pricing starts at $10/month (intro promo, regularly $50/month).`,
+    content: `The Lister platform (branded as CrewOps) is for crew coordinators, staffing agencies, and union leaders who list and assign jobs to contractors. It includes job creation, crew roster management, assignment dispatch, group messaging, and availability tracking. Access it at /dashboard/contractor/lister or via the lister subdomain (lister.witus.online). The Lister is a separate paid product — pricing starts at ${formatPrice(LISTER_PRICES.introMonthly)}/month (intro promo, regularly ${formatPrice(LISTER_PRICES.regularMonthly)}/month).`,
   },
   {
     role: 'all',
@@ -206,7 +215,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'all',
     title: 'Lister pricing and billing',
-    content: `The Lister platform (CrewOps) is a separate paid product. Standard pricing: $50/month or $500/year. Introductory promo: $10/month or $100/year (limited time). The promo is controlled via platform settings. No free tier — access is via paid subscription or admin invite. The subscription is independent from Work.WitUS and Contractor Hub subscriptions. Visit lister.witus.online/pricing for details.`,
+    content: `The Lister platform (CrewOps) is a separate paid product. Standard pricing: ${formatPrice(LISTER_PRICES.regularMonthly)}/month or ${formatPrice(LISTER_PRICES.regularAnnual)}/year. Introductory promo: ${formatPrice(LISTER_PRICES.introMonthly)}/month or ${formatPrice(LISTER_PRICES.introAnnual)}/year (limited time). The promo is controlled via platform settings. No free tier — access is via paid subscription or admin invite. The subscription is independent from Work.WitUS and Contractor Hub subscriptions. Visit lister.witus.online/pricing for details.`,
   },
   {
     role: 'all',
@@ -501,7 +510,7 @@ export const HELP_ARTICLES: HelpArticle[] = [
   {
     role: 'contractor',
     title: 'How to view earnings reports and 1099 tracking',
-    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099 — any client who paid $600+ in a year), earnings breakdown by month, total hours worked, and travel benefits accrued. Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, expenses, and net earnings. This helps you identify your most profitable clients.`,
+    content: `Go to Dashboard → Reports (/dashboard/contractor/reports). The reports page shows: total earnings YTD by client (useful for identifying who owes you a 1099: a client whose payments reach that tax year's threshold gets a 1099 badge), earnings breakdown by month, total hours worked, and travel benefits accrued. ${FORM_1099_HELP_SENTENCE} Export any report as CSV for your accountant or tax filing. Go to Dashboard → Compare to compare 2-4 specific jobs side by side — total pay, effective hourly rate, benefits, expenses, and net earnings. This helps you identify your most profitable clients.`,
   },
   {
     role: 'contractor',
