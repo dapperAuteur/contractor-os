@@ -1,7 +1,8 @@
 // lib/help/articles.ts
 // Chunked tutorial content for the RAG help system.
 // Role: 'student' | 'teacher' | 'admin' | 'contractor' | 'lister' | 'all'
-// Each chunk is embedded and stored in help_articles via /api/admin/help/ingest.
+// Each chunk is embedded and stored in help_articles by the knowledge sync (lib/help/embed-sync.ts:
+// the 03:00 cron and the /admin/sync buttons). Only changed articles are re-embedded.
 // Prices come from lib/pricing/prices.ts; never type a price into an article.
 
 import {

@@ -75,7 +75,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 # Admin
 ADMIN_EMAIL=
 NEXT_PUBLIC_ADMIN_EMAIL=
-NEXT_PUBLIC_SITE_URL=
+NEXT_PUBLIC_SITE_URL=          # https://work.witus.online in production; read only through lib/site-url.ts
 
 # AI
 GOOGLE_GEMINI_API_KEY_WORK_WITUS=

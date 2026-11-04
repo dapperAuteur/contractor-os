@@ -3,7 +3,7 @@ app: work
 name: Work.WitUS
 stage: live
 url: https://work.witus.online
-updated: 2026-11-01
+updated: 2026-11-04
 ---
 
 ## Live now
@@ -19,6 +19,8 @@ updated: 2026-11-01
 - Sign in with WitUS beside email sign-in with two-factor
 - Email sent through Mailgun under the Work.WitUS name
 - Signed income and work-schedule events sent to CentenarianOS instead of shared database triggers
+- Help-article knowledge sync paced under Google's free-tier embedding limit, re-embeds only changed articles, runs in chunks from /admin/sync with a short error list (2026-11-04)
+- One site-URL helper (`lib/site-url.ts`) with the work.witus.online default and a warning when the configured host is another app's (2026-11-04)
 - Sign out leaves only this app; a second control signs out of WitUS everywhere
 
 ## In progress

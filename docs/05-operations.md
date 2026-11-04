@@ -18,6 +18,8 @@ imports `lib/db` yet. The migrations have been applied to the Neon **dev** branc
 6. [Reset a Neon branch](#6-reset-a-neon-branch)
 7. [Copy data from Supabase](#7-copy-data-from-supabase)
 8. [Cutover and rollback](#8-cutover-and-rollback)
+9. [Help-article embeddings (knowledge sync)](#9-help-article-embeddings-knowledge-sync)
+10. [Site URL](#10-site-url)
 
 ## 1. Which database, which env var
 
@@ -182,3 +184,46 @@ Plan 18 Phase 7, in short (task 23 holds the checklist):
 **Rollback:** Vercel Instant Rollback to the last Supabase deployment, re-add `WORK_DB_URL` (and the
 CA), turn read-only off. Rows written to Neon after step 4 are found by `updated_at` and re-applied to
 Supabase by hand. Supabase rows stay untouched for 30 days.
+
+## 9. Help-article embeddings (knowledge sync)
+
+The help chat answers from `help_articles` rows (app `contractor`) embedded from `lib/help/articles.ts`
+with Gemini `gemini-embedding-001` at 768 dimensions. The code is `lib/help/embed-sync.ts`; the
+wiring is `lib/admin/syncKnowledge.ts`.
+
+- **Automatic:** the Vercel cron `/api/cron/knowledge-sync` at 03:00 UTC embeds only the articles
+  whose title, content or role changed, deletes rows for removed articles, and updates the
+  "Last knowledge sync" time. A content change reaches the help chat by the next morning.
+- **On demand:** /admin/sync, **Run Knowledge Sync** (changed articles only) or **Re-ingest Help
+  Articles** (every article; use after changing the embedding model or dimensions, which the
+  change check cannot see). Both run in chunks of about 40 seconds and loop in the browser; keep the
+  tab open until the summary appears. Only one runs at a time.
+- **Limits:** Google's free tier allows 100 embed requests a minute per project
+  (`EmbedContentRequestsPerMinutePerUserPerProjectPerModel-FreeTier`). The sync uses 60 a minute and
+  leaves the rest for live help-chat and union-chat questions. A 429 waits for Google's
+  `retryDelay` and retries; a delay longer than a minute means the daily quota is spent (it resets at
+  midnight Pacific time) and the run stops with that message.
+- **From a laptop**, if the admin page is down: call the cron route with the cron secret from your
+  password manager, without typing it into the command line history:
+
+  ```bash
+  read -rs CRON_SECRET && curl -fsS -X POST -H "Authorization: Bearer $CRON_SECRET" \
+    https://work.witus.online/api/cron/knowledge-sync; unset CRON_SECRET
+  ```
+
+  Expected: `{"ok":true,"helpArticles":{"done":true,"embedded":N,"skipped":M,...}}`. With `done:false`,
+  run it again; each run skips what the last one embedded.
+
+## 10. Site URL
+
+`NEXT_PUBLIC_SITE_URL` must be `https://work.witus.online` on Production. It is read only through
+`lib/site-url.ts`, inlined at build time (redeploy after changing it), and also decides the Sign in
+with WitUS redirect_uri. If it names another host, every server process logs one
+`[site-url] NEXT_PUBLIC_SITE_URL points at ...` warning (Vercel runtime logs). To fix it:
+
+```bash
+vercel env rm NEXT_PUBLIC_SITE_URL production --yes
+printf 'https://work.witus.online' | vercel env add NEXT_PUBLIC_SITE_URL production
+```
+
+then redeploy Production.
