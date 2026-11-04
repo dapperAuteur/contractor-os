@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 function serviceDb() {
   return createClient(
@@ -75,7 +76,7 @@ export async function POST(request: NextRequest) {
 
   // 2. Send Supabase invite email (creates user + sends magic link)
   const authClient = adminAuthClient();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const siteUrl = getSiteUrl();
 
   // Build subdomain-aware redirect URL through auth callback
   let baseUrl: string;

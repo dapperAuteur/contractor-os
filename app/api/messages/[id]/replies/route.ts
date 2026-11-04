@@ -8,6 +8,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { sendEmail } from '@/lib/email/mailgun';
 import { adminMessageReplyNotice } from '@/lib/email/templates';
 import { canSeeAdminMessage, visibleReply } from '@/lib/messages/visibility';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getDb() {
   return createServiceClient(
@@ -105,7 +106,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   // Email admin notification (only when a non-admin user replies)
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+    const siteUrl = getSiteUrl();
     if (adminEmail && !isAdmin) {
       // Skipped (logged once) when Mailgun is not configured; the reply is already saved.
       await sendEmail({

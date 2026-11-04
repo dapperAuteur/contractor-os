@@ -14,6 +14,7 @@ import { chunk, mailConfigured, sendEmail } from '@/lib/email/mailgun';
 import { renderTemplate } from '@/lib/email/campaign-templates';
 import { campaignEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getDb() {
   return createServiceClient(
@@ -152,7 +153,7 @@ export async function POST(_req: NextRequest, { params }: Params) {
       filteredRecipients = filteredRecipients.filter((r) => !optedOutIds.has(r.id));
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_SITE_URL || '';
+    const siteUrl = process.env.NEXT_PUBLIC_APP_URL || getSiteUrl();
     // {{name}} becomes a Mailgun recipient variable; everything else is the same for everyone.
     const body = renderTemplate(campaign.body_html, { siteUrl, name: '%recipient.name%' });
     const rendered = campaignEmail({ subject: campaign.subject, bodyHtml: body, siteUrl });

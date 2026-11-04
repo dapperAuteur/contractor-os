@@ -14,6 +14,7 @@ import {
   silentSsoEndpointFromAuthorizeUrl,
   type WitusSsoConfig,
 } from './witus-sso';
+import { getConfiguredSiteUrl } from '../site-url';
 
 /**
  * Resolve the ecosystem SSO configuration for this deployment.
@@ -46,17 +47,11 @@ import {
  */
 export function resolveWitusSsoConfig(): WitusSsoConfig {
   const clientId = process.env.WITUS_OIDC_CLIENT_ID;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  if (!clientId || !siteUrl) return WITUS_SSO_DISABLED;
-
-  let appOrigin: string;
-  try {
-    appOrigin = new URL(siteUrl).origin;
-  } catch {
-    // A malformed NEXT_PUBLIC_SITE_URL is a deployment bug. Fail dark rather than emit a button
-    // that sends an unparseable redirect_uri.
-    return WITUS_SSO_DISABLED;
-  }
+  // Configured value only (lib/site-url.ts): null when unset or malformed, and then SSO stays dark
+  // rather than emit a button that sends an unparseable or guessed redirect_uri. A configured origin
+  // that is not one of this app's hosts is logged once by lib/site-url.ts.
+  const appOrigin = getConfiguredSiteUrl();
+  if (!clientId || !appOrigin) return WITUS_SSO_DISABLED;
 
   const authorizeUrl = process.env.WITUS_OIDC_AUTHORIZE_URL ?? WITUS_OIDC_AUTHORIZE_FALLBACK;
   const endSessionBase = endSessionEndpointFromAuthorizeUrl(authorizeUrl);

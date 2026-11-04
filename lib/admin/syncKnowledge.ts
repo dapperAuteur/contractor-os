@@ -1,14 +1,37 @@
 // lib/admin/syncKnowledge.ts
-// Shared logic for syncing help articles and the context timestamp.
+// Wires the help-article embedding sync (lib/help/embed-sync.ts) to Supabase and the Gemini key,
+// and keeps the knowledge timestamp in platform_settings.
 // Course (lesson) embeddings were dropped in plan 18 Phase 1: the Academy left Work.WitUS, and the
 // job re-embedded every published CYOA course in the shared database, CentenarianOS's included.
 // CentenarianOS runs its own sync for its courses.
-// Called by: daily cron (/api/admin/demo/reset) and on-demand (/api/admin/knowledge/refresh).
+//
+// Called by: the 3:00 UTC cron (/api/cron/knowledge-sync) and the /admin/sync buttons
+// (/api/admin/knowledge/refresh, /api/admin/help/ingest), one chunk per request.
+// The demo reset no longer starts a sync of its own: its fire-and-forget copy ran alongside the
+// buttons and the cron and spent the same per-minute quota (the 429s of 2026-11-04).
 
 import { createClient } from '@supabase/supabase-js';
 import { HELP_ARTICLES } from '@/lib/help/articles';
+import { createGeminiEmbedder, HELP_SYNC_MIN_INTERVAL_MS } from '@/lib/ai/gemini-embed';
+import {
+  Pacer,
+  realClock,
+  runHelpSyncChunk,
+  runHelpSyncUntilDone,
+  type ChunkResult,
+  type HelpArticleStore,
+  type RunTotals,
+  type SyncArticle,
+} from '@/lib/help/embed-sync';
 
-const EMBEDDING_MODEL = 'gemini-embedding-001';
+const APP = 'contractor';
+
+/**
+ * Time one chunk may spend starting embeds. The chunk routes declare `maxDuration = 60`, the
+ * lowest ceiling of any Vercel plan, and this leaves 20 seconds for the database reads, the stale
+ * delete and one in-flight request. At one request a second that is about 40 articles a chunk.
+ */
+export const HELP_SYNC_CHUNK_BUDGET_MS = 40_000;
 
 function getDb() {
   return createClient(
@@ -17,74 +40,80 @@ function getDb() {
   );
 }
 
-async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      content: { parts: [{ text }] },
-      outputDimensionality: 768,
-    }),
-  });
-
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`Gemini embedding error: ${err}`);
-  }
-
-  const data = await response.json();
-  return data.embedding?.values ?? [];
+/** The articles this app owns. Never touches CentenarianOS's rows (app = 'centenarian'). */
+export function contractorArticles(): SyncArticle[] {
+  return HELP_ARTICLES.filter((a) => ['contractor', 'lister', 'all', 'admin'].includes(a.role));
 }
 
-export interface SyncResult {
-  helpArticles: { succeeded: number; failed: number };
-  timestamp: string;
-}
-
-/** Re-embed all help articles into help_articles table. */
-export async function syncHelpArticles(): Promise<{ succeeded: number; failed: number }> {
+function supabaseHelpStore(): HelpArticleStore {
   const db = getDb();
-
-  // Only touch contractor-app articles — never wipe centenarian articles
-  await db.from('help_articles').delete().eq('app', 'contractor');
-
-  const contractorArticles = HELP_ARTICLES.filter((a) =>
-    ['contractor', 'lister', 'all', 'admin'].includes(a.role),
-  );
-
-  let succeeded = 0;
-  let failed = 0;
-
-  for (const article of contractorArticles) {
-    const text = `${article.title}\n\n${article.content}`;
-    try {
-      const embedding = await getEmbedding(text);
-      if (!embedding.length) throw new Error('Empty embedding');
-
+  return {
+    async listEmbedded() {
+      const { data, error } = await db
+        .from('help_articles')
+        .select('title, content, role')
+        .eq('app', APP)
+        .not('embedding', 'is', null);
+      if (error) throw new Error(`help_articles read failed: ${error.message}`);
+      return (data ?? []) as SyncArticle[];
+    },
+    async listTitles() {
+      const { data, error } = await db.from('help_articles').select('title').eq('app', APP);
+      if (error) throw new Error(`help_articles read failed: ${error.message}`);
+      return (data ?? []).map((r: { title: string }) => r.title);
+    },
+    async upsert(article, embedding) {
+      // pgvector takes the vector as a bracketed string, "[0.1,0.2,...]".
       const { error } = await db.from('help_articles').upsert(
         {
           title: article.title,
           content: article.content,
           role: article.role,
-          app: 'contractor',
+          app: APP,
           embedding: `[${embedding.join(',')}]`,
         },
         { onConflict: 'title,app' },
       );
-      if (error) throw new Error(error.message);
-      succeeded++;
-    } catch {
-      failed++;
-    }
-    // Stay under Gemini free-tier limit (100 req/min)
-    await new Promise((r) => setTimeout(r, 700));
-  }
+      if (error) throw new Error(`help_articles write failed: ${error.message}`);
+    },
+    async deleteTitles(titles) {
+      const { error } = await db.from('help_articles').delete().eq('app', APP).in('title', titles);
+      if (error) throw new Error(`help_articles delete failed: ${error.message}`);
+    },
+  };
+}
 
-  return { succeeded, failed };
+// One pacer per server instance, shared by every route below.
+const pacer = new Pacer(HELP_SYNC_MIN_INTERVAL_MS, realClock);
+
+function embedder() {
+  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
+  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS is not set.');
+  return createGeminiEmbedder(apiKey);
+}
+
+/** One chunk, for the admin buttons. The browser loops on `cursor` until `done`. */
+export async function runHelpSyncChunkForApp(opts: { cursor: number; force: boolean }): Promise<ChunkResult> {
+  return runHelpSyncChunk({
+    articles: contractorArticles(),
+    store: supabaseHelpStore(),
+    embed: embedder(),
+    pacer,
+    cursor: opts.cursor,
+    force: opts.force,
+    timeBudgetMs: HELP_SYNC_CHUNK_BUDGET_MS,
+  });
+}
+
+/** Whole run inside one invocation, for the cron. */
+export async function runHelpSyncForCron(totalBudgetMs: number): Promise<RunTotals> {
+  return runHelpSyncUntilDone({
+    articles: contractorArticles(),
+    store: supabaseHelpStore(),
+    embed: embedder(),
+    pacer,
+    totalBudgetMs,
+  });
 }
 
 /** Update the knowledge sync timestamp in platform_settings. */
@@ -97,19 +126,4 @@ export async function updateContextTimestamp(): Promise<string> {
     .upsert({ key: 'knowledge_last_synced_at', value: now }, { onConflict: 'key' });
 
   return now;
-}
-
-/** Run all sync tasks. Returns combined results. */
-export async function syncAllKnowledge(): Promise<SyncResult> {
-  const [helpResult] = await Promise.allSettled([
-    syncHelpArticles(),
-  ]);
-
-  const helpArticles = helpResult.status === 'fulfilled'
-    ? helpResult.value
-    : { succeeded: 0, failed: HELP_ARTICLES.length };
-
-  const timestamp = await updateContextTimestamp();
-
-  return { helpArticles, timestamp };
 }

@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { RefreshCw, Database, BookOpen, Users, CheckCircle, XCircle, Loader2, Clock } from 'lucide-react';
+import { HelpSyncCard } from '@/components/admin/HelpSyncCard';
 
 interface SyncStatus {
   lastSynced: string | null;
@@ -40,7 +41,7 @@ function ActionCard({
           <Icon className="w-5 h-5" aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
+          <h3 className="text-lg font-semibold text-slate-900 mb-1">{title}</h3>
           <p className="text-sm text-slate-500 mb-4">{description}</p>
 
           <button
@@ -57,7 +58,7 @@ function ActionCard({
           </button>
 
           {result && (
-            <div className={`mt-3 flex items-start gap-2 text-sm ${result.ok ? 'text-green-400' : 'text-red-400'}`}>
+            <div className={`mt-3 flex items-start gap-2 text-sm ${result.ok ? 'text-green-700' : 'text-red-700'}`}>
               {result.ok ? (
                 <CheckCircle className="w-4 h-4 mt-0.5 shrink-0" aria-hidden="true" />
               ) : (
@@ -83,14 +84,12 @@ export default function AdminSyncPage() {
   const [status, setStatus] = useState<SyncStatus | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
 
-  const [knowledgeResult, setKnowledgeResult] = useState<ActionResult | null>(null);
-  const [knowledgeLoading, setKnowledgeLoading] = useState(false);
+  // Both help-sync cards spend the same Gemini per-minute quota, so only one runs at a time.
+  const [helpSyncRunning, setHelpSyncRunning] = useState(false);
 
   const [demoResult, setDemoResult] = useState<ActionResult | null>(null);
   const [demoLoading, setDemoLoading] = useState(false);
 
-  const [helpResult, setHelpResult] = useState<ActionResult | null>(null);
-  const [helpLoading, setHelpLoading] = useState(false);
 
   useEffect(() => {
     fetch('/api/admin/knowledge/status')
@@ -101,28 +100,6 @@ export default function AdminSyncPage() {
       })
       .catch(() => setStatusLoading(false));
   }, []);
-
-  async function runKnowledgeSync() {
-    setKnowledgeLoading(true);
-    setKnowledgeResult(null);
-    try {
-      const res = await fetch('/api/admin/knowledge/refresh', { method: 'POST' });
-      const data = await res.json();
-      if (res.ok) {
-        setKnowledgeResult({
-          ok: true,
-          message: `Synced ${data.helpArticles?.succeeded ?? 0} help articles.`,
-          details: data,
-        });
-        setStatus({ lastSynced: data.timestamp ?? new Date().toISOString() });
-      } else {
-        setKnowledgeResult({ ok: false, message: data.error || 'Sync failed' });
-      }
-    } catch (err) {
-      setKnowledgeResult({ ok: false, message: err instanceof Error ? err.message : 'Network error' });
-    }
-    setKnowledgeLoading(false);
-  }
 
   async function runDemoReset() {
     setDemoLoading(true);
@@ -148,27 +125,6 @@ export default function AdminSyncPage() {
     setDemoLoading(false);
   }
 
-  async function runHelpIngest() {
-    setHelpLoading(true);
-    setHelpResult(null);
-    try {
-      const res = await fetch('/api/admin/help/ingest', { method: 'POST' });
-      const data = await res.json();
-      if (res.ok) {
-        setHelpResult({
-          ok: true,
-          message: `Ingested ${data.succeeded ?? data.count ?? 0} help articles.`,
-          details: data,
-        });
-      } else {
-        setHelpResult({ ok: false, message: data.error || 'Ingest failed' });
-      }
-    } catch (err) {
-      setHelpResult({ ok: false, message: err instanceof Error ? err.message : 'Network error' });
-    }
-    setHelpLoading(false);
-  }
-
   function formatDate(iso: string) {
     const d = new Date(iso);
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
@@ -177,7 +133,7 @@ export default function AdminSyncPage() {
 
   return (
     <div className="p-8 max-w-3xl">
-      <h1 className="text-2xl font-bold text-white mb-1">Sync & Data</h1>
+      <h1 className="text-2xl font-bold text-slate-900 mb-1">Sync & Data</h1>
       <p className="text-slate-500 text-sm mb-6">Manually trigger knowledge sync, demo reset, and data operations. These also run automatically via daily cron jobs.</p>
 
       {/* Last sync status */}
@@ -186,34 +142,38 @@ export default function AdminSyncPage() {
         <div>
           <p className="text-sm text-slate-500">Last knowledge sync</p>
           {statusLoading ? (
-            <p className="text-white text-sm">Loading...</p>
+            <p className="text-slate-900 text-sm">Loading...</p>
           ) : status?.lastSynced ? (
-            <p className="text-white text-sm font-medium">{formatDate(status.lastSynced)}</p>
+            <p className="text-slate-900 text-sm font-medium">{formatDate(status.lastSynced)}</p>
           ) : (
-            <p className="text-amber-400 text-sm font-medium">Never synced — run a sync now</p>
+            <p className="text-amber-600 text-sm font-medium">Never synced — run a sync now</p>
           )}
         </div>
       </div>
 
       <div className="space-y-4">
-        <ActionCard
+        <HelpSyncCard
           title="Knowledge Sync"
-          description="Re-embeds all help articles into the vector database. Updates the knowledge timestamp. Runs daily at 3:00 AM UTC via cron."
+          description="Embeds the help articles that changed since the last sync (unchanged ones are skipped) and updates the knowledge timestamp. Paced under Google's per-minute limit, so a full run takes about two minutes. Runs daily at 3:00 AM UTC via cron."
           icon={BookOpen}
           buttonLabel="Run Knowledge Sync"
-          onAction={runKnowledgeSync}
-          result={knowledgeResult}
-          loading={knowledgeLoading}
+          endpoint="/api/admin/knowledge/refresh"
+          disabled={helpSyncRunning}
+          onRunningChange={setHelpSyncRunning}
+          onDone={(o) => {
+            if (o.timestamp) setStatus({ lastSynced: o.timestamp });
+          }}
         />
 
-        <ActionCard
+        <HelpSyncCard
           title="Help Article Ingest"
-          description="Re-ingests all help articles from lib/help/articles.ts into the help_articles table with embeddings. Use this after updating article content."
+          description="Re-embeds every help article from lib/help/articles.ts, changed or not. Use it after changing the embedding model; for content edits, Knowledge Sync is enough."
           icon={Database}
           buttonLabel="Re-ingest Help Articles"
-          onAction={runHelpIngest}
-          result={helpResult}
-          loading={helpLoading}
+          endpoint="/api/admin/help/ingest"
+          body={{ force: true }}
+          disabled={helpSyncRunning}
+          onRunningChange={setHelpSyncRunning}
         />
 
         <ActionCard

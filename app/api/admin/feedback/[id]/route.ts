@@ -7,6 +7,7 @@ import { createClient } from '@supabase/supabase-js';
 import { sendEmail } from '@/lib/email/mailgun';
 import { feedbackReplyEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getDb() {
   return createClient(
@@ -76,7 +77,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   try {
     const { data: authUser } = await db.auth.admin.getUserById(feedback.user_id);
     const userEmail = authUser?.user?.email;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+    const siteUrl = getSiteUrl();
     if (userEmail) {
       // Skipped (logged once) when Mailgun is not configured; the reply is already saved.
       await sendEmail({ to: userEmail, ...feedbackReplyEmail({ body, siteUrl }), tags: ['feedback-reply'] });

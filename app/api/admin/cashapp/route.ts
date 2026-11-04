@@ -9,6 +9,7 @@ import { incrementCampaignUses } from '@/lib/promo/active-lifetime-promo';
 import { sendEmail } from '@/lib/email/mailgun';
 import { cashappRejectedEmail, cashappVerifiedEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getDb() {
   return createServiceClient(
@@ -83,7 +84,7 @@ export async function PATCH(request: NextRequest) {
     // Notify user of rejection. Non-critical: sendEmail never throws, and skips when Mailgun is
     // not configured.
     if (userEmail) {
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.online';
+      const siteUrl = getSiteUrl();
       await sendEmail({
         to: userEmail,
         ...cashappRejectedEmail({
@@ -134,7 +135,7 @@ export async function PATCH(request: NextRequest) {
 
   // Notify user of verification via email (non-critical; skipped when Mailgun is not configured)
   if (userEmail) {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.online';
+    const siteUrl = getSiteUrl();
     await sendEmail({
       to: userEmail,
       ...cashappVerifiedEmail({

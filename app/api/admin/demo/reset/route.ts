@@ -12,7 +12,6 @@ import { requireAdmin } from '@/lib/auth/require-admin';
 import { clearUserData, seedTutorial, seedVisitor } from '@/lib/demo/seed';
 import { seedContractor } from '@/lib/demo/seed-contractor';
 import { seedLister } from '@/lib/demo/seed-lister';
-import { syncAllKnowledge } from '@/lib/admin/syncKnowledge';
 import { readIncomeSourceIds, emitDemoIncomeEvents } from '@/lib/demo/income-events';
 
 type SeedType = 'tutorial' | 'visitor' | 'contractor' | 'lister';
@@ -76,8 +75,9 @@ async function runReset() {
       resetList.push('lister');
     }
 
-    // Fire-and-forget: sync help articles + course embeddings + timestamp
-    syncAllKnowledge().catch((e) => console.error('[cron] syncAllKnowledge failed:', e));
+    // No knowledge sync here. It used to start one fire-and-forget, which ran alongside the 03:00
+    // knowledge-sync cron and the /admin/sync buttons and spent the same Gemini per-minute quota
+    // (the 429s of 2026-11-04). The help articles are synced by /api/cron/knowledge-sync only.
 
     return NextResponse.json({ ok: true, reset: resetList, at: new Date().toISOString() });
   } catch (err: unknown) {

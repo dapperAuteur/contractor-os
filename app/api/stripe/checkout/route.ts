@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { stripe } from '@/lib/stripe';
+import { getSiteUrl } from '@/lib/site-url';
 
 const VALID_PLANS = [
   'monthly', 'lifetime',
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
 
   // Prefer the actual request origin so subdomain users (contractor.*, lister.*) get
   // redirected back to their subdomain after Stripe checkout, not the main domain.
-  const baseUrl = request.headers.get('origin') ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const baseUrl = request.headers.get('origin') ?? getSiteUrl();
 
   let session;
 

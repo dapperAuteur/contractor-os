@@ -8,6 +8,7 @@ import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { sendEmail } from '@/lib/email/mailgun';
 import { adminFeedbackNotice } from '@/lib/email/templates';
 import { mirrorFeedbackToInbox } from '@/lib/feedback/inbox-mirror';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getServiceClient() {
   return createServiceClient(
@@ -90,7 +91,7 @@ export async function POST(request: NextRequest) {
   // Notify admin via email
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+    const siteUrl = getSiteUrl();
     if (adminEmail) {
       // Skipped (logged once) when Mailgun is not configured; the feedback is already saved.
       await sendEmail({

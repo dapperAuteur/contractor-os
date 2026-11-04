@@ -6,6 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 import { chunk, mailConfigured, sendEmail } from '@/lib/email/mailgun';
 import { adminMessageEmail } from '@/lib/email/templates';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getServiceClient() {
   return createClient(
@@ -86,7 +87,7 @@ export async function POST(request: NextRequest) {
   // Email copies via Mailgun batch sends: one request per 1,000 recipients (Mailgun's batch cap).
   // sendEmail adds recipient-variables for multi-recipient sends, so each person sees only their
   // own address in To.
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const siteUrl = getSiteUrl();
   const rendered = adminMessageEmail({ subject, body, siteUrl });
   let sent = 0;
   for (const group of chunk(emails)) {

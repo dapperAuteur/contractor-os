@@ -2,8 +2,9 @@
 // Tell search engines which paths to crawl and which to skip.
 
 import { MetadataRoute } from 'next';
+import { getSiteUrl } from '@/lib/site-url';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.com';
+const SITE_URL = getSiteUrl();
 
 export default function robots(): MetadataRoute.Robots {
   return {

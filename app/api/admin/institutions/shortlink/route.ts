@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createShortLink, toSwitchySlug } from '@/lib/switchy';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getDb() {
   return createServiceClient(
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
   }
 
   const db = getDb();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://work.witus.online';
+  const siteUrl = getSiteUrl();
 
   if (type === 'institution') {
     const { data: inst } = await db

@@ -3,7 +3,8 @@
 // Inject into pages via:
 //   <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.com';
+import { getSiteUrl } from '@/lib/site-url';
+const SITE_URL = getSiteUrl();
 
 // ─── Organization ─────────────────────────────────────────────────────────────
 

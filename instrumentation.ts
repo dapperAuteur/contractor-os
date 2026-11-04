@@ -7,7 +7,13 @@ import * as Sentry from '@sentry/nextjs';
 import type { Instrumentation } from 'next';
 
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') await import('./sentry.server.config');
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    await import('./sentry.server.config');
+    // Startup check: log once if NEXT_PUBLIC_SITE_URL names another app's host (2026-11-04 it was
+    // https://www.centenarianos.com). See lib/site-url.ts.
+    const { warnIfForeignSiteUrl } = await import('./lib/site-url');
+    warnIfForeignSiteUrl();
+  }
   if (process.env.NEXT_RUNTIME === 'edge') await import('./sentry.edge.config');
 }
 

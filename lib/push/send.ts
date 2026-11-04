@@ -2,6 +2,8 @@
 // Server-side push notification sending via web-push
 // Uses dynamic import so the build succeeds even if web-push isn't installed yet.
 
+import { getConfiguredSiteUrl } from '../site-url';
+
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
 const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 // VAPID subject: a contact URI the push services can reach about this sender. It used to fall back
@@ -9,7 +11,7 @@ const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY;
 // separate products, though they still share a Supabase project), so it comes from VAPID_SUBJECT,
 // and as a FALLBACK only, this app's own https site URL (VAPID accepts an https: URL as the subject).
 // With neither set, push is treated as not configured rather than borrowing another app's identity.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
+const SITE_URL = getConfiguredSiteUrl();
 const VAPID_SUBJECT =
   process.env.VAPID_SUBJECT || (SITE_URL?.startsWith('https://') ? SITE_URL : undefined);
 

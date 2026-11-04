@@ -30,6 +30,7 @@ import { cookies } from 'next/headers';
 import { WITUS_CALLBACK_PATH, withAttemptMarker } from '@/lib/auth/witus-sso';
 import { postWitusSignInPath } from '@/lib/auth/route-guard';
 import { mfaVerificationPending } from '@/lib/mfa/helpers';
+import { getConfiguredSiteUrl } from '@/lib/site-url';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -65,7 +66,11 @@ export async function GET(request: NextRequest) {
     return fail('witus_state');
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? url.origin;
+  // The redirect_uri must equal the one /authorize sent, which comes from the configured site URL
+  // only (lib/site-url.ts). The old `?? url.origin` fallback could build it from the request host;
+  // /authorize never starts a flow without the configured value, so there is nothing to fall back to.
+  const siteUrl = getConfiguredSiteUrl();
+  if (!siteUrl) return fail('witus_not_configured');
   const redirectUri = `${siteUrl.replace(/\/$/, '')}${WITUS_CALLBACK_PATH}`;
 
   // 1. Exchange the authorization code for tokens.

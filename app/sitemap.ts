@@ -5,8 +5,9 @@
 import { MetadataRoute } from 'next';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { INDUSTRY_CONFIGS } from '@/lib/features/industry-configs';
+import { getSiteUrl } from '@/lib/site-url';
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.com';
+const SITE_URL = getSiteUrl();
 
 function db() {
   return createServiceClient(

@@ -12,6 +12,7 @@ import {
 import { INDUSTRY_CONFIGS, getIndustryConfig } from '@/lib/features/industry-configs';
 import { organizationSchema } from '@/lib/seo/json-ld';
 import { CONTRACTOR_PRICE_SUMMARY } from '@/lib/pricing/prices';
+import { getSiteUrl } from '@/lib/site-url';
 
 // Icon registry — all icons used in industry configs
 const ICONS: Record<string, React.ComponentType<{ className?: string; size?: number }>> = {
@@ -64,7 +65,7 @@ export default async function IndustryDetailPage(
     '@type': 'WebPage',
     name: `Work.WitUS for ${config.name}`,
     description: config.description,
-    url: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.com'}/for/${slug}`,
+    url: `${getSiteUrl()}/for/${slug}`,
     provider: organizationSchema(),
   };
 

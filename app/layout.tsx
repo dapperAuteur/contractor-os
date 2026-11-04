@@ -12,10 +12,11 @@ import { Analytics } from "@vercel/analytics/next"
 import { PostHogProvider } from '@/lib/analytics/posthog-provider';
 import { WitusSsoProvider } from '@/lib/auth/witus-sso-client';
 import { resolveWitusSsoConfig } from '@/lib/auth/witus-sso-server';
+import { getSiteUrl } from '@/lib/site-url';
 
 const inter = Inter({ subsets: ['latin'] });
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://work.witus.com';
+const SITE_URL = getSiteUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

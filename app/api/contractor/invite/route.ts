@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { getSiteUrl } from '@/lib/site-url';
 
 function getDb() {
   return createServiceClient(
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
   }
 
   // Send magic link — redirect to the appropriate subdomain via auth callback
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const siteUrl = getSiteUrl();
   const subdomainUrl = product === 'lister'
     ? siteUrl.replace('://', '://lister.')
     : siteUrl.replace('://', '://contractor.');

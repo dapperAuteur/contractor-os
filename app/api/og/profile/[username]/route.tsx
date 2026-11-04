@@ -81,7 +81,7 @@ export async function GET(_req: NextRequest, ctx: Ctx) {
         {/* Footer */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '40px' }}>
           <span style={{ color: '#6b7280', fontSize: '16px' }}>@{username}</span>
-          <span style={{ color: '#4b5563', fontSize: '16px' }}>work.witus.com</span>
+          <span style={{ color: '#4b5563', fontSize: '16px' }}>work.witus.online</span>
         </div>
       </div>
     ),

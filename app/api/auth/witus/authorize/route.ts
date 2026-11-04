@@ -14,6 +14,7 @@ import {
   WITUS_OIDC_AUTHORIZE_FALLBACK,
   withAttemptMarker,
 } from '@/lib/auth/witus-sso';
+import { getConfiguredSiteUrl } from '@/lib/site-url';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -26,7 +27,8 @@ const b64url = (buf: Buffer) => buf.toString('base64url');
 
 export async function GET(request: NextRequest) {
   const clientId = process.env.WITUS_OIDC_CLIENT_ID;
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  // Configured value only (lib/site-url.ts): never a fallback, never the request host.
+  const siteUrl = getConfiguredSiteUrl();
 
   // `?sso=tried` is the half of the "Continue as ..." loop guard that survives a browser with no
   // usable sessionStorage: the login page reads it and skips the silent probe, so a bounce can
@@ -38,7 +40,7 @@ export async function GET(request: NextRequest) {
 
   // The redirect URI must EXACTLY match the one registered for slug `work` in the IdP
   // (https://work.witus.online/api/auth/witus/callback) — better-auth compares with `===`. It is
-  // built from NEXT_PUBLIC_SITE_URL, never from the request origin: on Vercel the request host may
+  // built from NEXT_PUBLIC_SITE_URL (getConfiguredSiteUrl), never from the request origin: on Vercel the request host may
   // be a deployment URL, and this project also serves www.badcba.com, neither of which is
   // registered. A visitor who reaches this route from the other host is therefore sent to the
   // registered host and finishes there. (The login page does not offer the button there at all —

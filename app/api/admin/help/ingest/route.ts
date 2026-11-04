@@ -1,11 +1,20 @@
 // app/api/admin/help/ingest/route.ts
-// POST: embed all help articles and upsert into help_articles table.
-// Admin-only. Uses Gemini text-embedding-004 (768-dim).
+// POST: admin-only. Re-embeds EVERY help article (changed or not) into help_articles, one chunk per
+// request. Body: { cursor?: number, force?: boolean (default true) }. The /admin/sync page loops on
+// the returned `cursor` until `done`. Pacing, 429 retries and the stale-row cleanup live in
+// lib/help/embed-sync.ts. Rows are upserted in place, never wiped first, so a failed article keeps
+// its previous embedding.
+// GET: row count, or ?diagnose=1 to list the models this key can use.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { HELP_ARTICLES } from '@/lib/help/articles';
 import { requireAdmin } from '@/lib/auth/require-admin';
+import { runHelpSyncChunkForApp } from '@/lib/admin/syncKnowledge';
+import { readSyncBody } from '@/lib/help/sync-request';
+
+// One chunk spends at most HELP_SYNC_CHUNK_BUDGET_MS (40 s); 60 is the lowest ceiling on any plan.
+export const maxDuration = 60;
 
 function getDb() {
   return createServiceClient(
@@ -14,97 +23,25 @@ function getDb() {
   );
 }
 
-// gemini-embedding-001 outputs 3072 dims by default; pin to 768 to match schema
-const EMBEDDING_MODEL = 'gemini-embedding-001';
-
-async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      content: { parts: [{ text }] },
-      outputDimensionality: 768,
-    }),
-  });
-
-  if (!response.ok) {
-    const err = await response.text();
-    throw new Error(`Gemini embedding error: ${err}`);
-  }
-
-  const data = await response.json();
-  return data.embedding?.values ?? [];
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function POST(_req: NextRequest) {
+export async function POST(req: NextRequest) {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
 
-  // Preflight: validate API key exists and the Gemini API is reachable
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-  if (!apiKey) {
+  if (!process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS) {
     return NextResponse.json(
       { error: 'GOOGLE_GEMINI_API_KEY_WORK_WITUS is not set in environment variables.' },
       { status: 500 },
     );
   }
 
-  // Quick ping to verify the key works before processing all articles
+  const { cursor, force } = await readSyncBody(req);
   try {
-    await getEmbedding('test');
-  } catch (e) {
-    return NextResponse.json(
-      { error: `Gemini API key check failed: ${e instanceof Error ? e.message : String(e)}` },
-      { status: 500 },
-    );
+    const result = await runHelpSyncChunkForApp({ cursor, force: force ?? true });
+    return NextResponse.json(result);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
-
-  const db = getDb();
-
-  // Only touch contractor-app articles — never wipe centenarian articles
-  await db.from('help_articles').delete().eq('app', 'contractor');
-
-  const contractorArticles = HELP_ARTICLES.filter((a) =>
-    ['contractor', 'lister', 'all', 'admin'].includes(a.role),
-  );
-
-  const results: { title: string; ok: boolean; error?: string }[] = [];
-
-  for (const article of contractorArticles) {
-    const text = `${article.title}\n\n${article.content}`;
-    try {
-      const embedding = await getEmbedding(text);
-      if (!embedding.length) throw new Error('Gemini returned an empty embedding vector.');
-
-      // pgvector expects the array formatted as a bracketed string e.g. "[0.1,0.2,...]"
-      const { error } = await db.from('help_articles').upsert(
-        {
-          title: article.title,
-          content: article.content,
-          role: article.role,
-          app: 'contractor',
-          embedding: `[${embedding.join(',')}]`,
-        },
-        { onConflict: 'title,app' },
-      );
-      if (error) throw new Error(error.message);
-      results.push({ title: article.title, ok: true });
-    } catch (e) {
-      results.push({ title: article.title, ok: false, error: e instanceof Error ? e.message : 'Unknown' });
-    }
-    // Stay under Gemini free-tier limit (100 req/min)
-    await new Promise((r) => setTimeout(r, 700));
-  }
-
-  const succeeded = results.filter((r) => r.ok).length;
-  const failed = results.filter((r) => !r.ok);
-
-  return NextResponse.json({ succeeded, failed: failed.length > 0 ? failed : undefined });
 }
 
 export async function GET(req: NextRequest) {
