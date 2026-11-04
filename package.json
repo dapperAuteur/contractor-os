@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@ericblade/quagga2": "^1.8.4",
-    "@sentry/nextjs": "^10.69.0",
+    "@sentry/nextjs": "^10.78.0",
     "@stripe/stripe-js": "^8.7.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.75.1",
