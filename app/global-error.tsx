@@ -81,6 +81,13 @@ export default function GlobalError({
             >
               Back to home
             </a>
+            {/* The root layout and its header failed, so this shell carries the sign-in link itself. */}
+            <a
+              href="/login"
+              style={{ minHeight: 44, padding: '11px 20px', color: 'inherit' }}
+            >
+              Sign in
+            </a>
           </div>
           {error.digest ? (
             <p style={{ color: '#737373', fontSize: 12, marginTop: 16 }}>Reference: {error.digest}</p>

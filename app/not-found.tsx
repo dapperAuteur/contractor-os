@@ -3,10 +3,12 @@
 
 import Link from 'next/link';
 import { HardHat } from 'lucide-react';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/ui/SiteFooter';
 
-export default function NotFound() {
+function NotFoundContent() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-4">
+    <div className="min-h-[60vh] bg-slate-50 flex flex-col items-center justify-center px-4">
       <div className="text-center max-w-md">
         {/* Logo */}
         <HardHat size={40} className="text-amber-600 mx-auto mb-4" aria-hidden="true" />
@@ -42,6 +44,20 @@ export default function NotFound() {
           </Link>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Error pages keep the app shell (witus docs/shared-ui-ux-dx.md): the root layout renders no
+// header, so the 404 page renders the public header (with its sign-in link) and the footer.
+export default function NotFound() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <SiteHeader />
+      <main id="main-content" className="flex-1">
+        <NotFoundContent />
+      </main>
+      <SiteFooter />
     </div>
   );
 }
