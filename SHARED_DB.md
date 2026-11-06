@@ -25,6 +25,18 @@ Both **Work.WitUS** (contractor-os) and **CentenarianOS** (centenarian-os) share
 | `user_contacts` | `home_country` | `text` | `NULL` | `150_contacts_system.sql` | Contact home country. CentOS can safely ignore. |
 | `user_contacts` | `last_worked_with` | `date` | `NULL` | `150_contacts_system.sql` | Last job start_date where contact was on crew. CentOS can safely ignore. |
 | `user_contacts` | `total_jobs_together` | `int` | `0` | `150_contacts_system.sql` | Count of jobs worked together. CentOS can safely ignore. |
+| `help_articles` | `embedding_v2` | `vector(1024)` | `NULL` | `226_mistral_embeddings_v2.sql` | mistral-embed vectors for Work.WitUS's rows (`app = 'contractor'`), read by `match_help_articles_v2`. CentOS keeps writing/reading the legacy `embedding` (768) column and `match_help_articles`; this column stays NULL on its rows. hnsw index `idx_help_articles_embedding_v2`. |
+| `union_document_chunks` | `embedding_v2` | `vector(1024)` | `NULL` | `226_mistral_embeddings_v2.sql` | mistral-embed vectors for union RAG, read by `match_union_chunks_v2` (server-only: EXECUTE revoked from anon/authenticated). Work.WitUS no longer writes the legacy `embedding` (768). hnsw index `idx_union_chunks_embedding_v2`. |
+
+**Functions added by Work.WitUS (226):** `match_help_articles_v2`, `match_union_chunks_v2`. The legacy
+`match_help_articles` (used by CentOS) and `match_union_chunks` are unchanged; drop the legacy columns
+and functions only in a later cleanup, after CentOS stops using `help_articles.embedding`.
+
+**Known cross-app hazard (found 2026-11-04, not changed here):** CentOS's help ingest
+(`lib/admin/syncKnowledge.ts` `syncHelpArticles`, `app/api/admin/help/ingest`) deletes EVERY
+`help_articles` row (`.neq('id', zero-uuid)`), Work.WitUS's `app = 'contractor'` rows included. Work.WitUS's
+nightly Knowledge Sync re-embeds them, so the help chat is empty for at most a day after a CentOS ingest.
+The fix belongs in CentOS (filter the delete by `app`).
 
 ## Columns added by CentenarianOS (not used by Work.WitUS)
 

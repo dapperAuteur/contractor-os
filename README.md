@@ -78,7 +78,8 @@ NEXT_PUBLIC_ADMIN_EMAIL=
 NEXT_PUBLIC_SITE_URL=          # https://work.witus.online in production; read only through lib/site-url.ts
 
 # AI
-GOOGLE_GEMINI_API_KEY_WORK_WITUS=
+GOOGLE_GEMINI_API_KEY_WORK_WITUS=  # chat answers, PDF text extraction, document scanning
+MISTRAL_API_KEY=                   # every embedding (mistral-embed, 1024); docs/05-operations.md section 9
 
 # Media
 NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
