@@ -1,13 +1,18 @@
 // app/api/help/chat/route.ts
 // POST: RAG-powered help chat.
-//   1. Embed the user's question via Gemini text-embedding-001
-//   2. Find top-5 matching help_articles via pgvector cosine similarity (contractor app)
-//   3. Build a context-grounded prompt and call Gemini Flash
+//   1. Embed the user's question with mistral-embed (lib/ai/mistral-embed.ts), the model the
+//      help_articles.embedding_v2 index is built with
+//   2. Find top-5 matching help_articles via match_help_articles_v2 (contractor app). Until the rows
+//      are re-embedded, or before migration 226 is applied, this comes back empty and the answer
+//      says the docs do not cover it (lib/rag/retrieve.ts), instead of a 500
+//   3. Build a context-grounded prompt and call Gemini Flash (generation still uses Gemini)
 //   4. Return the answer
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/server';
+import { EmbedRateLimitError, embedQuery } from '@/lib/ai/mistral-embed';
+import { matchHelpArticles } from '@/lib/rag/retrieve';
 
 function getDb() {
   return createServiceClient(
@@ -16,30 +21,7 @@ function getDb() {
   );
 }
 
-// gemini-embedding-001 outputs 3072 dims by default; pin to 768 to match schema
-const EMBEDDING_MODEL = 'gemini-embedding-001';
 const CHAT_MODEL = 'gemini-2.5-flash';
-
-async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      content: { parts: [{ text }] },
-      outputDimensionality: 768,
-    }),
-  });
-  if (!res.ok) {
-    if (res.status === 429) throw new Error('RATE_LIMITED');
-    throw new Error(`Embedding failed (${res.status})`);
-  }
-  const data = await res.json();
-  return data.embedding?.values ?? [];
-}
 
 async function generateAnswer(systemPrompt: string, question: string): Promise<string> {
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
@@ -75,33 +57,31 @@ export async function POST(request: NextRequest) {
   // 1. Embed the question
   let queryEmbedding: number[];
   try {
-    queryEmbedding = await getEmbedding(question.trim());
+    queryEmbedding = await embedQuery(question.trim());
   } catch (e) {
-    const msg = e instanceof Error ? e.message : '';
-    if (msg === 'RATE_LIMITED') {
-      return NextResponse.json(
-        { error: 'The help assistant is busy right now. Please wait a moment and try again.' },
-        { status: 503 },
-      );
-    }
-    return NextResponse.json({ error: 'Could not process your question. Please try again.' }, { status: 500 });
+    const busy = e instanceof EmbedRateLimitError;
+    // The message names no key; log the kind only.
+    console.warn(`[help-chat] embedding failed: ${e instanceof Error ? e.name : 'unknown'}`);
+    return NextResponse.json(
+      {
+        error: busy
+          ? 'The help assistant is busy right now. Please wait a moment and try again.'
+          : 'The help assistant is unavailable right now. Please try again later.',
+      },
+      { status: 503 },
+    );
   }
 
   // 2. Retrieve top-5 matching articles filtered to contractor app
-  // pgvector expects the vector as a bracketed string "[0.1,0.2,...]"
-  const { data: matches, error: matchError } = await db.rpc('match_help_articles', {
-    query_embedding: `[${queryEmbedding.join(',')}]`,
-    match_count: 5,
-    role_filter: role ?? null,
-    app_filter: 'contractor',
+  const { matches, degraded } = await matchHelpArticles((fn, args) => db.rpc(fn, args), queryEmbedding, {
+    app: 'contractor',
+    role: role ?? null,
+    count: 5,
   });
+  if (degraded) console.warn(`[help-chat] retrieval degraded: ${degraded}`);
 
-  if (matchError) {
-    return NextResponse.json({ error: matchError.message }, { status: 500 });
-  }
-
-  const context = (matches ?? [])
-    .map((m: { title: string; content: string }) => `## ${m.title}\n${m.content}`)
+  const context = matches
+    .map((m) => `## ${m.title}\n${m.content}`)
     .join('\n\n---\n\n');
 
   // 3. Build system prompt

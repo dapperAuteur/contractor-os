@@ -1,31 +1,42 @@
 // File: lib/help/embed-sync.ts
-// The help-article embedding sync, in chunks that fit one serverless request.
+// The help-article embedding sync, in chunks that fit one serverless request, plus the paced,
+// retrying batch call it shares with the union re-embed (lib/union/embed-backfill.ts).
 //
 // Callers: /api/admin/knowledge/refresh (changed articles only), /api/admin/help/ingest (every
 // article), /api/cron/knowledge-sync (changed only, loops chunks in one invocation). The wiring to
-// Supabase and the Gemini key lives in lib/admin/syncKnowledge.ts; this file takes its store,
+// Supabase and the Mistral key lives in lib/admin/syncKnowledge.ts; this file takes its store,
 // embedder and clock as arguments so tests/help-embed-sync.test.ts can run it against fakes.
 //
 // What a chunk does, in order:
 //   1. On the first chunk only (cursor 0), delete rows whose title is no longer an article. Rows are
-//      never wiped up front any more: the old code deleted every contractor row first, so each 429
-//      left that article missing from the help chat until the next full run succeeded.
+//      never wiped up front, so a failed request leaves the previous row in place.
 //   2. Walk the articles from `cursor`. An article whose stored title, content and role hash to the
-//      same value as the source, and which has an embedding, is skipped (unless `force`).
-//   3. Embed the rest, one request at a time, at most one per `minIntervalMs`
-//      (HELP_SYNC_MIN_INTERVAL_MS, under Google's 100-a-minute free tier; see lib/ai/gemini-embed.ts).
-//   4. A 429 waits for Google's retry delay and tries again, up to `maxRetries` times. If the wait
-//      will not fit in the chunk's time budget, the chunk stops and returns `waitMs`: the admin page
-//      waits that long and asks for the next chunk. A delay longer than `maxRetryWaitMs` is a daily
-//      quota, not a per-minute one, and stops the run with `stoppedReason: 'quota'`.
+//      same value as the source, and which has a v2 (Mistral) embedding, is skipped (unless `force`).
+//      A row with only the old Gemini `embedding` counts as not embedded, so the first Knowledge Sync
+//      after the move re-embeds everything into `embedding_v2`.
+//   3. Embed the rest in BATCHES (up to BATCH_MAX_TEXTS texts and MAX_REQUEST_TOKENS estimated
+//      tokens per request, lib/ai/mistral-embed.ts), at most one request per `minIntervalMs`
+//      (EMBED_SYNC_MIN_INTERVAL_MS).
+//   4. A 429 waits for Mistral's Retry-After (or an exponential backoff) and retries the same batch,
+//      up to `maxRetries` times. If the wait will not fit in the chunk's time budget, the chunk stops
+//      and returns `waitMs`: the admin page waits that long and asks for the next chunk. A delay
+//      longer than `maxRetryWaitMs` is not a per-minute limit and stops the run with
+//      `stoppedReason: 'quota'`.
 //   5. Stop before the time budget runs out and return the cursor to continue from.
 //
-// No new column: the stored row already holds the title, content and role it was embedded from, so
-// "unchanged" is a hash of those three on both sides. A change of embedding model or dimensions is
-// NOT detected (rows do not record the model); run Re-ingest (force) after changing either.
+// "Unchanged" is a hash of the stored title, content and role. A change of embedding model or
+// dimensions is NOT detected by the hash (rows do not record the model); the move to Mistral is
+// detected only because it writes a new column. Run Re-ingest (force) after any later model change.
 
 import { createHash } from 'node:crypto';
-import { GeminiEmbedError, type Embedder } from '../ai/gemini-embed.ts';
+import {
+  BATCH_MAX_TEXTS,
+  MAX_REQUEST_TOKENS,
+  MistralEmbedError,
+  backoffMs,
+  estimateTokens,
+  type BatchEmbedder,
+} from '../ai/mistral-embed.ts';
 
 export interface SyncArticle {
   title: string;
@@ -102,7 +113,7 @@ export interface ChunkResult {
   skipped: number;
   removed: number;
   failed: FailedArticle[];
-  /** When set, wait this long before asking for the next chunk (Google's retry delay). */
+  /** When set, wait this long before asking for the next chunk (Mistral's retry delay). */
   waitMs?: number;
   /** Why the chunk stopped before the end. 'quota' means stop the run: the daily quota is spent. */
   stoppedReason?: 'time' | 'rate_limit' | 'quota';
@@ -110,10 +121,22 @@ export interface ChunkResult {
   error?: string;
 }
 
-export interface ChunkOptions {
+/** The retry knobs both sync engines share. */
+export interface RetryOptions {
+  /** Allowance for one request to finish once started (checked before starting it). */
+  requestAllowanceMs?: number;
+  /** 429 (and 5xx) retries per batch inside one chunk. */
+  maxRetries?: number;
+  /** A retry delay longer than this is treated as a spent workspace limit, not a per-minute one. */
+  maxRetryWaitMs?: number;
+  /** Jitter source for the backoff used when a 429 carries no Retry-After (tests pass () => 0). */
+  random?: () => number;
+}
+
+export interface ChunkOptions extends RetryOptions {
   articles: SyncArticle[];
   store: HelpArticleStore;
-  embed: Embedder;
+  embed: BatchEmbedder;
   pacer: Pacer;
   clock?: Clock;
   cursor?: number;
@@ -121,25 +144,70 @@ export interface ChunkOptions {
   force?: boolean;
   /** Stop starting new work after this long. Keep well under the route's maxDuration. */
   timeBudgetMs: number;
-  /** Allowance for one request to finish once started (checked before starting it). */
-  requestAllowanceMs?: number;
-  /** 429 retries per article inside one chunk. */
-  maxRetries?: number;
-  /** A retry delay longer than this is treated as a spent daily quota. */
-  maxRetryWaitMs?: number;
-  /** Wait used when a 429 carries no retry delay. */
-  defaultRetryWaitMs?: number;
+  /** Texts per request (default BATCH_MAX_TEXTS). */
+  batchMaxTexts?: number;
+  /** Estimated tokens per request (default MAX_REQUEST_TOKENS). */
+  batchMaxTokens?: number;
 }
+
+export type BatchAttempt =
+  | { kind: 'ok'; vectors: number[][] }
+  | { kind: 'failed'; message: string; detail?: string }
+  | { kind: 'stop'; reason: 'time' | 'rate_limit' | 'quota'; waitMs?: number; error?: string };
+
+/**
+ * One batch: pace, call, and on a 429 wait and retry the same batch while the chunk's deadline
+ * allows. Never throws: the result says whether to save, report the batch as failed, or stop.
+ */
+export async function embedBatchWithRetry(
+  texts: string[],
+  ctx: RetryOptions & { embed: BatchEmbedder; pacer: Pacer; clock: Clock; deadline: number },
+): Promise<BatchAttempt> {
+  const allowance = ctx.requestAllowanceMs ?? 5_000;
+  const maxRetries = ctx.maxRetries ?? 3;
+  const maxRetryWaitMs = ctx.maxRetryWaitMs ?? 65_000;
+  const { clock, pacer, deadline } = ctx;
+  let attempts = 0;
+  while (true) {
+    if (clock.now() + pacer.delayMs() + allowance > deadline) return { kind: 'stop', reason: 'time' };
+    await pacer.wait();
+    try {
+      return { kind: 'ok', vectors: await ctx.embed(texts) };
+    } catch (e) {
+      if (e instanceof MistralEmbedError && e.isRateLimit) {
+        attempts++;
+        const wait = e.retryAfterMs ?? backoffMs(attempts, ctx.random);
+        if (wait > maxRetryWaitMs) {
+          return {
+            kind: 'stop',
+            reason: 'quota',
+            error: `${e.summary}. That is longer than a per-minute window, so a workspace limit (tokens per month) may be spent; check admin.mistral.ai/plateforme/limits.`,
+          };
+        }
+        if (attempts > maxRetries) return { kind: 'failed', message: e.summary, detail: e.detail };
+        if (clock.now() + wait + allowance > deadline) return { kind: 'stop', reason: 'rate_limit', waitMs: wait };
+        await clock.sleep(wait);
+        continue;
+      }
+      if (e instanceof MistralEmbedError && e.status >= 500 && attempts < maxRetries) {
+        attempts++;
+        await clock.sleep(2_000 * attempts);
+        continue;
+      }
+      if (e instanceof MistralEmbedError) return { kind: 'failed', message: e.summary, detail: e.detail };
+      return { kind: 'failed', message: e instanceof Error ? e.message : String(e) };
+    }
+  }
+}
+
+const articleText = (a: SyncArticle) => `${a.title}\n\n${a.content}`;
 
 export async function runHelpSyncChunk(opts: ChunkOptions): Promise<ChunkResult> {
   const clock = opts.clock ?? realClock;
-  const start = clock.now();
-  const deadline = start + opts.timeBudgetMs;
-  const allowance = opts.requestAllowanceMs ?? 5_000;
-  const maxRetries = opts.maxRetries ?? 3;
-  const maxRetryWaitMs = opts.maxRetryWaitMs ?? 65_000;
-  const defaultRetryWaitMs = opts.defaultRetryWaitMs ?? 30_000;
-  const { articles, store, embed, pacer } = opts;
+  const deadline = clock.now() + opts.timeBudgetMs;
+  const maxTexts = opts.batchMaxTexts ?? BATCH_MAX_TEXTS;
+  const maxTokens = opts.batchMaxTokens ?? MAX_REQUEST_TOKENS;
+  const { articles, store } = opts;
   const total = articles.length;
   let cursor = Math.max(0, Math.min(opts.cursor ?? 0, total));
 
@@ -160,74 +228,56 @@ export async function runHelpSyncChunk(opts: ChunkOptions): Promise<ChunkResult>
   if (!opts.force) {
     for (const row of await store.listEmbedded()) storedHashes.set(row.title, articleHash(row));
   }
+  const unchanged = (a: SyncArticle) => !opts.force && storedHashes.get(a.title) === articleHash(a);
 
   while (cursor < total) {
-    const article = articles[cursor];
-    if (!opts.force && storedHashes.get(article.title) === articleHash(article)) {
-      result.skipped++;
-      cursor++;
+    // Collect the next batch from `cursor`: the articles to embed, and the unchanged ones passed on
+    // the way (counted only once the batch is settled, so a stopped chunk does not double count).
+    const batch: SyncArticle[] = [];
+    let passed = 0;
+    let tokens = 0;
+    let end = cursor;
+    while (end < total) {
+      const a = articles[end];
+      if (unchanged(a)) {
+        passed++;
+        end++;
+        continue;
+      }
+      const t = estimateTokens(articleText(a));
+      if (batch.length > 0 && (batch.length >= maxTexts || tokens + t > maxTokens)) break;
+      batch.push(a);
+      tokens += t;
+      end++;
+    }
+
+    if (batch.length === 0) {
+      result.skipped += passed;
+      cursor = end;
       continue;
     }
 
-    let attempts = 0;
-    let outcome: 'ok' | 'failed' | 'stop' = 'failed';
-    while (true) {
-      if (clock.now() + pacer.delayMs() + allowance > deadline) {
-        result.stoppedReason = 'time';
-        outcome = 'stop';
-        break;
-      }
-      await pacer.wait();
-      try {
-        const vector = await embed(`${article.title}\n\n${article.content}`);
-        await store.upsert(article, vector);
-        outcome = 'ok';
-        break;
-      } catch (e) {
-        if (e instanceof GeminiEmbedError && e.isRateLimit) {
-          const wait = e.retryAfterMs ?? defaultRetryWaitMs;
-          if (wait > maxRetryWaitMs) {
-            result.stoppedReason = 'quota';
-            result.error = `${e.summary}. That is longer than a per-minute window, so the daily quota is probably spent; it resets at midnight Pacific time.`;
-            outcome = 'stop';
-            break;
-          }
-          attempts++;
-          if (attempts > maxRetries) {
-            result.failed.push({ title: article.title, message: e.summary, detail: e.detail });
-            outcome = 'failed';
-            break;
-          }
-          if (clock.now() + wait + allowance > deadline) {
-            result.stoppedReason = 'rate_limit';
-            result.waitMs = wait;
-            outcome = 'stop';
-            break;
-          }
-          await clock.sleep(wait);
-          continue;
+    const attempt = await embedBatchWithRetry(batch.map(articleText), { ...opts, clock, deadline });
+    if (attempt.kind === 'stop') {
+      result.stoppedReason = attempt.reason;
+      if (attempt.waitMs !== undefined) result.waitMs = attempt.waitMs;
+      if (attempt.error) result.error = attempt.error;
+      break;
+    }
+    if (attempt.kind === 'failed') {
+      for (const a of batch) result.failed.push({ title: a.title, message: attempt.message, detail: attempt.detail });
+    } else {
+      for (let k = 0; k < batch.length; k++) {
+        try {
+          await store.upsert(batch[k], attempt.vectors[k]);
+          result.embedded++;
+        } catch (e) {
+          result.failed.push({ title: batch[k].title, message: e instanceof Error ? e.message : String(e) });
         }
-        if (e instanceof GeminiEmbedError && e.status >= 500 && attempts < maxRetries) {
-          attempts++;
-          await clock.sleep(2_000 * attempts);
-          continue;
-        }
-        const message = e instanceof GeminiEmbedError
-          ? e.summary
-          : e instanceof Error ? e.message : String(e);
-        result.failed.push({
-          title: article.title,
-          message,
-          detail: e instanceof GeminiEmbedError ? e.detail : undefined,
-        });
-        outcome = 'failed';
-        break;
       }
     }
-
-    if (outcome === 'stop') break;
-    if (outcome === 'ok') result.embedded++;
-    cursor++;
+    result.skipped += passed;
+    cursor = end;
   }
 
   result.cursor = cursor;

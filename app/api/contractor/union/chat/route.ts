@@ -1,13 +1,18 @@
 // app/api/contractor/union/chat/route.ts
 // POST: RAG-powered union contract chat
-//   1. Embed user question
-//   2. Find top-5 matching chunks via pgvector cosine similarity
-//   3. Build context-grounded prompt with MANDATORY disclaimer
+//   1. Embed user question with mistral-embed (lib/ai/mistral-embed.ts), the model the
+//      union_document_chunks.embedding_v2 index is built with
+//   2. Find top-5 matching chunks via match_union_chunks_v2. Chunks uploaded before the move have
+//      no v2 embedding until /admin/sync "Re-embed Union Documents" runs; until then, or before
+//      migration 226 is applied, the search is empty and the answer says so (lib/rag/retrieve.ts)
+//   3. Build context-grounded prompt with MANDATORY disclaimer (generation still uses Gemini)
 //   4. Return answer + sources + disclaimer
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { EmbedRateLimitError, embedQuery } from '@/lib/ai/mistral-embed';
+import { matchUnionChunks } from '@/lib/rag/retrieve';
 
 function getDb() {
   return createServiceClient(
@@ -16,28 +21,9 @@ function getDb() {
   );
 }
 
-const EMBEDDING_MODEL = 'gemini-embedding-001';
 const CHAT_MODEL = 'gemini-2.5-flash';
 
 const DISCLAIMER = 'This is an AI-generated summary for reference only. It is not legal advice. Always consult your union representative or the official contract document for authoritative answers.';
-
-async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      content: { parts: [{ text }] },
-      outputDimensionality: 768,
-    }),
-  });
-  if (!res.ok) throw new Error(`Embedding error: ${await res.text()}`);
-  const data = await res.json();
-  return data.embedding?.values ?? [];
-}
 
 async function generateAnswer(systemPrompt: string, question: string): Promise<string> {
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
@@ -73,33 +59,38 @@ export async function POST(request: NextRequest) {
   // 1. Embed the question
   let queryEmbedding: number[];
   try {
-    queryEmbedding = await getEmbedding(question.trim());
+    queryEmbedding = await embedQuery(question.trim());
   } catch (e) {
-    return NextResponse.json({ error: e instanceof Error ? e.message : 'Embedding failed' }, { status: 500 });
+    const busy = e instanceof EmbedRateLimitError;
+    console.warn(`[union-chat] embedding failed: ${e instanceof Error ? e.name : 'unknown'}`);
+    return NextResponse.json(
+      {
+        error: busy
+          ? 'The union assistant is busy right now. Please wait a moment and try again.'
+          : 'The union assistant is unavailable right now. Please try again later.',
+      },
+      { status: 503 },
+    );
   }
 
   // 2. Retrieve top-5 matching chunks
-  const { data: matches, error: matchError } = await db.rpc('match_union_chunks', {
-    query_embedding: `[${queryEmbedding.join(',')}]`,
-    match_count: 5,
-    union_filter: union_local || null,
-    p_user_id: user.id,
+  const { matches, degraded } = await matchUnionChunks((fn, args) => db.rpc(fn, args), queryEmbedding, {
+    userId: user.id,
+    unionLocal: union_local || null,
+    count: 5,
   });
+  if (degraded) console.warn(`[union-chat] retrieval degraded: ${degraded}`);
 
-  if (matchError) {
-    return NextResponse.json({ error: matchError.message }, { status: 500 });
-  }
-
-  if (!matches || matches.length === 0) {
+  if (matches.length === 0) {
     return NextResponse.json({
-      answer: 'I could not find any relevant information in your uploaded union documents. Please upload the relevant contract or document first.',
+      answer: 'I could not find any searchable sections in your union documents. Upload the relevant contract or document, or, if you uploaded it already, try again shortly: documents are being re-indexed.',
       sources: [],
       disclaimer: DISCLAIMER,
     });
   }
 
   const context = matches
-    .map((m: { doc_name: string; chunk_index: number; chunk_text: string }) =>
+    .map((m) =>
       `[Source: ${m.doc_name}, Section ${m.chunk_index + 1}]\n${m.chunk_text}`,
     )
     .join('\n\n---\n\n');
@@ -129,7 +120,7 @@ ${context}
     answer += `\n\n${DISCLAIMER}`;
   }
 
-  const sources = matches.map((m: { doc_name: string; union_local: string; chunk_index: number; similarity: number }) => ({
+  const sources = matches.map((m) => ({
     document: m.doc_name,
     union_local: m.union_local,
     section: m.chunk_index + 1,

@@ -1,10 +1,10 @@
 'use client';
 
 // components/admin/HelpSyncCard.tsx
-// One /admin/sync card that runs the chunked help-article sync: it calls `endpoint` with a cursor
-// until the server says done (lib/help/sync-loop.ts), shows progress and any wait Google asked for,
-// and ends with a short summary. Each failed article is one line; Google's full error is behind a
-// details toggle instead of being dumped as JSON.
+// One /admin/sync card that runs a chunked embedding sync (help articles, or union document chunks):
+// it calls `endpoint` with a cursor until the server says done (lib/help/sync-loop.ts), shows
+// progress and any wait Mistral asked for, and ends with a short summary. Each failure is one line;
+// Mistral's full error is behind a details toggle instead of being dumped as JSON.
 
 import { useState } from 'react';
 import { CheckCircle, Loader2, RefreshCw, XCircle } from 'lucide-react';
@@ -22,6 +22,7 @@ export function HelpSyncCard({
   onDone,
   disabled,
   onRunningChange,
+  unit = 'article',
 }: {
   title: string;
   description: string;
@@ -31,10 +32,13 @@ export function HelpSyncCard({
   /** Extra JSON merged into every chunk request (e.g. { force: true }). */
   body?: Record<string, unknown>;
   onDone?: (outcome: LoopOutcome) => void;
-  /** True while another sync card is running; both share one Google quota. */
+  /** True while another sync card is running; all share one Mistral per-minute budget. */
   disabled?: boolean;
   onRunningChange?: (running: boolean) => void;
+  /** What one item is called in the progress line ("article", "chunk"). */
+  unit?: string;
 }) {
+  const Unit = unit.charAt(0).toUpperCase() + unit.slice(1);
   const [running, setRunning] = useState(false);
   const [progress, setProgress] = useState<LoopProgress | null>(null);
   const [outcome, setOutcome] = useState<LoopOutcome | null>(null);
@@ -93,10 +97,10 @@ export function HelpSyncCard({
           {running && (
             <p className="mt-3 text-sm text-slate-600" role="status">
               {progress
-                ? `Article ${Math.min(progress.cursor, progress.total)} of ${progress.total}: ${progress.embedded} embedded, ${progress.skipped} unchanged, ${progress.failed.length} failed.`
+                ? `${Unit} ${Math.min(progress.cursor, progress.total)} of ${progress.total}: ${progress.embedded} embedded, ${progress.skipped} unchanged, ${progress.failed.length} failed.`
                 : 'Starting...'}
               {progress?.waitingMs
-                ? ` Google asked for a pause; waiting ${Math.ceil(progress.waitingMs / 1000)}s, then continuing.`
+                ? ` Mistral asked for a pause; waiting ${Math.ceil(progress.waitingMs / 1000)}s, then continuing.`
                 : ''}
             </p>
           )}
@@ -113,13 +117,13 @@ export function HelpSyncCard({
                   {outcome.done ? 'Done' : 'Stopped'}: {outcome.embedded} embedded, {outcome.skipped} unchanged,{' '}
                   {outcome.failed.length} failed
                   {outcome.removed ? `, ${outcome.removed} old rows removed` : ''}
-                  {outcome.total ? ` (of ${outcome.total} articles)` : ''}.
+                  {outcome.total ? ` (of ${outcome.total} ${unit}s)` : ''}.
                 </p>
                 {outcome.error && <p className="mt-1">{outcome.error}</p>}
                 {outcome.failed.length > 0 && (
                   <ul className="mt-2 space-y-1 text-slate-700">
-                    {outcome.failed.map((f) => (
-                      <li key={f.title}>
+                    {outcome.failed.map((f, i) => (
+                      <li key={`${f.title}-${i}`}>
                         <span className="font-medium">{f.title}</span>: {f.message}
                         {f.detail && (
                           <details className="mt-0.5">

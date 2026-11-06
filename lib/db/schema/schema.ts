@@ -137,8 +137,11 @@ export const helpArticles = pgTable("help_articles", {
 	embedding: vector({ dimensions: 768 }),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	app: text().default('centenarian').notNull(),
+	// mistral-embed (supabase/migrations/226); the 768 Gemini column above goes in a cleanup.
+	embeddingV2: vector("embedding_v2", { dimensions: 1024 }),
 }, (table) => [
 	index("idx_help_articles_app").using("btree", table.app.asc().nullsLast().op("text_ops")),
+	index("idx_help_articles_embedding_v2").using("hnsw", table.embeddingV2.op("vector_cosine_ops")),
 	unique("help_articles_title_app_key").on(table.app, table.title),
 	check("help_articles_role_check", sql`role = ANY (ARRAY['student'::text, 'teacher'::text, 'admin'::text, 'contractor'::text, 'lister'::text, 'all'::text])`),
 ]);
@@ -2240,9 +2243,12 @@ export const unionDocumentChunks = pgTable("union_document_chunks", {
 	chunkIndex: integer("chunk_index").notNull(),
 	embedding: vector({ dimensions: 768 }),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow(),
+	// mistral-embed (supabase/migrations/226); the 768 Gemini column above goes in a cleanup.
+	embeddingV2: vector("embedding_v2", { dimensions: 1024 }),
 }, (table) => [
 	index("idx_union_chunks_document").using("btree", table.documentId.asc().nullsLast().op("uuid_ops")),
 	index("idx_union_chunks_embedding").using("ivfflat", table.embedding.asc().nullsLast().op("vector_cosine_ops")).with({lists: "50"}),
+	index("idx_union_chunks_embedding_v2").using("hnsw", table.embeddingV2.op("vector_cosine_ops")),
 	foreignKey({
 			columns: [table.documentId],
 			foreignColumns: [unionDocuments.id],

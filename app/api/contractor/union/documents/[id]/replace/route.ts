@@ -6,6 +6,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
+import { embedTexts } from '@/lib/ai/mistral-embed';
+import { buildChunkRows, chunkText } from '@/lib/union/chunks';
 
 export const maxDuration = 120;
 
@@ -17,34 +19,12 @@ function getDb() {
 }
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
-const CHUNK_SIZE = 1500;
-const CHUNK_OVERLAP = 200;
-const EMBEDDING_MODEL = 'gemini-embedding-001';
-const BATCH_SIZE = 5;
 
 const ALLOWED_TYPES = new Set([
   'application/pdf',
   'text/plain',
   'text/markdown',
 ]);
-
-async function getEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-  if (!apiKey) throw new Error('GOOGLE_GEMINI_API_KEY_WORK_WITUS not set');
-
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${EMBEDDING_MODEL}:embedContent`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-    body: JSON.stringify({
-      content: { parts: [{ text }] },
-      outputDimensionality: 768,
-    }),
-  });
-  if (!res.ok) throw new Error(`Embedding error: ${await res.text()}`);
-  const data = await res.json();
-  return data.embedding?.values ?? [];
-}
 
 async function extractPdfText(base64: string): Promise<string> {
   const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS!;
@@ -66,18 +46,6 @@ async function extractPdfText(base64: string): Promise<string> {
   if (!res.ok) throw new Error(`Failed to extract PDF text: ${await res.text()}`);
   const data = await res.json();
   return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
-}
-
-function chunkText(text: string): string[] {
-  const chunks: string[] = [];
-  let start = 0;
-  while (start < text.length) {
-    const end = Math.min(start + CHUNK_SIZE, text.length);
-    chunks.push(text.slice(start, end));
-    start = end - CHUNK_OVERLAP;
-    if (start >= text.length) break;
-  }
-  return chunks;
 }
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -174,24 +142,12 @@ export async function POST(request: NextRequest, ctx: Ctx) {
       return NextResponse.json({ error: 'No text could be extracted from file' }, { status: 400 });
     }
 
-    // Delete old chunks
-    await db.from('union_document_chunks').delete().eq('document_id', id);
-
-    // Chunk and embed in parallel batches
+    // Embed every chunk with mistral-embed in batched, paced requests (lib/union/chunks.ts)
     const chunks = chunkText(fullText);
-    const chunkRows = [];
-    for (let b = 0; b < chunks.length; b += BATCH_SIZE) {
-      const batch = chunks.slice(b, b + BATCH_SIZE);
-      const embeddings = await Promise.all(batch.map((c) => getEmbedding(c)));
-      for (let j = 0; j < batch.length; j++) {
-        chunkRows.push({
-          document_id: id,
-          chunk_text: batch[j],
-          chunk_index: b + j,
-          embedding: `[${embeddings[j].join(',')}]`,
-        });
-      }
-    }
+    const chunkRows = await buildChunkRows(id, chunks, (texts) => embedTexts(texts, { maxRetries: 3 }));
+
+    // Delete old chunks only once the new ones are embedded, so a failed embed keeps the old text.
+    await db.from('union_document_chunks').delete().eq('document_id', id);
 
     const { error: chunkErr } = await db.from('union_document_chunks').insert(chunkRows);
     if (chunkErr) {
