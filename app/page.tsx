@@ -8,6 +8,7 @@ import {
 import { organizationSchema } from '@/lib/seo/json-ld';
 import { CONTRACTOR_PRICE_SUMMARY } from '@/lib/pricing/prices';
 import { LEARN_WITUS_GUIDES, WORK_WITUS_GUIDES_SERIES_URL } from '@/lib/ecosystem/learn-witus.mjs';
+import SiteFooter from '@/components/ui/SiteFooter';
 
 export const metadata: Metadata = {
   title: 'Work.WitUS — Job Tracking for Independent Contractors',
@@ -258,19 +259,7 @@ export default function ContractorLandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200 px-4 py-8 text-center text-xs text-slate-400">
-        <p>&copy; {new Date().getFullYear()} Work.WitUS. All rights reserved.</p>
-        <p className="mt-1">Powered by <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:underline">WitUS.Online</a>, a B4C LLC brand</p>
-        <div className="mt-2 flex justify-center gap-4">
-          <Link href="/terms" className="hover:text-slate-500">Terms</Link>
-          <Link href="/privacy" className="hover:text-slate-500">Privacy</Link>
-          <Link href="/tech-roadmap" className="hover:text-slate-500">Roadmap</Link>
-          <Link href="/for" className="hover:text-slate-500">Industries</Link>
-          <a href="https://CentenarianOS.com" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">CentenarianOS</a>
-          <a href="https://WitUS.Online" target="_blank" rel="noopener noreferrer" className="hover:text-slate-500">WitUS.Online</a>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
