@@ -3,7 +3,7 @@ app: work
 name: Work.WitUS
 stage: live
 url: https://work.witus.online
-updated: 2026-11-04
+updated: 2026-11-05
 ---
 
 ## Live now
@@ -20,6 +20,7 @@ updated: 2026-11-04
 - Email sent through Mailgun under the Work.WitUS name
 - Signed income and work-schedule events sent to CentenarianOS instead of shared database triggers
 - Help-article knowledge sync paced under Google's free-tier embedding limit, re-embeds only changed articles, runs in chunks from /admin/sync with a short error list (2026-11-04)
+- Embeddings moved from Gemini to Mistral `mistral-embed` (1024 dimensions, `embedding_v2` columns): help articles and union documents go in batched, paced requests, so the help sync no longer hits Gemini's 100-a-minute free-tier limit; chats degrade to "nothing found" until rows are re-embedded; /admin/sync gains Re-embed Union Documents; union uploads no longer hang on the last chunk. Needs migration 226 applied by hand and MISTRAL_API_KEY set (2026-11-05)
 - One site-URL helper (`lib/site-url.ts`) with the work.witus.online default and a warning when the configured host is another app's (2026-11-04)
 - Sign out leaves only this app; a second control signs out of WitUS everywhere
 
@@ -32,6 +33,7 @@ updated: 2026-11-04
 - "Travel for this job" panel on job pages, read from a keyed, signed RideWitUS endpoint (plan 18 §8 answer 3)
 
 ## Backlog
+- Drop the legacy Gemini embedding columns (`help_articles.embedding`, `union_document_chunks.embedding`, vector(768)) and `match_union_chunks` once CentenarianOS no longer uses `help_articles.embedding` / `match_help_articles`, or at the Neon cutover
 - Move the remaining contractor tables and data, then retire them from CentenarianOS (plan 55, Phases 3 to 5)
 - Branded login emails once Work.WitUS has its own auth project
 - Decide whether City Guides stay (Work.WitUS-only feature; plan 18 lists their tables as cut with Travel, but CentenarianOS does not use them)

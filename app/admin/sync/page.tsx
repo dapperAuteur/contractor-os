@@ -4,7 +4,7 @@
 // Admin page for manually triggering knowledge sync, demo reset, and viewing sync status.
 
 import { useState, useEffect } from 'react';
-import { RefreshCw, Database, BookOpen, Users, CheckCircle, XCircle, Loader2, Clock } from 'lucide-react';
+import { RefreshCw, Database, BookOpen, Users, CheckCircle, XCircle, Loader2, Clock, FileText } from 'lucide-react';
 import { HelpSyncCard } from '@/components/admin/HelpSyncCard';
 
 interface SyncStatus {
@@ -84,7 +84,7 @@ export default function AdminSyncPage() {
   const [status, setStatus] = useState<SyncStatus | null>(null);
   const [statusLoading, setStatusLoading] = useState(true);
 
-  // Both help-sync cards spend the same Gemini per-minute quota, so only one runs at a time.
+  // The embedding cards share one Mistral per-minute budget, so only one runs at a time.
   const [helpSyncRunning, setHelpSyncRunning] = useState(false);
 
   const [demoResult, setDemoResult] = useState<ActionResult | null>(null);
@@ -154,7 +154,7 @@ export default function AdminSyncPage() {
       <div className="space-y-4">
         <HelpSyncCard
           title="Knowledge Sync"
-          description="Embeds the help articles that changed since the last sync (unchanged ones are skipped) and updates the knowledge timestamp. Paced under Google's per-minute limit, so a full run takes about two minutes. Runs daily at 3:00 AM UTC via cron."
+          description="Embeds the help articles that changed since the last sync, or that have no Mistral embedding yet (unchanged ones are skipped), and updates the knowledge timestamp. Sends articles to Mistral in batches, so a full run takes well under a minute. Runs daily at 3:00 AM UTC via cron."
           icon={BookOpen}
           buttonLabel="Run Knowledge Sync"
           endpoint="/api/admin/knowledge/refresh"
@@ -167,11 +167,22 @@ export default function AdminSyncPage() {
 
         <HelpSyncCard
           title="Help Article Ingest"
-          description="Re-embeds every help article from lib/help/articles.ts, changed or not. Use it after changing the embedding model; for content edits, Knowledge Sync is enough."
+          description="Re-embeds every help article from lib/help/articles.ts with Mistral, changed or not. Use it after changing the embedding model; for content edits, Knowledge Sync is enough."
           icon={Database}
           buttonLabel="Re-ingest Help Articles"
           endpoint="/api/admin/help/ingest"
           body={{ force: true }}
+          disabled={helpSyncRunning}
+          onRunningChange={setHelpSyncRunning}
+        />
+
+        <HelpSyncCard
+          title="Union Document Embeddings"
+          description="Re-embeds the union document sections that have no Mistral embedding yet (uploaded before the move from Gemini), from the text already stored. New uploads are embedded on upload. Union chat cannot find a section until it is embedded."
+          icon={FileText}
+          buttonLabel="Re-embed Union Documents"
+          endpoint="/api/admin/union/reembed"
+          unit="section"
           disabled={helpSyncRunning}
           onRunningChange={setHelpSyncRunning}
         />

@@ -118,7 +118,7 @@ export async function loadCopyPlan(root) {
   };
 }
 
-/** Functions plan 18 §2.4 recreates: trigger functions on the moved tables, plus the six RPCs. */
+/** Functions plan 18 §2.4 recreates: trigger functions on the moved tables, plus the RPCs (the six of §2.4 and the two v2 match functions of migration 226). */
 export const FUNCTIONS = [
   'update_updated_at_column',
   'set_updated_at',
@@ -130,5 +130,7 @@ export const FUNCTIONS = [
   'toggle_blog_save',
   'match_help_articles',
   'match_union_chunks',
+  'match_help_articles_v2', // supabase 226 / neon 0003 (mistral-embed)
+  'match_union_chunks_v2',
   'is_contractor_job_member',
 ];

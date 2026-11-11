@@ -1,6 +1,6 @@
 // lib/help/sync-loop.ts
 // The browser half of the chunked help sync: call the route with a cursor, add up the counts, wait
-// when Google asked for a pause, and stop when the server says done (or something is wrong).
+// when Mistral asked for a pause, and stop when the server says done (or something is wrong).
 // Same idea as witus-learn's /admin/rag "Run all": the loop lives in the browser, so no single
 // request has to outlast the function's time limit. Pure (no fetch, no React) so it can be tested.
 
@@ -13,7 +13,7 @@ export interface LoopProgress {
   skipped: number;
   removed: number;
   failed: FailedArticle[];
-  /** Set while the loop waits for Google's retry delay. */
+  /** Set while the loop waits for Mistral's retry delay. */
   waitingMs?: number;
 }
 
@@ -30,7 +30,7 @@ export async function runSyncLoop(opts: {
   callChunk: ChunkCaller;
   sleep: (ms: number) => Promise<void>;
   onProgress?: (p: LoopProgress) => void;
-  /** Hard stop so a bug can never loop forever. 107 articles take about 3 chunks plus waits. */
+  /** Hard stop so a bug can never loop forever. 107 articles take one chunk; the union re-embed may take several. */
   maxChunks?: number;
 }): Promise<LoopOutcome> {
   const maxChunks = opts.maxChunks ?? 40;
@@ -62,7 +62,7 @@ export async function runSyncLoop(opts: {
       return out;
     }
     if (chunk.stoppedReason === 'quota') {
-      out.error = chunk.error ?? 'Google quota spent.';
+      out.error = chunk.error ?? 'Mistral limit spent.';
       return out;
     }
     if (chunk.waitMs) {

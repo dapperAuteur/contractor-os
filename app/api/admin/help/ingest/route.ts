@@ -3,14 +3,14 @@
 // request. Body: { cursor?: number, force?: boolean (default true) }. The /admin/sync page loops on
 // the returned `cursor` until `done`. Pacing, 429 retries and the stale-row cleanup live in
 // lib/help/embed-sync.ts. Rows are upserted in place, never wiped first, so a failed article keeps
-// its previous embedding.
-// GET: row count, or ?diagnose=1 to list the models this key can use.
+// its previous embedding. Embeddings are mistral-embed (1024) in help_articles.embedding_v2.
+// GET: row counts for this app: rows, and rows with a v2 (Mistral) embedding. The runbook's check
+// after the move (docs/05-operations.md section 9) is `embeddedV2 === total`.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient as createServiceClient } from '@supabase/supabase-js';
-import { HELP_ARTICLES } from '@/lib/help/articles';
 import { requireAdmin } from '@/lib/auth/require-admin';
-import { runHelpSyncChunkForApp } from '@/lib/admin/syncKnowledge';
+import { contractorArticles, runHelpSyncChunkForApp } from '@/lib/admin/syncKnowledge';
 import { readSyncBody } from '@/lib/help/sync-request';
 
 // One chunk spends at most HELP_SYNC_CHUNK_BUDGET_MS (40 s); 60 is the lowest ceiling on any plan.
@@ -27,9 +27,9 @@ export async function POST(req: NextRequest) {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
 
-  if (!process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS) {
+  if (!process.env.MISTRAL_API_KEY?.trim()) {
     return NextResponse.json(
-      { error: 'GOOGLE_GEMINI_API_KEY_WORK_WITUS is not set in environment variables.' },
+      { error: 'MISTRAL_API_KEY is not set in environment variables.' },
       { status: 500 },
     );
   }
@@ -44,33 +44,26 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const auth = await requireAdmin();
   if (!auth.ok) return auth.response;
 
-  // ?diagnose=1 → list models available to this API key
-  const diagnose = new URL(req.url).searchParams.get('diagnose');
-  if (diagnose) {
-    const apiKey = process.env.GOOGLE_GEMINI_API_KEY_WORK_WITUS;
-    if (!apiKey) return NextResponse.json({ error: 'GOOGLE_GEMINI_API_KEY_WORK_WITUS not set' }, { status: 500 });
-    const r = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models',
-      { headers: { 'x-goog-api-key': apiKey } },
-    );
-    const data = await r.json();
-    // Extract just the names and supported methods for embedding
-    const models = (data.models ?? []).map((m: { name: string; supportedGenerationMethods?: string[] }) => ({
-      name: m.name,
-      supportsEmbed: (m.supportedGenerationMethods ?? []).includes('embedContent'),
-      supportsGenerate: (m.supportedGenerationMethods ?? []).includes('generateContent'),
-    }));
-    return NextResponse.json({ models, raw: r.ok ? undefined : data });
-  }
-
   const db = getDb();
-  const { count } = await db
+  const rows = await db
     .from('help_articles')
-    .select('id', { count: 'exact', head: true });
+    .select('id', { count: 'exact', head: true })
+    .eq('app', 'contractor');
+  const embedded = await db
+    .from('help_articles')
+    .select('id', { count: 'exact', head: true })
+    .eq('app', 'contractor')
+    .not('embedding_v2', 'is', null);
 
-  return NextResponse.json({ count: count ?? 0, total: HELP_ARTICLES.length });
+  return NextResponse.json({
+    count: rows.count ?? 0,
+    embeddedV2: embedded.count ?? 0,
+    // Set when migration 226 has not been applied (the column does not exist yet).
+    error: embedded.error?.message,
+    total: contractorArticles().length,
+  });
 }
