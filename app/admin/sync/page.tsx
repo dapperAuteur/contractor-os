@@ -17,6 +17,22 @@ interface ActionResult {
   details?: Record<string, unknown>;
 }
 
+// The route's answers when the admin session is refused (lib/auth/admin-verdict.ts codes).
+function demoResetDenial(code: unknown, error: unknown): string {
+  switch (code) {
+    case 'signed_out':
+      return 'You are signed out. Sign in again, then retry.';
+    case 'not_admin':
+      return 'This account is not the admin account, so it cannot reset the demo data.';
+    case 'mfa_required':
+      return typeof error === 'string' && error
+        ? error
+        : 'Admin actions need two-factor sign-in. Sign out, then sign in again with your authenticator code.';
+    default:
+      return typeof error === 'string' && error ? error : 'Reset failed';
+  }
+}
+
 function ActionCard({
   title,
   description,
@@ -107,9 +123,10 @@ export default function AdminSyncPage() {
     try {
       const res = await fetch('/api/admin/demo/reset', {
         method: 'POST',
-        headers: { Authorization: `Bearer ${prompt('Enter CRON_SECRET:')}` },
+        // The admin's own signed-in session (cookies) authorises this. No secret in the browser.
+        credentials: 'same-origin',
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setDemoResult({
           ok: true,
@@ -117,7 +134,7 @@ export default function AdminSyncPage() {
           details: data,
         });
       } else {
-        setDemoResult({ ok: false, message: data.error || 'Reset failed' });
+        setDemoResult({ ok: false, message: demoResetDenial(data.code, data.error) });
       }
     } catch (err) {
       setDemoResult({ ok: false, message: err instanceof Error ? err.message : 'Network error' });
@@ -189,7 +206,7 @@ export default function AdminSyncPage() {
 
         <ActionCard
           title="Demo Account Reset"
-          description="Clears and re-seeds all demo accounts (tutorial, visitor, contractor, lister) with fresh data. Runs daily at midnight UTC via cron. Requires CRON_SECRET."
+          description="Clears and re-seeds all demo accounts (tutorial, visitor, contractor, lister) with fresh data. Runs daily at midnight UTC via cron. The button uses your signed-in admin session (two-factor required)."
           icon={Users}
           buttonLabel="Reset Demo Accounts"
           onAction={runDemoReset}
