@@ -1,5 +1,5 @@
 // app/admin/layout.tsx
-// Admin-only layout — middleware enforces the ADMIN_EMAIL check before this renders. The admin APIs
+// Admin-only layout: middleware enforces the ADMIN_EMAIL check before this renders. The admin APIs
 // also require two-factor sign-in (aal2, lib/auth/require-admin.ts); AdminMfaNotice explains a refusal.
 
 'use client';
@@ -26,6 +26,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Menu className="w-5 h-5" aria-hidden="true" />
         </button>
         <p className="text-xs font-bold uppercase tracking-widest text-amber-600">Admin</p>
+        <Link
+          href="/dashboard/contractor"
+          className="ml-auto flex items-center gap-1.5 px-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition min-h-11 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:outline-none"
+        >
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+          Exit admin
+        </Link>
       </div>
 
       {/* Mobile overlay */}
@@ -45,7 +52,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         role="navigation"
         aria-label="Admin navigation"
       >
-        <div className="p-5 border-b border-slate-200 flex items-center justify-between">
+        <div className="shrink-0 p-5 border-b border-slate-200 flex items-center justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-widest text-amber-600 mb-1">Admin</p>
             <p className="text-lg font-bold text-slate-900">Work.WitUS</p>
@@ -59,19 +66,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
         </div>
         <AdminSidebar onNavigate={() => setSidebarOpen(false)} />
-        <div className="p-3 border-t border-slate-200">
+        <div className="shrink-0 p-3 border-t border-slate-200">
           <Link
             href="/dashboard/contractor"
             className="flex items-center gap-2 px-3 py-2 text-sm text-slate-500 hover:text-slate-900 transition min-h-11"
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-            Back to App
+            Back to app
           </Link>
         </div>
       </aside>
 
       {/* Main */}
-      <main className="flex-1 overflow-auto pt-14 lg:pt-0">
+      <main className="flex-1 min-w-0 overflow-auto pt-14 lg:pt-0">
+        {/* Desktop top bar: the exit is always visible, never below the sidebar fold */}
+        <div className="hidden lg:flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-6 py-2">
+          <p className="text-xs font-bold uppercase tracking-widest text-amber-600">Admin</p>
+          <Link
+            href="/dashboard/contractor"
+            className="flex items-center gap-1.5 px-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition min-h-11 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:outline-none"
+          >
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+            Exit admin
+          </Link>
+        </div>
         <AdminMfaNotice />
         {children}
       </main>
